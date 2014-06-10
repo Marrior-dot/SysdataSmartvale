@@ -1,0 +1,6 @@
+.settings
+*.backup
+*.war
+*.dat
+target
+target-eclipse

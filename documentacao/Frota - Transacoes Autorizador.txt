@@ -1,0 +1,17 @@
+MTI	CD PRC	Transacoes
+
+200	2100	Combustivel
+210 2100	Resp Combustivel
+202	2100	Confirmacao Combustivel
+420	2100	Desfazimento Combustivel
+
+800	600000	Configuracao de Precos
+802	600000	Confirmacao Configuracao
+420	600000	Desfazimento Configuracao
+
+200	200030	Cancelamento Combustivel
+210 200030	Resp Cancelamento
+202	200030	Confirmacao Cancelamento
+
+
+800	310000	Consulta de Precos
