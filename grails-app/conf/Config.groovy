@@ -53,7 +53,7 @@ grails.logging.jul.usebridge = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
-//Os links dos "caminhos de p�o" ser�o baseados no t�tulo  
+//Os links dos "caminhos de pao" serao baseados no titulo  
 breadcrumbs.selector="title"
 
 // set per-environment serverURL stem for creating absolute links
