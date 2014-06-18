@@ -114,6 +114,19 @@ log4j = {
 	
 }
 
+grails {
+	mail {
+	host = "smtp.gmail.com"
+	port = 465
+	username = "acception.tests@gmail.com"
+	password = "T35t5123x"
+	props = ["mail.smtp.auth":"true",
+	 "mail.smtp.socketFactory.port":"465",
+	 "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+	 "mail.smtp.socketFactory.fallback":"false"]
+	}
+}
+
 
 //log4j.logger.org.springframework.security='off,stdout'
 
@@ -123,6 +136,11 @@ log4j = {
 
 //log4j.logger.org.springframework.security='off,stdout'
 // Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.ui.register.postResetUrl = '/'
+grails.plugin.springsecurity.ui.forgotPassword.emailBody = 'Prezado (a) <br> Clique na URL abaixo para criar uma nova senha<br>'
+grails.plugin.springsecurity.ui.forgotPassword.emailFrom = 'diegodisouzza@gmail.com'
+grails.plugin.springsecurity.ui.forgotPassword.emailSubject = 'Recuperação de Senha'
+
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.sysdata.gestaofrota.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.sysdata.gestaofrota.UserRole'
 grails.plugins.springsecurity.authority.className = 'com.sysdata.gestaofrota.Role'
@@ -154,6 +172,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/images/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/login/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/logout/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/register/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
 	'/*':					['IS_AUTHENTICATED_FULLY']
 ]
 	

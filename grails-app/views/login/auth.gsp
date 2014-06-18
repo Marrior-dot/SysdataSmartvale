@@ -125,7 +125,6 @@
 					</p>
 				</fieldset>
 				
-			
 <%--				<p>--%>
 <%--					<label for='remember_me'>Remember me</label>--%>
 <%--					<input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'--%>
@@ -135,7 +134,13 @@
 					<input type='submit' value='Entrar' />
 				</p>
 			</form>
+			
+			<div>
+				<g:link controller='register' action='forgotPassword'>Esqueceu a senha?</g:link>
+			</div>
+				
 		</div>
+		
 	</div>
 <script type='text/javascript'>
 <!--
