@@ -38,8 +38,12 @@ class ReportViewerService {
 						case DataType.DATE:
 							castValues[paramInstance.name]=new SimpleDateFormat("dd/MM/yyyy").parse(rawValue)
 							break;
-						default:
+						case DataType.STRING:
+							castValues[paramInstance.name]=rawValue
 							break;
+							
+						default:
+							throw new RuntimeException("Parâmetro ${paramInstance.name} definido com tipo invalido!")
 						}
 					
 				} catch (NumberFormatException e) {

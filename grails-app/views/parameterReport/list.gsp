@@ -42,7 +42,7 @@
 				<g:each in="${parameterReportInstanceList}" status="i" var="parameterReportInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${parameterReportInstance.id}">${fieldValue(bean: parameterReportInstance, field: "dataType")}</g:link></td>
+						<td><g:link action="show" id="${parameterReportInstance.id}">${fieldValue(bean: parameterReportInstance, field: "id")}</g:link></td>
 					
 						<td>${fieldValue(bean: parameterReportInstance, field: "label")}</td>
 					
@@ -52,7 +52,7 @@
 					
 						<td>${fieldValue(bean: parameterReportInstance, field: "order")}</td>
 					
-						<td>${fieldValue(bean: parameterReportInstance, field: "report")}</td>
+						<td>${parameterReportInstance.report.name}</td>
 					
 					</tr>
 				</g:each>
