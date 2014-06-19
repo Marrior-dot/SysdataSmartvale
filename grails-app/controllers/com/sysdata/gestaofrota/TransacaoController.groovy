@@ -26,7 +26,7 @@ class TransacaoController extends BaseOwnerController{
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	
-	def transacaoService,autorizadorService
+	def transacaoService,autorizadorService,estornoService
 
     def index = {
         redirect(action: "list", params: params)
@@ -45,19 +45,30 @@ class TransacaoController extends BaseOwnerController{
 			pars.offset=params.offset?params.offset as int:0
 			pars.ids=ownerList
 			
+			
 			transacaoInstanceList=Transacao.executeQuery("""select tr 
 									from Transacao tr, Funcionario f
-									where tr.participante=f  
+									where tr.participante=f
+
+									${if(params.cartao) "and tr.numeroCartao='"+params.cartao+"'" else ''}
+									${if(params.codEstab) "and tr.codigoEstabelecimento='"+params.codEstab+"'" else ''}
+									${if(params.nsu) "and tr.nsu="+params.nsu else ''}
+  
 									and f.unidade.rh.id in (:ids)
 									order by tr.id desc""",	pars)
 			
 			transacaoInstanceTotal=Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
-				where tr.participante=f 
+				where tr.participante=f
+
+				${if(params.cartao) "and tr.numeroCartao='"+params.cartao+"'" else ''}
+				${if(params.codEstab) "and tr.codigoEstabelecimento='"+params.codEstab+"'" else ''}
+				${if(params.nsu) "and tr.nsu="+params.nsu else ''}
+ 
 				and f.unidade.rh.id in (:ids)""", [ids:ownerList])[0]
 			
 		}
 		
-        [transacaoInstanceList:transacaoInstanceList, transacaoInstanceTotal:transacaoInstanceTotal]
+        [transacaoInstanceList:transacaoInstanceList, transacaoInstanceTotal:transacaoInstanceTotal, params:params]
     }
 
     def create = {
@@ -181,5 +192,21 @@ class TransacaoController extends BaseOwnerController{
 		}
 		render(view:"simulador",model:[transacaoInstance:transacaoInstance])
 	}
+	
+	def estornar={
+		flash.errors=[]
+		def transacaoInstance=Transacao.get(params.id)
+		try{
+			estornoService.estornarTransacao(transacaoInstance)
+		}catch(TransacaoException e){
+			log.error e
+			flash.errors<<"ERRO"
+			flash.errors<<e
+			
+		}
+		redirect action:"list" ,params:params
+		
+	}
+	
 	
 }

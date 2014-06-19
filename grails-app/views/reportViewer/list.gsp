@@ -32,8 +32,8 @@
 				<g:render template="parameters" model="params"/>
 				            
 	            <div class="buttons">
-	            	<g:submitButton name="list" value="Listar" />
-	            	<g:actionSubmit action="export" value="Excel"/>
+	            	<g:submitButton class="list" name="list" value="Listar" />
+	            	<g:actionSubmit class="xls" action="export" value="Excel"/>
 	            	
 	            </div>
 	            
