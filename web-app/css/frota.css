@@ -144,6 +144,18 @@ a.download{
     padding-left: 36px;
 }
 
+.buttons input.list {
+    background: url(../images/skin/database_table.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
+.buttons input.xls {
+    background: url(../images/xls_mini.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
+
 
 .search{
 	border:groove;
@@ -189,4 +201,10 @@ a.file{
 	list-style-image: none;
 	list-style-position: inside;
 	margin-left:40px;
+}
+
+a.undo{
+	background:url(../images/undo_mini.png) center left no-repeat;
+	padding-left:20px;
+	padding-top:5px;
 }

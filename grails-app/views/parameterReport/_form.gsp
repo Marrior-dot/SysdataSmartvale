@@ -10,13 +10,11 @@
 	<g:select name="dataType" from="${br.com.acception.greport.DataType?.values()}" keys="${br.com.acception.greport.DataType.values()*.name()}" required="" value="${parameterReportInstance?.dataType?.name()}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'label', 'error')} ">
 	<label for="label">
 		<g:message code="parameterReport.label.label" default="Label" />
 		
 	</label>
 	<g:textField name="label" value="${parameterReportInstance?.label}"/>
-</div>
 
 <div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'markupType', 'error')} required">
 	<label for="markupType">
@@ -47,7 +45,8 @@
 		<g:message code="parameterReport.report.label" default="Report" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" required="" value="${parameterReportInstance?.report?.id}" class="many-to-one"/>
+	<g:select id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" optionValue="name" required="" 
+	value="${parameterReportInstance?.report?.id}" class="many-to-one"/>
 </div>
 
 

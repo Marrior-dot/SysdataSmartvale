@@ -51,6 +51,12 @@ class Transacao {
 		codigoEquipamento nullable:true
     }
 	
+	
+	Conta getConta(){
+		this.cartao?.funcionario?.conta
+	}
+	
+	
 	static mapping={
 		id generator:'sequence',params:[sequence:'transacao_seq']
 		version false

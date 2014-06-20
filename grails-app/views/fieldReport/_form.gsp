@@ -47,7 +47,7 @@
 		<g:message code="fieldReport.report.label" default="Report" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" required="" value="${fieldReportInstance?.report?.id}" class="many-to-one"/>
+	<g:select id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" optionValue="name" required="" value="${fieldReportInstance?.report?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: fieldReportInstance, field: 'totalizer', 'error')} ">
