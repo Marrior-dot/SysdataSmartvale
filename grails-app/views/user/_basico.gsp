@@ -15,6 +15,8 @@
 		
 		<div><label><span>Senha</span><g:passwordField name="password" value="${userInstance?.password}" /></label></div>
 		
+		<div><label><span>Email</span><g:textField name="email" value="${userInstance?.email}" /></label></div>
+		
 		<g:if test="${action in [Util.ACTION_NEW]}">
 			<div><label><span>Confirme a Senha</span><g:passwordField name="confirmPassword" value="" /></label></div>
 		</g:if>

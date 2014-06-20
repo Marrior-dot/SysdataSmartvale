@@ -198,11 +198,11 @@ class RegisterController extends grails.plugins.springsecurity.ui.RegisterContro
 		if (command.username && command.username.equals(password)) {
 			return 'command.password.error.username'
 		}
-		if (!checkPasswordMinLength(password, command) ||
+		/*if (!checkPasswordMinLength(password, command) ||
 			!checkPasswordMaxLength(password, command) ||
 			!checkPasswordRegex(password, command)) {
 			return 'command.password.error.strength'
-		}
+		}*/
 	}
 
 	static boolean checkPasswordMinLength(String password, command) {
@@ -258,7 +258,7 @@ class RegisterController extends grails.plugins.springsecurity.ui.RegisterContro
 			}
 
 			email blank: false, nullable: false, email: true
-			password blank: false, nullable: false, validator: RegisterController.passwordValidator
+			password blank: false, nullable: false//, validator: RegisterController.passwordValidator
 			password2 validator: RegisterController.password2Validator
 		}
 	}
@@ -269,9 +269,8 @@ class RegisterController extends grails.plugins.springsecurity.ui.RegisterContro
 		String password2
 
 		static constraints = {
-			fullname nullable: true
 			username nullable: false
-			password blank: false, nullable: false, validator: RegisterController.passwordValidator
+			password blank: false, nullable: false//, validator: RegisterController.passwordValidator
 			password2 validator: RegisterController.password2Validator
 		}
 	}

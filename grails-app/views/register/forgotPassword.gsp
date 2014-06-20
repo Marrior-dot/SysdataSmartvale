@@ -10,28 +10,28 @@
 <p/>
 
 <s2ui:form width='350' height='220' elementId='forgotPasswordFormContainer'
-           titleCode='spring.security.ui.forgotPassword.header' center='true'>
+           titleCode='user.forgotPassword.header' center='true'>
 
 	<g:form action='forgotPassword' name="forgotPasswordForm" autocomplete='off'>
 
 	<g:if test='${emailSent}'>
 	<br/>
-	<g:message code='spring.security.ui.forgotPassword.sent'/>
+	<g:message code='user.forgotPassword.sent'/>
 	</g:if>
 
 	<g:else>
 
 	<br/>
-	<h4><g:message code='spring.security.ui.forgotPassword.description'/></h4>
+	<h4><g:message code='user.forgotPassword.description'/></h4>
 
 	<table>
 		<tr>
-			<td><label for="username"><g:message code='spring.security.ui.forgotPassword.username'/></label></td>
+			<td><label for="username"><g:message code='user.forgotPassword.username'/></label></td>
 			<td><g:textField name="username" size="25" /></td>
 		</tr>
 	</table>
 
-	<s2ui:submitButton elementId='reset' form='forgotPasswordForm' messageCode='spring.security.ui.forgotPassword.submit'/>
+	<g:actionSubmit controller="register" class="reset" action="forgotPassword" value="Redefinir Senha"></g:actionSubmit>
 
 	</g:else>
 
