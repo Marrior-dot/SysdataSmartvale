@@ -15,7 +15,8 @@ class EstabelecimentoController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [estabelecimentoInstanceList: Estabelecimento.list(params), estabelecimentoInstanceTotal: Estabelecimento.count()]
+		def estabelecimentoInstanceList = Estabelecimento.list(params)
+        [estabelecimentoInstanceList: estabelecimentoInstanceList, estabelecimentoInstanceTotal: Estabelecimento.count()]
     }
 
     def create = {
@@ -115,7 +116,8 @@ class EstabelecimentoController {
         def estabelecimentoInstance = Estabelecimento.get(params.id)
         if (estabelecimentoInstance) {
             try {
-                estabelecimentoInstance.delete(flush: true)
+                estabelecimentoInstance.status = Status.INATIVO
+				estabelecimentoInstance.save(flush:true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
                 redirect(action: "list")
             }
@@ -138,6 +140,7 @@ class EstabelecimentoController {
 		def estabelecimentoInstanceList=Estabelecimento
 											.createCriteria()
 											.list(max:params.max,offset:offset){
+													eq('status', Status.ATIVO)
 													empresa{eq('id',empId)}
 											}
 		def estabelecimentoInstanceTotal=Estabelecimento
