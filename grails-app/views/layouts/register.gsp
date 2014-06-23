@@ -4,11 +4,14 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title><g:layoutTitle default='User Registration'/></title>
+<title><g:layoutTitle default='User Registration' /></title>
+<link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+<link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
 
-<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
+<link rel="shortcut icon"
+	href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 
-<r:require module="register"/>
+<r:require module="register" />
 <%--
 
 The 'resources' tag in SecurityUiTagLib renders these tags if you're not using the resources plugin:
@@ -31,21 +34,49 @@ If you need to customize the resources, replace the <s2ui:resources> tag with
 the explicit tags above and edit those, not the taglib code.
 --%>
 
-<g:layoutHead/>
+<g:layoutHead />
 
 </head>
 
-<body>
+<body class="yui-skin-sam">
+	<div id="page">
+		<div id="header">
+			<div id="frotaBanner">
+				<img id = "banner" alt="" src="${resource(dir:'images',file:'frota_banner.png') }">
+			</div>
+		</div>
+	</div>
 
-<s2ui:layoutResources module='register' />
-<g:layoutBody/>
-<%--
+	<s2ui:layoutResources module='register' />
+	<g:layoutBody />
+	<%--
 <g:javascript src='jquery/jquery.jgrowl.js' plugin='spring-security-ui'/>
 <g:javascript src='jquery/jquery.checkbox.js' plugin='spring-security-ui'/>
 <g:javascript src='spring-security-ui.js' plugin='spring-security-ui'/>
 --%>
+<g:javascript>
+	var img = document.getElementById('banner');
+	img.width = document.body.offsetWidth;
+	
+	var form = document.getElementById('forgotPasswordFormContainer');
+	if(form){
+		form.style.width = document.body.offsetWidth/2;
+		form.style.margin = 'auto auto';
+		var username = document.getElementById('username');
+		username.size = 100;
+	}
+	var reset = document.getElementById('resetPasswordFormContainer');
+	if(reset){
+		reset.style.width = document.body.offsetWidth/2;
+		reset.style.margin = 'auto auto';
+		var password = document.getElementById('password');
+		password.size = 90;
+		var password2 = document.getElementById('password2');
+		password2.size = 90;
+	}
+</g:javascript>
 
-<s2ui:showFlash/>
+	<s2ui:showFlash />
 
 </body>
 </html>
