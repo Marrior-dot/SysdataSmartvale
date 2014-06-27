@@ -28,9 +28,11 @@
 
 
 	<g:if test="${!action || action==Util.ACTION_VIEW}">
-		<div class="buttons">
-			<span class="button"><g:actionSubmit class="new" action="create" value="${message(code:'default.new.label', args:[message(code:'estabelecimento.label')]) }"/></span>
-		</div>
+		<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+			<div class="buttons">
+				<span class="button"><g:actionSubmit class="new" action="create" value="${message(code:'default.new.label', args:[message(code:'estabelecimento.label')]) }"/></span>
+			</div>
+		</sec:ifAnyGranted>
 	</g:if>
 	
 </g:form>

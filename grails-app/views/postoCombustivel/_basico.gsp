@@ -35,14 +35,15 @@
 	</div>
 		
 </div>
-
-	<div class="buttons">
-		<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-			<span class="button"><g:actionSubmit class="save" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-		</g:if>
-		<g:if test="${action==Util.ACTION_VIEW}">
-			<span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-			<span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-		</g:if>
-	</div>
+	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+		<div class="buttons">
+			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
+				<span class="button"><g:actionSubmit class="save" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+			</g:if>
+			<g:if test="${action==Util.ACTION_VIEW}">
+				<span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+				<span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+			</g:if>
+		</div>
+	</sec:ifAnyGranted>
 </g:form>

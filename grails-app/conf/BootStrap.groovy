@@ -34,6 +34,7 @@ class BootStrap {
 		def roleProc=Role.findByAuthority('ROLE_PROC')?:new Role(authority:'ROLE_PROC').save(failOnError:true)
 		def roleAdmin=Role.findByAuthority('ROLE_ADMIN')?:new Role(authority:'ROLE_ADMIN').save(failOnError:true)
 		def roleRh=Role.findByAuthority('ROLE_RH')?:new Role(authority:'ROLE_RH').save(failOnError:true)
+		def roleEstab=Role.findByAuthority('ROLE_ESTAB')?:new Role(authority:'ROLE_ESTAB').save(failOnError:true)
 		
 		def procInstance=Processadora.findByNome("SYSDATA")
 		def adminInstance=Administradora.findByNome("AMAZON")

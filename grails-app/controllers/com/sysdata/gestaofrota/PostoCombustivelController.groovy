@@ -151,6 +151,11 @@ class PostoCombustivelController {
 						else if(opcao==3)
 							estabelecimentos{like('codigo',filtro+'%')}
 					}
+					def userInstance=getAuthenticatedUser()
+					if(userInstance.owner instanceof PostoCombustivel){
+						eq('id', userInstance.owner.id)
+					}
+					
 				}
 		def postoCombustivelInstanceTotal=PostoCombustivel
 				.createCriteria()

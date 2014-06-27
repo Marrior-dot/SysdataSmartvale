@@ -15,10 +15,11 @@
 	
 	
 </fieldset>
-
-<div class="buttons">
-	<span class="button"><input type="button" class="new" onclick="openWindow(0);" value="Adicionar Reembolso"/></span>
-</div>
+<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+	<div class="buttons">
+		<span class="button"><input type="button" class="new" onclick="openWindow(0);" value="Adicionar Reembolso"/></span>
+	</div>
+</sec:ifAnyGranted>
 
 
 <div id="divSemanal" >
@@ -45,36 +46,60 @@
 	
 </div>
 
+<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+	<div id="divIntervalo" >
+	
+		<gui:dataTable 
+					id="reembolsosDT"
+					controller="postoCombustivel" action="getIntervalosReembolso"
+					columnDefs="[
+						[key:'inicio',sortable:true,resizeable:true,label:'Início Intervalo'],
+						[key:'fim',sortable:true,resizeable:true,label:'Fim Intervalo'],
+						[key:'diaEfetivacao',sortable:true,resizeable:true,label:'Dia Efetivação'],
+						[key:'meses',sortable:true,resizeable:true,label:'Meses'],
+						[key:'acao',sortable:false,resizeable:true,label:'Ações']
+					]"
+					params="[id:postoCombustivelInstance?.id]"
+					sortedBy="inicio"
+					rowsPerPage="10"
+					paginatorConfig="[
+						nextPageLinkLabel:'Prox',
+					previousPageLinkLabel:'Ant',
+					firstPageLinkLabel:'Prim',
+					lastPageLinkLabel:'Ult',
+						template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
+						pageReportTemplate:'{totalRecords} total de registros'
+					]"
+				/>
+	</div>
+</sec:ifAnyGranted>
 
-<div id="divIntervalo" >
-
-	<gui:dataTable 
-				id="reembolsosDT"
-				controller="postoCombustivel" action="getIntervalosReembolso"
-				columnDefs="[
-					[key:'inicio',sortable:true,resizeable:true,label:'Início Intervalo'],
-					[key:'fim',sortable:true,resizeable:true,label:'Fim Intervalo'],
-					[key:'diaEfetivacao',sortable:true,resizeable:true,label:'Dia Efetivação'],
-					[key:'meses',sortable:true,resizeable:true,label:'Meses'],
-					[key:'acao',sortable:false,resizeable:true,label:'Ações']
-				]"
-				params="[id:postoCombustivelInstance?.id]"
-				sortedBy="inicio"
-				rowsPerPage="10"
-				paginatorConfig="[
-					nextPageLinkLabel:'Prox',
-				previousPageLinkLabel:'Ant',
-				firstPageLinkLabel:'Prim',
-				lastPageLinkLabel:'Ult',
-					template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-					pageReportTemplate:'{totalRecords} total de registros'
-				]"
-			/>
-
-</div>
-
-
-
+<sec:ifAnyGranted roles="ROLE_ESTAB">
+	<div id="divIntervalo" >
+	
+		<gui:dataTable 
+					id="reembolsosDT"
+					controller="postoCombustivel" action="getIntervalosReembolso"
+					columnDefs="[
+						[key:'inicio',sortable:true,resizeable:true,label:'Início Intervalo'],
+						[key:'fim',sortable:true,resizeable:true,label:'Fim Intervalo'],
+						[key:'diaEfetivacao',sortable:true,resizeable:true,label:'Dia Efetivação'],
+						[key:'meses',sortable:true,resizeable:true,label:'Meses']
+					]"
+					params="[id:postoCombustivelInstance?.id]"
+					sortedBy="inicio"
+					rowsPerPage="10"
+					paginatorConfig="[
+						nextPageLinkLabel:'Prox',
+					previousPageLinkLabel:'Ant',
+					firstPageLinkLabel:'Prim',
+					lastPageLinkLabel:'Ult',
+						template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
+						pageReportTemplate:'{totalRecords} total de registros'
+					]"
+				/>
+	</div>
+</sec:ifAnyGranted>
 			
 <gui:dialog 
 	id="reembolsoDialog"

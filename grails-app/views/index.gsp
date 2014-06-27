@@ -47,12 +47,14 @@
 					<h2>Cadastros</h2>						            	
 	            </div>
 	            
+	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
 	            <div class="servico">
 	            	<a href="${createLink(controller:'login',action:'menu')}?servico=financeiro">
 	            		<img alt="Financeiro" src="${resource(dir:"images",file:"financeiro.png") }">
 	            	</a>
 	            	<h2>Financeiro</h2>
 	            </div>
+	            </sec:ifAnyGranted>
 	            
 	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		            <div class="servico">

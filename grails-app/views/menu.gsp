@@ -18,10 +18,12 @@
    			<g:if test="${servico=='cadastros'}">
                 <h2>Cadastros</h2>
                 <ul>
-					<li><g:link controller="rh" action="list">Programas</g:link></li></br>
-					<li><g:link controller="funcionario" action="list">Funcionários</g:link></li></br>
-					<li><g:link controller="veiculo" action="list">Veículos</g:link></li></br>
-					<li><g:link controller="equipamento" action="list">Equipamentos</g:link></li></br>
+                	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
+						<li><g:link controller="rh" action="list">Programas</g:link></li></br>
+						<li><g:link controller="funcionario" action="list">Funcionários</g:link></li></br>
+						<li><g:link controller="veiculo" action="list">Veículos</g:link></li></br>
+						<li><g:link controller="equipamento" action="list">Equipamentos</g:link></li></br>
+					</sec:ifAnyGranted>
 					
 					<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 						<li><g:link controller="postoCombustivel" action="list">Estabelecimentos</g:link></li></br>
@@ -39,13 +41,17 @@
 						
 					</sec:ifAnyGranted>
 					
+					<sec:ifAnyGranted roles="ROLE_ESTAB">
+						<li><g:link controller="postoCombustivel" action="list">Estabelecimentos</g:link></li></br>
+					</sec:ifAnyGranted>
+					
 					<sec:ifAnyGranted roles="ROLE_ADMIN">
 						<li><g:link controller="motivoNegacao" action="list">Motivos Negação</g:link></li></br>
 					</sec:ifAnyGranted>
 					
                 </ul>
    			</g:if>
-               
+            
 			<g:if test="${servico=='financeiro'}">
 				<h2>Financeiro</h2>
 				<ul>

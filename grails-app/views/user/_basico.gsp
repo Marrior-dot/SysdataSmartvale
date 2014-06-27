@@ -1,3 +1,7 @@
+<%@page import="com.sysdata.gestaofrota.Processadora"%>
+<%@page import="com.sysdata.gestaofrota.Administradora"%>
+<%@page import="com.sysdata.gestaofrota.Rh"%>
+<%@page import="com.sysdata.gestaofrota.PostoCombustivel"%>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 <g:form method="post">
@@ -7,7 +11,27 @@
 	<fieldset>
 		<h2>Dados de Usuário</h2>
 		
-		<div><label><span>Organização</span><g:select name="owner.id" from="${ownerList}" value="${userInstance?.owner?.id}" optionKey="id" optionValue="nome"></g:select></label></div>
+<%
+		
+		def l=[:]
+		l=ownerList.collect{
+					if(it instanceof PostoCombustivel){
+						[id:it.id,
+						nome:"Estabelecimento - " + it.nome]
+					}else if(it instanceof Rh){
+						[id:it.id,
+						nome:"RH - " + it.nome]
+					}else if(it instanceof Administradora){
+						[id:it.id,
+						nome:"Administradora - " + it.nome]
+					}else if(it instanceof Processadora){
+						[id:it.id,
+						nome:"Processadora - " + it.nome]
+					}
+				}
+		 %>		
+		
+		<div><label><span>Organização</span><g:select name="owner.id" from="${l}" value="${userInstance?.owner?.id}" optionKey="id" optionValue="nome"></g:select></label></div>
 		
 		<div><label><span>Nome</span><g:textField name="name" value="${userInstance?.name}" /></label></div>
 		

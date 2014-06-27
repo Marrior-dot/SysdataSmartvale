@@ -21,6 +21,5 @@ class Participante {
 	static mapping={
 		id generator:'sequence',params:[sequence:'participante_seq']
 		conta lazy:false
-	}
-	
+	}	
 }

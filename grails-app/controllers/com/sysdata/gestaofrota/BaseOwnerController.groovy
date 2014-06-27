@@ -36,10 +36,12 @@ class BaseOwnerController {
 		}else if(userInstance.owner instanceof Administradora){
 			ownerList<<userInstance.owner
 			ownerList+=Rh.all
+			ownerList+=PostoCombustivel.all
 		}else{
 			ownerList+=Processadora.all
 			ownerList+=Administradora.all
 			ownerList+=Rh.all
+			ownerList+=PostoCombustivel.all
 		}
 		
 		ownerList

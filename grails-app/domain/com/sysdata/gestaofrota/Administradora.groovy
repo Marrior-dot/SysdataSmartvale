@@ -7,4 +7,5 @@ class Administradora extends Participante {
     static constraints = {
 		bin(nullable:true)
     }
+	
 }

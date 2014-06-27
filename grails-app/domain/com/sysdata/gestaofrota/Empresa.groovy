@@ -13,4 +13,6 @@ class Empresa extends Participante {
 		inscricaoEstadual(nullable:true)
 		inscricaoMunicipal(nullable:true)
     }
+	
+	
 }

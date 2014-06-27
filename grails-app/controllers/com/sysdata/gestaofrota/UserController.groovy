@@ -104,6 +104,9 @@ class UserController extends BaseOwnerController{
 				
 				}else if(userInstance.owner instanceof Processadora){
 					UserRole.create userInstance,Role.findByAuthority("ROLE_PROC")
+					
+				}else if(userInstance.owner instanceof PostoCombustivel){
+					UserRole.create userInstance,Role.findByAuthority("ROLE_ESTAB")
 				}
 	
 				
