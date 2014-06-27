@@ -14,4 +14,8 @@ enum Status {
 	static asList(){
 		[ATIVO,INATIVO,BLOQUEADO]
 	}
+	
+	static asBloqueado(){
+		[ATIVO,BLOQUEADO]
+	}
 }

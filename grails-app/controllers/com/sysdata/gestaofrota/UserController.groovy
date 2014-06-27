@@ -139,7 +139,7 @@ class UserController extends BaseOwnerController{
             redirect(action: "list")
         }
         else {
-            return [userInstance: userInstance]
+            return [userInstance: userInstance, ownerList:listOwners()]
         }
     }
 
@@ -151,7 +151,7 @@ class UserController extends BaseOwnerController{
                 if (userInstance.version > version) {
                     
                     userInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'user.label', default: 'User')] as Object[], "Another user has updated this User while you were editing")
-                    render(view: "edit", model: [userInstance: userInstance])
+                    render(view: "edit", model: [userInstance: userInstance, ownerList:listOwners()])
                     return
                 }
             }
@@ -161,7 +161,7 @@ class UserController extends BaseOwnerController{
                 redirect(action: "show", id: userInstance.id)
             }
             else {
-                render(view: "edit", model: [userInstance: userInstance])
+                render(view: "edit", model: [userInstance: userInstance, ownerList:listOwners()])
             }
         }
         else {

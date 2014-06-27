@@ -1,4 +1,5 @@
 <%@ page import="com.sysdata.gestaofrota.CategoriaFuncionario" %>
+<%@ page import="com.sysdata.gestaofrota.Status" %>
 <%@ page import="com.sysdata.gestaofrota.CategoriaCnh" %>
 
 <%@ page import="com.sysdata.gestaofrota.Util" %>
@@ -59,10 +60,14 @@
 										optionValue="nome"></g:select> </label>
 										
 						<label id="lblGestor"><span>Gestor</span><g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/></label>
-					
+						
 					</div>
 					
+					<div>
 					
+						<label><span>Status</span><g:select name="status" from="${Status.asBloqueado()}" value="${funcionarioInstance?.status}" optionKey="" optionValue=""></g:select></label>
+					
+					</div>
 					
 				</fieldset>
 				        
