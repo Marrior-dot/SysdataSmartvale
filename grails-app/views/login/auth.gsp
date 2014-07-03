@@ -83,6 +83,13 @@
 	color:#99CC33;
 }
 
+a:link, a:visited, a:hover{
+	color: #333;
+	text-align:left;
+	padding:10px;
+}
+
+
 </style>
 </head>
 
@@ -135,8 +142,10 @@
 				</p>
 			</form>
 			
+			<br>
+			
 			<div>
-				<g:link controller='register' action='forgotPassword'>Esqueceu a senha?</g:link>
+					<g:link controller='register' action='forgotPassword'>Esqueceu a senha?</g:link>
 			</div>
 				
 		</div>

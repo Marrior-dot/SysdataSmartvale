@@ -64,7 +64,11 @@
 	                            <g:sortableColumn property="status" title="${message(code: 'transacao.status.label', default: '')}" />
 	                            <g:sortableColumn property="statusControle" title="${message(code: 'transacao.statusControle.label', default: '')}" />
 	                            <g:sortableColumn property="valor" title="${message(code: 'transacao.valor.label', default: '')}" />
-	                            <th>Ações</th>
+	                            
+	                            <sec:ifAnyGranted roles="ROLE_PROC">
+		                            <th>Ações</th>
+	                            </sec:ifAnyGranted>
+	                            
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -81,15 +85,18 @@
 	                            <td>${transacaoInstance.statusControle?.nome}</td>
 	                            <td><g:formatNumber number="${transacaoInstance.valor}" format="#0.00" /></td>
 	                            
-	                            <td> 
-		                            <g:if test="${transacaoInstance.status in [StatusTransacao.AGENDAR,StatusTransacao.AGENDADA] && 
-		                            			  transacaoInstance.tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] && 
-												  transacaoInstance.statusControle==StatusControleAutorizacao.CONFIRMADA}">
-												  
-										<span title="Estornar"><g:link class="undo" action="estornar" id="${transacaoInstance.id}"></g:link></span>
-		                            	
-		                            </g:if>
-	                            </td>
+	                            <sec:ifAnyGranted roles="ROLE_PROC">
+		                            <td> 
+			                            <g:if test="${transacaoInstance.status in [StatusTransacao.AGENDAR,StatusTransacao.AGENDADA] && 
+			                            			  transacaoInstance.tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] && 
+													  transacaoInstance.statusControle==StatusControleAutorizacao.CONFIRMADA}">
+													  
+											<span title="Estornar"><g:link class="undo" action="estornar" id="${transacaoInstance.id}"></g:link></span>
+			                            	
+			                            </g:if>
+		                            </td>
+	                            </sec:ifAnyGranted>
+	                            
 	                            
 	                        </tr>
 	                    </g:each>
