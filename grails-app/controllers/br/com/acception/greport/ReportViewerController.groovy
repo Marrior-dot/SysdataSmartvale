@@ -1,5 +1,7 @@
 package br.com.acception.greport
 
+import com.sysdata.gestaofrota.Estabelecimento
+
 class ReportViewerController {
 
 	def reportViewerService
@@ -54,6 +56,14 @@ class ReportViewerController {
 	def list(){
 		params.max=Math.min(params.max ? params.int('max') : 10, 100)
 		
+		def list
+		def filter= Estabelecimento.enableHibernateFilter('contaFilter')
+		//filter.setParameter("contaId",5)
+		list= Estabelecimento.findAll()
+			
+		println list
+
+		
 		def reportInstance=Report.get(params.id)
 		
 		def result=[:]
@@ -73,7 +83,6 @@ class ReportViewerController {
 				params.reportInstance=reportInstance
 			}
 		}
-		
 		params+result
 	}
 }

@@ -1,7 +1,10 @@
+import org.grails.plugin.hibernate.filter.HibernateFilterDomainConfiguration
+
 dataSource {
     pooled = true
     driverClassName = "org.postgresql.Driver"
     username = "postgres"
+	configClass = HibernateFilterDomainConfiguration
 }
 hibernate {
     cache.use_second_level_cache = true

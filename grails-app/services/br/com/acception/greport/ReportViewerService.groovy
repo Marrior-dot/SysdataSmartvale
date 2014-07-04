@@ -1,6 +1,7 @@
 package br.com.acception.greport
 
 import java.text.SimpleDateFormat
+import com.sysdata.gestaofrota.Estabelecimento
 
 import org.apache.poi.hssf.record.formula.functions.T
 import org.hibernate.Query

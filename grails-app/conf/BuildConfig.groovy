@@ -28,4 +28,8 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
     }
+	
+	plugins {
+		compile ":hibernate-filter:0.3.2"
+	}
 }
