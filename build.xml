@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     20/06/2014 18:09:13                                                        
+
+     Fleet    
+     description
+                   
+     luiz                                                                
+     ====================================================================== -->
+<project name="Fleet" default="deploy">
+    <description>
+            description
+    </description>
+	
+	
+	<property name="ftp-server" value="148.5.7.145"/>
+	<property name="ftp-user" value="globalcard"/>
+
+
+    <!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="ftp" description="description">
+        
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="ftp" description="upload classes to server">
+    	
+    	<ftp>
+    	</ftp>
+    	
+    </target>
+
+</project>

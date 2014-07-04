@@ -37,15 +37,14 @@
 						<li><g:link controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li></br>
 						<li><g:link controller="banco" action="list">Bancos</g:link></li></br>
 						
-						<li><g:link controller="parametroSistema" action="list">Parâmetros do Sistema</g:link></li></br>
-						
 					</sec:ifAnyGranted>
 					
 					<sec:ifAnyGranted roles="ROLE_ESTAB">
 						<li><g:link controller="postoCombustivel" action="list">Estabelecimentos</g:link></li></br>
 					</sec:ifAnyGranted>
 					
-					<sec:ifAnyGranted roles="ROLE_ADMIN">
+					<sec:ifAnyGranted roles="ROLE_PROC">
+						<li><g:link controller="parametroSistema" action="list">Parâmetros do Sistema</g:link></li></br>
 						<li><g:link controller="motivoNegacao" action="list">Motivos Negação</g:link></li></br>
 					</sec:ifAnyGranted>
 					
