@@ -104,8 +104,11 @@ class TransacaoService {
 	}
 	
 	def agendarAll(){
+		
+		log.info "Gerando lancamentos financeiros a partir das transacoes..."
+		
 		def errors=[]
-		def agendarList=Transacao.findAllWhere(status:StatusTransacao.AGENDAR)
+		def agendarList=Transacao.findAllWhere(status:StatusTransacao.AGENDAR,statusControle:StatusControleAutorizacao.CONFIRMADA)
 		agendarList.each{tr->
 			try {
 				agendarTransacao(tr)
@@ -115,6 +118,9 @@ class TransacaoService {
 				log.error e.message
 			}
 		}
+		
+		log.info agendarList.size()>0?"Lancamentos financeiros gerados":"Nao ha lancamentos financeiros para agendar"
+		
 		errors=(errors.size()>0)?errors:null
 		errors
 	}
