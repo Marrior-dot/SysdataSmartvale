@@ -102,8 +102,10 @@ log4j = {
     warn   'org.mortbay.log'
 	
 	debug 'grails.app.controllers',
-		'grails.app.domains',
+		'grails.app.domain',
 		'grails.app.services'
+		
+	info "grails.app"
 	
 	root{
 		debug 'logFile','stdout'
