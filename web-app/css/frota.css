@@ -65,7 +65,7 @@ fieldset{
 
 fieldset label{
 	display:block;
-	padding:5px;
+	padding:2px 2px 2px 2px;
 	float:left;
 }
 
@@ -208,3 +208,10 @@ a.undo{
 	padding-left:20px;
 	padding-top:5px;
 }
+
+ input#name, textarea#query{
+	width: 700px;
+}
+ textarea#countQuery {
+ 	width: 655px;
+ }

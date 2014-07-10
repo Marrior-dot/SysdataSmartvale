@@ -1,6 +1,12 @@
 <%@ page import="br.com.acception.greport.Report" %>
 
-
+<div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'queryType', 'error')} required">
+	<label for="queryType">
+		<g:message code="report.queryType.label" default="Query Type" />
+	</label>
+	<span class="required-indicator">*</span>
+	<g:select name="queryType" from="${br.com.acception.greport.QueryType?.values()}" keys="${br.com.acception.greport.QueryType.values()*.name()}" required="" value="${reportInstance?.queryType?.name()}"/>
+</div>
 
 <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'name', 'error')} ">
 	<label for="countQuery">
@@ -9,15 +15,6 @@
 	</label>
 	<g:textField name="name" value="${reportInstance?.name}"/>
 </div>
-
-<div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'queryType', 'error')} required">
-	<label for="queryType">
-		<g:message code="report.queryType.label" default="Query Type" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select name="queryType" from="${br.com.acception.greport.QueryType?.values()}" keys="${br.com.acception.greport.QueryType.values()*.name()}" required="" value="${reportInstance?.queryType?.name()}"/>
-</div>
-
 
 <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'query', 'error')} ">
 	<label for="query">
@@ -36,6 +33,11 @@
 	
 </div>
 
+
+<br />
+<hr>
+<br />
+
 <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'fields', 'error')} ">
 	<label for="fields">
 		<g:message code="report.fields.label" default="Fields" />
@@ -43,35 +45,39 @@
 	</label>
 
 
-<table>
-	
+
 	<g:each in="${reportInstance?.fields?}" var="f">
-	    <tr><g:link controller="fieldReport" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></tr>
+	    <span class="property-value" aria-labelledby="fields-label"><g:link controller="fieldReport" action="show" id="${f.id}">${f?.id +" - "+f?.label} |</g:link></span>
 	</g:each>
-</table>
+
 	
-<g:link controller="fieldReport" action="create" params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'fieldReport.label', default: 'FieldReport')])}</g:link>
+	<g:link controller="fieldReport" action="create" params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'fieldReport.label', default: 'FieldReport')])}</g:link>
 
 </div>
+
+<br />
+<hr>
+<br />
+
 
 <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'parameters', 'error')} ">
 	<label for="parameters">
-		<g:message code="report.parameters.label" default="Parameters" />
+		<g:message code="report.parameters.label" default="Parameters" /> 
 		
 	</label>
 	
-	<table>
-	
 		<g:each in="${reportInstance?.parameters?}" var="p">
-			<tr>
-			<g:link controller="parameterReport" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link>
-			</tr>
+			
+			<span class="property-value" aria-labelledby="parameters-label"><g:link controller="parameterReport" action="show" id="${p.id}">${p?.id +" - "+p?.label} |</g:link></span>
+			
 		</g:each>
-	</table>
 	
-<g:link controller="parameterReport" action="create" params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'parameterReport.label', default: 'ParameterReport')])}</g:link>	
+		<g:link controller="parameterReport" action="create" params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'parameterReport.label', default: 'ParameterReport')])}</g:link>	
 
 </div>
+
+<br />
+<hr>
 
 
 

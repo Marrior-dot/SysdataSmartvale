@@ -298,3 +298,8 @@ li{
 a.show {
     background: transparent url(../images/show_mini.png) no-repeat;
 }
+
+th.total {
+	color: #48802C;
+	font-weight:bold;
+}

@@ -5,7 +5,8 @@ enum StatusControleAutorizacao {
 	CONFIRMADA("Confirmada"),
 	DESFEITA("Desfeita"),
 	CANCELADA("Cancelada"),
-	NEGADA("Negada")
+	NEGADA("Negada"),
+	NAO_AGENDAR("Não agendar")
 	
 	String nome
 	

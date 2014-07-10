@@ -6,7 +6,8 @@ enum TipoTransacao {
 	CARGA_SALDO("Carga de Saldo"),
 	CANCELAMENTO("Cancelamento"),
 	CONSULTA_PRECOS("Consulta de Preços"),
-	SERVICOS("Serviços")
+	SERVICOS("Serviços"),
+	CANCELAMENTO_COMBUSTIVEL("Cancelamento combustível")
 	
 	String nome
 	

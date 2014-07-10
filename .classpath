@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" path=".link_to_grails_plugins/spring-security-ui-0.2/grails-app"/>
+	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="src" path="src/groovy"/>
-	<classpathentry kind="src" path="grails-app/conf"/>
+	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="grails-app/controllers"/>
+	<classpathentry kind="src" path="grails-app/views"/>
+	<classpathentry kind="src" path="grails-app/conf"/>
+	<classpathentry kind="src" path="web-app"/>
+	<classpathentry kind="src" path="grails-app/i18n"/>
+	<classpathentry kind="src" path="scripts"/>
+	<classpathentry kind="src" path="target"/>
 	<classpathentry kind="src" path="grails-app/domain"/>
 	<classpathentry kind="src" path="grails-app/services"/>
-	<classpathentry kind="src" path="grails-app/taglib"/>
-	<classpathentry kind="src" path="grails-app/utils"/>
-	<classpathentry kind="src" path="test/integration"/>
-	<classpathentry kind="src" path="test/unit"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-<<<<<<< HEAD
-	<classpathentry kind="con" path="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER"/>
-=======
-	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
-	<classpathentry kind="lib" path="lib/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/jpos-1.7.0-sysdata.jar"/>
-	<classpathentry kind="lib" path="lib/mail-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/poi-3.7-20101029.jar"/>
-	<classpathentry kind="lib" path="lib/poi-ooxml-3.7-20101029.jar"/>
-	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-3.7-20101029.jar"/>
-	<classpathentry kind="lib" path="lib/postgresql-8.3-604.jdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.2.jar"/>
->>>>>>> ee275f0b34ee561c590a8e4a55750b781df1b6bc
-	<classpathentry kind="output" path="target-eclipse/classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

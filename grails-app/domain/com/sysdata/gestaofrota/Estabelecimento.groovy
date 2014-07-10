@@ -14,8 +14,4 @@ class Estabelecimento extends Empresa {
 	static mapping={
 		id generator:'sequence',params:[sequence:'estabelecimento_seq']
 	}
-	
-	static hibernateFilters = {
-		contaFilter(condition:'conta.id =:contaId', types: 'long', default: true)
-	}
 }

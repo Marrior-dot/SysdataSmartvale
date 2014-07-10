@@ -5,8 +5,8 @@
 <div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'dataType', 'error')} required">
 	<label for="dataType">
 		<g:message code="parameterReport.dataType.label" default="Data Type" />
-		<span class="required-indicator">*</span>
 	</label>
+	<span class="required-indicator">*</span>
 	<g:select name="dataType" from="${br.com.acception.greport.DataType?.values()}" keys="${br.com.acception.greport.DataType.values()*.name()}" required="" value="${parameterReportInstance?.dataType?.name()}"/>
 </div>
 
@@ -19,8 +19,8 @@
 <div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'markupType', 'error')} required">
 	<label for="markupType">
 		<g:message code="parameterReport.markupType.label" default="Markup Type" />
-		<span class="required-indicator">*</span>
 	</label>
+	<span class="required-indicator">*</span>
 	<g:select name="markupType" from="${br.com.acception.greport.MarkupType?.values()}" keys="${br.com.acception.greport.MarkupType.values()*.name()}" required="" value="${parameterReportInstance?.markupType?.name()}"/>
 </div>
 
@@ -35,16 +35,16 @@
 <div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'order', 'error')} required">
 	<label for="order">
 		<g:message code="parameterReport.order.label" default="Order" />
-		<span class="required-indicator">*</span>
 	</label>
+	<span class="required-indicator">*</span>
 	<g:field type="number" name="order" required="" value="${parameterReportInstance.order}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: parameterReportInstance, field: 'report', 'error')} required">
 	<label for="report">
 		<g:message code="parameterReport.report.label" default="Report" />
-		<span class="required-indicator">*</span>
 	</label>
+	<span class="required-indicator">*</span>
 	<g:select id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" optionValue="name" required="" 
 	value="${parameterReportInstance?.report?.id}" class="many-to-one"/>
 </div>
