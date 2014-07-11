@@ -93,6 +93,11 @@ class ReportViewerService {
 		
 		def totalizers=reportInstance.fields.findAll{it.totalizer}
 		
+		totalizers.each{
+			tots[it.name]=[label:it.label,sum:0]
+		}
+		
+		
 		if(totalizers && isLastPage(params,total)){
 			
 			def resultTot
@@ -118,6 +123,7 @@ class ReportViewerService {
 				
 					totalizers.each{totField->
 						if(rs.properties.containsKey(totField.name)){
+							
 							tots[totField.name]=(tots[totField.name]?:0)+rs.properties[totField.name]
 						}
 						else
@@ -126,15 +132,20 @@ class ReportViewerService {
 				
 				
 				} else if(rs instanceof Object[]){
-					/* Localiza metainfo de fields pela ordem de retorno na consulta */
+					
+//				/* Localiza metainfo de fields pela ordem de retorno na consulta */
 					rs.eachWithIndex {val,i->
 						
 						def totField=totalizers.find{it.order==(i+1)}
-						if(totField)
-							tots[totField.name]=(tots[totField.name]?:0)+rs.properties[totField.name]
-						else
-							throw new RuntimeException("Relatorio:${reportInstance.name} - Campo totalizador de ordem ${i+1} nao localizado na configuracao")
+						if(totField){
+							def m=tots[totField.name]
+							m.sum+=rs[i]
+						}	
+//							(tots[totField.name]?:0)+rs[i]
+//						else
+//							throw new RuntimeException("Relatorio:${reportInstance.name} - Campo totalizador de ordem ${i+1} nao localizado na configuracao")
 					}
+					
 				}else{
 					def totField=totalizers.find{it.order==1}
 					if(totField)

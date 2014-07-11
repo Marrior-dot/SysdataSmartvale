@@ -41,7 +41,7 @@
 				</g:each>
 				</tbody>
 			</table>
-			<div class="pagination">
+			<div class="paginateButtons">
 				<g:paginate total="${motivoNegacaoInstanceTotal}" />
 			</div>
 		</div>

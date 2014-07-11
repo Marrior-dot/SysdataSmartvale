@@ -83,13 +83,13 @@
 	
 	<g:if test="${rowTotal}">
 	
-		<tfoot>
+		<thead>
 			<g:each in="${rowTotal}" var="total">
 				<tr>
-					<td>Total ${total.key} ${total.value}</td>
+					<th class="total" colspan='2'>Total ${total.value.label} ${total.value.sum}</td>
 				</tr>
 			</g:each>
-		</tfoot>
+		</thead>
 	</g:if>
 	
 </table>

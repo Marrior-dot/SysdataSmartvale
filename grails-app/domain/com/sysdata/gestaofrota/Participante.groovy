@@ -22,4 +22,11 @@ class Participante {
 		id generator:'sequence',params:[sequence:'participante_seq']
 		conta lazy:false
 	}	
+	
+	static hibernateFilters = {
+		empresaPorUser(condition:'id=:owner_id', types: 'int')
+		funcionariosPorUnidade(condition:'unidade_id=:unidade_id', types: 'long')
+		estabelecimentoPorPosto(condition:'empresa_id=:empresa_id',types:'long')
+	}
+	
 }

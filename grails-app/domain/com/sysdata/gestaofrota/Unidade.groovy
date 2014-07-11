@@ -17,4 +17,9 @@ class Unidade {
 	static mapping={
 		id generator:'sequence',params:[sequence:'unidade_seq']
 	}
+	
+	static hibernateFilters = {
+		unidadePorRh(condition:'rh_id=:rh_id', types: 'long')
+		
+	}
 }
