@@ -118,8 +118,8 @@ log4j = {
 
 hibernateFilter.enableFilters = { user->
 	def result=[:]
-	result['transacaoPorEstabelecimento']=['class':com.sysdata.gestaofrota.Transacao,parameters:['estabelecimento_id':user.owner.id]]
-	result['transacaoPorParticipante']=['class':com.sysdata.gestaofrota.Transacao,parameters:['participante_id':user.owner.id]]
+	//result['transacaoPorEstabelecimento']=['class':com.sysdata.gestaofrota.Transacao,parameters:['estabelecimento_id':user.owner.id]]
+	//result['transacaoPorParticipante']=['class':com.sysdata.gestaofrota.Transacao,parameters:['participante_id':user.owner.id]]
 	result['transacaoPorRH']=['class':com.sysdata.gestaofrota.Transacao,parameters:['rh_id':user.owner.id]]
 	result['transacaoPorPosto']=['class':com.sysdata.gestaofrota.Transacao,parameters:['posto_id':user.owner.id]]
 	result['estabelecimentoPorPosto']=['class':com.sysdata.gestaofrota.Participante,parameters:['empresa_id':user.owner.id]]

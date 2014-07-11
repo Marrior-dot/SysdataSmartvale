@@ -7,7 +7,7 @@ class UserHibernateFilterFilters {
 	def sessionFactory
 	def springSecurityService
     def filters = {
-        all(controller:'*', action:'*') {
+        all(controller:'reportViewer', action:'*') {
             before = {
 				def session = sessionFactory.currentSession
 				def user=springSecurityService.currentUser
@@ -15,19 +15,31 @@ class UserHibernateFilterFilters {
 				if (user && enableFilters && enableFilters instanceof Closure) {
 					def result=enableFilters(user)
 					def roleEstab=Role.findByAuthority('ROLE_ESTAB')
-					if(user.authorities.contains(roleEstab)){
-						if(result) {
-							result.each {fname, options->
-								log.debug "Adding filter $fname => $options ..."
-								def clz=options['class']
-								def parameters=options['parameters']
-								def filter=clz.enableHibernateFilter(fname)
-								parameters.each {pname,value->
-									filter.setParameter(pname,value)
+					def roleRH=Role.findByAuthority('ROLE_RH')
+					if(result) {
+						result.each {fname, options->
+							log.debug "Adding filter $fname => $options ..."
+							def clz=options['class']
+							def parameters=options['parameters']
+							if(user.authorities.contains(roleEstab)){
+								if(fname=='transacaoPorPosto' || fname=='estabelecimentoPorPosto'){
+									def filter=clz.enableHibernateFilter(fname)
+									parameters.each {pname,value->
+										filter.setParameter(pname,value)
+									}
+								}
+							}
+							if(user.authorities.contains(roleRH)){
+								if(fname=='transacaoPorRH'){
+									def filter=clz.enableHibernateFilter(fname)
+									parameters.each {pname,value->
+										filter.setParameter(pname,value)
+									}
 								}
 							}
 						}
-					} 
+					}
+					
 				}
             }
         }
