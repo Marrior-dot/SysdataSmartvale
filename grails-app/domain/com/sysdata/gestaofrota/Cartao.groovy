@@ -17,4 +17,18 @@ class Cartao {
 		motivoCancelamento(nullable:true)
 		arquivo(nullable:true)
     }
+	
+	
+	def beforeUpdate(){
+		
+		def histCartao
+		
+		if(status in [StatusCartao.ATIVO,StatusCartao.BLOQUEADO,StatusCartao.CANCELADO]){
+			histCartao=new HistoricoStatusCartao(cartao:this,novoStatus:this.status)
+			if(!histCartao.save())
+				return false
+		}
+		
+		return true
+	}
 }
