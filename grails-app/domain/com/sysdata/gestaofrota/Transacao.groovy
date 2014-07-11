@@ -64,12 +64,12 @@ class Transacao {
 	
 	static hibernateFilters = {
 		// Filtros Transacao
-		transacaoPorEstabelecimento(condition:'estabelecimento_id=:estabelecimento_id',types:'int')
+		transacaoPorEstabelecimento(condition:'estabelecimento_id=:estabelecimento_id',types:'long')
 		
 		transacaoPorParticipante(condition:'participante_id=:participante_id',types:'long')
 		
-		transacaoPorRH(condition:'participante_id in (select f.id from Participante f where f.unidade_id in (select u.id from Unidade u where u.rh_id=:rh_id))',types:'int')
+		transacaoPorRH(condition:'participante_id in (select f.id from Participante f where f.unidade_id in (select u.id from Unidade u where u.rh_id=:rh_id))',types:'long')
 		
-		transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id=:posto_id)', types: 'int')
+		transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id=:posto_id)', types: 'long')
 	}
 }

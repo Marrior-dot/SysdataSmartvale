@@ -56,14 +56,16 @@
 	            </div>
 	            </sec:ifAnyGranted>
 	            
-	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB">
 		            <div class="servico">
 						<a href="${createLink(controller:'login',action:'menu')}?servico=relatorios">
 		            		<img alt="Relatorios" src="${resource(dir:"images",file:"relatorio.png") }">
 		            	</a>
 		            	<h2>Relatórios</h2>
 		            </div>
+		        </sec:ifAnyGranted>
 		            
+		        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		            <div class="servico">
 						<a href="${createLink(controller:'login',action:'menu')}?servico=ca">
 		            		<img alt="Central de Atendimento" src="${resource(dir:"images",file:"ca.png") }">

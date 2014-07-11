@@ -116,6 +116,17 @@ log4j = {
 	
 }
 
+hibernateFilter.enableFilters = { user->
+	def result=[:]
+	result['transacaoPorEstabelecimento']=['class':com.sysdata.gestaofrota.Transacao,parameters:['estabelecimento_id':user.owner.id]]
+	result['transacaoPorParticipante']=['class':com.sysdata.gestaofrota.Transacao,parameters:['participante_id':user.owner.id]]
+	result['transacaoPorRH']=['class':com.sysdata.gestaofrota.Transacao,parameters:['rh_id':user.owner.id]]
+	result['transacaoPorPosto']=['class':com.sysdata.gestaofrota.Transacao,parameters:['posto_id':user.owner.id]]
+	result['estabelecimentoPorPosto']=['class':com.sysdata.gestaofrota.Participante,parameters:['empresa_id':user.owner.id]]
+	result
+	
+}
+
 grails {
 	mail {
 		host = "148.5.7.50"
@@ -157,7 +168,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 	'/report/**':			['ROLE_PROC'],
 	'/parameterReport/**':	['ROLE_PROC'],
 	'/fieldReport/**':		['ROLE_PROC'],
-	'/reportViewer/**':		['ROLE_PROC','ROLE_ADMIN'],
+	'/reportViewer/**':		['ROLE_PROC','ROLE_ADMIN','ROLE_ESTAB'],
 	'/estado/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/cidade/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/marcaVeiculo/**':		['ROLE_PROC','ROLE_ADMIN'],
