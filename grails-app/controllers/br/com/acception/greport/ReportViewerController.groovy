@@ -40,7 +40,6 @@ class ReportViewerController {
 				response.contentType=grailsApplication.config.grails.mime.types[params.format]
 				response.setHeader("Content-disposition","attachment;filename=${reportInstance.name}.xlsx")
 				xlsExportService.export(params,response.outputStream)
-					
 				
 			} catch (Exception e) {
 				log.error e
