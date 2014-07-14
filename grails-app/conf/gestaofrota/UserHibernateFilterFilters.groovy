@@ -7,7 +7,7 @@ class UserHibernateFilterFilters {
 	def sessionFactory
 	def springSecurityService
     def filters = {
-        all(controller:'reportViewer', action:'list') {
+        all(controller:'reportViewer', action:'*') {
             before = {
 				def session = sessionFactory.currentSession
 				def user=springSecurityService.currentUser
