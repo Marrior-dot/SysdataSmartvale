@@ -44,9 +44,6 @@ class UserController extends BaseOwnerController{
 			}
 		}
 		
-		userInstanceList.each(){
-			println it.name
-		}
 		withSecurity{ownerList->
 			userInstanceTotal=User.withCriteria(uniqueResult:true){
 				
