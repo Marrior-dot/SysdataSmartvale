@@ -3,3 +3,5 @@
 *.log
 Thumbs.db
 /bin
+/target
+/target-eclipse

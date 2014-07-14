@@ -27,8 +27,8 @@ class XlsExportService {
 		def castValues=[:]
 		
 		reportInstance.parameters.each{paramInstance->
-			if(params.containsKey(paramInstance.name)){
-				def rawValue=params[paramInstance.name]
+				if(params.containsKey(paramInstance.name)){
+					def rawValue=params[paramInstance.name]
 				
 				try {
 					switch (paramInstance.dataType) {
@@ -47,6 +47,10 @@ class XlsExportService {
 						case DataType.DATE:
 							castValues[paramInstance.name]=new SimpleDateFormat("dd/MM/yyyy").parse(rawValue)
 							break;
+						case DataType.STRING:
+							castValues[paramInstance.name]=rawValue
+							break;
+
 						default:
 							break;
 						}
@@ -350,7 +354,9 @@ class XlsExportService {
 					xStyle=wb.createCellStyle();
 					xStyle.setDataFormat(xFormat.getFormat("#,##0.00"));
 					xCell.setCellStyle(xStyle)
-				}else
+				}else if(fieldInstance.dataType==DataType.STRING)
+					xCell.setCellValue(row[fieldInstance.name] as String)
+				else
 					xCell.setCellValue(row[fieldInstance.name])
 				
 			}
