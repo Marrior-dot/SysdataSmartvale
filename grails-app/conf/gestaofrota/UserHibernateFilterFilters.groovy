@@ -7,7 +7,7 @@ class UserHibernateFilterFilters {
 	def sessionFactory
 	def springSecurityService
     def filters = {
-        all(controller:'reportViewer', action:'*') {
+        all(controller:'reportViewer', action:'list') {
             before = {
 				def session = sessionFactory.currentSession
 				def user=springSecurityService.currentUser
@@ -38,10 +38,37 @@ class UserHibernateFilterFilters {
 								}
 							}
 						}
-					}
-					
+					}	
 				}
             }
+			
+			after = {
+				def session = sessionFactory.currentSession
+				def user=springSecurityService.currentUser
+				def enableFilters=grailsApplication.config.hibernateFilter?.enableFilters
+				if (user && enableFilters && enableFilters instanceof Closure) {
+					def result=enableFilters(user)
+					def roleEstab=Role.findByAuthority('ROLE_ESTAB')
+					def roleRH=Role.findByAuthority('ROLE_RH')
+					if(result) {
+						result.each {fname, options->
+							log.debug "Adding filter $fname => $options ..."
+							def clz=options['class']
+							def parameters=options['parameters']
+							if(user.authorities.contains(roleEstab)){
+								if(fname=='transacaoPorPosto' || fname=='estabelecimentoPorPosto'){
+									def filter=clz.disableHibernateFilter(fname)
+								}
+							}
+							if(user.authorities.contains(roleRH)){
+								if(fname=='transacaoPorRH'){
+									def filter=clz.disableHibernateFilter(fname)
+								}
+							}
+						}
+					}
+				}
+			}
         }
     }
 }

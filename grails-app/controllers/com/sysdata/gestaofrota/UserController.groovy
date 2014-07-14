@@ -35,14 +35,18 @@ class UserController extends BaseOwnerController{
 									if(option==2)
 										like("username",params.filtro+"%")
 								}
-				
+								
 								if(ownerList.size>0)
-									owner{'in'('id',ownerList)}
-								maxResults(params.max)
+									//owner{'in'('id',ownerList)}
+								//maxResults(params.max)
 								firstResult(params.offset?params.offset as int:0)
-							}
+								
+			}
 		}
 		
+		userInstanceList.each(){
+			println it.name
+		}
 		withSecurity{ownerList->
 			userInstanceTotal=User.withCriteria(uniqueResult:true){
 				
