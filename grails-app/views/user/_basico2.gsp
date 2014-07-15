@@ -1,4 +1,9 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@page import="com.sysdata.gestaofrota.Util" %>
+<%@page import="com.sysdata.gestaofrota.Administradora"%>
+<%@page import="com.sysdata.gestaofrota.Rh"%>
+<%@page import="com.sysdata.gestaofrota.PostoCombustivel"%>
+<%@page import="com.sysdata.gestaofrota.Processadora"%>
+
 
 <g:form method="post">
 
