@@ -56,7 +56,7 @@
 	            </div>
 	            </sec:ifAnyGranted>
 	            
-	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB">
+	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH">
 		            <div class="servico">
 						<a href="${createLink(controller:'login',action:'menu')}?servico=relatorios">
 		            		<img alt="Relatorios" src="${resource(dir:"images",file:"relatorio.png") }">

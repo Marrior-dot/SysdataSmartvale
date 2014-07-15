@@ -59,7 +59,7 @@
 				</ul>
 			</g:if>
 
-			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB">
+			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB, ROLE_RH">
 				<g:if test="${servico=='relatorios'}">
 					<h2>Relatórios</h2>
 					<ul>

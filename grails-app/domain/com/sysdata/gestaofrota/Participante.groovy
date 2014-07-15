@@ -26,7 +26,7 @@ class Participante {
 	static hibernateFilters = {
 		empresaPorUser(condition:'id=:owner_id', types: 'int')
 		funcionariosPorUnidade(condition:'unidade_id=:unidade_id', types: 'long')
-		estabelecimentoPorPosto(condition:'empresa_id=:empresa_id',types:'long')
+		estabelecimentoPorPosto(condition:'(empresa_id=:empresa_id or id=:empresa_id)',types:'long')
 	}
 	
 }
