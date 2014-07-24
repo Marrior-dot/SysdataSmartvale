@@ -40,12 +40,14 @@
 			<hr>      
             
             <div id="servicos">
+            	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH,ROLE_LOG">
 	            <div class="servico">
 	            	<a href="${createLink(controller:'login',action:'menu')}?servico=cadastros">
 	            		<img alt="Cadastros" src="${resource(dir:"images",file:"cadastro.png") }">
 	            	</a>
 					<h2>Cadastros</h2>						            	
 	            </div>
+	            </sec:ifAnyGranted>
 	            
 	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
 	            <div class="servico">
@@ -56,7 +58,7 @@
 	            </div>
 	            </sec:ifAnyGranted>
 	            
-	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH">
+	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH,ROLE_LOG,ROLE_HELP">
 		            <div class="servico">
 						<a href="${createLink(controller:'login',action:'menu')}?servico=relatorios">
 		            		<img alt="Relatorios" src="${resource(dir:"images",file:"relatorio.png") }">

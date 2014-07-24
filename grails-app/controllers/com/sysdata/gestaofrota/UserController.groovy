@@ -90,6 +90,7 @@ class UserController extends BaseOwnerController{
     }
 
     def save = {
+
         def userInstance = new User(params)
 		
 		userInstance.enabled=true
@@ -97,18 +98,20 @@ class UserController extends BaseOwnerController{
 		if(params.password==params.confirmPassword){
 			if (userInstance.save(flush: true)) {
 				
-				if(userInstance.owner instanceof Rh){
-					UserRole.create userInstance,Role.findByAuthority("ROLE_RH")
+				UserRole.create userInstance,Role.get(params.role)
 				
-				}else if(userInstance.owner instanceof Administradora){
-					UserRole.create userInstance,Role.findByAuthority("ROLE_ADMIN")
-				
-				}else if(userInstance.owner instanceof Processadora){
-					UserRole.create userInstance,Role.findByAuthority("ROLE_PROC")
-					
-				}else if(userInstance.owner instanceof PostoCombustivel){
-					UserRole.create userInstance,Role.findByAuthority("ROLE_ESTAB")
-				}
+//				if(userInstance.owner instanceof Rh){
+//					UserRole.create userInstance,Role.findByAuthority("ROLE_RH")
+//				
+//				}else if(userInstance.owner instanceof Administradora){
+//					UserRole.create userInstance,Role.findByAuthority("ROLE_ADMIN")
+//				
+//				}else if(userInstance.owner instanceof Processadora){
+//					UserRole.create userInstance,Role.findByAuthority("ROLE_PROC")
+//					
+//				}else if(userInstance.owner instanceof PostoCombustivel){
+//					UserRole.create userInstance,Role.findByAuthority("ROLE_ESTAB")
+//				}
 	
 				
 				
@@ -132,7 +135,8 @@ class UserController extends BaseOwnerController{
             redirect(action: "list")
         }
         else {
-			render (view:'form', model:[userInstance:userInstance,action:Util.ACTION_VIEW,ownerList:listOwners()])
+			def userRole=UserRole.findByUser(userInstance)
+			render (view:'form', model:[userInstance:userInstance, role:userRole.role, action:Util.ACTION_VIEW,ownerList:listOwners()])
         }
     }
 
@@ -143,7 +147,8 @@ class UserController extends BaseOwnerController{
             redirect(action: "list")
         }
         else {
-            return [userInstance: userInstance, ownerList:listOwners()]
+			def userRole=UserRole.findByUser(userInstance)
+           render(view:"form",model:[userInstance: userInstance, role:userRole.role,action:Util.ACTION_EDIT,ownerList:listOwners()])
         }
     }
 
@@ -159,6 +164,11 @@ class UserController extends BaseOwnerController{
                     return
                 }
             }
+			
+			def userRole=UserRole.findByUser(userInstance)
+			userRole.delete(flush: true)
+			UserRole.create userInstance,Role.get(params.role)
+			
             userInstance.properties = params
             if (!userInstance.hasErrors() && userInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
@@ -234,6 +244,15 @@ class UserController extends BaseOwnerController{
 		redirect(action: "show", id: params.id)
 	}
 
-	
-	
+	def listRoles(){
+		def participante=Participante.findByNome(params.nome)
+		def roles=Role.withCriteria{
+			eq("owner", participante)
+		}
+		
+		println roles
+
+		render roles as JSON
+
+	}	
 }

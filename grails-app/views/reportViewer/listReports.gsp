@@ -28,7 +28,15 @@
 			
 			<ul>
 				<g:each in="${reportList}" var="reportInstance">
-					<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link>  </li>
+					<sec:ifAnyGranted roles="ROLE_LOG,ROLE_HELP">
+						<g:if test="${reportInstance.name=="Transações Combustível por Período"}">
+							<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
+						</g:if>
+						<g:else></g:else>
+					</sec:ifAnyGranted>
+					<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH,ROLE_ESTAB">
+						<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
+					</sec:ifAnyGranted>
 				</g:each>
 			
 			</ul>

@@ -37,9 +37,10 @@
 						<li><g:link controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li></br>
 						<li><g:link controller="banco" action="list">Bancos</g:link></li></br>
 						
+						<li><g:link controller="role" action="list">Roles</g:link></li></br>						
 					</sec:ifAnyGranted>
 					
-					<sec:ifAnyGranted roles="ROLE_ESTAB">
+					<sec:ifAnyGranted roles="ROLE_ESTAB,ROLE_LOG">
 						<li><g:link controller="postoCombustivel" action="list">Estabelecimentos</g:link></li></br>
 					</sec:ifAnyGranted>
 					
@@ -59,7 +60,7 @@
 				</ul>
 			</g:if>
 
-			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB, ROLE_RH">
+			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB, ROLE_RH,ROLE_LOG,ROLE_HELP">
 				<g:if test="${servico=='relatorios'}">
 					<h2>Relatórios</h2>
 					<ul>

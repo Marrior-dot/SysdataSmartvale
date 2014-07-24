@@ -4,7 +4,7 @@ class Rh extends Empresa {
 	
 	String codigo
 	
-	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel]
+	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	
     static constraints = {
     }

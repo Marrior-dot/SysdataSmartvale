@@ -1,5 +1,3 @@
-
-
 <%@ page import="com.sysdata.gestaofrota.User" %>
 <html>
     <head>
