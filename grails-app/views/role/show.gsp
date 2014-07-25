@@ -36,7 +36,7 @@
 				<li class="fieldcontain">
 					<span id="owner-label" class="property-label"><g:message code="role.owner.label" default="Owner" /></span>
 					
-						<span class="property-value" aria-labelledby="owner-label"><g:link controller="participante" action="show" id="${roleInstance?.owner?.id}">${roleInstance?.owner?.nome}</g:link></span>
+						<span class="property-value" aria-labelledby="owner-label">${roleInstance?.owner}</span>
 					
 				</li>
 				</g:if>

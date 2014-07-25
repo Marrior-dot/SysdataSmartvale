@@ -245,12 +245,9 @@ class UserController extends BaseOwnerController{
 	}
 
 	def listRoles(){
-		def participante=Participante.findByNome(params.nome)
 		def roles=Role.withCriteria{
-			eq("owner", participante)
+			eq("owner", params.classe)
 		}
-		
-		println roles
 
 		render roles as JSON
 
