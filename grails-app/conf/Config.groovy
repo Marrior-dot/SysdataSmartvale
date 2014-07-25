@@ -174,7 +174,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 	'/marcaVeiculo/**':		['ROLE_PROC','ROLE_ADMIN'],
 	'/banco/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/postoCombustivel/**':	['ROLE_PROC','ROLE_ADMIN','ROLE_ESTAB','ROLE_LOG'],
-	'/estabelecimento/**':	['ROLE_PROC','ROLE_ADMIN','ROLE_ESTAB'],
+	'/estabelecimento/**':	['ROLE_PROC','ROLE_ADMIN','ROLE_ESTAB', 'ROLE_LOG'],
 	'/arquivo/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/motivoNegacao/**':	['ROLE_PROC'],
 	'/parametroSistema/**':	['ROLE_PROC','ROLE_ADMIN'],

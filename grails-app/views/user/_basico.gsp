@@ -2,9 +2,15 @@
 <%@page import="com.sysdata.gestaofrota.Administradora"%>
 <%@page import="com.sysdata.gestaofrota.Rh"%>
 <%@page import="com.sysdata.gestaofrota.PostoCombustivel"%>
+<%@ page import="com.sysdata.gestaofrota.Role" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
+<g:if test="${action in [Util.ACTION_NEW]}">
 <script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"></script>
+</g:if>
+<g:if test="${action in [Util.ACTION_EDIT]}">
+<script type="text/javascript" src="${resource(dir:'js',file:'roles2.js') }"></script>
+</g:if>
 
 <g:form method="post">
 
@@ -44,13 +50,13 @@
 		
 		
 		<g:if test="${action in [Util.ACTION_EDIT]}">
-			<div><label><span>Papel : ${role?.authority}</span><g:select name="role" from="" value="" optionKey="id" optionValue="authority"></g:select></label></div>
+			<div><label><span>Papel : ${role?.authority}</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="" optionKey="id" optionValue="authority"></g:select></label></div>
 		</g:if>
 		
 		
 		
 		<g:if test="${action in [Util.ACTION_VIEW]}">
-			<div><label><span>Papel : ${role?.authority}</span></label></div>
+			<div><label><span>Papel</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="${role?.authority}" optionKey="id" optionValue="authority"></g:select></label></div>
 		</g:if>
 		
 		

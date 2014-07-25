@@ -17,7 +17,7 @@
             <div class="message">${flash.message}</div>
             </g:if>
            	<g:form>
-           		<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_LOG">
+           		<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		            <div class="buttons">
 			            <span class="button"><g:actionSubmit class="new" action="create" value="${message(code:'default.new.label', args:[entityName]) }"/></span>
 		            </div>

@@ -136,7 +136,7 @@ class UserController extends BaseOwnerController{
         }
         else {
 			def userRole=UserRole.findByUser(userInstance)
-			render (view:'form', model:[userInstance:userInstance, role:userRole.role, action:Util.ACTION_VIEW,ownerList:listOwners()])
+			render (view:'form', model:[userInstance:userInstance, role:userRole?.role, action:Util.ACTION_VIEW,ownerList:listOwners()])
         }
     }
 
@@ -148,7 +148,7 @@ class UserController extends BaseOwnerController{
         }
         else {
 			def userRole=UserRole.findByUser(userInstance)
-           render(view:"form",model:[userInstance: userInstance, role:userRole.role,action:Util.ACTION_EDIT,ownerList:listOwners()])
+           render(view:"form",model:[userInstance: userInstance, role:userRole?.role,action:Util.ACTION_EDIT,ownerList:listOwners()])
         }
     }
 
@@ -166,7 +166,7 @@ class UserController extends BaseOwnerController{
             }
 			
 			def userRole=UserRole.findByUser(userInstance)
-			userRole.delete(flush: true)
+			userRole?.delete(flush: true)
 			UserRole.create userInstance,Role.get(params.role)
 			
             userInstance.properties = params
