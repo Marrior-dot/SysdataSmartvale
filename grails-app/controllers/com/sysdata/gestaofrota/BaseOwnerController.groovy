@@ -14,11 +14,11 @@ class BaseOwnerController {
 			ownerList<<userInstance.owner.id
 		}else if(userInstance.owner instanceof Administradora){
 			ownerList<<userInstance.owner.id
-			ownerList+=Rh.all*.id
+			ownerList+=Rh.all.id
 		}else{
 			ownerList<<userInstance.owner.id
-			ownerList+=Administradora.all*.id
-			ownerList+=Rh.all*.id
+			ownerList+=Administradora.all.id
+			ownerList+=Rh.all.id
 		}
 	
 		cls.call(ownerList)

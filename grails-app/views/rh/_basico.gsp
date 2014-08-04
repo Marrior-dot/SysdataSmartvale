@@ -27,6 +27,14 @@
 				<label><span>Nome Fantasia</span><g:textField name="nomeFantasia" value="${rhInstance?.nomeFantasia}" size="50" maxlength="50" /></label>
 				<div class="clear"></div>
 			</div>	
+			
+			<div>
+				<label><span>Taxa de Pedido (R$)</span><g:textField name="taxaPedido" value="${rhInstance?.taxaPedido}" /></label>
+			</div>
+			
+			<div>
+				<label><span>Validade da carga (dias)</span><g:textField name="validadeCarga" value="${rhInstance?.validadeCarga}" /></label>
+			</div>
 				
 			
 			<g:render template="/endereco/form" model="[enderecoInstance:rhInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>

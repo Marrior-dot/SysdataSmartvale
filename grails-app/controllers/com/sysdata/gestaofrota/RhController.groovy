@@ -206,7 +206,6 @@ class RhController extends BaseOwnerController {
 						}
 		}
 		
-
 		def fields=rhInstanceList.collect{r->
 			[id:r.id,
 				codigo:r.codigo,		
