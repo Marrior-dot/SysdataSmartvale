@@ -40,6 +40,7 @@
 	                
 					<fieldset class="uppercase">
 						<label><span>Data de Carga</span><gui:datePicker id="dataCarga" name="dataCarga" value="${pedidoCargaInstance?.dataCarga}" formatString="dd/MM/yyyy"/></label>
+						<label><span>Taxa Pedido (%)</span>${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}</label>
 					</fieldset>
 					
 					<fieldset>

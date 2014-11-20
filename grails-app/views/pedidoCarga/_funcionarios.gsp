@@ -54,8 +54,6 @@
 		$("input[name='selectAll']").attr("checked",(total==count));
 	}
 
-
-
 	function synchServer(funcId,check){
 
 		$.ajax({
@@ -104,7 +102,6 @@
 		 * 	por isso o tratamento com a variável firstTime 
 		 */		
 		 
-
 		GRAILSUI.funcSearchDT.subscribe("initEvent",function(args){
 
 			if(!firstTime){
@@ -117,12 +114,9 @@
 					countCat[rec.getData('categoria')]=GRAILSUI.funcSearchDT.configs.paginator._configs.totalRecords.value;
 
 				$("input[name='selectAll']").attr("checked",(countCat[rec.getData('categoria')]==totalCat[rec.getData('categoria')]));
-				
 					
 			}else
 				firstTime=false;
-			
-			
 		});
 		
 		
@@ -149,6 +143,9 @@
 
 			synchServer(rec.getData('id'),newValue);
 
+			if(newValue)
+				totalPedido+=parseFloat(rec.getData('valorCarga'));
+
 			validateSelectAll(rec.getData('categoria'),newValue);
 			
 		});
@@ -168,7 +165,13 @@
 		var recs=GRAILSUI.funcSearchDT.getRecordSet().getRecords();
 		var i=0;
 
+		totalPedido=0.0;
+
 		while(i<recs.length){
+
+			if(check)
+				totalPedido+=parseFloat(rec.getData('valorCarga'));
+			
 			if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
 				recs[i].setData('selecao',check);
 			i++;

@@ -67,6 +67,7 @@ environments {
 
 }
 
+
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console
@@ -75,16 +76,16 @@ log4j = {
     appenders {
 		
 		console name: "stdout",	layout: pattern(conversionPattern: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] %p %c{4} - %m%n")
-		
-							
+
+		def logDir=System.env["AMAZON_FLEET_LOG_DIR"]
+		if(!logDir) logDir="/var/log/tomcat6/frota"
+				
 		appender new DailyRollingFileAppender(
 						name: "logFile",
 						datePattern: "'.'yyyy-MM-dd",
-						//file: "/home/frota/.amazon/logs/gestaofrota.log",
-						file:"/var/log/tomcat6/frota/amazon.log",
+						file:logDir+"/amazon_fleet.log",
 						layout: pattern(conversionPattern: '[%d{yyyy-MM-dd HH:mm:ss.SSS}] - %m%n')
 				)
-		
     }
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers

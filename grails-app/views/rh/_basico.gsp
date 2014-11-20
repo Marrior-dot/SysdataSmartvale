@@ -29,7 +29,7 @@
 			</div>	
 			
 			<div>
-				<label><span>Taxa de Pedido (R$)</span><g:textField name="taxaPedido" value="${rhInstance?.taxaPedido}" /></label>
+				<label><span>Taxa de Pedido (%)</span><g:textField name="taxaPedido" value="${rhInstance?.taxaPedido}" /></label>
 			</div>
 			
 			<div>

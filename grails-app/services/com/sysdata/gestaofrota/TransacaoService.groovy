@@ -96,7 +96,7 @@ class TransacaoService {
 					status:StatusLancamento.A_EFETIVAR,
 					valor:abastInstance.valor-arrend,
 					dataEfetivacao:dataReembolso,
-					conta:abastInstance.participante.conta)
+					conta:estabelecimentoInstance.empresa.conta)
 			abastInstance.addToLancamentos(lancReembolso)
 		}else{
 			throw new TransacaoException(message:"Reembolso não definido para o Posto:${estabelecimentoInstance.posto.cnpj-estabelecimentoInstance.posto.nomeFantasia}")
@@ -108,7 +108,7 @@ class TransacaoService {
 		log.info "Gerando lancamentos financeiros a partir das transacoes..."
 		
 		def errors=[]
-		def agendarList=Transacao.findAllWhere(status:StatusTransacao.AGENDAR,statusControle:StatusControleAutorizacao.CONFIRMADA)
+		def agendarList=Transacao.findAllWhere(status:StatusTransacao.AGENDAR)
 		agendarList.each{tr->
 			try {
 				agendarTransacao(tr)

@@ -16,7 +16,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
-            url = "jdbc:postgresql://192.168.1.207/amazonfrota_development"
+            url = "jdbc:postgresql://localhost/amazonfrota_development"
 			password="postgres"
         }
     }

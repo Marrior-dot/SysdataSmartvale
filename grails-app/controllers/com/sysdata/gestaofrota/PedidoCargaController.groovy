@@ -32,6 +32,15 @@ class PedidoCargaController extends BaseOwnerController {
 		
 		if(params.unidade_id){
 			def unidadeInstance=Unidade.get(params.unidade_id)
+			
+			//Calcula total inicial do pedido 
+			
+//			def vlTotPed=Funcionario.executeQuery("""
+//select sum(c.valorCarga) from Funcionario f, CategoriaFuncionario c 
+//where f.categoria=c 
+//and f.unidade.id=:unid
+//and f.status='ATIVO'""",[unid:unidadeInstance.id])[0]
+			
 			render(view:"form",model:[unidadeInstance:unidadeInstance,action:'novo'])
 		}else{
 			flash.message="Unidade não selecionada!"
@@ -71,7 +80,10 @@ class PedidoCargaController extends BaseOwnerController {
 		def check=(params.check=="true")
 		
 		if(categ=='all'){
-			synchHttpSessionWithDB(check)
+			synchHttpSessionWithDB(session.funcionariosList,check)
+
+			render "SUCESSO"
+			response.status=response.SC_OK
 
 		}else{
 			def catId=params.categ as long
@@ -119,14 +131,14 @@ class PedidoCargaController extends BaseOwnerController {
 					funcionariosList.each{f->
 											
 						def funcionarioInstance=Funcionario.get(f.id)
-						
 						pedidoCargaInstance.addToItens(new ItemPedido(participante:funcionarioInstance,
-																		valor:Util.convertToCurrency(f.valorCarga),
-																		sobra:0.00,
-																		ativo:true
+																	valor:Util.convertToCurrency(f.valorCarga),
+																	sobra:0.00,
+																	ativo:true
 													))
-						
 					}
+					pedidoCargaInstance.calcularTotal()
+					
 					if (pedidoCargaInstance.save(flush: true)) {
 						
 						clearSessionList()
@@ -209,7 +221,9 @@ class PedidoCargaController extends BaseOwnerController {
 			}
 			
             pedidoCargaInstance.properties = params
-            if (!pedidoCargaInstance.hasErrors() && pedidoCargaInstance.save(flush: true)) {
+            
+			pedidoCargaInstance.calcularTotal()
+			if (!pedidoCargaInstance.hasErrors() && pedidoCargaInstance.save(flush: true)) {
 				
 				clearSessionList()
 				
@@ -299,7 +313,7 @@ class PedidoCargaController extends BaseOwnerController {
 			unidade:p.unidade.nome,
 			dataPedido:Util.formattedDate(p.dateCreated),
 			dataCarga:Util.formattedDate(p.dataCarga),
-			total:Util.formatCurrency( p.itens.sum{it.valor}),
+			total:Util.formatCurrency(p.total),
 			status:p.status.nome,
 			acoes:"""
 					<a class='show' title='Visualizar Detalhes' href='${createLink(action:'show')}/${p.id}'>  
@@ -626,7 +640,6 @@ class PedidoCargaController extends BaseOwnerController {
 		},
 		only:['save','update']
 	]
-
 	
 	def withListFromSession={cls->
 		def sessFuncList=session.funcionariosList

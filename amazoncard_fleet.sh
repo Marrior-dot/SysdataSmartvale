@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # Gestao de Frota
 # (C) Sysdata-GlobalCard 2012-2014
@@ -6,9 +6,9 @@
 
 date=`date +%Y-%m-%d`
 
-base_dir_log="/var/log"
-proj_dir_log="fleet"
-proj_name="amazoncard"
+base_dir_log="/home/globalcard"
+proj_dir_log="fleet/log"
+proj_name="amazon"
 proj_file_log="${proj_name}_dailyprocessing_${date}.log"
 
 log(){
@@ -35,7 +35,11 @@ log(){
 main(){
 	log "Iniciando Processamento Diário Gestao Frota - AmazonCard ..."
 	
-	cd /usr/local/fleet/amazon
+	cd ~/fleet/amazon
+	
+	source ~/.gvm/bin/gvm-init.sh
+	
+	gvm use grails 2.0.4
 	
  	grails prod run-script scripts/DailyProcessing.groovy >> $base_dir_log/$proj_dir_log/$proj_name/$proj_file_log
  	

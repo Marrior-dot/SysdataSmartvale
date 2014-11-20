@@ -37,8 +37,8 @@ class UserController extends BaseOwnerController{
 								}
 								
 								if(ownerList.size>0)
-									//owner{'in'('id',ownerList)}
-								//maxResults(params.max)
+									owner{'in'('id',ownerList)}
+								maxResults(params.max)
 								firstResult(params.offset?params.offset as int:0)
 								
 			}
@@ -91,36 +91,27 @@ class UserController extends BaseOwnerController{
 
     def save = {
 
-        def userInstance = new User(params)
+        def userInstance=new User(params)
 		
 		userInstance.enabled=true
 		
 		if(params.password==params.confirmPassword){
-			if (userInstance.save(flush: true)) {
-				
-				UserRole.create userInstance,Role.get(params.role)
-				
-//				if(userInstance.owner instanceof Rh){
-//					UserRole.create userInstance,Role.findByAuthority("ROLE_RH")
-//				
-//				}else if(userInstance.owner instanceof Administradora){
-//					UserRole.create userInstance,Role.findByAuthority("ROLE_ADMIN")
-//				
-//				}else if(userInstance.owner instanceof Processadora){
-//					UserRole.create userInstance,Role.findByAuthority("ROLE_PROC")
-//					
-//				}else if(userInstance.owner instanceof PostoCombustivel){
-//					UserRole.create userInstance,Role.findByAuthority("ROLE_ESTAB")
-//				}
-	
-				
-				
-				flash.message = "${message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
-				redirect(action: "show", id: userInstance.id)
+			
+			def roleInstance=Role.get(params.role)
+			if(roleInstance){
+				if (userInstance.save(flush: true)) {
+					
+					UserRole.create userInstance,Role.get(params.role)
+					flash.message = "${message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
+					redirect(action: "show", id: userInstance.id)
+				}
+				else 
+					render(view:"form",model:[userInstance: userInstance,action:Util.ACTION_NEW,ownerList:listOwners()])
+			}else{
+				flash.message="Papel não definido para usuário"
+				render view:"form",model:[userInstance:userInstance,action:Util.ACTION_NEW,ownerList:listOwners()]
 			}
-			else {
-				render(view:"form",model:[userInstance: userInstance,action:Util.ACTION_NEW,ownerList:listOwners()])
-			}
+			
 		}else{
 			flash.message="Confirmação não confere com Senha informada"
 			render(view:"form",model:[userInstance: userInstance,action:Util.ACTION_NEW,ownerList:listOwners()])
