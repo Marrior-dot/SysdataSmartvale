@@ -141,7 +141,7 @@ tr {
     border: 0;
 }
 td, th {
-    font: 12px verdana, arial, helvetica, sans-serif;
+    font: 10px verdana, arial, helvetica, sans-serif;
     line-height: 15px;
     padding: 5px 6px;
     text-align: left;
@@ -150,7 +150,7 @@ td, th {
 th {
     background: #fff url(../images/skin/shadow.jpg);
     color: #666;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
     line-height: 17px;
     padding: 2px 6px;
@@ -162,6 +162,14 @@ th a:link, th a:visited, th a:hover {
     text-decoration: none;
     width: 100%;
 }
+
+td a:link, td a:visited, td a:hover {
+    color: #0000FF;
+    text-decoration: underline;
+    font-weight:normal;
+}
+
+
 th.asc a, th.desc a {
     background-position: right;
     background-repeat: no-repeat;

@@ -19,6 +19,7 @@ class BaseOwnerController {
 			ownerList<<userInstance.owner.id
 			ownerList+=Administradora.all.id
 			ownerList+=Rh.all.id
+			ownerList+=Empresa.all.id
 		}
 	
 		cls.call(ownerList)

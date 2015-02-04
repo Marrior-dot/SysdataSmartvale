@@ -59,7 +59,6 @@ class TransacaoController extends BaseOwnerController{
 			
 			transacaoInstanceTotal=Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
 				where tr.participante=f
-
 				${if(params.cartao) "and tr.numeroCartao='"+params.cartao+"'" else ''}
 				${if(params.codEstab) "and tr.codigoEstabelecimento='"+params.codEstab+"'" else ''}
 				${if(params.nsu) "and tr.nsu="+params.nsu else ''}

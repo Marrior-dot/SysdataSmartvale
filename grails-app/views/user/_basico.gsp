@@ -5,16 +5,11 @@
 <%@ page import="com.sysdata.gestaofrota.Role" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<g:if test="${action in [Util.ACTION_NEW]}">
-<script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"></script>
-</g:if>
-<g:if test="${action in [Util.ACTION_EDIT]}">
-<script type="text/javascript" src="${resource(dir:'js',file:'roles2.js') }"></script>
-</g:if>
 
 <g:form method="post">
 
 	<g:hiddenField name="id" value="${userInstance?.id}"/>
+	<g:hiddenField name="actionView" value="${action}"/>
 	
 	<fieldset>
 		<h2>Dados de Usuário</h2>
@@ -50,7 +45,7 @@
 		
 		
 		<g:if test="${action in [Util.ACTION_EDIT]}">
-			<div><label><span>Papel : ${role?.authority}</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="" optionKey="id" optionValue="authority"></g:select></label></div>
+			<div><label><span>Papel</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="" optionKey="id" optionValue="authority"></g:select></label></div>
 		</g:if>
 		
 		
@@ -95,3 +90,6 @@
 	</div>
 	
 </g:form>
+
+<script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"></script>
+
