@@ -143,8 +143,8 @@
 
 			synchServer(rec.getData('id'),newValue);
 
-			if(newValue)
-				totalPedido+=parseFloat(rec.getData('valorCarga'));
+<%--			if(newValue)--%>
+<%--				totalPedido+=parseFloat(rec.getData('valorCarga'));--%>
 
 			validateSelectAll(rec.getData('categoria'),newValue);
 			
@@ -165,12 +165,12 @@
 		var recs=GRAILSUI.funcSearchDT.getRecordSet().getRecords();
 		var i=0;
 
-		totalPedido=0.0;
+<%--		totalPedido=0.0;--%>
 
 		while(i<recs.length){
 
-			if(check)
-				totalPedido+=parseFloat(rec.getData('valorCarga'));
+<%--			if(check)--%>
+<%--				totalPedido+=parseFloat(rec.getData('valorCarga'));--%>
 			
 			if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
 				recs[i].setData('selecao',check);

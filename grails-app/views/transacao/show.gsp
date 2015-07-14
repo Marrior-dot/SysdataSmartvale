@@ -6,6 +6,25 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'transacao.label', default: 'Transacao')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
+        
+        <style type="text/css">
+        
+        	table#tbTrans {
+    			padding:0;
+			    border-collapse: collapse;
+			}
+			
+        	table#tbTrans tr{
+    			border:0;
+			}
+			
+        	table#tbTrans td.name {
+        		background-color:#48802c;
+        		text-align:right;
+        		font-weight:bold;
+        		color:#FFFFFF;
+        	}
+        </style>
     </head>
     <body>
         <div class="nav">
@@ -18,7 +37,7 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <div class="dialog">
-                <table>
+                <table id="tbTrans">
                     <tbody>
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="transacao.id.label" default="Id" /></td>
@@ -85,13 +104,24 @@
                             <td valign="top" class="value">${transacaoInstance.codigoRetorno}</td>
                         </tr>
                         
-
-                        
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="transacao.veiculo.label" default="" /></td>
-                            <td valign="top" class="value">${transacaoInstance.maquina?.placa}</td>
-                        </tr>
-                        
+						<g:if test="${transacaoInstance.maquina?.instanceOf(com.sysdata.gestaofrota.Veiculo)  }">
+						
+	                        <tr class="prop">
+	                            <td valign="top" class="name"><g:message code="transacao.veiculo.label" default="" /></td>
+	                            <td valign="top" class="value">${transacaoInstance.maquina?.placa}</td>
+	                        </tr>
+	                        
+						</g:if>
+						
+						<g:if test="${transacaoInstance.maquina?.instanceOf(com.sysdata.gestaofrota.Equipamento)  }">
+						
+	                        <tr class="prop">
+	                            <td valign="top" class="name"><g:message code="transacao.equipamento.label" default="Equipamento" /></td>
+	                            <td valign="top" class="value">${transacaoInstance.maquina?.codigo}</td>
+	                        </tr>
+						
+						</g:if>
+						
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="transacao.combustivel.label" default="" /></td>
                             <td valign="top" class="value">${transacaoInstance.combustivel?.nome}</td>

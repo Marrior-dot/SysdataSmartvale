@@ -5,6 +5,8 @@ import com.sysdata.gestaofrota.exception.TransacaoException
 class TransacaoService {
 
     static transactional=false
+	
+	private def ret
 
     def agendarTransacao(transacaoInstance) {
 		if(transacaoInstance.status==StatusTransacao.AGENDAR){
@@ -12,19 +14,21 @@ class TransacaoService {
 			if(transacaoInstance.tipo==TipoTransacao.CARGA_SALDO)
 				agendarCarga(transacaoInstance)
 			if(transacaoInstance.tipo==TipoTransacao.COMBUSTIVEL)
-				agendarAbastecimento(transacaoInstance)
+				ret=agendarAbastecimento(transacaoInstance)
 				
-			transacaoInstance.status=StatusTransacao.AGENDADA
-			if(!transacaoInstance.save(flush:true)){
-				def errors=""
-				transacaoInstance.errors.allErrors.each{err->
-					errors+="TR [${transacaoInstance.id}]: ${err.defaultMessage}\n"
+			if(ret.ok){
+				transacaoInstance.status=StatusTransacao.AGENDADA
+				
+				if(!transacaoInstance.save(flush:true)){
+					ret.ok=false
+					
+					transacaoInstance.errors.allErrors.each{err->
+						ret.msg+="TR [${transacaoInstance.id}]: ${err.defaultMessage}\n"
+					}
 				}
-				throw new TransacaoException(message:errors)
-			}
-		
+			}else
+				transacaoInstance.discard()
 		}
-				
     }
 	
 	def agendarCarga(cargaInstance){
@@ -76,6 +80,7 @@ class TransacaoService {
 	}
 	
 	def agendarAbastecimento(abastInstance){
+		
 		//Lancamento funcionario
 		def lancCompra=new Lancamento(tipo:TipoLancamento.COMPRA,
 										status:StatusLancamento.EFETIVADO,
@@ -98,8 +103,9 @@ class TransacaoService {
 					dataEfetivacao:dataReembolso,
 					conta:estabelecimentoInstance.empresa.conta)
 			abastInstance.addToLancamentos(lancReembolso)
+			ret=[ok:true]
 		}else{
-			throw new TransacaoException(message:"Reembolso não definido para o Posto:${estabelecimentoInstance.posto.cnpj-estabelecimentoInstance.posto.nomeFantasia}")
+			ret=[ok:false,msg:"Reembolso não definido para o CNPJ:${estabelecimentoInstance.empresa.cnpj}"]
 		}
 	}
 	
@@ -107,21 +113,18 @@ class TransacaoService {
 		
 		log.info "Gerando lancamentos financeiros a partir das transacoes..."
 		
-		def errors=[]
 		def agendarList=Transacao.findAllWhere(status:StatusTransacao.AGENDAR)
+		
 		agendarList.each{tr->
-			try {
-				agendarTransacao(tr)
-				log.debug "Transacao ${tr.id} [${tr.class}] AGENDADA"
-			} catch (TransacaoException e) {
-				errors<<e.message
-				log.error e.message
-			}
+			agendarTransacao(tr)
+			if(ret.ok)
+				log.debug "Transacao #${tr.id}  AGENDADA"
+			else
+				log.debug "Transacao #${tr.id}  NAO AGENDADA - "+ret.msg
 		}
 		
 		log.info agendarList.size()>0?"Lancamentos financeiros gerados":"Nao ha lancamentos financeiros para agendar"
 		
-		errors=(errors.size()>0)?errors:null
-		errors
+		ret
 	}
 }

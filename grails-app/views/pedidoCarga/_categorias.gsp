@@ -24,7 +24,6 @@
 
 	var countCat={};
 	var totalCat={};
-	var totalPedido=${pedidoCargaInstance?pedidoCargaInstance.total:vlTotPed};
 
 	YAHOO.util.Event.onDOMReady(function(){
 

@@ -158,11 +158,11 @@ class TransacaoController extends BaseOwnerController{
 	def agendarAll={
 		flash.errors=[]
 		Transacao.withTransaction{
-			def errors=transacaoService.agendarAll()
-			if(!errors)
+			def ret=transacaoService.agendarAll()
+			if(!ret.ok)
 				flash.message="Agendamento executando com SUCESSO"
 			else
-				flash.errors=errors
+				flash.errors=ret.msg
 		}
 		redirect(action:'list')
 	}

@@ -15,6 +15,7 @@ class BaseOwnerController {
 		}else if(userInstance.owner instanceof Administradora){
 			ownerList<<userInstance.owner.id
 			ownerList+=Rh.all.id
+			ownerList+=Empresa.all.id
 		}else{
 			ownerList<<userInstance.owner.id
 			ownerList+=Administradora.all.id

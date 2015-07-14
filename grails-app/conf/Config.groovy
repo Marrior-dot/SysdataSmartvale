@@ -59,7 +59,7 @@ breadcrumbs.selector="title"
 // set per-environment serverURL stem for creating absolute links
 environments {
     development {
-        grails.serverURL = "http://localhost:8080/${appName}"
+//        grails.serverURL = "http://localhost:8080/${appName}"
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
@@ -154,7 +154,7 @@ grails {
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.ui.register.postResetUrl = '/'
 grails.plugin.springsecurity.ui.forgotPassword.emailBody = 'Prezado (a) <br> Clique na URL abaixo para criar uma nova senha<br>'
-grails.plugin.springsecurity.ui.forgotPassword.emailFrom = 'diegodisouzza@gmail.com'
+grails.plugin.springsecurity.ui.forgotPassword.emailFrom = 'no-reply@sysdata.com.br'
 grails.plugin.springsecurity.ui.forgotPassword.emailSubject = 'Recuperação de Senha'
 
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.sysdata.gestaofrota.User'

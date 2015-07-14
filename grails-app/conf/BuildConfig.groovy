@@ -31,5 +31,7 @@ grails.project.dependency.resolution = {
 	
 	plugins {
 		compile ":hibernate-filter:0.3.2"
+		
+		compile ':quartz:1.0.2'
 	}
 }

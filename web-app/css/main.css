@@ -138,7 +138,7 @@ table {
     width: 100%
 }
 tr {
-    border: 0;
+	border:0;
 }
 td, th {
     font: 10px verdana, arial, helvetica, sans-serif;
