@@ -113,11 +113,18 @@ class PostoCombustivelController {
         def postoCombustivelInstance = PostoCombustivel.get(params.id)
         if (postoCombustivelInstance) {
             try {
-                postoCombustivelInstance.delete(flush: true)
+				log.debug('Inativando ' + postoCombustivelInstance)
+				postoCombustivelInstance = PostoCombustivel.get(params.id)
+				postoCombustivelInstance.status=Status.INATIVO
+				postoCombustivelInstance.estabelecimentos.each {
+					log.debug('Inativando ' + it)
+					it.status=Status.INATIVO
+				}
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
+				log.error("Erro ao deletar posto combustivel " + postoCombustivelInstance)
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
                 redirect(action: "show", params:[selectedId:params.id])
             }
@@ -138,6 +145,7 @@ class PostoCombustivelController {
 		def postoCombustivelInstanceList=PostoCombustivel
 				.createCriteria()
 				.list(max:params.max,offset:offset){
+					eq('status', Status.ATIVO)
 					if(params.opcao && params.filtro){
 						opcao=params.opcao.toInteger()
 						filtro=params.filtro
@@ -160,6 +168,7 @@ class PostoCombustivelController {
 		def postoCombustivelInstanceTotal=PostoCombustivel
 				.createCriteria()
 				.list(){
+					eq('status', Status.ATIVO)
 					if(params.opcao && params.filtro){
 						//Nome Fantasia
 						if(opcao==1)

@@ -104,22 +104,39 @@ class RhController extends BaseOwnerController {
 
 	@Secured(['ROLE_PROC','ROLE_ADMIN'])
     def delete = {
-        def rhInstance = Rh.get(params.id)
-        if (rhInstance) {
-            try {
-                rhInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-                redirect(action: "show", params:[rhId: rhInstance.id])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-            redirect(action: "list")
-        }
+		def rhInstance = Rh.get(params.id)
+		if (rhInstance) {
+			try {
+				log.debug("Inativando " + rhInstance)
+				rhInstance.status = Status.INATIVO
+				rhInstance.empresas.each { empresa ->
+					log.debug("Inativando " + empresa)
+					empresa.status = Status.INATIVO
+					empresa.estabelecimentos.each { estabelecimento ->
+						log.debug("Inativando " + estabelecimento)
+						estabelecimento.status = Status.INATIVO
+					}
+				}
+				rhInstance.unidades.each { uni ->
+					log.debug("Inativando " + uni)
+					uni.status = Status.INATIVO
+					uni.funcionarios.each { fun ->
+						log.debug("Inativando " + fun)
+						fun.status = Status.INATIVO
+					}
+				}
+				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+				redirect(action: "list")
+			}
+			catch (org.springframework.dao.DataIntegrityViolationException e) {
+				flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+				redirect(action: "show", params:[rhId: rhInstance.id])
+			}
+		}
+		else {
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+			redirect(action: "list")
+		}
     }
 	
 	@Secured(['IS_AUTHENTICATED_FULLY'])
@@ -129,7 +146,7 @@ class RhController extends BaseOwnerController {
 		withSecurity{ownerList->
 			
 			list = Rh.withCriteria{
-							
+							eq('status', Status.ATIVO)
 							if(ownerList.size>0)
 								'in'('id',ownerList)
 				
@@ -160,7 +177,7 @@ class RhController extends BaseOwnerController {
 			rhInstanceList=Rh
 							.createCriteria()
 							.list(max:params.max,offset:offset){
-								
+								eq('status', Status.ATIVO)
 								if(ownerList.size>0)
 									'in'('id',ownerList)
 								
@@ -187,6 +204,7 @@ class RhController extends BaseOwnerController {
 			rhInstanceTotal=Rh
 						.createCriteria()
 						.list(){
+							eq('status', Status.ATIVO)
 							if(params.opcao && params.filtro){
 								
 								if(ownerList.size>0)
@@ -250,7 +268,7 @@ class RhController extends BaseOwnerController {
 		
 		def progInstance=Rh.get(params.prgId)
 		
-		def empresaList=PostoCombustivel.list(max:params.max,offset:params.offset)
+		def empresaList=PostoCombustivel.findAllByStatus(Status.ATIVO, [max: params.max, offset: offset])
 
 		def resultList=[]
 				

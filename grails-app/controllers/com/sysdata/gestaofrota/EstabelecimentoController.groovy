@@ -146,6 +146,7 @@ class EstabelecimentoController {
 		def estabelecimentoInstanceTotal=Estabelecimento
 												.createCriteria()
 												.list(){
+													eq('status', Status.ATIVO)
 													empresa{eq('id',empId)}
 													projections{ rowCount() }
 												}

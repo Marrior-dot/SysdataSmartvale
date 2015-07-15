@@ -139,7 +139,8 @@ class FuncionarioController extends BaseOwnerController {
 		def funcionarioInstance = Funcionario.get(params.id)
 		if (funcionarioInstance) {
 			try {
-				funcionarioInstance.delete(flush: true)
+				log.debug("Inativando " + funcionarioInstance)
+				funcionarioInstance.status = Status.INATIVO
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
 				redirect(action: "list")
 			}
@@ -171,7 +172,7 @@ class FuncionarioController extends BaseOwnerController {
 			funcionarioInstanceList=Funcionario
 									.createCriteria()
 									.list(max:params.max,offset:offset){
-										
+										eq('status', Status.ATIVO)
 										if(ownerList.size>0)
 											unidade{rh{'in'('id',ownerList)}}
 										
@@ -206,7 +207,7 @@ class FuncionarioController extends BaseOwnerController {
 			funcionarioInstanceTotal=Funcionario
 										.createCriteria()
 										.list(){
-											
+											eq('status', Status.ATIVO)
 											if(ownerList.size>0)
 												unidade{rh{'in'('id',ownerList)}}
 											
