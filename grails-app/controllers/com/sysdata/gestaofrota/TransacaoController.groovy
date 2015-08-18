@@ -70,6 +70,82 @@ class TransacaoController extends BaseOwnerController{
         [transacaoInstanceList:transacaoInstanceList, transacaoInstanceTotal:transacaoInstanceTotal, params:params]
     }
 
+    def listPendentes = {
+        params.max=Math.min(params.max ? params.int('max') : 10, 100)
+
+        def transacaoInstanceList
+        def transacaoInstanceTotal
+
+        withSecurity{ownerList->
+
+            def pars=[:]
+            pars.max=params.max
+            pars.offset=params.offset?params.offset as int:0
+            pars.ids=ownerList
+
+
+            transacaoInstanceList=Transacao.executeQuery("""select tr
+									from Transacao tr, Funcionario f
+									where tr.participante=f and tr.statusControle='PENDENTE'
+
+									${if(params.cartao) "and tr.numeroCartao='"+params.cartao+"'" else ''}
+									${if(params.codEstab) "and tr.codigoEstabelecimento='"+params.codEstab+"'" else ''}
+									${if(params.nsu) "and tr.nsu="+params.nsu else ''}
+
+									and f.unidade.rh.id in (:ids)
+									order by tr.id desc""",	pars)
+
+            transacaoInstanceTotal= Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
+				where tr.participante=f and tr.statusControle='PENDENTE'
+				${if(params.cartao) "and tr.numeroCartao='"+params.cartao+"'" else ''}
+				${if(params.codEstab) "and tr.codigoEstabelecimento='"+params.codEstab+"'" else ''}
+				${if(params.nsu) "and tr.nsu="+params.nsu else ''}
+
+				and f.unidade.rh.id in (:ids)""", [ids:ownerList])[0]
+
+        }
+
+        [transacaoInstanceList:transacaoInstanceList, transacaoInstanceTotal:transacaoInstanceTotal, params:params]
+    }
+
+    def desfazer = {
+        if (params.transacoes) {
+            def idsConvertido = []
+            params.transacoes.each {
+                idsConvertido.add(new Long(it))
+            }
+
+            Transacao.findAllByIdInList(idsConvertido).each {
+
+                if(params['selecionado' + it.id]){
+                    it.statusControle = StatusControleAutorizacao.DESFEITA
+                    it.participante.conta.saldo += it.valor
+                }
+
+            }
+        }
+        redirect(action: 'listPendentes')
+    }
+
+    def confirmar = {
+        if (params.transacoes) {
+            def idsConvertido = []
+            params.transacoes.each {
+                idsConvertido.add(new Long(it))
+            }
+
+            Transacao.findAllByIdInList(idsConvertido).each {
+
+                if(params['selecionado' + it.id]){
+                    it.statusControle = StatusControleAutorizacao.CONFIRMADA
+                    it.status = StatusTransacao.AGENDAR
+                }
+
+            }
+        }
+        redirect(action: 'listPendentes')
+    }
+
     def create = {
         def transacaoInstance = new Transacao()
         transacaoInstance.properties = params

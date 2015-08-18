@@ -150,6 +150,18 @@ a.download{
     padding-left: 25px;
 }
 
+.buttons input.desfazer {
+	background: url(../images/skin/shadow.jpg) center left no-repeat;
+	color: #333;
+	padding-left: 25px;
+}
+
+.buttons input.confirmar {
+	background: url(../images/skin/shadow.jpg) center left no-repeat;
+	color: #333;
+	padding-left: 25px;
+}
+
 .buttons input.xls {
     background: url(../images/xls_mini.png) center left no-repeat;
     color: #333;
