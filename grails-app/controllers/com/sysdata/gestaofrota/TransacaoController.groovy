@@ -118,8 +118,12 @@ class TransacaoController extends BaseOwnerController{
             Transacao.findAllByIdInList(idsConvertido).each {
 
                 if(params['selecionado' + it.id]){
-                    it.statusControle = StatusControleAutorizacao.DESFEITA
-                    it.participante.conta.saldo += it.valor
+                    if(it.tipo == TipoTransacao.COMBUSTIVEL || it.tipo == TipoTransacao.SERVICOS) {
+                        it.statusControle = StatusControleAutorizacao.DESFEITA
+                        it.participante.conta.saldo += it.valor
+                    } else if (it.tipo == TipoTransacao.CONFIGURACAO_PRECO){
+                        it.statusControle = StatusControleAutorizacao.DESFEITA
+                    }
                 }
 
             }
@@ -137,8 +141,12 @@ class TransacaoController extends BaseOwnerController{
             Transacao.findAllByIdInList(idsConvertido).each {
 
                 if(params['selecionado' + it.id]){
-                    it.statusControle = StatusControleAutorizacao.CONFIRMADA
-                    it.status = StatusTransacao.AGENDAR
+                    if(it.tipo == TipoTransacao.COMBUSTIVEL || it.tipo == TipoTransacao.SERVICOS) {
+                        it.statusControle = StatusControleAutorizacao.CONFIRMADA
+                        it.status = StatusTransacao.AGENDAR
+                    } else if (it.tipo == TipoTransacao.CONFIGURACAO_PRECO){
+                        it.statusControle = StatusControleAutorizacao.CONFIRMADA
+                    }
                 }
 
             }

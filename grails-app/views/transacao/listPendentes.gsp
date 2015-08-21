@@ -93,7 +93,12 @@
                         <td>${transacaoInstance.codigoEstabelecimento}</td>
                         <td>${transacaoInstance.numeroCartao}</td>
                         <td>${transacaoInstance.participante?.nome}</td>
-                        <td>${transacaoInstance.tipo.nome}</td>
+                        <g:if test="${transacaoInstance.tipo.nome == "Cancelamento"}">
+                            <td>${transacaoInstance.tipo.nome}¹</td>
+                        </g:if>
+                        <g:else>
+                            <td>${transacaoInstance.tipo.nome}</td>
+                        </g:else>
                         <td>${transacaoInstance.status.nome}</td>
                         <td>${transacaoInstance.statusControle?.nome}</td>
                         <td><g:formatNumber number="${transacaoInstance.valor}" format="#0.00" /></td>
@@ -121,7 +126,8 @@
             <g:paginate total="${transacaoInstanceTotal}" params="${params}"/>
 
         </div>
-
+        <br/>
+        ¹Obs: Não é possível confirmar transações de cancelamento no momento.
         <div>
 
         </div>
