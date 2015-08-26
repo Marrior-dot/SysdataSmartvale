@@ -18,7 +18,7 @@
 								dateVal=new java.text.SimpleDateFormat("dd/MM/yyyy").parse(dateStr)
 					 	%>
 						<gui:datePicker id="${parameterInstance.name}" name="${parameterInstance.name}"  formatString="dd/MM/yyyy"
-						value="${dateVal}"/>						
+						value="${dateVal}"/>
 					</g:elseif>
 				</label>
 			</div>

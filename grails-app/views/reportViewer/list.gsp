@@ -6,6 +6,10 @@
         <title>Relatório de ${reportInstance?.name}</title>
     </head>
     <body>
+		<%
+		    if(dataInicio) params.dataInicio = dataInicio
+			if(dataFim) params.dataFim = dataFim
+		%>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="listReports">Lista de Relatórios</g:link></span>
@@ -40,7 +44,6 @@
 	            <div class="list">
 	            	<g:render template="fields" model="params"/>
 				</div>	            	
-	            
 	            <div class="paginateButtons">
 	                <g:paginate total="${rowCount}" params="${params}"/>
 	            </div>

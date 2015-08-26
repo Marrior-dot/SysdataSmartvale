@@ -26,8 +26,13 @@
 		
 			<g:each in="${rows}" var="rowInstance" status="i">
 				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<g:each in="${reportInstance.fields.sort{it.order}}" var="fieldInstance">
-						<td>${rowInstance[fieldInstance.name]}</td>
+					<g:each in="${reportInstance.fields.sort{it.order}}" status="j" var="fieldInstance">
+						<g:if test="${j==0}">
+							<td>${rowInstance[fieldInstance.name]}</td>
+						</g:if>
+						<g:else>
+							<td>${rowInstance[fieldInstance.name]}</td>
+						</g:else>
 					</g:each>
 				</tr>
 			</g:each>
@@ -47,7 +52,7 @@
 
 				if(!nobreak){
 					fieldsGroup.each{fld->
-						currGroup[fld.name]=row[fld.name]
+						currGroup[fld.name]=row[fld.name]+""
 					}
 			
 	%>
@@ -68,12 +73,18 @@
 			</thead>
 		
 			<tbody>
-		
+		:
 	<% 			}	%>
 
 				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<g:each in="${reportInstance.fields.findAll{!it.groupBy}.sort{it.order}}" var="fieldInstance">
-						<td>${row[fieldInstance.name]}</td>
+					<g:each in="${reportInstance.fields.findAll{!it.groupBy}.sort{it.order}}" status ="j" var="fieldInstance">
+						<g:if test="${j==0 && fieldInstance.name=='idEstab'}">
+							<td><g:link action="list" id="${5}" params="[idEstab: row[fieldInstance.name], dataReembolso:row['data_reembolso']]">${row[fieldInstance.name]}</g:link></td>
+						</g:if>
+						<g:else>
+							<td>${row[fieldInstance.name]}</td>
+						</g:else>
+
 					</g:each>
 				</tr>
 

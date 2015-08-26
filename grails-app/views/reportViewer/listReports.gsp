@@ -32,10 +32,15 @@
 						<g:if test="${reportInstance.name=="Transações Combustível por Período"}">
 							<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
 						</g:if>
+						<g:elseif test="${reportInstance.name=="Detalhes Projecao Reembolso"}">
+							<li></li>
+						</g:elseif>
 						<g:else></g:else>
 					</sec:ifAnyGranted>
 					<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH,ROLE_ESTAB">
-						<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
+						<g:if test="${reportInstance.name!="Detalhes Projecao Reembolso"}">
+							<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
+						</g:if>
 					</sec:ifAnyGranted>
 				</g:each>
 			

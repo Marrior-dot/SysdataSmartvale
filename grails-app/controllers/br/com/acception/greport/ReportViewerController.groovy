@@ -50,10 +50,16 @@ class ReportViewerController {
 		render view:'list',model:params+result
 
 	}
+
+	def showProjecaoPagar(){
+		def reportList=Report.all
+		[reportList:reportList]
+	}
 	
 	
-	def list(){
-		params.max=Math.min(params.max ? params.int('max') : 10, 100)
+	def list(Integer max, Integer offset){
+		params.max=max ?: 10
+		params.offset =offset?:0
 		
 		def reportInstance=Report.get(params.id)
 		

@@ -93,7 +93,7 @@ class TransacaoController extends BaseOwnerController{
 									${if(params.nsu) "and tr.nsu="+params.nsu else ''}
 
 									and f.unidade.rh.id in (:ids)
-									order by tr.id desc""",	pars)
+									order by tr.id desc and tr.""",	pars)
 
             transacaoInstanceTotal= Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
 				where tr.participante=f and tr.statusControle='PENDENTE'
