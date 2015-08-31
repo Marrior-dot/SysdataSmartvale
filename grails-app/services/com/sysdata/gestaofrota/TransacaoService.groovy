@@ -12,7 +12,7 @@ class TransacaoService {
 		if(transacaoInstance.status==StatusTransacao.AGENDAR){
 			
 			if(transacaoInstance.tipo==TipoTransacao.CARGA_SALDO)
-				agendarCarga(transacaoInstance)
+				ret=agendarCarga(transacaoInstance)
 			if(transacaoInstance.tipo==TipoTransacao.COMBUSTIVEL)
 				ret=agendarAbastecimento(transacaoInstance)
 				
@@ -42,6 +42,8 @@ class TransacaoService {
 		//Atualiza saldo conta
 		contaInstance.updateSaldo(lancamentoInstance.valor)
 		contaInstance.save()
+
+		ret=[ok:true]
 	}
 	
 	
