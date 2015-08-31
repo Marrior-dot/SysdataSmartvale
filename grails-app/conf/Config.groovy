@@ -182,7 +182,8 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 	'/tipoEquipamento/**':	['ROLE_PROC','ROLE_ADMIN'],
 	'/produto/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/role/**':			['ROLE_PROC','ROLE_ADMIN'],
-	
+	'/transacao/listPendentes': ['ROLE_PROC', 'ROLE_ADMIN'],
+
 	'/plugins/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/js/**':				['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/css/**':				['IS_AUTHENTICATED_ANONYMOUSLY'],

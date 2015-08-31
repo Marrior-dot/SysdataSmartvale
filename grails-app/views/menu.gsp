@@ -57,7 +57,9 @@
 				<ul>
 					<li><g:link controller="pedidoCarga" action="list">Pedido de Carga</g:link></li></br>
 					<li><g:link controller="transacao" action="list">Transações</g:link></li></br>
-				<li><g:link controller="transacao" action="listPendentes">Transações Pendentes</g:link></li></br>
+				<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+					<li><g:link controller="transacao" action="listPendentes">Transações Pendentes</g:link></li></br>
+				</sec:ifAnyGranted>
 				</ul>
 			</g:if>
 
