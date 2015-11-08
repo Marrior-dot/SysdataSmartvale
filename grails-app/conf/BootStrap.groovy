@@ -11,7 +11,15 @@ import com.sysdata.gestaofrota.UserRole
 class BootStrap {
 
     def init = { servletContext ->
-		 
+
+		Date.metaClass.trunc={->
+			Calendar cal=Calendar.instance
+			cal.time=delegate
+			cal.set(Calendar.HOUR_OF_DAY,0)
+			cal.set(Calendar.MINUTE,0)
+			cal.set(Calendar.SECOND,0)
+			cal.time
+		}
 		
 
 //		switch(Environment.current){

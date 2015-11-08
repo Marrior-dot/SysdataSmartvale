@@ -61,8 +61,7 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="grails-2.0.4" level="application" />
-    <orderEntry type="library" name="grails-2.0.4" level="application" />
     <orderEntry type="module" module-name="GestaoFrota-grailsPlugins" />
+    <orderEntry type="library" name="grails-2.0.4" level="application" />
   </component>
 </module>

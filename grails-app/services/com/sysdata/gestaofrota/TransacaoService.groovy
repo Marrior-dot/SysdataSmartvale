@@ -1,6 +1,6 @@
 package com.sysdata.gestaofrota
 
-import com.sysdata.gestaofrota.exception.TransacaoException
+import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
 
 class TransacaoService {
 
@@ -96,8 +96,8 @@ class TransacaoService {
 		double valoReemb=(abastInstance.valor*estabelecimentoInstance.empresa.taxaReembolso/100.0)
 		//Arredonda
 		def arrend=Util.roundCurrency(valoReemb)
-		
-		def dataReembolso=calcularDataReembolso(estabelecimentoInstance.empresa,abastInstance.dateCreated)
+
+		def dataReembolso=calcularDataReembolso(estabelecimentoInstance.empresa,ReferenceDateProcessing.calcuteReferenceDate())
 		
 		if(dataReembolso){
 			def lancReembolso=new Lancamento(tipo:TipoLancamento.REEMBOLSO,
