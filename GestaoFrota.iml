@@ -63,5 +63,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="GestaoFrota-grailsPlugins" />
     <orderEntry type="library" name="grails-2.0.4" level="application" />
+    <orderEntry type="library" name="grails-2.0.4 (2)" level="application" />
+    <orderEntry type="library" name="grails-2.0.4 (3)" level="application" />
   </component>
 </module>

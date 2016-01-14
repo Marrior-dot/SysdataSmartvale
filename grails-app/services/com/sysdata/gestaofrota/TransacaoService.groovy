@@ -6,15 +6,15 @@ class TransacaoService {
 
     static transactional=false
 	
-	private def ret
+	private def ret=[:]
 
     def agendarTransacao(transacaoInstance) {
 		if(transacaoInstance.status==StatusTransacao.AGENDAR){
 			
 			if(transacaoInstance.tipo==TipoTransacao.CARGA_SALDO)
-				ret=agendarCarga(transacaoInstance)
+				agendarCarga(transacaoInstance)
 			if(transacaoInstance.tipo==TipoTransacao.COMBUSTIVEL)
-				ret=agendarAbastecimento(transacaoInstance)
+				agendarAbastecimento(transacaoInstance)
 				
 			if(ret.ok){
 				transacaoInstance.status=StatusTransacao.AGENDADA
@@ -43,8 +43,7 @@ class TransacaoService {
 		contaInstance.updateSaldo(lancamentoInstance.valor)
 		contaInstance.save()
 
-		ret=[ok:true]
-		ret
+		ret.ok=true
 	}
 	
 	
@@ -106,13 +105,16 @@ class TransacaoService {
 					dataEfetivacao:dataReembolso,
 					conta:estabelecimentoInstance.empresa.conta)
 			abastInstance.addToLancamentos(lancReembolso)
-			ret=[ok:true]
+			ret.ok=true
 		}else{
-			ret=[ok:false,msg:"Reembolso não definido para o CNPJ:${estabelecimentoInstance.empresa.cnpj}"]
+			ret.ok=false
+			ret.msg="Reembolso não definido para o CNPJ:${estabelecimentoInstance.empresa.cnpj}"
 		}
 	}
 	
 	def agendarAll(){
+
+		ret.clear()
 		
 		log.info "Gerando lancamentos financeiros a partir das transacoes..."
 		

@@ -43,6 +43,7 @@ class CentralAtendimentoController {
 	
 	def authServerService
 	def funcionarioService
+	def springSecurityService
 		
     def index = { }
 	
@@ -72,8 +73,10 @@ class CentralAtendimentoController {
 		def cartaoInstance=Cartao.get(params.id)
 		if(cartaoInstance){
 			cartaoInstance.status=StatusCartao.ATIVO
-			if(cartaoInstance.save(flush:true))
+			if(cartaoInstance.save(flush:true)){
+				log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} desbloqueado"
 				flash.message="Cartão DESBLOQUEADO com sucesso"
+			}
 			else
 				flash.errors<<"Erro ao Desbloquear Cartão"
 			[cartaoInstance:cartaoInstance]
@@ -87,9 +90,10 @@ class CentralAtendimentoController {
 		def cartaoInstance=Cartao.get(params.id)
 		if(cartaoInstance){
 			cartaoInstance.status=StatusCartao.CANCELADO
-			if(cartaoInstance.save() && funcionarioService.gerarCartao(cartaoInstance.funcionario))
-				flash.message="Cartão CANCELADO com sucesso"
-			else{
+			if(cartaoInstance.save() && funcionarioService.gerarCartao(cartaoInstance.funcionario)) {
+				log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} cancelado"
+				flash.message = "Cartão CANCELADO com sucesso"
+			}else{
 				cartaoInstance.errors.allErrors.each {
 					log.error it
 				}

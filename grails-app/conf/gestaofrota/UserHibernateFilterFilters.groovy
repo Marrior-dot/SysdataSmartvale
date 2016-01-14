@@ -7,6 +7,17 @@ class UserHibernateFilterFilters {
 	def sessionFactory
 	def springSecurityService
     def filters = {
+
+		log(controller:"*",action:"*" ){
+			after={
+				def user=springSecurityService.currentUser
+				def actCtrl=controllerName && actionName?"${controllerName}/${actionName}":"login"
+				if(user) {
+					log.info "${user.name}@${request.getRemoteAddr()}-${actCtrl}"
+				}
+			}
+		}
+
         all(controller:'reportViewer', action:'*') {
             before = {
 				def session = sessionFactory.currentSession
