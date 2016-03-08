@@ -5,6 +5,8 @@ class MaquinaMotorizada {
 	Long capacidadeTanque
 	TipoAbastecimento tipoAbastecimento
 	Date dateCreated
+
+	static auditable = true
 	
 	static belongsTo=[unidade:Unidade]
 	

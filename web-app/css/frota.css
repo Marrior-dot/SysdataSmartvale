@@ -227,3 +227,19 @@ a.undo{
  textarea#countQuery {
  	width: 655px;
  }
+
+table.show {
+	padding:0;
+	border-collapse: collapse;
+}
+
+table.show tr{
+	border:0;
+}
+
+table.show td.name {
+	background-color:#48802c;
+	text-align:right;
+	font-weight:bold;
+	color:#FFFFFF;
+}

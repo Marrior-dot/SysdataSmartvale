@@ -9,6 +9,8 @@ class Participante {
 	Status status=Status.ATIVO
 	Date dateCreated
 	DadoBancario dadoBancario
+
+	static auditable = true
 	
 	static embedded=['endereco','telefone','dadoBancario']
 	

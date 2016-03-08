@@ -11,10 +11,7 @@
 // }
 
 import org.apache.log4j.DailyRollingFileAppender
-
-import grails.plugins.springsecurity.SecurityConfigType
-
-
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -169,6 +166,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 	'/report/**':			['ROLE_PROC'],
 	'/parameterReport/**':	['ROLE_PROC'],
 	'/fieldReport/**':		['ROLE_PROC'],
+	'/auditLogEvent/**':	['ROLE_PROC'],
 	'/reportViewer/**':		['ROLE_PROC','ROLE_ADMIN','ROLE_ESTAB','ROLE_RH','ROLE_LOG','ROLE_HELP'],
 	'/estado/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/cidade/**':			['ROLE_PROC','ROLE_ADMIN'],
@@ -193,5 +191,17 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/register/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
 	'/*':					['IS_AUTHENTICATED_FULLY']
 ]
-	
 
+
+auditLog {
+	actorClosure = { request, session ->
+		if (request.applicationContext.springSecurityService.principal instanceof java.lang.String){
+			return request.applicationContext.springSecurityService.principal
+		}
+		def username = request.applicationContext.springSecurityService.principal?.username
+		if (SpringSecurityUtils.isSwitched()){
+			username = SpringSecurityUtils.switchedUserOriginalUsername+" AS "+username
+		}
+		return username
+	}
+}

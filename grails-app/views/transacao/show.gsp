@@ -7,24 +7,6 @@
         <g:set var="entityName" value="${message(code: 'transacao.label', default: 'Transacao')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
         
-        <style type="text/css">
-        
-        	table#tbTrans {
-    			padding:0;
-			    border-collapse: collapse;
-			}
-			
-        	table#tbTrans tr{
-    			border:0;
-			}
-			
-        	table#tbTrans td.name {
-        		background-color:#48802c;
-        		text-align:right;
-        		font-weight:bold;
-        		color:#FFFFFF;
-        	}
-        </style>
     </head>
     <body>
         <div class="nav">
@@ -38,7 +20,7 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <div class="dialog">
-                <table id="tbTrans">
+                <table class="show">
                     <tbody>
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="transacao.id.label" default="Id" /></td>

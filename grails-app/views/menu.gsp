@@ -47,6 +47,7 @@
 					<sec:ifAnyGranted roles="ROLE_PROC">
 						<li><g:link controller="parametroSistema" action="list">Parâmetros do Sistema</g:link></li></br>
 						<li><g:link controller="motivoNegacao" action="list">Motivos Negação</g:link></li></br>
+						<li><g:link controller="auditLogEvent" action="list">Audit Log</g:link></li></br>
 					</sec:ifAnyGranted>
 					
                 </ul>
