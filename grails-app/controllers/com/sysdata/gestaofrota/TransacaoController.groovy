@@ -134,8 +134,12 @@ class TransacaoController extends BaseOwnerController{
     def confirmar = {
         if (params.transacoes) {
             def idsConvertido = []
-            params.transacoes.each {
-                idsConvertido.add(new Long(it))
+            if(params.transacoes.class.isArray()) {
+                params.transacoes.each {
+                    idsConvertido.add(new Long(it))
+                }
+            }else{
+                idsConvertido.add(new Long(params.transacoes))
             }
 
             Transacao.findAllByIdInList(idsConvertido).each {
