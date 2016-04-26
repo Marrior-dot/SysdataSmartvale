@@ -55,6 +55,8 @@ class TransacaoService {
 		def mesTr=cal.get(Calendar.MONTH)+1
 		def anoTr=cal.get(Calendar.YEAR)
 		
+		def fimDeSem = cal.get(Calendar.DAY_OF_WEEK)
+		
 		def calHoje=Calendar.getInstance()
 		calHoje.setTime(new Date())
 		def diaHj=calHoje.get(Calendar.DAY_OF_MONTH)+1
@@ -76,7 +78,19 @@ class TransacaoService {
 			
 			def calReemb=Calendar.getInstance()
 			calReemb.set(anoReemb,--mesReemb,diaReemb)
+			
+			def dia = calReemb.get(Calendar.DAY_OF_WEEK)
 			dataReembolso=calReemb.getTime()
+			
+			if(dia == 7){
+				
+				dataReembolso+=2
+				
+			}else if (dia == 1){
+			
+				dataReembolso+=1
+			
+			}
 		}
 		dataReembolso
 	}
