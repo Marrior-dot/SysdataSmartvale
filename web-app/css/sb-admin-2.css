@@ -20,13 +20,13 @@ body { background-color: #fff }
     }
 }
 
-#nav-top.navbar-static-top { box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3); background-color: #016A37 !important;
+#nav-top.navbar-static-top { box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3); background-color: #00B264 !important;
     border-color: transparent; }
 #nav-top.navbar-static-top>ul>li>a { color: #ffffff; }
 .nav .open>a, .nav .open>a:focus, .nav .open>a:hover,
 #nav-top.navbar-static-top>ul>li>a:focus,
 #nav-top.navbar-static-top>ul>li>a:hover,
-#nav-top.navbar-static-top>ul>li>a:active { background-color: #016A37; color: #FFFFFF; }
+#nav-top.navbar-static-top>ul>li>a:active { background-color: #00B264; color: #FFFFFF; }
 
 .navbar-top-links { margin-right: 0; }
 .navbar-top-links li { display: inline-block; }

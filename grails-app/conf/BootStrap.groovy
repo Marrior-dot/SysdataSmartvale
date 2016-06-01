@@ -34,8 +34,8 @@ class BootStrap {
 	def destroy = {   }
 	
 	void createDefaultOwners(){
-		Administradora.count()==0?new Administradora(nome:"AMAZON",bin:"623409").save(failOnError:true):false
-		Processadora.count()==0?new Processadora(nome:"SYSDATA").save(failOnError:true):false
+		Administradora.count()==0? new Administradora(nome:"AMAZON",bin:"623409").save(failOnError:true):false
+		Processadora.count()==0? new Processadora(nome:"SYSDATA").save(failOnError:true):false
 	}
 	
 	void createDefaultUser(){

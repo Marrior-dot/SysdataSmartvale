@@ -1,8 +1,8 @@
 <html>
     <head>
         <title>Bem vindo ao Sistema Gestão de Frota</title>
-        <meta name="layout" content="main" />
-        <style type="text/css" media="screen">
+        <meta name="layout" content="bootstrap-layout" />
+        %{--<style type="text/css" media="screen">
 
 
 	            
@@ -25,13 +25,13 @@
        		text-align:center;
        }
         
-        </style>
+        </style>--}%
         
         
         
     </head>
     <body>
-      
+
         	<div id="user">
         		<img src="${resource(dir:'images',file:'usuario.png')}" alt="Usuário Cenpros" border="0"/>
         		<span style="font: 20px sans-serif ;color: #4682B4 " >Bem vindo(a) ao Gestão de Frota</span>
