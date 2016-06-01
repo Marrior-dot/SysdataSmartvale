@@ -1,0 +1,424 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*HOME*/
+.menu-home{
+    font-family: 'gloriola_std_mediumregular';
+    font-size: 1.000em;
+    text-transform: uppercase;
+    color: #FFFFFF  !important;
+    background-color:transparent !important;
+}
+
+.menu-home:hover{
+    background-color:transparent !important;
+    text-decoration: underline !important;
+}
+
+
+.sub-menu-home{
+    font-family: 'gloriola_std_lightregular';
+    font-size: 1.000em;
+    text-transform: uppercase;
+}
+
+.sub-menu-home:hover{
+    font-family: 'gloriola_std_lightregular';
+    font-size: 1.000em;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    background-color:#8EC649 !important;
+}
+
+.nav-home{
+    background-color: rgba(33, 60, 120, 0.72);
+    height: 600px;
+}
+
+.logo-home{
+    margin-left: 130px;
+    margin-top: 100px;
+    margin-right: auto;
+}
+
+.imagem-logo{
+    width: 150px;
+}
+
+.texto-home{
+    padding-top: 50px;
+    width: 624px;
+    /*margin-left: auto;*/
+    height: 395px;
+    margin-left: 130px;
+    padding-right: 200px;
+}
+
+.texto-coop{
+    font-family: 'gloriola_std_lightregular';
+    font-size: 1.300em;
+    color:black;
+    text-align: justify;
+    font-weight: 800;
+}
+
+
+
+.logo-coop{
+    width: 85px;
+    padding-left: 20px;
+    padding-top: 7px;
+    color:white;
+}
+
+.logo-coop-mobile{
+    width: 65px;
+    padding-left: 20px;
+    padding-top: 7px;
+    color:white;
+}
+
+.navbar-brand:hover {
+    color: #FFFFFF;
+    background-color: transparent;
+}
+
+.navbar-brand {
+    font-family: 'gloriola_std_mediumregular';
+    font-size: 1.300em;
+    color: #FFFFFF !important;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: black !important
+}
+
+.navbar-default .navbar-nav > .active > a{
+    color: #FFF !important;
+    background-color: #DD3131 !important;
+}
+.navbar-default .navbar-nav > .active > a:hover{
+    color: #555 !important;
+    background-color: #DD3131 !important;
+}
+
+.navbar-default .navbar-toggle:hover .icon-bar {
+    background-color: white !important;
+}
+
+.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: white !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #FFF;
+    text-transform: uppercase;
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: transparent !important;
+    background-color: white !important;
+}
+
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    background-color: rgb(33, 60, 120) !important;
+}
+
+.navbar-default {
+    background-color: white;
+    border-color: #e7e7e7;
+}
+
+.navbar-default {
+    background-color: rgb(221, 49, 49) !important;
+    border-color: transparent !important;
+}
+
+.logo-coop-link{
+    font-family: 'gloriola_std_display_thinRg', "sans-serif", 'Courier', 'Arial' ;
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 1.300em;
+    width: 55px;
+    padding-left: 20px;
+    padding-top: 7px;
+    color:white;
+}
+
+.titulo-coop{
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial';
+    font-size: 1.500em;
+    color:black;
+    text-transform: uppercase;
+}
+
+
+.footer-home{
+    background-color: #016A37 !important;
+    height: 50px;
+    padding: 15px;
+    font-family: 'gloriola_std_display_thinRg', "sans-serif", 'Courier', 'Arial';
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-logado{
+    background-color: #016A37 !important;
+    height: 50px;
+    padding: 15px;
+    font-family: 'gloriola_std_display_thinRg', "sans-serif", 'Courier', 'Arial';
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+    color: #262626;
+    text-decoration: none;
+    background-color: transparent !important;
+}
+
+.dropdown-menu>li>a:focus {
+    color: white !important;
+}
+#wrapper-home {
+    height: 100%;
+    /*background-color:white;*/
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+
+#first {
+    width: 40%;
+    float:left; /* add this */
+}
+
+#second {
+    width: 60%;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
+.menu-logado{
+    color: #333 !important;
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial'!important;
+    font-size: 1.000em;
+    text-transform: uppercase;
+
+}
+
+.submenu-logado{
+
+    color: #333 !important;
+    font-family: 'gloriola_std_lightregular', "sans-serif", 'Courier', 'Arial' !important;
+    font-size: 0.900em !important;
+    font-weight: 900 !important;
+    text-transform: uppercase  !important;
+
+}
+
+.submenu-logado:hover{
+    color: white !important;
+    background-color: #016A37 !important;
+}
+.menu-logado:hover{
+    color: white !important;
+    background-color: #016A37 !important;
+
+}
+
+.dropdown-user{
+    color: white !important;
+    background-color: #016A37 !important;
+}
+
+.dropdown-menu{
+    background-color: #016A37 !important;
+}
+
+.dropdown-menu a:hover{
+    background-color: white !important;
+}
+
+.nav .open>a{
+    background-color: #016A37 !important;
+}
+
+/*.btn-success{
+    background-color: rgba(224, 71, 71, 0.84) !important;
+    border-color: transparent;
+}
+
+.btn-success:hover{
+    background-color: white !important;
+
+    border-color: transparent;
+}*/
+
+.btn-lg {
+    font-family: 'gloriola_std_lightregular', "sans-serif", 'Courier', 'Arial' !important;
+}
+
+.btn-default {
+    font-family: 'gloriola_stdregular' !important;
+    text-transform: uppercase;
+}
+
+.nav-tabs > li > a :hover{
+    background-color: red;
+}
+
+.btn-default:hover {
+    text-transform: uppercase;
+}
+
+.nav-tabs > li > a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    text-transform: uppercase;
+}
+
+.dropdown-menu>li>a{
+    color: white !important;
+
+}
+.dropdown-menu>li>a:hover{
+
+    background-color: rgba(221, 49, 49, 0.89) !important;
+    /*text-decoration: underline;*/
+}
+
+.navbar-top-links .dropdown-menu li a:hover{
+    background-color: transparent !important;
+}
+
+.dropdown:hover{
+    background-color: transparent;
+}
+
+.dropdown-user:hover{
+    background-color: rgb(221, 49, 49) !important;
+}
+
+
+.usuario-logado{
+    color: white !important;
+}
+
+#login-box-home{
+    border-radius: 5px 5px 0px 0px;
+    color: #FFF;
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    background-color: #016A37;
+    border-color: #ddd;
+}
+
+.usuario-logado:hover{
+    background-color: transparent !important;
+    text-decoration: underline !important;
+}
+
+.usuario-logado:focus{
+    background-color: transparent !important;
+}
+
+.panel-default>.panel-heading {
+    /*border-radius: 5px 5px 0px 0px;*/
+    color: #FFF;
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    background-color: #016A37;
+    border-color: #ddd;
+}
+
+.flash-enviroment{
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase;
+}
+.panel-default>.panel-heading select {
+    /*border-radius: 5px 5px 0px 0px;*/
+    color: black !important;
+}
+
+.panel-default>.panel-heading a { color: white }
+
+.table th{
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+}
+
+.navbar-venda-facil { background: #454545; border: none; color: #fff; margin-bottom: 0; position:relative;}
+.navbar-venda-facil .selo-solicite-ja { position: absolute; top: -6px; right: 10px; z-index: 999;}
+.navbar-default .navbar-toggle { border: none;}
+.navbar-toggle { float:left !important; margin-left: 15px; margin-right: -7px; }
+.navbar-default .navbar-brand { color: #fff; font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial'; font-size: 1.500em;  text-transform: uppercase;}
+.navbar-default .navbar-collapse, .navbar-default .navbar-form { border: none;}
+
+.datepicker.datepicker-dropdown.dropdown-menu  {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.sweet-alert button {
+    background-color: rgb(221, 49, 49) !important
+}
+
+.control-label{
+    font-family: 'gloriola_stdregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+}
+
+.well {
+    font-family: 'gloriola_stdregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+}
+
+li .p-label{
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+}
+
+li .p-label:after{
+   content: ":";
+}
+
+li .p-value{
+    font-family: 'gloriola_stdregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+}
+
+.nav>li {
+    font-family: 'gloriola_stdregular' !important;
+}
+
+.nav>li:hover {
+    color: white !important;
+}
+
+.tab-pane h4 {
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    font-size: 16px;
+}
+
+.chart-legend {
+    font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase;
+}
+
+.input-group-sm>.form-control, .input-group-sm>.input-group-addon, .input-group-sm>.input-group-btn>.btn {
+    font-size: 14px !important;
+    font-family: 'gloriola_stdregular' !important;
+}
+
+.form-control {
+    font-family: 'gloriola_stdregular' !important;
+    font-size: 14px !important;
+}

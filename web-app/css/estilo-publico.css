@@ -1,0 +1,29 @@
+html,body {height: 100%;}
+
+#page-body {
+    min-height: 100%;
+    height: auto !important;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+.push {height: 30px}
+#footer {height: 50px;background-color: rgba(221, 49, 49, 0.89);}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+div .logo-header{
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 2.6em;
+    color: white;
+}

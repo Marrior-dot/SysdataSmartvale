@@ -1,7 +1,7 @@
 <head>
-<meta name='layout' content='main' />
+<meta name='layout' content='publico' />
 <title>Login</title>
-<style type='text/css' media='screen'>
+%{--<style type='text/css' media='screen'>
 
 #apresentacao{
 	float:left;	
@@ -90,67 +90,63 @@ a:link, a:visited, a:hover{
 }
 
 
-</style>
+</style>--}%
 </head>
 
 <body>
 
-   	<div id="logo">
-   		<img src="${resource(dir:'images',file:'logo_amazon.jpg') }" alt="Amazon Card"/>
-   	</div>
-
-
-	<div id="apresentacao">
-		<p>O Gestão de Frotas proporciona a você as seguintes funcionalidades:</p>
-		<ul>
-			<li >Gestão de Programas, RHs, Funcionários e Veículos</li>
-			<li class="odd">Credenciamento de Estabelecimentos</li>
-			<li >Cargas de saldos nos Cartões</li>
-			<li class="odd">Realização de transações</li>
-			<li >Gestão financeira</li>
-			<li class="odd">Controle de acesso</li>
-			<li >Relatórios de Gestão</li>
-		</ul>
-	</div>
-
-	<div id='login'>
-		<div class='inner'>
-			<div class='fheader'>Entre no sistema!</div>
-			<hr>			
-			<g:if test='${flash.message}'>
-				<div class='login_message'>${flash.message}</div>
-			</g:if>
-			
-			<form action='${postUrl}' method='POST' id='loginForm' class='cssform'>
-				
-				<fieldset>
-					<p>
-						<label><span>Login</span><g:textField name="j_username" value="${request.remoteUser}" /></label>
-					</p>
-					<p>
-						<label><span>Senha</span><g:passwordField name="j_password"  /></label>
-					</p>
-				</fieldset>
-				
-<%--				<p>--%>
-<%--					<label for='remember_me'>Remember me</label>--%>
-<%--					<input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'--%>
-<%--					<g:if test='${hasCookie}'>checked='checked'</g:if> />--%>
-<%--				</p>--%>
-				<p>
-					<input type='submit' value='Entrar' />
-				</p>
-			</form>
-			
-			<br>
-			
-			<div>
-					<g:link controller='register' action='forgotPassword'>Esqueceu a senha?</g:link>
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-default  col-md-offset-4">
+			<div class="panel-heading" id="login-box-home">
+				<span class="fa fa-user">
+					<g:message code="springSecurity.login.header"
+							   style="font-family: 'gloriola_std_mediumregular' !important;"/>
+					%{--<img src="http://s11.postimg.org/7kzgji28v/logo_sm_2_mr_1.png" class="img-responsive" alt="Conxole Admin"/>--}%
+				</span>
 			</div>
-				
+			<div class="panel-body">
+				<g:if test='${flash.message}'>
+					<div class='login_message'
+						 style="color: white;">${flash.message}</div>
+				</g:if>
+				<form action='${request.contextPath}/j_spring_security_check'
+					  method='POST' id='loginForm' autocomplete='off'
+					  class="form-signin">
+					<fieldset>
+						<label class="panel-login">
+							<div class="login_result"></div>
+						</label>
+						<input class="form-control" placeholder="Nome" name='j_username'
+							   id='username' type="text"
+							   style=" font-family: 'gloriola_std_lightregular';">
+						<input class="form-control" placeholder="Senha"
+							   name='j_password' id='password' type="password"
+							   style=" font-family: 'gloriola_std_lightregular';">
+						<br>
+
+						<p id="remember_me_holder">
+							<input type='checkbox' class='chk'
+								   name='${rememberMeParameter}' id='remember_me'
+								   <g:if test='${hasCookie}'>checked='checked'</g:if>/>
+							<label for='remember_me'
+								   style="color: white;text-transform:uppercase; font-family: 'gloriola_std_display_thinRg'; font-size: 0.900em"><g:message
+									code="springSecurity.login.remember.me.label"/></label>
+						</p>
+
+						<input class="btn btn-lg btn-success btn-block" style="background-color: #016A37" type="submit"
+							   id="submit"
+							   value="${message(code: "springSecurity.login.button")} »">
+					</fieldset>
+				</form>
+				<g:link style="color: white; font-weight: bold;" controller="login" action="forgotPassword">
+					<g:message code="spring.security.ui.forgotPassword.title" default="Esqueci minha senha"/>
+				</g:link>
+			</div>
 		</div>
-		
 	</div>
+</div>
+
 <script type='text/javascript'>
 <!--
 (function(){

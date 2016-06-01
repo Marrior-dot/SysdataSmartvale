@@ -1,0 +1,40 @@
+.properties {
+    padding: 0;
+    position: relative;
+    zoom: 1;
+    border: none;
+    list-style: none;
+}
+.properties li {
+    list-style: none;
+    overflow: hidden;
+    zoom: 1;
+    padding: .5em 0;
+}
+.properties li:nth-child(odd) {
+    background-color: #F5F5F5;
+}
+.p-label {
+    float: left;
+    display: block;
+    padding-right: 0.7em;
+    width: 25%;
+    text-align: right;
+}
+.p-value {
+    float: right;
+    display: block;
+    width: 74%;
+}
+
+div .hor-scrollable{
+    overflow-x: scroll; padding: 0; margin-bottom: 20px;
+}
+
+div .hor-scrollable table{
+    margin-bottom: 0;
+}
+
+div .ver-scrollable{
+    overflow-y: scroll;
+}
