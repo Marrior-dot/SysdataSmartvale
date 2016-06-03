@@ -21,6 +21,16 @@ class RhController extends BaseOwnerController {
 	@Secured(['IS_AUTHENTICATED_FULLY'])
     def list = {   }
 
+	@Secured(['IS_AUTHENTICATED_FULLY'])
+	def newList = {
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		def criteria = {
+			order('id', 'desc')
+		}
+		def rhInstanceList = Rh.createCriteria().list(params, criteria)
+		/*[rhInstanceList:rhInstanceList , rhInstanceTotal: Rh.count()]*/
+	}
+
 	@Secured(['ROLE_PROC','ROLE_ADMIN'])
     def create = {
 		render(view:'form',model:[action:Util.ACTION_NEW])

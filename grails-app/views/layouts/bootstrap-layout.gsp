@@ -9,9 +9,18 @@
 <html>
 <head>
     <title><g:layoutTitle default="Grails" /></title>
+%{--
     <link rel="shortcut icon" href="${resource(dir:'images',file:'carro.png')}" type="image/x-icon" />
+--}%
+%{--
     <g:javascript library="jquery" plugin="jquery"/>
+--}%
+
+%{--
     <gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
+--}%
+    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/jquery-1.11.3.min.js') }"></script>
+
     <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/bootstrap.min.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'estilo-publico.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'font-awesome.min.css')}" />

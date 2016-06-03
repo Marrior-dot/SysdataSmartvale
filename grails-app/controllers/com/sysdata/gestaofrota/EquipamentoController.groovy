@@ -18,6 +18,8 @@ class EquipamentoController extends BaseOwnerController {
 
     def list = {  }
 
+	def newList = {  }
+
     def create = {
 		if(params.unidade_id){
 			def unidadeInstance=Unidade.get(params.unidade_id)

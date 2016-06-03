@@ -26,6 +26,15 @@ class PedidoCargaController extends BaseOwnerController {
 
     def list = {  }
 
+	def newList = {
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		def criteria = {
+			order('dateCreated', 'desc')
+		}
+		def pedidoCargaInstanceList = PedidoCarga.createCriteria().list(params, criteria)
+		[pedidoCargaInstanceList:pedidoCargaInstanceList , pedidoCargaInstanceTotal: PedidoCarga.count()]
+	}
+
 	def create = {
 		if(session.funcionariosList)
 			session.funcionariosList=null

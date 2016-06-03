@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="bootstrap-layout" />
+        <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'rh.label', default: 'RH')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>

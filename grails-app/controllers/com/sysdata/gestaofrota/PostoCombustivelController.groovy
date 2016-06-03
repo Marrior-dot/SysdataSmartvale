@@ -33,6 +33,15 @@ class PostoCombustivelController {
 
     def list = {  }
 
+	def newList = {
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		def criteria = {
+			order('id')
+		}
+		def postoCombustivelInstanceList = PostoCombustivel.createCriteria().list(params, criteria)
+		[postoCombustivelInstanceList:postoCombustivelInstanceList , postoCombustivelInstanceTotal: PostoCombustivel.count()]
+	}
+
     def create = {
 		render(view:"form",model:[action:'novo'])    
 	}

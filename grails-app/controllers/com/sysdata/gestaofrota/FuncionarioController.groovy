@@ -21,6 +21,15 @@ class FuncionarioController extends BaseOwnerController {
 
 	def list = {}
 
+	def newList = {
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		def criteria = {
+			order('id')
+		}
+		def funcionarioInstanceList = Funcionario.createCriteria().list(params, criteria)
+		[funcionarioInstanceList:funcionarioInstanceList , funcionarioInstanceTotal: Rh.count()]
+	}
+
 	def selectRhUnidade={
 		render(view:'/selectRhUnidade',model:[controller:"funcionario",action:Util.ACTION_NEW]) 
 	}

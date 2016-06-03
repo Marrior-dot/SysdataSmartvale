@@ -21,6 +21,15 @@ class VeiculoController extends BaseOwnerController {
 
     def list = {   }
 
+	def newList = {
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		def criteria = {
+			order('id')
+		}
+		def veiculoInstanceList = Veiculo.createCriteria().list(params, criteria)
+		[veiculoInstanceList:veiculoInstanceList , veiculoInstanceTotal: Veiculo.count()]
+	}
+
     def create = {
 		if(params.unidade_id){
 			def unidadeInstance=Unidade.get(params.unidade_id)

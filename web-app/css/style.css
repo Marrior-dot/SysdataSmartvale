@@ -168,7 +168,7 @@
 }
 
 .footer-logado{
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
     height: 50px;
     padding: 15px;
     font-family: 'gloriola_std_display_thinRg', "sans-serif", 'Courier', 'Arial';
@@ -223,21 +223,21 @@
 
 .submenu-logado:hover{
     color: white !important;
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
 }
 .menu-logado:hover{
     color: white !important;
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
 
 }
 
 .dropdown-user{
     color: white !important;
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
 }
 
 .dropdown-menu{
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
 }
 
 .dropdown-menu a:hover{
@@ -245,7 +245,7 @@
 }
 
 .nav .open>a{
-    background-color: #016A37 !important;
+    background-color: #00B264 !important;
 }
 
 /*.btn-success{
@@ -316,7 +316,7 @@
     color: #FFF;
     font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
     text-transform: uppercase !important;
-    background-color: #016A37;
+    background-color: #00B264;
     border-color: #ddd;
 }
 
@@ -334,7 +334,7 @@
     color: #FFF;
     font-family: 'gloriola_std_mediumregular', "sans-serif", 'Courier', 'Arial' !important;
     text-transform: uppercase !important;
-    background-color: #016A37;
+    background-color: #00B264;
     border-color: #ddd;
 }
 

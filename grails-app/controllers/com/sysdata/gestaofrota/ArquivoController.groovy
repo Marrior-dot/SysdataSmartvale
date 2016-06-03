@@ -21,6 +21,10 @@ class ArquivoController {
 	
 	
 	def list={}
+
+	def newList={
+
+	}
 	
 	def listAllJSON={
 				

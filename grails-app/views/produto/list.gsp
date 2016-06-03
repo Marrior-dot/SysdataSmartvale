@@ -8,10 +8,6 @@
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 	</head>
 	<body>
-		%{--<div class="nav" role="navigation">
-			<span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-			<span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
-		</div>--}%
 	<br>
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -27,7 +23,7 @@
 			</div>
 			<br>
 			<br>
-			<table class="table table-striped table-bordered table-hover table-condensed">
+			<table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
 				<thead>
 				<tr>
 
