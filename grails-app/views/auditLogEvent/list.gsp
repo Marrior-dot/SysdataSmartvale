@@ -13,6 +13,8 @@
                 <h4>Listagem Audit Log</h4>
             </div>
             <div class="panel-body">
+                <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
+                <br><br>
                 <div class="body">
                     <g:form action="list">
                         <g:if test="${flash.message}">
