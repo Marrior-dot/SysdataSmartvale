@@ -93,7 +93,7 @@
         </div>
         <!-- /.navbar-header -->
 
-       %{-- <ul class="nav navbar-top-links navbar-right">
+        <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown">
                 <a data-toggle="dropdown" href="#" class="usuario-logado">
                     <sec:ifLoggedIn>
@@ -121,7 +121,7 @@
         <!-- /.dropdown-user -->
         </li>
             <!-- /.dropdown -->
-        </ul>--}%
+        </ul>
         <!-- /.navbar-top-links -->
     </nav>
     <!-- /.navbar-static-side -->

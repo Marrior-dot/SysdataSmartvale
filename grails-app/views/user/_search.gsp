@@ -1,16 +1,21 @@
 <g:form controller="${controller}">
-
+	<br>
 	 <div class="buttons">
-	  <span class="button"><g:actionSubmit class="new" action="create" 	value="${message(code:'default.new.label', args:[message(code:'user.label')]) }"/></span>
+	 <g:actionSubmit class="btn btn-default" action="create" 	value="Novo Usuário"/>
 	 </div>
+	<br><br>
+	<div class="panel panel-default">
+		<div class="panel-heading">Pesquisa</div>
+		<div class="panel-body">
+			<fieldset>
+				<input type="radio" name="opcao" value="1" checked="true">Nome</input>
+				<input type="radio" name="opcao" value="2">Login</input>
+				<br><br>
+				<label>Filtro: <g:textField class="form-control" name="filtroUser" value="${filtro}"/></label>
+			</fieldset>
+		</div>
+	</div>
 
-
-	<fieldset class="search">
-		<input type="radio" name="opcao" value="1" checked="true">Nome</input> 
-		<input type="radio" name="opcao" value="2">Login</input>
-		<br><br>
-		<label>Filtro: <g:textField name="filtroUser" value="${filtro}"/></label>
-	</fieldset>
 	
 		<gui:dataTable 
 	 			id="userSearchDT"
