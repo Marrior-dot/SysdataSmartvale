@@ -2,85 +2,54 @@
     <head>
         <title>Bem vindo ao Sistema Gestão de Frota</title>
         <meta name="layout" content="bootstrap-layout" />
-        %{--<style type="text/css" media="screen">
+		<script type="text/javascript" src="${resource(dir:'js',file:'chart-config.js') }"></script>
+		<script type="text/javascript" src="${resource(dir:'js',file:'plugins/Chart.min.js') }"></script>
 
 
-	            
-	    .clear{
-			clear:both;
-		}
 
-		#servicos{
-		   margin-left:100px;	
-		   margin-top:100px;
-		   margin-bottom:100px;
-		}
-
-        .servico{
-        	width:150px;
-        	float:left;
-        }
-        
-       .servico h2{
-       		text-align:center;
-       }
-        
-        </style>--}%
-        
-        
-        
-    </head>
+	</head>
     <body>
+	<br><br>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<i class="fa fa-bar-chart-o fa-fw"></i> Transações (R$)
+			<div class="pull-right">
+				<g:form>
+					<g:select name="mesEscolhido" class="form-down-option-graphics"
+							  from="${['Todos', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']}" ></g:select>
+					<g:select name="anoEscolhido" class="form-down-option-graphics" from="${2016..2012}"></g:select>
+				</g:form>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div id="line-chart-transacoes">
 
-        	<div id="user">
-        		<img src="${resource(dir:'images',file:'usuario.png')}" alt="Usuário Cenpros" border="0"/>
-        		<span style="font: 20px sans-serif ;color: #4682B4 " >Bem vindo(a) ao Gestão de Frota</span>
-        	</div>
-			
-			<hr>      
-            
-            <div id="servicos">
-            	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH,ROLE_LOG">
-	            <div class="servico">
-	            	<a href="${createLink(controller:'login',action:'menu')}?servico=cadastros">
-	            		<img alt="Cadastros" src="${resource(dir:"images",file:"cadastro.png") }">
-	            	</a>
-					<h2>Cadastros</h2>						            	
-	            </div>
-	            </sec:ifAnyGranted>
-	            
-	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
-	            <div class="servico">
-	            	<a href="${createLink(controller:'login',action:'menu')}?servico=financeiro">
-	            		<img alt="Financeiro" src="${resource(dir:"images",file:"financeiro.png") }">
-	            	</a>
-	            	<h2>Financeiro</h2>
-	            </div>
-	            </sec:ifAnyGranted>
-	            
-	            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_ESTAB,ROLE_RH,ROLE_LOG,ROLE_HELP">
-		            <div class="servico">
-						<a href="${createLink(controller:'login',action:'menu')}?servico=relatorios">
-		            		<img alt="Relatorios" src="${resource(dir:"images",file:"relatorio.png") }">
-		            	</a>
-		            	<h2>Relatórios</h2>
-		            </div>
-		        </sec:ifAnyGranted>
-		            
-		        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-		            <div class="servico">
-						<a href="${createLink(controller:'login',action:'menu')}?servico=ca">
-		            		<img alt="Central de Atendimento" src="${resource(dir:"images",file:"ca.png") }">
-		            	</a>
-		            	<h2>Central de Atendimento</h2>
-		            </div>
-	            
-	            </sec:ifAnyGranted>
-            
-	            
-	                        
-      			<div class="clear"></div>   
-	         </div>   
-	                     
+			</div>
+		</div>
+		<ul class="chart-legend">
+			<li>
+				<span style="background-color:#58CE58"></span>
+				Confirmadas
+			</li>
+			<sec:ifAnyGranted roles="ROLE_PROC, ROLE_ADMIN">
+				<li>
+					<span style="background-color:#EA4335"></span>
+					Não Autorizadas
+				</li>
+				<li>
+					<span style="background-color:#4386F5"></span>
+					Desfeitas
+				</li>
+				<li>
+					<span style="background-color:#FBBC05"></span>
+					Pendentes
+				</li>
+				<li>
+					<span style="background-color:#434343"></span>
+					Canceladas
+				</li>
+			</sec:ifAnyGranted>
+		</ul>
+	</div>
     </body>
 </html>

@@ -130,7 +130,7 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li id="coop_logo">
-                    <a href="${createLink(uri: '/')}"><asset:image src="logo_amazon2.png" alt="COOP"/></a>
+                    <a href="${createLink(uri: '/')}"><img alt="VR" src="${resource(dir:'images',file:'vr-beneficios-big.png') }"></a>
                 </li>
                 <g:render template="/layouts/menu-convenio"/>
             </ul>
