@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'carro.png')}" type="image/x-icon" />
         <g:javascript library="jquery" plugin="jquery"/>
-		<gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>        
+		<gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
 
         <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
 

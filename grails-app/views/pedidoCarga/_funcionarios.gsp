@@ -4,7 +4,7 @@
 			<input type="radio" name="opcao" value="2">Nome</input>
 			<input type="radio" name="opcao" value="3">CPF</input>
 			<br><br>
-			<label>Filtro: <g:textField name="filtro" value="${filtro}"/></label>
+			<label>Filtro: <g:textField class="form-control" name="filtro" value="${filtro}"/></label>
 		</fieldset>
 	
 	
