@@ -166,7 +166,7 @@ class FuncionarioController extends BaseOwnerController {
 
 
 	def listAllJSON={
-		
+
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def offset=params.offset?:0
 		def opcao

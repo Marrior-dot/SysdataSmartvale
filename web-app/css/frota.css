@@ -243,3 +243,7 @@ table.show td.name {
 	font-weight:bold;
 	color:#FFFFFF;
 }
+
+table.table-default {
+	font-size: 12px;
+}

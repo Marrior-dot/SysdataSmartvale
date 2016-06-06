@@ -1,8 +1,19 @@
-<fieldset>
-	<h2>${legend}</h2>
-	<label><span>DDD</span><g:textField name="${telefone}.ddd" value="${telefoneInstance?.ddd}" style="width:30px" maxlength="2"/></label>
-	<label><span>Número</span><g:textField name="${telefone}.numero" value="${telefoneInstance?.numero}" style="width:100px" maxlength="9"/></label>
-	<label><span>Ramal</span><g:textField name="${telefone}.ramal" value="${telefoneInstance?.ramal}" style="width:60px" maxlength="4" /></label>
-</fieldset>
+<div class="panel panel-default">
+    <div class="panel-heading">${legend}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-2">
+                <bs:formField id="${telefone}.ddd" name="${telefone}.ddd" label="DDD"  value="${telefoneInstance?.ddd}" />
+            </div>
+            <div class="col-xs-2">
+                <bs:formField id="${telefone}.numero" name="${telefone}.numero" label="Número"  value="${telefoneInstance?.numero}" />
+            </div>
+            <div class="col-xs-2">
+                <bs:formField id="${telefone}.ramal" name="${telefone}.ramal" label="Ramal"  value="${telefoneInstance?.ramal}" />
+            </div>
+        </div>
+    </div>
+</div>
+
 
 

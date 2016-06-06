@@ -6,44 +6,58 @@
     <g:hiddenField name="action" value="${action}"/>
 
 
-	<div class="enter">
-		<fieldset class="uppercase">
-			<h2>Dados Básicos</h2>
-			<div style="padding:0.5em;font-size:16px;">
-				<g:if test="${action==Util.ACTION_VIEW}">
-					<span>Código: ${rhInstance?.codigo}</span>
-				</g:if>
+	<div class="panel panel-default">
+
+		<div class="panel-heading">Dados Básicos</div>
+
+
+		<div style="padding:0.5em;font-size:16px;">
+			<g:if test="${action==Util.ACTION_VIEW}">
+				<span>Código: ${rhInstance?.codigo}</span>
+			</g:if>
+		</div>
+
+
+		<div class="panel-body">
+
+			<div class="row">
+
+				<div class="col-xs-4">
+					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" value="${rhInstance?.cnpj}" />
+				</div>
+
+				<div class="col-xs-4">
+					<bs:formField class="uppercase" id="razaoSocial" label="Razão Social" required="true" value="${rhInstance?.nome}" />
+				</div>
+
 			</div>
-			<div>
-				<label><span>CNPJ</span><g:textField name="cnpj" value="${rhInstance?.cnpj}" /></label>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<bs:formField class="uppercase" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
+				</div>
 			</div>
-			
-			<div>
-				<label><span>Razão Social</span><g:textField name="nome" value="${rhInstance?.nome}" size="50" maxlength="50" /></label>
-				<div class="clear"></div>
+
+			<div class="row">
+				<div class="col-xs-4">
+					<bs:formField class="uppercase" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
+				</div>
+
+				<div class="col-xs-4">
+					<bs:formField class="uppercase" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
+				</div>
+
 			</div>
-			
-			<div>
-				<label><span>Nome Fantasia</span><g:textField name="nomeFantasia" value="${rhInstance?.nomeFantasia}" size="50" maxlength="50" /></label>
-				<div class="clear"></div>
-			</div>	
-			
-			<div>
-				<label><span>Taxa de Pedido (%)</span><g:textField name="taxaPedido" value="${rhInstance?.taxaPedido}" /></label>
-			</div>
-			
-			<div>
-				<label><span>Validade da carga (dias)</span><g:textField name="validadeCarga" value="${rhInstance?.validadeCarga}" /></label>
-			</div>
-				
-			
-			<g:render template="/endereco/form" model="[enderecoInstance:rhInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
-			
-			<g:render template="/telefone/form" model="[telefoneInstance:rhInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
-		</fieldset>					
-	
+		</div>
+
+
+		<g:render template="/endereco/form" model="[enderecoInstance:rhInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
+		<g:render template="/telefone/form" model="[telefoneInstance:rhInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
+
+
 	</div>
-	
+
+
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">
 			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">

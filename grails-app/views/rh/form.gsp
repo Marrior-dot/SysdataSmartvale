@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
+        <meta name="layout" content="bootstrap-layout" />
         <g:set var="entityName" value="${message(code: 'rh.label', default: 'RH')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
@@ -23,27 +23,40 @@
             </div>
             </g:hasErrors>
            	<g:if test="${action==Util.ACTION_VIEW}">
-           		<gui:tabView>
-        			<gui:tab label="${entityName}" active="true">
-        				<g:render template="basico"/>
-        			</gui:tab>
-        			<gui:tab label="${message(code:'unidade.label')}">
-        				<g:render template="/unidade/search" model="[controller:'unidade',rhId:rhInstance?.id]"/> 
-        			</gui:tab>
-        			<gui:tab label="Categorias de Funcionários">	
-        				<g:render template="/categoriaFuncionario/search" model="[controller:'categoriaFuncionario',rhId:rhInstance?.id]"/>
-        			</gui:tab>
-        			
-        			<gui:tab label="Estabelecimentos">
-        				<g:render template="estabelecimentos" bean="${rhInstance}"/>
-        			</gui:tab>
-        			
-        		</gui:tabView>
-           	</g:if>
-           	<g:else>
-           		<g:render template="basico"/>
-           	</g:else>
-		</div>			
+
+                <div class="tabbable"> <!-- Only required for left/right tabs -->
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab">Programa</a></li>
+                        <li><a href="#tab2" data-toggle="tab">RH</a></li>
+                        <li><a href="#tab3" data-toggle="tab">Categorias de Funcionários</a></li>
+                        <li><a href="#tab4" data-toggle="tab">Estabelecimentos</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="tab1">
+                            <g:render template="basico"/>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <g:render template="/unidade/search" model="[controller:'unidade',rhId:rhInstance?.id]"/>
+                        </div>
+                        <div class="tab-pane" id="tab3">
+                            <g:render template="/categoriaFuncionario/search" model="[controller:'categoriaFuncionario',rhId:rhInstance?.id]"/>
+                        </div>
+                        <div class="tab-pane" id="tab4">
+                            <g:render template="estabelecimentos" bean="${rhInstance}"/>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </g:if>
+            <g:else>
+                <g:render template="basico"/>
+            </g:else>
+		</div>
     </body>
 </html>
 

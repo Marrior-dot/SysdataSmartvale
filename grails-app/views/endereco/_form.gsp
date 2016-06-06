@@ -1,19 +1,43 @@
-<fieldset class="uppercase">
-	<h2>${legend}</h2>
-	
-	<div>
-		<label><span>CEP</span><g:textField name="${endereco}.cep" class="cep" value="${enderecoInstance?.cep}" size="10"/></label>
-		<label><span>Logradouro</span><g:textField name="${endereco}.logradouro" value="${enderecoInstance?.logradouro}" size="50"/></label>
-		<label><span>Nº</span><g:textField name="${endereco}.numero" value="${enderecoInstance?.numero}" size="6" maxlength="6"/></label>
-		<div class="clear"></div>
-	</div>
+<div class="panel panel-default">
 
-	<div>
-		<label><span>Complemento</span><g:textField name="${endereco}.complemento" value="${enderecoInstance?.complemento}" /></label>
-		<label><span>Bairro</span><g:textField name="${endereco}.bairro" value="${enderecoInstance?.bairro}" /></label>
-		<div class="clear"></div>
+	<div class="panel-heading">${legend}</div>
+	<div class="panel-body">
+
+		<div class="row">
+            <div class="col-xs-2">
+                <bs:formField id="${endereco}.cep" name="${endereco}.cep" label="CEP"  value="${enderecoInstance?.cep}" />
+            </div>
+            <div class="col-xs-6">
+                <bs:formField id="${endereco}.logradouro" name="${endereco}.logradouro" label="Logradouro"  value="${enderecoInstance?.logradouro}" />
+            </div>
+            <div class="col-xs-2">
+                <bs:formField id="${endereco}.numero" name="${endereco}.numero" label="Nº"  value="${enderecoInstance?.numero}" />
+            </div>
+		</div>
+
+        <div class="row">
+            <div class="col-xs-4">
+                <bs:formField id="${endereco}.complemento" name="${endereco}.complemento" label="Complemento"  value="${enderecoInstance?.complemento}" />
+            </div>
+            <div class="col-xs-4">
+                <bs:formField id="${endereco}.bairro" name="${endereco}.bairro" label="Bairro"  value="${enderecoInstance?.bairro}" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-2">
+                <bs:formField name="${endereco}.cidade.estado.nome" label="Estado"  value="${enderecoInstance?.cidade?.estado?.nome}" />
+            </div>
+            <div class="col-xs-4">
+                <bs:formField name="${endereco}.cidade.nome" label="Cidade"  value="${enderecoInstance?.cidade?.nome}" />
+            </div>
+        </div>
+
 	</div>
-	
+</div>
+
+
+%{--
 	<div>
 		<label><span>Estado</span>
 			<div style="width:150px;padding-bottom:20px;" class="disable">
@@ -42,6 +66,6 @@
 		</label>
 		<div class="clear"></div>
 	</div>
-</fieldset>
+--}%
 
 

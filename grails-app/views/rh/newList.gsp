@@ -31,7 +31,7 @@
                 </sec:ifAnyGranted>
                 <br><br>
                 <div class="list">
-                    <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
+                    <table class="table table-striped table-bordered table-hover table-condensed table-default" >
                         <thead>
                         <th>Código</th>
                         <th>Razão Social</th>
@@ -41,7 +41,7 @@
                         <tbody>
                             <g:each in="${Rh.list()}" status="i" var="rh">
                                 <tr>
-                                    <td>${rh.codigo}</td>
+                                    <td><g:link action="show" id="${rh.id}">${fieldValue(bean: rh, field: "codigo")}</g:link></td>
                                     <td>${rh.nome}</td>
                                     <td>${rh.nomeFantasia}</td>
                                     <td>${rh.cnpj}</td>

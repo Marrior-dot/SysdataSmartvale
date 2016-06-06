@@ -34,6 +34,11 @@
     <link rel="stylesheet" href="${resource(dir:'css',file:'sweetalert.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'timeline.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'fonts/fonts.css')}" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/dataTables.bootstrap.min.css')}"/>
+    <!-- Frota -->
+    <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
+
 
 %{--
     <script type="text/javascript" src="${resource(dir:'js',file:'application.js') }"></script>
@@ -47,7 +52,9 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/moment.min.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/metisMenu.min.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootstrap-waitingfor.js') }"></script>
-
+    <!-- DataTables -->
+    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/jquery.dataTables.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.bootstrap.min.js')}"></script>
 
 
 
