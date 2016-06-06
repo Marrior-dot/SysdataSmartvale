@@ -2,8 +2,18 @@
  * Created by hyago on 06/06/16.
  */
 $(document).ready(function () {
+	configDatepicker();
 	configInputMasks();
 });
+
+function configDatepicker() {
+	$(".datepicker").datepicker({
+		format: 'dd/mm/yyyy',
+		language: 'pt-BR',
+		clearBtn: true,
+		daysOfWeekHighlighted: [0, 6]
+	});
+}
 
 function configInputMasks() {
 	$('.date').mask("99/99/9999", {placeholder: '__/__/____'});

@@ -32,19 +32,56 @@
     <div class="panel panel-default">
         <div class="panel-heading">Dados Básicos</div>
         <div class="panel-body">
-            <div class="form-group col-md-4">
-                <label for="matricula">Matrícula</label>
-                <g:textField class="form-control matricula" name="matricula" value="${funcionarioInstance?.matricula}" maxlength="10"/>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="matricula">Matrícula</label>
+                    <g:textField class="form-control matricula" name="matricula" value="${funcionarioInstance?.matricula}" maxlength="10"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="cpf">CPF</label>
+                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="rg">RG</label>
+                    <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10" class="form-control only-numbers"/>
+                </div>
             </div>
 
-            <div class="form-group col-md-4">
-                <label for="cpf">CPF</label>
-                <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"/>
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label for="nome">Nome</label>
+                    <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="dataNascimento">Data Nascimento</label>
+                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento"
+                           value="${funcionarioInstance?.dataNascimento}"/>
+                </div>
             </div>
 
-            <div class="form-group col-md-4">
-                <label for="rg">RG</label>
-                <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10" class="form-control only-numbers"/>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="cnh">CNH</label>
+                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}" maxlength="11"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="validadeCnh">Validade CNH</label>
+                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh" value="${funcionarioInstance?.cnh}"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="categoria.id">Categoria CNH</label>
+                    <g:select name="categoria.id" value="${funcionarioInstance?.categoria?.id}"
+                              noSelection="${['null': 'Selecione a categoria...']}" class="form-control"
+                              from="${CategoriaFuncionario.withCriteria {
+                                  rh { eq('id', unidadeInstance?.rh?.id) }
+                              }}"
+                              optionKey="id" optionValue="nome"/>
+                </div>
             </div>
         </div>
     </div>
@@ -54,38 +91,6 @@
         <fieldset class="uppercase">
             <h2>Dados Básicos</h2>
 
-            <div>
-
-                <label><span>CPF</span><g:textField name="cpf" value="${funcionarioInstance?.cpf}"/></label>
-                <label><span>RG</span><g:textField name="rg" class="numeric" value="${funcionarioInstance?.rg}"
-                                                   size="10" maxlength="10"/></label>
-
-                <div class="clear"></div>
-            </div>
-
-            <div>
-                <label><span>Nome</span><g:textField name="nome" value="${funcionarioInstance?.nome}" size="50"
-                                                     maxlength="50"/></label>
-                <label><span>Data Nascimento</span><gui:datePicker id="dataNascimento" name="dataNascimento"
-                                                                   value="${funcionarioInstance?.dataNascimento}"
-                                                                   formatString="dd/MM/yyyy"/></label>
-
-                <div class="clear"></div>
-            </div>
-
-            <div>
-                <label><span>CNH</span><g:textField name="cnh" class="numeric" value="${funcionarioInstance?.cnh}"
-                                                    size="11" maxlength="11"/></label>
-                <label><span>Validade CNH</span><gui:datePicker id="validadeCnh" name="validadeCnh"
-                                                                value="${funcionarioInstance?.validadeCnh}"
-                                                                formatString="dd/MM/yyyy"/></label>
-                <label><span>Categoria CNH</span><g:select name="categoriaCnh" from="${CategoriaCnh.values()}"
-                                                           optionValue="nome"
-                                                           noSelection="${['null': 'Selecione uma Categ. CNH...']}"
-                                                           value="${funcionarioInstance?.categoriaCnh}"/></label>
-
-                <div class="clear"></div>
-            </div>
 
 
             <div>
