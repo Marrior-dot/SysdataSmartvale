@@ -167,8 +167,12 @@ class FuncionarioController extends BaseOwnerController {
 
 	def listAllJSON={
 
+        params.each{
+            println it
+        }
+
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def offset=params.offset?:0
+		def offset=params.start?:0
 		def opcao
 		def filtro
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
@@ -180,7 +184,8 @@ class FuncionarioController extends BaseOwnerController {
 		withSecurity{ownerList->
 			funcionarioInstanceList=Funcionario
 									.createCriteria()
-									.list(max:params.max,offset:offset){
+									//.list(max:params.max,offset:offset){
+                                    .list(){
 										eq('status', Status.ATIVO)
 										if(ownerList.size>0)
 											unidade{rh{'in'('id',ownerList)}}
@@ -207,6 +212,8 @@ class FuncionarioController extends BaseOwnerController {
 											else if(opcao==3)
 												like('cpf',filtro+'%')
 										}
+
+										order("nome")
 									}
 		}
 		
@@ -248,11 +255,13 @@ class FuncionarioController extends BaseOwnerController {
 			[id:f.id,
 						matricula:f.matricula,
 						nome:f.nome,
-						cpf:f.cpf,
-						acao:"<a class='show' href=${createLink(action:'show')}/${f.id}></a>"]
+						cpf:"<a href=${createLink(action:'show')}/${f.id}>${f.cpf}</a>"
+            ]
+
 		}
 
-		def data=[totalRecords:funcionarioInstanceTotal,results:fields]
+		def data=[recordsTotal:funcionarioInstanceTotal,results:fields]
+
 		render data as JSON
 	}
 

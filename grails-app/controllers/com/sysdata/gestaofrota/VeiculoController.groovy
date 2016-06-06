@@ -175,7 +175,7 @@ class VeiculoController extends BaseOwnerController {
 	
 	def listAllJSON={
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def offset=params.offset?:10
+		def offset=params.start?:10
 		def opcao
 		def filtro
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
@@ -185,7 +185,8 @@ class VeiculoController extends BaseOwnerController {
 		withSecurity{ownerList->
 			veiculoInstanceList=Veiculo
 								.createCriteria()
-								.list(max:params.max,offset:offset){
+								//.list(max:params.max,offset:offset){
+								.list(){
 									
 									if(ownerList.size>0)
 										unidade{rh{'in'('id',ownerList)}}
@@ -233,14 +234,14 @@ class VeiculoController extends BaseOwnerController {
 
 		def fields=veiculoInstanceList.collect{v->
 			[id:v.id,
-						placa:v.placa,
+                        placa:"<a href=${createLink(action:'show')}/${v.id}>${v.placa}</a>",
 						marca:v.marca?.nome,
 						modelo:v.modelo,
-						ano:v.anoFabricacao,
-						acao:"<a class='show' href=${createLink(action:'show')}/${v.id}></a>"]
+						ano:v.anoFabricacao
+						]
 		}
 
-		def data=[totalRecords:veiculoInstanceTotal,results:fields]
+		def data=[recordsTotal:veiculoInstanceTotal,results:fields]
 		render data as JSON
 	}
 	

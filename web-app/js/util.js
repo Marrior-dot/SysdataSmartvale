@@ -1,3 +1,24 @@
+//Configuração padrão para todos os DataTables
+$.extend( $.fn.dataTable.defaults, {
+
+    "lengthChange": false,
+
+    language:{
+        search:"Filtro:",
+        loadingRecords: "Carregando...",
+
+        paginate: {
+            first:      "Primeiro",
+            previous:   "Anterior",
+            next:       "Pr&oacute;ximo",
+            last:       "&Uacute;ltimo"
+        }
+    }
+
+} );
+
+
+
 function expandHeaderX(logoHeader){
 	
 	/* Altura e largura da janela do browser */
