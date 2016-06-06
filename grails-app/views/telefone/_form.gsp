@@ -5,7 +5,7 @@
             <div class="col-xs-2">
                 <bs:formField id="${telefone}.ddd" name="${telefone}.ddd" label="DDD"  value="${telefoneInstance?.ddd}" />
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-4">
                 <bs:formField id="${telefone}.numero" name="${telefone}.numero" label="Número"  value="${telefoneInstance?.numero}" />
             </div>
             <div class="col-xs-2">
