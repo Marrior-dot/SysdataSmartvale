@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="${resource(dir:'css',file:'sweetalert.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'timeline.css')}" />
     <link rel="stylesheet" href="${resource(dir:'css',file:'fonts/fonts.css')}" />
+    <link rel="stylesheet" href="${resource(dir:'js',file:'jquery/jquery-ui-1.11.4/jquery-ui.min.css')}"/>
+
     <!-- DataTables -->
     <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/dataTables.bootstrap.min.css')}"/>
     <!-- Frota -->
@@ -52,6 +54,10 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/moment.min.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/metisMenu.min.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootstrap-waitingfor.js') }"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.mask.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.maskMoney.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery-ui-1.11.4/jquery-ui.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/mascaras.js')}"></script>
     <!-- DataTables -->
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/jquery.dataTables.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.bootstrap.min.js')}"></script>

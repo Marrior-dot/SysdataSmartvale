@@ -4,11 +4,11 @@
 %{--<style type='text/css' media='screen'>
 
 #apresentacao{
-	float:left;	
+	float:left;
 	width:615px;
-	
+
 	margin:15px 0px; padding:0px;
-	
+
 	color: #336600;
     font-size: 15px;
 }
@@ -16,11 +16,11 @@
 #apresentacao ul{
 	padding-top:20px;
 }
-	
+
 
 #login {
 	width:250px;
-	float:left;	
+	float:left;
 	margin:15px 0px; padding:0px;
 	text-align:center;
 }
@@ -32,7 +32,7 @@
 	text-align:left;
 	padding:10px;
 	background:url("../images/login_panel.png") top left no-repeat;
-	
+
 }
 #login .inner .fheader {
 	padding:4px;
@@ -70,7 +70,7 @@
 
 #apresentacao p{
 	color:#000000;
-	
+
 }
 
 #apresentacao li{
@@ -151,7 +151,7 @@ a:link, a:visited, a:hover{
 																   name='${rememberMeParameter}' id='remember_me'
 																   <g:if test='${hasCookie}'>checked='checked'</g:if>/>
 															<label for='remember_me'
-																   style="color: white;text-transform:uppercase; font-family: 'gloriola_std_display_thinRg'; font-size: 0.900em"><g:message
+																   style="color: black;text-transform:uppercase; font-family: 'gloriola_std_display_thinRg'; font-size: 0.900em"><g:message
 																	code="springSecurity.login.remember.me.label"/></label>
 														</p>
 

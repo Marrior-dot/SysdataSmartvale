@@ -1,26 +1,30 @@
 <html>
     <head>
         <title><g:layoutTitle default="Grails" /></title>
-        <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+        %{--<link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'carro.png')}" type="image/x-icon" />
-        <g:javascript library="jquery" plugin="jquery"/>
+        <g:javascript library="jquery" plugin="jquery"/>--}%
 		<gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
 
+%{--
         <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
+--}%
 
-		<script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>       
+%{--		<script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'maskFields.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'uppercase.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>
-        
+        <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>--}%
+
+%{--
         <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
-        
-        <g:layoutHead />
+--}%
+
+        %{--<g:layoutHead />--}%
         
     </head>
     
-    <script type="text/javascript">
+%{--    <script type="text/javascript">
 		$(window).resize(function(){
 			expandHeaderX($("#frotaBanner img"));
 		});
@@ -28,7 +32,7 @@
 		$(window).load(function(){
 			$(window).resize();
 		});    	
-	</script>
+	</script>--}%
     
     
     <body class="yui-skin-sam">
