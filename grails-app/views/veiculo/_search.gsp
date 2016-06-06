@@ -1,77 +1,58 @@
+<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.Veiculo" %>
 
 
 
-<g:form controller="${controller}">
+<div class="panel panel-default">
 
-		 <div class="buttons">
-		  <span class="button"><g:actionSubmit class="new" 
-		  						action="${unidade_id?'create':'selectRhUnidade'}" 
-		  						value="${message(code:'default.new.label', args:[message(code:'veiculo.label')]) }"/></span>
-		 </div>
+    <div class="panel-heading">Lista de Veículos</div>
 
+    <div class="panel-body">
 
+        <g:if test="${!action || action==Util.ACTION_VIEW}">
+            <div class="buttons">
+                <g:link class="btn btn-default" action="${unidade_id?'create':'selectRhUnidade'}">
+                    <span class="glyphicon glyphicon-plus"></span>${message(code:'default.new.label', args:[message(code:'veiculo.label')]) }
+                </g:link>
+            </div>
+        </g:if>
 
-	<fieldset class="search">
-		<h2>Pesquisa por filtro</h2>
-	
-		<input type="hidden" id="veicId" name="veicId"/>
-		<input type="hidden" name="unidade_id" value="${unidade_id}"/>
-
-		<input type="radio" name="opcao" value="1" checked="true">Placa</input> 
-		<input type="radio" name="opcao" value="2">Modelo</input>
-		<br><br>
-		<label>Filtro: <g:textField name="filtroVeic" value="${filtro}"/></label>
-	</fieldset>
-	
-		<gui:dataTable 
-	 			id="veicSearchDT"
-	 			controller="veiculo" action="listAllJSON"
-	 			params="[unidade_id:unidade_id]"
-	 			columnDefs="[
-	 				[key:'id',hidden:true],
-	 				[key:'placa',sortable:true,resizeable:true,label:'Placa'],
-	 				[key:'marca',sortable:true,resizeable:true,label:'Marca'],
-	 				[key:'modelo',sortable:true,resizeable:true,label:'Modelo'],
-	 				[key:'ano',sortable:true,resizeable:true,label:'Ano'],
-	 				[key:'acao',label:'Ação']
-	 			]"
-	 			sortedBy="marca"
-	 			rowsPerPage="10"
-	 			paginatorConfig="[
-	 				nextPageLinkLabel:'Prox',
-					previousPageLinkLabel:'Ant',
-					firstPageLinkLabel:'Prim',
-					lastPageLinkLabel:'Ult',
-	 				template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-	 				pageReportTemplate:'{totalRecords} total de registros'
-	 			]"
-	 			/>
-
-</g:form>
+        <g:form controller="${controller}">
+            <div class="list">
+                <table id="veicTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+                    <thead>
+                    <th>Placa</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Ano</th>
+                    </thead>
+                </table>
+            </div>
+        </g:form>
+    </div>
+</div>
 
 
 
- 			
-<jq:jquery>
-	
-	//Filtra enquanto digita
-	$('input[name="filtroVeic"]').keyup(function(){
-		filtrarVeiculos($(this).val());
-	});
-	
-	
-	function filtrarVeiculos(filtro){
 
-		var params='';
-		
-		<g:if test="${unidade_id}">
-			params+="unidade_id=${unidade_id}&";
-		</g:if>
-		
-		params+="opcao="+$(':checked').val()+"&filtro="+filtro;
-		
-		filtrarEntidade(GRAILSUI.veicSearchDT,params); 
-		
-	}
-		
-</jq:jquery>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $("#veicTable").DataTable({
+
+            //"serverSide": true,
+            "ajax":{
+                "url":"${createLink(controller:'veiculo',action:'listAllJSON')}",
+                "data":{"unidade_id":${unidade_id}},
+                "dataSrc":"results"
+            },
+            "columns":[
+                {"data":"placa"},
+                {"data":"marca"},
+                {"data":"modelo"},
+                {"data":"ano"}
+            ]
+        });
+    });
+</script>

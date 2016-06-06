@@ -131,7 +131,7 @@ class EquipamentoController extends BaseOwnerController {
 	
 	def listAllJSON={
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def offset=params.offset?:10
+		def offset=params.start?:10
 		def opcao
 		def filtro
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
@@ -141,8 +141,8 @@ class EquipamentoController extends BaseOwnerController {
 		withSecurity{ownerList->
 			equipInstanceList=Equipamento
 								.createCriteria()
-								.list(max:params.max,offset:offset){
-									
+								//.list(max:params.max,offset:offset){
+                                .list(){
 									if(ownerList.size>0)
 										unidade{rh{'in'('id',ownerList)}}
 
@@ -190,14 +190,13 @@ class EquipamentoController extends BaseOwnerController {
 		def fields=equipInstanceList.collect{e->
 			[
 				id:e.id,
-				codigo:e.codigo,
+				codigo:"<a href=${createLink(action:'show')}/${e.id}>${e.codigo}</a>",
 				descricao:e.descricao,
-				tipo:e.tipo?.nome,
-				acao:"<a class='show' href=${createLink(action:'show')}/${e.id}></a>"
+				tipo:e.tipo?.nome
 			]
 		}
 
-		def data=[totalRecords:equipInstanceTotal,results:fields]
+		def data=[recordsTotal:equipInstanceTotal,results:fields]
 		render data as JSON
 	}
 
