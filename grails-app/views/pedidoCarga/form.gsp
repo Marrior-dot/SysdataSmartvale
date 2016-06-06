@@ -3,19 +3,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="bootstrap-layout" />
-        <gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
+        <g:javascript library="jquery" plugin="jquery"/>
 
-        %{--
-                <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
-        --}%
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
-%{--
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'maskFields.js') }"></script>
---}%
+        <meta name="layout" content="bootstrap-layout" />
+        <gui:resources components="['tabView','dataTable','dialog','autoComplete']"/>
+        <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
+      %{--  <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'uppercase.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
+        <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>--}%
 
         <g:set var="entityName" value="${message(code: 'pedidoCarga.label', default: 'Pedido de Carga')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
@@ -47,8 +43,10 @@
         </style>
         <script>
             $( document ).ready(function() {
-                $('table').click(function () {
-                   console.log("hey");
+                console.log( "ready!" );
+                console.log($('#yui-rec0'));
+                $( "#yui-rec0" ).click(function() {
+                    console.log( "Handler for .click() called." );
                 });
             });
         </script>
@@ -98,7 +96,7 @@
                             </fieldset>--}%
 
                             <fieldset class="uppercase">
-                                <label><span>Data de Carga</span><input id="dataCarga"  name="dataCarga" class="form-control" value="${pedidoCargaInstance?.dataCarga}" formatString="dd/MM/yyyy"></label>
+                                <label><span>Data de Carga</span><input id="dataCarga" name="dataCarga" class="form-control date" value="${pedidoCargaInstance?.dataCarga}"></label>
                                 <label><span>Taxa Pedido (%)</span><input class="form-control"  value="${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}" disabled></label>
                             </fieldset>
 

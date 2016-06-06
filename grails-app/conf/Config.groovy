@@ -181,6 +181,9 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 	'/produto/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/role/**':			['ROLE_PROC','ROLE_ADMIN'],
 	'/transacao/listPendentes': ['ROLE_PROC', 'ROLE_ADMIN'],
+	'/console/**':			['ROLE_PROC'],
+	'/home/dataGraficoResgate':['ROLE_PROC','ROLE_ADMIN'],
+	'/home/dataGraficoMesResgate':['ROLE_PROC','ROLE_ADMIN'],
 
 	'/plugins/**':			['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/js/**':				['IS_AUTHENTICATED_ANONYMOUSLY'],

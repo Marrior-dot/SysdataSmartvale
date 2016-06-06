@@ -18,21 +18,21 @@ class HomeController {
     }
 
     def dataGraficoResgate(Integer ano) {
-        def papel = springSecurityService.currentUser.papel
-        papel = papel?.class == Estabelecimento ? papel : null
-        def statusTransacaoRede = [StatusTransacaoRede.CONFIRMADA, StatusTransacaoRede.NAO_AUTORIZADA, StatusTransacaoRede.DESFEITA, StatusTransacaoRede.PENDENTE, StatusTransacaoRede.CANCELADA]
+       /* def papel = springSecurityService.currentUser.papel
+        papel = papel?.class == Estabelecimento ? papel : null*/
+        def statusTransacaoRede = [StatusControleAutorizacao.CONFIRMADA, StatusControleAutorizacao.NEGADA, StatusControleAutorizacao.DESFEITA, StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CANCELADA]
         def data = new ChartModel()
         def isMaster =  SpringSecurityUtils.ifAnyGranted('ROLE_PROC')
         statusTransacaoRede.each { status ->
-            if ((isMaster || status == StatusTransacaoRede.CONFIRMADA)) {
+            if ((isMaster || status == StatusControleAutorizacao.CONFIRMADA)) {
                 def serie = new DataSet(data)
                 serie.label = "Valores"
                 data.addDataSet(serie)
-                def transactions = Transacao.valorMensal(Transacao.TipoValorMensal.MONTH, [ano: ano, status: status, tipo: TipoTransacao.AVISTA, estabelecimento: papel]).sort {
+                def transactions = Transacao.valorMensal([ano: ano, status: status], 'MONTH').sort {
                     it[1]
                 }
                 transactions.each {
-                    serie.addData(com.acception.Util.Util.getStringMes(it[1]), it[0])
+                    serie.addData(Util.getStringMes(it[1]), it[0])
                 }
             } // end if
         } // end each
@@ -40,18 +40,18 @@ class HomeController {
     } // dataGraficoResgate
 
     def dataGraficoMesResgate(Integer ano, Integer mes) {
-        def papel = springSecurityService.currentUser.papel
-        papel = papel?.class == Estabelecimento ? papel : null
-        def statusTransacaoRede = [StatusTransacaoRede.CONFIRMADA, StatusTransacaoRede.NAO_AUTORIZADA, StatusTransacaoRede.DESFEITA, StatusTransacaoRede.PENDENTE, StatusTransacaoRede.CANCELADA]
+       /* def papel = springSecurityService.currentUser.papel
+        papel = papel?.class == Estabelecimento ? papel : null*/
+        def statusTransacaoRede = [StatusControleAutorizacao.CONFIRMADA, StatusControleAutorizacao.NEGADA, StatusControleAutorizacao.DESFEITA, StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CANCELADA]
         def data = new ChartModel()
-        def isMaster =  SpringSecurityUtils.ifAnyGranted('ROLE_MASTER, ROLE_SUPORTE')
+        def isMaster =  SpringSecurityUtils.ifAnyGranted('ROLE_PROC')
         statusTransacaoRede.each { status ->
-            if ((isMaster || status == StatusTransacaoRede.CONFIRMADA)) {
+            if ((isMaster || status == StatusControleAutorizacao.CONFIRMADA)) {
                 def serie = new DataSet(data)
                 serie.label = "Valores"
                 data.addDataSet(serie)
 
-                def transactions = Transacao.valorMensal(Transacao.TipoValorMensal.DAY, [mes: mes, ano: ano, status: status, tipo: TipoTransacao.AVISTA, estabelecimento: papel])
+                def transactions = Transacao.valorMensal([mes: mes, ano: ano, status: status], 'DAY')
                 ChartModel.organizeMissingLabels(transactions, mes).each {
                     serie.addData(it[1].toString(), it[0])
                 }

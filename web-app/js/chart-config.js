@@ -35,14 +35,14 @@ $(function () {
     function changeAno() {
         var ano = $('#anoEscolhido').val();
         var mes = getNumeroMes($('#mesEscolhido').val());
-     /*   var action = "dataGraficoResgate";
+        var action = "dataGraficoResgate";
         if($('#mesEscolhido').val()=='Todos'){
             action = "dataGraficoResgate";
         } else {
             action = "dataGraficoMesResgate";
-        }*/
+        }
 
-        var data = {
+       /* var data = {
             labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
             datasets: [
                 {
@@ -96,16 +96,17 @@ $(function () {
 
         $("#line-chart-transacoes").html("<canvas style=\"width: 100%\"></canvas>");
         var ctx = $("#line-chart-transacoes canvas").get(0).getContext("2d");
-        new Chart(ctx).Line(data, {});
+        new Chart(ctx).Line(data, {});*/
 
-     /*   $.ajax('home/'+ action, {
+        $.ajax('home/'+ action, {
             data: { ano: ano, mes:mes },
             success: function(data) {
                 $("#line-chart-transacoes").html("<canvas style=\"width: 100%\"></canvas>");
                 var ctx = $("#line-chart-transacoes canvas").get(0).getContext("2d");
                 new Chart(ctx).Line(data, {});
+                console.log(data);
             }
-        });*/
+        });
         console.log("hey");
     }
     changeAno();
