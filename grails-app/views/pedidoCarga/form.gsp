@@ -3,16 +3,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <g:javascript library="jquery" plugin="jquery"/>
+
         <meta name="layout" content="bootstrap-layout" />
         <gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
-
-        %{--
-                <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
-        --}%
+        <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
+        <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
-%{--
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'maskFields.js') }"></script>
---}%
         <script type="text/javascript" src="${resource(dir:'js/jquery',file:'uppercase.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
@@ -47,8 +45,10 @@
         </style>
         <script>
             $( document ).ready(function() {
-                $('table').click(function () {
-                   console.log("hey");
+                console.log( "ready!" );
+                console.log($('#yui-rec0'));
+                $( "#yui-rec0" ).click(function() {
+                    console.log( "Handler for .click() called." );
                 });
             });
         </script>

@@ -72,4 +72,36 @@ class Transacao {
 		
 		transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id=:posto_id)', types: 'long')
 	}
+
+	static def valorMensal(Map map, String tipoValorMensal) {
+		def query = new StringBuilder()
+		def params = []
+		query << """
+           select sum(t.valor), $tipoValorMensal(t.dataHora) from Transacao t
+       """
+		if (!map.isEmpty())
+			query << " where 1 = 1 "
+		if (map.mes) {
+			query << " and MONTH(t.dataHora) = ?"
+			params << map.mes
+		}
+		if (map.ano) {
+			query << " and YEAR(t.dataHora) = ?"
+			params << map.ano
+		}
+		if (map.status) {
+			query << " and statusControle = ?"
+			params << map.status
+		}
+		if (map.tipo) {
+			query << " and tipo = ?"
+			params << map.tipo
+		}
+		if (map.estabelecimento) {
+			query << ' and t.estabelecimento = ?'
+			params << map.estabelecimento
+		}
+		query << " group by $tipoValorMensal(t.dataHora)"
+		Transacao.executeQuery(query.toString(), params)
+	}
 }
