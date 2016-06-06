@@ -22,8 +22,8 @@
                 <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
             </div>
             <div class="panel-body">
-                <div class="nav">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+                <div class="buttons">
+                    <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
                 </div>
                 <div class="body">
                     <g:if test="${flash.message}">
