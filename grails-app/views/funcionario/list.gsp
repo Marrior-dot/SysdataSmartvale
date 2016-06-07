@@ -23,30 +23,8 @@
                 <a class="btn btn-default" href="${g.createLink(controller: 'funcionario', action: 'selectRhUnidade')}"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="['Funcionario']"/></a>
             </div>
             <br><br>
-            <div class="list">
-                <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
-                    <thead>
-                    <th>Matrícula</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    %{-- <th>Ações</th>--}%
-                    </thead>
-                    <tbody>
-                    <g:each in="${funcionarioInstanceList}" status="i" var="funcionario">
-                        <tr>
-                            <td>${funcionario.matricula}</td>
-                            <td>
-                                <g:link controller="funcionario" action="show" id="${funcionario.id}">
-                                    ${funcionario.nome}
-                                </g:link>
-                            </td>
-                            <td>${funcionario.cpf}</td>
-                            %{--<td></td>--}%
-                        </tr>
-                    </g:each>
-                    </tbody>
-                </table>
-            </div>
+            
+            <g:render template="search" model="[controller:'funcionario', unidade_id: unidadeInstance?.id]"/>
         </div>
     </div>
 
