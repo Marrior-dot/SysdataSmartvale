@@ -63,6 +63,7 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.bootstrap.min.js')}"></script>
 
 
+    <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
 
     %{--
         <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>

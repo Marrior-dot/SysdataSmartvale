@@ -8,8 +8,7 @@ $(document).ready(function () {
 
 function configDatepicker() {
 	$(".datepicker").datepicker({
-		format: 'dd/mm/yyyy',
-		language: 'pt-BR',
+		dateFormat: 'dd/mm/yy',
 		clearBtn: true,
 		daysOfWeekHighlighted: [0, 6]
 	});

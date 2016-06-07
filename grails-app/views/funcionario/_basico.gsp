@@ -29,6 +29,7 @@
         </tbody>
     </table>
 
+    %{--dados basicos--}%
     <div class="panel panel-default">
         <div class="panel-heading">Dados Básicos</div>
         <div class="panel-body">
@@ -74,63 +75,58 @@
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="categoria.id">Categoria CNH</label>
+                    <label for="categoriaCnh">Categoria CNH</label>
+                    <g:select name="categoriaCnh" from="${CategoriaCnh.values()}"
+                              optionValue="nome" class="form-control"
+                              noSelection="${['null': 'Selecione uma Categ. CNH...']}"
+                              value="${funcionarioInstance?.categoriaCnh}"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="categoria.id">Categoria</label>
                     <g:select name="categoria.id" value="${funcionarioInstance?.categoria?.id}"
-                              noSelection="${['null': 'Selecione a categoria...']}" class="form-control"
+                              noSelection="${['null': 'Selecione a categoria...']}"
                               from="${CategoriaFuncionario.withCriteria {
                                   rh { eq('id', unidadeInstance?.rh?.id) }
                               }}"
-                              optionKey="id" optionValue="nome"/>
+                              optionKey="id" class="form-control"
+                              optionValue="nome"/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="status">Status</label>
+                    <g:select name="status" from="${Status.asBloqueado()}" class="form-control"
+                              value="${funcionarioInstance?.status}" optionKey=""
+                              optionValue=""/>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="gestor">Gestor</label>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="gestor" name="gestor" value="${funcionarioInstance?.gestor}"> Gestor
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <g:render template="/endereco/form" model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
 
-
-        <fieldset class="uppercase">
-            <h2>Dados Básicos</h2>
-
-
-
-            <div>
-
-                <label><span>Categoria</span><g:select name="categoria.id"
-                                                       value="${funcionarioInstance?.categoria?.id}"
-                                                       noSelection="${['null': 'Selecione a categoria...']}"
-                                                       from="${CategoriaFuncionario.withCriteria {
-                                                           rh { eq('id', unidadeInstance?.rh?.id) }
-                                                       }}"
-                                                       optionKey="id"
-                                                       optionValue="nome"></g:select></label>
-
-                <label id="lblGestor"><span>Gestor</span><g:checkBox name="gestor"
-                                                                     value="${funcionarioInstance?.gestor}"/></label>
-
-            </div>
-
-            <div>
-
-                <label><span>Status</span><g:select name="status" from="${Status.asBloqueado()}"
-                                                    value="${funcionarioInstance?.status}" optionKey=""
-                                                    optionValue=""></g:select></label>
-
-            </div>
-
-        </fieldset>
-
-        <g:render template="/endereco/form"
-                  model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
-
-        <div style="float:left">
-            <g:render template="/telefone/form"
-                      model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
-        </div>
-        <g:render template="/telefone/form"
-                  model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial']"/>
+    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
+    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial']"/>
 
     <div class="buttons">
         <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
+            <button type="button" class="btn btn-primary">
+                <i class="glyphicon glyphicon-floppy-disk"></i>
+                ${message(code: 'default.button.update.label', default: 'Update')}
+            </button>
+
+
             <span class="button"><g:actionSubmit class="save" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
                                                  value="${message(code: 'default.button.update.label', default: 'Update')}"/></span>
         </g:if>
