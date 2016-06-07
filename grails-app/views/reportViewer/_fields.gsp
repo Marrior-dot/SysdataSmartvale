@@ -9,7 +9,7 @@
  %>
 
 
-<table>
+<table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
 
 	<% 
 		if(currGroup.isEmpty()){
