@@ -121,6 +121,12 @@
 
     <div class="buttons">
         <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
+            <button type="button" class="btn btn-primary">
+                <i class="glyphicon glyphicon-floppy-disk"></i>
+                ${message(code: 'default.button.update.label', default: 'Update')}
+            </button>
+
+
             <span class="button"><g:actionSubmit class="save" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
                                                  value="${message(code: 'default.button.update.label', default: 'Update')}"/></span>
         </g:if>
