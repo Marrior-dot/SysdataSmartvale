@@ -13,7 +13,7 @@ class Util {
 	static final String ACTION_VIEW="visualizando"
 	static final String ACTION_EDIT="editando"
 	static final String ACTION_FILTER="filtrando"
-	
+
 	static final Locale LOCAL=new Locale("pt","BR");
 	
 	static final int DIGITOS_SENHA=4;
@@ -96,6 +96,10 @@ class Util {
 	static def isFloat(val){
 		val==~/\d+,\d{2}/
 	}
+
+	static String formatDate(def data, String format = 'dd/MM/yyyy'){
+		new SimpleDateFormat(format).format(data)
+	}
 	
 	static def convertToCurrency(value){
 		if(value==~/\d+,\d{2}/){
@@ -107,11 +111,12 @@ class Util {
 		}
 	}
 	
-	static def formattedDate(date){
-		def df=new SimpleDateFormat("dd/MM/yyyy")
-		df.format(date)
+	static def formattedDate(date) {
+
+		date ? new SimpleDateFormat("dd/MM/yyyy").format(date) : ''
+
 	}
-	
+
 	static def formattedDateTime(date){
 		def df=new SimpleDateFormat("dd/MM/yyyy HH:m:ss")
 		df.format(date)

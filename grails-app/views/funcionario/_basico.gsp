@@ -59,7 +59,8 @@
                 <div class="form-group col-md-4">
                     <label for="dataNascimento">Data Nascimento</label>
                     <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento"
-                           value="${funcionarioInstance?.dataNascimento}"/>
+                           value="${Util.formatDate(funcionarioInstance?.dataNascimento)}"/>
+
                 </div>
             </div>
 
@@ -71,7 +72,8 @@
 
                 <div class="form-group col-md-4">
                     <label for="validadeCnh">Validade CNH</label>
-                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh" value="${funcionarioInstance?.cnh}"/>
+                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh"
+                           value="${Util.formatDate(funcionarioInstance?.validadeCnh)}"/>
                 </div>
 
                 <div class="form-group col-md-4">
@@ -106,7 +108,7 @@
                     <label for="gestor">Gestor</label>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" id="gestor" name="gestor" value="${funcionarioInstance?.gestor}"> Gestor
+                            <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
                         </label>
                     </div>
                 </div>
@@ -121,21 +123,13 @@
 
     <div class="buttons">
         <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
-            <button type="button" class="btn btn-primary">
-                <i class="glyphicon glyphicon-floppy-disk"></i>
-                ${message(code: 'default.button.update.label', default: 'Update')}
-            </button>
-
-
-            <span class="button"><g:actionSubmit class="save" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
-                                                 value="${message(code: 'default.button.update.label', default: 'Update')}"/></span>
+            <g:actionSubmit class="btn btn-primary" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
+                value="${message(code: 'default.button.update.label', default: 'Update')}"/>
         </g:if>
         <g:if test="${action == Util.ACTION_VIEW}">
-            <span class="button"><g:actionSubmit class="edit" action="edit"
-                                                 value="${message(code: 'default.button.edit.label', default: 'Edit')}"/></span>
-            <span class="button"><g:actionSubmit class="delete" action="delete"
-                                                 value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                                 onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/></span>
+            <g:actionSubmit class="btn btn-info" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
+            <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
         </g:if>
     </div>
 

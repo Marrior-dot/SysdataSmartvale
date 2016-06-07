@@ -20,6 +20,25 @@
             <g:if test="${flash.message}">
                 <div class="message">${flash.message}</div>
             </g:if>
+
+            <g:hasErrors bean="${funcionarioInstance}">
+                <div class="alert alert-danger" role="alert">
+                    <b>Erro ao salvar Funcionário</b>
+                    <g:renderErrors bean="${funcionarioInstance}" as="list" />
+                </div>
+            </g:hasErrors>
+
+            <g:if test="${flash.errors}">
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        <g:each in="${flash.errors}" var="err">
+                            <li>${err}</li>
+                        </g:each>
+                    </ul>
+                </div>
+            </g:if>
+
+
             <div class="buttons">
                 <a class="btn btn-default" href="${createLink(uri: '/')}">
                     <span class="glyphicon glyphicon-home"></span>
@@ -49,7 +68,7 @@
             <g:if test="${action == Util.ACTION_VIEW}">
                 <gui:tabView>
                     <gui:tab label="${entityName}" active="true">
-                        <g:render template="basico"/>
+                        <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance]}"/>
                     </gui:tab>
                     <gui:tab label="Cartões">
                         <g:render template="cartao"/>

@@ -19,31 +19,27 @@
 
 </script>
 
-<style>
-	#password{
-		font-weight:normal;
-	}
-</style>
+<table class="table table-bordered">
+	<thead>
+	<tr>
+		<th>Cartão</th>
+		<th>Saldo Disponível</th>
+		<th>Senha Atual</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>${funcionarioInstance?.cartaoAtual()?.numero} [${funcionarioInstance?.cartaoAtual()?.status?.nome}]</td>
+		<td>${Util.formatCurrency(funcionarioInstance?.conta?.saldo)}</td>
+		<td id="password">${funcionarioInstance?.cartaoAtual()?.senha}</td>
+	</tr>
+	</tbody>
+</table>
 
 
-<fieldset class="uppercase">
-	<div>
-		<label><span>Cartão</span>${funcionarioInstance?.cartaoAtual()?.numero} [${funcionarioInstance?.cartaoAtual()?.status?.nome}]</label>
-		<div class="clear"></div>
-	</div>
-	<div>
-		<label><span>Saldo Disponível</span>${Util.formatCurrency(funcionarioInstance?.conta?.saldo)}</label>
-		<div class="clear"></div>
-	</div>
-	<div>
-		<label><span>Senha Atual</span><span id="password">${funcionarioInstance?.cartaoAtual()?.senha}</span></label>
-		<div class="clear"></div>
-	</div>
-
-	<sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
-		<button onclick="generateNewPassword();">Gerar Nova Senha</button>	
-	</sec:ifAnyGranted>
-
-	
-</fieldset>
-
+<sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
+	<button class="btn btn-warning" onclick="generateNewPassword();">
+		<i class="glyphicon glyphicon-lock"></i>
+		Gerar Nova Senha
+	</button>
+</sec:ifAnyGranted>

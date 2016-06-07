@@ -16,6 +16,7 @@ function configDatepicker() {
 
 function configInputMasks() {
 	$('.date').mask("99/99/9999", {placeholder: '__/__/____'});
+	$('.datepicker').mask("99/99/9999", {placeholder: '__/__/____'});
 	$('.cpf').mask("999.999.999-99", {placeholder: '___.___.___-__'});
 	$('.cartao').mask("9999.9999.9999.9999", {placeholder: '____.____.____.____'});
 	$('.cep').mask("99999-999", {placeholder: '_____-___'});

@@ -19,9 +19,7 @@ class FuncionarioController extends BaseOwnerController {
         redirect(action: "list", params: params)
     }
 
-    def list = {}
-
-    def newList = {
+    def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id')
@@ -90,7 +88,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def edit = {
-        def funcionarioInstance = Funcionario.get(params.id)
+        Funcionario funcionarioInstance = Funcionario.get(params.id)
         if (!funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")
@@ -100,6 +98,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def update = {
+        println("PARAMS: ${params.dump()}")
         def funcionarioInstance = Funcionario.get(params.id)
         if (funcionarioInstance) {
             if (params.version) {
@@ -123,6 +122,7 @@ class FuncionarioController extends BaseOwnerController {
                     funcionarioInstance.telefone = params['telefone']
 
                     if (funcionarioService.save(funcionarioInstance)) {
+                        println("funcionarioInstance: ${funcionarioInstance.dump()}")
                         flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
                         redirect(action: "show", id: funcionarioInstance.id)
                     } else {
