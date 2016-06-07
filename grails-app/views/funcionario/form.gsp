@@ -58,7 +58,7 @@
                 </a>
 
                 <a class="btn btn-default"
-                   href="${g.createLink(controller: 'funcionario', action: 'newList')}">
+                   href="${g.createLink(controller: 'funcionario', action: 'list')}">
                     <span class="glyphicon glyphicon-list"></span>
                     <g:message code="default.list.label" args="[entityName]"/>
                 </a>

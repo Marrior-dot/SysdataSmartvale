@@ -108,7 +108,7 @@
                     <label for="gestor">Gestor</label>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" id="gestor" name="gestor" value="${funcionarioInstance?.gestor}"> Gestor
+                            <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
                         </label>
                     </div>
                 </div>

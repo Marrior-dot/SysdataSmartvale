@@ -8,7 +8,7 @@
         <ul class="nav nav-second-level">
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
                 <li class="controller"><g:link class="submenu-logado" controller="rh" action="newList">Programas</g:link></li>
-                <li class="controller"><g:link class="submenu-logado" controller="funcionario" action="newList">Funcionários</g:link></li>
+                <li class="controller"><g:link class="submenu-logado" controller="funcionario" action="list">Funcionários</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="veiculo" action="newList">Veículos</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="equipamento" action="newList">Equipamentos</g:link></li>
             </sec:ifAnyGranted>
