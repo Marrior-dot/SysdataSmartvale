@@ -15,11 +15,12 @@
 			</div>
 			<div class="panel-body">
 				<div class="nav" role="navigation">
-					<ul>
+
 						<a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
 						<g:link class="btn btn-default"action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
-					</ul>
+
 				</div>
+				<br><br>
 				<div id="list-report" class="content scaffold-list" role="main">
 					<g:if test="${flash.message}">
 						<div class="message" role="status">${flash.message}</div>
