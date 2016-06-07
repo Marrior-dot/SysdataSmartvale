@@ -39,7 +39,9 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/dataTables.bootstrap.min.css')}"/>
     <!-- Frota -->
+%{--
     <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
+--}%
 
 
 %{--
