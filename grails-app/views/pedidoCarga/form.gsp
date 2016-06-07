@@ -1,9 +1,11 @@
-<%@ page import="com.sysdata.gestaofrota.PedidoCarga" %>
+<%@ page import="java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+%{--
         <g:javascript library="jquery" plugin="jquery"/>
+--}%
 
         <meta name="layout" content="bootstrap-layout" />
         <gui:resources components="['tabView','dataTable','dialog','autoComplete']"/>
@@ -41,15 +43,6 @@
             display: none;
         }
         </style>
-        <script>
-            $( document ).ready(function() {
-                console.log( "ready!" );
-                console.log($('#yui-rec0'));
-                $( "#yui-rec0" ).click(function() {
-                    console.log( "Handler for .click() called." );
-                });
-            });
-        </script>
     </head>
     <body>
     <br><br>
@@ -96,7 +89,9 @@
                             </fieldset>--}%
 
                             <fieldset class="uppercase">
-                                <label><span>Data de Carga</span><input id="dataCarga" name="dataCarga" class="form-control date" value="${pedidoCargaInstance?.dataCarga}"></label>
+                                <label><span>Data de Carga</span><input id="dataCarga" name="dataCarga" class="form-control datepicker" value="${
+
+                                    new java.text.SimpleDateFormat("MM/dd/yyyy").format(pedidoCargaInstance?.dataCarga)}"></label>
                                 <label><span>Taxa Pedido (%)</span><input class="form-control"  value="${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}" disabled></label>
                             </fieldset>
 

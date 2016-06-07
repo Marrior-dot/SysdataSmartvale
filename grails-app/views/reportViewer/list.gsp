@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
+        <meta name="layout" content="bootstrap-layout" />
         <title>Relatório de ${reportInstance?.name}</title>
     </head>
     <body>
@@ -10,9 +10,10 @@
 		    if(dataInicio) params.dataInicio = dataInicio
 			if(dataFim) params.dataFim = dataFim
 		%>
+		<br><br>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="list" action="listReports">Lista de Relatórios</g:link></span>
+            <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+           	<g:link class="btn btn-default" action="listReports">Lista de Relatórios</g:link>
         </div>
         <div class="body">
             <h1>Relatório de ${reportInstance?.name}</h1>
@@ -36,8 +37,8 @@
 				<g:render template="parameters" model="params"/>
 				            
 	            <div class="buttons">
-	            	<g:submitButton class="list" name="list" value="Listar" />
-	            	<g:actionSubmit class="xls" action="export" value="Excel"/>
+	            	<g:submitButton class="btn btn-default list" name="list" value="Listar" />
+	            	<g:actionSubmit class="btn btn-default xls" action="export" value="Excel"/>
 	            	
 	            </div>
 	            
