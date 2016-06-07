@@ -4,9 +4,7 @@
 
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-
-
-
+<br>
 <g:form method="post">
     <g:hiddenField name="id" value="${funcionarioInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>

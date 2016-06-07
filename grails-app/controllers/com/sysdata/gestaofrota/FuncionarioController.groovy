@@ -159,48 +159,48 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def listAllJSON={
+    def listAllJSON = {
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def offset=params.start?:0
+        def offset = params.start ?: 0
         def opcao
         def filtro
-        def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
-        def categId=params.categId
-        def gestor=params.gestor
+        def unidId = params.unidade_id ? (params.unidade_id != 'null' ? params.unidade_id.toLong() : null) : null
+        def categId = params.categId
+        def gestor = params.gestor
 
         def funcionarioInstanceList
 
-        withSecurity{ownerList->
-            funcionarioInstanceList=Funcionario
+        withSecurity { ownerList ->
+            funcionarioInstanceList = Funcionario
                     .createCriteria()
             //.list(max:params.max,offset:offset){
-                    .list(){
+                    .list() {
                 eq('status', Status.ATIVO)
-                if(ownerList.size>0)
-                    unidade{rh{'in'('id',ownerList)}}
+                if (ownerList.size > 0)
+                    unidade { rh { 'in'('id', ownerList) } }
 
-                if(unidId)
-                    unidade{eq('id',unidId)}
+                if (unidId)
+                    unidade { eq('id', unidId) }
 
-                if(categId)
-                    categoria{eq('id',categId)}
+                if (categId)
+                    categoria { eq('id', categId) }
 
-                if(gestor && gestor!="null")
-                    eq("gestor",true)
+                if (gestor && gestor != "null")
+                    eq("gestor", true)
 
-                if(params.opcao && params.filtro){
-                    opcao=params.opcao.toInteger()
-                    filtro=params.filtro
+                if (params.opcao && params.filtro) {
+                    opcao = params.opcao.toInteger()
+                    filtro = params.filtro
                     //Matricula
-                    if(opcao==1)
-                        like('matricula',filtro+'%')
+                    if (opcao == 1)
+                        like('matricula', filtro + '%')
                     //Nome
-                    else if(opcao==2)
-                        like('nome',filtro+'%')
+                    else if (opcao == 2)
+                        like('nome', filtro + '%')
                     //CPF
-                    else if(opcao==3)
-                        like('cpf',filtro+'%')
+                    else if (opcao == 3)
+                        like('cpf', filtro + '%')
                 }
 
                 order("nome")
@@ -209,48 +209,48 @@ class FuncionarioController extends BaseOwnerController {
 
         def funcionarioInstanceTotal
 
-        withSecurity{ownerList->
-            funcionarioInstanceTotal=Funcionario
+        withSecurity { ownerList ->
+            funcionarioInstanceTotal = Funcionario
                     .createCriteria()
-                    .list(){
+                    .list() {
                 eq('status', Status.ATIVO)
-                if(ownerList.size>0)
-                    unidade{rh{'in'('id',ownerList)}}
+                if (ownerList.size > 0)
+                    unidade { rh { 'in'('id', ownerList) } }
 
-                if(unidId)
-                    unidade{eq('id',unidId)}
+                if (unidId)
+                    unidade { eq('id', unidId) }
 
-                if(categId)
-                    categoria{eq('id',categId)}
+                if (categId)
+                    categoria { eq('id', categId) }
 
-                if(gestor!="null")
-                    eq("gestor",true)
+                if (gestor != "null")
+                    eq("gestor", true)
 
-                if(params.opcao && params.filtro){
+                if (params.opcao && params.filtro) {
                     //Matricula
-                    if(opcao==1)
-                        like('matricula',filtro+'%')
+                    if (opcao == 1)
+                        like('matricula', filtro + '%')
                     //Nome
-                    else if(opcao==2)
-                        like('nome',filtro+'%')
+                    else if (opcao == 2)
+                        like('nome', filtro + '%')
                     //CPF
-                    else if(opcao==3)
-                        like('cpf',filtro+'%')
+                    else if (opcao == 3)
+                        like('cpf', filtro + '%')
                 }
-                projections{ rowCount() }
+                projections { rowCount() }
             }
         }
 
-        def fields=funcionarioInstanceList.collect{f->
-            [id:f.id,
-             matricula:f.matricula,
-             nome:f.nome,
-             cpf:"<a href=${createLink(action:'show')}/${f.id}>${f.cpf}</a>"
+        def fields = funcionarioInstanceList.collect { f ->
+            [id       : f.id,
+             matricula: f.matricula,
+             nome     : f.nome,
+             cpf      : "<a href=${createLink(action: 'show')}/${f.id}>${f.cpf}</a>"
             ]
 
         }
 
-        def data=[recordsTotal:funcionarioInstanceTotal,results:fields]
+        def data = [recordsTotal: funcionarioInstanceTotal, results: fields]
 
         render data as JSON
     }

@@ -63,17 +63,26 @@
                     <g:message code="default.list.label" args="[entityName]"/>
                 </a>
             </div>
-            <br><br>
+            <br>
 
             <g:if test="${action == Util.ACTION_VIEW}">
-                <gui:tabView>
-                    <gui:tab label="${entityName}" active="true">
-                        <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance]}"/>
-                    </gui:tab>
-                    <gui:tab label="Cartões">
-                        <g:render template="cartao"/>
-                    </gui:tab>
-                </gui:tabView>
+
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#funcionarios" data-toggle="tab">Funcionários</a></li>
+                        <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="funcionarios">
+                            <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance]}"/>
+                        </div>
+                        <div class="tab-pane" id="cartoes">
+                            <g:render template="cartao"/>
+                        </div>
+
+                    </div>
+                </div>
             </g:if>
             <g:else>
                 <g:render template="basico"/>
