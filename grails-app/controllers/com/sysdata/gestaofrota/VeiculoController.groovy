@@ -134,7 +134,7 @@ class VeiculoController extends BaseOwnerController {
 									 cpf:f.funcionario.cpf,
 									 acao:"""<a href='#' onclick='removeFuncionario(${f.funcionario.id});'><img src='${resource(dir:'images',file:'remove_person.png')}' alt='Remover'></a>"""]
 								}
-		def data=[totalRecords:funcionariosList.size(),results:funcionariosList]
+		def data=[recordsTotal:funcionariosList.size(),results:funcionariosList]
 		render data as JSON
 			
 	}

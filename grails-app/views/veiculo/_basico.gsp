@@ -59,10 +59,6 @@
                     <label for="validadeExtintor">Validade Extintor</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor" value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}"/>
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
