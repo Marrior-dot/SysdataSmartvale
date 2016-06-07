@@ -85,12 +85,15 @@ class FuncionarioController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")
         } else {
+            println("FUNCIONARIO: ${funcionarioInstance.dump()}")
+            println("data nascimento: ${funcionarioInstance.dataNascimento.format('dd/MM/yy')}")
+
             render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_VIEW])
         }
     }
 
     def edit = {
-        def funcionarioInstance = Funcionario.get(params.id)
+        Funcionario funcionarioInstance = Funcionario.get(params.id)
         if (!funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")

@@ -35,7 +35,11 @@
                     <g:each in="${funcionarioInstanceList}" status="i" var="funcionario">
                         <tr>
                             <td>${funcionario.matricula}</td>
-                            <td>${funcionario.nome}</td>
+                            <td>
+                                <g:link controller="funcionario" action="show" id="${funcionario.id}">
+                                    ${funcionario.nome}
+                                </g:link>
+                            </td>
                             <td>${funcionario.cpf}</td>
                             %{--<td></td>--}%
                         </tr>
