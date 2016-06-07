@@ -60,6 +60,7 @@
                     <label for="dataNascimento">Data Nascimento</label>
                     <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento"
                            value="${Util.formatDate(funcionarioInstance?.dataNascimento)}"/>
+
                 </div>
             </div>
 

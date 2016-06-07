@@ -58,6 +58,8 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.maskMoney.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery-ui-1.11.4/jquery-ui.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery/mascaras.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
+
     <!-- DataTables -->
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/jquery.dataTables.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.bootstrap.min.js')}"></script>
