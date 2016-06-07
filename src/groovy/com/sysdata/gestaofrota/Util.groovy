@@ -97,7 +97,7 @@ class Util {
 		val==~/\d+,\d{2}/
 	}
 
-	static String formatDate(Date data, String format = 'dd/MM/yyyy'){
+	static String formatDate(def data, String format = 'dd/MM/yyyy'){
 		new SimpleDateFormat(format).format(data)
 	}
 	
@@ -111,11 +111,12 @@ class Util {
 		}
 	}
 	
-	static def formattedDate(date){
-		def df=new SimpleDateFormat("dd/MM/yyyy")
-		df.format(date)
+	static def formattedDate(date) {
+
+		date ? new SimpleDateFormat("dd/MM/yyyy").format(date) : ''
+
 	}
-	
+
 	static def formattedDateTime(date){
 		def df=new SimpleDateFormat("dd/MM/yyyy HH:m:ss")
 		df.format(date)
