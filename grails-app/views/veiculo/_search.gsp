@@ -21,10 +21,10 @@
             <div class="list">
                 <table id="veicTable" class="table table-striped table-bordered table-hover table-condensed table-default">
                     <thead>
-                    <th>Placa</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Ano</th>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Ano</th>
                     </thead>
                 </table>
             </div>
