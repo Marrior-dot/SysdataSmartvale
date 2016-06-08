@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
+        <meta name="layout" content="bootstrap-layout" />
         <g:set var="entityName" value="${message(code: 'autorizacao.label', default: 'Autorização')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
