@@ -1,4 +1,3 @@
-<%@ page import="com.acception.cadastro.Administradora" %>
 
 <!DOCTYPE html>
 <head>

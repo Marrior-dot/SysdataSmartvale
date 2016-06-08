@@ -20,6 +20,9 @@
                 <div class="message">${flash.message}</div>
             </g:if>
             <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
+
+            <a class="btn btn-default" href="${g.createLink(controller:'veiculo',action: 'selectRhUnidade')}"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="['Veículo']"/></a>
+
             <br><br>
             <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
                 <thead>
