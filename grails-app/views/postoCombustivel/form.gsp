@@ -8,6 +8,7 @@
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
+    <br/>
         <div class="body">
             <div class="panel panel-default">
                 <div class="panel-heading">

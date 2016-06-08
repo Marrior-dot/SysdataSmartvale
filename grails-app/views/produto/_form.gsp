@@ -6,8 +6,7 @@
 		<div class="row">
 			<div class="form-group col-md-4">
 				<label for="codigo">
-					<g:message code="produto.codigo.label" default="Codigo" />
-
+					<g:message code="produto.codigo.label" default="Codigo"/>
 				</label>
 				<g:textField class="form-control" name="codigo" value="${produtoInstance?.codigo}"/>
 			</div>
