@@ -57,7 +57,7 @@
                 <div class="form-group col-md-4">
                     <label for="dataNascimento">Data Nascimento</label>
                     <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento"
-                           value="${Util.formatDate(funcionarioInstance?.dataNascimento)}"/>
+                           value="${Util.formattedDate(funcionarioInstance?.dataNascimento)}"/>
 
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="form-group col-md-4">
                     <label for="validadeCnh">Validade CNH</label>
                     <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh"
-                           value="${Util.formatDate(funcionarioInstance?.validadeCnh)}"/>
+                           value="${Util.formattedDate(funcionarioInstance?.validadeCnh)}"/>
                 </div>
 
                 <div class="form-group col-md-4">

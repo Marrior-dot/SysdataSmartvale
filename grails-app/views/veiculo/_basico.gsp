@@ -65,7 +65,13 @@
             <div class="row">
                 <div class="col-xs-4">
                     <label for="tipoAbastecimento">Tipo de Combustível</label>
-                        <g:select name="tipoAbastecimento" from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
+                        <g:select name="tipoAbastecimento"
+
+                            optionValue="nome"
+
+                                  from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
+
+
                                   class="form-control"
                                   value="${veiculoInstance?.tipoAbastecimento}"  />
                 </div>

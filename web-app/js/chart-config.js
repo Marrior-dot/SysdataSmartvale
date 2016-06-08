@@ -32,6 +32,18 @@ $(function () {
             default: return 'Todos';
         }
     }
+    function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
     function changeAno() {
         var ano = $('#anoEscolhido').val();
         var mes = getNumeroMes($('#mesEscolhido').val());
@@ -46,9 +58,40 @@ $(function () {
         $.ajax('home/'+ action, {
             data: { ano: ano, mes:mes },
             success: function(data) {
-                $("#line-chart-transacoes").html("<canvas style=\"width: 100%\"></canvas>");
+                $("#line-chart-transacoes").html("<canvas style=\"width: 100%\"></canvas> <div id=\"chartjs-tooltip\"></div>");
                 var ctx = $("#line-chart-transacoes canvas").get(0).getContext("2d");
-                new Chart(ctx).Line(data, {});
+
+                var chart = new Chart(ctx).Line(data, {
+                  /*  customTooltips: function (tooltip) {
+                        var tooltipEl = $('#chartjs-tooltip');
+
+                        if (!tooltip) {
+                            tooltipEl.css({
+                                opacity: 0
+                            });
+                            return;
+                        }
+
+                        tooltipEl.removeClass('above below');
+                        tooltipEl.addClass(tooltip.yAlign);
+
+                        // split out the label and value and make your own tooltip here
+                        console.log(tooltip);
+                        var parts = tooltip;
+                        var innerHtml = '<span> R$ </span> : <span><b>' + parts + '</b></span>';
+                        tooltipEl.html(innerHtml);
+
+                        tooltipEl.css({
+                            opacity: 1,
+                            left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+                            top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
+                            fontFamily: tooltip.fontFamily,
+                            fontSize: tooltip.fontSize,
+                            fontStyle: tooltip.fontStyle,
+                        });
+                    }*/
+                });
+
             }
         });
     }
