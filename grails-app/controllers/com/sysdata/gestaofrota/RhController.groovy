@@ -108,7 +108,7 @@ class RhController extends BaseOwnerController {
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-            redirect(action: "list")
+            redirect(action: "newList")
         }
     }
 
@@ -136,7 +136,7 @@ class RhController extends BaseOwnerController {
 					}
 				}
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-				redirect(action: "list")
+				redirect(action: "newList")
 			}
 			catch (org.springframework.dao.DataIntegrityViolationException e) {
 				flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
@@ -145,7 +145,7 @@ class RhController extends BaseOwnerController {
 		}
 		else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-			redirect(action: "list")
+			redirect(action: "newList")
 		}
     }
 	

@@ -28,7 +28,8 @@
                 <g:form>
                     <div class="nav">
                         <div class="buttons">
-                            <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+                            <a class="btn btn-default" href="${createLink(uri: '/')}"><span
+                                    class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
                             <g:actionSubmit class="btn btn-default"
                                             action="${unidade_id?'create':'selectRhUnidade'}"
                                             value="${message(code:'default.new.label', args:[entityName]) }"/>

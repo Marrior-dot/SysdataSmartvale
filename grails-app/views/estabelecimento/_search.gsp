@@ -2,7 +2,8 @@
 <g:form controller="${controller}">
 	
 	<input type="hidden" name="empId" value="${empId}"/>
-	
+
+
 	<gui:dataTable 
 				id="estSearchDT"
 				controller="estabelecimento" action="listAllJSON"

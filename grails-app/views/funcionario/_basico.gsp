@@ -125,8 +125,8 @@
                 value="${message(code: 'default.button.update.label', default: 'Update')}"/>
         </g:if>
         <g:if test="${action == Util.ACTION_VIEW}">
-            <g:actionSubmit class="btn btn-info" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
-            <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+            <g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
+            <g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
                 onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
         </g:if>
     </div>

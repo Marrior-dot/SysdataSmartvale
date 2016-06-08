@@ -30,12 +30,31 @@
 <g:hiddenField name="prgId" value="${rhInstance?.id}"/>
 
 <div class="buttons">
-	<span class="button"><input type="button" id="btnSaveEst" class="save" value="Salvar"/></span>   
+	<span class="button">
+		<input type="button" id="btnSaveEst" class="btn btn-default" value="Salvar"/>
+	</span>
 	
 </div>
+<br><br>
 
-
-
+<table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
+	<thead>
+	<th><input type="checkbox" class="enable" id="geral"></th>
+	<th>Razão Social</th>
+	<th>Nome Fantasia</th>
+	<th>CNPJ</th>
+	</thead>
+	<tbody>
+	<g:each in="${com.sysdata.gestaofrota.PostoCombustivel.list()}" status="i" var="posto">
+		<tr>
+			<td><input type="checkbox" class="enable"></td>
+			<td>${posto.nome}</td>
+			<td>${posto.nomeFantasia}</td>
+			<td>${posto.cnpj}</td>
+		</tr>
+	</g:each>
+	</tbody>
+</table>
 
 <fr:checkDataTable
 	id="estabDT"
