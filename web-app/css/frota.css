@@ -101,21 +101,27 @@ span.close a#psw{
 }
 
 a.show{
-	background:url(../images/show_mini.png) center left no-repeat;
-	padding-left:20px;
-	padding-top:5px;
+	background:url(../images/show_mini.png) center center no-repeat;
+    margin-left: 0px;
+    padding-top: 20px;
+    width: 30px;
+
 }
 
-a.release{
-	background:url(../images/unlock_mini.png) center left no-repeat;
-	padding-left:20px;
-	padding-top:5px;
+a.release {
+    background: url(../images/unlock_mini.png) center center no-repeat;
+    margin-left: 30px;
+    padding-top: 34px;
+    padding-left: 20px;
+
 }
 
 a.cancel{
-	background:url(../images/close.png) center left no-repeat;
-	padding-left:20px;
-	padding-top:5px;
+	background:url(../images/close.png) center center no-repeat;
+    margin-left: 0px;
+    padding-left: 20px;
+    padding-top: 34px;
+
 }
 
 

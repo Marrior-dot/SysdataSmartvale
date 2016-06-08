@@ -1,43 +1,40 @@
+<fieldset>
+    <input type="hidden" id="selectedId" name="selectedId"/>
+    <input type="radio" name="opcao" value="1" checked="true">Matrícula</input>
+    <input type="radio" name="opcao" value="2">Nome</input>
+    <input type="radio" name="opcao" value="3">CPF</input>
+    <br><br>
+    <label>Filtro: <g:textField class="form-control" name="filtro" value="${filtro}"/></label>
+</fieldset>
 
 
+<input type="checkbox" name="selectAll" checked>Seleciona Todos Funcionários</input>
 
-		<fieldset>
-			<input type="hidden" id="selectedId" name="selectedId"/>
-			<input type="radio" name="opcao" value="1" checked="true">Matrícula</input> 
-			<input type="radio" name="opcao" value="2">Nome</input>
-			<input type="radio" name="opcao" value="3">CPF</input>
-			<br><br>
-			<label>Filtro: <g:textField class="form-control" name="filtro" value="${filtro}"/></label>
-		</fieldset>
-	
-	
-		<input type="checkbox" name="selectAll" checked>Seleciona Todos Funcionários</input>
-	
-		<gui:dataTable
-	 			id="funcSearchDT"
-	 			controller="pedidoCarga" action="${(action=='novo')?'listFuncionariosCategoriaJSON':'listFuncionariosPedidoJSON'}"
-	 			params="${(action=='novo')?[unidade_id:unidadeInstance?.id]:[id:pedidoCargaInstance?.id]}"
-	 			columnDefs="[
-	 					[key:'selecao',label:'Seleção',formatter:'checkbox'],
-		 				[key:'id',hidden:true],
-		 				[key:'categoria',hidden:true],
-		 				[key:'matricula',sortable:true,resizeable:true,label:'Matrícula'],
-		 				[key:'nome',sortable:true,resizeable:true,label:'Nome'],
-		 				[key:'cpf',sortable:true,resizeable:true,label:'CPF'],
-		 				[key:'valorCarga',label:'Valor Carga', formatter:'text', editor:[controller:'pedidoCarga', action:'updateValorCarga']]
-            		]"
-            		
-	 			sortedBy="nome"
-	 			rowsPerPage="10"
-	 			paginatorConfig="[
-	 				nextPageLinkLabel:'Prox',
-					previousPageLinkLabel:'Ant',
-					firstPageLinkLabel:'Prim',
-					lastPageLinkLabel:'Ult',
-	 				template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-	 				pageReportTemplate:'{totalRecords} total de registros'
-	 			]"
-	 			/>
+<gui:dataTable
+        id="funcSearchDT"
+        controller="pedidoCarga" action="${(action=='novo')?'listFuncionariosCategoriaJSON':'listFuncionariosPedidoJSON'}"
+        params="${(action=='novo')?[unidade_id:unidadeInstance?.id]:[id:pedidoCargaInstance?.id]}"
+        columnDefs="[
+                [key:'selecao',label:'Seleção',formatter:'checkbox'],
+                [key:'id',hidden:true],
+                [key:'categoria',hidden:true],
+                [key:'matricula',sortable:true,resizeable:true,label:'Matrícula'],
+                [key:'nome',sortable:true,resizeable:true,label:'Nome'],
+                [key:'cpf',sortable:true,resizeable:true,label:'CPF'],
+                [key:'valorCarga',label:'Valor Carga', formatter:'text', editor:[controller:'pedidoCarga', action:'updateValorCarga']]
+            ]"
+
+        sortedBy="nome"
+        rowsPerPage="100"
+        paginatorConfig="[
+            nextPageLinkLabel:'Prox',
+            previousPageLinkLabel:'Ant',
+            firstPageLinkLabel:'Prim',
+            lastPageLinkLabel:'Ult',
+            template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
+            pageReportTemplate:'{totalRecords} total de registros'
+        ]"
+        />
  			
 <script type="text/javascript">
 
@@ -121,8 +118,27 @@
 			}else
 				firstTime=false;
 		});
-		
-		
+
+
+        GRAILSUI.funcSearchDT.subscribe("dataReturnEvent",function(args){
+
+            var check=$("input[name='selectAll']").checked?true:false;
+
+            var recs=GRAILSUI.funcSearchDT.getRecordSet().getRecords();
+            var i=0;
+
+            while(i<recs.length){
+
+                //if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
+                    recs[i].setData('selecao',check);
+                i++;
+            }
+
+            GRAILSUI.funcSearchDT.render();
+
+        });
+
+
 		GRAILSUI.funcSearchDT.subscribe("rowSelectEvent",function(args){
 			var selected=GRAILSUI.funcSearchDT.getRecord(GRAILSUI.funcSearchDT.getSelectedRows()[0]);
 			$("#selectedId").val(selected.getData('id'));
@@ -177,7 +193,7 @@
 
 		while(i<recs.length){
 
-			if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
+			//if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
 				recs[i].setData('selecao',check);
 			i++;
 		}
