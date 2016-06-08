@@ -1,44 +1,23 @@
-		<h2>Funcionários habilitados para condução</h2>
-		<br>
 
+<div class="panel panel-default">
+    <div class="panel-heading">Funcionários habilitados para condução</div>
+    <div class="panel-body">
         <div class="list">
-            <table id="funcTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+            <table id="funcVeicTable" class="table table-striped table-bordered table-hover table-condensed table-default">
                 <thead>
                     <th>CPF</th>
                     <th>Nome</th>
                     <th>Matrícula</th>
                     <th></th>
                 </thead>
-
             </table>
         </div>
+    </div>
+</div>
 
 
 %{--
 
-		<gui:dataTable
-				id="funcionariosDT"
-				controller="veiculo" action="listFuncionariosJSON"
-				columnDefs="[
-					[key:'id',hidden:true],
-					[key:'matricula',sortable:true,resizeable:true,label:'Matrícula'],
-					[key:'nome',sortable:true,resizeable:true,label:'Nome'],
-					[key:'cpf',sortable:true,resizeable:true,label:'CPF'],
-					[key:'acao',label:'Ação']
-				]"
-				sortedBy="nome"
-				rowsPerPage="10"
-				params="[id:veiculoInstance?.id]"
-				paginatorConfig="[
-					nextPageLinkLabel:'Prox',
-					  previousPageLinkLabel:'Ant',
-					  firstPageLinkLabel:'Prim',
-					  lastPageLinkLabel:'Ult',
-					template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-					pageReportTemplate:'{totalRecords} total de registros'
-				]"
-				/>
-	
 		<span id="message"></span>
 
 			<gui:dialog
@@ -67,10 +46,9 @@
 --}%
 <script type="text/javascript">
 
-
     $(document).ready(function(){
 
-        $("#funcTable").DataTable({
+        $("#funcVeicTable").DataTable({
 
             //"serverSide": true,
             "ajax":{

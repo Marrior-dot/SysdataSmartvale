@@ -276,7 +276,7 @@ class PedidoCargaController extends BaseOwnerController {
 		def offset=params.offset?params.offset as int:10
 		def opcao
 		def filtro
-		def unidId=params.unidade_id!='null'?params.unidade_id.toLong():null
+		def unidId=params.unidade_id?params.unidade_id.toLong():null
 
 		def pedidoCargaInstanceList
 		
@@ -289,8 +289,8 @@ class PedidoCargaController extends BaseOwnerController {
 										if(unidId)
 											unidade{eq('id',unidId)}
 										
-										firstResult(offset)
-										maxResults(params.max)
+//										firstResult(offset)
+//										maxResults(params.max)
 														
 										order("id","desc")
 									}
@@ -336,7 +336,7 @@ class PedidoCargaController extends BaseOwnerController {
 					}"""]
 		}
 
-		def data=[totalRecords:pedidoCargaInstanceTotal,results:fields]
+		def data=[recordsTotal:pedidoCargaInstanceTotal,results:fields]
 		render data as JSON
 	}
 	
@@ -660,5 +660,80 @@ class PedidoCargaController extends BaseOwnerController {
 		session.funcionariosList=sessFuncList
 
 	}
-	
+
+
+	def listFuncionariosCategoriaJSON2={
+
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		params.start=params.start?params.int('offset'):0
+		def unidId=(params.unidade_id && params.unidade_id!='null')?params.unidade_id.toLong():null
+		params.categId=(params.categId)?params.categId.toLong():null
+
+		def funcionarioInstanceList=Funcionario
+				.createCriteria()
+				.list(){
+					eq("status",Status.ATIVO)
+
+					if(unidId)
+						unidade{eq('id',unidId)}
+					if(params.categId)
+						categoria{eq('id',params.categId)}
+					if(params.opcao && params.filtro){
+						params.opcao=params.opcao as int
+						//Matricula
+						if(params.opcao==1)
+							like('matricula',params.filtro+'%')
+						//Nome
+						else if(params.opcao==2)
+							like('nome',params.filtro+'%')
+						//CPF
+						else if(params.opcao==3)
+							like('cpf',params.filtro+'%')
+					}
+					order("nome")
+				}
+
+		def funcionarioInstanceTotal=Funcionario
+				.createCriteria()
+				.list(){
+                    eq("status",Status.ATIVO)
+                    if(unidId)
+                        unidade{eq('id',unidId)}
+                    if(params.categId)
+                        categoria{eq('id',params.categId)}
+                    if(params.opcao && params.filtro){
+                        //Matricula
+                        if(params.opcao==1)
+                            like('matricula',params.filtro+'%')
+                        //Nome
+                        else if(params.opcao==2)
+                            like('nome',params.filtro+'%')
+                        //CPF
+                        else if(params.opcao==3)
+                            like('cpf',params.filtro+'%')
+                    }
+                    projections{ rowCount() }
+                }
+
+
+        def funcList=funcionarioInstanceList.collect{f->
+            [        id:f.id,
+                     categoria:f.categoria.id,
+                     matricula:f.matricula,
+                     nome:f.nome,
+                     cpf:f.cpf,
+                     valorCarga:"<input type='text' value=${Util.formatCurrency(f.categoria?.valorCarga)} />",
+                     selecao:true
+            ]
+        }
+
+
+        def dataJSON=[recordsTotal:funcionarioInstanceTotal,results:funcList]
+
+		response.setHeader("Cache-control", "no-store")
+
+		render dataJSON as JSON
+	}
+
+
 }

@@ -1,5 +1,7 @@
 <%@ page import="java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
+<%@ page import="com.sysdata.gestaofrota.Util" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -52,7 +54,8 @@
             </div>
             <div class="panel-body">
                 <div class="nav">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+                    <a class="btn btn-default" href="${createLink(uri: '/')}"><span
+                            class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
                     <g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
                     <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]"><g:message code="default.new.label" args="[entityName]" /></g:link>
                 </div>
@@ -91,7 +94,7 @@
                             <fieldset class="uppercase">
                                 <label><span>Data de Carga</span><input id="dataCarga" name="dataCarga" class="form-control datepicker" value="${
 
-                                    new java.text.SimpleDateFormat("MM/dd/yyyy").format(pedidoCargaInstance?.dataCarga)}"></label>
+                                    Util.formattedDate(pedidoCargaInstance?.dataCarga)}"></label>
                                 <label><span>Taxa Pedido (%)</span><input class="form-control"  value="${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}" disabled></label>
                             </fieldset>
 

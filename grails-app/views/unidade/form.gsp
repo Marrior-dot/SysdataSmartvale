@@ -8,7 +8,7 @@
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
-
+    <br><br>
         <div class="panel panel-default">
 
             <div class="panel-heading">
@@ -17,13 +17,21 @@
 
             <div class="panel-body">
                 <div class="buttons">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-                    <g:link class="btn btn-default" controller="rh" action="show" params="[id:rhInstance?.id]"><g:message code="rh.label"/></g:link>
-                    <g:link class="btn btn-default" action="generateCartaSenha" params="[id:unidadeInstance?.id]">Gerar Carta Senha</g:link>
+                    <a class="btn btn-default" href="${createLink(uri: '/')}">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <g:message code="default.home.label"/>
+                    </a>
+                    <g:link class="btn btn-default" controller="rh" action="show" params="[id:rhInstance?.id]">
+                        <span class="glyphicon glyphicon-plus"></span> Criar Unidade
+                    </g:link>
+                    <g:link class="btn btn-default" action="generateCartaSenha" params="[id:unidadeInstance?.id]">
+                        <span class="glyphicon glyphicon-open-file"></span>
+                        Gerar Carta Senha
+                    </g:link>
                 </div>
 
                 <g:if test="${flash.message}">
-                    <div class="message">${flash.message}</div>
+                    <div class="alert alert-info">${flash.message}</div>
                 </g:if>
                 <g:hasErrors bean="${unidadeInstance}">
                     <div class="errors">
@@ -31,12 +39,12 @@
                         <g:renderErrors bean="${unidadeInstance}" as="list" />
                     </div>
                 </g:hasErrors>
+                <br><br>
 
-
-                <fieldset style="border:1px solid;font-size:14px;">
+               %{-- <fieldset style="border:1px solid;font-size:14px;">
                     <label><span>${message(code: 'rh.label', default: 'RH')}</span>${rhInstance?.nome}</label>
                     <div class="clear"></div>
-                </fieldset>
+                </fieldset>--}%
 
                 <g:if test="${action==Util.ACTION_VIEW}">
 

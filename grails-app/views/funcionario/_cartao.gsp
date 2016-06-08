@@ -18,8 +18,8 @@
 	}
 
 </script>
-
-<table class="table table-bordered">
+<br><br>
+<table class="table table-bordered" style="font-size: 12px">
 	<thead>
 	<tr>
 		<th>Cartão</th>
@@ -38,7 +38,7 @@
 
 
 <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
-	<button class="btn btn-warning" onclick="generateNewPassword();">
+	<button class="btn btn-default" onclick="generateNewPassword();">
 		<i class="glyphicon glyphicon-lock"></i>
 		Gerar Nova Senha
 	</button>
