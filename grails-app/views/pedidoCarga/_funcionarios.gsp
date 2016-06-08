@@ -185,7 +185,7 @@
 
 	$("input[name='selectAll']").click(function(){
 
-		var check=$(this).checked?true:false;
+		var check=$(this).is(":checked");
 
 		var recs=GRAILSUI.funcSearchDT.getRecordSet().getRecords();
 		var i=0;

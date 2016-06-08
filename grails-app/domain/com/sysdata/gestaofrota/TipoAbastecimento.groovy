@@ -4,7 +4,7 @@ enum TipoAbastecimento {
 	GASOLINA("Gasolina"),
 	ALCOOL("Álcool"),
 	DIESEL("Diesel"),
-	BICOMBUSTIVEL("Bicombustível")
+	BICOMBUSTIVEL("Flex")
 	
 	String nome
 	
