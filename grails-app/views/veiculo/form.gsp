@@ -34,8 +34,8 @@
                 <g:if test="${action==Util.ACTION_VIEW}">
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1">${entityName}</a></li>
-                            <li><a href="#tab2">Funcionários</a></li>
+                            <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
+                            <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">

@@ -14,10 +14,12 @@ hibernate {
 // environment specific settings
 environments {
     development {
+
+        def urlDev=System.env["FROTA_DEV_DB"]
+        if(!urlDev) urlDev="jdbc:postgresql://148.5.7.215/amazonfrota_development"
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
-           // url = "jdbc:postgresql://localhost/amazonfrota_development"
-			url = "jdbc:postgresql://148.5.7.215/amazonfrota_development"
+			url = urlDev
 			password="postgres"
         }
     }

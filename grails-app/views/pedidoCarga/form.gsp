@@ -1,5 +1,7 @@
 <%@ page import="java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
+<%@ page import="com.sysdata.gestaofrota.Util" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -92,7 +94,7 @@
                             <fieldset class="uppercase">
                                 <label><span>Data de Carga</span><input id="dataCarga" name="dataCarga" class="form-control datepicker" value="${
 
-                                    new java.text.SimpleDateFormat("MM/dd/yyyy").format(pedidoCargaInstance?.dataCarga)}"></label>
+                                    Util.formattedDate(pedidoCargaInstance?.dataCarga)}"></label>
                                 <label><span>Taxa Pedido (%)</span><input class="form-control"  value="${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}" disabled></label>
                             </fieldset>
 

@@ -1,3 +1,6 @@
+
+
+
 		<fieldset>
 			<input type="hidden" id="selectedId" name="selectedId"/>
 			<input type="radio" name="opcao" value="1" checked="true">Matrícula</input> 
@@ -10,7 +13,7 @@
 	
 		<input type="checkbox" name="selectAll" checked>Seleciona Todos Funcionários</input>
 	
-		<gui:dataTable 
+		<gui:dataTable
 	 			id="funcSearchDT"
 	 			controller="pedidoCarga" action="${(action=='novo')?'listFuncionariosCategoriaJSON':'listFuncionariosPedidoJSON'}"
 	 			params="${(action=='novo')?[unidade_id:unidadeInstance?.id]:[id:pedidoCargaInstance?.id]}"
@@ -156,22 +159,24 @@
 		filtrarFuncionarios(null,$(this).val());
 	});
 
+
+	var funcSel=[];
+
 	/* 
 	 * Quando cheka a seleção de Todos
 	 * Envia notificação para marcação de todos por categoria
 	 */
+
 	$("input[name='selectAll']").click(function(){
-		var check=$(this).attr('checked')=='checked';
+
+		var check=$(this).checked?true:false;
+
 		var recs=GRAILSUI.funcSearchDT.getRecordSet().getRecords();
 		var i=0;
 
-<%--		totalPedido=0.0;--%>
 
 		while(i<recs.length){
 
-<%--			if(check)--%>
-<%--				totalPedido+=parseFloat(rec.getData('valorCarga'));--%>
-			
 			if(recs[i]!=undefined && recs[i].getData('selecao')!=check)
 				recs[i].setData('selecao',check);
 			i++;
@@ -212,5 +217,4 @@
 	
 	}
 </script>	
-
 

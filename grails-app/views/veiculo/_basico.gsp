@@ -44,7 +44,7 @@
                     <bs:formField id="capacidadeTanque" name="capacidadeTanque" label="Capacidade Tanque (lt)" value="${veiculoInstance?.capacidadeTanque}"></bs:formField>
                 </div>
                 <div class="col-xs-4">
-                    <bs:formField id="autonomia" name="autonomia" label="Autonomia" value="${veiculoInstance?.autonomia}"></bs:formField>
+                    <bs:formField id="autonomia" name="autonomia" label="Autonomia (Km/l)" value="${veiculoInstance?.autonomia}"></bs:formField>
                 </div>
             </div>
             <div class="row">
