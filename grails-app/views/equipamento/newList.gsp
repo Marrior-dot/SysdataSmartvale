@@ -40,7 +40,7 @@
                         <tbody>
                         <g:each in="${com.sysdata.gestaofrota.Equipamento.list()}" status="i" var="equipamento">
                             <tr>
-                                <td>${equipamento.codigo}</td>
+                                <td><g:link action="show" id="${equipamento.id}">${equipamento.codigo}</g:link></td>
                                 <td>${equipamento.descricao}</td>
                                 <td>${equipamento.tipo.nome}</td>
                             </tr>
