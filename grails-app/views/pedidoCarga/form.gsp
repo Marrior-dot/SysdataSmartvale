@@ -54,7 +54,8 @@
             </div>
             <div class="panel-body">
                 <div class="nav">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+                    <a class="btn btn-default" href="${createLink(uri: '/')}"><span
+                            class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
                     <g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
                     <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]"><g:message code="default.new.label" args="[entityName]" /></g:link>
                 </div>

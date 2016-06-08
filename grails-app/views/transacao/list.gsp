@@ -10,7 +10,9 @@
         <meta name="layout" content="bootstrap-layout" />
         <g:set var="entityName" value="${message(code: 'transacao.label', default: 'Transacao')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
-    </head>
+		<link rel="stylesheet" href="${resource(dir:'css',file:'table-javascript-style.css')}" />
+
+	</head>
     <body>
 	<br><br>
 	<div class="panel panel-default">
@@ -19,11 +21,20 @@
 		</div>
 		<div class="panel-body">
 			<div class="nav">
-				<a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-				<g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
+				<a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
+				<g:link class="btn btn-default" action="list">
+					<span class="glyphicon glyphicon-list"></span>
+					<g:message code="default.list.label" args="[entityName]" />
+				</g:link>
 				<sec:ifAnyGranted roles="ROLE_PROC">
-					<g:link class="btn btn-default" action="agendarAll">Agendar Todas</g:link>
-					<g:link class="btn btn-default" action="simulador">Simulação de Transações</g:link>
+					<g:link class="btn btn-default" action="agendarAll">
+						<span class="glyphicon glyphicon-dashboard"></span>
+						Agendar Todas
+					</g:link>
+					<g:link class="btn btn-default" action="simulador">
+						<span class="glyphicon glyphicon-facetime-video"></span>
+						Simulação de Transações
+					</g:link>
 				</sec:ifAnyGranted>
 				<br><br>
 			</div>

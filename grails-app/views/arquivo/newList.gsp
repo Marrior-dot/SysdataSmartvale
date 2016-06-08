@@ -23,10 +23,10 @@
                 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
                     <div class="buttons">
                         <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-                        <g:link action="create" class="btn btn-default">
+                        %{--<g:link action="create" class="btn btn-default">
                             <span class="glyphicon glyphicon-plus"></span>
                             <g:message code="default.new.label" args="[entityName]" />
-                        </g:link>
+                        </g:link>--}%
                     </div>
                 </sec:ifAnyGranted>
                 <br><br>

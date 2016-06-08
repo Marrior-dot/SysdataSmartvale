@@ -58,7 +58,7 @@ h2{
     font-size: 15px;
     background: -moz-linear-gradient(left, #5CCCCC, #FFFFFF );
 }
-
+/*
 fieldset{
 	border:none;
 }
@@ -67,7 +67,7 @@ fieldset label{
 	display:block;
 	padding:2px 2px 2px 2px;
 	float:left;
-}
+}*/
 
 fieldset label span{
 	display:block;
@@ -175,11 +175,11 @@ a.download{
 }
 
 
-.search{
+/*.search{
 	border:groove;
 	margin-top:1em;
 	padding-top:0.5em;	
-}
+}*/
 
 .search h2{
 	padding-bottom:0.5em;
@@ -227,12 +227,12 @@ a.undo{
 	padding-top:5px;
 }
 
- input#name, textarea#query{
+/* input#name, textarea#query{
 	width: 700px;
-}
- textarea#countQuery {
+}*/
+/* textarea#countQuery {
  	width: 655px;
- }
+ }*/
 
 table.show {
 	padding:0;

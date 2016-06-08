@@ -11,19 +11,19 @@
 
             <div class="buttons">
                 <g:link controller="unidade" action="create" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span>Novo RH
+                    <span class="glyphicon glyphicon-plus"></span> Criar RH
                 </g:link>
             </div>
-
+            <br><br>
 
         <fieldset class="search">
-            <input type="hidden" id="unidId" name="unidId"/>
-            <input type="hidden" name="rhId" value="${rhId}"/>
+            <input  type="hidden" id="unidId" name="unidId"/>
+            <input  type="hidden" name="rhId" value="${rhId}"/>
 
-        <input type="radio" name="opcaoUnid" value="1" checked="true">Código</input>
-        <input type="radio" name="opcaoUnid" value="2">Nome</input>
+        <input class="enable" type="radio" name="opcaoUnid" value="1" checked="true">Código</input>
+        <input class="enable" type="radio" name="opcaoUnid" value="2">Nome</input>
         <br><br>
-        <label>Filtro: <g:textField name="filtro" value="${filtro}"/></label>
+        <label>Filtro: <input type="search" class="form-control" id="filtro" name="filtro" value="${filtro}"/></label>
         </fieldset>
 
         <div class="list">
