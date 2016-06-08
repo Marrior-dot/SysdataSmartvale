@@ -7,6 +7,7 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
+    <br><br>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
@@ -14,9 +15,18 @@
 
             <div class="panel-body">
                 <div class="buttons">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-                    <g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
-                    <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]"><g:message code="default.new.label" args="[entityName]" /></g:link>
+                    <a class="btn btn-default" href="${createLink(uri: '/')}">
+                    <span class="glyphicon glyphicon-home"></span>
+                    <g:message code="default.home.label"/>
+                    </a>
+                    <g:link class="btn btn-default" action="newList">
+                        <span class="glyphicon glyphicon-list"></span>
+                        <g:message code="default.list.label" args="[entityName]" />
+                    </g:link>
+                    <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <g:message code="default.new.label" args="[entityName]" />
+                        </g:link>
                 </div>
 
                 <br>
@@ -38,6 +48,7 @@
                             <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
                         </ul>
                         <div class="tab-content">
+                            <br><br>
                             <div class="tab-pane active" id="tab1">
                                 <g:render template="basico"/>
                             </div>

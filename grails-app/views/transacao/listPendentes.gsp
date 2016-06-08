@@ -61,11 +61,21 @@
                         </fieldset>
 
                         <div class="buttons">
+%{--
                             <g:submitButton class="list btn btn-default" name="list" value="Listar" />
-                            <g:actionSubmit class="desfazer btn btn-default" action="desfazer" name="desfazer" value="Desfazer Selecionados"
+--}%
+                            <g:link class="btn btn-default" action="desfazer" name="desfazer"
+                                    onclick="return confirm('Tem certeza que deseja desfazer as transações selecionadas?');">
+                                    <span class="glyphicon glyphicon-remove-sign"></span> Desfazer Selecionados
+                            </g:link>
+                            <g:link class="btn btn-default" action="confirmar" name="confirmar"
+                                    onclick="return confirm('Tem certeza que deseja confirmar as transações selecionadas?');">
+                                    <span class="glyphicon glyphicon-ok-sign"></span> Confirmar Selecionados
+                            </g:link>
+                            %{--<g:actionSubmit class="desfazer btn btn-default" action="desfazer" name="desfazer" value="Desfazer Selecionados"
                                             onclick="return confirm('Tem certeza que deseja desfazer as transações selecionadas?');">Desfazer</g:actionSubmit>
                             <g:actionSubmit class="confirmar btn btn-default" action="confirmar" name="confirmar" value="Confirmar Selecionados"
-                                            onclick="return confirm('Tem certeza que deseja confirmar as transações selecionadas?');"></g:actionSubmit>
+                                            onclick="return confirm('Tem certeza que deseja confirmar as transações selecionadas?');"></g:actionSubmit>--}%
                         </div>
                     </div>
                 </div>

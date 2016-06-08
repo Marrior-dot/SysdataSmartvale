@@ -61,7 +61,11 @@ table .table {
 #yui-pg0-0-prev-span,
 #yui-pg0-0-next-link,
 #yui-pg0-0-last-link,
-#yui-pg0-1-next-span
+#yui-pg0-1-next-span,
+.step,
+.prevLink,
+.currentStep,
+.nextLink
 {
     position: relative;
     float: left;

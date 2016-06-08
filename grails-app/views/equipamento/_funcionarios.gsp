@@ -1,5 +1,8 @@
 	    
 <script type="text/javascript">
+	$(function () {
+		openWindow();
+	});
 
 	function openWindow(){
 		$.ajax({
@@ -138,7 +141,7 @@
 			
 			
 			 <div class="buttons">
-			 	<span class="button"><input type="button" class="new" onclick="openWindow();" value="Adicionar Funcionário"/></span>
+			 	<span class="button"><input class="btn btn-default" type="button" class="new" onclick="openWindow();" value="Adicionar Funcionário"/></span>
 			 </div>
 			
 
