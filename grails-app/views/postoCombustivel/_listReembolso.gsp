@@ -3,28 +3,28 @@
 <%@ page import="com.sysdata.gestaofrota.ReembolsoSemanal" %>
 <%@ page import="com.sysdata.gestaofrota.TipoReembolso" %>
 
-<fieldset class="uppercase">
-	<label><span>Tipo Reembolso</span>
+<br/>
+<div class="row">
+	<div class="col-xs-12">
+		<label for="tipoReembolso">Tipo Reembolso</label>
 		<g:radioGroup name="tipoReembolso"
-		              labels="${TipoReembolso.values()*.nome}"
-		              values="${TipoReembolso.values()}"
-		              value="${postoCombustivelInstance?.tipoReembolso}">
-		<p>${it.radio} ${it.label}</p>
-		</g:radioGroup>	
-	</label>
-	
-	
-</fieldset>
-<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-	<div class="buttons">
-		<span class="button"><input type="button" class="new" onclick="openWindow(0);" value="Adicionar Reembolso"/></span>
+					  labels="${TipoReembolso.values()*.nome}"
+					  values="${TipoReembolso.values()}"
+					  value="${postoCombustivelInstance?.tipoReembolso}">
+			<p>${it.radio} ${it.label}</p>
+		</g:radioGroup>
 	</div>
+</div>
+
+<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+	<button type="button" class="btn btn-default" onclick="openWindow(0);">
+		Adicionar Reembolso
+	</button>
 </sec:ifAnyGranted>
 
 
 <div id="divSemanal" >
-	<gui:dataTable 
-				id="reembSemanalDT"
+	<gui:dataTable id="reembSemanalDT"
 				controller="postoCombustivel" action="getReembolsoSemanal"
 				columnDefs="[
 					[key:'diaSemana',sortable:true,resizeable:true,label:'Dia Semana'],
@@ -41,8 +41,7 @@
 				lastPageLinkLabel:'Ult',
 					template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
 					pageReportTemplate:'{totalRecords} total de registros'
-				]"
-				/>
+				]"/>
 	
 </div>
 

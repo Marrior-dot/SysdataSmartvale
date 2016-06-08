@@ -1,49 +1,77 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<g:form method="post" >
+<br/>
+<g:form method="post">
 	<g:hiddenField name="id" value="${postoCombustivelInstance?.id}" />
 	<g:hiddenField name="version" value="${postoCombustivelInstance?.version}" />
 	<g:hiddenField name="action" value="${action}"/>
 
-
-<div class="dialog">
-	<div class="enter">
-		<fieldset class="uppercase">
-			<h2>Dados Básicos</h2>
-			<label><span>CNPJ</span><g:textField name="cnpj" value="${postoCombustivelInstance?.cnpj}" /></label>
-			<label><span>Razão Social</span><g:textField name="nome" value="${postoCombustivelInstance?.nome}" size="50" maxlength="50"/></label>
-			<div>
-				<label><span>Nome Fantasia</span><g:textField name="nomeFantasia" value="${postoCombustivelInstance?.nomeFantasia}" size="50" maxlength="50"/></label>
-				<div class="clear"></div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Dados Básicos
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-6">
+					<bs:formField id="cnpj" name="cnpj" label="CNPJ"  value="${postoCombustivelInstance?.cnpj}" class="cnpj"/>
+				</div>
+				<div class="col-xs-6">
+					<bs:formField id="nome" name="nome" label="Razão Social" value="${postoCombustivelInstance?.nome}"/>
+				</div>
 			</div>
-			<label><span>Inscrição Estadual</span><g:textField name="inscricaoEstadual" value="${postoCombustivelInstance?.inscricaoEstadual}" class="numeric" size="10" maxlength="10"/></label>
-			<label><span>Inscrição Municipal</span><g:textField name="inscricaoMunicipal" value="${postoCombustivelInstance?.inscricaoMunicipal}" class="numeric" size="10" maxlength="10"/></label>
-		</fieldset>
-		
-		<g:render template="/endereco/form" model="[enderecoInstance:postoCombustivelInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
-		
-		<g:render template="/telefone/form" model="[telefoneInstance:postoCombustivelInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
-		
-		<g:render template="/dadoBancario/form" model="[dadoBancarioInstance:postoCombustivelInstance?.dadoBancario,dadoBancario:'dadoBancario',legend:'Conta para Reembolso']"/>
-		
-		<fieldset>
-			<h2>Dados de Reembolso</h2>
-			<label><span>Taxa</span><g:textField name="taxaReembolso" class="currency" value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" /></label>
-		</fieldset>
-		
-		
+
+			<div class="row">
+				<div class="col-xs-12">
+					<bs:formField id="nomeFantasia" name="nomeFantasia" label="Nome Fantasia" value="${postoCombustivelInstance?.nomeFantasia}"/>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<bs:formField id="inscricaoEstadual" name="inscricaoEstadual" label="Inscrição Estadual" value="${postoCombustivelInstance?.inscricaoEstadual}" class="only-numbers" maxlength="10"/>
+				</div>
+				<div class="col-xs-6">
+					<bs:formField id="inscricaoMunicipal" name="inscricaoMunicipal" label="Inscrição Municipal" value="${postoCombustivelInstance?.inscricaoMunicipal}" class="only-numbers" maxlength="10"/>
+				</div>
+			</div>
+		</div>
 	</div>
-		
-</div>
+
+	<g:render template="/endereco/form" model="[enderecoInstance:postoCombustivelInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
+
+	<g:render template="/telefone/form" model="[telefoneInstance:postoCombustivelInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
+
+	<g:render template="/dadoBancario/form" model="[dadoBancarioInstance:postoCombustivelInstance?.dadoBancario,dadoBancario:'dadoBancario',legend:'Conta para Reembolso']"/>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Dados de Reembolso
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-6">
+					<bs:formField id="taxaReembolso" name="taxaReembolso" label="Taxa" value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="currency"/>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">
 			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-				<span class="button"><g:actionSubmit class="save" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+				<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}"
+								value="${message(code: 'default.button.update.label', default: 'Update')}"/>
 			</g:if>
 			<g:if test="${action==Util.ACTION_VIEW}">
-				<span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-				<span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+				<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
+				<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+								onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
 			</g:if>
 		</div>
 	</sec:ifAnyGranted>
+
 </g:form>
+
+
