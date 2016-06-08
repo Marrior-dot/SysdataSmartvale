@@ -1,5 +1,7 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <g:form controller="${controller}">
+
+	<br/>
 	
 	<input type="hidden" name="empId" value="${empId}"/>
 
@@ -31,7 +33,7 @@
 	<g:if test="${!action || action==Util.ACTION_VIEW}">
 		<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 			<div class="buttons">
-				<span class="button"><g:actionSubmit class="new" action="create" value="${message(code:'default.new.label', args:[message(code:'estabelecimento.label')]) }"/></span>
+				<g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
 			</div>
 		</sec:ifAnyGranted>
 	</g:if>

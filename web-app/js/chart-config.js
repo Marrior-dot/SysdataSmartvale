@@ -32,6 +32,18 @@ $(function () {
             default: return 'Todos';
         }
     }
+    function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
     function changeAno() {
         var ano = $('#anoEscolhido').val();
         var mes = getNumeroMes($('#mesEscolhido').val());
@@ -48,7 +60,9 @@ $(function () {
             success: function(data) {
                 $("#line-chart-transacoes").html("<canvas style=\"width: 100%\"></canvas>");
                 var ctx = $("#line-chart-transacoes canvas").get(0).getContext("2d");
-                new Chart(ctx).Line(data, {});
+
+                var chart = new Chart(ctx).Line(data, {});
+
             }
         });
     }

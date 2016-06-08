@@ -17,13 +17,14 @@ class FormUtilTagLib {
         def disabled = attrs.disabled ?: false
         def hasfeedback = attrs.hasfeedback ?: true
         def inline = attrs.inline ?: false
+        def maxlength = attrs.maxlength ?: null
 
         out << """
         <div class="form-group ${hasfeedback ? 'has-feedback' : ''}" ${inline ? 'style="display: inline-block"' : ''}>
             <label class="control-label" for="$id">$label</label>
             ${disabled ? "<input id='$id' name='$name' type='hidden' value='$value'>" : ''}
             ${inline ? '<div class="form-inline">' : ''}
-            <input ${ id ? "id='${id}'" : '' } name="$name" type="$type" style="max-width: $width%" class="form-control $clazz"
+            <input ${ id ? "id='${id}'" : '' } name="$name" type="$type" ${maxlength ? "maxlength=$maxlength" : ""} style="max-width: $width%" class="form-control $clazz"
                 ${ type.trim().equalsIgnoreCase('cpf')  ? 'data-rule-cpf="true"' : '' }
                 ${ type.trim().equalsIgnoreCase('cnpj') ? 'data-rule-cnpj="true"' : '' }
                 value="$value" ${required ? 'required' : ''} ${attrs.size ? "size='${attrs.size}'" : ''} ${disabled ? 'disabled' : ''}>

@@ -1,31 +1,46 @@
 <%@ page import="com.sysdata.gestaofrota.Banco" %>
 <%@ page import="com.sysdata.gestaofrota.TipoTitular" %>
 
-<fieldset class="uppercase">
-	<h2>${legend}</h2>
-	
-	<div>
-		<label><span>Banco</span><g:select name="${dadoBancario}.banco.id" 
-											value="${dadoBancarioInstance?.banco?.id}" 
-											noSelection="${['null':'Selecione o banco...'] }" 
-											from="${Banco.list()}"	
-											optionKey="id" 
-											optionValue="nome"></g:select> </label>
-		<label><span>Agência</span><g:textField name="${dadoBancario}.agencia" value="${dadoBancarioInstance?.agencia}" /></label>
-		<label><span>Nº Conta</span><g:textField name="${dadoBancario}.conta" value="${dadoBancarioInstance?.conta}" /></label>
-		<div class="clear"></div>
-	</div>
 
-	<div>
-		<label><span>Tipo Titular</span><g:radioGroup name="${dadoBancario}.tipoTitular" value="${dadoBancarioInstance?.tipoTitular}" values="${TipoTitular.asList()}"
-											labels="${TipoTitular.asList()*.nome}">
-											<p>${it.label} ${it.radio}</p>
-										</g:radioGroup> </label>
-		<label><span>Titular</span><g:textField name="${dadoBancario}.nomeTitular" value="${dadoBancarioInstance?.nomeTitular}" size="40" maxlength="40"/></label>
-		<label><span>Documento(CPF/CNPJ)</span><g:textField name="${dadoBancario}.documentoTitular" value="${dadoBancarioInstance?.documentoTitular}" size="18" maxlength="18"/></label>
-	</div>
+<div class="panel panel-default">
+	<div class="panel-heading">${legend}</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-4">
+				<div class="form-group">
+					<label for="${dadoBancario}.banco.id">Banco</label>
+					<g:select name="${dadoBancario}.banco.id" class="form-control"
+							  value="${dadoBancarioInstance?.banco?.id}"
+							  noSelection="${['null':'Selecione o banco...']}"
+							  from="${Banco.list()}" optionKey="id" optionValue="nome"/>
+				</div>
+			</div>
 
-	
-</fieldset>
+			<div class="col-xs-4">
+				<bs:formField id="${dadoBancario}.agencia" name="${dadoBancario}.agencia" label="Agência" value="${dadoBancarioInstance?.agencia}"/>
+			</div>
+
+			<div class="col-xs-4">
+				<bs:formField id="${dadoBancario}.conta" name="${dadoBancario}.conta" label="Nº Conta" value="${dadoBancarioInstance?.conta}"/>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-4">
+				<div class="form-group">
+					<label for="${dadoBancario}.tipoTitular">Tipo Titular</label>
+					<g:select name="${dadoBancario}.tipoTitular" from="${TipoTitular.asList()}" class="form-control"
+						value="${dadoBancarioInstance?.tipoTitular}" optionValue="nome"/>
+				</div>
+			</div>
+			<div class="col-xs-4">
+				<bs:formField id="${dadoBancario}.nomeTitular" name="${dadoBancario}.nomeTitular" label="Titular" value="${dadoBancarioInstance?.nomeTitular}" maxlength="40"/>
+			</div>
+			<div class="col-xs-4">
+				<bs:formField id="${dadoBancario}.documentoTitular" name="${dadoBancario}.documentoTitular" label="Documento(CPF/CNPJ)" value="${dadoBancarioInstance?.documentoTitular}" maxlength="18"/>
+			</div>
+		</div>
+	</div>
+</div>
 
 

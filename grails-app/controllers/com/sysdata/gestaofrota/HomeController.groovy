@@ -28,7 +28,7 @@ class HomeController {
                 def serie = new DataSet(data)
                 serie.label = "Valores"
                 data.addDataSet(serie)
-                def transactions = Transacao.valorMensal([ano: ano, status: status], 'MONTH').sort {
+                def transactions = Transacao.valorMensal([ano: ano, status: status, tipo: TipoTransacao.COMBUSTIVEL], 'MONTH').sort {
                     it[1]
                 }
                 transactions.each {
@@ -51,7 +51,7 @@ class HomeController {
                 serie.label = "Valores"
                 data.addDataSet(serie)
 
-                def transactions = Transacao.valorMensal([mes: mes, ano: ano, status: status], 'DAY')
+                def transactions = Transacao.valorMensal([mes: mes, ano: ano, status: status, tipo: TipoTransacao.COMBUSTIVEL], 'DAY')
                 ChartModel.organizeMissingLabels(transactions, mes).each {
                     serie.addData(it[1].toString(), it[0])
                 }

@@ -40,7 +40,11 @@
                         <tbody>
                         <g:each in="${postoCombustivelInstanceList}" status="i" var="posto">
                             <tr>
-                                <td>${posto.nome}</td>
+                                <td>
+                                <g:link controller="postoCombustivel" action="show" id="${posto.id}">
+                                    ${posto.nome}
+                                </g:link>
+                                </td>
                                 <td>${posto.nomeFantasia}</td>
                                 <td>${posto.cnpj}</td>
                             </tr>

@@ -4,7 +4,22 @@
         <meta name="layout" content="bootstrap-layout" />
 		<script type="text/javascript" src="${resource(dir:'js',file:'chart-config.js') }"></script>
 		<script type="text/javascript" src="${resource(dir:'js',file:'plugins/Chart.min.js') }"></script>
+		<style>
+		#chartjs-tooltip {
+			opacity: 0;
+			position: absolute;
+			background: rgba(0, 0, 0, .7);
+			color: white;
+			padding: 3px;
+			border-radius: 3px;
+			-webkit-transition: all .1s ease;
+			transition: all .1s ease;
+			pointer-events: none;
+			-webkit-transform: translate(-50%, 0);
+			transform: translate(-50%, 0);
+		}
 
+		</style>
 
 
 	</head>
@@ -12,7 +27,7 @@
 	<br><br>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<i class="fa fa-bar-chart-o fa-fw"></i> Transações (R$)
+			<i class="fa fa-bar-chart-o fa-fw"></i> Transações de Combustível (R$)
 			<div class="pull-right">
 				<g:form>
 					<g:select name="mesEscolhido" class="form-down-option-graphics"
