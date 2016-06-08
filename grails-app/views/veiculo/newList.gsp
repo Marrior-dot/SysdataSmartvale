@@ -31,7 +31,7 @@
                 <tbody>
                 <g:each in="${veiculoInstanceList}" status="i" var="veiculo">
                     <tr>
-                        <td>${veiculo.placa}</td>
+                        <td><g:link action="show" id="${veiculo.id}">${veiculo.placa}</g:link></td>
                         <td>${veiculo.marca.nome}</td>
                         <td>${veiculo.modelo}</td>
                         <td>${veiculo.anoFabricacao}</td>
