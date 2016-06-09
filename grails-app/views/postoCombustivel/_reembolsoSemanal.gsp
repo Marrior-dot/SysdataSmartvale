@@ -6,9 +6,9 @@
 	
 	<fieldset>
 		<h2>Reembolso Semanal</h2>
-		
-		<label><span>Dia Semana</span><g:select name="diaSemana" from="${DiaSemana.values()}" optionValue="nome" value="${reembolsoInstance?.diaSemana}"/></label>		
-		<label><span>Intervalo Dias</span><g:textField name="intervaloDias" class="numeric required" size="2" value="${reembolsoInstance?.intervaloDias}"/></label>
+
+		<label><span>Dia Semana</span><g:select class="form-control" name="diaSemana" from="${DiaSemana.values()}" optionValue="nome" value="${reembolsoInstance?.diaSemana}"/></label>
+		<label><span>Intervalo Dias</span><g:textField name="intervaloDias" class="numeric required form-control" size="2" value="${reembolsoInstance?.intervaloDias}"/></label>
 	</fieldset>
 </form>
 

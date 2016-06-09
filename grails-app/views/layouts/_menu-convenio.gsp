@@ -64,10 +64,10 @@
         <ul class="nav nav-second-level">
             <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
             <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
-            <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+            %{--<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
                 <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="settingPriceTransaction">Configuração de Preços de Combustível</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="fuelTransaction" >Transação de Combustível</g:link></li>
-            </sec:ifAnyGranted>
+            </sec:ifAnyGranted>--}%
         </ul>
         <!-- /.nav-second-level -->
     </li>
