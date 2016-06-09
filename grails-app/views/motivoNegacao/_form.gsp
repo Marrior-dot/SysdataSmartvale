@@ -7,7 +7,7 @@
 		<g:message code="motivoNegacao.codigo.label" default="Codigo" />
 		
 	</label>
-	<g:textField name="codigo" value="${motivoNegacaoInstance?.codigo}"/>
+	<g:textField name="codigo" class="form-control" value="${motivoNegacaoInstance?.codigo}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: motivoNegacaoInstance, field: 'descricao', 'error')} ">
@@ -15,6 +15,7 @@
 		<g:message code="motivoNegacao.descricao.label" default="Descricao" />
 		
 	</label>
-	<g:textField name="descricao" value="${motivoNegacaoInstance?.descricao}"/>
+	<g:textField name="descricao" class="form-control" value="${motivoNegacaoInstance?.descricao}"/>
 </div>
+<br><br>
 
