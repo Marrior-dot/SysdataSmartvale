@@ -159,7 +159,7 @@ class EstabelecimentoController {
 						acao:"""<a href="${createLink(controller:'estabelecimento',action:'show')}/${e.id}" class='show'></a>"""]
 		}
 
-		def data=[totalRecords:estabelecimentoInstanceTotal,results:fields]
+		def data=[recordsTotal:estabelecimentoInstanceTotal,results:fields]
 		render data as JSON
 	}
 	

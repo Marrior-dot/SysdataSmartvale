@@ -3,11 +3,21 @@
 <%@ page import="com.sysdata.gestaofrota.ReembolsoSemanal" %>
 <%@ page import="com.sysdata.gestaofrota.TipoReembolso" %>
 
+<script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootbox/bootbox.min.js') }"></script>
+
+<style>
+    .modal-dialog {
+        z-index: 1500;
+    }
+
+</style>
+
+
 <br/>
 <div class="row">
 	<div class="col-xs-12">
 		<label for="tipoReembolso">Tipo Reembolso</label>
-		<g:radioGroup name="tipoReembolso"
+		<g:radioGroup class="enable" name="tipoReembolso"
 					  labels="${TipoReembolso.values()*.nome}"
 					  values="${TipoReembolso.values()}"
 					  value="${postoCombustivelInstance?.tipoReembolso}">
@@ -17,122 +27,87 @@
 </div>
 
 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-	<button type="button" class="btn btn-default" onclick="openWindow(0);">
+	<button type="button" class="btn btn-default" onclick="openModal(0);">
 		Adicionar Reembolso
 	</button>
 </sec:ifAnyGranted>
 
 
-<div id="divSemanal" >
-	<gui:dataTable id="reembSemanalDT"
-				controller="postoCombustivel" action="getReembolsoSemanal"
-				columnDefs="[
-					[key:'diaSemana',sortable:true,resizeable:true,label:'Dia Semana'],
-					[key:'intervaloDias',sortable:true,resizeable:true,label:'Intervalo Dias'],
-					[key:'acao',sortable:false,resizeable:true,label:'Ações']
-				]"
-				params="[id:postoCombustivelInstance?.id]"
-				sortedBy="diaSemana"
-				rowsPerPage="10"
-				paginatorConfig="[
-					nextPageLinkLabel:'Prox',
-				previousPageLinkLabel:'Ant',
-				firstPageLinkLabel:'Prim',
-				lastPageLinkLabel:'Ult',
-					template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-					pageReportTemplate:'{totalRecords} total de registros'
-				]"/>
-	
+
+<div id="divSemanal">
+
+    <div class="list">
+        <table id="rbSemanalTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+            <thead>
+                <th>Dia Semana</th>
+                <th>Intervalo Dias</th>
+                <th>Açoes</th>
+            </thead>
+        </table>
+    </div>
+
+
 </div>
 
 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 	<div id="divIntervalo" >
-	
-		<gui:dataTable 
-					id="reembolsosDT"
-					controller="postoCombustivel" action="getIntervalosReembolso"
-					columnDefs="[
-						[key:'inicio',sortable:true,resizeable:true,label:'Início Intervalo'],
-						[key:'fim',sortable:true,resizeable:true,label:'Fim Intervalo'],
-						[key:'diaEfetivacao',sortable:true,resizeable:true,label:'Dia Efetivação'],
-						[key:'meses',sortable:true,resizeable:true,label:'Meses'],
-						[key:'acao',sortable:false,resizeable:true,label:'Ações']
-					]"
-					params="[id:postoCombustivelInstance?.id]"
-					sortedBy="inicio"
-					rowsPerPage="10"
-					paginatorConfig="[
-						nextPageLinkLabel:'Prox',
-					previousPageLinkLabel:'Ant',
-					firstPageLinkLabel:'Prim',
-					lastPageLinkLabel:'Ult',
-						template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-						pageReportTemplate:'{totalRecords} total de registros'
-					]"
-				/>
+
+
+        <div class="list">
+            <table id="rbIntervaloTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+                <thead>
+                <th>Inicio Intervalo</th>
+                <th>Fim Intervalo</th>
+                <th>Dia Efetivaçao</th>
+                <th>Meses</th>
+                <th>Açoes</th>
+                </thead>
+            </table>
+        </div>
+
+
+
 	</div>
 </sec:ifAnyGranted>
-
-<sec:ifAnyGranted roles="ROLE_ESTAB">
-	<div id="divIntervalo" >
-	
-		<gui:dataTable 
-					id="reembolsosDT"
-					controller="postoCombustivel" action="getIntervalosReembolso"
-					columnDefs="[
-						[key:'inicio',sortable:true,resizeable:true,label:'Início Intervalo'],
-						[key:'fim',sortable:true,resizeable:true,label:'Fim Intervalo'],
-						[key:'diaEfetivacao',sortable:true,resizeable:true,label:'Dia Efetivação'],
-						[key:'meses',sortable:true,resizeable:true,label:'Meses']
-					]"
-					params="[id:postoCombustivelInstance?.id]"
-					sortedBy="inicio"
-					rowsPerPage="10"
-					paginatorConfig="[
-						nextPageLinkLabel:'Prox',
-					previousPageLinkLabel:'Ant',
-					firstPageLinkLabel:'Prim',
-					lastPageLinkLabel:'Ult',
-						template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-						pageReportTemplate:'{totalRecords} total de registros'
-					]"
-				/>
-	</div>
-</sec:ifAnyGranted>
-			
-<gui:dialog 
-	id="reembolsoDialog"
-	title="Reembolso em Intervalos"
-	draggable="true"
-	fixedcenter="true"
-	close="false"
-	modal="true"
-    buttons="[[text:'Salvar', handler: 'saveHandler', isDefault: true], 
-	    		[text:'Cancelar', handler: 'function() {this.cancel();}', isDefault: false]	]" >
-	<div id="reembolsoDiv">
-	
-	</div>
-</gui:dialog>
-
-
-<gui:dialog 
-	id="reembolsoSemanalDialog"
-	title="Reembolso Semanal"
-	draggable="true"
-	fixedcenter="true"
-	close="false"
-	modal="true"
-    buttons="[[text:'Salvar', handler: 'saveSemanalHandler', isDefault: true], 
-	    		[text:'Cancelar', handler: 'function() {this.cancel();}', isDefault: false]	]" >
-	<div id="reembolsoSemanalDiv">
-	
-	</div>
-</gui:dialog>
-
 
 
 
 <script type="text/javascript">
+
+    var rbSemanalTable,rbIntervaloTable
+
+    $(document).ready(function(){
+
+        rbSemanalTable=$("#rbSemanalTable").DataTable({
+            "ajax":{
+                "url":"${createLink(controller:'postoCombustivel',action:'getReembolsoSemanal')}",
+                "data":{"id":${postoCombustivelInstance?.id}},
+                "dataSrc":"results"
+            },
+            "columns":[
+                {"data":"diaSemana"},
+                {"data":"intervaloDias"},
+                {"data":"acao"}
+            ]
+        });
+
+
+        rbIntervaloTable=$("#rbIntervaloTable").DataTable({
+            "ajax":{
+                "url":"${createLink(controller:'postoCombustivel',action:'getIntervalosReembolso')}",
+                "data":{"id":${postoCombustivelInstance?.id}},
+                "dataSrc":"results"
+            },
+            "columns":[
+                {"data":"inicio"},
+                {"data":"fim"},
+                {"data":"diaEfetivacao"},
+                {"data":"meses"},
+                {"data":"acao"}
+            ]
+        });
+    });
+
 
 	var checked=null;
 
@@ -181,63 +156,110 @@
 				data:"id="+rbId,
 				success:function(o){
 					if(o.type=="ok"){
-						showMessage(o.message);
+						alert(o.message);
 
-						var params="id=${postoCombustivelInstance?.id}";
-						if(checked.val()=='SEMANAL'){
+						if(checked.val()=='SEMANAL')
+                            rbSemanalTable.ajax.reload();
+						else if(checked.val()=='INTERVALOS_MULTIPLOS')
+                            rbIntervaloTable.ajax.reload();
 
-							filtrarEntidade(GRAILSUI.reembSemanalDT,params); 
-							GRAILSUI.reembolsoSemanalDialog.hide();
-							
-						}else if(checked.val()=='INTERVALOS_MULTIPLOS'){
-
-							filtrarEntidade(GRAILSUI.reembolsosDT,params)
-							GRAILSUI.reembolsoDialog.hide();
-						}
 					}
 					else if(o.type=="error")
-						showError(o.message);
+						alert(o.message);
 				},
 				statusCode:{
 					404:function(){
-						showError("Falha ao abrir página para inclusão de Novos Funcionários");
+						alert("Falha ao abrir página para inclusão de Novos Funcionários");
 					}
 				}
 			});	
 		}		
 	}
 
-	function openWindow(rbId){
-		var callback = {  
-			success: function(o) {  
+    function openReembSemanal(html){
+        bootbox.dialog({
+            title: "Reembolso Semanal",
+            message:html,
+            buttons: {
+                success: {
+                    label: "Salvar",
+                    className: "btn-success",
+                    callback: function() {
+                        saveReembSemanal();
+                    }
+                }
+            }
+        });
+    }
 
-				if(checked.val()=='SEMANAL'){
-					GRAILSUI.util.replaceWithServerResponse(document.getElementById('reembolsoSemanalDiv'), o);  
-					GRAILSUI.reembolsoSemanalDialog.show();
-					
-				}else if(checked.val()=='INTERVALOS_MULTIPLOS'){
-					GRAILSUI.util.replaceWithServerResponse(document.getElementById('reembolsoDiv'), o);  
-					GRAILSUI.reembolsoDialog.show();
-				}
+    function openReembIntervalo(html){
+        bootbox.dialog({
+            title: "Intervalos Multiplos",
+            message:html,
+            buttons: {
+                success: {
+                    label: "Salvar",
+                    className: "btn-success",
+                    callback: function() {
+                        saveReembIntervalos();
+                    }
+                }
+            }
+        });
+    }
 
-			},  
-			failure:function(o) {}  
-		};  
+
+
+    function loadReembSemanal(rbId) {
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller:'postoCombustivel',action:'manageReembolsoSemanal')}",
+            data:"parId=${postoCombustivelInstance?.id}&id="+rbId,
+            success: function (data) {
+                openReembSemanal(data);
+            },
+            statusCode: {
+                404: function () {
+                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
+                }
+            }
+        });
+
+    }
+
+    function loadReembIntervalo(rbId) {
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller:'postoCombustivel',action:'manageReembolso')}",
+            data:"parId=${postoCombustivelInstance?.id}&id="+rbId,
+            success: function (data) {
+                openReembIntervalo(data);
+            },
+            statusCode: {
+                404: function () {
+                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
+                }
+            }
+        });
+
+    }
+
+
+	function openModal(rbId){
 
 		if(checked!=null){
 
-			if(checked.val()=='SEMANAL'){
-				YAHOO.util.Connect.asyncRequest('POST',"${createLink(controller:'postoCombustivel',action:'manageReembolsoSemanal')}?parId=${postoCombustivelInstance?.id}&id="+rbId, callback);
-			}else if(checked.val()=='INTERVALOS_MULTIPLOS'){
-				YAHOO.util.Connect.asyncRequest('POST',"${createLink(controller:'postoCombustivel',action:'manageReembolso')}?parId=${postoCombustivelInstance?.id}&id="+rbId, callback);
-			}
-			
+			if(checked.val()=='SEMANAL')
+                loadReembSemanal(rbId)
+			else if(checked.val()=='INTERVALOS_MULTIPLOS')
+                loadReembIntervalo(rbId)
+
 		}else{
 			alert("Selecione primeiramente um Tipo de Reembolso!");
 		}
 	}
 
-	function saveHandler(){
+	function saveReembIntervalos(){
 		hasError=false;
 		$(".mandatory").each(function(){
 			if($(this).val()==""){
@@ -253,18 +275,14 @@
 				data:data,
 				success:function(o){
 					if(o.type=="ok"){
-						showMessage(o.message);
-
-						var params="id=${postoCombustivelInstance?.id}";
-						filtrarEntidade(GRAILSUI.reembolsosDT,params); 
-						GRAILSUI.reembolsoDialog.hide();
+                        rbIntervaloTable.ajax.reload();
 					}
 					else if(o.type=="error")
-						showError(o.message);
+						alert(o.message);
 				},
 				statusCode:{
 					404:function(){
-						showError("Falha ao abrir página para inclusão de Novos Funcionários");
+						alert("Falha ao abrir página para inclusão de Novos Funcionários");
 					}
 				}
 			});						
@@ -273,7 +291,7 @@
 		}
 	}
 
-	function saveSemanalHandler(){
+	function saveReembSemanal(){
 		hasError=false;
 		$(".required").each(function(){
 			if($(this).val()==""){
@@ -290,18 +308,16 @@
 				data:data,
 				success:function(o){
 					if(o.type=="ok"){
-						showMessage(o.message);
+						alert(o.message);
+                        rbSemanalTable.ajax.reload();
 
-						var params="id=${postoCombustivelInstance?.id}";
-						filtrarEntidade(GRAILSUI.reembSemanalDT,params); 
-						GRAILSUI.reembolsoSemanalDialog.hide();
 					}
 					else if(o.type=="error")
-						showError(o.message);
+						alert(o.message);
 				},
 				statusCode:{
 					404:function(){
-						showError("Falha ao abrir página para inclusão de Novos Funcionários");
+						alert("Falha ao abrir página para inclusão de Novos Funcionários");
 					}
 				}
 			});			

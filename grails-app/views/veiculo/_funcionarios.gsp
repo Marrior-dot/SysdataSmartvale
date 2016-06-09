@@ -1,7 +1,23 @@
+<script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootbox/bootbox.min.js') }"></script>
+
+<style>
+    .modal-dialog {
+        z-index: 1500;
+    }
+
+</style>
+
 
 <div class="panel panel-default">
     <div class="panel-heading">Funcionários habilitados para condução</div>
     <div class="panel-body">
+        <div class="buttons">
+            <a href="#" id="incFunc" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span>Habilitar Funcionário</a>
+
+        </div>
+
+        <span id="message"></span>
+
         <div class="list">
             <table id="funcVeicTable" class="table table-striped table-bordered table-hover table-condensed table-default">
                 <thead>
@@ -16,41 +32,14 @@
 </div>
 
 
-%{--
 
-		<span id="message"></span>
-
-			<gui:dialog
-				id="searchFuncDialog"
-				title="Pesquisa de Funcionários"
-				draggable="false"
-				width="500px"
-				update="searchForm"
-				fixedcenter="true"
-				close="false"
-				modal="true"
-				buttons="[
-				        [text:'Selecionar', handler: 'yesHandler', isDefault: true],
-				        [text:'Cancelar', handler: 'function() {this.cancel();}', isDefault: false]
-				    ]"
-				>
-				<div id="searchForm"></div>			
-			</gui:dialog>
-			
-			
-			 <div class="buttons">
-			 	<span class="button"><input type="button" class="new" onclick="openWindow();" value="Adicionar Funcionário"/></span>
-			 </div>
-
-
---}%
 <script type="text/javascript">
+
+    var funcVeicTable
 
     $(document).ready(function(){
 
-        $("#funcVeicTable").DataTable({
-
-            //"serverSide": true,
+        funcVeicTable=$("#funcVeicTable").DataTable({
             "ajax":{
                 "url":"${createLink(controller:'veiculo',action:'listFuncionariosJSON')}",
                 "data":{"id":${veiculoInstance?.id}},
@@ -63,12 +52,133 @@
                 {"data":"acao"}
             ]
         });
+
+        $("#incFunc").on("click",function(e){
+            e.preventDefault();
+            loadFuncModal();
+        });
+
+
     });
+
+    function removeFuncionario(idFunc){
+        $.ajax({
+            type:'POST',
+            url:"${createLink(controller:'veiculo',action:'removeFuncionario')}",
+            data:"idVeic=${veiculoInstance?.id}"+"&idFunc="+idFunc,
+            beforeSend:function(data){
+                $("#message").html("Removendo relação entre Funcionário e Veículo...");
+                $("#message").show();
+            },
+            success:function(data){
+                //Recarrega a lista de funcionários relacionados ao veículo
+                $("#message").html(data);
+                $("#message").show();
+                $("#message").fadeOut(5000);
+                funcVeicTable.ajax.reload();
+            }
+
+        });
+    }
+
+
+
+    function bindFuncVeic(){
+
+        funcSel.forEach(function(el){
+
+            $.ajax({
+                type:'POST',
+                url:"${createLink(controller:'veiculo',action:'addFuncionario')}",
+                data:"idVeic=${veiculoInstance?.id}"+"&idFunc="+el,
+                beforeSend:function(data){
+                    $("#message").html("Incluindo relação entre Funcionário e Veículo...");
+                    $("#message").show();
+                },
+                success:function(data){
+                    //Recarrega a lista de funcionários relacionados ao veículo
+
+                    $("#message").html(data);
+                    $("#message").show();
+                    $("#message").fadeOut(5000);
+
+
+                    funcVeicTable.ajax.reload();
+
+                }
+            });
+
+
+        });
+
+    }
+
+
+    function openFuncModal(html) {
+        bootbox.dialog({
+
+            title: "Vinculação Funcionário ao Veículo",
+
+            message:html,
+
+            buttons: {
+                success: {
+                    label: "Habilitar",
+                    className: "btn-success",
+                    callback: function() {
+                        bindFuncVeic();
+                    }
+                }
+            }
+        });
+    }
+
+    function loadFuncModal() {
+
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller:'funcionario',action:'search')}",
+            data: "controller=funcionario&unidade_id=${veiculoInstance?.unidade?.id}&action=filtro",
+            success: function (data) {
+                openFuncModal(data);
+            },
+            statusCode: {
+                404: function () {
+                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
+                }
+            }
+        });
+    }
+
 
 </script>
 
+
+
 %{--
 
+
+<span id="message"></span>
+
+<gui:dialog
+        id="searchFuncDialog"
+        title="Pesquisa de Funcionários"
+        draggable="false"
+        width="500px"
+        update="searchForm"
+        fixedcenter="true"
+        close="false"
+        modal="true"
+        buttons="[
+                [text:'Selecionar', handler: 'yesHandler', isDefault: true],
+                [text:'Cancelar', handler: 'function() {this.cancel();}', isDefault: false]
+        ]"
+>
+    <div id="searchForm"></div>
+</gui:dialog>
+
+
+<script>
     function openWindow(){
         $.ajax({
             type:'POST',
@@ -179,6 +289,10 @@
         }
         this.cancel();
     }
+
+
+</script>
+
 
 --}%
 
