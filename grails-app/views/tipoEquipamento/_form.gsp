@@ -7,6 +7,7 @@
 		<g:message code="tipoEquipamento.nome.label" default="Nome" />
 		
 	</label>
-	<g:textField name="nome" value="${tipoEquipamentoInstance?.nome}"/>
+	<g:textField name="nome" class="form-control" value="${tipoEquipamentoInstance?.nome}"/>
 </div>
+<br><br>
 
