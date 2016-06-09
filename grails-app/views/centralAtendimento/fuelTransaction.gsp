@@ -101,41 +101,39 @@
 								<bs:formField id="cartao" name="cartao" value="${commandInstance?.cartao}" label="Cartão" class="col-md-3 only-numbers" maxlength="19"/>
 							</div>
 							<div class="col-md-3">
-								<bs:formField id="" name="" value=""/>
+								<bs:formField id="vencimento" name="vencimento" value="${commandInstance?.vencimento}" label="Vencimento" class="only-numbers" maxlength="4"/>
 							</div>
 							<div class="col-md-3">
-								<bs:formField id="" name="" value=""/>
+								<bs:formField id="matricula" name="matricula" value="${commandInstance?.matricula}" label="Matrícula Motorista" class="only-numbers" maxlength="12"/>
 							</div>
 
 							<div class="col-md-3">
-								<bs:formField id="" name="" value=""/>
+								<bs:formField id="placa" name="placa" value="${commandInstance?.placa}" label="Placa Veículo" class="placa"/>
 							</div>
-						<div class="row"></div>
-						<div class="row"></div>
-						<div class="row"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<bs:formField id="quilometragem" name="quilometragem" value="${commandInstance?.quilometragem}" label="Quilometragem" class="only-numbers" maxlength="9"/>
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="tipoCombustivel">Combustível</label>
+								<g:select name="tipoCombustivel" from="${TipoCombustivel.values()}"  class="form-control"
+										  optionValue="nome" value="commandInstance?.tipoCombustivel"/>
+							</div>
+							<div class="col-md-6">
+								<bs:formField id="estabelecimento" name="estabelecimento" value="${commandInstance?.estabelecimento}" label="Estabelecimento" maxlength="15"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<bs:formField id="valor" name="valor" value="${commandInstance?.valor}" label="Valor Transação" class="money"/>
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="senha">Senha</label>
+								<g:passwordField name="senha" class="form-control"/>
+							</div>
+						</div>
 
-
-						<fieldset>
-
-							<label><span>Vencimento</span><g:textField class="numeric" size="4" name="vencimento" value="${commandInstance?.vencimento}"></g:textField></label>
-							<div class="clear"></div>
-							<label><span>Matrícula Motorista</span><g:textField class="numeric" size="12" name="matricula" value="${commandInstance?.matricula}"></g:textField> <span class="inline" id="nome"></span></label>
-							<div class="clear"></div>
-							<label><span>Placa Veículo</span><g:textField class="placa" name="placa" value="${commandInstance?.placa}"></g:textField> <span class="inline" id="veiculo"></span></label>
-							<div class="clear"></div>
-							<label><span>Quilometragem</span><g:textField class="numeric" size="9" name="quilometragem" value="${commandInstance?.quilometragem}"></g:textField></label>
-							<div class="clear"></div>
-							<label><span>Estabelecimento</span><g:textField class="numeric" size="15" name="estabelecimento" value="${commandInstance?.estabelecimento}"></g:textField> <span class="inline" id="razaoSocial"></span></label>
-							<div class="clear"></div>
-							<label><span>Combustível</span><g:select name="tipoCombustivel" from="${TipoCombustivel.values()}" optionValue="nome" value="commandInstance?.tipoCombustivel"></g:select></label>
-							<div class="clear"></div>
-							<label><span>Valor Transação</span><g:textField name="valor" value="${commandInstance?.valor}" class="currency"></g:textField></label>
-							<div class="clear"></div>
-							<label><span>Senha</span><g:passwordField name="senha" ></g:passwordField></label>
-							<div class="clear"></div>
-
-
-						</fieldset>
 
 						<div class="buttons">
 							<g:if test="${commandInstance?.autorizada}">
