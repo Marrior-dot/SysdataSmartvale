@@ -6,90 +6,113 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 
-<g:form method="post">
-
-	<g:hiddenField name="id" value="${userInstance?.id}"/>
-	<g:hiddenField name="actionView" value="${action}"/>
-	
-	<fieldset>
-		<h2>Dados de Usuário</h2>
-		
-<%
-		
-		def l=[:]
-		l=ownerList.collect{
-					if(it instanceof PostoCombustivel){
-						[id:it.id,
-						nome:"Estabelecimento - " + it.nome]
-					}else if(it instanceof Rh){
-						[id:it.id,
-						nome:"RH - " + it.nome]
-					}else if(it instanceof Administradora){
-						[id:it.id,
-						nome:"Administradora - " + it.nome]
-					}else if(it instanceof Processadora){
-						[id:it.id,
-						nome:"Processadora - " + it.nome]
-					}
+<br/>
+<div class="panel panel-default">
+	<div class="panel-heading">Dados de Usuário</div>
+	<div class="panel-body">
+		<g:form method="post">
+			<g:hiddenField name="id" value="${userInstance?.id}"/>
+			<g:hiddenField name="action" value="${action}"/>
+			<% def l = [:]
+			l = ownerList.collect {
+				if (it instanceof PostoCombustivel) {
+					[id  : it.id,
+					 nome: "Estabelecimento - " + it.nome]
+				} else if (it instanceof Rh) {
+					[id  : it.id,
+					 nome: "RH - " + it.nome]
+				} else if (it instanceof Administradora) {
+					[id  : it.id,
+					 nome: "Administradora - " + it.nome]
+				} else if (it instanceof Processadora) {
+					[id  : it.id,
+					 nome: "Processadora - " + it.nome]
 				}
-		 %>		
-		
-		<div><label><span>Organização</span><g:select id="owner" name="owner.id" from="${l}" value="${userInstance?.owner?.id}" optionKey="id" optionValue="nome"></g:select></label></div>
-		
-		
-		
-		<g:if test="${action in [Util.ACTION_NEW]}">
-			<div><label><span>Papel</span><g:select name="role" from="" value="" optionKey="id" optionValue="authority"></g:select></label></div>
-		</g:if>
-		
-		
-		
-		<g:if test="${action in [Util.ACTION_EDIT]}">
-			<div><label><span>Papel</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="" optionKey="id" optionValue="authority"></g:select></label></div>
-		</g:if>
-		
-		
-		
-		<g:if test="${action in [Util.ACTION_VIEW]}">
-			<div><label><span>Papel</span><g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="${role?.authority}" optionKey="id" optionValue="authority"></g:select></label></div>
-		</g:if>
-		
-		
-		
-		
-		<div><label><span>Nome</span><g:textField name="name" value="${userInstance?.name}" /></label></div>
-		
-		<div><label><span>Email</span><g:textField name="email" value="${userInstance?.email}" /></label></div>
-		
-		<g:if test="${action in [Util.ACTION_NEW]}">
-			<div><label><span>Login</span><g:textField name="username" value="${userInstance?.username}" /></label></div>
-			
-			<div><label><span>Senha</span><g:passwordField name="password" value="${userInstance?.password}" /></label></div>
-			
-			<div><label><span>Confirme a Senha</span><g:passwordField name="confirmPassword" value="" /></label></div>
-		
-		</g:if>
-		
-		<div><label><span>Habilitado</span><g:checkBox name="enabled" value="${userInstance?.enabled}" /></label></div>
-		
-	</fieldset>
-	
-	
-	<div class="buttons">
-		<g:if test="${action in [Util.ACTION_NEW]}">
-			<span class="button"><g:actionSubmit class="save" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-		</g:if>
-		<g:if test="${action in [Util.ACTION_VIEW]}">
-        	<span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-        	<span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-        </g:if>
-        <g:if test="${action in [Util.ACTION_EDIT]}">
-        	<span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-        	<span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-        </g:if>
-	</div>
-	
-</g:form>
+			} %>
 
-<script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"></script>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label for="owner">Organização</label>
+					<g:select id="owner" name="owner.id" from="${l}" value="${userInstance?.owner?.id}" class="form-control"
+							  optionKey="id" optionValue="nome"/>
+				</div>
+				<g:if test="${action in [Util.ACTION_NEW]}">
+					<div class="form-group col-md-6">
+						<label for="role">Papel</label>
+						<g:select name="role" id="role" from="" value="" optionKey="id" optionValue="authority" class="form-control"/>
+					</div>
+				</g:if>
+			</div>
+
+			<div class="row">
+				<g:if test="${action in [Util.ACTION_EDIT]}">
+					<div class="form-group col-md-6">
+						<label for="role">Papel</label>
+						<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
+								  value="" optionKey="id" optionValue="authority" class="form-control"/>
+					</div>
+				</g:if>
+				<g:if test="${action in [Util.ACTION_VIEW]}">
+					<div class="form-group col-md-6">
+						<label for="role">Papel</label>
+						<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="${role?.authority}"
+								  optionKey="id" optionValue="authority" class="form-control"/>
+					</div>
+				</g:if>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<bs:formField label="Nome" id="name" name="name" value="${userInstance?.name}" class="form-control"/>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="email">Email</label>
+					<input type="email" id="email" name="email" value="${userInstance?.email}" class="form-control"/>
+				</div>
+			</div>
+
+			<g:if test="${action in [Util.ACTION_NEW]}">
+				<div class="row">
+					<div class="col-md-4">
+						<bs:formField label="Login" id="username" name="username" value="${userInstance?.username}" class="form-control"/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="password">Senha</label>
+						<g:passwordField name="password" class="form-control"/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="confirmPassword">Confirme a Senha</label>
+						<g:passwordField name="confirmPassword" class="form-control"/>
+					</div>
+				</div>
+			</g:if>
+
+			<div class="checkbox">
+				<label>
+					<g:checkBox name="enabled" value="${userInstance?.enabled}"/>
+					<strong>Habilitado</strong>
+				</label>
+			</div>
+
+			<div class="buttons">
+				<g:if test="${action in [Util.ACTION_NEW]}">
+					<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+				</g:if>
+				<g:if test="${action in [Util.ACTION_VIEW]}">
+					<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
+					<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				</g:if>
+				<g:if test="${action in [Util.ACTION_EDIT]}">
+					<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+					<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				</g:if>
+			</div>
+		</g:form>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"/>
+
+
 
