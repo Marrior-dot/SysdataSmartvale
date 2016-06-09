@@ -21,9 +21,9 @@
                         <span class="glyphicon glyphicon-home"></span>
                         <g:message code="default.home.label"/>
                     </a>
-                    <g:link class="btn btn-default" controller="rh" action="show" params="[id:rhInstance?.id]">
+                  %{--  <g:link class="btn btn-default" controller="rh" action="show" params="[id:rhInstance?.id]">
                         <span class="glyphicon glyphicon-plus"></span> Criar Unidade
-                    </g:link>
+                    </g:link>--}%
                     <g:link class="btn btn-default" action="generateCartaSenha" params="[id:unidadeInstance?.id]">
                         <span class="glyphicon glyphicon-open-file"></span>
                         Gerar Carta Senha
