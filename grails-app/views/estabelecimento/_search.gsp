@@ -19,7 +19,7 @@
 
 	<div class="list">
 
-        <table id="estTable" class="table table-striped table-hover table-bordered table-condensed">
+        <table id="estTable" class="table table-striped table-bordered table-hover table-condensed table-default">
 
             <thead>
                 <th>Cod.Estab</th>
@@ -44,10 +44,11 @@
 
             "ajax":{
                 "url":"${createLink(controller:'estabelecimento',action:'listAllJSON')}",
-                "data":{"empId":$("#empId").val()},
+                "data":{"empId":"${empId}"},
                 "dataSrc":"results"
             },
             "columns":[
+
                 {"data":"razao"},
                 {"data":"nomeFantasia"},
                 {"data":"codEstab"},
