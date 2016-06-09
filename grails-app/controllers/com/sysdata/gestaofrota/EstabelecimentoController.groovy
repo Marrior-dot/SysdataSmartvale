@@ -134,14 +134,12 @@ class EstabelecimentoController {
 	
 	def listAllJSON={
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def offset=params.offset?:10
+		def offset=params.start?:10
 		def empId=params.empId!='null'?params.empId.toLong():null
 
-		def estabelecimentoInstanceList=Estabelecimento
-											.createCriteria()
-											.list(max:params.max,offset:offset){
-													eq('status', Status.ATIVO)
-													empresa{eq('id',empId)}
+		def estabelecimentoInstanceList=Estabelecimento.withCriteria{
+                                                eq('status', Status.ATIVO)
+                                                empresa{eq('id',empId)}
 											}
 		def estabelecimentoInstanceTotal=Estabelecimento
 												.createCriteria()
