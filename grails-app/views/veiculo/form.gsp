@@ -47,6 +47,7 @@
                         <ul class="nav nav-tabs">
                             <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
                             <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
+                            <li><a href="#tab3" data-toggle="tab">Hodômetro</a></li>
                         </ul>
                         <div class="tab-content">
                             <br><br>
@@ -55,6 +56,9 @@
                             </div>
                             <div class="tab-pane" id="tab2">
                                 <g:render template="funcionarios"/>
+                            </div>
+                            <div class="tab-pane" id="tab3">
+                                <g:render template="hodometro"/>
                             </div>
                         </div>
                     </div>

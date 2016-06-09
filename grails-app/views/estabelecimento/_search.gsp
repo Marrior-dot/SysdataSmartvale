@@ -1,18 +1,20 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 
-<g:if test="${!action || action==Util.ACTION_VIEW}">
-    <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-        <div class="buttons">
-            <g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
-        </div>
-    </sec:ifAnyGranted>
-</g:if>
-
-
 <g:form controller="${controller}">
 
-	<br/>
+
+    <g:if test="${!action || action==Util.ACTION_VIEW}">
+        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+            <div class="buttons">
+                <br><br>
+                <g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
+            </div>
+        </sec:ifAnyGranted>
+    </g:if>
+
+
+    <br/>
 	
 	<input type="hidden" name="empId" value="${empId}"/>
 

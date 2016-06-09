@@ -11,8 +11,9 @@ class Veiculo extends MaquinaMotorizada {
 	String anoFabricacao
 	Long autonomia
 	Date validadeExtintor
-	
-	
+	Long hodometro
+
+
     static constraints = {
 		validadeExtintor(nullable:true)
 		placa unique:true,blank:false
@@ -23,5 +24,16 @@ class Veiculo extends MaquinaMotorizada {
     }
 	
 	static mapping={
+	}
+
+	String getHodometro(){
+		if(!this.hodometro){
+			def ultTr=Transacao
+                    .executeQuery("select max(t) from Transacao t where t.maquina=:maq and t.statusControle in (:sts)",
+                    [maq:this,sts:[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA]])
+            if(ultTr) this.hodometro=ultTr[0].quilometragem
+            else this.hodometro=0
+		}
+        return this.hodometro
 	}
 }

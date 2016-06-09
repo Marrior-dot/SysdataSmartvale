@@ -52,9 +52,9 @@
                 </a>
 
                 <a class="btn btn-default"
-                   href="${g.createLink(controller: 'unidade', action: 'show', id: '${unidadeInstance?.id}')}">
+                   href="${g.createLink(controller: 'unidade', action: 'list')}">
                     <span class="glyphicon glyphicon-list"></span>
-                    RH
+                    Lista de RH
                 </a>
 
                 <a class="btn btn-default"

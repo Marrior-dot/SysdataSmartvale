@@ -121,7 +121,7 @@
 
     <div class="buttons">
         <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
-            <g:actionSubmit class="btn btn-primary" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
+            <g:actionSubmit class="btn btn-default" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
                 value="${message(code: 'default.button.update.label', default: 'Update')}"/>
         </g:if>
         <g:if test="${action == Util.ACTION_VIEW}">
