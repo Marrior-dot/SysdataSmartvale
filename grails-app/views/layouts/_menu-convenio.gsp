@@ -13,7 +13,7 @@
                 <li class="controller"><g:link class="submenu-logado" controller="equipamento" action="newList">Equipamentos</g:link></li>
             </sec:ifAnyGranted>
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                <li class="controller"><g:link class="submenu-logado"  controller="postoCombustivel" action="list">Estabelecimentos</g:link></li>
+                <li class="controller"><g:link class="submenu-logado"  controller="postoCombustivel" action="list">Empresas Lojistas</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="produto" action="list">Produtos</g:link></li>
                 <li class="controller"><g:link class="submenu-logado"  controller="arquivo" action="newList">Arquivos</g:link></li>
 %{--
@@ -41,7 +41,9 @@
             </sec:ifAnyGranted>
 
             <sec:ifAnyGranted roles="ROLE_PROC">
+%{--
                 <li class="controller"><g:link class="submenu-logado" controller="parametroSistema" action="list">Parâmetros do Sistema</g:link></li>
+--}%
                 <li class="controller"><g:link class="submenu-logado" controller="motivoNegacao" action="list">Motivos Negação</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="auditLogEvent" action="list">Audit Log</g:link></li>
             </sec:ifAnyGranted>

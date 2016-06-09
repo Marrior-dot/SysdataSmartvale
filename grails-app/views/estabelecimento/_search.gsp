@@ -7,6 +7,7 @@
     <g:if test="${!action || action==Util.ACTION_VIEW}">
         <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
             <div class="buttons">
+                <br><br>
                 <g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
             </div>
         </sec:ifAnyGranted>
