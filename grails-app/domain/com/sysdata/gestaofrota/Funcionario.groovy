@@ -16,6 +16,7 @@ class Funcionario extends Participante {
 	static belongsTo=[unidade:Unidade]	
 	static embedded=['telefoneComercial']
 	static hasMany=[cartoes:Cartao,veiculos:MaquinaFuncionario]
+	static transients =['cartaoAtivo']
 	
     static constraints = {
 		cpf(blank:false,cpf:true)
@@ -32,8 +33,8 @@ class Funcionario extends Participante {
 		cnh(blank:false)
     }
 	
-	Cartao cartaoAtivo(){
-		cartoes.find{it.status==StatusCartao.ATIVO}
+	Cartao getCartaoAtivo(){
+		cartoes.find{it.status==StatusCartao.ATIVO || it.status==StatusCartao.EMBOSSING}
 	}
 	
 	Cartao cartaoAtual(){

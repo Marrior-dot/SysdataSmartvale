@@ -31,9 +31,7 @@ class PostoCombustivelController {
         redirect(action: "list", params: params)
     }
 
-    def list = {  }
-
-	def newList = {
+    def list = {
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def criteria = {
 			order('id')
@@ -41,6 +39,7 @@ class PostoCombustivelController {
 		def postoCombustivelInstanceList = PostoCombustivel.createCriteria().list(params, criteria)
 		[postoCombustivelInstanceList:postoCombustivelInstanceList , postoCombustivelInstanceTotal: PostoCombustivel.count()]
 	}
+
 
     def create = {
 		render(view:"form",model:[action:'novo'])    
@@ -215,7 +214,7 @@ class PostoCombustivelController {
 			 fim:r.fimIntervalo,
 			 diaEfetivacao:r.diaEfetivacao,
 			 meses:r.meses,
-			 acao:"<a href='#' onclick='openWindow(${r.id});'><img src='${resource(dir:'images',file:'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir:'images',file:'delete_mini.png')}' alt='Excluir'></a>"
+			 acao:"<a href='#' onclick='openModal(${r.id});'><img src='${resource(dir:'images',file:'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir:'images',file:'delete_mini.png')}' alt='Excluir'></a>"
 				 ]	
 			}
 			
@@ -252,7 +251,7 @@ class PostoCombustivelController {
 			def fields=postoCombustivelInstance.reembolsos.collect{r->
 				[diaSemana:r.diaSemana.nome,
 				 intervaloDias:r.intervaloDias,
-				 acao:"<a href='#' onclick='openWindow(${r.id});'><img src='${resource(dir:'images',file:'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir:'images',file:'delete_mini.png')}' alt='Excluir'></a>"
+				 acao:"<a href='#' onclick='openModal(${r.id});'><img src='${resource(dir:'images',file:'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir:'images',file:'delete_mini.png')}' alt='Excluir'></a>"
 					 ]
 			}
 			

@@ -143,6 +143,12 @@ class VeiculoController extends BaseOwnerController {
 		if(params.idVeic && params.idFunc){
 			def veiculoInstance=Veiculo.get(params.idVeic)
 			def funcionarioInstance=Funcionario.get(params.idFunc)
+
+			if(veiculoInstance.funcionarios.find{it.funcionario==funcionarioInstance}){
+				render "Funcionário já associado ao veículo!"
+				return
+			}
+
 			if(veiculoInstance && funcionarioInstance){
 				def veicFunc=new MaquinaFuncionario()
 				veicFunc.funcionario=funcionarioInstance

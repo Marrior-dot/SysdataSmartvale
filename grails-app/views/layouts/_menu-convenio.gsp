@@ -13,7 +13,7 @@
                 <li class="controller"><g:link class="submenu-logado" controller="equipamento" action="newList">Equipamentos</g:link></li>
             </sec:ifAnyGranted>
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                <li class="controller"><g:link class="submenu-logado"  controller="postoCombustivel" action="newList">Estabelecimentos</g:link></li>
+                <li class="controller"><g:link class="submenu-logado"  controller="postoCombustivel" action="list">Estabelecimentos</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="produto" action="list">Produtos</g:link></li>
                 <li class="controller"><g:link class="submenu-logado"  controller="arquivo" action="newList">Arquivos</g:link></li>
 %{--
