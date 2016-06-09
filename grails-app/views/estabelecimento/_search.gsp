@@ -1,4 +1,15 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
+
+
+<g:if test="${!action || action==Util.ACTION_VIEW}">
+    <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+        <div class="buttons">
+            <g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
+        </div>
+    </sec:ifAnyGranted>
+</g:if>
+
+
 <g:form controller="${controller}">
 
 	<br/>
@@ -6,36 +17,43 @@
 	<input type="hidden" name="empId" value="${empId}"/>
 
 
-	<gui:dataTable 
-				id="estSearchDT"
-				controller="estabelecimento" action="listAllJSON"
-				params="[empId:empId]"
-				columnDefs="[
-					[key:'id',hidden:true],
-					[key:'codEstab',sortable:true,resizeable:true,label:'Cod.Estab.'],
-					[key:'razao',sortable:true,resizeable:true,label:'Razão Social'],
-					[key:'nomeFantasia',sortable:true,resizeable:true,label:'Nome Fantasia'],
-					[key:'acao',sortable:false,resizeable:false,label:'Ação']
-				]"
-				sortedBy="codEstab"
-				rowsPerPage="10"
-				paginatorConfig="[
-					nextPageLinkLabel:'Prox',
-				previousPageLinkLabel:'Ant',
-				firstPageLinkLabel:'Prim',
-				lastPageLinkLabel:'Ult',
-					template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-					pageReportTemplate:'{totalRecords} total de registros'
-				]"
-				/>
+	<div class="list">
+
+        <table id="estTable" class="table table-striped table-hover table-bordered table-condensed">
+
+            <thead>
+                <th>Cod.Estab</th>
+                <th>Razão Social</th>
+                <th>Nome Fantasia</th>
+                <th></th>
+            </thead>
+
+        </table>
+
+    </div>
 
 
-	<g:if test="${!action || action==Util.ACTION_VIEW}">
-		<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-			<div class="buttons">
-				<g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
-			</div>
-		</sec:ifAnyGranted>
-	</g:if>
-	
 </g:form>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $("#estTable").DataTable({
+
+            "ajax":{
+                "url":"${createLink(controller:'estabelecimento',action:'listAllJSON')}",
+                "data":{"empId":$("#empId").val()},
+                "dataSrc":"results"
+            },
+            "columns":[
+                {"data":"razao"},
+                {"data":"nomeFantasia"},
+                {"data":"codEstab"},
+                {"data":"acao"}
+            ]
+        });
+    });
+
+</script>

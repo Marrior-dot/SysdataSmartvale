@@ -24,18 +24,19 @@
 	<tr>
 		<th>Cartão</th>
 		<th>Saldo Disponível</th>
-		<th>Senha Atual</th>
+%{--		<th>Senha Atual</th>  --}%
 	</tr>
 	</thead>
 	<tbody>
 	<tr>
 		<td>${funcionarioInstance?.cartaoAtual()?.numero} [${funcionarioInstance?.cartaoAtual()?.status?.nome}]</td>
 		<td>${Util.formatCurrency(funcionarioInstance?.conta?.saldo)}</td>
-		<td id="password">${funcionarioInstance?.cartaoAtual()?.senha}</td>
+%{--		<td id="password">  ${funcionarioInstance?.cartaoAtual()?.senha}</td> --}%
 	</tr>
 	</tbody>
 </table>
 
+%{--
 
 <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
 	<button class="btn btn-default" onclick="generateNewPassword();">
@@ -43,3 +44,5 @@
 		Gerar Nova Senha
 	</button>
 </sec:ifAnyGranted>
+
+--}%
