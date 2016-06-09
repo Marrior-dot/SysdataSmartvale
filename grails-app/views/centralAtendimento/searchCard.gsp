@@ -34,7 +34,7 @@
                 <g:form method="post" action="${act}">
                     <g:hiddenField name="goTo" value="${goTo}"/>
 
-                    <bs:formField id="cartao" name="cartao" label="Cartão" class="only-numbers" maxlength="19   "/>
+                    <bs:formField id="cartao" name="cartao" label="Cartão" class="only-numbers" maxlength="19"/>
 
                     <button class="btn btn-default" type="submit" name="${act}">
                         <i class="glyphicon glyphicon-search"></i>

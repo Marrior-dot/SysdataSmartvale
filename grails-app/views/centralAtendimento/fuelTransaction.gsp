@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<meta name="layout" content="main"/>
+		<meta name="layout" content="bootstrap-layout"/>
 		<jq:jquery>
 
 			$("input[name='matricula']").focusout(function(){
@@ -67,64 +67,88 @@
 		</jq:jquery>
 	</head>
 	<body>
-	    <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-        </div>
+		<br/>
+		<g:if test="${flash.message}">
+			<div class="message">${flash.message}</div>
+		</g:if>
+		<g:if test="${flash.errors}">
+			<div class="alert alert-danger" role="alert">
+				<g:each var="err" in="${flash.errors}">
+					<strong>${err}</strong>
+				</g:each>
+			</div>
+		</g:if>
+
 		<div class="body">
-            <g:if test="${flash.message}">
-            	<div class="message">${flash.message}</div>
-            </g:if>
-            
-            <g:if test="${flash.errors}">
-	            <div class="errors">
-	            	<ul>
-	            		<g:each var="err" in="${flash.errors}">
-		            		<li>${err}</li>
-	            		</g:each>
-	            	</ul>
-	            </div>
-	        </g:if>
-            
-            <g:form method="post" >
-            	<g:hiddenField name="nsuTerminal" value="${commandInstance?.nsuTerminal}"/>
-            	<g:hiddenField name="nsuHost" value="${commandInstance?.nsuHost}"/>
-            	<g:hiddenField name="dataHost" value="${commandInstance?.dataHost}"/>
-            	<g:hiddenField name="horaHost" value="${commandInstance?.horaHost}"/>
-            
-				<fieldset>
-					<label><span>Cartão</span><g:textField class="numeric" size="19" name="cartao" value="${commandInstance?.cartao}"></g:textField></label>
-					<div class="clear"></div>
-					<label><span>Vencimento</span><g:textField class="numeric" size="4" name="vencimento" value="${commandInstance?.vencimento}"></g:textField></label>
-					<div class="clear"></div>				
-					<label><span>Matrícula Motorista</span><g:textField class="numeric" size="12" name="matricula" value="${commandInstance?.matricula}"></g:textField> <span class="inline" id="nome"></span></label>
-					<div class="clear"></div>
-					<label><span>Placa Veículo</span><g:textField class="placa" name="placa" value="${commandInstance?.placa}"></g:textField> <span class="inline" id="veiculo"></span></label>
-					<div class="clear"></div>
-					<label><span>Quilometragem</span><g:textField class="numeric" size="9" name="quilometragem" value="${commandInstance?.quilometragem}"></g:textField></label>
-					<div class="clear"></div>
-					<label><span>Estabelecimento</span><g:textField class="numeric" size="15" name="estabelecimento" value="${commandInstance?.estabelecimento}"></g:textField> <span class="inline" id="razaoSocial"></span></label>
-					<div class="clear"></div>
-					<label><span>Combustível</span><g:select name="tipoCombustivel" from="${TipoCombustivel.values()}" optionValue="nome" value="commandInstance?.tipoCombustivel"></g:select></label>
-					<div class="clear"></div>
-					<label><span>Valor Transação</span><g:textField name="valor" value="${commandInstance?.valor}" class="currency"></g:textField></label>
-					<div class="clear"></div>
-					<label><span>Senha</span><g:passwordField name="senha" ></g:passwordField></label>
-					<div class="clear"></div>
-					
-					
-				</fieldset>
-	            <div class="buttons">
-	            	<g:if test="${commandInstance?.autorizada}">
-		                <span class="button"><g:actionSubmit action="confirmFuelTransaction" value="Confirmar" /></span>
-		                <span class="button"><g:actionSubmit action="confirmFuelTransaction" value="Desfazer" /></span>
-	            	</g:if>
-	            	<g:else>
-		                <span class="button"><g:actionSubmit action="doFuelTransaction" value="Solicitar" /></span>
-	            	</g:else>
-	            </div>
-            </g:form>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>Transação de Combustível</h4>
+				</div>
+				<div class="panel-body">
+					<div class="buttons">
+						<a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+					</div>
+					<br/>
+
+					<g:form method="post" >
+						<g:hiddenField name="nsuTerminal" value="${commandInstance?.nsuTerminal}"/>
+						<g:hiddenField name="nsuHost" value="${commandInstance?.nsuHost}"/>
+						<g:hiddenField name="dataHost" value="${commandInstance?.dataHost}"/>
+						<g:hiddenField name="horaHost" value="${commandInstance?.horaHost}"/>
+
+						<div class="row">
+							<div class="col-md-3">
+								<bs:formField id="cartao" name="cartao" value="${commandInstance?.cartao}" label="Cartão" class="col-md-3 only-numbers" maxlength="19"/>
+							</div>
+							<div class="col-md-3">
+								<bs:formField id="" name="" value=""/>
+							</div>
+							<div class="col-md-3">
+								<bs:formField id="" name="" value=""/>
+							</div>
+
+							<div class="col-md-3">
+								<bs:formField id="" name="" value=""/>
+							</div>
+						<div class="row"></div>
+						<div class="row"></div>
+						<div class="row"></div>
+
+
+						<fieldset>
+
+							<label><span>Vencimento</span><g:textField class="numeric" size="4" name="vencimento" value="${commandInstance?.vencimento}"></g:textField></label>
+							<div class="clear"></div>
+							<label><span>Matrícula Motorista</span><g:textField class="numeric" size="12" name="matricula" value="${commandInstance?.matricula}"></g:textField> <span class="inline" id="nome"></span></label>
+							<div class="clear"></div>
+							<label><span>Placa Veículo</span><g:textField class="placa" name="placa" value="${commandInstance?.placa}"></g:textField> <span class="inline" id="veiculo"></span></label>
+							<div class="clear"></div>
+							<label><span>Quilometragem</span><g:textField class="numeric" size="9" name="quilometragem" value="${commandInstance?.quilometragem}"></g:textField></label>
+							<div class="clear"></div>
+							<label><span>Estabelecimento</span><g:textField class="numeric" size="15" name="estabelecimento" value="${commandInstance?.estabelecimento}"></g:textField> <span class="inline" id="razaoSocial"></span></label>
+							<div class="clear"></div>
+							<label><span>Combustível</span><g:select name="tipoCombustivel" from="${TipoCombustivel.values()}" optionValue="nome" value="commandInstance?.tipoCombustivel"></g:select></label>
+							<div class="clear"></div>
+							<label><span>Valor Transação</span><g:textField name="valor" value="${commandInstance?.valor}" class="currency"></g:textField></label>
+							<div class="clear"></div>
+							<label><span>Senha</span><g:passwordField name="senha" ></g:passwordField></label>
+							<div class="clear"></div>
+
+
+						</fieldset>
+
+						<div class="buttons">
+							<g:if test="${commandInstance?.autorizada}">
+								<g:actionSubmit class="btn btn-default" action="confirmFuelTransaction" value="Confirmar" />
+								<g:actionSubmit class="btn btn-default" action="confirmFuelTransaction" value="Desfazer" />
+							</g:if>
+							<g:else>
+								<g:actionSubmit class="btn btn-default" action="doFuelTransaction" value="Solicitar" />
+							</g:else>
+						</div>
+					</g:form>
+				</div>
+			</div>
 		</div>
 	</body>
-	
-	
 </html>
