@@ -18,13 +18,15 @@
                     <span class="glyphicon glyphicon-home"></span>
                     <g:message code="default.home.label"/>
                 </a>
-                <g:link class="btn btn-default" action="list">
+                <g:link class="btn btn-default" action="newList">
                     <span class="glyphicon glyphicon-list"></span>
-                    <g:message code="default.list.label" args="[entityName]" />
+                    Lista de Equipamento
+                    %{--<g:message code="default.list.label" args="[entityName]" />--}%
                 </g:link>
                 <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]">
                     <span class="glyphicon glyphicon-plus"></span>
-                    <g:message code="default.new.label" args="[entityName]" />
+                    Criar Equipamento
+                    %{--<g:message code="default.new.label" args="[entityName]" />--}%
                 </g:link>
             </div>
             <br><br>
