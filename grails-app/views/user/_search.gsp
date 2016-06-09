@@ -1,9 +1,5 @@
 <g:form controller="${controller}">
-	<br>
-	 <div class="buttons">
-	 <g:actionSubmit class="btn btn-default" action="create" 	value="Novo Usuário"/>
-	 </div>
-	<br><br>
+	<br/>
 	<div class="panel panel-default">
 		<div class="panel-heading">Pesquisa</div>
 		<div class="panel-body">
