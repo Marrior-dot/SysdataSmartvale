@@ -31,10 +31,12 @@
 						<span class="glyphicon glyphicon-dashboard"></span>
 						Agendar Todas
 					</g:link>
+%{--
+
 					<g:link class="btn btn-default" action="simulador">
 						<span class="glyphicon glyphicon-facetime-video"></span>
 						Simulação de Transações
-					</g:link>
+					</g:link>  --}%
 				</sec:ifAnyGranted>
 				<br><br>
 			</div>
