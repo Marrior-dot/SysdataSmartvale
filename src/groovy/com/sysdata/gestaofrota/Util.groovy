@@ -138,7 +138,13 @@ class Util {
 			arrend
 		}
 	}
-	
+
+	static def maskCard(num){
+        if(num){
+            if(num.length()==16) return num[0..3]+"****"+num[13..15]
+            else if(num.length()==19) return num[0..3]+"****"+num[15..18]
+        }
+    }
 
 	
 }
