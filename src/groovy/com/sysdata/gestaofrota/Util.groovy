@@ -138,7 +138,9 @@ class Util {
 			arrend
 		}
 	}
-	
 
-	
+	static BigDecimal toBigDecial(Double valor, int decimalPlace = 2){
+		BigDecimal bd = new BigDecimal(Double.toString(valor));
+		bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+	}
 }

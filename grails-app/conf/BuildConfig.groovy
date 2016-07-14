@@ -39,5 +39,7 @@ grails.project.dependency.resolution = {
 		compile ':quartz:1.0.2'
 
         compile ":console:1.5.5"
+
+        compile "org.grails.plugins:remote-pagination:0.4.8"
 	}
 }
