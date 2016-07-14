@@ -3,9 +3,12 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
+import java.text.SimpleDateFormat
+
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PedidoCargaController {
+    def exportService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -192,9 +195,9 @@ class PedidoCargaController {
 
             pedidoCarga.itens.each { itemPedido ->
                 itemPedido.valor = params?.double("valorCarga[${itemPedido.participante.id}]") ?: itemPedido.valor
-                if(funcionariosAtivosIds.contains(itemPedido.participante.id))
+                if (funcionariosAtivosIds.contains(itemPedido.participante.id))
                     itemPedido.ativo = true
-                else if(funcionariosInativosIds.contains(itemPedido.participante.id))
+                else if (funcionariosInativosIds.contains(itemPedido.participante.id))
                     itemPedido.ativo = false
 
                 itemPedido.save(flush: true)
@@ -318,7 +321,50 @@ class PedidoCargaController {
     }
 
     def gerarPlanilha = {
-        flash.message = "TODO: gerar planilha de verdade"//"Planilha gerada com sucesso!"
-        redirect(action: 'show', id: params.id)
+        PedidoCarga pedidoCarga = PedidoCarga.get(params.long('id'))
+        if (!pedidoCarga) {
+            flash.errors = "Pedido não encontrado"
+            redirect(action: 'list')
+            return;
+        }
+
+        String format = 'excel'
+        String extention = 'xls'
+
+        response.contentType = grailsApplication.config.grails.mime.types[format]
+        response.setHeader("Content-disposition", "attachment; filename=PedidoCarga#${pedidoCarga.id}.${extention}")
+
+        List fields = [
+                "ativo",
+                "participante.nome",
+                "valor",
+                "participante.cpf",
+                "participante.matricula",
+                "participante.rg",
+                "participante.dataNascimento",
+                "participante.categoria.nome"
+        ]
+        Map labels = [
+                "ativo"                      : "Ativo",
+                "participante.nome"          : "Nome",
+                "valor"                      : "Valor",
+                "participante.cpf"           : "CPF",
+                "participante.matricula"     : "Matrícula",
+                "participante.rg"            : "RG",
+                "participante.dataNascimento": "Dt. Nascimento",
+                "participante.categoria.nome": "Categoria"
+        ]
+
+        Map formatters = [
+                'ativo': { domain, value -> return value ? "Ativado" : "Desativado" },
+                'valor': { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
+                'participante.dataNascimento': { domain, value -> return value.format("dd/MM/yyyy")}
+        ]
+
+        Map parameters = ["column.widths": [0.1, 0.5, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]]
+
+
+        List<ItemPedido> itemPedidoList = pedidoCarga.itens.collect { it as ItemPedido }?.sort { it.participante.nome }
+        exportService.export(format, response.outputStream, itemPedidoList, fields, labels, formatters, parameters)
     }
 }

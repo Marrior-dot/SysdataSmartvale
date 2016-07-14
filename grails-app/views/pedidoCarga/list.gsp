@@ -79,6 +79,7 @@
                         <div>
                             <g:paginate class="pagination" total="${pedidoCargaInstanceCount ?: 0}"/>
                         </div>
+
                     </g:if>
                     <g:else>
                         <div class="well text-center">SEM DADOS</div>

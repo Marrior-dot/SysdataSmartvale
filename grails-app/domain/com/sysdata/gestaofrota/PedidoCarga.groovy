@@ -50,6 +50,14 @@ class PedidoCarga {
         itensInstance[0..max].collect { it.participante as Funcionario }
     }
 
+    public List<Funcionario> funcionarioList() {
+        List<ItemPedido> itensInstance = itens as List<ItemPedido>
+        int max = itensInstance?.size() - 1
+        itensInstance.sort { it.participante.nome }
+
+        itensInstance[0..max].collect { it.participante as Funcionario }
+    }
+
     public def getCategoriasFuncionario(){
         unidade?.rh?.categoriasFuncionario
     }
