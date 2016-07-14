@@ -139,6 +139,13 @@ class Util {
 		}
 	}
 
+	static def maskCard(num){
+        if(num){
+            if(num.length()==16) return num[0..3]+"****"+num[13..15]
+            else if(num.length()==19) return num[0..3]+"****"+num[15..18]
+        }
+    }
+
 	static BigDecimal toBigDecial(Double valor, int decimalPlace = 2){
 		BigDecimal bd = new BigDecimal(Double.toString(valor));
 		bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);

@@ -31,4 +31,9 @@ class Cartao {
 		
 		return true
 	}
+
+	String getNumero(){
+        Util.maskCard(this.numero)
+    }
+
 }

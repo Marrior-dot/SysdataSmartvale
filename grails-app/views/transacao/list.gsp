@@ -1,4 +1,4 @@
-
+<%@ page import="com.sysdata.gestaofrota.Util" %>
 <%@ page import="com.sysdata.gestaofrota.Transacao" %>
 <%@ page import="com.sysdata.gestaofrota.StatusTransacao" %>
 <%@ page import="com.sysdata.gestaofrota.TipoTransacao" %>
@@ -120,7 +120,7 @@
 									<td>${transacaoInstance.nsu}</td>
 									<td><g:formatDate date="${transacaoInstance.dateCreated}" format="dd/MM/yyyy HH:mm:ss" /></td>
 									<td>${transacaoInstance.codigoEstabelecimento}</td>
-									<td>${transacaoInstance.numeroCartao}</td>
+									<td>${Util.maskCard(transacaoInstance.numeroCartao)}</td>
 									<td>${transacaoInstance.participante?.nome}</td>
 									<td>${transacaoInstance.tipo.nome}</td>
 									<td>${transacaoInstance.status.nome}</td>
