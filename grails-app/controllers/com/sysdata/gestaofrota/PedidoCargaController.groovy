@@ -76,7 +76,6 @@ class PedidoCargaController {
     }
 
     def save = {
-
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (!unidadeInstance) {
             flash.errors = "Unidade não selecionada"
@@ -152,7 +151,7 @@ class PedidoCargaController {
     }
 
     def update = {
-        println("params: ${params}")
+//        println("params: ${params}")
 
         def pedidoCarga = PedidoCarga.get(params.long('id'))
         if (!pedidoCarga) {
@@ -259,8 +258,8 @@ class PedidoCargaController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.unidade) {
-                eq('unidade', pedidoCargaInstance.unidade)
+            if (pedidoCargaInstance?.itens) {
+                'in'('id', pedidoCargaInstance.itens*.participante.id)
             }
 
             order('nome')
@@ -283,8 +282,8 @@ class PedidoCargaController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.unidade) {
-                eq('unidade', pedidoCargaInstance.unidade)
+            if (pedidoCargaInstance?.itens) {
+                'in'('id', pedidoCargaInstance.itens*.participante.id)
             }
         }
 
@@ -305,8 +304,8 @@ class PedidoCargaController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.unidade) {
-                eq('unidade', pedidoCargaInstance.unidade)
+            if (pedidoCargaInstance?.itens) {
+                'in'('id', pedidoCargaInstance.itens*.participante.id)
             }
 
             order('nome')
