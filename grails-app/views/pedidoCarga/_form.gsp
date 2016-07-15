@@ -8,7 +8,7 @@
     var valorCategoria;
 
     $(document).ready(function () {
-        valorCategoria = $("input#valorCarga").val();
+        valorCategoria = $("input#valorCargaCategoria").val();
 
         var defaultForm = $("form#defaultForm");
         //desabilita o formulario de ser submetido caso o botão 'enter' seja pressionado
@@ -111,8 +111,8 @@
                     var ativo = $("input[type='checkbox'][name='selectAll']").is(":checked");
                     $('div#funcionario-list .checkbox').prop('checked', ativo);
 
+                    valorCategoria = data.valorCategoria;
                     data.idsFuncionarios.forEach(function (funcionarioId) {
-                        valorCategoria = data.valorCategoria;
                         setItemPedido(funcionarioId);
                     });
                 }
@@ -181,7 +181,7 @@
 
 <g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
 <g:hiddenField name="unidade_id" value="${pedidoCargaInstance?.unidade?.id}"/>
-<g:hiddenField name="valorCarga" value="${pedidoCargaInstance?.categoriasFuncionario?.valorCarga}"/>
+<g:hiddenField name="valorCargaCategoria" value="${pedidoCargaInstance?.categoriasFuncionario?.valorCarga}"/>
 <g:hiddenField name="version" value="${pedidoCargaInstance?.version}"/>
 <g:hiddenField name="action" value="${action}"/>
 
