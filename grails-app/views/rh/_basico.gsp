@@ -15,13 +15,6 @@
 
 		<div class="panel-body">
 
-			<div style="padding:0.5em;font-size:16px;">
-				<g:if test="${action==Util.ACTION_VIEW}">
-					<span>Código: ${rhInstance?.codigo}</span>
-				</g:if>
-			</div>
-			<br><br>
-
 			<div class="row">
 
 				<div class="col-xs-4">
