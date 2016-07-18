@@ -11,5 +11,6 @@ class Lancamento {
 	static belongsTo=[transacao:Transacao,conta:Conta]
 	
     static constraints = {
+        dataEfetivacao nullable: true
     }
 }
