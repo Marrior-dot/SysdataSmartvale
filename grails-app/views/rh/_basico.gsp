@@ -58,6 +58,37 @@
 
 	<g:render template="/telefone/form" model="[telefoneInstance:rhInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
 
+
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			Parâmetros Autorizador
+		</div>
+
+		<div class="panel-body">
+
+			%{--<div style="padding:0.0em;font-size:16px;">
+				<g:if test="${action==Util.ACTION_VIEW}">
+					<span>Código: ${rhInstance?.codigo}</span>
+				</g:if>
+			</div>--}%
+			<br>
+
+			<div class="row">
+				<div class="col-xs-4">
+					<bs:formField  class="uppercase" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
+				</div>
+
+				<div class="col-xs-4">
+					<bs:formField class="uppercase" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">
 			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">

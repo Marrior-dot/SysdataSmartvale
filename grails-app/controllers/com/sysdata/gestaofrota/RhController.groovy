@@ -39,7 +39,6 @@ class RhController extends BaseOwnerController {
 	@Secured(['ROLE_PROC','ROLE_ADMIN'])
     def save = {
         def rhInstance=new Rh(params)
-		
 		rhInstance.endereco=params['endereco']
 		rhInstance.telefone=params['telefone']
 		
@@ -55,6 +54,7 @@ class RhController extends BaseOwnerController {
 	@Secured(['IS_AUTHENTICATED_FULLY'])
     def show = {
         def rhInstance = Rh.get(params.id)
+
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
@@ -92,7 +92,7 @@ class RhController extends BaseOwnerController {
             }
 			
 			
-			
+
             rhInstance.properties = params
 			rhInstance.endereco=params['endereco']
 			rhInstance.telefone=params['telefone']
