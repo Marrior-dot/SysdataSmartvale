@@ -19,16 +19,13 @@ class RhController extends BaseOwnerController {
     }
 
 	@Secured(['IS_AUTHENTICATED_FULLY'])
-    def list = {   }
-
-	@Secured(['IS_AUTHENTICATED_FULLY'])
-	def newList = {
+    def list = {
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def criteria = {
 			order('id', 'desc')
 		}
 		def rhInstanceList = Rh.createCriteria().list(params, criteria)
-		/*[rhInstanceList:rhInstanceList , rhInstanceTotal: Rh.count()]*/
+
 	}
 
 	@Secured(['ROLE_PROC','ROLE_ADMIN'])
@@ -39,7 +36,6 @@ class RhController extends BaseOwnerController {
 	@Secured(['ROLE_PROC','ROLE_ADMIN'])
     def save = {
         def rhInstance=new Rh(params)
-		
 		rhInstance.endereco=params['endereco']
 		rhInstance.telefone=params['telefone']
 		
@@ -55,6 +51,7 @@ class RhController extends BaseOwnerController {
 	@Secured(['IS_AUTHENTICATED_FULLY'])
     def show = {
         def rhInstance = Rh.get(params.id)
+
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
@@ -92,7 +89,7 @@ class RhController extends BaseOwnerController {
             }
 			
 			
-			
+
             rhInstance.properties = params
 			rhInstance.endereco=params['endereco']
 			rhInstance.telefone=params['telefone']
@@ -361,6 +358,44 @@ class RhController extends BaseOwnerController {
 			}
 		}
 	}
-	
+
+	def listMarkedEstab(){
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        def offset=params.offset?:10
+
+        def rh=Rh.get(params.rhId as int)
+
+        def postoCombustivelInstanceList=
+                PostoCombustivel.withCriteria {
+                    eq('status', Status.ATIVO)
+                    def userInstance=getAuthenticatedUser()
+                    if(userInstance.owner instanceof PostoCombustivel)
+                        eq('id', userInstance.owner.id)
+                    maxResults(params.max)
+                    firstResult(offset)
+                }
+
+        def postoCombustivelInstanceTotal=
+                PostoCombustivel.withCriteria {
+                    eq('status', Status.ATIVO)
+                    projections{ rowCount() }
+                }
+
+
+
+        def listEmp=[]
+
+        postoCombustivelInstanceList.each{p->
+            def l=[cnpj:p.cnpj,razao:p.nome,nomeFantasia:p.nomeFantasia]
+            if(rh.empresas.find{it==p}) l.sel=true
+            else l['sel']=false
+            listEmp<<l
+        }
+
+        def data=[totalRecords:postoCombustivelInstanceTotal,results:listEmp]
+        render data as JSON
+    }
+
+
 	
 }

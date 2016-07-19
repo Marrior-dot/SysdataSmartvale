@@ -3,7 +3,11 @@ package com.sysdata.gestaofrota
 enum TipoLancamento {
 	CARGA("Carga"),
 	COMPRA("Compra"),
-	REEMBOLSO("Reembolso")
+	REEMBOLSO("Reembolso"),
+	TAXA_UTILIZACAO("Taxa de Utilização"),
+	MENSALIDADE("Mensalidade de Cartão"),
+	EMISSAO_CARTAO("Emissão de Cartão"),
+	REEMISSAO_CARTAO("Reemissão de Cartão")
 	
 	String nome
 	
