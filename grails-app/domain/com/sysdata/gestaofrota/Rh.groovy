@@ -7,7 +7,10 @@ class Rh extends Empresa {
 	Integer validadeCarga=0
 	Integer maximoTrnPorDia=0
 	Integer diasInatividade=0
-
+	BigDecimal taxaUtilizacao=0.00
+	BigDecimal taxaMensalidade=0.00
+	BigDecimal taxaEmissaoCartao=0.00
+	BigDecimal taxaReemissaoCartao=0.00
 	
 	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	
@@ -17,13 +20,13 @@ class Rh extends Empresa {
 		maximoTrnPorDia nullable: true, blank: true
 		diasInatividade nullable: true, blank: true
     }
-	
-	String toString(){
-		def flat=""
-		this.properties.each{
-			flat+="${it}\n"
-		}
-		flat
-	}
-	
+
+    String toString() {
+        def flat = ""
+        this.properties.each {
+            flat += "${it}\n"
+        }
+        flat
+    }
+
 }

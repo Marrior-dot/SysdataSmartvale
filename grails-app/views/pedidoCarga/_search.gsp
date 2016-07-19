@@ -1,8 +1,50 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Pesquisar</div>
+
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <g:form action="list" role="search">
+                <div class="row">
+                    <div class="col-xs-3 input-group-sm">
+                        <label class="control-label" for="searchDataPedido">Data Pedido</label>
+                        <input name="searchDataPedido" id="searchDataPedido" class="datepicker form-control" value="${searchDataPedido}"/>
+                    </div>
+
+                    <div class="col-xs-3 input-group-sm">
+                        <label class="control-label" for="searchDataCarga">Data Carga</label>
+                        <input id="searchDataCarga" name="searchDataCarga" value="${searchDataCarga}" class="datepicker form-control"/>
+                    </div>
+
+                    <div class="col-xs-3 input-group-sm">
+                        <label class="control-label" for="searchUnidade">Unidade</label>
+                        <g:textField class="form-control" id="searchUnidade" name="searchUnidade" value="${searchUnidade}"/>
+                    </div>
+
+                    <div class="col-xs-3 input-group-sm">
+                        <label class="control-label" for="searchStatus">Status</label>
+                        <g:select name="searchStatus" value="${searchStatus}"
+                                  from="${statusPedidoCarga}" class="form-control"
+                                  noSelection="['': 'Todos']"
+                                  optionValue="nome"/>
+                    </div>
+                </div>
+
+                <div style="float: right; margin-top: 2em">
+                    <g:actionSubmit name="pesquisar" action="list" class="btn btn-default" value="Pesquisar"/>
+                </div>
+            </g:form>
+        </div>
+    </div>
+</div>
+
+
+%{--
+
 <style>
 
     table#pedCrgTable{
         font-size:10px;
-%{--        table-layout:fixed; --}%
+        table-layout:fixed;
         white-space:nowrap;
         overflow:hidden;
     }
@@ -95,7 +137,7 @@
         });
     });
 </script>
-
+--}%
 
 
 

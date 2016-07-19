@@ -34,7 +34,7 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/dataTables.bootstrap.min.css')}"/>
     <link rel="stylesheet" href="${resource(dir:'css',file:'bootstrap/select.bootstrap.min.css')}"/>
-
+    <link rel="stylesheet" href="${resource(dir:'css',file:'table-javascript-style.css')}" />
 
     <!-- Frota -->
     <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />

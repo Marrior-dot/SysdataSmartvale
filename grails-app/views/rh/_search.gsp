@@ -35,22 +35,22 @@
 			/>
 
 <script type="text/javascript">
-	
+
 	function filtrarRhs(filtro){
-		
+
 		var params="opcao="+$(':checked').val()+"&filtro="+filtro;
 
-		filtrarEntidade(GRAILSUI.rhSearchDT,params); 
-	
-	
+		filtrarEntidade(GRAILSUI.rhSearchDT,params);
+
+
 	}
-	
+
 	//Filtra enquanto digita
 	$('input[name="filtroRh"]').keyup(function(){
 		filtrarRhs($(this).val());
 	});
 
-</script> 			
-	
+</script>
+
 
 

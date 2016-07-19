@@ -16,7 +16,7 @@ environments {
     development {
 
         def urlDev=System.env["FROTA_DEV_DB"]
-        if(!urlDev) urlDev="jdbc:postgresql://148.5.7.215/amazonfrota_development"
+        if(!urlDev) urlDev="jdbc:postgresql://localhost/gestaofrota_development"
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
 			url = urlDev
@@ -31,9 +31,11 @@ environments {
         }
     }
     production {
+
+        def urlProd=System.env["FROTA_PROD_DB"]
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = "jdbc:postgresql://148.5.7.211/amazonfrota_production"
+			url = urlProd
 			password="jmml72"
         }
     }
