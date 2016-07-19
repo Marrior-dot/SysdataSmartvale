@@ -5,9 +5,6 @@ import com.sysdata.gestaofrota.Role
 import com.sysdata.gestaofrota.User
 import com.sysdata.gestaofrota.UserRole
 
-
-
-
 class BootStrap {
 
     def init = { servletContext ->

@@ -85,9 +85,7 @@
         </ul>
         <!-- /.nav-second-level -->
     </li>
-</sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_PROC">
     <li>
         <a href="#" class="menu-logado"><i class="fa fa-wrench fa-fw"></i> Sistema<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
@@ -97,9 +95,7 @@
         </ul>
         <!-- /.nav-second-level -->
     </li>
-</sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_PROC">
     <li>
         <a href="#" class="menu-logado"><i class="fa fa-shield fa-fw"></i> Segurança<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
@@ -116,25 +112,25 @@
     </li>
 </sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_CA">
+<sec:ifAnyGranted roles="ROLE_HELP">
     <li class="controller"><g:link class="menu-logado" controller="consulta" action="saldoExtrato">Consultar Saldo e Extrato</g:link></li>
     <li class="controller"><g:link class="menu-logado" controller="solicitacaoCartao" action="transferenciaCarga">Transferência de Saldo</g:link></li>
     <li class="controller"><g:link class="submenu-logado" controller="cartao" action="desbloqueio">Desbloquear Cartão</g:link></li>
     <li class="controller"><g:link class="submenu-logado" controller="cartao" action="cancelamento">Cancelar Cartão</g:link></li>
 </sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_LOJISTA">
+<sec:ifAnyGranted roles="ROLE_ESTAB">
     <li class="controller"><g:link class="menu-logado" controller="transacao" action="index">Transações</g:link></li>
     <li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>
 </sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_UNIDADE">
-    <li class="controller"><g:link class="submenu-logado" controller="contaPortador" action="index">Portadores</g:link></li>
-    <li class="controller"><g:link class="submenu-logado" controller="solicitacaoCarga" action="create">Solicitação de Carga</g:link></li>
+<sec:ifAnyGranted roles="ROLE_RH">
+    <li class="controller"><g:link class="submenu-logado" controller="funcionario" action="index">Portadores</g:link></li>
+    <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="index">Solicitação de Carga</g:link></li>
 </sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_EMPRESA">
-    <li class="controller"><g:link class="submenu-logado" controller="contaPortador" action="index">Portadores</g:link></li>
-    <li class="controller"><g:link class="submenu-logado" controller="solicitacaoCarga" action="create">Solicitação de Carga</g:link></li>
-    <li class="controller"><g:link class="submenu-logado" controller="unidade" action="index">Unidades</g:link></li>
-</sec:ifAnyGranted>
+%{--<sec:ifAnyGranted roles="ROLE_ESTAB">--}%
+    %{--<li class="controller"><g:link class="submenu-logado" controller="contaPortador" action="index">Portadores</g:link></li>--}%
+    %{--<li class="controller"><g:link class="submenu-logado" controller="solicitacaoCarga" action="create">Solicitação de Carga</g:link></li>--}%
+    %{--<li class="controller"><g:link class="submenu-logado" controller="unidade" action="index">Unidades</g:link></li>--}%
+%{--</sec:ifAnyGranted>--}%
