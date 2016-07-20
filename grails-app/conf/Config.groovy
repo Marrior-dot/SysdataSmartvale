@@ -41,7 +41,6 @@ grails.views.gsp.sitemesh.preprocess = true
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
-
 // Set to false to use the new Grails 1.2 JSONBuilder in the render method
 grails.json.legacy.builder = false
 // enabled native2ascii conversion of i18n properties files
@@ -153,45 +152,48 @@ grails.plugin.springsecurity.ui.forgotPassword.emailBody = 'Prezado (a) <br> Cli
 grails.plugin.springsecurity.ui.forgotPassword.emailFrom = 'no-reply@sysdata.com.br'
 grails.plugin.springsecurity.ui.forgotPassword.emailSubject = 'Recuperação de Senha'
 
+grails.plugins.springsecurity.useSwitchUserFilter = true
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.sysdata.gestaofrota.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.sysdata.gestaofrota.UserRole'
 grails.plugins.springsecurity.authority.className = 'com.sysdata.gestaofrota.Role'
+
 
 grails.plugins.springsecurity.rejectIfNoRule = true
 
 grails.plugins.springsecurity.securityConfigType = "Annotation"
 
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
-        '/report/**'                 : ['ROLE_PROC'],
-        '/parameterReport/**'        : ['ROLE_PROC'],
-        '/fieldReport/**'            : ['ROLE_PROC'],
-        '/auditLogEvent/**'          : ['ROLE_PROC'],
-        '/reportViewer/**'           : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_LOG', 'ROLE_HELP'],
-        '/estado/**'                 : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/cidade/**'                 : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/marcaVeiculo/**'           : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/banco/**'                  : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/postoCombustivel/**'       : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG'],
-        '/estabelecimento/**'        : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG'],
-        '/arquivo/**'                : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/motivoNegacao/**'          : ['ROLE_PROC'],
-        '/parametroSistema/**'       : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/tipoEquipamento/**'        : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/produto/**'                : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/role/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/transacao/listPendentes'   : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/console/**'                : ['ROLE_PROC'],
-        '/home/dataGraficoResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/home/dataGraficoMesResgate': ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/report/**'                    : ['ROLE_PROC'],
+        '/parameterReport/**'           : ['ROLE_PROC'],
+        '/fieldReport/**'               : ['ROLE_PROC'],
+        '/auditLogEvent/**'             : ['ROLE_PROC'],
+        '/j_spring_security_switch_user': ['ROLE_ADMIN', 'isFullyAuthenticated()'],
+        '/reportViewer/**'              : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_LOG', 'ROLE_HELP'],
+        '/estado/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/cidade/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/marcaVeiculo/**'              : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/banco/**'                     : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/postoCombustivel/**'          : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG'],
+        '/estabelecimento/**'           : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG'],
+        '/arquivo/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/motivoNegacao/**'             : ['ROLE_PROC'],
+        '/parametroSistema/**'          : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/tipoEquipamento/**'           : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/produto/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/role/**'                      : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/transacao/listPendentes'      : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/console/**'                   : ['ROLE_PROC'],
+        '/home/dataGraficoResgate'      : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/home/dataGraficoMesResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
 
-        '/plugins/**'                : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/js/**'                     : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/css/**'                    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/images/**'                 : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/login/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/logout/**'                 : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/register/**'               : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/*'                         : ['IS_AUTHENTICATED_FULLY']
+        '/plugins/**'                   : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/js/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/css/**'                       : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/images/**'                    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/login/**'                     : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/logout/**'                    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/register/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/*'                            : ['IS_AUTHENTICATED_FULLY']
 ]
 
 

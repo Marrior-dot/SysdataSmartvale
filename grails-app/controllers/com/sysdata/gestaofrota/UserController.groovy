@@ -68,6 +68,7 @@ class UserController extends BaseOwnerController {
                     id    : u.id,
                     login : u.username,
                     name  : u.name,
+                    roles : u.getAuthorities()*.authority,
                     owner : u.owner.nome,
                     action: "<a class='show' href=${createLink(action: 'show')}/${u.id}></a>"
             ]
@@ -124,10 +125,10 @@ class UserController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
             redirect(action: "list")
             return;
-        } else {
-            def userRole = UserRole.findByUser(userInstance)
-            render(view: 'form', model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_VIEW, ownerList: listOwners()])
         }
+
+        def userRole = UserRole.findByUser(userInstance)
+        render(view: 'form', model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_VIEW, ownerList: listOwners()])
     }
 
     def edit = {
