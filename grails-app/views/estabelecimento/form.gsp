@@ -11,7 +11,7 @@
     <br><br>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
+            <h4>${estabelecimentoInstance.class} - <g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
         </div>
         <div class="panel-body">
             <div class="nav">

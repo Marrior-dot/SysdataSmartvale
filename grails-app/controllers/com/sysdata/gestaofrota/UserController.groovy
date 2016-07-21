@@ -68,6 +68,7 @@ class UserController extends BaseOwnerController {
                     id    : u.id,
                     login : u.username,
                     name  : u.name,
+                    roles : u.getAuthorities()*.authority,
                     owner : u.owner.nome,
                     action: "<a class='show' href=${createLink(action: 'show')}/${u.id}></a>"
             ]
@@ -119,15 +120,16 @@ class UserController extends BaseOwnerController {
     }
 
     def show = {
-        def userInstance = User.get(params.id)
+        User userInstance = User.get(params.long('id'))
         if (!userInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
             redirect(action: "list")
             return;
-        } else {
-            def userRole = UserRole.findByUser(userInstance)
-            render(view: 'form', model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_VIEW, ownerList: listOwners()])
         }
+
+
+        def userRole = UserRole.findByUser(userInstance)
+        render(view: 'form', model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_VIEW, ownerList: listOwners()])
     }
 
     def edit = {
@@ -214,6 +216,34 @@ class UserController extends BaseOwnerController {
             flash.message = "Senha atual informada não corresponde a do referido usuário"
             render(view: 'editPassword', model: [userInstance: userInstance])
         }
+    }
+
+    def meusDados = {
+        User userInstance = User.get(params.long('id'))
+        if (!userInstance?.owner) {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participante.label', default: 'Participante'), params.id])}"
+            redirect(action: "list")
+            return;
+        }
+
+        if(userInstance.owner.instanceOf(Rh)){
+            redirect(controller: 'rh', action: 'show', id: userInstance.owner.id)
+            return ;
+        }
+        else if(userInstance.owner.instanceOf(PostoCombustivel)){
+            redirect(controller: 'postoCombustivel', action: 'show', id: userInstance.owner.id)
+            return ;
+        }
+        else if(userInstance.owner.instanceOf(Estabelecimento)){
+            redirect(controller: 'estabelecimento', action: 'show', id: userInstance.owner.id)
+            return ;
+        }
+        else if(userInstance.owner.instanceOf(Funcionario)){
+            redirect(controller: 'funcionario', action: 'show', id: userInstance.owner.id)
+            return ;
+        }
+
+        redirect(action: 'show', id: userInstance.id)
     }
 
     def enableUser() {

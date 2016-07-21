@@ -10,10 +10,6 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />
 
         <gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
-        <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'maskFields.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'uppercase.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>
 
         <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
@@ -28,7 +24,9 @@
         <div class="panel-body">
             <div class="buttons">
                 <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-                <g:actionSubmit class="btn btn-default" action="create" 	value="Novo Usuário"/>
+                <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
+                    <g:actionSubmit class="btn btn-default" action="create" value="Novo Usuário"/>
+                </sec:ifAnyGranted>
             </div>
             <div class="body">
                 <g:if test="${flash.message}">

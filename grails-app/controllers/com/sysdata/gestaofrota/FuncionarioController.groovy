@@ -20,9 +20,15 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def list = {
+        Unidade unidade = getUnidade()
+
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id')
+
+            if(unidade){
+                eq('unidade', unidade)
+            }
         }
 
         def funcionarioInstanceList = Funcionario.createCriteria().list(params, criteria)
@@ -78,7 +84,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def show = {
-        def funcionarioInstance = Funcionario.get(params.id)
+        def funcionarioInstance = Funcionario.get(params.long('id'))
         if (!funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")

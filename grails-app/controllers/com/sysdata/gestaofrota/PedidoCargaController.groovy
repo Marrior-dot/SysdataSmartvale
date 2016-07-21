@@ -3,22 +3,37 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
-import java.text.SimpleDateFormat
-
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
-class PedidoCargaController {
+class PedidoCargaController extends BaseOwnerController {
     def exportService
+    def authenticateService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
-    def springSecurityService
 
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
+        Unidade unidadeInstance = getUnidade()
+
+        def authorities = getCurrentUser().authorities*.authority
+
+        if(!unidadeInstance && !(authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_PROC"))){
+
+            [pedidoCargaInstanceList : null,
+             pedidoCargaInstanceCount: 0,
+             unidadeInstance         : unidadeInstance,
+             statusPedidoCarga       : StatusPedidoCarga.asList(),
+             searchDataPedido        : params?.searchDataPedido,
+             searchDataCarga         : params?.searchDataCarga,
+             searchUnidade           : params?.searchUnidade,
+             searchStatus            : params?.searchStatus]
+            return ;
+        }
+
+
         def criteria = {
             if (params?.searchDataCarga) {
                 Date beginDay = Date.parse('dd/MM/yyyy', params.searchDataCarga.toString()).clearTime()
@@ -32,9 +47,13 @@ class PedidoCargaController {
                 lt('dateCreated', beginDay + 1)
             }
 
-            if (params?.searchUnidade) {
-                unidade {
+            unidade {
+                if (params?.searchUnidade) {
                     ilike('nome', "%${params.searchUnidade}%")
+                }
+
+                if (unidadeInstance) {
+                    idEq(unidadeInstance.id)
                 }
             }
 
@@ -51,7 +70,7 @@ class PedidoCargaController {
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
-         unidadeInstance         : Unidade.get(params.long('unidade_id')),
+         unidadeInstance         : unidadeInstance,
          statusPedidoCarga       : StatusPedidoCarga.asList(),
          searchDataPedido        : params?.searchDataPedido,
          searchDataCarga         : params?.searchDataCarga,
@@ -355,9 +374,9 @@ class PedidoCargaController {
         ]
 
         Map formatters = [
-                'ativo': { domain, value -> return value ? "Ativado" : "Desativado" },
-                'valor': { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
-                'participante.dataNascimento': { domain, value -> return value.format("dd/MM/yyyy")}
+                'ativo'                      : { domain, value -> return value ? "Ativado" : "Desativado" },
+                'valor'                      : { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
+                'participante.dataNascimento': { domain, value -> return value.format("dd/MM/yyyy") }
         ]
 
         Map parameters = ["column.widths": [0.1, 0.5, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]]

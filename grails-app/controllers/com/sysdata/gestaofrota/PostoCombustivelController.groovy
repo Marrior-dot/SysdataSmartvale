@@ -63,7 +63,7 @@ class PostoCombustivelController {
     }
 
     def show = {
-        def postoCombustivelInstance = PostoCombustivel.get(params.id)
+        def postoCombustivelInstance = PostoCombustivel.get(params.long('id'))
         if (!postoCombustivelInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
             redirect(action: "list")

@@ -18,7 +18,7 @@
 			<div class="row">
 
 				<div class="col-xs-4">
-					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" value="${rhInstance?.cnpj}" />
+					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" required="true" value="${rhInstance?.cnpj}" />
 				</div>
 
 				<div class="col-xs-4">
@@ -33,16 +33,6 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-4">
-					<bs:formField class="uppercase" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
-				</div>
-
-				<div class="col-xs-4">
-					<bs:formField class="uppercase" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
-				</div>
-
-			</div>
 		</div>
 
 	</div>
@@ -50,6 +40,88 @@
 	<g:render template="/endereco/form" model="[enderecoInstance:rhInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
 
 	<g:render template="/telefone/form" model="[telefoneInstance:rhInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Pedido de Carga
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <bs:formField class="uppercase" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
+                </div>
+
+                <div class="col-xs-4">
+                    <bs:formField class="uppercase" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+	<div class="panel panel-default">
+
+        <div class="panel-heading">
+			Taxas de Cartão
+		</div>
+
+
+		<div class="panel-body">
+            <div class="row">
+                <div class="col-xs-4">
+                    <bs:formField id="taxaUtilizacao" name="taxaUtilizacao" label="Utilização (R\$)" value="${rhInstance?.taxaUtilizacao}" />
+                </div>
+
+                <div class="col-xs-4">
+                    <bs:formField id="taxaMensalidade" label="Mensalidade (R\$)" value="${rhInstance?.taxaMensalidade}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <bs:formField id="taxaEmissaoCartao" name="taxaEmissaoCartao" label="Emissão de Cartão (R\$)" value="${rhInstance?.taxaEmissaoCartao}" />
+                </div>
+
+                <div class="col-xs-4">
+                    <bs:formField id="taxaReemissaoCartao" label="Remissão de Cartão (R\$)" value="${rhInstance?.taxaReemissaoCartao}" />
+                </div>
+            </div>
+		</div>
+    </div>
+
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			Parâmetros Autorizador
+		</div>
+
+		<div class="panel-body">
+
+			%{--<div style="padding:0.0em;font-size:16px;">
+				<g:if test="${action==Util.ACTION_VIEW}">
+					<span>Código: ${rhInstance?.codigo}</span>
+				</g:if>
+			</div>--}%
+			<br>
+
+			<div class="row">
+				<div class="col-xs-4">
+					<bs:formField  class="uppercase" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
+				</div>
+
+				<div class="col-xs-4">
+					<bs:formField class="uppercase" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
 
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">

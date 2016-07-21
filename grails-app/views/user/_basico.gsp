@@ -1,4 +1,4 @@
-<%@page import="com.sysdata.gestaofrota.Processadora"%>
+<%@page import="com.sysdata.gestaofrota.Estabelecimento; com.sysdata.gestaofrota.Processadora"%>
 <%@page import="com.sysdata.gestaofrota.Administradora"%>
 <%@page import="com.sysdata.gestaofrota.Rh"%>
 <%@page import="com.sysdata.gestaofrota.PostoCombustivel"%>
@@ -44,6 +44,48 @@
 					</div>
 				</g:if>
 			</div>
+
+			<g:if test="${userInstance?.owner.instanceOf(Rh)}">
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label for="owner.nome">Nome RH</label>
+						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner.nome}"/>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="owner.codigo">Código RH</label>
+						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner.codigo}"/>
+					</div>
+				</div>
+			</g:if>
+
+			<g:elseif test="${userInstance?.owner.instanceOf(Estabelecimento)}">
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label for="owner.nome">Nome Estabelecimento</label>
+						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="owner.codigo">Código Estabelecimento</label>
+						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.codigo}"/>
+					</div>
+				</div>
+			</g:elseif>
+
+			<g:elseif test="${userInstance?.owner.instanceOf(PostoCombustivel)}">
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label for="owner.nome">Nome Posto Combustível</label>
+						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
+					</div>
+
+					<div class="form-group col-md-6">
+						<label for="owner.codigo">Taxa Reembolso</label>
+						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.taxaReembolso}"/>
+					</div>
+				</div>
+			</g:elseif>
 
 			<div class="row">
 				<g:if test="${action in [Util.ACTION_EDIT]}">
@@ -109,6 +151,13 @@
 				</g:if>
 			</div>
 		</g:form>
+
+		<sec:ifAnyGranted roles='ROLE_ADMIN'>
+			<form action='${request.contextPath}/j_spring_security_switch_user' method='POST'>
+				<input class="btn btn-primary" type='submit' value='Logar'/>
+				<input type='hidden' name='j_username' value="${userInstance?.username}"/> <br/>
+			</form>
+		</sec:ifAnyGranted>
 	</div>
 </div>
 

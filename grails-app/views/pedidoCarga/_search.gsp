@@ -15,10 +15,12 @@
                         <input id="searchDataCarga" name="searchDataCarga" value="${searchDataCarga}" class="datepicker form-control"/>
                     </div>
 
-                    <div class="col-xs-3 input-group-sm">
-                        <label class="control-label" for="searchUnidade">Unidade</label>
-                        <g:textField class="form-control" id="searchUnidade" name="searchUnidade" value="${searchUnidade}"/>
-                    </div>
+                    <g:if test="${!unidadeInstance}">
+                        <div class="col-xs-3 input-group-sm">
+                            <label class="control-label" for="searchUnidade">Unidade</label>
+                            <g:textField class="form-control" id="searchUnidade" name="searchUnidade" value="${searchUnidade}"/>
+                        </div>
+                    </g:if>
 
                     <div class="col-xs-3 input-group-sm">
                         <label class="control-label" for="searchStatus">Status</label>
