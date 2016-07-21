@@ -8,22 +8,14 @@
 
 	<div class="panel-body">
 
-	%{--<g:if test="${!action || action == Util.ACTION_VIEW}">--}%
-	%{--<div class="buttons">--}%
-	%{-- <g:link class="btn btn-default" action="${unidade_id ? 'create' : 'selectRhUnidade'}">
-         <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
-     </g:link>--}%
-	%{--</div>--}%
-	%{--</g:if>--}%
-
 		<g:form controller="${controller}">
 			<div class="list">
 				<table id="funcTable"
 					   class="table table-striped table-bordered table-hover table-condensed table-default">
 					<thead>
+						<th>CNPJ</th>
 						<th>Razão Social</th>
 						<th>Nome Fantasia</th>
-						<th>CNPJ</th>
 					</thead>
 				</table>
 			</div>
@@ -43,13 +35,12 @@
 			//"serverSide": true,
 			"ajax": {
 				"url": "${createLink(controller:'postoCombustivel',action:'listAllJSON')}",
-				/*"data": {"unidade_id": ${unidade_id ?: 'null'} },*/
 				"dataSrc": "results"
 			},
 			"columns": [
+				{"data": "cnpj"},
 				{"data": "razao"},
-				{"data": "nomeFantasia"},
-				{"data": "cnpj"}
+				{"data": "nomeFantasia"}
 			]
 		});
 

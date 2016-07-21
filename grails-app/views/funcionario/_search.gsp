@@ -8,13 +8,13 @@
 
     <div class="panel-body">
 
-        %{--<g:if test="${!action || action == Util.ACTION_VIEW}">--}%
-            %{--<div class="buttons">--}%
-               %{-- <g:link class="btn btn-default" action="${unidade_id ? 'create' : 'selectRhUnidade'}">
+        <g:if test="${!action || action == Util.ACTION_VIEW}">
+            <div class="buttons">
+               <g:link class="btn btn-default" controller="funcionario" action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id:unidade_id]">
                     <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
-                </g:link>--}%
-            %{--</div>--}%
-        %{--</g:if>--}%
+                </g:link>
+            </div>
+        </g:if>
 
         <g:form controller="${controller}">
             <div class="list">

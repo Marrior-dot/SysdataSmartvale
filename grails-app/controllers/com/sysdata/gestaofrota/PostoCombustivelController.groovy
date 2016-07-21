@@ -197,8 +197,7 @@ class PostoCombustivelController {
 						sel: p.vinculado(prg) ? "<input type='checkbox' class='enable target' name='sel' id='sel${p.id}' checked>":"<input type='checkbox' class='enable target' name='sel' id='sel${p.id}'>",
 						razao:p.nome,
 						nomeFantasia:p.nomeFantasia,
-						cnpj:p.cnpj,
-						acao:"<a class='show' href=${createLink(action:'show')}/${p.id}></a>"]
+						cnpj:"<a href='${createLink(action:'show',id:p.id)}'>${p.cnpj}</a>"]
 		}
 
 		def data=[totalRecords:postoCombustivelInstanceTotal,results:fields]
