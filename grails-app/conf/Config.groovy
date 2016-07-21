@@ -162,13 +162,16 @@ grails.plugins.springsecurity.rejectIfNoRule = true
 
 grails.plugins.springsecurity.securityConfigType = "Annotation"
 
+def allRoles = ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_LOG', 'ROLE_HELP']
+def masterRoles = ['ROLE_PROC', 'ROLE_ADMIN']
+
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/report/**'                    : ['ROLE_PROC'],
         '/parameterReport/**'           : ['ROLE_PROC'],
         '/fieldReport/**'               : ['ROLE_PROC'],
         '/auditLogEvent/**'             : ['ROLE_PROC'],
         '/j_spring_security_switch_user': ['ROLE_ADMIN', 'isFullyAuthenticated()'],
-        '/reportViewer/**'              : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_LOG', 'ROLE_HELP'],
+        '/reportViewer/**'              : allRoles,
         '/estado/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/cidade/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/marcaVeiculo/**'              : ['ROLE_PROC', 'ROLE_ADMIN'],
@@ -185,6 +188,9 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/console/**'                   : ['ROLE_PROC'],
         '/home/dataGraficoResgate'      : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/home/dataGraficoMesResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/user/**'                      : allRoles,
+        '/user/create'                  : masterRoles,
+        '/user/list'                    : masterRoles,
 
         '/plugins/**'                   : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/js/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],

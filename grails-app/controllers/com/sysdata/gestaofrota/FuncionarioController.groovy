@@ -84,7 +84,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def show = {
-        def funcionarioInstance = Funcionario.get(params.id)
+        def funcionarioInstance = Funcionario.get(params.long('id'))
         if (!funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")

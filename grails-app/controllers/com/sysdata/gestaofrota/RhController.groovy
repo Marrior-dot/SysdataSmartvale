@@ -50,7 +50,7 @@ class RhController extends BaseOwnerController {
 
 	@Secured(['IS_AUTHENTICATED_FULLY'])
     def show = {
-        def rhInstance = Rh.get(params.id)
+        def rhInstance = Rh.get(params.long('id'))
 
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
@@ -171,7 +171,8 @@ class RhController extends BaseOwnerController {
 		render jsonResult as JSON
 	}
 	
-	@Secured(['IS_AUTHENTICATED_FULLY'])
+//	@Secured(['IS_AUTHENTICATED_FULLY'])
+	@Secured(['ROLE_PROC','ROLE_ADMIN'])
 	def listAllJSON={
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def offset=params.offset?:0

@@ -67,6 +67,7 @@
 
 
     <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
+    <script type="text/javascript" src="${resource(dir:'js/jquery',file:'application-common.js') }"></script>
 
     %{--
         <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
@@ -160,7 +161,7 @@
     </div>
 
     <sec:ifSwitched>
-        <div style="position: fixed; bottom: 1em; right: 1em">
+        <div style="position: fixed; bottom: 5em; right: 1em">
             <a style="border-radius: 0" class="btn btn-danger btn-lg"
                href='${request.contextPath}/j_spring_security_exit_user'>
                 <i class="fa fa-arrow-left fa-fw"></i>

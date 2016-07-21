@@ -7,6 +7,7 @@ import grails.plugins.springsecurity.Secured
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PedidoCargaController extends BaseOwnerController {
     def exportService
+    def authenticateService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -16,6 +17,22 @@ class PedidoCargaController extends BaseOwnerController {
 
     def list = {
         Unidade unidadeInstance = getUnidade()
+
+        def authorities = getCurrentUser().authorities*.authority
+
+        if(!unidadeInstance && !(authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_PROC"))){
+
+            [pedidoCargaInstanceList : null,
+             pedidoCargaInstanceCount: 0,
+             unidadeInstance         : unidadeInstance,
+             statusPedidoCarga       : StatusPedidoCarga.asList(),
+             searchDataPedido        : params?.searchDataPedido,
+             searchDataCarga         : params?.searchDataCarga,
+             searchUnidade           : params?.searchUnidade,
+             searchStatus            : params?.searchStatus]
+            return ;
+        }
+
 
         def criteria = {
             if (params?.searchDataCarga) {

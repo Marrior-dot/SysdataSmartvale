@@ -60,7 +60,7 @@ class EstabelecimentoController {
     }
 
     def show = {
-		def estabelecimentoInstance = Estabelecimento.get(params.id)
+		def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
 		if (!estabelecimentoInstance) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
 			redirect(action: "list")
