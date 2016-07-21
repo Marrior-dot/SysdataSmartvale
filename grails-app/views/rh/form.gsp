@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="bootstrap-layout" />
-        <g:set var="entityName" value="${message(code: 'rh.label', default: 'RH')}" />
+        <g:set var="entityName" value="${message(code: 'rh.label', default: 'Programas')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -44,7 +44,7 @@
                             <li><a href="#tab3" data-toggle="tab">Categorias de Funcionários</a></li>
                             <li><a href="#tab4" data-toggle="tab">Estabelecimentos</a></li>
                         </ul>
-                        <div class="panel panel-default">
+                        <div class="panel">
                             <div class="tab-content panel-body">
 
                                 <div class="tab-pane active" id="tab1">
@@ -56,10 +56,10 @@
                                     <g:render template="/unidade/search" model="[controller:'unidade',rhId:rhInstance?.id]"/>
                                 </div>
                                 <div class="tab-pane" id="tab3">
-                                    <g:render template="/categoriaFuncionario/search" model="[controller:'categoriaFuncionario',rhId:rhInstance?.id]"/>
+                                    <g:render template="/categoriaFuncionario/newSearch" model="[controller:'categoriaFuncionario',rhId:rhInstance?.id]"/>
                                 </div>
                                 <div class="tab-pane" id="tab4">
-                                    <g:render template="estabelecimentos" bean="${rhInstance}"/>
+                                    <g:render template="newEstabelecimentos" bean="${rhInstance}"/>
                                 </div>
 
                             </div>

@@ -10,7 +10,7 @@
 
 
             <div class="buttons">
-                <g:link controller="unidade" action="create" class="btn btn-default">
+                <g:link controller="unidade" action="create" class="btn btn-default" params="[rhId: rhId]">
                     <span class="glyphicon glyphicon-plus"></span> Criar RH
                 </g:link>
             </div>

@@ -13,4 +13,15 @@ class PostoCombustivel extends Empresa {
     static constraints = {
 		tipoReembolso(nullable:true)
     }
+
+	def vinculado(Rh programa){
+		if(this.programas && !this.programas.empty){
+			if(this.programas.contains(programa))
+				true
+			else
+				false
+		} else {
+			false
+		}
+	}
 }

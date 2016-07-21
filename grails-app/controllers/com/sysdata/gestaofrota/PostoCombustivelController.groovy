@@ -149,11 +149,12 @@ class PostoCombustivelController {
 		def offset=params.offset?:10
 		def opcao
 		def filtro
+		def prg = Rh.get(params.prgId as Long)
 
 		def postoCombustivelInstanceList=PostoCombustivel
 				.createCriteria()
-				.list(max:params.max,offset:offset){
-					eq('status', Status.ATIVO)
+				.list(){
+					//eq('status', Status.ATIVO)
 					if(params.opcao && params.filtro){
 						opcao=params.opcao.toInteger()
 						filtro=params.filtro
@@ -193,6 +194,7 @@ class PostoCombustivelController {
 
 		def fields=postoCombustivelInstanceList.collect{p->
 			[id:p.id,
+						sel: p.vinculado(prg) ? "<input type='checkbox' class='enable target' name='sel' id='sel${p.id}' checked>":"<input type='checkbox' class='enable target' name='sel' id='sel${p.id}'>",
 						razao:p.nome,
 						nomeFantasia:p.nomeFantasia,
 						cnpj:p.cnpj,

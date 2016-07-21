@@ -1,19 +1,18 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<g:form method="post" >
+<g:form method="post">
     <g:hiddenField name="id" value="${unidadeInstance?.id}" />
     <g:hiddenField name="version" value="${unidadeInstance?.version}" />
     <g:hiddenField name="action" value="${action}"/>
-    <g:hiddenField name="rhId" value="${rhId}"/>
+    <g:hiddenField name="rhId" value="${rhInstance?.id}"/>
 
 	<div class="panel panel-default">
-
 		<div class="panel-heading">Dados Básicos</div>
 
 		<div class="panel-body">
 
             <div class="row">
-                <g:if test="${action==Util.ACTION_VIEW}">
+                <g:if test="${action == Util.ACTION_VIEW}">
                     <div class="col-xs-2">
                         <bs:formField id="id" name="id" label="Código" class="id" value="${unidadeInstance?.id}" />
                     </div>
@@ -28,16 +27,17 @@
 
 			<fieldset class="buttons">
 				<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-
-                    <button type="submit" class="btn btn-default" >
+                    <g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}"
+                                    value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    %{--<button type="submit" class="btn btn-default" >
                         <span class="glyphicon glyphicon-floppy-save"></span>
                         <g:message code="default.button.update.label"/>
-                    </button>
+                    </button>--}%
 
 
                 </g:if>
 				<g:if test="${action==Util.ACTION_VIEW}">
-                    <g:link class="btn btn-default" action="edit" resource="${unidadeInstance}">
+                    <g:link class="btn btn-default" action="edit" resource="${unidadeInstance}" id="${unidadeInstance?.id}">
                         <span class="glyphicon glyphicon-edit"></span>
                         <g:message code="default.button.edit.label" default="Edit"/>
                     </g:link>

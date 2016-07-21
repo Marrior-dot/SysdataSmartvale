@@ -9,6 +9,7 @@
     </head>
     <body>
     <br><br>
+
         <div class="panel panel-default">
 
             <div class="panel-heading">
@@ -29,7 +30,7 @@
                         Gerar Carta Senha
                     </g:link>
                 </div>
-
+                <br><br>
                 <g:if test="${flash.message}">
                     <div class="alert alert-info">${flash.message}</div>
                 </g:if>
@@ -39,7 +40,7 @@
                         <g:renderErrors bean="${unidadeInstance}" as="list" />
                     </div>
                 </g:hasErrors>
-                <br><br>
+                <br>
 
                %{-- <fieldset style="border:1px solid;font-size:14px;">
                     <label><span>${message(code: 'rh.label', default: 'RH')}</span>${rhInstance?.nome}</label>
@@ -56,19 +57,22 @@
                             <li><a href="#tab3" data-toggle="tab">Veículos</a></li>
                             <li><a href="#tab4" data-toggle="tab">Equipamentos</a></li>
                         </ul>
+                        <div class="panel-body">
 
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab1">
-                                <g:render template="basico" model="[rhId:rhInstance?.id]"/>
-                            </div>
-                            <div class="tab-pane" id="tab2">
-                                <g:render template="/funcionario/search" model="[controller:'funcionario',unidade_id:unidadeInstance?.id]"/>
-                            </div>
-                            <div class="tab-pane" id="tab3">
-                                <g:render template="/veiculo/search" model="[controller:'veiculo',unidade_id:unidadeInstance?.id]"/>
-                            </div>
-                            <div class="tab-pane" id="tab4">
-                                <g:render template="/equipamento/search" model="[controller:'equipamento',unidade_id:unidadeInstance?.id]"/>
+                            <div class="tab-content">
+                                    <div class="tab-pane active" id="tab1">
+                                        <g:render template="basico" model="[rhId:rhInstance?.id]"/>
+                                    </div>
+                                    <div class="tab-pane" id="tab2">
+                                        <g:render template="/funcionario/search" model="[controller:'funcionario',unidade_id:unidadeInstance?.id]"/>
+                                    </div>
+                                    <div class="tab-pane" id="tab3">
+                                        <g:render template="/veiculo/search" model="[controller:'veiculo',unidade_id:unidadeInstance?.id]"/>
+                                    </div>
+                                    <div class="tab-pane" id="tab4">
+                                        <g:render template="/equipamento/search" model="[controller:'equipamento',unidade_id:unidadeInstance?.id]"/>
+                                    </div>
+
                             </div>
                         </div>
                     </div>
