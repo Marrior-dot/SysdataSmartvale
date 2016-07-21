@@ -21,15 +21,17 @@ class UnidadeController {
 	}
 
     def create = {
+
 		def rhInstance=Rh.get(params.rhId)
 		render(view:'form',model:[action:Util.ACTION_NEW,rhInstance:rhInstance])
     }
 
     def save = {
+		log.debug("teste"+params.rhId)
 		if(params.rhId){
 			def rhId=params.rhId
 			def unidadeInstance = new Unidade(params)
-			def rhInstance=Rh.get(rhId)
+			def rhInstance=Rh.get(rhId as Long)
 			unidadeInstance.rh=rhInstance
 			if (unidadeService.saveNew(unidadeInstance)) {
 				flash.message = "${message(code: 'default.created.message', args: [message(code: 'unidade.label', default: 'Unidade'), unidadeInstance.id])}"

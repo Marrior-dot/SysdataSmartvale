@@ -1,52 +1,73 @@
-<fieldset class="search">
-	<h2>Pesquisa por filtro</h2>
-
-	<input type="hidden" id="selectedId" name="selectedId"/>
-	<input type="radio" name="opcao" value="1" checked="true">Nome Fantasia</input> 
-	<input type="radio" name="opcao" value="2">CNPJ</input>
-<%--	<input type="radio" name="opcao" value="3">Cod.Estabelecimento</input>--%>
-	<br><br>
-	<label>Filtro: <g:textField name="filtro" value="${filtro}"/></label>
-</fieldset>
+<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.PostoCombustivel" %>
 
 
-<gui:dataTable 
-			id="postoSearchDT"
-			controller="postoCombustivel" action="listAllJSON"
-			columnDefs="[
-				[key:'id',hidden:true],
-				[key:'razao',sortable:true,resizeable:true,label:'Razão Social'],
-				[key:'nomeFantasia',sortable:true,resizeable:true,label:'Nome Fantasia'],
-				[key:'cnpj',sortable:true,resizeable:true,label:'CNPJ'],
-				[key:'acao',label:'Ações'],
-			]"
-			sortedBy="razao"
-			rowsPerPage="10"
-			paginatorConfig="[
-				nextPageLinkLabel:'Prox',
-			previousPageLinkLabel:'Ant',
-			firstPageLinkLabel:'Prim',
-			lastPageLinkLabel:'Ult',
-				template:'{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-				pageReportTemplate:'{totalRecords} total de registros'
-			]"
-			/>
- 			
-<jq:jquery>
-	
-	$('input[name="filtro"]').keyup(function(){
+<div class="panel panel-default">
 
-		var params='';
-		
-		<g:if test="${unidade_id}">
-			params+='unidade_id='+${unidade_id};
-		</g:if>
-		
-		params+="opcao="+$(':checked').val()+"&filtro="+$(this).val();
-		
-		filtrarEntidade(GRAILSUI.postoSearchDT,params);
-		
+	<div class="panel-heading">Lista de Empresas Lojistas</div>
+
+	<div class="panel-body">
+
+	%{--<g:if test="${!action || action == Util.ACTION_VIEW}">--}%
+	%{--<div class="buttons">--}%
+	%{-- <g:link class="btn btn-default" action="${unidade_id ? 'create' : 'selectRhUnidade'}">
+         <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
+     </g:link>--}%
+	%{--</div>--}%
+	%{--</g:if>--}%
+
+		<g:form controller="${controller}">
+			<div class="list">
+				<table id="funcTable"
+					   class="table table-striped table-bordered table-hover table-condensed table-default">
+					<thead>
+						<th>Razão Social</th>
+						<th>Nome Fantasia</th>
+						<th>CNPJ</th>
+					</thead>
+				</table>
+			</div>
+		</g:form>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+	var funcSel=[];
+
+	$(document).ready(function () {
+
+
+		$("#funcTable").DataTable({
+			//"serverSide": true,
+			"ajax": {
+				"url": "${createLink(controller:'postoCombustivel',action:'listAllJSON')}",
+				/*"data": {"unidade_id": ${unidade_id ?: 'null'} },*/
+				"dataSrc": "results"
+			},
+			"columns": [
+				{"data": "razao"},
+				{"data": "nomeFantasia"},
+				{"data": "cnpj"}
+			]
+		});
+
+		// Seleção de um funcionário na tabela
+
+		$("#funcTable tbody").on("click",'tr',function(){
+
+			var fid=$(this).find("td:first").html();
+			if($(this).hasClass("selected")){
+				$(this).removeClass("selected");
+				funcSel.pop(fid);
+			}
+			else{
+				$(this).addClass("selected");
+				funcSel.push(fid);
+			}
+		});
+
 	});
-</jq:jquery>
-
+</script>
 

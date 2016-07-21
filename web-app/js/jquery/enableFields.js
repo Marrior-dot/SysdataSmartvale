@@ -1,7 +1,7 @@
 $(document).ready(function () {
     if ($("#action").val() == "visualizando") {
-        $("input:not([type=image],[type=button],[type=submit],[type=hidden],[type=search],[class=enable])").each(disable);
-        $('select').each(disable);
+        $("select:not([id=estabs])").each(disable);
+        $("input:not([type=image],[type=button],[type=submit],[type=hidden],[type=search],[type=enable],[class=enable])").each(disable);
     }
 });
 

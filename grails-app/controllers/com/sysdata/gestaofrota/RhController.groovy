@@ -96,7 +96,7 @@ class RhController extends BaseOwnerController {
 			
 			participanteService.saveCidade(rhInstance.endereco)
             if (!rhInstance.hasErrors() && rhInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Rh'), rhInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                 redirect(action: "show", id:rhInstance.id)
             }
             else {
@@ -104,7 +104,7 @@ class RhController extends BaseOwnerController {
             }
         }
         else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Programa'), params.id])}"
             redirect(action: "newList")
         }
     }
@@ -314,6 +314,7 @@ class RhController extends BaseOwnerController {
 	@Secured(['IS_AUTHENTICATED_FULLY'])
 	def saveEstabs(){
 		def progInstance=Rh.get(params.prgId)
+		log.debug("session:"+session)
 		if(progInstance){
 			
 			/* Marca todas as empresas no HTTP Session */
@@ -396,6 +397,53 @@ class RhController extends BaseOwnerController {
         render data as JSON
     }
 
+	@Secured(['IS_AUTHENTICATED_FULLY'])
+	def listEstabNaoVinculados(){
+		def estabs = PostoCombustivel.createCriteria().list {
+			eq('status', Status.ATIVO)
+			programas {
+				eq('id', params.prgId as Long)
+			}
+		}
+		def listEstabs = PostoCombustivel.createCriteria().list {
+			eq('status', Status.ATIVO)
+		}
+		def estabsFiltered = listEstabs - estabs
+		render estabsFiltered.collect{ e -> [id: e.id, nome: e.nomeFantasia+" ("+e.cnpj+")"]} as JSON
+	}
 
-	
+	@Secured(['IS_AUTHENTICATED_FULLY'])
+	def salvarEstabelecimentosVinculados(){
+		def retorno = [:]
+		def estab = PostoCombustivel.get(params.selectedEstabId as Long)
+		def prg = Rh.get(params.prgId as Long)
+		prg.addToEmpresas(estab)
+		if(prg.save(flush: true)){
+			retorno.mensagem = "Estabelecimento Adicionado"
+		} else {
+			retorno.mensagem = "Erro ao Salvar Estabelecimento"
+		}
+		render retorno as JSON
+	}
+
+	@Secured(['IS_AUTHENTICATED_FULLY'])
+	def listEstabVinculados(){
+		def estabs = Rh.get(params.prgId as Long).empresas
+		render template: 'tabelaEstabVinculados', model: [estabelecimentoInstanceList: estabs]
+	}
+
+	@Secured(['IS_AUTHENTICATED_FULLY'])
+	def desvincularEstab(){
+		def retorno = [:]
+		def estab = PostoCombustivel.get(params.selectedEstabId as Long)
+		def prg = Rh.get(params.prgId as Long)
+		prg.removeFromEmpresas(estab)
+		if(prg.save(flush: true)){
+			retorno.mensagem = "Estabelecimento Desvinculado"
+		} else {
+			retorno.mensagem = "Erro ao desvincular"
+		}
+		render retorno as JSON
+	}
+
 }

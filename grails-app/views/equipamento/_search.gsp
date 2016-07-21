@@ -8,7 +8,7 @@
         <g:if test="${!action || action==Util.ACTION_VIEW}">
             <div class="buttons">
                 <g:link class="btn btn-default" action="${unidade_id?'create':'selectRhUnidade'}">
-                    <span class="glyphicon glyphicon-plus"></span>${message(code:'default.new.label', args:[message(code:'equipamento.label')]) }
+                    <span class="glyphicon glyphicon-plus"></span> ${message(code:'default.new.label', args:[message(code:'equipamento')]) }
                 </g:link>
             </div>
         </g:if>

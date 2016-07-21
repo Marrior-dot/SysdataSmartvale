@@ -70,14 +70,8 @@
 					<button type="submit" class="btn btn-default"
 							onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
 						<span class="glyphicon glyphicon-floppy-remove"></span>
-						<g:message code="default.button.delete.label"/>
+						<g:message code="default.button.delete.label" default="Inativar"/>
 					</button>
-
-					%{--<span class="button">
-						<g:actionSubmit class="btn btn-default" action="delete"
-										value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-										onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-					</span>--}%
 				</g:form>
 			</g:if>
 		</div>
