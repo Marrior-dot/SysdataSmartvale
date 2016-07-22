@@ -37,5 +37,8 @@ grails.project.dependency.resolution = {
         compile ":console:1.5.5"
         compile "org.grails.plugins:remote-pagination:0.4.8"
         compile "org.grails.plugins:export:1.6"
+
+        compile ":fixtures:1.2"
+        compile ":build-test-data:2.0.3"
 	}
 }

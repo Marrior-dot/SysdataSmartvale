@@ -26,7 +26,9 @@ class TransacaoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def transacaoService, autorizadorService, estornoService
+    def transacaoService
+    def autorizadorService
+    def estornoService
 
     def index = {
         redirect(action: "list", params: params)

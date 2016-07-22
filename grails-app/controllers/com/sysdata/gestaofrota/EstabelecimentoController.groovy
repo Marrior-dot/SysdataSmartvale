@@ -153,8 +153,7 @@ class EstabelecimentoController {
 			[id:e.id,
 						razao:e.nome,
 						nomeFantasia:e.nomeFantasia,
-						codEstab:e.codigo,
-						acao:"""<a href="${createLink(controller:'estabelecimento',action:'show')}/${e.id}" class='show'></a>"""]
+						codEstab:"<a href='${createLink(controller:'estabelecimento',action:'show',id:e.id)}'>${e.codigo}</a>"]
 		}
 
 		def data=[recordsTotal:estabelecimentoInstanceTotal,results:fields]

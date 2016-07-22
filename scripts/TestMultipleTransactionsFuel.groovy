@@ -12,8 +12,6 @@ class Const{
 
 }
 
-
-
 class TransactionMaker {
 
     def number
