@@ -49,7 +49,7 @@
 
                     <g:if test="${action==Util.ACTION_VIEW}">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Básico</a></li>
+                            <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Lojista</a></li>
                             <li role="presentation"><a href="#calendario" aria-controls="calendario" role="tab" data-toggle="tab">Calendário Reembolso</a></li>
                             <li role="presentation"><a href="#estabelecimento" aria-controls="estabelecimento" role="tab" data-toggle="tab">Estabelecimentos</a></li>
                         </ul>

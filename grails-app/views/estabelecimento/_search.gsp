@@ -3,6 +3,7 @@
 
 <g:form controller="${controller}">
 
+    <input type="hidden" name="empId" value="${empId}"/>
 
     <g:if test="${!action || action==Util.ACTION_VIEW}">
         <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
@@ -16,7 +17,7 @@
 
     <br/>
 	
-	<input type="hidden" name="empId" value="${empId}"/>
+
 
 
 	<div class="list">
@@ -51,10 +52,9 @@
             },
             "columns":[
 
+                {"data":"codEstab"},
                 {"data":"razao"},
                 {"data":"nomeFantasia"},
-                {"data":"codEstab"},
-                {"data":"acao"}
             ]
         });
     });

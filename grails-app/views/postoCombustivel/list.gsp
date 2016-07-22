@@ -32,28 +32,6 @@
                 <br><br>
                 <g:render template="search" model="[controller:'postoCombustivel']"/>
 
-            %{--<div class="list">
-                <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
-                    <thead>
-                    <th>Razão Social</th>
-                    <th>Nome Fantasia</th>
-                    <th>CNPJ</th>
-                    </thead>
-                    <tbody>
-                    <g:each in="${postoCombustivelInstanceList}" status="i" var="posto">
-                        <tr>
-                            <td>
-                                <g:link controller="postoCombustivel" action="show" id="${posto.id}">
-                                    ${posto.nome}
-                                </g:link>
-                            </td>
-                            <td>${posto.nomeFantasia}</td>
-                            <td>${posto.cnpj}</td>
-                        </tr>
-                    </g:each>
-                    </tbody>
-                </table>
-            </div>--}%
             </g:form>
         </div>
     </div>

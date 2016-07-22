@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 
 import grails.plugins.springsecurity.Secured
-import org.springframework.transaction.annotation.Transactional
+
 
 
 class RhController extends BaseOwnerController {
@@ -416,7 +416,8 @@ class RhController extends BaseOwnerController {
 	@Secured(['IS_AUTHENTICATED_FULLY'])
 	def salvarEstabelecimentosVinculados(){
 		def retorno = [:]
-		def estab = PostoCombustivel.get(params.selectedEstabId as Long)
+		def estab = PostoCombustivel.get(params.long('selectedEstabId'))
+		log.debug(estab)
 		def prg = Rh.get(params.prgId as Long)
 		prg.addToEmpresas(estab)
 		if(prg.save(flush: true)){
@@ -433,7 +434,7 @@ class RhController extends BaseOwnerController {
 		render template: 'tabelaEstabVinculados', model: [estabelecimentoInstanceList: estabs]
 	}
 
-	@Transactional
+
 	@Secured(['IS_AUTHENTICATED_FULLY'])
 	def desvincularEstab(){
 		def retorno = [:]
@@ -443,7 +444,7 @@ class RhController extends BaseOwnerController {
 		if(prg.save(flush: true, failOnError: true)){
 			retorno.mensagem = "Estabelecimento Desvinculado"
 		} else {
-			retorno.mensagem = "Erro ao desvincular"+estab.nome
+			retorno.mensagem = "Erro ao desvincular"
 		}
 		render retorno as JSON
 	}

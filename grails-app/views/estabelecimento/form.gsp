@@ -11,7 +11,7 @@
     <br><br>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>${estabelecimentoInstance.class} - <g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
+            <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
         </div>
         <div class="panel-body">
             <div class="nav">
@@ -22,7 +22,7 @@
                     <span class="glyphicon glyphicon-eye-open"></span>
                     <g:message code="empresa.label" default="Visualizar Empresa"/></g:link>
                 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                    <g:link class="btn btn-default" action="create">
+                    <g:link class="btn btn-default" action="create" params="[empId:empresaInstance?.id]">
                         <span class="glyphicon glyphicon-plus"></span>
                         <g:message code="default.new.label" args="[entityName]" />
                     </g:link>
