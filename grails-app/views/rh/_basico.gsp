@@ -12,11 +12,9 @@
 			Dados Básicos
 		</div>
 
-
 		<div class="panel-body">
 
 			<div class="row">
-
 				<div class="col-xs-4">
 					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" required="true" value="${rhInstance?.cnpj}" />
 				</div>
@@ -24,7 +22,6 @@
 				<div class="col-xs-4">
 					<bs:formField class="uppercase" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
 				</div>
-
 			</div>
 
 			<div class="row">
@@ -32,14 +29,13 @@
 					<bs:formField class="uppercase" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
 				</div>
 			</div>
-
 		</div>
 
 	</div>
 
-	<g:render template="/endereco/form" model="[enderecoInstance:rhInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
+	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
 
-	<g:render template="/telefone/form" model="[telefoneInstance:rhInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
+	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -56,20 +52,16 @@
                 <div class="col-xs-4">
                     <bs:formField class="uppercase" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
                 </div>
-
             </div>
         </div>
-
     </div>
 
 
 
 	<div class="panel panel-default">
-
         <div class="panel-heading">
 			Taxas de Cartão
 		</div>
-
 
 		<div class="panel-body">
             <div class="row">
@@ -94,7 +86,6 @@
     </div>
 
 	<div class="panel panel-default">
-
 		<div class="panel-heading">
 			Parâmetros Autorizador
 		</div>
@@ -116,10 +107,8 @@
 				<div class="col-xs-4">
 					<bs:formField class="uppercase" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
 				</div>
-
 			</div>
 		</div>
-
 	</div>
 
 
@@ -148,9 +137,4 @@
 			</g:if>
 		</div>
 	</sec:ifAnyGranted>
-	
-	
-	
-
-
 </g:form>

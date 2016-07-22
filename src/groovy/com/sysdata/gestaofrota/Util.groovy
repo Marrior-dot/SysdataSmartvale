@@ -150,4 +150,38 @@ class Util {
 		BigDecimal bd = new BigDecimal(Double.toString(valor));
 		bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
 	}
+
+	static String replaceSpecialChars(String s) {
+		if (s) {
+			def t = s.replaceAll('ç', 'c')
+			t = t.replaceAll('Ç', 'C')
+			t = t.replaceAll('á', 'a')
+			t = t.replaceAll('à', 'a')
+			t = t.replaceAll('â', 'a')
+			t = t.replaceAll('ã', 'a')
+			t = t.replaceAll('é', 'e')
+			t = t.replaceAll('ê', 'e')
+			t = t.replaceAll('í', 'i')
+			t = t.replaceAll('ó', 'o')
+			t = t.replaceAll('õ', 'o')
+			t = t.replaceAll('ô', 'o')
+			t = t.replaceAll('ú', 'u')
+			t = t.replaceAll('Á', 'A')
+			t = t.replaceAll('À', 'A')
+			t = t.replaceAll('Â', 'A')
+			t = t.replaceAll('Ã', 'A')
+			t = t.replaceAll('É', 'E')
+			t = t.replaceAll('Ê', 'E')
+			t = t.replaceAll('Í', 'I')
+			t = t.replaceAll('Ó', 'O')
+			t = t.replaceAll('Õ', 'O')
+			t = t.replaceAll('Ô', 'O')
+			t = t.replaceAll('Ú', 'U')
+			t = t.replaceAll('ª', 'a')
+			t = t.replaceAll('º', 'o')
+			t
+		} else {
+			s
+		}
+	}
 }
