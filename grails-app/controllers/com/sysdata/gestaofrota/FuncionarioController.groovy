@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 import java.text.SimpleDateFormat
 
@@ -20,7 +21,12 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def list = {
-        Unidade unidadeInstance = getUnidade()
+        Participante participanteInstance = getCurrentUser()?.owner
+        Unidade unidadeInstance = null
+        if (participanteInstance?.instanceOf(Rh)) {
+            Rh rh = Rh.get(participanteInstance.id)
+            unidadeInstance = Unidade.findByRh(rh)
+        }
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {

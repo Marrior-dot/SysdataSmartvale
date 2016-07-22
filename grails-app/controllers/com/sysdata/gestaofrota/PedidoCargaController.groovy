@@ -16,7 +16,8 @@ class PedidoCargaController extends BaseOwnerController {
     }
 
     def list = {
-        Unidade unidadeInstance = getUnidade()
+        Participante participante = getCurrentUser()?.owner
+        Unidade unidadeInstance = participante.instanceOf(Rh) ? Unidade.findByRh(participante) : null
 
         def authorities = getCurrentUser().authorities*.authority
 

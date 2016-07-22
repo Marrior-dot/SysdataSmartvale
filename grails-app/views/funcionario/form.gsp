@@ -44,12 +44,14 @@
                     <span class="glyphicon glyphicon-home"></span>
                     <g:message code="default.home.label"/>
                 </a>
+                <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+                    <a class="btn btn-default"
+                       href="${g.createLink(controller: 'funcionario', action: 'create', params = "${[unidade_id: unidadeInstance?.id]}")}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <g:message code="default.new.label" args="[entityName]"/>
+                    </a>
+                </sec:ifAnyGranted>
 
-                <a class="btn btn-default"
-                   href="${g.createLink(controller: 'funcionario', action: 'create', params = "${[unidade_id: unidadeInstance?.id]}")}">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <g:message code="default.new.label" args="[entityName]"/>
-                </a>
 
                 <a class="btn btn-default"
                    href="${g.createLink(controller: 'rh', action: 'list')}">

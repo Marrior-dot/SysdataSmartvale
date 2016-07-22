@@ -3,7 +3,7 @@
     <a href="${createLink(uri: '/')}" class="menu-logado"><i class="fa fa-dashboard fa-fw"></i> Início</a>
 </li>
 
-<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH, ROLE_ESTAB, ROLE_LOG">
+<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH, ROLE_ESTAB">
     <li>
         <a href="#" class="menu-logado"><i class="fa fa-archive"></i> Cadastros<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
@@ -22,7 +22,7 @@
                 <li class="controller"><g:link class="submenu-logado"  controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
             </sec:ifAnyGranted>
 
-            <sec:ifAnyGranted roles="ROLE_ESTAB, ROLE_LOG">
+            <sec:ifAnyGranted roles="ROLE_ESTAB">
                 <li class="controller"><g:link class="submenu-logado" controller="postoCombustivel" action="list">Estabelecimentos</g:link></li>
             </sec:ifAnyGranted>
 
@@ -102,18 +102,16 @@
     </li>
 </sec:ifAnyGranted>
 
-<sec:ifAnyGranted roles="ROLE_HELP">
+<sec:ifAnyGranted roles="ROLE_LOG, ROLE_HELP">
     <li>
-        <a href="#" class="menu-logado"><i class="fa fa-cogs"></i> Financeiro<span class="fa arrow"></span></a>
+        <a href="#" class="menu-logado"><i class="fa fa-archive"></i> Cadastros<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
-            <li class="controller"><g:link class="submenu-logado" controller="consulta" action="saldoExtrato">Consultar Saldo e Extrato</g:link></li>
-            <li class="controller"><g:link class="submenu-logado" controller="solicitacaoCartao" action="transferenciaCarga">Transferência de Saldo</g:link></li>
-            <li class="controller"><g:link class="submenu-logado" controller="cartao" action="desbloqueio">Desbloquear Cartão</g:link></li>
-            <li class="controller"><g:link class="submenu-logado" controller="cartao" action="cancelamento">Cancelar Cartão</g:link></li>
+            <li class="controller"><g:link class="submenu-logado"  controller="postoCombustivel" action="list">Empresas Lojistas</g:link></li>
+            <li class="controller"><g:link class="submenu-logado" controller="funcionario" action="show" id="${sec.loggedInUserInfo(field: 'id')}">Funcionarios</g:link></li>
         </ul>
-        <!-- /.nav-second-level -->
     </li>
 </sec:ifAnyGranted>
+
 
 <sec:ifAnyGranted roles="ROLE_ESTAB">
     <li class="controller"><g:link class="submenu-logado" controller="user" action="meusDados" id="${sec.loggedInUserInfo(field: 'id')}">Meus Dados</g:link></li>
@@ -126,6 +124,7 @@
         <a href="#" class="menu-logado"><i class="fa fa-cogs"></i> Financeiro<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
             <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="index">Solicitação de Carga</g:link></li>
+            <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
         </ul>
     </li>
 
@@ -136,3 +135,4 @@
         </ul>
     </li>
 </sec:ifAnyGranted>
+
