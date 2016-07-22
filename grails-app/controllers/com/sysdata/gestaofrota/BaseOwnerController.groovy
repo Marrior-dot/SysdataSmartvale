@@ -54,6 +54,18 @@ class BaseOwnerController {
 
     Unidade getUnidade() {
         Participante participante = getCurrentUser()?.owner
-        participante?.instanceOf(Rh) ? Unidade.findByRh(participante) : null
+        Unidade unidade = null
+
+        if(participante?.instanceOf(Rh)){
+            unidade = Unidade.findByRh(participante)
+        }
+        else if(participante?.instanceOf(PostoCombustivel)){
+        }
+        else if(participante?.instanceOf(Estabelecimento)){
+        }
+        else if(participante?.instanceOf(Funcionario)){
+        }
+
+        unidade
     }
 }
