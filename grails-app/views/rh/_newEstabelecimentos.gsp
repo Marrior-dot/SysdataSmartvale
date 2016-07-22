@@ -16,7 +16,7 @@
             waitingDialog.show("Aguarde...");
             $.ajax({
                 url: "${g.createLink(controller:'rh', action:'salvarEstabelecimentosVinculados')}",
-                data: {prgId:$("#rhId").val(), selectedEstabId: $("select option:selected").val()},
+                data: {prgId:$("#rhId").val(), selectedEstabId: $("select#estabs option:selected").val()},
                 dataType: 'json',
                 success: function (data) {
                     carregarComboBox();

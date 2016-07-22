@@ -161,4 +161,57 @@ class CategoriaFuncionarioController {
     def filter() {
         render (template: "list", model: categoriaFuncionarioService.filter(params))
     }
+
+    @Secured(['IS_AUTHENTICATED_FULLY'])
+    def salvarCategoria(){
+        log.debug("salvando categoriaa....")
+        def retorno = [:]
+        def nome = params.categoriaNome;
+        def valor = params.categoriaValor.replace("R\$ ", "") as Double;
+        def categoriaId = params.categoriaId ? params.categoriaId as Long: 0
+        def prg = Rh.get(params.prgId as Long)
+        def categoria = null
+
+        if(categoriaId && categoriaId > 0){
+            categoria = CategoriaFuncionario.get(categoriaId)
+            categoria.nome = nome
+            categoria.valorCarga = valor
+            if(categoria.save(flush: true)){
+                retorno.mensagem = "Atualizado com sucesso"
+            } else {
+                retorno.mensagem = "Erro ao atualizar"
+            }
+        } else {
+            categoria = new CategoriaFuncionario(nome: nome, valorCarga: valor)
+            prg.addToCategoriasFuncionario(categoria)
+            if(prg.save(flush: true)){
+                retorno.mensagem = "Salvo com sucesso"
+            } else {
+                retorno.mensagem = "Erro ao salvar"
+            }
+        }
+
+
+        render retorno as JSON
+    }
+
+    def carregarCategorias(){
+        def categorias = Rh.get(params.prgId as Long).categoriasFuncionario
+
+        render template: 'tabelaCategoria', model: [categorias: categorias]
+
+    }
+
+    def excluirCategoria(){
+        def retorno
+        def categoriaId = params.categoriaId ? params.categoriaId as Long: 0
+        def prg = Rh.get(params.prgId as Long)
+        def categoria = CategoriaFuncionario.get(categoriaId)
+        prg.removeFromCategoriasFuncionario(categoria)
+        if(prg.save(flush: true) && categoria.delete(flush: true)){
+            retorno.mensagem = "Sucesso"
+        }
+
+        render retorno as JSON
+    }
 }

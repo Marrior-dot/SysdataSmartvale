@@ -37,7 +37,7 @@
                         <th>Nome Fantasia</th>
                         </thead>
                         <tbody>
-                        <g:each in="${Rh.list()}" status="i" var="rh">
+                        <g:each in="${rhInstanceList}" status="i" var="rh">
                             <tr>
                                 <td><g:link action="show" id="${rh.id}">${fieldValue(bean: rh, field: "cnpj")}</g:link></td>
                                 <td>${rh.nome}</td>
