@@ -20,14 +20,14 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def list = {
-        Unidade unidade = getUnidade()
+        Unidade unidadeInstance = getUnidade()
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id')
 
-            if(unidade){
-                eq('unidade', unidade)
+            if(unidadeInstance){
+                eq('unidade', unidadeInstance)
             }
         }
 

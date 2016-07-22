@@ -20,11 +20,23 @@ class RhController extends BaseOwnerController {
 
 	@Secured(['IS_AUTHENTICATED_FULLY'])
     def list = {
+
+		Unidade unidadeInstance = getUnidade()
+		//println "unidadeInstance: ${unidadeInstance}"
+
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def criteria = {
-			order('id', 'desc')
-		}
-		def rhInstanceList = Rh.createCriteria().list(params, criteria)
+        params.sort='id'
+        params.order = 'desc'
+
+		/*def criteria = {
+			if(unidadeInstance){
+				'in'('unidades',unidadeInstance)
+			}
+		}*/
+		def rhInstanceList =Rh.findByUnidadesInList([unidadeInstance]) //Rh.createCriteria().list(params, criteria)
+        [rhInstanceList:rhInstanceList]
+
+        Rh.findAllByUnidadesIsEmpty()
 
 	}
 

@@ -17,8 +17,8 @@ class Rh extends Empresa {
     static constraints = {
 		taxaPedido nullable: true, blank: true
 		validadeCarga nullable: true, blank: true
-		maximoTrnPorDia nullable: true, blank: true
-		diasInatividade nullable: true, blank: true
+/*		maximoTrnPorDia nullable: true, blank: true
+		diasInatividade nullable: true, blank: true*/
     }
 
     String toString() {
