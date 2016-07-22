@@ -48,7 +48,8 @@
         });
 
         $('#tabelaCategoria').on('click','tr .excluirButton', function () {
-            console.log($(this).parent().parent());
+            var categoriaId = $(this).parent().parent().find('[name="categoriaId"]').val();
+            excluirCategoria(categoriaId);
             $(this).parent().parent().remove();
         })
 
