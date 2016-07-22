@@ -24,7 +24,7 @@ class RhController extends BaseOwnerController {
             order('id', 'desc')
         }
         def rhInstanceList = Rh.createCriteria().list(params, criteria)
-
+        [rhInstanceList:rhInstanceList]
     }
 
     @Secured(['ROLE_PROC', 'ROLE_ADMIN'])

@@ -8,7 +8,7 @@ class Empresa extends Participante {
 	String inscricaoMunicipal
 	
     static constraints = {
-		cnpj(blank:false,cnpj:true)
+		cnpj(blank:false,unique:true)
 		nomeFantasia(blank:false)
 		inscricaoEstadual(nullable:true)
 		inscricaoMunicipal(nullable:true)

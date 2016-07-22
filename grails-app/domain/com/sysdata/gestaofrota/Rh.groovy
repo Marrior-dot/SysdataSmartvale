@@ -4,9 +4,9 @@ class Rh extends Empresa {
 	
 	String codigo
 	Double taxaPedido=0.0
-	Integer validadeCarga=0
-	Integer maximoTrnPorDia=0
-	Integer diasInatividade=0
+	Integer validadeCarga
+	Integer maximoTrnPorDia
+	Integer diasInatividade
 	BigDecimal taxaUtilizacao=0.00
 	BigDecimal taxaMensalidade=0.00
 	BigDecimal taxaEmissaoCartao=0.00
@@ -15,10 +15,6 @@ class Rh extends Empresa {
 	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	
     static constraints = {
-		taxaPedido nullable: true, blank: true
-		validadeCarga nullable: true, blank: true
-/*		maximoTrnPorDia nullable: true, blank: true
-		diasInatividade nullable: true, blank: true*/
     }
 
     String toString() {

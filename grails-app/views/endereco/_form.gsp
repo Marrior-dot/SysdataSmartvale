@@ -122,7 +122,7 @@
                     <g:message code="endereco.estado.label" default="Estado"/>
                 </label>
                 <g:select class="form-control " name="${endereco}.cidade.estado.id" from="${Estado.list(sort: 'nome')}"
-                          optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.estado.id}"
+                          optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.estado?.id}"
                 onchange="filtrarCidadesPorEstado('${endereco}')"/>
             </div>
 
@@ -131,7 +131,7 @@
                     <g:message code="endereco.cidade.label" default="Cidade"/>
                 </label>
                 <g:select class="form-control " name="${endereco}.cidade.id" from="${enderecoInstance?.cidade?.estado?.cidades}"
-                          optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade.id}" />
+                          optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.id}" />
             </div>
 
         </div>

@@ -46,11 +46,11 @@
 
             <div class="row">
                 <div class="col-xs-4">
-                    <bs:formField class="uppercase" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
+                    <bs:formField id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
                 </div>
 
                 <div class="col-xs-4">
-                    <bs:formField class="uppercase" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
+                    <bs:formField required="true" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
                 </div>
             </div>
         </div>
@@ -92,20 +92,13 @@
 
 		<div class="panel-body">
 
-			%{--<div style="padding:0.0em;font-size:16px;">
-				<g:if test="${action==Util.ACTION_VIEW}">
-					<span>Código: ${rhInstance?.codigo}</span>
-				</g:if>
-			</div>--}%
-			<br>
-
 			<div class="row">
 				<div class="col-xs-4">
-					<bs:formField  class="uppercase" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
+					<bs:formField  required="true" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
 				</div>
 
 				<div class="col-xs-4">
-					<bs:formField class="uppercase" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
+					<bs:formField required="true" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
 				</div>
 			</div>
 		</div>

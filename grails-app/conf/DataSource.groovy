@@ -16,8 +16,7 @@ environments {
     development {
 
         def urlDev=System.env["FROTA_DEV_DB"]
-        if(!urlDev) urlDev="" +"jdbc:postgresql://localhost/amazonfrota_development"
-                //"jdbc:postgresql://148.5.7.211/vrfrota_production"
+        if(!urlDev) urlDev="jdbc:postgresql://localhost/gestaofrota_development"
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
 			url = urlDev
