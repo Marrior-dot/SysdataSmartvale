@@ -161,4 +161,27 @@ class CategoriaFuncionarioController {
     def filter() {
         render (template: "list", model: categoriaFuncionarioService.filter(params))
     }
+
+    def salvarCategoria(){
+        def retorno = [:]
+        def nome = params.categoriaNome;
+        def valor = params.categoriaValor as Double;
+        def prg = Rh.get(params.prgId as Long)
+
+        def categoria = new CategoriaFuncionario(nome: nome, valorCarga: valor)
+        prg.addToCategoriasFuncionario(categoria)
+        if(prg.save(flush: true)){
+            retorno.mensagem = "Salvo com sucesso"
+        } else {
+            retorno.mensagem = "Erro ao salvar"
+        }
+        render retorno as JSON
+    }
+
+    def carregarCategorias(){
+        def categorias = Rh.get(params.prgId as Long).categoriasFuncionario
+
+        render template: 'tabelaCategoria', model: [categorias: categorias]
+
+    }
 }
