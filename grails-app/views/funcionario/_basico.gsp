@@ -118,17 +118,19 @@
 
     <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
     <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial']"/>
+    <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+        <div class="buttons">
+            <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
+                <g:actionSubmit class="btn btn-default" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
+                                value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+            </g:if>
+            <g:if test="${action == Util.ACTION_VIEW}">
+                <g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
+                <g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+            </g:if>
+        </div>
+    </sec:ifAnyGranted>
 
-    <div class="buttons">
-        <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
-            <g:actionSubmit class="btn btn-default" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
-                value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-        </g:if>
-        <g:if test="${action == Util.ACTION_VIEW}">
-            <g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
-            <g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
-        </g:if>
-    </div>
 
 </g:form>

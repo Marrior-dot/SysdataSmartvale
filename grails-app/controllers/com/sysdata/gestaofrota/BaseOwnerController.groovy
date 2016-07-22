@@ -51,21 +51,4 @@ class BaseOwnerController {
     User getCurrentUser() {
         springSecurityService?.getCurrentUser() as User
     }
-
-    Unidade getUnidade() {
-        Participante participante = getCurrentUser()?.owner
-        Unidade unidade = null
-
-        if(participante?.instanceOf(Rh)){
-            unidade = Unidade.findByRh(participante)
-        }
-        else if(participante?.instanceOf(PostoCombustivel)){
-        }
-        else if(participante?.instanceOf(Estabelecimento)){
-        }
-        else if(participante?.instanceOf(Funcionario)){
-        }
-
-        unidade
-    }
 }
