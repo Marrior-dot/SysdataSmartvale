@@ -4,17 +4,20 @@
 
 <div class="panel panel-default">
 
-    <div class="panel-heading">Lista de Funcionários</div>
+    <div class="panel-heading"><h4>Lista de Funcionários</h4></div>
 
     <div class="panel-body">
 
         <g:if test="${!action || action == Util.ACTION_VIEW}">
             <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
-                <div class="buttons">
+                <nav class="buttons">
+
+                        <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
+
                     <g:link class="btn btn-default" controller="funcionario" action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id:unidade_id]">
                         <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
                     </g:link>
-                </div>
+                </nav>
             </sec:ifAnyGranted>
         </g:if>
 
@@ -23,7 +26,6 @@
                 <table id="funcTable"
                        class="table table-striped table-bordered table-hover table-condensed table-default">
                     <thead>
-                    <th>ID</th>
                     <th>CPF</th>
                     <th>Nome</th>
                     <th>Matrícula</th>
@@ -49,7 +51,6 @@
                 "dataSrc": "results"
             },
             "columns": [
-                {"data": "id"},
                 {"data": "cpf"},
                 {"data": "nome"},
                 {"data": "matricula"},

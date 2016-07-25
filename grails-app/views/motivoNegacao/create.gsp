@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta name="layout" content="bootstrap-layout">
-		<g:set var="entityName" value="${message(code: 'motivoNegacao.label', default: 'MotivoNegacao')}" />
+		<g:set var="entityName" value="${message(code: 'motivoNegacao.label', default: 'Motivo Negação')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
 	</head>
 	<body>
@@ -24,7 +24,7 @@
 			<br><br>
 			<div id="create-motivoNegacao" class="content scaffold-create" role="main">
 				<g:if test="${flash.message}">
-					<div class="message" role="status">${flash.message}</div>
+					<div class="alert alert-info" role="status">${flash.message}</div>
 				</g:if>
 				<g:hasErrors bean="${motivoNegacaoInstance}">
 					<ul class="errors" role="alert">

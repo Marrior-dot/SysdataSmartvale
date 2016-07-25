@@ -26,14 +26,14 @@ class TipoEquipamentoController {
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), tipoEquipamentoInstance.id])
+		flash.message = message(code: 'default.created.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), tipoEquipamentoInstance.id])
         redirect(action: "show", id: tipoEquipamentoInstance.id)
     }
 
     def show() {
         def tipoEquipamentoInstance = TipoEquipamento.get(params.id)
         if (!tipoEquipamentoInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "list")
             return
         }
@@ -44,7 +44,7 @@ class TipoEquipamentoController {
     def edit() {
         def tipoEquipamentoInstance = TipoEquipamento.get(params.id)
         if (!tipoEquipamentoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "list")
             return
         }
@@ -55,7 +55,7 @@ class TipoEquipamentoController {
     def update() {
         def tipoEquipamentoInstance = TipoEquipamento.get(params.id)
         if (!tipoEquipamentoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "list")
             return
         }
@@ -78,25 +78,25 @@ class TipoEquipamentoController {
             return
         }
 
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), tipoEquipamentoInstance.id])
+		flash.message = message(code: 'default.updated.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), tipoEquipamentoInstance.id])
         redirect(action: "show", id: tipoEquipamentoInstance.id)
     }
 
     def delete() {
         def tipoEquipamentoInstance = TipoEquipamento.get(params.id)
         if (!tipoEquipamentoInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "list")
             return
         }
 
         try {
             tipoEquipamentoInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tipoEquipamento.label', default: 'TipoEquipamento'), params.id])
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento'), params.id])
             redirect(action: "show", id: params.id)
         }
     }

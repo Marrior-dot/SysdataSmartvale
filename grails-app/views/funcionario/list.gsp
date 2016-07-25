@@ -8,24 +8,15 @@
     <title><g:message code="default.list.label" args="[entityName]" /></title>
 </head>
 <body>
-<br><br>
 <div class="body">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4><g:message code="default.list.label" args="[entityName]" /></h4>
-        </div>
-        <div class="panel-body">
+
             <g:if test="${flash.message}">
                 <div class="message">${flash.message}</div>
             </g:if>
-            <div class="buttons">
-                <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-            </div>
+
             <br><br>
             
             <g:render template="search" model="[controller:'funcionario', unidade_id: unidadeInstance?.id]"/>
-        </div>
-    </div>
 
 </div>
 </body>

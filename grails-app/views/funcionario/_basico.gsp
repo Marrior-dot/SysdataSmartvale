@@ -22,7 +22,7 @@
         <tbody>
             <tr>
                 <td>${unidadeInstance?.rh.nome}</td>
-                <td>${unidadeInstance?.codigo}-${unidadeInstance?.nome}</td>
+                <td>${unidadeInstance?.nome}</td>
             </tr>
         </tbody>
     </table>

@@ -5,12 +5,15 @@
 
 <div class="panel panel-default">
 
-    <div class="panel-heading">Lista de Veículos</div>
+    <div class="panel-heading"><h4>Lista de Veículos</h4></div>
 
     <div class="panel-body">
-
         <g:if test="${!action || action==Util.ACTION_VIEW}">
             <div class="buttons">
+                <a class="btn btn-default" href="${createLink(uri: '/')}">
+                    <span class="glyphicon glyphicon-home"></span>
+                    <g:message code="default.home.label"/>
+                </a>
                 <g:link class="btn btn-default" controller="veiculo" action="${unidade_id?'create':'selectRhUnidade'}">
                     <span class="glyphicon glyphicon-plus"></span> ${message(code:'default.new.label', args:[message(code:'veiculo')]) }
                 </g:link>
@@ -44,7 +47,7 @@
             //"serverSide": true,
             "ajax":{
                 "url":"${createLink(controller:'veiculo',action:'listAllJSON')}",
-                "data":{"unidade_id":${unidade_id}},
+                "data":{"unidade_id":${unidade_id ?: 'null'}},
                 "dataSrc":"results"
             },
             "columns":[

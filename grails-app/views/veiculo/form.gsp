@@ -20,7 +20,7 @@
                     <span class="glyphicon glyphicon-home"></span>
                     <g:message code="default.home.label"/>
                     </a>
-                    <g:link class="btn btn-default" action="newList">
+                    <g:link class="btn btn-default" action="list">
                         <span class="glyphicon glyphicon-list"></span>
                         <g:message code="default.list.label" args="[entityName]" />
                     </g:link>

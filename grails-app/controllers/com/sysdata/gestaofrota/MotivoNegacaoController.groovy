@@ -26,14 +26,14 @@ class MotivoNegacaoController {
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), motivoNegacaoInstance.id])
+		flash.message = message(code: 'default.created.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), motivoNegacaoInstance.id])
         redirect(action: "show", id: motivoNegacaoInstance.id)
     }
 
     def show() {
         def motivoNegacaoInstance = MotivoNegacao.get(params.id)
         if (!motivoNegacaoInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'Motiv oNegacao'), params.id])
             redirect(action: "list")
             return
         }
@@ -44,7 +44,7 @@ class MotivoNegacaoController {
     def edit() {
         def motivoNegacaoInstance = MotivoNegacao.get(params.id)
         if (!motivoNegacaoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), params.id])
             redirect(action: "list")
             return
         }
@@ -55,7 +55,7 @@ class MotivoNegacaoController {
     def update() {
         def motivoNegacaoInstance = MotivoNegacao.get(params.id)
         if (!motivoNegacaoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), params.id])
             redirect(action: "list")
             return
         }
@@ -78,25 +78,25 @@ class MotivoNegacaoController {
             return
         }
 
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), motivoNegacaoInstance.id])
+		flash.message = message(code: 'default.updated.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), motivoNegacaoInstance.id])
         redirect(action: "show", id: motivoNegacaoInstance.id)
     }
 
     def delete() {
         def motivoNegacaoInstance = MotivoNegacao.get(params.id)
         if (!motivoNegacaoInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), params.id])
             redirect(action: "list")
             return
         }
 
         try {
             motivoNegacaoInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), params.id])
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'motivoNegacao.label', default: 'MotivoNegacao'), params.id])
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'motivoNegacao.label', default: 'Motivo Negacao'), params.id])
             redirect(action: "show", id: params.id)
         }
     }
