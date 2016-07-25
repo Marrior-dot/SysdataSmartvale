@@ -16,15 +16,14 @@
 <div class="row">
 	<div class="form-group col-md-6 ${hasErrors(bean: reportInstance, field: 'query', 'error')} ">
 		<label for="query"><g:message code="report.query.label" default="Query" /></label>
-		<g:textArea class="form-control" id="query" name="query" value="${reportInstance?.query}"/>
+		<g:textArea rows="20" class="form-control" id="query" name="query" value="${reportInstance?.query}"/>
 	</div>
 
 	<div class="form-group col-md-6 ${hasErrors(bean: reportInstance, field: 'countQuery', 'error')} ">
 		<label class="control-label" for="countQuery">
 			<g:message code="report.countQuery.label" default="Count Query" />
-
 		</label>
-		<g:textArea class="form-control" name="countQuery" value="${reportInstance?.countQuery}"/>
+		<g:textArea rows="20" class="form-control" name="countQuery" value="${reportInstance?.countQuery}"/>
 	</div>
 </div>
 

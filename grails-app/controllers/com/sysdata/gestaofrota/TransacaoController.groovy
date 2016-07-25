@@ -38,7 +38,7 @@ class TransacaoController extends BaseOwnerController {
     }
 
     def list = {
-        println("Authorities: ${getCurrentUser().authorities*.authority}")
+//        println("Authorities: ${getCurrentUser().authorities*.authority}")
         Participante participanteInstance = getCurrentUser()?.owner
         Unidade unidadeInstance = null
         Estabelecimento estabelecimentoInstance = null

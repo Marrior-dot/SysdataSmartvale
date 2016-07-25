@@ -6,7 +6,8 @@ enum MarkupType {
 	SELECT("Select"),
 	RADIO("Radio"),
 	CHECK("Check"),
-	DATE_PICKER("Date Picker")
+	DATE_PICKER("Date Picker"),
+	READONLY("Readonly")
 	
 	String name
 	

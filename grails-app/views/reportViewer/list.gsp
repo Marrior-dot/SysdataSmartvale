@@ -1,4 +1,3 @@
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -39,7 +38,6 @@
 	            <div class="buttons">
 	            	<g:submitButton class="btn btn-default list" name="list" value="Listar" />
 	            	<g:actionSubmit class="btn btn-default xls" action="export" value="Excel"/>
-	            	
 	            </div>
 	            
 	            <div class="list">
