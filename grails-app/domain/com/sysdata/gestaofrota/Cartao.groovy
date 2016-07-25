@@ -11,6 +11,8 @@ class Cartao {
 	Date validade
 	
 	static belongsTo=[funcionario:Funcionario]
+
+	static transients = ['numeroMascarado']
 	
     static constraints = {
 		numero(unique:true)
@@ -32,7 +34,7 @@ class Cartao {
 		return true
 	}
 
-	String getNumero(){
+	String getNumeroMascarado(){
         Util.maskCard(this.numero)
     }
 

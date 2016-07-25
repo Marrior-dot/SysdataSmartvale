@@ -29,7 +29,7 @@
 	</thead>
 	<tbody>
 	<tr>
-		<td>${funcionarioInstance?.cartaoAtual()?.numero} [${funcionarioInstance?.cartaoAtual()?.status?.nome}]</td>
+		<td>${funcionarioInstance?.cartaoAtual()?.numeroMascarado} [${funcionarioInstance?.cartaoAtual()?.status?.nome}]</td>
 		<td>${Util.formatCurrency(funcionarioInstance?.conta?.saldo)}</td>
 %{--		<td id="password">  ${funcionarioInstance?.cartaoAtual()?.senha}</td> --}%
 	</tr>

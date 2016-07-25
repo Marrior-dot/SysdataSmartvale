@@ -26,7 +26,6 @@
                 <table id="funcTable"
                        class="table table-striped table-bordered table-hover table-condensed table-default">
                     <thead>
-                    <th>ID</th>
                     <th>CPF</th>
                     <th>Nome</th>
                     <th>Matrícula</th>
@@ -52,7 +51,6 @@
                 "dataSrc": "results"
             },
             "columns": [
-                {"data": "id"},
                 {"data": "cpf"},
                 {"data": "nome"},
                 {"data": "matricula"},

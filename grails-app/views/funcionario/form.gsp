@@ -52,6 +52,11 @@
                     </a>
                 </sec:ifAnyGranted>
 
+                <a class="btn btn-default"
+                   href="${g.createLink(controller: 'funcionario', action: 'create', params:[unidade_id: unidadeInstance?.id])}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <g:message code="default.new.label" args="[entityName]"/>
+                </a>
 
                 <a class="btn btn-default"
                    href="${g.createLink(controller: 'rh', action: 'list')}">
