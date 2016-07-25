@@ -12,7 +12,7 @@
     <div class="panel-heading">Funcionários habilitados para condução</div>
     <div class="panel-body">
         <div class="buttons">
-            <a href="#" id="incFunc" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span>Habilitar Funcionário</a>
+            <a href="#" id="incFunc" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span> Habilitar Funcionário</a>
 
         </div>
 

@@ -1,8 +1,8 @@
-<%	
+<%
 	def currGroup=[:]
 
 	def fieldsGroup=reportInstance.fields.findAll{it.groupBy}
-	
+
 	fieldsGroup.each{fieldInstance->
 		currGroup[fieldInstance.name]=''
 	}
@@ -56,7 +56,6 @@
 					}
 			
 	%>
-		
 			<thead>
 			
 				<tr>
@@ -71,9 +70,9 @@
 					</g:each>
 				</tr>
 			</thead>
-		
+
 			<tbody>
-		:
+
 	<% 			}	%>
 
 				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">

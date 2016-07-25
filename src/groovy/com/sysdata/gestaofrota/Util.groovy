@@ -100,6 +100,13 @@ class Util {
 	static String formatDate(def data, String format = 'dd/MM/yyyy'){
 		new SimpleDateFormat(format).format(data)
 	}
+
+	static String parseDate(String data, String format = 'dd/MM/yyyy'){
+		if(data?.length() > 0)
+			return new SimpleDateFormat(format).parse(data).format(format)
+
+		return ""
+	}
 	
 	static def convertToCurrency(value){
 		if(value==~/\d+,\d{2}/){

@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta name="layout" content="bootstrap-layout">
-		<g:set var="entityName" value="${message(code: 'motivoNegacao.label', default: 'MotivoNegacao')}" />
+		<g:set var="entityName" value="${message(code: 'motivoNegacao.label', default: 'Motivo Negação')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
@@ -28,7 +28,7 @@
 			<br><br>
 			<div id="show-motivoNegacao" class="content scaffold-show" role="main">
 				<g:if test="${flash.message}">
-					<div class="message" role="status">${flash.message}</div>
+					<div class="alert alert-info" role="status">${flash.message}</div>
 				</g:if>
 				<ul class="properties">
 

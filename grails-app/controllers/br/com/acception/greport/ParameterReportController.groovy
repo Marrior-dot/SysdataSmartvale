@@ -42,7 +42,7 @@ class ParameterReportController {
     }
 
     def edit() {
-        def parameterReportInstance = ParameterReport.get(params.id)
+        def parameterReportInstance = ParameterReport.get(params.long('id'))
         if (!parameterReportInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'parameterReport.label', default: 'ParameterReport'), params.id])
             redirect(action: "list")
