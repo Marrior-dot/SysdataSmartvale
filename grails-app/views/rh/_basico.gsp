@@ -46,7 +46,7 @@
 
             <div class="row">
                 <div class="col-xs-4">
-                    <bs:formField id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
+                    <bs:formField required="true" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
                 </div>
 
                 <div class="col-xs-4">

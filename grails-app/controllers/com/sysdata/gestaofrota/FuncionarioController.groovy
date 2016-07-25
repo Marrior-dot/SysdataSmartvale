@@ -258,7 +258,7 @@ class FuncionarioController extends BaseOwnerController {
              matricula: f.matricula,
              nome     : f.nome,
              cartao   : f.cartaoAtivo?f.cartaoAtivo.numero:'< Nenhum cartão ativo >',
-             cpf      : "<a href=${createLink(action: 'show')}/${f.id}>${f.cpf}</a>"
+             cpf      : "<a href=${createLink(action: 'show',id:f.id)}>${f.cpf}</a>"
             ]
 
         }

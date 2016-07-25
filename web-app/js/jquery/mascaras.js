@@ -35,7 +35,7 @@ function configInputMasks() {
 	$('.decimal').mask('#.##0,00', {reverse: true});
 	$('.percentual').mask('000.00 %');
 	$('.money').maskMoney({prefix: 'R$ ', decimal: ',', thousands: '.', affixesStay: false});
-	$(".placa").mask("aaa-9999", {placeholder: "___-____"});
+	$(".placa").mask("AAA-9999", {placeholder: "___-____"});
 
 	$('.only-numbers').keyup(function () {
 		var n = this.value.replace(/[^0-9\.]/g, '');

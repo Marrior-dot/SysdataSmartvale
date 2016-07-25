@@ -36,7 +36,7 @@
 
             <div class="row">
                 <div class="col-xs-4">
-                    <bs:formField id="placa" name="placa" label="Placa" value="${veiculoInstance?.placa}"></bs:formField>
+                    <bs:formField id="placa" class="placa" name="placa" label="Placa" value="${veiculoInstance?.placa}"></bs:formField>
                 </div>
                 <div class="col-xs-4">
                     <label for="marca.id">MARCA</label>

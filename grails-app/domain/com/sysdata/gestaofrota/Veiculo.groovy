@@ -31,7 +31,7 @@ class Veiculo extends MaquinaMotorizada {
 			def ultTr=Transacao
                     .executeQuery("select max(t) from Transacao t where t.maquina=:maq and t.statusControle in (:sts)",
                     [maq:this,sts:[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA]])
-            if(ultTr) this.hodometro=ultTr[0].quilometragem
+            if(ultTr[0]) this.hodometro=ultTr[0].quilometragem
             else this.hodometro=0
 		}
         return this.hodometro

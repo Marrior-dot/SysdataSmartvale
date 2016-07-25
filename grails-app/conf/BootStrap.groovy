@@ -2,6 +2,7 @@ import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.Cidade
 import com.sysdata.gestaofrota.Estado
+import com.sysdata.gestaofrota.MarcaVeiculo
 import com.sysdata.gestaofrota.ParametroSistema
 import com.sysdata.gestaofrota.Processadora
 import com.sysdata.gestaofrota.Role
@@ -60,6 +61,10 @@ class BootStrap {
             fixtureLoader.load("cidades_p")
             fixtureLoader.load("cidades_r")
             fixtureLoader.load("cidades_st")
+        }
+
+        if(MarcaVeiculo.count==0){
+            fixtureLoader.load("marcas_veiculo")
         }
     }
 
