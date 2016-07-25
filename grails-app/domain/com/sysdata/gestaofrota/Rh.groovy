@@ -15,6 +15,10 @@ class Rh extends Empresa {
 	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	
     static constraints = {
+		taxaUtilizacao nullable: true
+		taxaMensalidade nullable: true
+		taxaEmissaoCartao nullable: true
+		taxaReemissaoCartao nullable: true
     }
 
     String toString() {

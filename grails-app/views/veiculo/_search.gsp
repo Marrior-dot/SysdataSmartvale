@@ -5,7 +5,7 @@
 
 <div class="panel panel-default">
 
-    <div class="panel-heading">Lista de Veículos</div>
+    <div class="panel-heading"><h4>Lista de Veículos</h4></div>
 
     <div class="panel-body">
         <g:if test="${!action || action==Util.ACTION_VIEW}">

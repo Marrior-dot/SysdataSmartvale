@@ -11,7 +11,7 @@
             <div class="row">
 
                 <div class="col-xs-4">
-                    <bs:formField id="hodometro" name="hodometro" label="Última Leitura" value="${veiculoInstance?.hodometro}"></bs:formField>
+                    <bs:formField id="hodometro" name="hodometro" label="Última Leitura" value="${veiculoInstance?.hodometro ?: 0}"></bs:formField>
                 </div>
             </div>
 

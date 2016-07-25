@@ -1,13 +1,6 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <%@ page import="com.sysdata.gestaofrota.PostoCombustivel" %>
 
-
-<div class="panel panel-default">
-
-	<div class="panel-heading">Lista de Empresas Lojistas</div>
-
-	<div class="panel-body">
-
 		<g:form controller="${controller}">
 			<div class="list">
 				<table id="funcTable"
@@ -20,8 +13,6 @@
 				</table>
 			</div>
 		</g:form>
-	</div>
-</div>
 
 
 <script type="text/javascript">

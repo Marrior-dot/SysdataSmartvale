@@ -19,7 +19,6 @@
                 <div class="message">${flash.message}</div>
             </g:if>
             <g:form>
-
                 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
                     <div class="buttons">
                         <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
@@ -29,7 +28,6 @@
                         </g:link>
                     </div>
                 </sec:ifAnyGranted>
-                <br><br>
                 <g:render template="search" model="[controller:'postoCombustivel']"/>
 
             </g:form>
