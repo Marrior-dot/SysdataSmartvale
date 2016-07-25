@@ -9,11 +9,13 @@
     <div class="panel-body">
 
         <g:if test="${!action || action == Util.ACTION_VIEW}">
-            <div class="buttons">
-               <g:link class="btn btn-default" controller="funcionario" action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id:unidade_id]">
-                    <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
-                </g:link>
-            </div>
+            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+                <div class="buttons">
+                    <g:link class="btn btn-default" controller="funcionario" action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id:unidade_id]">
+                        <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
+                    </g:link>
+                </div>
+            </sec:ifAnyGranted>
         </g:if>
 
         <g:form controller="${controller}">

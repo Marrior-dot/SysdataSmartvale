@@ -4,6 +4,8 @@ import grails.gorm.DetachedCriteria
 import grails.plugins.springsecurity.Secured
 
 import com.sysdata.gestaofrota.exception.TransacaoException
+import grails.plugins.springsecurity.SecurityTagLib
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 
 class TransacaoCommand {
@@ -29,13 +31,26 @@ class TransacaoController extends BaseOwnerController {
     def transacaoService
     def autorizadorService
     def estornoService
+    def springSecurityUtils
 
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-        Unidade unidadeInstance = getUnidade()
+        println("Authorities: ${getCurrentUser().authorities*.authority}")
+        Participante participanteInstance = getCurrentUser()?.owner
+        Unidade unidadeInstance = null
+        Estabelecimento estabelecimentoInstance = null
+
+        if (SpringSecurityUtils.ifAllGranted("ROLE_ESTAB") && participanteInstance?.instanceOf(PostoCombustivel)) {
+            PostoCombustivel postoCombustivel = PostoCombustivel.get(participanteInstance.id)
+            estabelecimentoInstance = Estabelecimento.findByEmpresa(postoCombustivel)
+        } else if (SpringSecurityUtils.ifAllGranted("ROLE_RH") && participanteInstance?.instanceOf(Rh)) {
+            Rh rh = Rh.get(participanteInstance.id)
+            unidadeInstance = Unidade.findByRh(rh)
+        }
+
         def criteria = {
             if (params?.cartao && params.cartao.toString().length() > 0) {
                 eq('numeroCartao', params.cartao)
@@ -54,6 +69,10 @@ class TransacaoController extends BaseOwnerController {
                     eq('unidade', unidadeInstance)
                 }
             }
+
+            if (estabelecimentoInstance?.codigo?.length() > 0) {
+                eq("codigoEstabelecimento", estabelecimentoInstance.codigo)
+            }
         }
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
@@ -64,44 +83,44 @@ class TransacaoController extends BaseOwnerController {
          transacaoInstanceTotal: Transacao.createCriteria().count(criteria),
          params                : params]
 
-    /*      CÓDIGO ANTIGO =============================================================================
+        /*      CÓDIGO ANTIGO =============================================================================
 
-        def transacaoInstanceList
-        def transacaoInstanceTotal
+            def transacaoInstanceList
+            def transacaoInstanceTotal
 
-        withSecurity { ownerList ->
+            withSecurity { ownerList ->
 
-            def pars = [:]
-            pars.max = params.max
-            pars.offset = params.offset ? params.offset as int : 0
-            pars.ids = ownerList
+                def pars = [:]
+                pars.max = params.max
+                pars.offset = params.offset ? params.offset as int : 0
+                pars.ids = ownerList
 
 
-            transacaoInstanceList = Transacao.executeQuery("""select tr
-									from Transacao tr, Funcionario f
-									where tr.participante=f
+                transacaoInstanceList = Transacao.executeQuery("""select tr
+                                        from Transacao tr, Funcionario f
+                                        where tr.participante=f
 
-									${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-									${
-                if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''
+                                        ${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
+                                        ${
+                    if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''
+                }
+                                        ${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
+
+                                        and f.unidade.rh.id in (:ids)
+                                        order by tr.id desc""", pars)
+
+                transacaoInstanceTotal = Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
+                    where tr.participante=f
+                    ${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
+                    ${if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''}
+                    ${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
+
+                    and f.unidade.rh.id in (:ids)""", [ids: ownerList])[0]
+
             }
-									${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
 
-									and f.unidade.rh.id in (:ids)
-									order by tr.id desc""", pars)
-
-            transacaoInstanceTotal = Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
-				where tr.participante=f
-				${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-				${if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''}
-				${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
-
-				and f.unidade.rh.id in (:ids)""", [ids: ownerList])[0]
-
-        }
-
-        CÓDIGO ANTIGO =============================================================================
-        */
+            CÓDIGO ANTIGO =============================================================================
+            */
     }
 
     def listPendentes = {

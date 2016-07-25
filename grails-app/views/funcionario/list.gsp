@@ -20,7 +20,6 @@
             </g:if>
             <div class="buttons">
                 <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-                <a class="btn btn-default" href="${g.createLink(controller: 'funcionario', action: 'selectRhUnidade')}"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="['Funcionario']"/></a>
             </div>
             <br><br>
             
