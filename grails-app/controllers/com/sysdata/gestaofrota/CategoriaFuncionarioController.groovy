@@ -181,6 +181,7 @@ class CategoriaFuncionarioController {
             } else {
                 retorno.mensagem = "Erro ao atualizar"
             }
+            retorno.id = categoriaId
         } else {
             categoria = new CategoriaFuncionario(nome: nome, valorCarga: valor)
             prg.addToCategoriasFuncionario(categoria)
@@ -189,6 +190,7 @@ class CategoriaFuncionarioController {
             } else {
                 retorno.mensagem = "Erro ao salvar"
             }
+            retorno.id = categoria?.id ?:0
         }
 
 
@@ -198,20 +200,31 @@ class CategoriaFuncionarioController {
     def carregarCategorias(){
         def categorias = Rh.get(params.prgId as Long).categoriasFuncionario
 
-        render template: 'tabelaCategoria', model: [categorias: categorias]
+        render template: 'tabelaCategoria', model: [categorias: categorias.sort{it.nome}]
 
     }
 
     def excluirCategoria(){
-        def retorno
-        def categoriaId = params.categoriaId ? params.categoriaId as Long: 0
+        def retorno = [:]
+        def categoriaId = params.categoriaId as Long
         def prg = Rh.get(params.prgId as Long)
-        def categoria = CategoriaFuncionario.get(categoriaId)
-        prg.removeFromCategoriasFuncionario(categoria)
-        if(prg.save(flush: true) && categoria.delete(flush: true)){
+        def categoria = CategoriaFuncionario.get(categoriaId as Long)
+        log.debug("CAT:"+categoriaId)
+        if(categoria.delete(flush: true)){
             retorno.mensagem = "Sucesso"
         }
 
         render retorno as JSON
+    }
+
+    def cancelarCategoria(){
+        def retorno = [:]
+        def categoriaId = params.categoriaId as Long
+        def categoria = CategoriaFuncionario.get(categoriaId as Long)
+        retorno.nome = categoria.nome
+        retorno.valorCarga = categoria.valorCarga
+
+        render retorno as JSON
+
     }
 }

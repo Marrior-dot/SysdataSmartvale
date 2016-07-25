@@ -8,18 +8,26 @@
                 data: {prgId:$("#rhId").val(), categoriaId: categoriaId},
                 dataType: 'json',
                 success: function (data) {
-
+                    console.log(data.retorno)
+                    document.getElementById("mensagem").innerHTML =  "<div class='alert alert-info'>Excluido com Sucesso</div>";
                 }
             })
         }
 
-        function salvarCategoria(nome, valor, categoriaId) {
+        function salvarCategoria(nome, valor, categoriaId, component) {
             $.ajax({
                 url: "${g.createLink(controller:'categoriaFuncionario', action:'salvarCategoria')}",
                 data: {prgId:$("#rhId").val(), categoriaNome: nome, categoriaValor:valor, categoriaId: categoriaId},
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    document.getElementById("mensagem").innerHTML =  "<div class='alert alert-info'>"+data.mensagem+"</div>";
+                    $(component).parent().parent().html(         '<input type="hidden" name="categoriaId" value="'+data.id+'">'+
+                            '<td><div class="catNome">'+nome+'</div></td>'+
+                            '<td><div class="catValor">'+valor+'</div></td>'+
+                            '<td>'+
+                            '<button class="btn btn-primary editarButton">Editar</button> '+
+                            '<button class="btn btn-danger excluirButton">Excluir</button>'+
+                            '</td>');
                 }
             });
         }
@@ -48,27 +56,39 @@
         });
 
         $('#tabelaCategoria').on('click','tr .excluirButton', function () {
-            var categoriaId = $(this).parent().parent().find('[name="categoriaId"]').val();
-            excluirCategoria(categoriaId);
-            $(this).parent().parent().remove();
+            var confirmacao = confirm('Você tem certeza?');
+            if(confirmacao){
+                var categoriaId = $(this).parent().parent().find('[name="categoriaId"]').val();
+                excluirCategoria(categoriaId);
+                $(this).parent().parent().remove();
+            }
         })
 
         $('#tabelaCategoria').on('click','tr .cancelarButton', function () {
+            var categoriaId = $(this).parent().parent().find('[name="categoriaId"]').val();
+            var componente = $(this).parent().parent();
+            $.ajax({
+                url: "${g.createLink(controller:'categoriaFuncionario', action:'cancelarCategoria')}",
+                data: {categoriaId: categoriaId},
+                dataType: 'json',
+                success: function (data) {
+                    componente.html('<input type="hidden" name="categoriaId" value="'+categoriaId+'">'+
+                            '<td><div class="catNome">'+data.nome+'</div></td>'+
+                            '<td><div class="catValor">'+data.valorCarga+'</div></td>'+
+                            '<td>'+
+                            '<button class="btn btn-primary editarButton">Editar</button> '+
+                            '<button class="btn btn-danger excluirButton">Excluir</button>'+
+                            '</td>');
 
+                }
+            });
         });
 
         $('#tabelaCategoria').on('click','tr .salvarButton', function () {
             var nome = $(this).parent().parent().find('[name="nome"]').val();
             var valor = "R$ "+$(this).parent().parent().find('[name="valor"]').val();
             var categoriaId = $(this).parent().parent().find('[name="categoriaId"]').val();
-            $(this).parent().parent().html(         '<input type="hidden" name="categoriaId" value="'+categoriaId+'">'+
-                                                    '<td><div class="catNome">'+nome+'</div></td>'+
-                                                    '<td><div class="catValor">'+valor+'</div></td>'+
-                                                    '<td>'+
-                                                        '<button class="btn btn-primary editarButton">Editar</button> '+
-                                                        '<button class="btn btn-danger excluirButton">Excluir</button>'+
-                                                    '</td>');
-            salvarCategoria(nome, valor, categoriaId);
+            salvarCategoria(nome, valor, categoriaId, $(this));
         });
 
         $('#tabelaCategoria').on('click','tr .editarButton', function () {
@@ -85,6 +105,10 @@
         });
     });
 </script>
+<br><br>
+<div id="mensagem">
+
+</div>
 <button class="btn btn-default" id="buttonAdd"> Adicionar Categoria</button>
 <br><br>
 <div class="panel panel-default">
