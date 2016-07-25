@@ -37,26 +37,19 @@ class ArquivoController {
 		def tipoArquivo=params.tipoArquivo
 		def arquivoList
 		def arquivoCount=0
-		if(tipoArquivo){
+
 			arquivoList=Arquivo.withCriteria(){
-				if(tipoArquivo!='null')
-					eq("tipo",TipoArquivo.valueOf(tipoArquivo))
 				if(dataInicio && dataFim)
 					between('dateCreated',dataInicio,dataFim+1)
-				
-				order("id","desc")
-				maxResults(params.max)
-				firstResult(offset)
 			}
 			
 			arquivoCount=Arquivo.withCriteria(){
-				if(tipoArquivo!='null')
-					eq("tipo",TipoArquivo.valueOf(tipoArquivo))
+
 				if(dataInicio && dataFim)
 					between('dateCreated',dataInicio,dataFim+1)
 				projections{rowCount()}
 			}
-		}
+
 		
 		def fields=arquivoList.collect{a->
 			[	id:a.id,
