@@ -46,7 +46,7 @@
                 </a>
 
                 <a class="btn btn-default"
-                   href="${g.createLink(controller: 'funcionario', action: 'create', params = "${[unidade_id: unidadeInstance?.id]}")}">
+                   href="${g.createLink(controller: 'funcionario', action: 'create', params:[unidade_id: unidadeInstance?.id])}">
                     <span class="glyphicon glyphicon-plus"></span>
                     <g:message code="default.new.label" args="[entityName]"/>
                 </a>
