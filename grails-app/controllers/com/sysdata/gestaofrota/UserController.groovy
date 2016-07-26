@@ -38,8 +38,8 @@ class UserController extends BaseOwnerController {
 
                 if (ownerList.size > 0)
                     owner { 'in'('id', ownerList) }
-                maxResults(params.max)
-                firstResult(params.offset ? params.offset as int : 0)
+//                maxResults(params.max)
+//                firstResult(params.offset ? params.offset as int : 0)
 
             }
         }
@@ -66,15 +66,14 @@ class UserController extends BaseOwnerController {
         def resultList = userInstanceList.collect { u ->
             [
                     id    : u.id,
-                    login : u.username,
+                    login : "<a href='${createLink(action: 'show',id:u.id)}'>${u.username}</a>",
                     name  : u.name,
                     roles : u.getAuthorities()*.authority,
-                    owner : u.owner.nome,
-                    action: "<a class='show' href=${createLink(action: 'show')}/${u.id}></a>"
+                    owner : u.owner.nome
             ]
         }
 
-        def resultJSON = [totalRecords: userInstanceTotal, results: resultList]
+        def resultJSON = [recordsTotal: userInstanceTotal, results: resultList]
 
         response.setHeader("Cache-Control", "no-store")
 

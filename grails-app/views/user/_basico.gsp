@@ -16,16 +16,16 @@
 			<g:hiddenField name="action" value="${action}"/>
 			<% def l = [:]
 			l = ownerList.collect {
-				if (it instanceof PostoCombustivel) {
+				if (it.instanceOf(PostoCombustivel)) {
 					[id  : it.id,
 					 nome: "Estabelecimento - " + it.nome]
-				} else if (it instanceof Rh) {
+				} else if (it.instanceOf(Rh)) {
 					[id  : it.id,
 					 nome: "RH - " + it.nome]
-				} else if (it instanceof Administradora) {
+				} else if (it.instanceOf(Administradora)) {
 					[id  : it.id,
 					 nome: "Administradora - " + it.nome]
-				} else if (it instanceof Processadora) {
+				} else if (it.instanceOf(Processadora)) {
 					[id  : it.id,
 					 nome: "Processadora - " + it.nome]
 				}
@@ -45,7 +45,7 @@
 				</g:if>
 			</div>
 
-			<g:if test="${userInstance?.owner.instanceOf(Rh)}">
+			<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
 				<div class="row">
 					<div class="form-group col-md-6">
 						<label for="owner.nome">Nome RH</label>
@@ -59,7 +59,7 @@
 				</div>
 			</g:if>
 
-			<g:elseif test="${userInstance?.owner.instanceOf(Estabelecimento)}">
+			<g:elseif test="${userInstance?.owner?.instanceOf(Estabelecimento)}">
 				<div class="row">
 					<div class="form-group col-md-6">
 						<label for="owner.nome">Nome Estabelecimento</label>
@@ -73,7 +73,7 @@
 				</div>
 			</g:elseif>
 
-			<g:elseif test="${userInstance?.owner.instanceOf(PostoCombustivel)}">
+			<g:elseif test="${userInstance?.owner?.instanceOf(PostoCombustivel)}">
 				<div class="row">
 					<div class="form-group col-md-6">
 						<label for="owner.nome">Nome Posto Combustível</label>

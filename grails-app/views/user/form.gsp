@@ -24,7 +24,7 @@
                     <div class="buttons">
                         <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
                         
-                        <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
+                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
                             <g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
                             <g:link class="btn btn-default" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
                         </sec:ifAnyGranted>
