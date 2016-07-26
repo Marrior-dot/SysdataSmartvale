@@ -46,13 +46,15 @@
 
         $('#buttonAdd').click(function () {
             document.getElementById('bodyTable').innerHTML += '<tr>'+
-                    '<td><input type="enable" name="nome" required="required" class="enable form-control" ></td>'+
-                    '<td><input type="enable" name="valor" required="required" class="enable form-control" placeholder="R$"></td>'+
+                    '<td><input type="text" name="nome" required="required" class="enable form-control" ></td>'+
+                    '<td><input type="text" name="valor" required="required" class="enable form-control money"></td>'+
                     '<td>'+
                     '<button class="btn btn-primary salvarButton" name="salvarButton">Salvar</button> '+
                     '<button class="btn btn-default cancelarButton" name="cancelarButton">Cancelar</button>'+
                     '</td>'+
-                    '</tr>'
+                    '</tr>';
+
+            configInputMasks();
         });
 
         $('#tabelaCategoria').on('click','tr .excluirButton', function () {
