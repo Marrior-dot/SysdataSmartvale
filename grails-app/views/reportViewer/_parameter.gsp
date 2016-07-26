@@ -1,5 +1,5 @@
 <%@ page import="com.sysdata.gestaofrota.Util; br.com.acception.greport.MarkupType" %>
-<div class="form-group col-md-2">
+<div class="form-group col-md-3">
     <g:if test="${parameterInstance?.markupType == MarkupType.TEXT}">
         <label for="${parameterInstance.name}">${parameterInstance.label}</label>
         <input type="text" class="form-control" name="${parameterInstance.name}"
