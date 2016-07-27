@@ -1,43 +1,43 @@
-<div class="panel panel-default">
+<g:form controller="${controller}">
+    <br/>
 
-    <div class="panel-body">
-        <g:form controller="${controller}">
+    <div class="panel panel-default">
+        <div class="panel-heading">Pesquisa</div>
 
+        <div class="panel-body">
             <div class="list">
-                <table id="usuTable"
-                       class="table table-striped table-bordered table-hover table-condensed table-default">
-                    <thead>
-                        <th>Login</th>
+                    <table id="userTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+                        <thead>
                         <th>Nome</th>
+                        <th>Login</th>
                         <th>Organização</th>
-                        <th>Papéis</th>
-                    </thead>
-                </table>
-
+                        <th>Permissões</th>
+                        </thead>
+                    </table>
             </div>
-        </g:form>
+        </div>
     </div>
-</div>
+</g:form>
 
 <script type="text/javascript">
 
+    $(document).ready(function(){
 
-    $(document).ready(function () {
+        $("#userTable").DataTable({
 
-        $("#usuTable").DataTable({
             //"serverSide": true,
-            "ajax": {
-                "url": "${createLink(controller:'user',action:'listAllJSON')}",
-                "dataSrc": "results"
+            "ajax":{
+                "url":"${createLink(controller:'user',action:'listAllJSON')}",
+                "data":{"unidade_id":${unidade_id ?: 'null'}},
+                "dataSrc":"results"
             },
-            "columns": [
-                {"data": "login"},
-                {"data": "name"},
-                {"data": "owner"},
-                {"data": "roles"}
+            "columns":[
+                {"data":"name"},
+                {"data":"login"},
+                {"data":"owner"},
+                {"data": "roles"},
             ]
         });
-
-
     });
 </script>
+
