@@ -16,16 +16,16 @@
 			<g:hiddenField name="action" value="${action}"/>
 			<% def l = [:]
 			l = ownerList.collect {
-				if (it instanceof PostoCombustivel) {
+				if (it.instanceOf(PostoCombustivel)) {
 					[id  : it.id,
 					 nome: "Estabelecimento - " + it.nome]
-				} else if (it instanceof Rh) {
+				} else if (it.instanceOf(Rh)) {
 					[id  : it.id,
 					 nome: "RH - " + it.nome]
-				} else if (it instanceof Administradora) {
+				} else if (it.instanceOf(Administradora)) {
 					[id  : it.id,
 					 nome: "Administradora - " + it.nome]
-				} else if (it instanceof Processadora) {
+				} else if (it.instanceOf(Processadora)) {
 					[id  : it.id,
 					 nome: "Processadora - " + it.nome]
 				}

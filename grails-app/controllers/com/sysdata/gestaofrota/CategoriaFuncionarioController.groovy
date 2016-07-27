@@ -199,9 +199,7 @@ class CategoriaFuncionarioController {
 
     def carregarCategorias(){
         def categorias = Rh.get(params.prgId as Long).categoriasFuncionario
-
         render template: 'tabelaCategoria', model: [categorias: categorias.sort{it.nome}]
-
     }
 
     def excluirCategoria(){

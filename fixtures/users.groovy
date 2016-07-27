@@ -4,13 +4,14 @@ import com.sysdata.gestaofrota.User
 import com.sysdata.gestaofrota.UserRole
 
 fixture {
+
     println("CRIANDO ROLES...")
-    roleProc(Role, authority: "ROLE_PROC")
-    roleAdmin(Role, authority: "ROLE_ADMIN")
-    roleRh(Role, authority: "ROLE_RH")
-    roleEstab(Role, authority: "ROLE_ESTAB")
-    roleLog(Role, authority: "ROLE_LOG")
-    roleHelp(Role, authority: "ROLE_HELP")
+    roleProc(Role, authority: "ROLE_PROC", owner:"Processadora" )
+    roleAdmin(Role, authority: "ROLE_ADMIN",owner: "Administradora")
+    roleRh(Role, authority: "ROLE_RH",owner:"RH")
+    roleEstab(Role, authority: "ROLE_ESTAB",owner:"Estabelecimento")
+    roleLog(Role, authority: "ROLE_LOG",owner:"Processadora")
+    roleHelp(Role, authority: "ROLE_HELP",owner:"Processadora")
 
     println("CRIANDO USUÁRIOS PADRÕES...")
     userSuporteAcception(User, owner: Processadora.findByNome("SYSDATA"), name: "Administrador Acception", username: 'suporte.acception', password: '@cceptionn0t3', email: "acception@acception.com.br",

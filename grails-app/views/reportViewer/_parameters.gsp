@@ -2,22 +2,34 @@
 
 <g:if test="${reportInstance?.parameters}">
 
-    %{--<g:set var="reportParameters" value="${reportInstance.parameters.sort { it.order }}"/>--}%
-    %{--<g:set var="mod" value="${reportParameters?.size() % 4}"/>--}%
-
-    %{--<g:each in="${[0..mod]}" status="i">--}%
-        %{--<div class="row">--}%
-            %{--<g:each in="${reportParameters[(i * 4).. reportParameters.size() ??? 4]}" var="parameterInstance">--}%
-                %{--<g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>--}%
-            %{--</g:each>--}%
-        %{--</div>--}%
-    %{--</g:each>--}%
+    <g:set var="reportParameters" value="${reportInstance.parameters.sort { it.order }}"/>
 
 
-    <div class="row">
-        <g:each in="${reportInstance.parameters.sort { it.order }}" var="parameterInstance">
-            <g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>
-        </g:each>
-    </div>
+    <g:if test="${reportParameters.size() <= 4}">
+        <div class="row">
+            <g:each in="${reportParameters}" var="parameterInstance">
+                <g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>
+            </g:each>
+        </div>
+    </g:if>
+    <g:elseif test="${reportParameters.size() <= 8}">
+        <div class="row">
+            <g:each in="${reportParameters[0..3]}" var="parameterInstance">
+                <g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>
+            </g:each>
+        </div>
+        <div class="row">
+            <g:each in="${reportParameters[4..(reportParameters.size()-1)]}" var="parameterInstance">
+                <g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>
+            </g:each>
+        </div>
+    </g:elseif>
+
+
+    %{--<div class="row">--}%
+        %{--<g:each in="${reportInstance.parameters.sort { it.order }}" var="parameterInstance">--}%
+            %{--<g:render template="/reportViewer/parameter" model="${[parameterInstance: parameterInstance]}"/>--}%
+        %{--</g:each>--}%
+    %{--</div>--}%
 
 </g:if>

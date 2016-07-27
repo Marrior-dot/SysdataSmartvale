@@ -74,12 +74,12 @@ log4j = {
         console name: "stdout", layout: pattern(conversionPattern: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] %p %c{4} - %m%n")
 
         def logDir = System.env["AMAZON_FLEET_LOG_DIR"]
-        if (!logDir) logDir = "/var/log/tomcat6/frota"
+        if (!logDir) logDir = "/var/log/tomcat7/frota"
 
         appender new DailyRollingFileAppender(
                 name: "logFile",
                 datePattern: "'.'yyyy-MM-dd",
-                file: logDir + "/amazon_fleet.log",
+                file: logDir + "/fleet.log",
                 layout: pattern(conversionPattern: '[%d{yyyy-MM-dd HH:mm:ss.SSS}] - %m%n')
         )
     }

@@ -30,6 +30,10 @@
                 esse.append("<input type='hidden' name='valorCarga[" + item.id + "]' value='" + item.valor + "'/>");
             });
         });
+
+        //seleciona a primeira categoria
+        $('input:radio[name=categoriaSelecionada]:first').attr('checked', true);
+        selecionaCategoria();
     });
 
     function limparFuncionario(){
