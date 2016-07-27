@@ -23,10 +23,15 @@
         </div>
         <div class="panel-body">
             <div class="buttons">
-                <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+                <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
                 <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
                     <g:actionSubmit class="btn btn-default" action="create" value="Novo Usuário"/>
                 </sec:ifAnyGranted>
+                <g:link action="create" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Novo Usuário
+                </g:link>
+
             </div>
             <div class="body">
                 <g:if test="${flash.message}">
