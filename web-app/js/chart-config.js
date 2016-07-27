@@ -62,34 +62,6 @@ $(function () {
                 var ctx = $("#line-chart-transacoes canvas").get(0).getContext("2d");
 
                 var chart = new Chart(ctx).Line(data, {
-                  /*  customTooltips: function (tooltip) {
-                        var tooltipEl = $('#chartjs-tooltip');
-
-                        if (!tooltip) {
-                            tooltipEl.css({
-                                opacity: 0
-                            });
-                            return;
-                        }
-
-                        tooltipEl.removeClass('above below');
-                        tooltipEl.addClass(tooltip.yAlign);
-
-                        // split out the label and value and make your own tooltip here
-                        console.log(tooltip);
-                        var parts = tooltip;
-                        var innerHtml = '<span> R$ </span> : <span><b>' + parts + '</b></span>';
-                        tooltipEl.html(innerHtml);
-
-                        tooltipEl.css({
-                            opacity: 1,
-                            left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-                            top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px',
-                            fontFamily: tooltip.fontFamily,
-                            fontSize: tooltip.fontSize,
-                            fontStyle: tooltip.fontStyle,
-                        });
-                    }*/
                 });
 
             }
