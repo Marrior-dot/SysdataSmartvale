@@ -43,7 +43,7 @@ class RhController extends BaseOwnerController {
 		rhInstance.telefone=params['telefone']
 		
         if (rhService.saveNew(rhInstance)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Rh'), rhInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
             redirect(action: "show", id: rhInstance.id)
         }
         else {
@@ -85,7 +85,7 @@ class RhController extends BaseOwnerController {
                 def version = params.version.toLong()
                 if (rhInstance.version > version) {
                     
-                    rhInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Rh')] as Object[], "Another user has updated this Rh while you were editing")
+                    rhInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Another user has updated this Rh while you were editing")
                     render(view:'form',model:[rhInstance:rhInstance,action:Util.ACTION_EDIT])
                     return
                 }
@@ -238,7 +238,7 @@ class RhController extends BaseOwnerController {
 		def fields=rhInstanceList.collect{r->
 			[id:r.id,
 				codigo:r.codigo,		
-				razao:r.nome,
+				razao:"<a href=${createLink(action:'show')}/${r.id}>"+r.nome+"</a>",
 				fantasia:r.nomeFantasia,
 				cnpj:r.cnpj,
 				acao:"<a class='show' href=${createLink(action:'show')}/${r.id}></a>"]
