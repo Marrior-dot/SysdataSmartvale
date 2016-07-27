@@ -20,7 +20,7 @@ environments {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
 			url = urlDev
-			password="postgres"
+			password="jmml72"
         }
     }
     test {
