@@ -423,7 +423,7 @@ class RhController extends BaseOwnerController {
 		log.debug(estab)
 		def prg = Rh.get(params.prgId as Long)
 		prg.addToEmpresas(estab)
-		if(prg.save(flush: true)){
+		if(prg.save(flush: true, failOnError: true)){
 			retorno.mensagem = "Estabelecimento Adicionado"
 		} else {
 			retorno.mensagem = "Erro ao Salvar Estabelecimento"
