@@ -1,5 +1,6 @@
 package br.com.acception.greport
 
+import com.sysdata.gestaofrota.Role
 import org.springframework.dao.DataIntegrityViolationException
 
 class ReportController {
@@ -21,19 +22,25 @@ class ReportController {
 
     def save() {
         def reportInstance = new Report(params)
+        def roles = params.list('roles').collect { Role.get(it as Long) }
+        reportInstance.save()
+        roles.each { role ->
+            reportInstance.addToRoles(role)
+        }
+
         if (!reportInstance.save(flush: true)) {
             render(view: "create", model: [reportInstance: reportInstance])
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'report.label', default: 'Report'), reportInstance.id])
+        flash.message = message(code: 'default.created.message', args: [message(code: 'report.label', default: 'Report'), reportInstance.id])
         redirect(action: "show", id: reportInstance.id)
     }
 
     def show() {
-        def reportInstance = Report.get(params.id)
+        def reportInstance = Report.get(params.long('id'))
         if (!reportInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "list")
             return
         }
@@ -42,7 +49,7 @@ class ReportController {
     }
 
     def edit() {
-        def reportInstance = Report.get(params.id)
+        def reportInstance = Report.get(params.long('id'))
         if (!reportInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "list")
@@ -53,7 +60,7 @@ class ReportController {
     }
 
     def update() {
-        def reportInstance = Report.get(params.id)
+        def reportInstance = Report.get(params.long('id'))
         if (!reportInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "list")
@@ -64,39 +71,44 @@ class ReportController {
             def version = params.version.toLong()
             if (reportInstance.version > version) {
                 reportInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'report.label', default: 'Report')] as Object[],
-                          "Another user has updated this Report while you were editing")
+                        [message(code: 'report.label', default: 'Report')] as Object[],
+                        "Another user has updated this Report while you were editing")
                 render(view: "edit", model: [reportInstance: reportInstance])
                 return
             }
         }
 
         reportInstance.properties = params
+        def roles = params.list('roles').collect { Role.get(it as Long) }
+        reportInstance.roles.clear()
+        roles.each { role ->
+            reportInstance.addToRoles(role)
+        }
 
         if (!reportInstance.save(flush: true)) {
             render(view: "edit", model: [reportInstance: reportInstance])
             return
         }
 
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'report.label', default: 'Report'), reportInstance.id])
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'report.label', default: 'Report'), reportInstance.id])
         redirect(action: "show", id: reportInstance.id)
     }
 
     def delete() {
         def reportInstance = Report.get(params.id)
         if (!reportInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "list")
             return
         }
 
         try {
             reportInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'report.label', default: 'Report'), params.id])
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'report.label', default: 'Report'), params.id])
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'report.label', default: 'Report'), params.id])
             redirect(action: "show", id: params.id)
         }
     }

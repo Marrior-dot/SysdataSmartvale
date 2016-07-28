@@ -36,7 +36,7 @@
 					<g:hiddenField name="id" value="${reportInstance?.id}" />
 					<g:hiddenField name="version" value="${reportInstance?.version}" />
 					<fieldset class="form">
-						<g:render template="form"/>
+						<g:render template="form" model="${[reportInstance: reportInstance]}"/>
 					</fieldset>
 					<fieldset class="buttons">
 						<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />

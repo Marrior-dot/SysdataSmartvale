@@ -17,8 +17,6 @@
 
 				<a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
 				<g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
-				<g:link class="btn btn-default"  action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
-
 			</div>
 			<br><br>
 			<div id="edit-parameterReport" class="content scaffold-edit" role="main">
@@ -36,7 +34,7 @@
 					<g:hiddenField name="id" value="${parameterReportInstance?.id}" />
 					<g:hiddenField name="version" value="${parameterReportInstance?.version}" />
 					<fieldset class="form">
-						<g:render template="form"/>
+						<g:render template="form" model="${[parameterReportInstance: parameterReportInstance]}"/>
 					</fieldset>
 					<fieldset class="buttons">
 						<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
