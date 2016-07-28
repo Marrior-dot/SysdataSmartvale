@@ -20,9 +20,13 @@ class ReportViewerController {
     }
 
     def openToParameters() {
-        def reportInstance = Report.get(params.id)
-        if (!reportInstance)
+        def reportInstance = Report.get(params.long('id'))
+        if (!reportInstance) {
             flash.message = "Relatório ${params.id} não encontrado na base de configuração"
+            redirect(action: 'listReports')
+            return ;
+        }
+
         render view: "list", model: [reportInstance: reportInstance, rowCount: 0]
     }
 
@@ -68,6 +72,7 @@ class ReportViewerController {
 
 
     def list(Integer max, Integer offset) {
+        println("PARAMS: ${params}")
         params.max = max ?: 10
         params.offset = offset ?: 0
 
@@ -94,7 +99,6 @@ class ReportViewerController {
             }
         }
 
-        println("PARAMS: ${params}")
         params + result
     }
 }

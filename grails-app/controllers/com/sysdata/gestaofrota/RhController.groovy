@@ -185,7 +185,7 @@ class RhController extends BaseOwnerController {
 		withSecurity{ownerList->
 			rhInstanceList=Rh
 							.createCriteria()
-							.list(max:params.max,offset:offset){
+							.list(){
 								eq('status', Status.ATIVO)
 								if(ownerList.size>0)
 									'in'('id',ownerList)

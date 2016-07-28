@@ -15,18 +15,42 @@
 		</div>
 		<div class="panel-body">
 			<div class="nav" role="navigation">
-
 				<a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
 				<g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
-				<g:link class="btn btn-default" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
-
 			</div>
 			<br><br>
+
 			<div id="show-parameterReport" class="content scaffold-show" role="main">
 				<g:if test="${flash.message}">
 					<div class="alert alert-info" role="status">${flash.message}</div>
 				</g:if>
 				<ul class="properties">
+					<g:if test="${parameterReportInstance?.report}">
+						<li class="fieldcontain">
+							<span class="property-label p-label">
+								<g:message code="parameterReport.report.label" default="Report" />
+							</span>
+							<span class="property-value p-value" aria-labelledby="report-label">
+								<g:link controller="report" action="show" id="${parameterReportInstance?.report?.id}">
+									${parameterReportInstance?.report?.name?.encodeAsHTML()}
+								</g:link>
+							</span>
+						</li>
+					</g:if>
+
+					<li class="fieldcontain">
+						<span class="property-label p-label">
+							Roles
+						</span>
+						<span class="property-value p-value" aria-labelledby="report-label">
+							<g:if test="${parameterReportInstance?.roles}">
+								${parameterReportInstance?.roles?.sort{it.authority}*.authority?.join(', ')}
+							</g:if>
+							<g:else>
+								(NENHUM)
+							</g:else>
+						</span>
+					</li>
 
 					<g:if test="${parameterReportInstance?.dataType}">
 						<li class="fieldcontain">
@@ -72,17 +96,8 @@
 
 						</li>
 					</g:if>
-
-					<g:if test="${parameterReportInstance?.report}">
-						<li class="fieldcontain">
-							<span id="report-label" class="property-label p-label"><g:message code="parameterReport.report.label" default="Report" /></span>
-
-							<span class="property-value p-value" aria-labelledby="report-label"><g:link controller="report" action="show" id="${parameterReportInstance?.report?.id}">${parameterReportInstance?.report?.encodeAsHTML()}</g:link></span>
-
-						</li>
-					</g:if>
-
 				</ul>
+
 				<g:form>
 					<fieldset class="buttons">
 						<g:hiddenField name="id" value="${parameterReportInstance?.id}" />
