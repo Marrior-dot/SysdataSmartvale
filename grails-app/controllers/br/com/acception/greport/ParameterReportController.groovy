@@ -1,5 +1,6 @@
 package br.com.acception.greport
 
+import com.sysdata.gestaofrota.Role
 import org.springframework.dao.DataIntegrityViolationException
 
 class ParameterReportController {
@@ -21,6 +22,12 @@ class ParameterReportController {
 
     def save() {
         def parameterReportInstance = new ParameterReport(params)
+        def roles = params.list('roles').collect { Role.get(it as Long) }
+        parameterReportInstance.save()
+        roles.each { role ->
+            parameterReportInstance.addToRoles(role)
+        }
+
         if (!parameterReportInstance.save(flush: true)) {
             render(view: "create", model: [parameterReportInstance: parameterReportInstance])
             return
@@ -53,7 +60,7 @@ class ParameterReportController {
     }
 
     def update() {
-        def parameterReportInstance = ParameterReport.get(params.id)
+        def parameterReportInstance = ParameterReport.get(params.long('id'))
         if (!parameterReportInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'parameterReport.label', default: 'ParameterReport'), params.id])
             redirect(action: "list")
@@ -72,6 +79,11 @@ class ParameterReportController {
         }
 
         parameterReportInstance.properties = params
+        def roles = params.list('roles').collect { Role.get(it as Long) }
+        parameterReportInstance.roles.clear()
+        roles.each { role ->
+            parameterReportInstance.addToRoles(role)
+        }
 
         if (!parameterReportInstance.save(flush: true)) {
             render(view: "edit", model: [parameterReportInstance: parameterReportInstance])

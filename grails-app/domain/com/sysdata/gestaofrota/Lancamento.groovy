@@ -14,5 +14,6 @@ class Lancamento {
     static constraints = {
         dataEfetivacao nullable: true
         referencia nullable: true
+		transacao nullable: true
     }
 }

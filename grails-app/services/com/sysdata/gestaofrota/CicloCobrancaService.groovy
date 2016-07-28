@@ -28,6 +28,7 @@ class CicloCobrancaService {
             if(evt){
                 def lanc=new Lancamento()
                 lanc.with{
+                    conta=f.conta
                     valor=tx
                     tipo=tl
                     referencia=cicloAberto.referencia
@@ -51,7 +52,7 @@ class CicloCobrancaService {
 
         withCobranca(f,TipoLancamento.TAXA_UTILIZACAO,tx){
 
-            def evt=(Transacao.withCriteria {
+            def evt=(Transacao.withCriteria(uniqueResult:true) {
                                     "inList"("tipo",[TipoTransacao.COMBUSTIVEL,TipoTransacao.SERVICOS])
                                     "inList"("status",[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA])
                                     eq("participante",f)
@@ -73,7 +74,7 @@ class CicloCobrancaService {
 
         withCobranca(f,TipoLancamento.MENSALIDADE,tx){
 
-            def ativoMesAnt=(AuditLogEvent.withCriteria {
+            def ativoMesAnt=(AuditLogEvent.withCriteria(uniqueResult:true) {
                 eq("className","Funcionario")
                 eq("propertyName","status")
                 eq("oldValue","ATIVO")
@@ -85,7 +86,7 @@ class CicloCobrancaService {
                 }
             })>0
 
-            def evt=(f.status==Status.ATIVO && f.dateCreated.clearTime()<=intv.prmDat) || (f.status==Status.INATIVO && ativoMesAnt)
+            def evt=(f.status==Status.ATIVO && f.dateCreated<=intv.ultDat) || (f.status==Status.INATIVO && ativoMesAnt)
             evt
         }
 
@@ -94,7 +95,9 @@ class CicloCobrancaService {
     private def cobrarEmissaoCartao(f,intv,tx){
 
         withCobranca(f,TipoLancamento.EMISSAO_CARTAO,tx){
-            f.cartoes.size()==1 && f.cartoes[0].dateCreated.clearTime()>=intv.prmDat && f.cartoes[0].dateCreated.clearTime()<=intv.ultDat
+
+            def carList=f.cartoes as List<Cartao>
+            carList.size()==1 && carList[0].dateCreated>=intv.prmDat && carList[0].dateCreated<=intv.ultDat
         }
 
     }
@@ -106,9 +109,10 @@ class CicloCobrancaService {
             def evt=false
             if(f.cartoes.size()>1) {
                 //Desconsidera primeiro cartão na pesquisa
-                def prim=f.cartoes.sort{it.id}[0]
-                def outList=f.cartoes-prim
-                evt=outList.find{it.dateCreated.clearTime()>=intv.primDat && it.dateCreated.clearTime()<=intv.ultDat}
+                def carList=f.cartoes as List<Cartao>
+                def prim=carList.sort{it.id}[0]
+                def outList=carList-prim
+                evt=outList.any{it.dateCreated.clearTime()>=intv.primDat && it.dateCreated.clearTime()<=intv.ultDat}
             }
             evt
         }
@@ -134,12 +138,25 @@ class CicloCobrancaService {
 
     def execute(dateRef) {
 
-        def intervRef=calcularIntervaloReferencia(dateRef)
+        log.debug "Iniciando Cobranca de Taxas Cartoes..."
+        if(dateRef){
+            def intervRef=calcularIntervaloReferencia(dateRef)
+            log.debug "Periodo de referencia = Inicio: ${intervRef.prmDat.format("dd/MM/yyyy")} Fim: ${intervRef.ultDat.format("dd/MM/yyyy")}"
 
-        Rh.list().each{r->
-            r.unidades*.funcionarios.each{f->
-                if(r.taxaUtilizacao) cobrarTaxaUtilizacao(f,intervRef,r.taxaUtilizacao)
+            Rh.list().each{r->
+                log.debug "Programa: $r.nome"
+                r.unidades.each{u->
+                    log.debug "Unidade: $u.nome"
+                    u.funcionarios.each {f->
+                        if(r.taxaUtilizacao) cobrarTaxaUtilizacao(f,intervRef,r.taxaUtilizacao)
+                        if(r.taxaMensalidade) cobrarMensalidade(f,intervRef,r.taxaMensalidade)
+                        if(r.taxaEmissaoCartao) cobrarEmissaoCartao(f,intervRef,r.taxaEmissaoCartao)
+                        if(r.taxaReemissaoCartao) cobrarReemissaoCartao(f,intervRef,r.taxaReemissaoCartao)
+                    }
+                }
             }
-        }
+        }else throw new RuntimeException("Data de Referencia nao definida!")
+
+        log.debug "Cobranca de Taxas Cartoes finalizada!"
     }
 }

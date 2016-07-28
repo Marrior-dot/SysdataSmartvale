@@ -25,7 +25,7 @@ class CicloCobranca {
         sprintf("%04d%02d",ano,mes)
     }
 
-    private def abrirNovoCiclo(ref){
+    private static CicloCobranca abrirNovoCiclo(ref){
         def cicloAberto=new CicloCobranca(referencia:ref,status:StatusCiclo.ABERTO)
         cicloAberto.save(flush:true)
         cicloAberto
@@ -40,7 +40,7 @@ class CicloCobranca {
 
         def cicloAberto
 
-        def ultCiclo=CicloCobranca.withCriteria {
+        def ultCiclo=CicloCobranca.withCriteria(uniqueResult:true) {
                         maxResults(1)
                         order("id","desc")
                     }

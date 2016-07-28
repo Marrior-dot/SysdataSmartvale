@@ -1,6 +1,26 @@
 <%@ page import="br.com.acception.greport.ParameterReport" %>
 
+<div class="form-group">
+	<div class="checkbox">
+		<label for="mandatory">
+			<input name="mandatory" id="mandatory" type="checkbox" value="${fieldReportInstance?.mandatory}"> <g:message code="fieldReport.mandatory.label" default="Mandatory" />
+			<span class="help-block">O campo deve obrigatoriamente ser informado?</span>
+		</label>
+	</div>
+</div>
 
+<div class="form-group">
+	<label class="control-label">Roles</label>
+
+	<div class="form-control">
+		<g:each in="${parameterReportInstance?.report?.roles?.sort{it.authority}}" var="rola">
+			<label class="checkbox-inline">
+				<input type="checkbox" name="roles" value="${rola.id}"
+					${parameterReportInstance?.roles?.contains(rola) ? 'checked' : ''}> ${rola.authority}
+			</label>
+		</g:each>
+	</div>
+</div>
 
 <div class="form-group ${hasErrors(bean: parameterReportInstance, field: 'dataType', 'error')} required">
 	<label for="dataType">
@@ -43,23 +63,6 @@
 	<g:field class="form-control" type="number" name="order" required="" value="${parameterReportInstance.order}"/>
 </div>
 
-<div class="form-group ${hasErrors(bean: parameterReportInstance, field: 'report', 'error')} required">
-	<label for="report">
-		<g:message code="parameterReport.report.label" default="Report" />
-	</label>
-	<span class="required-indicator">*</span>
-	<g:select  id="report" name="report.id" from="${br.com.acception.greport.Report.list()}" optionKey="id" optionValue="name" required=""
-	value="${parameterReportInstance?.report?.id}" class="many-to-one form-control"/>
-</div>
-
-
-<div class="form-group ${hasErrors(bean: fieldReportInstance, field: 'mandatory', 'error')} ">
-	<label for="mandatory">
-		<g:message code="fieldReport.mandatory.label" default="Mandatory" />
-		
-	</label>
-	<g:checkBox name="mandatory" value="${fieldReportInstance?.mandatory}" />
-</div>
 
 
 

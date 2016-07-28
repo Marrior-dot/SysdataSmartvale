@@ -33,8 +33,8 @@
 			<g:form action="list">
 				<g:hiddenField name="id" value="${reportInstance?.id}"/>
 				
-				<g:render template="parameters" model="params"/>
-				            
+				<g:render template="parameters" model="${[reportInstance: reportInstance]}"/>
+
 	            <div class="buttons">
 	            	<g:submitButton class="btn btn-default list" name="list" value="Listar" />
 	            	<g:actionSubmit class="btn btn-default xls" action="export" value="Excel"/>

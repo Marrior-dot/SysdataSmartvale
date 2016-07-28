@@ -7,7 +7,9 @@ class Conta {
 	Double saldo=0.0
 	
 	static belongsTo=Participante
-	
+
+	static transients = ['participante']
+
     static constraints = {
     }
 	
@@ -27,4 +29,8 @@ class Conta {
 		}
 	
 	}
+
+    Participante getParticipante(){
+        Participante.findByConta(this)
+    }
 }

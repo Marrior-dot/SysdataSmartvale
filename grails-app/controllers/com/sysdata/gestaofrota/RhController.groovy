@@ -91,8 +91,6 @@ class RhController extends BaseOwnerController {
                 }
             }
 			
-			
-
             rhInstance.properties = params
 			rhInstance.endereco=params['endereco']
 			rhInstance.telefone=params['telefone']

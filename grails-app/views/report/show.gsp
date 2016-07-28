@@ -28,19 +28,32 @@
 					</g:if>
 					<ol class="property-list report">
 
-
+						<g:if test="${reportInstance?.name}">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<strong><span class="property-label"><g:message code="report.name.label" default="Name" /></span></strong>
+									<span class="property-value"><p class="relatorio-show"><g:fieldValue bean="${reportInstance}" field="name"/></p></span>
+								</div>
+							</div>
+						</g:if>
 
 						<g:if test="${reportInstance?.queryType}">
 							<div class="panel panel-default">
 								<div class="panel-body">
 									<strong><span id="queryType-label" class="property-label"><g:message code="report.queryType.label" default="Query Type" /></span></strong>
-
 									<span class="property-value" aria-labelledby="queryType-label"><p class="relatorio-show"><g:fieldValue bean="${reportInstance}" field="queryType"/></p></span>
 								</div>
 							</div>
 						</g:if>
 
-
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<strong><span class="property-label">Roles</span></strong>
+								<span class="property-value">
+									<p class="relatorio-show">${reportInstance?.roles?.sort{it.authority}*.authority.join(', ')}</p>
+								</span>
+							</div>
+						</div>
 
 						<g:if test="${reportInstance?.query}">
 							<div class="panel panel-default">
