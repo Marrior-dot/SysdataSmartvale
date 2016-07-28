@@ -18,7 +18,7 @@
 
         <div class="panel-body">
             <g:if test="${flash.message}">
-                <div class="message">${flash.message}</div>
+                <div class="alert alert-info">${flash.message}</div>
             </g:if>
 
             <g:hasErrors bean="${funcionarioInstance}">

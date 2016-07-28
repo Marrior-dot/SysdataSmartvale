@@ -6,8 +6,10 @@ class RhService {
 	
     synchronized def saveNew(rhInstance) {
 		def ultCod=Rh.withCriteria(uniqueResult:true) {
-						projections{max('codigo')}
-					}
+			projections{max('id')}
+		}
+
+		ultCod = Integer.parseInt(Rh.get(ultCod).codigo)
 		
 		def novoCod=ultCod?++(ultCod as long):1
 		
