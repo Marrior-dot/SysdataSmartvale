@@ -26,6 +26,8 @@
                 },
                 complete: function () {
                     waitingDialog.hide();
+                    verificarDisponibilidadeBotao();
+
                 }
 
             })
@@ -48,6 +50,7 @@
                         },
                         complete: function () {
                             waitingDialog.hide();
+                            verificarDisponibilidadeBotao();
                         }
                     })
                 } else {
@@ -70,7 +73,7 @@
         }
 
         function verificarDisponibilidadeBotao() {
-            var selected = $("select option:selected").val();
+            var selected = $("select#estabs option:selected").val();
             if(selected == 'none'){
                 $("#addButton").prop('disabled', true);
             } else {

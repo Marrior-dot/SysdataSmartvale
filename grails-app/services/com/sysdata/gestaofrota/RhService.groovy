@@ -14,6 +14,6 @@ class RhService {
 		rhInstance.codigo=novoCod
 		
 		participanteService.saveCidade(rhInstance.endereco)
-		rhInstance.save(flush:true)
+		rhInstance.save(flush:true,failOnError: true)
     }
 }

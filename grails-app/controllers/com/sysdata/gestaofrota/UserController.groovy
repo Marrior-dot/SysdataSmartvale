@@ -38,7 +38,7 @@ class UserController extends BaseOwnerController {
 
                 if (ownerList.size > 0)
                     owner { 'in'('id', ownerList) }
-                maxResults(params.max)
+                //maxResults(params.max)
                 firstResult(params.offset ? params.offset as int : 0)
 
             }
@@ -66,7 +66,7 @@ class UserController extends BaseOwnerController {
         def resultList = userInstanceList.collect { u ->
             [
                     id    : u.id,
-                    login : u.username,
+                    login : "<a href=${createLink(action:'show')}/${u.id}>${u.username}</a>",
                     name  : u.name,
                     roles : u.getAuthorities()*.authority,
                     owner : u.owner.nome,
@@ -87,6 +87,7 @@ class UserController extends BaseOwnerController {
         userInstance.properties = params
 
         render(view: 'form', model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
+
 
     }
 

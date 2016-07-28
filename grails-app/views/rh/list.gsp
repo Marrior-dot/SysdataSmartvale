@@ -30,7 +30,7 @@
                 </sec:ifAnyGranted>
                 <br><br>
                 <div class="list">
-                    <table class="table table-striped table-bordered table-hover table-condensed table-default" >
+                   %{-- <table class="table table-striped table-bordered table-hover table-condensed table-default" >
                         <thead>
                         <th>CNPJ</th>
                         <th>Razão Social</th>
@@ -45,7 +45,8 @@
                             </tr>
                         </g:each>
                         </tbody>
-                    </table>
+                    </table>--}%
+                    <g:render template="search"></g:render>
                 </div>
             </g:form>
         </div>

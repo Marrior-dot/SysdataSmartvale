@@ -5,59 +5,39 @@
         <div class="panel-heading">Pesquisa</div>
 
         <div class="panel-body">
-            <fieldset>
-                <input type="radio" name="opcao" value="1" checked="true">Nome</input>
-                <input type="radio" name="opcao" value="2">Login</input>
-                <br><br>
-                <label>Filtro: <g:textField class="form-control" name="filtroUser" value="${filtro}"/></label>
-            </fieldset>
+            <div class="list">
+                    <table id="userTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+                        <thead>
+                        <th>Nome</th>
+                        <th>Login</th>
+                        <th>Organização</th>
+                        <th>Permissões</th>
+                        </thead>
+                    </table>
+            </div>
         </div>
     </div>
-
-
-    <gui:dataTable
-            id="userSearchDT"
-            controller="user" action="listAllJSON"
-            columnDefs="[
-                    [key: 'id', hidden: true],
-                    [key: 'name', sortable: true, resizeable: true, label: 'Nome'],
-                    [key: 'login', sortable: true, resizeable: true, label: 'Login'],
-                    [key: 'owner', sortable: true, resizeable: true, label: 'Organização'],
-                    [key: 'roles', sortable: false, resizeable: true, label: 'Permissões'],
-                    [key: 'action', label: 'Ação']
-            ]"
-            sortedBy="name"
-            rowsPerPage="10"
-            paginatorConfig="[
-                    nextPageLinkLabel    : 'Prox',
-                    previousPageLinkLabel: 'Ant',
-                    firstPageLinkLabel   : 'Prim',
-                    lastPageLinkLabel    : 'Ult',
-                    template             : '{FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}',
-                    pageReportTemplate   : '{totalRecords} total de registros'
-            ]"/>
-
 </g:form>
 
+<script type="text/javascript">
 
+    $(document).ready(function(){
 
+        $("#userTable").DataTable({
 
-<jq:jquery>
-
-    //Filtra enquanto digita
-    $('input[name="filtroUser"]').keyup(function(){
-        filtrarUsuarios($(this).val());
+            //"serverSide": true,
+            "ajax":{
+                "url":"${createLink(controller:'user',action:'listAllJSON')}",
+                "data":{"unidade_id":${unidade_id ?: 'null'}},
+                "dataSrc":"results"
+            },
+            "columns":[
+                {"data":"name"},
+                {"data":"login"},
+                {"data":"owner"},
+                {"data": "roles"},
+            ]
+        });
     });
+</script>
 
-
-    function filtrarUsuarios(filtro){
-
-        var params='';
-
-        params+="opcao="+$(':checked').val()+"&filtro="+filtro;
-
-        filtrarEntidade(GRAILSUI.userSearchDT,params);
-
-    }
-
-</jq:jquery>

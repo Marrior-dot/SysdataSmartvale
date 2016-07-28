@@ -92,6 +92,22 @@ class PedidoCargaController extends BaseOwnerController {
         pedidoCargaInstance.unidade = unidadeInstance
         pedidoCargaInstance.dataCarga = new Date().clearTime()
 
+        //Verifica se existem taxas a serem cobradas
+        //Se existirem, adiciona como itens do pedido
+
+        def lancList=Lancamento.executeQuery("select l from Lancamento l, Funcionario f where l.conta=f.conta and f.unidade=:unid",[unid:unidadeInstance])
+
+        lancList.each{l->
+            def item=new ItemPedido()
+            item.with{
+                participante=l.conta.participante
+                valor=l.valor
+                lancamento=l
+            }
+            pedidoCargaInstance.addToItens(item)
+        }
+
+
         [pedidoCargaInstance: pedidoCargaInstance]
     }
 

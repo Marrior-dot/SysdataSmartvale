@@ -166,8 +166,8 @@ class CategoriaFuncionarioController {
     def salvarCategoria(){
         log.debug("salvando categoriaa....")
         def retorno = [:]
-        def nome = params.categoriaNome;
-        def valor = params.categoriaValor.replace("R\$ ", "") as Double;
+        def nome = params.categoriaNome
+        def valor = params.categoriaValor.replace("R\$ ", "").replace(".", "").replace(",", ".") as Double
         def categoriaId = params.categoriaId ? params.categoriaId as Long: 0
         def prg = Rh.get(params.prgId as Long)
         def categoria = null

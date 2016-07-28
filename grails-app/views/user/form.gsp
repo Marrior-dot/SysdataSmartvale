@@ -22,12 +22,17 @@
                 <div class="panel-heading"><h4><g:message code="default.show.label" args="[entityName]" /></h4></div>
                 <div class="panel-body">
                     <div class="buttons">
-                        <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-                        
-                        <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
-                            <g:link class="btn btn-default" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link>
-                            <g:link class="btn btn-default" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
-                        </sec:ifAnyGranted>
+                        <a class="btn btn-default" href="${createLink(uri: '/')}">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <g:message code="default.home.label"/></a>
+                        <g:link class="btn btn-default" action="list">
+                            <span class="glyphicon glyphicon-list"></span>
+                            <g:message code="default.list.label" args="[entityName]" />
+                        </g:link>
+                        <g:link class="btn btn-default" action="create">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            <g:message code="default.new.label" args="[entityName]" />
+                        </g:link>
                     </div>
 
                     <g:render template="basico" model="${[action: action]}"/>

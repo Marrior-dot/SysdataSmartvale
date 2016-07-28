@@ -28,8 +28,7 @@ class Veiculo extends MaquinaMotorizada {
 
 	String getHodometro(){
 		if(!this.hodometro){
-
-			def ultTr = Transacao
+			def ultTr=Transacao
                     .executeQuery("select max(t) from Transacao t where t.maquina=:maq and t.statusControle in (:sts)",
                     [maq:this,sts:[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA]])
             if(ultTr[0]) this.hodometro=ultTr[0].quilometragem
