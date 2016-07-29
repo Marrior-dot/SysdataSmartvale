@@ -1,6 +1,6 @@
 <%@ page import="com.sysdata.gestaofrota.Util; br.com.acception.greport.MarkupType" %>
 
-<sec:ifAnyGranted roles="${parameterInstance?.roles?.authority}">
+<sec:ifAnyGranted roles="${parameterInstance?.roles?.authority?.join(', ')}">
     <div class="form-group col-md-3">
         <g:if test="${parameterInstance?.markupType == MarkupType.TEXT}">
             <label for="${parameterInstance.name}">${parameterInstance.label}</label>

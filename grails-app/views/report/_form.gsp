@@ -47,21 +47,20 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'fields', 'error')} ">
-            <label for="fields">
-                <g:message code="report.fields.label" default="Fields"/>
-            </label>
+            <label><g:message code="report.fields.label" default="Fields"/></label>
 
-            <g:each in="${reportInstance?.fields ?}" var="f">
+            <g:each in="${reportInstance?.fields?.sort { it.order }}" var="f">
                 <span class="property-value" aria-labelledby="fields-label">
                     <g:link controller="fieldReport" action="show" id="${f.id}">
-                        ${f?.id + " - " + f?.label} |
+                        ${f?.label} |
                     </g:link>
                 </span>
             </g:each>
+            <br/>
 
-            <g:link controller="fieldReport" action="create"
-                    params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'fieldReport.label', default: 'FieldReport')])}</g:link>
-
+            <g:link class="btn btn-default" controller="fieldReport" action="create" params="['report.id': reportInstance?.id]">
+                ${message(code: 'default.add.label', args: [message(code: 'fieldReport.label', default: 'FieldReport')])}
+            </g:link>
         </div>
     </div>
 </div>
@@ -69,22 +68,20 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="fieldcontain ${hasErrors(bean: reportInstance, field: 'parameters', 'error')} ">
-            <label for="parameters">
-                <g:message code="report.parameters.label" default="Parameters"/>
+            <label><g:message code="report.parameters.label" default="Parameters"/></label>
 
-            </label>
-
-            <g:each in="${reportInstance?.parameters ?}" var="p">
-
+            <g:each in="${reportInstance?.parameters?.sort { it.order }}" var="p">
                 <span class="property-value" aria-labelledby="parameters-label">
-                    <g:link controller="parameterReport" action="show" id="${p.id}">${p?.id + " - " + p?.label} |</g:link>
+                    <g:link controller="parameterReport" action="show" id="${p.id}">
+                        ${p?.label} |
+                    </g:link>
                 </span>
-
             </g:each>
+            <br/>
 
-            <g:link controller="parameterReport" action="create"
-                    params="['report.id': reportInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'parameterReport.label', default: 'ParameterReport')])}</g:link>
-
+            <g:link class="btn btn-default" controller="parameterReport" action="create" params="['report.id': reportInstance?.id]">
+                ${message(code: 'default.add.label', args: [message(code: 'parameterReport.label', default: 'ParameterReport')])}
+            </g:link>
         </div>
     </div>
 </div>

@@ -5,10 +5,10 @@
         <title>Relatório de ${reportInstance?.name}</title>
     </head>
     <body>
-		<%
-		    if(dataInicio) params.dataInicio = dataInicio
-			if(dataFim) params.dataFim = dataFim
-		%>
+		%{--<%--}%
+		    %{--if(dataInicio) params.dataInicio = dataInicio--}%
+			%{--if(dataFim) params.dataFim = dataFim--}%
+		%{--%>--}%
 		<br><br>
         <div class="nav">
             <a class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
@@ -17,17 +17,10 @@
         <div class="body">
             <h1>Relatório de ${reportInstance?.name}</h1>
             <g:if test="${flash.message}">
-            	<div class="message">${flash.message}</div>
+            	<div class="alert alert-info" role="alert">${flash.message}</div>
             </g:if>
             <g:if test="${flash.errors}">
-	            <div class="errors">
-	            	<span style="font-weight:bold;padding-left:10px">ERROS</span> 
-	                <ul>
-	                	<g:each in="${flash.errors}" var="err">
-	                		<li>${err}</li>
-	                	</g:each>
-	                </ul>
-	            </div>
+				<div class="alert alert-danger" role="alert">${flash.errors}</div>
 			</g:if>
 			
 			<g:form action="list">

@@ -1,3 +1,4 @@
+import br.com.acception.greport.Report
 import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.Cidade
@@ -29,7 +30,6 @@ class BootStrap {
 //				break;
 //		}
 
-
 //        fixtureLoader.load {
 //            partAdministradora(Administradora, nome: "AMAZON", bin: "623409")
 //        }
@@ -49,7 +49,7 @@ class BootStrap {
             fixtureLoader.load("users")
         if (Banco.count() == 0)
             fixtureLoader.load("bancos")
-        if(ParametroSistema.count == 0)
+        if (ParametroSistema.count == 0)
             fixtureLoader.load("parametros")
 
         if (Estado.count() == 0)
@@ -63,8 +63,12 @@ class BootStrap {
             fixtureLoader.load("cidades_st")
         }
 
-        if(MarcaVeiculo.count==0){
+        if (MarcaVeiculo.count == 0) {
             fixtureLoader.load("marcas_veiculo")
+        }
+
+        if (Report.count() == 0) {
+            fixtureLoader.load("reports")
         }
     }
 
