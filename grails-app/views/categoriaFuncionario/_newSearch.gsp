@@ -84,7 +84,7 @@
                 success: function (data) {
                     componente.html('<input type="hidden" name="categoriaId" value="'+categoriaId+'">'+
                             '<td><div class="catNome">'+data.nome+'</div></td>'+
-                            '<td><div class="catValor">'+data.valorCarga.replace(".", ",")+'</div></td>'+
+                            '<td><div class="catValor">'+data.valorCarga.toString().replace(".", ",")+'</div></td>'+
                             '<td>'+
                             '<button class="btn btn-primary editarButton">Editar</button> '+
                             '<button class="btn btn-danger excluirButton">Excluir</button>'+

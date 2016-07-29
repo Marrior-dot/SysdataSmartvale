@@ -8,6 +8,8 @@ class Lancamento {
 	TipoLancamento tipo
 	StatusLancamento status
     String referencia
+
+	static transients = ['descricao']
 	
 	static belongsTo=[transacao:Transacao,conta:Conta]
 	
@@ -16,4 +18,8 @@ class Lancamento {
         referencia nullable: true
 		transacao nullable: true
     }
+
+	String getDescricao(){
+        return "${this.tipo.nome} - ${this.conta.participante.nome}"
+	}
 }

@@ -10,10 +10,12 @@ class ItemPedido {
     Double sobra
     boolean ativo
     Lancamento lancamento
+    TipoItemPedido tipo
 
 
     static constraints = {
         lancamento nullable: true
+        tipo nullable: true
     }
 
     Funcionario getFuncionario(){

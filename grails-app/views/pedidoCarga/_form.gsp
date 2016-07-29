@@ -7,6 +7,7 @@
     var itensPedidos = [];
     var valorCategoria;
 
+
     $(document).ready(function () {
         valorCategoria = $("input#valorCargaCategoria").val();
 
@@ -34,6 +35,9 @@
         //seleciona a primeira categoria
         $('input:radio[name=categoriaSelecionada]:first').attr('checked', true);
         selecionaCategoria();
+
+        //Carrega taxas de cartão a serem cobradas, caso existam
+        carregarTaxasCartao();
     });
 
     function limparFuncionario(){
@@ -181,6 +185,27 @@
             }
         });
     }
+
+    function carregarTaxasCartao() {
+        waitingDialog.show("Verificando cobrança de taxas...");
+
+        var params={
+            unidId:$("#unidade_id").val(),
+            pedId:$("#id").val()
+        };
+
+        $.ajax({
+           url:"${createLink(controller: 'pedidoCarga', action:'loadTaxasCartao')}",
+           data:params,
+           dataType:'html',
+
+           success:function(data){
+               $("div#taxasCartao").html(data);
+           }
+        });
+    }
+
+
 </script>
 
 <g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
@@ -197,7 +222,7 @@
     </tr>
     <tr>
         <td>Unidade</td>
-        <td><b>${pedidoCargaInstance?.unidade?.id} - ${pedidoCargaInstance?.unidade?.nome}</b></td>
+        <td><b>${pedidoCargaInstance?.unidade?.nome}</b></td>
     </tr>
     </tbody>
 </table>
@@ -226,4 +251,8 @@
 
 
 <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
+
+
+<g:render template="taxasCartao" />
+
 <br/>
