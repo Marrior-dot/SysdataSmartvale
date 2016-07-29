@@ -21,7 +21,7 @@ class PedidoCargaController extends BaseOwnerController {
 
         def authorities = getCurrentUser().authorities*.authority
 
-        if(!unidadeInstance && !(authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_PROC"))){
+        if (!unidadeInstance && !(authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_PROC"))) {
 
             [pedidoCargaInstanceList : null,
              pedidoCargaInstanceCount: 0,
@@ -31,7 +31,7 @@ class PedidoCargaController extends BaseOwnerController {
              searchDataCarga         : params?.searchDataCarga,
              searchUnidade           : params?.searchUnidade,
              searchStatus            : params?.searchStatus]
-            return ;
+            return;
         }
 
 
@@ -91,7 +91,7 @@ class PedidoCargaController extends BaseOwnerController {
         PedidoCarga pedidoCargaInstance = new PedidoCarga()
         pedidoCargaInstance.unidade = unidadeInstance
         pedidoCargaInstance.dataCarga = new Date().clearTime()
-        pedidoCargaInstance.taxa=unidadeInstance.rh.taxaPedido
+        pedidoCargaInstance.taxa = unidadeInstance.rh.taxaPedido
 
         [pedidoCargaInstance: pedidoCargaInstance]
     }
@@ -131,7 +131,7 @@ class PedidoCargaController extends BaseOwnerController {
             itemPedido.valor = params?.double("valorCarga[${funcionario.id}]") ?: funcionario?.categoria?.valorCarga
             itemPedido.sobra = 0.0D
             itemPedido.ativo = !funcionariosInativosIds.contains(funcionario.id)
-            itemPedido.tipo=TipoItemPedido.CARGA
+            itemPedido.tipo = TipoItemPedido.CARGA
             itemPedido.save(flush: true)
 
             pedidoCarga.addToItens(itemPedido)
@@ -139,23 +139,23 @@ class PedidoCargaController extends BaseOwnerController {
         }
 
         //Vincula taxas de cartão a efetivar ao pedido, caso existam
-        def taxasList=getTaxasACobrar(unidadeInstance)
-        taxasList.each{tx->
-            def item=new ItemPedido()
+        def taxasList = getTaxasACobrar(unidadeInstance)
+        taxasList.each { tx ->
+            def item = new ItemPedido()
             item.with {
-                participante=tx.conta.participante
-                valor=tx.valor
-                lancamento=tx
-                tipo=TipoItemPedido.TAXA
-                sobra=0
-                ativo=true
-                save(flush:true)
+                participante = tx.conta.participante
+                valor = tx.valor
+                lancamento = tx
+                tipo = TipoItemPedido.TAXA
+                sobra = 0
+                ativo = true
+                save(flush: true)
             }
             pedidoCarga.addToItens(item)
-            pedidoCarga.total+=item.valor
+            pedidoCarga.total += item.valor
             //Marca lançamento como EFETIVADO
-            tx.status=StatusLancamento.EFETIVADO
-            tx.save(flush:true);
+            tx.status = StatusLancamento.EFETIVADO
+            tx.save(flush: true);
         }
 
         pedidoCarga.status = StatusPedidoCarga.NOVO
@@ -265,10 +265,12 @@ class PedidoCargaController extends BaseOwnerController {
             try {
 
                 //Altera status de lançamentos de taxas para a efetivar
-                pedidoCargaInstance.itens.findAll{it.tipo==TipoItemPedido.TAXA && it.lancamento.status==StatusLancamento.EFETIVADO}.each{i->
-                    def lc=i.lancamento
-                    lc.status=StatusLancamento.A_EFETIVAR
-                    lc.save(flush:true)
+                pedidoCargaInstance.itens.findAll {
+                    it.tipo == TipoItemPedido.TAXA && it.lancamento.status == StatusLancamento.EFETIVADO
+                }.each { i ->
+                    def lc = i.lancamento
+                    lc.status = StatusLancamento.A_EFETIVAR
+                    lc.save(flush: true)
                 }
 
 
@@ -311,8 +313,8 @@ class PedidoCargaController extends BaseOwnerController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.itens.findAll{it.tipo==TipoItemPedido.CARGA}) {
-                'in'('id', pedidoCargaInstance.itens.findAll{it.tipo==TipoItemPedido.CARGA}*.participante.id)
+            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
+                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
             }
 
             order('nome')
@@ -335,8 +337,8 @@ class PedidoCargaController extends BaseOwnerController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.itens.findAll{it.tipo==TipoItemPedido.CARGA}) {
-                'in'('id', pedidoCargaInstance.itens.findAll{it.tipo==TipoItemPedido.CARGA}*.participante.id)
+            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
+                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
             }
         }
 
@@ -357,8 +359,8 @@ class PedidoCargaController extends BaseOwnerController {
                 eq('categoria', categoriaInstance)
             }
 
-            if (pedidoCargaInstance?.itens.findAll{it.tipo==TipoItemPedido.CARGA}) {
-                'in'('id', pedidoCargaInstance.itens.findAll{it.tipo==TipoItemPedido.CARGA}*.participante.id)
+            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
+                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
             }
 
             order('nome')
@@ -421,7 +423,7 @@ class PedidoCargaController extends BaseOwnerController {
     }
 
 
-    private def getTaxasACobrar(unidadeInstance){
+    private def getTaxasACobrar(unidadeInstance) {
         return Lancamento.executeQuery("""
 select l
 from Lancamento l, Funcionario f
@@ -430,27 +432,27 @@ and l.tipo in (:tipos)
 and l.status=:sts
 and f.unidade=:unid
 """,
-    [unid:unidadeInstance,
-     tipos:[TipoLancamento.TAXA_UTILIZACAO,TipoLancamento.MENSALIDADE,TipoLancamento.EMISSAO_CARTAO,TipoLancamento.REEMISSAO_CARTAO],
-    sts:StatusLancamento.A_EFETIVAR])
+                [unid : unidadeInstance,
+                 tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
+                 sts  : StatusLancamento.A_EFETIVAR])
     }
 
 
-    def loadTaxasCartao(){
+    def loadTaxasCartao() {
 
-        def unidadeInstance=Unidade.get(params.unidId)
-        def pedidoInstance=PedidoCarga.get(params.pedId)
+        def unidadeInstance = Unidade.get(params.unidId)
+        def pedidoInstance = PedidoCarga.get(params.pedId)
 
-        if(unidadeInstance){
+        if (unidadeInstance) {
 
             //Verifica se existem taxas a serem cobradas
             //Se existirem, adiciona como itens do pedido
 
             def lancList
-            if(pedidoInstance) lancList=pedidoInstance.itens.findAll{it.tipo==TipoItemPedido.TAXA}*.lancamento
-            else lancList=getTaxasACobrar(unidadeInstance)
+            if (pedidoInstance) lancList = pedidoInstance.itens.findAll { it.tipo == TipoItemPedido.TAXA }*.lancamento
+            else lancList = getTaxasACobrar(unidadeInstance)
 
-            render(template: 'taxasList',model: [taxasList : lancList, taxasCount: lancList.size()])
+            render(template: 'taxasList', model: [taxasList: lancList, taxasCount: lancList.size()])
 
         }
     }
@@ -460,34 +462,35 @@ and f.unidade=:unid
 	 * Insere transação de CARGA para cada item do pedido
 	 *
 	 */
-    @Secured(["ROLE_ADMIN","ROLE_PROC"])
-    def liberarPedido(){
-        def pedidoCargaInstance=PedidoCarga.get(params.id)
 
-        if(pedidoCargaInstance.status==StatusPedidoCarga.NOVO){
-            pedidoCargaInstance.status=StatusPedidoCarga.LIBERADO
+    @Secured(["ROLE_ADMIN", "ROLE_PROC"])
+    def liberarPedido() {
+        def pedidoCargaInstance = PedidoCarga.get(params.id)
+
+        if (pedidoCargaInstance.status == StatusPedidoCarga.NOVO) {
+            pedidoCargaInstance.status = StatusPedidoCarga.LIBERADO
             //Registra o usuário que realizou a liberação
-            pedidoCargaInstance.usuario=springSecurityService.currentUser
+            pedidoCargaInstance.usuario = springSecurityService.currentUser
 
             //Registra Transação de Carga para posterior Agendamento
-            pedidoCargaInstance.itens.findAll{it.tipo==TipoItemPedido.TAXA}.each{item->
+            pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.TAXA }.each { item ->
 
-                new Transacao(participante:item.participante,
-                        valor:item.valor,
-                        status:StatusTransacao.AGENDAR,
-                        tipo:TipoTransacao.CARGA_SALDO).
-                        save(flush:true)
+                new Transacao(participante: item.participante,
+                        valor: item.valor,
+                        status: StatusTransacao.AGENDAR,
+                        tipo: TipoTransacao.CARGA_SALDO).
+                        save(flush: true)
 
             }
 
-            if(pedidoCargaInstance.save(flush:true))
-                flash.message="Pedido ${pedidoCargaInstance.id} LIBERADO"
+            if (pedidoCargaInstance.save(flush: true))
+                flash.message = "Pedido ${pedidoCargaInstance.id} LIBERADO"
             else
-                flash.message="ERRO ao Salvar. Pedido ${pedidoCargaInstance.id} não liberado"
-        }else
-            flash.message="Pedido ${pedidoCargaInstance.id} não pode ser LIBERADO. Status Inválido"
+                flash.message = "ERRO ao Salvar. Pedido ${pedidoCargaInstance.id} não liberado"
+        } else
+            flash.message = "Pedido ${pedidoCargaInstance.id} não pode ser LIBERADO. Status Inválido"
 
-        redirect(action:'list')
+        redirect(action: 'list')
     }
 
 

@@ -72,10 +72,10 @@
                                         <td><g:formatDate date="${pedido?.dataCarga}" format="dd/MM/yyyy"/></td>
                                         <td><g:formatReal value="${pedido?.total}"/></td>
                                         <td>${pedido.status}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADM">
                                                 <g:if test="${pedido.status==com.sysdata.gestaofrota.StatusPedidoCarga.NOVO}">
-                                                    <g:link action="liberarPedido" id="${pedido.id}">Liberar</g:link>
+                                                    <g:link class="btn btn-primary btn-xs" action="liberarPedido" id="${pedido.id}">Liberar</g:link>
                                                 </g:if>
                                             </sec:ifAnyGranted>
                                         </td>
