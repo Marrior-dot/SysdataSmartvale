@@ -56,6 +56,7 @@
                                 <g:bootstrapSortableColumn property="dataCarga" title="Data Carga"/>
                                 <g:bootstrapSortableColumn property="total" title="Total" sign="_19"/>
                                 <g:bootstrapSortableColumn property="statusSolicitacaoCarga" title="Status" sign="az"/>
+                                <g:bootstrapSortableColumn property="acoes" title="Ações"/>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,15 @@
                                         <td><g:formatDate date="${pedido?.dataCarga}" format="dd/MM/yyyy"/></td>
                                         <td><g:formatReal value="${pedido?.total}"/></td>
                                         <td>${pedido.status}</td>
+                                        <td class="text-center">
+                                            <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADM">
+                                                <g:if test="${pedido.status==com.sysdata.gestaofrota.StatusPedidoCarga.NOVO}">
+                                                    <g:link class="btn btn-primary btn-xs" action="liberarPedido" id="${pedido.id}">Liberar</g:link>
+                                                </g:if>
+                                            </sec:ifAnyGranted>
+                                        </td>
+
+
                                     </tr>
                                 </g:each>
                             </tbody>

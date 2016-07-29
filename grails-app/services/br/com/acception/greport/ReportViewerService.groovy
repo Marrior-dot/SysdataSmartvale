@@ -217,7 +217,6 @@ class ReportViewerService {
 
 
     def list(def params) {
-
         def reportInstance = Report.get(params?.long('id'))
 
         def castParams = castReportParams(params, reportInstance)

@@ -45,13 +45,13 @@ class Funcionario extends Participante {
 
     public boolean isAtivoInPedido(PedidoCarga pedidoCarga) {
         if(!pedidoCarga) return false
-        ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id }
+        ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id && it.tipo==TipoItemPedido.CARGA}
         item?.ativo
     }
 
     public BigDecimal valorInPedido(PedidoCarga pedidoCarga, int decimalPlace = 2) {
         if(!pedidoCarga) return Util.toBigDecial(categoria.valorCarga, decimalPlace)
-        ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id }
+        ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id && it.tipo==TipoItemPedido.CARGA}
         Double valor = item?.valor ?: categoria.valorCarga
         Util.toBigDecial(valor, decimalPlace)
     }

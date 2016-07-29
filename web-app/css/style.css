@@ -382,7 +382,6 @@
 
 li .p-label{
     font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
-    text-transform: uppercase !important;
 }
 
 li .p-label:after{
@@ -391,7 +390,6 @@ li .p-label:after{
 
 li .p-value{
     font-family: 'gloriola_stdregular', "sans-serif", 'Courier', 'Arial' !important;
-    text-transform: uppercase !important;
 }
 
 .nav>li {
