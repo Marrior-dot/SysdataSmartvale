@@ -2,6 +2,7 @@ package br.com.acception.greport
 
 import com.sysdata.gestaofrota.*
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.hibernate.QueryException
 
 class ReportViewerController {
     def springSecurityService
@@ -24,7 +25,7 @@ class ReportViewerController {
         if (!reportInstance) {
             flash.message = "Relatório ${params.id} não encontrado na base de configuração"
             redirect(action: 'listReports')
-            return ;
+            return;
         }
 
         render view: "list", model: [reportInstance: reportInstance, rowCount: 0]
@@ -48,9 +49,7 @@ class ReportViewerController {
         if (reportInstance) {
             params.reportInstance = reportInstance
             try {
-
                 /* Trata solicitação de geração XLSX */
-
                 response.contentType = grailsApplication.config.grails.mime.types[params.format]
                 response.setHeader("Content-disposition", "attachment;filename=${reportInstance.name}.xlsx")
                 xlsExportService.export(params, response.outputStream)
@@ -62,7 +61,6 @@ class ReportViewerController {
         }
 
         render view: 'list', model: params + result
-
     }
 
     def showProjecaoPagar() {
@@ -72,11 +70,13 @@ class ReportViewerController {
 
 
     def list(Integer max, Integer offset) {
-        println("PARAMS: ${params}")
-        params.max = max ?: 10
-        params.offset = offset ?: 0
+        Report reportInstance = Report.get(params.long('id'))
+        if (!reportInstance) {
+            flash.errors = "Report não encontrado"
+            redirect(action: 'list')
+            return;
+        }
 
-        def reportInstance = Report.get(params.long('id'))
         Participante participanteInstance = springSecurityService?.getCurrentUser()?.owner
         Estabelecimento estabelecimentoInstance = null
 
@@ -84,19 +84,22 @@ class ReportViewerController {
             PostoCombustivel postoCombustivel = PostoCombustivel.get(participanteInstance.id)
             estabelecimentoInstance = Estabelecimento.findByEmpresa(postoCombustivel)
         }
-        params << ['codEstab': estabelecimentoInstance?.codigo ?: '']
+
+        params.codEstab = estabelecimentoInstance?.codigo ?: ''
+        params.max = max ?: 10
+        params.offset = offset ?: 0
 
         def result = [:]
-        if (reportInstance) {
-            try {
-                result = reportViewerService.list(params)
-            } catch (Exception e) {
-                result = [rows: null, rowCount: 0, rowTotal: 0]
-                log.error e
-                flash.message = e.message
-            } finally {
-                params.reportInstance = reportInstance
-            }
+
+        try {
+            result = reportViewerService.list(params)
+        } catch (QueryException e) {
+            result = [rows: null, rowCount: 0, rowTotal: 0]
+            log.error(e)
+            flash.errors = e
+        } finally {
+            //session foi finalizado devido ao catch acima. Recarregar o reportInstance
+            params.reportInstance = Report.get(params.long('id'))
         }
 
         params + result

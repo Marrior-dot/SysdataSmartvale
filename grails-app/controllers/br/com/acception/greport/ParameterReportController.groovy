@@ -17,7 +17,13 @@ class ParameterReportController {
     }
 
     def create() {
-        [parameterReportInstance: new ParameterReport(params)]
+        ParameterReport parameterReportInstance = new ParameterReport(params)
+        def roles = parameterReportInstance?.report?.roles ?: Role.list()
+        roles.each {role ->
+            parameterReportInstance.addToRoles(role)
+        }
+
+        [parameterReportInstance: parameterReportInstance]
     }
 
     def save() {

@@ -33,23 +33,9 @@
 
 				<ul>
 					<g:each in="${reportList}" var="reportInstance">
-						<sec:ifAnyGranted roles="${reportInstance?.roles?.authority}">
+						<sec:ifAnyGranted roles="${reportInstance?.roles?.authority?.join(', ')}">
 							<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>
 						</sec:ifAnyGranted>
-
-						%{--<sec:ifAnyGranted roles="ROLE_LOG,ROLE_HELP">--}%
-							%{--<g:if test="${reportInstance.name=="Transações Combustível por Período"}">--}%
-								%{--<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>--}%
-							%{--</g:if>--}%
-							%{--<g:elseif test="${reportInstance.name=="Detalhes Projecao Reembolso"}">--}%
-								%{--<li></li>--}%
-							%{--</g:elseif>--}%
-						%{--</sec:ifAnyGranted>--}%
-						%{--<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH,ROLE_ESTAB">--}%
-							%{--<g:if test="${reportInstance.name!="Detalhes Projecao Reembolso"}">--}%
-								%{--<li><g:link action="openToParameters" id="${reportInstance.id}">${reportInstance.name}</g:link></li>--}%
-							%{--</g:if>--}%
-						%{--</sec:ifAnyGranted>--}%
 					</g:each>
 				</ul>
 

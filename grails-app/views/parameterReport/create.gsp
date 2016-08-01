@@ -33,7 +33,7 @@
 				</g:hasErrors>
 				<g:form action="save" >
 					<fieldset class="form">
-						<g:render template="form"/>
+						<g:render template="form" model="${[parameterReportInstance: parameterReportInstance]}"/>
 					</fieldset>
 					<fieldset class="buttons">
 						<g:submitButton name="create" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Create')}" />

@@ -40,6 +40,16 @@
 
 					<li class="fieldcontain">
 						<span class="property-label p-label">
+							<g:message code="parameterReport.mandatory.label" default="Mandatory" />
+						</span>
+						<span class="property-value p-value" aria-labelledby="report-label">
+							${parameterReportInstance?.mandatory ? 'YES' : 'NO'}
+						</span>
+					</li>
+
+
+					<li class="fieldcontain">
+						<span class="property-label p-label">
 							Roles
 						</span>
 						<span class="property-value p-value" aria-labelledby="report-label">

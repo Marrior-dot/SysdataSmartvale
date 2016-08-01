@@ -81,8 +81,12 @@
 								<div class="panel-body">
 									<strong><span id="fields-label" class="property-label"><g:message code="report.fields.label" default="Fields" /></span></strong>
 									<p>
-										<g:each in="${reportInstance.fields}" var="f">
-											<span class="property-value" aria-labelledby="fields-label"><g:link controller="fieldReport" action="show" id="${f.id}">${f?.id +" - "+f?.label} |</g:link></span>
+										<g:each in="${reportInstance?.fields?.sort { it.order }}" var="f">
+											<span class="property-value" aria-labelledby="fields-label">
+												<g:link controller="fieldReport" action="show" id="${f.id}">
+													${f?.label} |
+												</g:link>
+											</span>
 										</g:each>
 									</p>
 								</div>
@@ -95,8 +99,12 @@
 								<div class="panel-body">
 									<strong><span id="parameters-label" class="property-label"><g:message code="report.parameters.label" default="Parameters" /></span></strong>
 									<p>
-										<g:each in="${reportInstance.parameters}" var="p">
-											<span class="property-value" aria-labelledby="parameters-label"><g:link controller="parameterReport" action="show" id="${p.id}">${p?.id +" - "+p?.label} |</g:link></span>
+										<g:each in="${reportInstance?.parameters?.sort { it.order }}" var="p">
+											<span class="property-value" aria-labelledby="parameters-label">
+												<g:link controller="parameterReport" action="show" id="${p.id}">
+													${p?.label} |
+												</g:link>
+											</span>
 										</g:each>
 									</p>
 								</div>
