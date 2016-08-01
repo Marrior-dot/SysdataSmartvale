@@ -18,16 +18,14 @@
         </tbody>
     </table>
 
-
-%{--
-    <util:remotePaginate controller="pedidoCarga" action="filterFuncionarios"
-                         total="${funcionarioInstanceCount}"
-                         params="${[actionView: action, categoria: categoriaInstance?.id]}"
-                         update="funcionario-list" max="10" id="${pedidoCargaInstance?.id}"
+    <util:remotePaginate controller="pedidoCarga" action="loadTaxasCartao"
+                         total="${taxasCount}"
+                         params="${[unidId:unidadeInstance?.id,pedId:pedidoCargaInstance?.id]}"
+                         update="taxasCartao" max="10"
                          onLoading="waitingDialog.show('Aguarde...')"
-                         onComplete="onFuncionarioListLoadComplete()"/>
+                         />
 
---}%
+
 
 </g:if>
 <g:else>
