@@ -10,6 +10,7 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+import com.sysdata.gestaofrota.cartao.NewGeradorCartao
 import org.apache.log4j.DailyRollingFileAppender
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
@@ -215,3 +216,17 @@ auditLog {
         return username
     }
 }
+
+project {
+
+    geradorCartao=NewGeradorCartao.class
+
+    tipoPrograma=7
+    parceiro=2
+
+
+}
+
+
+
+

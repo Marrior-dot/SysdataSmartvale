@@ -11,6 +11,7 @@ class Rh extends Empresa {
 	BigDecimal taxaMensalidade=0
 	BigDecimal taxaEmissaoCartao=0
 	BigDecimal taxaReemissaoCartao=0
+	Integer qtdeContas=0
 	
 	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	
@@ -19,6 +20,7 @@ class Rh extends Empresa {
 		taxaMensalidade nullable: true
 		taxaEmissaoCartao nullable: true
 		taxaReemissaoCartao nullable: true
+        qtdeContas nullable: true
     }
 
     String toString() {
