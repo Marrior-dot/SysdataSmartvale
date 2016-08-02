@@ -34,9 +34,7 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-
         $("#equipTable").DataTable({
-
             //"serverSide": true,
             "ajax":{
                 "url":"${createLink(controller:'equipamento',action:'listAllJSON')}",

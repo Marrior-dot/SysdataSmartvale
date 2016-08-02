@@ -55,7 +55,7 @@
                                 <g:render template="basico"/>
                             </div>
                             <div class="tab-pane" id="tab2">
-                                <g:render template="funcionarios"/>
+                                <g:render template="/maquinaMotorizada/funcionarios" model="${[instance: veiculoInstance, instanceName: 'Veículo']}"/>
                             </div>
                             <div class="tab-pane" id="tab3">
                                 <g:render template="hodometro"/>
