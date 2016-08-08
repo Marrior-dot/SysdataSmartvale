@@ -17,17 +17,18 @@ class EquipamentoController extends BaseOwnerController {
         render(view: '/selectRhUnidade', model: [controller: "equipamento", action: Util.ACTION_NEW])
     }
 
-    def list = {}
+    def list = {
+
+    }
 
     def newList = {}
 
     def create = {
         if (params.unidade_id) {
-            def unidadeInstance = Unidade.get(params.unidade_id)
+            def unidadeInstance = Unidade.get(params.long('unidade_id'))
             render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW])
         } else {
-            flash.message = "Unidade não selecionada!"
-            redirect(action: 'list')
+            redirect(action: 'selectRhUnidade')
         }
     }
 
