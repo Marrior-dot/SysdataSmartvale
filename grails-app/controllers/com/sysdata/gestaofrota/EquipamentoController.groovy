@@ -28,8 +28,7 @@ class EquipamentoController extends BaseOwnerController {
             def unidadeInstance = Unidade.get(params.long('unidade_id'))
             render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW])
         } else {
-            flash.message = "Unidade não selecionada!"
-            redirect(action: 'list')
+            redirect(action: 'selectRhUnidade')
         }
     }
 
