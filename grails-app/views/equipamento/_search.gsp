@@ -1,7 +1,6 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <%@ page import="com.sysdata.gestaofrota.Equipamento" %>
 
-
 <div class="panel panel-default">
     <div class="panel-heading"><h4>Lista de Equipamentos</h4></div>
     <div class="panel-body">
@@ -11,8 +10,9 @@
                     <span class="glyphicon glyphicon-home"></span>
                     <g:message code="default.home.label"/>
                 </a>
-                <g:link class="btn btn-default" action="${unidade_id?'create':'selectRhUnidade'}">
-                    <span class="glyphicon glyphicon-plus"></span> ${message(code:'default.new.label', args:[message(code:'equipamento')]) }
+                <g:link class="btn btn-default" controller="equipamento" action="create" params="${[unidade_id: unidade_id]}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    ${message(code:'default.new.label', args:[message(code:'equipamento')]) }
                 </g:link>
             </div>
         </g:if>
@@ -34,6 +34,8 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        console.log('${unidade_id}');
+
         $("#equipTable").DataTable({
             //"serverSide": true,
             "ajax":{

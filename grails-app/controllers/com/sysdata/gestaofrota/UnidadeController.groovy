@@ -115,19 +115,18 @@ class UnidadeController {
     }
 	
 	@Secured(['IS_AUTHENTICATED_FULLY'])
-	def autoCompleteJSON={
-		def rhId=params.rhId?params.rhId.toLong():0
-		def list = Unidade.withCriteria{
-				rh{eq("id",rhId)}
-				if(params.query)
-					like("nome",params.query+"%")
-			}
-		def jsonList = list.collect { [ id: it.id, name: it.nome ] }
+	def autoCompleteJSON = {
+		long rhId = params?.long('rhId') ?: 0
+		def list = Unidade.withCriteria {
+			rh { idEq(rhId) }
+			if (params?.query?.toString().length() > 0)
+				like("nome", params.query + "%")
+		}
+		def jsonList = list.collect { [id: it.id, name: it.nome] }
 		def jsonResult = [
-			result: jsonList
+				result: jsonList
 		]
 		render jsonResult as JSON
-
 	}
 	
 	def listAllJSON={

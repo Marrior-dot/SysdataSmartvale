@@ -1,4 +1,3 @@
-
 <%@ page import="com.sysdata.gestaofrota.Veiculo" %>
 <html>
     <head>

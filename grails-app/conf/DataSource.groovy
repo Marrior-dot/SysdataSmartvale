@@ -32,7 +32,7 @@ environments {
     }
     production {
 
-        def urlProd=System.env["FROTA_PROD_DB"]
+        def urlProd="jdbc:postgresql://148.5.7.211/vrfrota_production"
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop','update'
 			url = urlProd

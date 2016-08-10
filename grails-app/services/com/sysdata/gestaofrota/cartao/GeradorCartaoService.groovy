@@ -1,14 +1,10 @@
 package com.sysdata.gestaofrota.cartao
 
-import com.sysdata.gestaofrota.Cartao
 import com.sysdata.gestaofrota.Funcionario
-import com.sysdata.gestaofrota.ParametroSistema
 import com.sysdata.gestaofrota.Util
 
-/**
- * Created by luiz on 29/07/16.
- */
-abstract class GeradorCartao {
+abstract class GeradorCartaoService {
+
 
     private String calcularDV(String card) {
         int valor;
@@ -27,16 +23,15 @@ abstract class GeradorCartao {
     }
 
 
-    String gerarSenha(){
-        Random random=new Random()
-        int tamanho=(int)(Math.pow(10,Util.DIGITOS_SENHA)-1)
-        int senha=random.nextInt(tamanho)
-        String fmt="%0"+Util.DIGITOS_SENHA+"d"
-        String.format(fmt,senha)
+    String gerarSenha() {
+        Random random = new Random()
+        int tamanho = (int) (Math.pow(10, Util.DIGITOS_SENHA) - 1)
+        int senha = random.nextInt(tamanho)
+        String fmt = "%0" + Util.DIGITOS_SENHA + "d"
+        String.format(fmt, senha)
     }
 
+
     abstract String gerarNumero(Funcionario funcionario)
-
-
 
 }

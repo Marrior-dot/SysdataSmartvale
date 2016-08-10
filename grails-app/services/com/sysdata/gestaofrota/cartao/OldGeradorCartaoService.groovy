@@ -3,14 +3,11 @@ package com.sysdata.gestaofrota.cartao
 import com.sysdata.gestaofrota.Funcionario
 import com.sysdata.gestaofrota.ParametroSistema
 
-/**
- * Created by luiz on 29/07/16.
- */
-class OldGeradorCartao extends GeradorCartao {
+class OldGeradorCartaoService extends GeradorCartaoService {
+
 
     @Override
     String gerarNumero(Funcionario funcionario) {
-
         def binPar=ParametroSistema.findByNome(ParametroSistema.BIN)
         def bin=binPar.valor
         def qtde=funcionario.cartoes?funcionario.cartoes.size():0
@@ -19,5 +16,6 @@ class OldGeradorCartao extends GeradorCartao {
         def prov=sprintf("%6d%1d%03d%06d%02d",bin.toInteger(),4,cdRh.toInteger(),idFunc,++qtde)
         def check=calcularDV(prov)
         prov+check
+
     }
 }
