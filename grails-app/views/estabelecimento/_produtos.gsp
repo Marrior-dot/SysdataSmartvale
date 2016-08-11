@@ -16,36 +16,46 @@
         <div class="panel-body">
 
             <div class="list">
-                <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
-				    <thead>
-                        <tr>
 
-                            <g:sortableColumn property="codigo" title="${message(code: 'produto.codigo.label', default: 'Codigo')}" />
+                    <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
+                    <g:if test="${prodEstabInstance}">
+                        <thead>
+                            <tr>
 
-                            <g:sortableColumn property="nome" title="${message(code: 'produto.nome.label', default: 'Nome')}" />
+                                <g:sortableColumn property="codigo" title="${message(code: 'produto.codigo.label', default: 'Codigo')}" />
 
-                            <g:sortableColumn property="tipo" title="${message(code: 'produto.tipo.label', default: 'Tipo')}" />
+                                <g:sortableColumn property="nome" title="${message(code: 'produto.nome.label', default: 'Nome')}" />
 
-                            <g:sortableColumn property="valor" title="${message(code: 'produto.valor.label', default: 'Valor')}" />
+                                <g:sortableColumn property="tipo" title="${message(code: 'produto.tipo.label', default: 'Tipo')}" />
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <g:each in="${prodEstabInstance}" status="i" var="produtoEstabelecimentoInstance">
-                            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                                <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "codigo")}</td>
-
-                                <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "nome")}</td>
-
-                                <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "tipo")}</td>
-
-                                <td>${fieldValue(bean: produtoEstabelecimentoInstance, field: "valor")}</td>
+                                <g:sortableColumn property="valor" title="${message(code: 'produto.valor.label', default: 'Valor')}" />
 
                             </tr>
-                        </g:each>
-                    </tbody>
-    </table>
+                        </thead>
+                        <tbody>
+
+
+
+                                <g:each in="${prodEstabInstance}" status="i" var="produtoEstabelecimentoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+
+                                        <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "codigo")}</td>
+
+                                        <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "nome")}</td>
+
+                                        <td>${fieldValue(bean: produtoEstabelecimentoInstance.produto, field: "tipo")}</td>
+
+                                        <td>${fieldValue(bean: produtoEstabelecimentoInstance, field: "valor")}</td>
+
+                                    </tr>
+                                </g:each>
+                        </tbody>
+                    </g:if>
+                    <g:else>
+                        SEM REGISTROS
+                    </g:else>
+                    </table>
+
     %{--<div class="pagination">
         <g:paginate total="${produtoInstanceTotal}" />
     </div>--}%

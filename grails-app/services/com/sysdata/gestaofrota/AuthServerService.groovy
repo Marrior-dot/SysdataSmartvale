@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 import java.text.SimpleDateFormat
 
-
+/*
 import org.jpos.iso.ISOChannel
 import org.jpos.iso.ISOField
 import org.jpos.iso.ISOMsg
@@ -13,11 +13,18 @@ import org.jpos.util.SimpleLogListener
 
 import com.sysdata.authserver.channel.BASE24TCPChannel
 import com.sysdata.authserver.packager.AsciiISOPackager
+
+*/
+
 import com.sysdata.gestaofrota.ca.AuthAccessFile
 import com.sysdata.gestaofrota.ca.NsuTermFile
 
+import java.util.logging.Logger
+
 class AuthServerService {
 	
+/*
+
 	Logger logger
 	
 	AuthServerService(){
@@ -207,4 +214,6 @@ class AuthServerService {
 		commandInstance
 
     }
+
+    */
 }
