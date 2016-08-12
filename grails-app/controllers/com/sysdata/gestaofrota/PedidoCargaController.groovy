@@ -232,6 +232,29 @@ class PedidoCargaController extends BaseOwnerController {
 
         if (funcionariosAtivosIds.size() > 0 || funcionariosInativosIds.size() > 0) {
             pedidoCarga.total = 0D
+            boolean needSave = false
+
+            funcionariosAtivosIds.each { idFuncionario ->
+                ItemPedido itemPedido = pedidoCarga.itens.find { it.participante.id == idFuncionario }
+                //caso ainda não exista um item pedido para um funcionario selecionado, cria-lo
+                if (!itemPedido) {
+                    Funcionario funcionario = Funcionario.get(idFuncionario)
+
+                    itemPedido = new ItemPedido()
+                    itemPedido.participante = funcionario
+                    itemPedido.valor = params?.double("valorCarga[${funcionario.id}]") ?: funcionario?.categoria?.valorCarga
+                    itemPedido.sobra = 0.0D
+                    itemPedido.ativo = !funcionariosInativosIds.contains(funcionario.id)
+                    itemPedido.tipo = TipoItemPedido.CARGA
+                    itemPedido.save(flush: true)
+
+                    pedidoCarga.addToItens(itemPedido)
+                    needSave = true
+                }
+            }
+
+            if(needSave) pedidoCarga.save(flush: true)
+
 
             pedidoCarga.itens.each { itemPedido ->
                 itemPedido.valor = params?.double("valorCarga[${itemPedido.participante.id}]") ?: itemPedido.valor
@@ -316,36 +339,15 @@ class PedidoCargaController extends BaseOwnerController {
             if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
                 'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
             }
-
-            order('nome')
         }
 
-        def coutCriteria = {
-            if (params?.searchMatricula && params?.searchMatricula.length() > 0) {
-                eq('matricula', params.searchMatricula)
-            }
 
-            if (params?.searchNome && params?.searchNome.length() > 0) {
-                ilike('nome', "${params.searchNome}%")
-            }
-
-            if (params?.searchCpf && params?.searchCpf.length() > 0) {
-                eq('cpf', params.searchCpf)
-            }
-
-            if (categoriaInstance) {
-                eq('categoria', categoriaInstance)
-            }
-
-            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
-                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
-            }
-        }
+        params.sort = 'nome'
 
         render(template: '/pedidoCarga/funcionarioList',
                 model: [pedidoCargaInstance     : pedidoCargaInstance,
                         funcionarioInstanceList : Funcionario.createCriteria().list(params, criteria),
-                        funcionarioInstanceCount: Funcionario.createCriteria().count(coutCriteria),
+                        funcionarioInstanceCount: Funcionario.createCriteria().count(criteria),
                         categoriaInstance       : categoriaInstance,
                         action                  : params.actionView])
     }
@@ -398,80 +400,74 @@ class PedidoCargaController extends BaseOwnerController {
         ]
 
         Map labels = [
-                "cpf"       : "CPF",
-                "matricula" : "Matrícula",
-                "nome"      : "Nome",
-                "descricao" : "Lançamento",
-                "valor"     : "Valor"
+                "cpf"      : "CPF",
+                "matricula": "Matrícula",
+                "nome"     : "Nome",
+                "descricao": "Lançamento",
+                "valor"    : "Valor"
         ]
 
         Map formatters = [
-                'valor' : { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
+                'valor': { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
         ]
 
         Map parameters = ["column.widths": [0.2, 0.2, 0.5, 0.2, 0.2]]
 
         def itemPedidoList = pedidoCarga.itens.collect {
             [
-                "cpf"         :it.participante.cpf,
-                "matricula"   :it.participante.matricula,
-                "nome"        :it.participante.nome,
-                "descricao"   :it.lancamento?it.lancamento.tipo.nome:"CARGA",
-                "valor"       :it.valor
+                    "cpf"      : it.participante.cpf,
+                    "matricula": it.participante.matricula,
+                    "nome"     : it.participante.nome,
+                    "descricao": it.lancamento ? it.lancamento.tipo.nome : "CARGA",
+                    "valor"    : it.valor
             ]
-        }.sort{it.tipo?.nome}
+        }.sort { it.tipo?.nome }
 
         exportService.export(format, response.outputStream, itemPedidoList, fields, labels, formatters, parameters)
     }
 
 
-    private def getTaxasACobrar(unidadeInstance,pars){
-        return Lancamento.executeQuery("""
-select l
-from Lancamento l, Funcionario f
-where l.conta=f.conta
-and l.tipo in (:tipos)
-and l.status=:sts
-and f.unidade=:unid
-""",
-        [
-            unid:unidadeInstance,
-            tipos:[TipoLancamento.TAXA_UTILIZACAO,TipoLancamento.MENSALIDADE,TipoLancamento.EMISSAO_CARTAO,TipoLancamento.REEMISSAO_CARTAO],
-            sts:StatusLancamento.A_EFETIVAR,
-            max:pars.max,
-            offset:pars.offset
-        ])
+    private def getTaxasACobrar(Unidade unidadeInstance) {
+        return Lancamento.executeQuery(
+                "select l from Lancamento l, Funcionario f " +
+                        "where l.conta = f.conta and l.tipo in (:tipos) and l.status = :sts and f.unidade = :unid",
+
+                [
+                        unid : unidadeInstance,
+                        tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
+                        sts  : StatusLancamento.A_EFETIVAR
+                ]
+        )
     }
 
 
     def loadTaxasCartao() {
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.offset=params.offset?:0
+        params.offset = params.offset ?: 0
 
-        def unidadeInstance=Unidade.get(params.unidId)
-        def pedidoInstance=PedidoCarga.get(params.pedId)
+        def unidadeInstance = Unidade.get(params.unidId)
+        def pedidoInstance = PedidoCarga.get(params.pedId)
 
-        if(unidadeInstance){
+        if (unidadeInstance) {
 
             //Verifica se existem taxas a serem cobradas
             //Se existirem, adiciona como itens do pedido
 
             def lancList
-            if(pedidoInstance) {
+            if (pedidoInstance) {
 
-                lancList=Lancamento.executeQuery("""select l
+                lancList = Lancamento.executeQuery("""select l
 from Lancamento l, ItemPedido i
 where i.lancamento=l
 and i.pedido=:ped
-""",  [
-                                ped:pedidoInstance,
-                                max:params.max,
-                                offset:params.offset
-                        ])
+""", [
+                        ped   : pedidoInstance,
+                        max   : params.max,
+                        offset: params.offset
+                ])
 
-            }
-            else lancList=getTaxasACobrar(unidadeInstance,params)
+            } else lancList = getTaxasACobrar(unidadeInstance, params)
 
             render(template: 'taxasList', model: [taxasList: lancList, taxasCount: lancList.size()])
 
