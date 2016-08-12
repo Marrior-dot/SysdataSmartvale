@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.cartao
 
+import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.Funcionario
 import com.sysdata.gestaofrota.ParametroSistema
 import grails.util.Holders
@@ -8,8 +9,8 @@ class NewGeradorCartaoService extends GeradorCartaoService {
 
     @Override
     String gerarNumero(Funcionario funcionario) {
-        def binPar=ParametroSistema.findByNome(ParametroSistema.BIN)
-        def bin=binPar.valor
+        def binPar=Administradora.list().first()
+        def bin=binPar.bin
         def tipoProg=Holders.grailsApplication.config.project.tipoPrograma
         def parceiro=Holders.grailsApplication.config.project.parceiro
         def cdRh=funcionario.unidade.rh.id

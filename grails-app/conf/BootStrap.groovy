@@ -5,6 +5,7 @@ import com.sysdata.gestaofrota.Cidade
 import com.sysdata.gestaofrota.Estado
 import com.sysdata.gestaofrota.FuncionarioService
 import com.sysdata.gestaofrota.MarcaVeiculo
+import com.sysdata.gestaofrota.MotivoNegacao
 import com.sysdata.gestaofrota.ParametroSistema
 import com.sysdata.gestaofrota.Processadora
 import com.sysdata.gestaofrota.Role
@@ -47,6 +48,10 @@ class BootStrap {
 
         if (Report.count() == 0) {
             fixtureLoader.load("reports")
+        }
+
+        if(MotivoNegacao.count() == 0) {
+            fixtureLoader.load ("motivos_negacao")
         }
     }
 
