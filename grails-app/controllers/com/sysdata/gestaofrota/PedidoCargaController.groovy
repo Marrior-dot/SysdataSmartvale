@@ -160,12 +160,17 @@ class PedidoCargaController extends BaseOwnerController {
 
     def show = {
         def pedidoCargaInstance = PedidoCarga.get(params.id)
+
+		def totalPedido = 0
+		pedidoCargaInstance.itens.each{
+			totalPedido+=it.valor
+		}
         if (!pedidoCargaInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
             redirect(action: "list")
         }
         else {
-            render(view:'form',model:[pedidoCargaInstance: pedidoCargaInstance,unidadeInstance:pedidoCargaInstance.unidade,action:Util.ACTION_VIEW])
+            render(view:'form',model:[totalPedido:totalPedido,pedidoCargaInstance: pedidoCargaInstance,unidadeInstance:pedidoCargaInstance.unidade,action:Util.ACTION_VIEW])
         }
     }
 
