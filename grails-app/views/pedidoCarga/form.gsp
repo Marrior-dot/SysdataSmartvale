@@ -52,18 +52,23 @@
 						<h2>Funcionários</h2>
 						<g:render template="funcionarios"></g:render>					
 					</fieldset>
-                    <table>
-                        <tr>
-                           <th>Total do Pedido (R$)</th>
-                            <th>Taxa do Pedido (R$)</th>
-                            <th>Total Geral do Pedido (R$)</th>
-                        </tr>
-                        <tr>
-                            <th>${totalPedido}</th>
-                            <th>${totalPedido * (pedidoCargaInstance?.taxa)/100}</th>
-                            <th>${pedidoCargaInstance?.total}</th>
-                        </tr>
-                    </table></br>
+
+                    <g:if test="${action=='visualizando'}">
+                        <table>
+                            <tr>
+                                <th>Total do Pedido (R$)</th>
+                                <th>Taxa do Pedido (R$)</th>
+                                <th>Total Geral do Pedido (R$)</th>
+                            </tr>
+                            <tr>
+                                <th>${totalPedido}</th>
+                                <th>${totalPedido * (pedidoCargaInstance?.taxa)/100}</th>
+                                <th>${pedidoCargaInstance?.total}</th>
+                            </tr>
+                        </table></br>
+                    </g:if>
+
+
                    %{-- <fieldset class="uppercase">
                         <label><span>Total do Pedido(R$) </span>${pedidoCargaInstance?.total - pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}</label>
                         <label><span>Taxa do Pedido(R$) </span>${pedidoCargaInstance?.taxa?:unidadeInstance?.rh.taxaPedido}</label>
