@@ -61,12 +61,13 @@ class EstabelecimentoController {
 
     def show = {
 		def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
+		def prodEstabInstance = ProdutoEstabelecimento.findByEstabelecimento(estabelecimentoInstance)
 		if (!estabelecimentoInstance) {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
 			redirect(action: "list")
 		}
 		else {
-			render(view:'form',model:[estabelecimentoInstance: estabelecimentoInstance,empresaInstance:estabelecimentoInstance.empresa,action:Util.ACTION_VIEW])
+			render(view:'form',model:[estabelecimentoInstance: estabelecimentoInstance,prodEstabInstance:prodEstabInstance,empresaInstance:estabelecimentoInstance.empresa,action:Util.ACTION_VIEW])
 		}
     }
 

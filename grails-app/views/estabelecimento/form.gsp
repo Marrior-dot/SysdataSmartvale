@@ -39,27 +39,52 @@
                         <g:renderErrors bean="${estabelecimentoInstance}" as="list" />
                     </div>
                 </g:hasErrors>
-                <g:form method="post" >
-                    <g:hiddenField name="id" value="${estabelecimentoInstance?.id}" />
-                    <g:hiddenField name="version" value="${estabelecimentoInstance?.version}" />
-                    <g:hiddenField name="empId" value="${empresaInstance?.id}" />
-                    <g:hiddenField name="action" value="${action}"/>
 
-                    <g:render template="basico"/>
+                <br>
 
-                    <div class="buttons">
-                        <g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-                            <span class="button"><g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                        </g:if>
-                        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                            <g:if test="${action==Util.ACTION_VIEW}">
-                                <span class="button"><g:actionSubmit class="btn btn-default"action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-                                <span class="button"><g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-                            </g:if>
-                        </sec:ifAnyGranted>
+                <g:if test="${action==Util.ACTION_VIEW}">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Dados Estabelecimento</a></li>
+                        <li role="presentation"><a href="#produto" aria-controls="produto" role="tab" data-toggle="tab">Produtos</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="basico">
+                            <g:render template="basico"/>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="produto">
+                            <g:render template="/estabelecimento/produtos" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
+                        </div>
                     </div>
+                </g:if>
+                <g:else>
+                    <g:render template="basico"/>
+                </g:else>
 
-                </g:form>
+            %{--<g:form method="post" >
+                <g:hiddenField name="id" value="${estabelecimentoInstance?.id}" />
+                <g:hiddenField name="version" value="${estabelecimentoInstance?.version}" />
+                <g:hiddenField name="empId" value="${empresaInstance?.id}" />
+                <g:hiddenField name="action" value="${action}"/>
+
+
+
+                <g:render template="basico"/>
+
+                <div class="buttons">
+                    <g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
+                        <span class="button"><g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                    </g:if>
+                    <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                        <g:if test="${action==Util.ACTION_VIEW}">
+                            <span class="button"><g:actionSubmit class="btn btn-default"action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                            <span class="button"><g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                        </g:if>
+                    </sec:ifAnyGranted>
+                </div>
+
+            </g:form>--}%
             </div>
         </div>
     </div>

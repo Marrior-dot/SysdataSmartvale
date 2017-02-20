@@ -187,7 +187,7 @@
     }
 
     function carregarTaxasCartao() {
-        waitingDialog.show("Verificando cobrança de taxas...");
+        waitingDialog.show("Aguarde...");
 
         var params={
             unidId:$("#unidade_id").val(),

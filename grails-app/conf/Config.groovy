@@ -10,6 +10,7 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+import com.sysdata.gestaofrota.cartao.NewGeradorCartaoService
 import org.apache.log4j.DailyRollingFileAppender
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
@@ -73,15 +74,16 @@ log4j = {
 
         console name: "stdout", layout: pattern(conversionPattern: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] %p %c{4} - %m%n")
 
-        def logDir = System.env["AMAZON_FLEET_LOG_DIR"]
-        if (!logDir) logDir = "/var/log/tomcat7/frota"
-
         appender new DailyRollingFileAppender(
                 name: "logFile",
                 datePattern: "'.'yyyy-MM-dd",
-                file: logDir + "/fleet.log",
+                file: System.properties['catalina.base'] + "/logs/fleet.log",
                 layout: pattern(conversionPattern: '[%d{yyyy-MM-dd HH:mm:ss.SSS}] - %m%n')
         )
+
+
+        rollingFile name: "stacktrace", maxFileSize: 1024 * 10, file: System.properties['catalina.base'] + "/logs/fleet-stacktrace.log"
+
     }
 
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -215,3 +217,17 @@ auditLog {
         return username
     }
 }
+
+project {
+
+    geradorCartao=NewGeradorCartaoService
+
+    tipoPrograma=7
+    parceiro=2
+
+
+}
+
+
+
+

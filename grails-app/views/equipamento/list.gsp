@@ -1,4 +1,3 @@
-
 <%@ page import="com.sysdata.gestaofrota.Veiculo" %>
 <html>
     <head>
@@ -8,13 +7,10 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
-    <br><br>
-            <div class="body">
-                <g:if test="${flash.message}">
-                    <div class="message">${flash.message}</div>
-                </g:if>
-
-                <g:render template="search" model="[controller:'equipamento']"/>
-            </div>
+        <br><br>
+        <div class="body">
+            <g:render template="/alertMessages"/>
+            <g:render template="search" model="[controller:'equipamento']"/>
+        </div>
     </body>
 </html>

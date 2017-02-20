@@ -38,3 +38,7 @@ div .hor-scrollable table{
 div .ver-scrollable{
     overflow-y: scroll;
 }
+
+.modal-dialog {
+    z-index: 1500 !important;
+}

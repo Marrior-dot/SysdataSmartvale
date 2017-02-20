@@ -5,13 +5,8 @@
         <meta name="layout" content="bootstrap-layout" />
 
         <gui:resources components="['tabView','dataTable','dialog','datePicker','autoComplete']"/>
-        <script type="text/javascript" src="${resource(dir:'js/jquery/jquery.inputmask',file:'jquery.inputmask.js') }" ></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'maskFields.js') }"></script>
-        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'uppercase.js') }"></script>
         <script type="text/javascript" src="${resource(dir:'js',file:'messageWindow.js') }"></script>
 
-        <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
         <g:set var="entityName" value="${message(code: 'funcionario.label', default: 'Funcionário')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
@@ -47,6 +42,7 @@
                                                     controller="rh"
                                                     action="autoCompleteJSON"
                                                     name="rh"
+                                                    value="${unidadeInstance?.rh?.nomeFantasia}"
                                             />
                                         </div>
                                     </label>

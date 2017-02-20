@@ -232,6 +232,29 @@ class PedidoCargaController extends BaseOwnerController {
 
         if (funcionariosAtivosIds.size() > 0 || funcionariosInativosIds.size() > 0) {
             pedidoCarga.total = 0D
+            boolean needSave = false
+
+            funcionariosAtivosIds.each { idFuncionario ->
+                ItemPedido itemPedido = pedidoCarga.itens.find { it.participante.id == idFuncionario }
+                //caso ainda não exista um item pedido para um funcionario selecionado, cria-lo
+                if (!itemPedido) {
+                    Funcionario funcionario = Funcionario.get(idFuncionario)
+
+                    itemPedido = new ItemPedido()
+                    itemPedido.participante = funcionario
+                    itemPedido.valor = params?.double("valorCarga[${funcionario.id}]") ?: funcionario?.categoria?.valorCarga
+                    itemPedido.sobra = 0.0D
+                    itemPedido.ativo = !funcionariosInativosIds.contains(funcionario.id)
+                    itemPedido.tipo = TipoItemPedido.CARGA
+                    itemPedido.save(flush: true)
+
+                    pedidoCarga.addToItens(itemPedido)
+                    needSave = true
+                }
+            }
+
+            if(needSave) pedidoCarga.save(flush: true)
+
 
             pedidoCarga.itens.each { itemPedido ->
                 itemPedido.valor = params?.double("valorCarga[${itemPedido.participante.id}]") ?: itemPedido.valor
@@ -316,36 +339,15 @@ class PedidoCargaController extends BaseOwnerController {
             if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
                 'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
             }
-
-            order('nome')
         }
 
-        def coutCriteria = {
-            if (params?.searchMatricula && params?.searchMatricula.length() > 0) {
-                eq('matricula', params.searchMatricula)
-            }
 
-            if (params?.searchNome && params?.searchNome.length() > 0) {
-                ilike('nome', "${params.searchNome}%")
-            }
-
-            if (params?.searchCpf && params?.searchCpf.length() > 0) {
-                eq('cpf', params.searchCpf)
-            }
-
-            if (categoriaInstance) {
-                eq('categoria', categoriaInstance)
-            }
-
-            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
-                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
-            }
-        }
+        params.sort = 'nome'
 
         render(template: '/pedidoCarga/funcionarioList',
                 model: [pedidoCargaInstance     : pedidoCargaInstance,
                         funcionarioInstanceList : Funcionario.createCriteria().list(params, criteria),
-                        funcionarioInstanceCount: Funcionario.createCriteria().count(coutCriteria),
+                        funcionarioInstanceCount: Funcionario.createCriteria().count(criteria),
                         categoriaInstance       : categoriaInstance,
                         action                  : params.actionView])
     }
@@ -375,6 +377,7 @@ class PedidoCargaController extends BaseOwnerController {
     }
 
     def gerarPlanilha = {
+
         PedidoCarga pedidoCarga = PedidoCarga.get(params.long('id'))
         if (!pedidoCarga) {
             flash.errors = "Pedido não encontrado"
@@ -389,56 +392,59 @@ class PedidoCargaController extends BaseOwnerController {
         response.setHeader("Content-disposition", "attachment; filename=PedidoCarga#${pedidoCarga.id}.${extention}")
 
         List fields = [
-                "ativo",
-                "participante.nome",
-                "valor",
-                "participante.cpf",
-                "participante.matricula",
-                "participante.rg",
-                "participante.dataNascimento",
-                "participante.categoria.nome"
+                "cpf",
+                "matricula",
+                "nome",
+                "descricao",
+                "valor"
         ]
+
         Map labels = [
-                "ativo"                      : "Ativo",
-                "participante.nome"          : "Nome",
-                "valor"                      : "Valor",
-                "participante.cpf"           : "CPF",
-                "participante.matricula"     : "Matrícula",
-                "participante.rg"            : "RG",
-                "participante.dataNascimento": "Dt. Nascimento",
-                "participante.categoria.nome": "Categoria"
+                "cpf"      : "CPF",
+                "matricula": "Matrícula",
+                "nome"     : "Nome",
+                "descricao": "Lançamento",
+                "valor"    : "Valor"
         ]
 
         Map formatters = [
-                'ativo'                      : { domain, value -> return value ? "Ativado" : "Desativado" },
-                'valor'                      : { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
-                'participante.dataNascimento': { domain, value -> return value.format("dd/MM/yyyy") }
+                'valor': { domain, value -> return "R\$ ${Util.formatCurrency(value)}" },
         ]
 
-        Map parameters = ["column.widths": [0.1, 0.5, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]]
+        Map parameters = ["column.widths": [0.2, 0.2, 0.5, 0.2, 0.2]]
 
+        def itemPedidoList = pedidoCarga.itens.collect {
+            [
+                    "cpf"      : it.participante.cpf,
+                    "matricula": it.participante.matricula,
+                    "nome"     : it.participante.nome,
+                    "descricao": it.lancamento ? it.lancamento.tipo.nome : "CARGA",
+                    "valor"    : it.valor
+            ]
+        }.sort { it.tipo?.nome }
 
-        List<ItemPedido> itemPedidoList = pedidoCarga.itens.collect { it as ItemPedido }?.sort { it.participante.nome }
         exportService.export(format, response.outputStream, itemPedidoList, fields, labels, formatters, parameters)
     }
 
 
-    private def getTaxasACobrar(unidadeInstance) {
-        return Lancamento.executeQuery("""
-select l
-from Lancamento l, Funcionario f
-where l.conta=f.conta
-and l.tipo in (:tipos)
-and l.status=:sts
-and f.unidade=:unid
-""",
-                [unid : unidadeInstance,
-                 tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
-                 sts  : StatusLancamento.A_EFETIVAR])
+    private def getTaxasACobrar(Unidade unidadeInstance) {
+        return Lancamento.executeQuery(
+                "select l from Lancamento l, Funcionario f " +
+                        "where l.conta = f.conta and l.tipo in (:tipos) and l.status = :sts and f.unidade = :unid",
+
+                [
+                        unid : unidadeInstance,
+                        tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
+                        sts  : StatusLancamento.A_EFETIVAR
+                ]
+        )
     }
 
 
     def loadTaxasCartao() {
+
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.offset = params.offset ?: 0
 
         def unidadeInstance = Unidade.get(params.unidId)
         def pedidoInstance = PedidoCarga.get(params.pedId)
@@ -449,8 +455,19 @@ and f.unidade=:unid
             //Se existirem, adiciona como itens do pedido
 
             def lancList
-            if (pedidoInstance) lancList = pedidoInstance.itens.findAll { it.tipo == TipoItemPedido.TAXA }*.lancamento
-            else lancList = getTaxasACobrar(unidadeInstance)
+            if (pedidoInstance) {
+
+                lancList = Lancamento.executeQuery("""select l
+from Lancamento l, ItemPedido i
+where i.lancamento=l
+and i.pedido=:ped
+""", [
+                        ped   : pedidoInstance,
+                        max   : params.max,
+                        offset: params.offset
+                ])
+
+            } else lancList = getTaxasACobrar(unidadeInstance, params)
 
             render(template: 'taxasList', model: [taxasList: lancList, taxasCount: lancList.size()])
 

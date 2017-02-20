@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.http.HttpStatus
 
 import java.text.SimpleDateFormat
 
@@ -32,7 +32,7 @@ class FuncionarioController extends BaseOwnerController {
         def criteria = {
             order('id')
 
-            if(unidadeInstance){
+            if (unidadeInstance) {
                 eq('unidade', unidadeInstance)
             }
         }
@@ -172,7 +172,6 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def listAllJSON = {
-
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.start ?: 0
         def opcao
@@ -184,10 +183,7 @@ class FuncionarioController extends BaseOwnerController {
         def funcionarioInstanceList
 
         withSecurity { ownerList ->
-            funcionarioInstanceList = Funcionario
-                    .createCriteria()
-            //.list(max:params.max,offset:offset){
-                    .list() {
+            funcionarioInstanceList = Funcionario.createCriteria().list() {
                 eq('status', Status.ATIVO)
                 if (ownerList.size > 0)
                     unidade { rh { 'in'('id', ownerList) } }
@@ -254,20 +250,20 @@ class FuncionarioController extends BaseOwnerController {
         }
 
         def fields = funcionarioInstanceList.collect { f ->
-            [id       : f.id,
-             matricula: f.matricula,
-             nome     : f.nome,
-             cartao   : f.cartaoAtivo?f.cartaoAtivo.numeroMascarado:'< Nenhum cartão ativo >',
-             cpf      : "<a href=${createLink(action: 'show',id:f.id)}>${f.cpf}</a>"
+            [
+                    id       : f.id,
+                    matricula: f.matricula,
+                    nome     : f.nome,
+                    cartao   : f.cartaoAtivo ? f.cartaoAtivo.numeroMascarado : '< Nenhum cartão ativo >',
+                    cpf      : "<a href=${createLink(action: 'show', id: f.id)}>${f.cpf}</a>"
             ]
 
         }
 
-        def data = [recordsTotal: funcionarioInstanceTotal, results: fields]
+        def data = [recordsTotal: funcionarioInstanceTotal, results: fields.sort { it.nome }]
 
         render data as JSON
     }
-
 
     def beforeInterceptor = [
             action: {
@@ -288,7 +284,6 @@ class FuncionarioController extends BaseOwnerController {
         render "${funcionarioInstance?.nome}"
     }
 
-
     def generateNewPassword() {
         def ret = [:]
 
@@ -302,5 +297,4 @@ class FuncionarioController extends BaseOwnerController {
         ret['newPsw'] = cartaoInstance.senha
         render ret as JSON
     }
-
 }

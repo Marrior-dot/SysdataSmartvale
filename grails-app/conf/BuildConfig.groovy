@@ -16,12 +16,15 @@ grails.project.dependency.resolution = {
 
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
+        mavenLocal()
+        mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+
+
+
     }
 
     dependencies {
@@ -31,6 +34,9 @@ grails.project.dependency.resolution = {
     }
 	
 	plugins {
+
+
+
         compile "org.grails.plugins:audit-logging:1.0.5"
 		compile ":hibernate-filter:0.3.2"
 		compile ':quartz:1.0.2'
