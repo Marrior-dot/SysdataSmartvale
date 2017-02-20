@@ -19,6 +19,11 @@
 									${flash.message}
 								</div>
 							</g:if>
+							<div style="text-align: center">
+								<img alt="Cooper Combustível" src="/GestaoFrota/images/cooper-logo-big.png">
+								<br><br>
+							</div>
+
 							<form action='${request.contextPath}/j_spring_security_check' method='POST' id='loginForm'
 								  autocomplete='off' class="form-signin">
 
