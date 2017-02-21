@@ -25,7 +25,7 @@
                      style="margin-bottom: 0;    height: 80px;">
 
                     <div class="navbar-left" style="margin-left:10px; margin-top:10px">
-                        <img alt="VR" src="${resource(dir:'images',file:'cooper-logo-small.png') }">
+                        <img alt="VR" src="${resource(dir:'images',file:'vr-beneficios-small.png') }">
                     </div>
 
                 </div>
