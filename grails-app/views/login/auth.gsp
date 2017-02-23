@@ -20,7 +20,7 @@
 								</div>
 							</g:if>
 							<div style="text-align: center">
-								<img alt="Cooper Combustível" src="/GestaoFrota/images/vr-beneficios-big.png">
+								<img alt="VR Frota" src="${resource(dir:'images',file:'vr-beneficios-big.png') }">
 								<br><br>
 							</div>
 
