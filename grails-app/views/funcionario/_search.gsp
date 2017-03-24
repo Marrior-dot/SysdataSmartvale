@@ -1,4 +1,5 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.Status" %>
 
 
 <g:form controller="${controller}">
@@ -19,12 +20,14 @@
 		<h2>Pesquisa por filtro</h2>
 	
 		<input type="hidden" name="unidade_id" value="${unidade_id}"/>
-		
-		<input type="radio" name="opcao" value="1" checked="true">Matrícula</input> 
+		<input type="radio" name="opcao" value="1" checked="true">Matrícula</input>
 		<input type="radio" name="opcao" value="2">Nome</input>
 		<input type="radio" name="opcao" value="3">CPF</input>
 		<br>
+
 		<label>Filtro: <g:textField name="filtroFunc" value="${filtro}"/></label>
+		<label>Status: <g:select name="filtroStatus" from="${Status.asBloqueado()}" value="${status}" optionValue="nome"></g:select></label>
+
 	</fieldset>
 	
 
@@ -32,7 +35,7 @@
 	<gui:dataTable 
 				id="funcSearchDT"
 				controller="funcionario" action="listAllJSON"
-				params="[unidade_id:unidade_id,gestor:gestor]"
+				params='[unidade_id:unidade_id,gestor:gestor]'
 				columnDefs="[
 					[key:'id',hidden:true],
 					[key:'matricula',sortable:true,resizeable:true,label:'Matrícula'],
@@ -70,16 +73,37 @@
 			params+='categId='+categId+'&';
 		
 		params+="opcao="+$(':checked').val()+"&filtro="+filtro;
+		params+="&status="+$('select[name="filtroStatus"]').val();
 		
 		filtrarEntidade(GRAILSUI.funcSearchDT,params);
-	
 
 	}
 
-	//Filtra enquanto digita
-	$('input[name="filtroFunc"]').keyup(function(){
-		filtrarFuncionarios($(this).val(),null);
-	});
+	function filtrarStatus(status,categId){
+		var params='';
+
+		<g:if test="${unidade_id}">
+			params+="unidade_id=${unidade_id}&";
+		</g:if>
+
+		if(categId)
+	        params+='categId='+categId+'&';
+
+    	params+="status="+$('select[name="filtroStatus"]').val();
+
+    filtrarEntidade(GRAILSUI.funcSearchDT,params);
+}
+
+//Filtra enquanto digita
+$('input[name="filtroFunc"]').keyup(function(){
+    filtrarFuncionarios($(this).val(),null);
+});
+//Filtra se tiver mudança do select
+$('select[name="filtroStatus"]').change(function() {
+    filtrarStatus($(this).val(),null);
+ });
+
+
 
 </jq:jquery>
 

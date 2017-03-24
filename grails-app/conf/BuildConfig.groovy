@@ -16,8 +16,12 @@ grails.project.dependency.resolution = {
 
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
+        mavenLocal()
+        mavenCentral()
+        mavenRepo "http://repo.grails.org/grails/plugins"
+        mavenRepo "http://acceptiondev.com.br/artifactory/plugins-release-local"
+        mavenRepo "http://acceptiondev.com.br/artifactory/libs-release-local"
+        mavenRepo "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"

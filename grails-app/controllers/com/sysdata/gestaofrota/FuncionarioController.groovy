@@ -157,70 +157,70 @@ class FuncionarioController extends BaseOwnerController {
 
 
 	def listAllJSON={
-		
+
+		println "Params: ${params}"
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def offset=params.offset?:0
 		def opcao
+		def status=params.status
 		def filtro
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
 		def categId=params.categId
 		def gestor=params.gestor
 		
 		def funcionarioInstanceList
-		
 		withSecurity{ownerList->
 			funcionarioInstanceList=Funcionario
 									.createCriteria()
 									.list(max:params.max,offset:offset){
-										eq('status', Status.ATIVO)
-										if(ownerList.size>0)
-											unidade{rh{'in'('id',ownerList)}}
-										
-										if(unidId)
-											unidade{eq('id',unidId)}
-											
-										if(categId)
-											categoria{eq('id',categId)}
-											
-										if(gestor && gestor!="null")
-											eq("gestor",true)
-											
-										if(params.opcao && params.filtro){
-											opcao=params.opcao.toInteger()
-											filtro=params.filtro
-											//Matricula
-											if(opcao==1)
-												like('matricula',filtro+'%')
-											//Nome
-											else if(opcao==2)
-												like('nome',filtro+'%')
-											//CPF
-											else if(opcao==3)
-												like('cpf',filtro+'%')
-										}
-									}
-		}
-		
-		def funcionarioInstanceTotal
-		
-		withSecurity{ownerList->
-			funcionarioInstanceTotal=Funcionario
-										.createCriteria()
-										.list(){
-											eq('status', Status.ATIVO)
+										if(status){
+											if(status == "ATIVO") {
+												eq('status', Status.ATIVO)
+											}
+											else if(status == "BLOQUEADO") {
+												eq('status', Status.BLOQUEADO)
+											}
+												if(ownerList.size>0)
+													unidade{rh{'in'('id',ownerList)}}
+
+												if(unidId)
+													unidade{eq('id',unidId)}
+
+												if(categId)
+													categoria{eq('id',categId)}
+
+												if(gestor!="null")
+													eq("gestor",true)
+
+												if(params.opcao && params.filtro){
+													//Matricula
+													if(opcao==1)
+														like('matricula',filtro+'%')
+													//Nome
+													else if(opcao==2)
+														like('nome',filtro+'%')
+													//CPF
+													else if(opcao==3)
+														like('cpf',filtro+'%')
+												}
+										}else{
+											eq('status',Status.ATIVO)
+
 											if(ownerList.size>0)
 												unidade{rh{'in'('id',ownerList)}}
-											
+
 											if(unidId)
 												unidade{eq('id',unidId)}
-												
+
 											if(categId)
 												categoria{eq('id',categId)}
-												
-											if(gestor!="null")
+
+											if(gestor && gestor!="null")
 												eq("gestor",true)
-	
+
 											if(params.opcao && params.filtro){
+												opcao=params.opcao.toInteger()
+												filtro=params.filtro
 												//Matricula
 												if(opcao==1)
 													like('matricula',filtro+'%')
@@ -230,7 +230,79 @@ class FuncionarioController extends BaseOwnerController {
 												//CPF
 												else if(opcao==3)
 													like('cpf',filtro+'%')
+
 											}
+										}
+
+									}
+		}
+		
+		def funcionarioInstanceTotal
+		
+		withSecurity{ownerList->
+			funcionarioInstanceTotal=Funcionario
+										.createCriteria()
+										.list(){
+											if(status){
+												if(status == "ATIVO") {
+													eq('status', Status.ATIVO)
+												}
+												else if(status == "BLOQUEADO") {
+													eq('status', Status.BLOQUEADO)
+												}
+
+												if(ownerList.size>0)
+														unidade{rh{'in'('id',ownerList)}}
+
+													if(unidId)
+														unidade{eq('id',unidId)}
+
+													if(categId)
+														categoria{eq('id',categId)}
+
+													if(gestor!="null")
+														eq("gestor",true)
+
+													if(params.opcao && params.filtro){
+														//Matricula
+														if(opcao==1)
+															like('matricula',filtro+'%')
+														//Nome
+														else if(opcao==2)
+															like('nome',filtro+'%')
+														//CPF
+														else if(opcao==3)
+															like('cpf',filtro+'%')
+													}
+											}else {
+												//eq('status', status)
+												eq('status', Status.ATIVO)
+
+												if(ownerList.size>0)
+													unidade{rh{'in'('id',ownerList)}}
+
+												if(unidId)
+													unidade{eq('id',unidId)}
+
+												if(categId)
+													categoria{eq('id',categId)}
+
+												if(gestor!="null")
+													eq("gestor",true)
+
+												if(params.opcao && params.filtro){
+													//Matricula
+													if(opcao==1)
+														like('matricula',filtro+'%')
+													//Nome
+													else if(opcao==2)
+														like('nome',filtro+'%')
+													//CPF
+													else if(opcao==3)
+														like('cpf',filtro+'%')
+												}
+											}
+
 											projections{ rowCount() }
 										}
 		}
@@ -240,6 +312,7 @@ class FuncionarioController extends BaseOwnerController {
 						matricula:f.matricula,
 						nome:f.nome,
 						cpf:f.cpf,
+						//status:f.status.nome,
 						acao:"<a class='show' href=${createLink(action:'show')}/${f.id}></a>"]
 		}
 
