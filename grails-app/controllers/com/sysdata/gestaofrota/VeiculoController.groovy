@@ -170,7 +170,7 @@ class VeiculoController extends BaseOwnerController {
 		def opcao
 		def filtro
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
-
+		println "Params: ${params}"
 		def veiculoInstanceList
 		
 		withSecurity{ownerList->

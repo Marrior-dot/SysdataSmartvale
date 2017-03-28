@@ -161,64 +161,50 @@ class FuncionarioController extends BaseOwnerController {
 		println "Params: ${params}"
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		def offset=params.offset?:0
-		def opcao
-		def status=params.status
-		def filtro
+		def opcao = null
+		def status= null
+		def filtro = null
 		def unidId=params.unidade_id?(params.unidade_id!='null'?params.unidade_id.toLong():null):null
 		def categId=params.categId
 		def gestor=params.gestor
-		
+		println "Opção: ${params.opcao}"
+		println "Filtro: ${params.filtro}"
+		println "Status: ${params.status}"
+
 		def funcionarioInstanceList
 		withSecurity{ownerList->
-			funcionarioInstanceList=Funcionario
+			funcionarioInstanceList =Funcionario
 									.createCriteria()
 									.list(max:params.max,offset:offset){
-										if(status){
-											if(status == "ATIVO") {
-												eq('status', Status.ATIVO)
+											status = params.status
+
+											if(!status) eq('status',Status.ATIVO)
+											else{
+												if(status == "ATIVO"){
+													eq('status',Status.ATIVO)}
+												else if (status == "BLOQUEADO"){
+													eq('status',Status.BLOQUEADO)}
+
 											}
-											else if(status == "BLOQUEADO") {
-												eq('status', Status.BLOQUEADO)
-											}
-												if(ownerList.size>0)
-													unidade{rh{'in'('id',ownerList)}}
 
-												if(unidId)
-													unidade{eq('id',unidId)}
-
-												if(categId)
-													categoria{eq('id',categId)}
-
-												if(gestor!="null")
-													eq("gestor",true)
-
-												if(params.opcao && params.filtro){
-													//Matricula
-													if(opcao==1)
-														like('matricula',filtro+'%')
-													//Nome
-													else if(opcao==2)
-														like('nome',filtro+'%')
-													//CPF
-													else if(opcao==3)
-														like('cpf',filtro+'%')
-												}
-										}else{
-											eq('status',Status.ATIVO)
-
+											println "Entrou no if status"
 											if(ownerList.size>0)
 												unidade{rh{'in'('id',ownerList)}}
+											println "ownerList: ${ownerList}"
 
 											if(unidId)
 												unidade{eq('id',unidId)}
+											println "unidId: ${unidId}"
 
 											if(categId)
 												categoria{eq('id',categId)}
+											println "categId: ${categId}"
 
 											if(gestor && gestor!="null")
 												eq("gestor",true)
 
-											if(params.opcao && params.filtro){
+											if(params.opcao && (params.filtro != null || params.filtro != '')){
+												println "Entrou no if do filtro com ele valendo: ${params.filtro}"
 												opcao=params.opcao.toInteger()
 												filtro=params.filtro
 												//Matricula
@@ -232,65 +218,52 @@ class FuncionarioController extends BaseOwnerController {
 													like('cpf',filtro+'%')
 
 											}
-										}
-
 									}
 		}
 		
 		def funcionarioInstanceTotal
 		
 		withSecurity{ownerList->
-			funcionarioInstanceTotal=Funcionario
+			 funcionarioInstanceTotal=Funcionario
 										.createCriteria()
 										.list(){
-											if(status){
-												if(status == "ATIVO") {
-													eq('status', Status.ATIVO)
-												}
-												else if(status == "BLOQUEADO") {
-													eq('status', Status.BLOQUEADO)
-												}
+				 								status = params.status
 
-												if(ownerList.size>0)
-														unidade{rh{'in'('id',ownerList)}}
+												 if(!status) eq('status',Status.ATIVO)
+												 else{
+													 if(status == "ATIVO"){
+														 eq('status',Status.ATIVO)
+													 }
+													 else if (status == "BLOQUEADO"){
+														 eq('status',Status.BLOQUEADO)
+													 }
 
-													if(unidId)
-														unidade{eq('id',unidId)}
+												 }
 
-													if(categId)
-														categoria{eq('id',categId)}
-
-													if(gestor!="null")
-														eq("gestor",true)
-
-													if(params.opcao && params.filtro){
-														//Matricula
-														if(opcao==1)
-															like('matricula',filtro+'%')
-														//Nome
-														else if(opcao==2)
-															like('nome',filtro+'%')
-														//CPF
-														else if(opcao==3)
-															like('cpf',filtro+'%')
+												if(ownerList.size>0){
+													unidade{
+														rh{
+															'in'('id',ownerList)
+														}
 													}
-											}else {
-												//eq('status', status)
-												eq('status', Status.ATIVO)
-
-												if(ownerList.size>0)
-													unidade{rh{'in'('id',ownerList)}}
+												}
+												println "ownerList: ${ownerList}"
 
 												if(unidId)
 													unidade{eq('id',unidId)}
+												println "unidId: ${unidId}"
 
 												if(categId)
 													categoria{eq('id',categId)}
+												println "categId: ${categId}"
 
-												if(gestor!="null")
+												if(gestor && gestor!="null")
 													eq("gestor",true)
 
-												if(params.opcao && params.filtro){
+												if(params.opcao && (params.filtro != null || params.filtro != '')){
+													println "Entrou no if do filtro com ele valendo: ${params.filtro}"
+													opcao=params.opcao.toInteger()
+													filtro=params.filtro
 													//Matricula
 													if(opcao==1)
 														like('matricula',filtro+'%')
@@ -300,19 +273,20 @@ class FuncionarioController extends BaseOwnerController {
 													//CPF
 													else if(opcao==3)
 														like('cpf',filtro+'%')
+
 												}
-											}
+
 
 											projections{ rowCount() }
 										}
 		}
-
+		println "funcionarioInstanceList: ${funcionarioInstanceList}"
+		println "totalRecords: ${funcionarioInstanceList}"
 		def fields=funcionarioInstanceList.collect{f->
 			[id:f.id,
 						matricula:f.matricula,
 						nome:f.nome,
 						cpf:f.cpf,
-						//status:f.status.nome,
 						acao:"<a class='show' href=${createLink(action:'show')}/${f.id}></a>"]
 		}
 

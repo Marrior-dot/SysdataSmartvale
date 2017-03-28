@@ -89,20 +89,23 @@
 		if(categId)
 	        params+='categId='+categId+'&';
 
-    	params+="status="+$('select[name="filtroStatus"]').val();
+    	params+="status="+status;
 
     filtrarEntidade(GRAILSUI.funcSearchDT,params);
 }
 
 //Filtra enquanto digita
-$('input[name="filtroFunc"]').keyup(function(){
-    filtrarFuncionarios($(this).val(),null);
-});
-//Filtra se tiver mudança do select
-$('select[name="filtroStatus"]').change(function() {
-    filtrarStatus($(this).val(),null);
- });
 
+		$('input[name="filtroFunc"]').keyup(function(){
+			filtrarFuncionarios($(this).val(),null);
+		});
+
+
+
+//Filtra se tiver mudança do select
+		$('select[name="filtroStatus"]').change(function() {
+			filtrarStatus($(this).val(),null);
+		 });
 
 
 </jq:jquery>
