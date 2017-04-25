@@ -109,14 +109,14 @@ class RhController extends BaseOwnerController {
 			try {
 				log.debug("Inativando " + rhInstance)
 				rhInstance.status = Status.INATIVO
-				rhInstance.empresas.each { empresa ->
+				/*rhInstance.empresas.each { empresa ->
 					log.debug("Inativando " + empresa)
 					empresa.status = Status.INATIVO
 					empresa.estabelecimentos.each { estabelecimento ->
 						log.debug("Inativando " + estabelecimento)
 						estabelecimento.status = Status.INATIVO
 					}
-				}
+				}*/
 				rhInstance.unidades.each { uni ->
 					log.debug("Inativando " + uni)
 					uni.status = Status.INATIVO
@@ -274,7 +274,9 @@ class RhController extends BaseOwnerController {
 				
 		empresaList.each {e->
 			def check=progInstance.empresas.find{it.id==e.id}!=null
-			resultList<<[id:e.id,fantasia:e.nomeFantasia,razao:e.nome,selecao:check]
+			//def end = "Lograd.: ${e.endereco?.logradouro ? e.endereco.logradouro:""}, Complem.: ${e.endereco?.complemento ? e.endereco.complemento:""}, Num.: ${e.endereco?.numero ? e.endereco.numero:"S/N"}, Bairro: ${e.endereco?.bairro ? e.endereco.bairro:""}, Cid.: ${e.endereco?.cidade?.nome ? e.endereco.cidade.nome:""}-${e.endereco?.cidade?.estado?.uf ? e.endereco.cidade.estado.uf:""}, cep: ${e.endereco?.cep ? e.endereco.cep:""}"
+			def end = "${e.endereco?.logradouro ? e.endereco.logradouro:""}, ${e.endereco?.complemento ? e.endereco.complemento:""}, ${e.endereco?.numero ? e.endereco.numero:"S/N"},${e.endereco?.bairro ? e.endereco.bairro:""}, ${e.endereco?.cidade?.nome ? e.endereco.cidade.nome:""}-${e.endereco?.cidade?.estado?.uf ? e.endereco.cidade.estado.uf:""}, cep: ${e.endereco?.cep ? e.endereco.cep:""}"
+			resultList<<[id:e.id,fantasia:e.nomeFantasia,endereco:end,selecao:check]//razao:e.nome
 			fillEstMapOnDemand(e.id,check)
 			
 		}

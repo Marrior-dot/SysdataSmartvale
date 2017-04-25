@@ -61,14 +61,18 @@
 					<div class="clear"></div>
 					<label><span>Data Nascimento</span><g:formatDate format="dd/MM/yyyy" date="${cartaoInstance?.funcionario?.dataNascimento}"/></label>
 					<label><span>Status Cartão</span>${cartaoInstance?.status?.nome}</label>
-					
-					<g:if test="${goTo=='cancelCard' && cartaoInstance?.status==StatusCartao.ATIVO}">
+					<label><span>Status Portador</span>${participante?.status?.nome}</label>
+
+					<g:if test="${goTo=='cancelCard' && cartaoInstance?.status==StatusCartao.ATIVO && !cartaoInstance.motivoCancelamento}">
 						<div>
 							<label><span>Motivo Cancelamento</span>
 								<g:select name="motivoCancelamento" from="${MotivoCancelamento.values().findAll{it!=MotivoCancelamento.DEMISSAO}}" optionName="nome"></g:select>
 							</label>
 						</div>
 					</g:if>
+					<g:else>
+						<label><span>Motivo Cancelamento</span>${cartaoInstance?.motivoCancelamento?.nome}</label>
+					</g:else>
 					
 				</fieldset>
 				
@@ -77,6 +81,7 @@
 		                <span class="button"><g:actionSubmit action="unlockNewCard" class="unlock" value="Desbloquear Cartão" /></span>
 		            </div>
 				</g:if>
+				<g:elseif test="${goTo=='unlockNewCard' && cartaoInstance?.status!=StatusCartao.EMBOSSING}">OBS: O cartão deve estar com status "Embossing" para ser desbloqueado</g:elseif>
 				
 				<g:if test="${goTo=='cancelCard' && cartaoInstance?.status==StatusCartao.ATIVO}">
 					<div class="buttons">

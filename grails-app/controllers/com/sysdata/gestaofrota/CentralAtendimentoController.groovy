@@ -56,8 +56,9 @@ class CentralAtendimentoController {
 		def numero=params.cartao
 		if(numero){
 			def cartaoInstance=Cartao.findByNumero(numero)
+			def participante = cartaoInstance.funcionario
 			if(cartaoInstance){
-				render(view:'manageCard',model:[cartaoInstance:cartaoInstance,goTo:params.goTo])
+				render(view:'manageCard',model:[cartaoInstance:cartaoInstance,goTo:params.goTo,participante:participante])
 			}else{
 				flash.errors<<"Nenhum cartão localizado com este número"
 				render(view:'searchCard',model:[act:'findFuncionario',goTo:params.goTo])
@@ -71,6 +72,7 @@ class CentralAtendimentoController {
 	def unlockNewCard={
 		flash.errors=[]
 		def cartaoInstance=Cartao.get(params.id)
+		def participante = cartaoInstance.funcionario
 		if(cartaoInstance){
 			cartaoInstance.status=StatusCartao.ATIVO
 			if(cartaoInstance.save(flush:true)){
@@ -81,27 +83,50 @@ class CentralAtendimentoController {
 				flash.errors<<"Erro ao Desbloquear Cartão"
 			[cartaoInstance:cartaoInstance]
 		}
-		render view:'manageCard',model:[cartaoInstance:cartaoInstance]
+		render view:'manageCard',model:[cartaoInstance:cartaoInstance,participante:participante]
 	}
 	
 	/* Ao cancelar um determinado cartão, um novo é automaticamente gerado */
 	def cancelCard={
+		println "params : $params"
 		flash.errors=[]
 		def cartaoInstance=Cartao.get(params.id)
+		def participante = cartaoInstance.funcionario
 		if(cartaoInstance){
-			cartaoInstance.status=StatusCartao.CANCELADO
-			if(cartaoInstance.save() && funcionarioService.gerarCartao(cartaoInstance.funcionario)) {
-				log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} cancelado"
-				flash.message = "Cartão CANCELADO com sucesso"
-			}else{
+			//println "motivoCancelamento ${MotivoCancelamento.valueOf(params.motivoCancelamento)}"
+				if((params.motivoCancelamento as MotivoCancelamento) != MotivoCancelamento.SOLICITACAO_ADM){
+					cartaoInstance.status=StatusCartao.CANCELADO
+					cartaoInstance.motivoCancelamento = MotivoCancelamento.valueOf(params.motivoCancelamento)
+					println "É diferente de solicitacao_adm"
+					funcionarioService.gerarCartao(cartaoInstance.funcionario)
+
+				}else{
+					println "É igual a solicitacao_adm"
+					cartaoInstance.status=StatusCartao.CANCELADO
+					cartaoInstance.motivoCancelamento = MotivoCancelamento.valueOf(params.motivoCancelamento)
+					cartaoInstance.funcionario.status = Status.BLOQUEADO
+					Participante.executeUpdate("""update Participante p set p.status='BLOQUEADO' where p.id=:parId""",[parId:participante.id])
+				}
+				if(cartaoInstance.save(flush: true, failOnError: true)){
+					//cartaoInstance.save(flush: true, failOnError: true) &&
+					println "Salvou o cartao"
+					log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} cancelado"
+					flash.message = "Cartão CANCELADO com sucesso, pelo motivo ${cartaoInstance.motivoCancelamento}"
+
+				}else{
 				cartaoInstance.errors.allErrors.each {
 					log.error it
 				}
-				flash.errors<<"Erro ao Cancelar Cartão"
-			}
-			[cartaoInstance:cartaoInstance]
+				flash.errors<<"Erro ao Cancelar Cartão!"
+				}
+
+				//[cartaoInstance:cartaoInstance]
+			//funcionarioInstance.save(flush: true, failOnError: true)
+			//println "Salvou o funcionario"
+
 		}
-		render view:'manageCard',model:[cartaoInstance:cartaoInstance]
+		println "cartaoInstance.status: ${cartaoInstance.funcionario.status}"
+		render view:'manageCard',model:[cartaoInstance:cartaoInstance, participante:participante]
 	}
 	
 	

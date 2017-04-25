@@ -45,7 +45,7 @@
 					[key:'selecao',label:'Seleção',formatter:'checkbox'],
 	 				[key:'id',hidden:true],
 	 				[key:'fantasia',sortable:true,resizeable:true,label:'Nome Fantasia'],
-	 				[key:'razao',sortable:true,resizeable:true,label:'Razão Social'],
+	 				[key:'endereco',sortable:true,resizeable:true,label:'Endereço'],
             	]"
 	sortedBy="fantasia"
 	rowsPerPage="10"
