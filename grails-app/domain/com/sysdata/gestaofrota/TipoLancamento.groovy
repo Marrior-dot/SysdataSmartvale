@@ -3,7 +3,8 @@ package com.sysdata.gestaofrota
 enum TipoLancamento {
 	CARGA("Carga"),
 	COMPRA("Compra"),
-	REEMBOLSO("Reembolso")
+	REEMBOLSO("Reembolso"),
+	TRANSFERENCIA_SALDO("Transferência de Saldo")
 	
 	String nome
 	
@@ -12,6 +13,6 @@ enum TipoLancamento {
 	}
 	
 	static asList(){
-		[CARGA,COMPRA,REEMBOLSO]
+		[CARGA,COMPRA,REEMBOLSO,TRANSFERENCIA_SALDO]
 	}
 }

@@ -26,7 +26,7 @@
 		<br>
 
 		<label>Filtro: <g:textField name="filtroFunc" value="${filtro}"/></label>
-		<label>Status: <g:select name="filtroStatus" from="${Status.asBloqueado()}" value="${status}" optionValue="nome"></g:select></label>
+		<label>Status: <g:select name="filtroStatus" from="${Status.lista()}" value="${status}" optionValue="nome"></g:select></label>
 
 	</fieldset>
 	

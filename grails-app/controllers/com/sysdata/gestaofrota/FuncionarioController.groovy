@@ -184,6 +184,8 @@ class FuncionarioController extends BaseOwnerController {
 													eq('status',Status.ATIVO)}
 												else if (status == "BLOQUEADO"){
 													eq('status',Status.BLOQUEADO)}
+												else if (status == "CANCELADO"){
+													eq('status',Status.CANCELADO)}
 
 											}
 
@@ -237,6 +239,8 @@ class FuncionarioController extends BaseOwnerController {
 													 else if (status == "BLOQUEADO"){
 														 eq('status',Status.BLOQUEADO)
 													 }
+													 else if (status == "CANCELADO"){
+														 eq('status',Status.CANCELADO)}
 
 												 }
 

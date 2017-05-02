@@ -44,46 +44,123 @@ class CentralAtendimentoController {
 	def authServerService
 	def funcionarioService
 	def springSecurityService
+	def centralAtendimentoService
 		
     def index = { }
 	
 	def searchCard={
 		[act:params.act,goTo:params.goTo]
 	}
+
+	def searchCards={
+		[act:params.act,goTo:params.goTo]
+	}
 	
 	def findFuncionario={
 		flash.errors=[]
 		def numero=params.cartao
+		def sucesso = false
+		println "params: ${params}"
 		if(numero){
 			def cartaoInstance=Cartao.findByNumero(numero)
 			def participante = cartaoInstance.funcionario
 			if(cartaoInstance){
-				render(view:'manageCard',model:[cartaoInstance:cartaoInstance,goTo:params.goTo,participante:participante])
+				render(view:'manageCard',model:[cartaoInstance:cartaoInstance,goTo:params.goTo,participante:participante, sucesso: sucesso])
 			}else{
 				flash.errors<<"Nenhum cartão localizado com este número"
 				render(view:'searchCard',model:[act:'findFuncionario',goTo:params.goTo])
 			}
 		}else{
 			flash.errors<<"Nº de cartão nulo"
-			render(view:'searchCard',model:[act:'findFuncionario',goTo:params.goTo])
+			render(view:'searchCard',model:[act:'findFuncionario',goTo:params.goTo, sucesso: sucesso])
 		}
 	}
-	
+
+	def buscarFuncionarios={
+		flash.errors=[]
+		println "params: ${params}"
+		def numero=params.cartao
+		def cartaoDebito = params.cartaoParaTransferir
+		def cartaoCredito = params.cartaoParaReceber
+		def sucesso = false
+		if(cartaoDebito && cartaoCredito){
+			def cartaoInstanceDebito=Cartao.findByNumero(cartaoDebito)
+			def cartaoInstanceCredito=Cartao.findByNumero(cartaoCredito)
+			def participanteDebito = cartaoInstanceDebito?.funcionario
+			def participanteCredito = cartaoInstanceCredito?.funcionario
+			if(cartaoInstanceDebito && cartaoInstanceCredito){
+                if(cartaoInstanceDebito.funcionario.conta.saldo>0){
+                    if(cartaoInstanceDebito.funcionario.unidade == cartaoInstanceCredito.funcionario.unidade ){
+
+                        render(view:'manageCard',model:[cartaoInstanceDebito:cartaoInstanceDebito,cartaoInstanceCredito:cartaoInstanceCredito,goTo:params.goTo,participanteDebito:participanteDebito,participanteCredito:participanteCredito,sucesso:sucesso])
+                    }else{
+                        flash.errors<<"Os cartões inseridos devem ser do mesmo Rh."
+                        render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+                    }
+                }else{
+                    flash.errors<<"Não há saldo disponivel para transferência no cartão $cartaoInstanceDebito.numero    . Saldo: R\$ $cartaoInstanceDebito.funcionario.conta.saldo"
+                    render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+                }
+			}else if(!cartaoInstanceDebito){
+				flash.errors<<"Nenhum cartão localizado na base com o número ${cartaoDebito}"
+				render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+			}else if(!cartaoInstanceCredito){
+				flash.errors<<"Nenhum cartão localizado na base com o número ${cartaoCredito}"
+				render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+			}
+		}else{
+			flash.errors<<"Nº de cartão nulo"
+			render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+		}
+	}
+	def transfSaldo={
+		println "params : $params"
+		flash.errors=[]
+		def cartaoInstanceDebito = Cartao.get(params.cartaoInstanceDebitoId)
+		def cartaoInstanceCredito = Cartao.get(params.cartaoInstanceCreditoId)
+		def participanteDebito = cartaoInstanceDebito.funcionario
+		def participanteCredito = cartaoInstanceCredito.funcionario
+		def valorTransf
+		def saldoPortador
+		def sucesso = false
+		if (cartaoInstanceCredito && cartaoInstanceDebito){
+			valorTransf = cartaoInstanceDebito.funcionario.conta.saldo
+			saldoPortador = cartaoInstanceCredito.funcionario.conta.saldo
+			println "saldo portador debito: $valorTransf - saldo portador credito: $saldoPortador"
+            if(centralAtendimentoService.tranferenciaSaldo(cartaoInstanceCredito,cartaoInstanceDebito,valorTransf)){
+                log.info "User:${springSecurityService.currentUser?.name}-Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero}"
+                flash.message = "Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero} com sucesso."
+                sucesso=true
+            }else{
+                cartaoInstanceCredito.errors.allErrors.each {
+                    log.error "Erro cartao ${cartaoInstanceCredito.numero}: $it"
+                }
+                cartaoInstanceDebito.errors.allErrors.each {
+                    log.error "Erro cartao ${cartaoInstanceDebito.numero}: $it"
+                }
+                flash.errors<<"Erro ao receber no cartao ${cartaoInstanceCredito.numero} o saldo transferido do cartão ${cartaoInstanceDebito.numero}!"
+            }
+		}
+        render view:'manageCard',model:[cartaoInstanceDebito:cartaoInstanceDebito,cartaoInstanceCredito:cartaoInstanceCredito,goTo:params.goTo,participanteDebito:participanteDebito,participanteCredito:participanteCredito,sucesso:sucesso]
+	}
+
 	def unlockNewCard={
 		flash.errors=[]
 		def cartaoInstance=Cartao.get(params.id)
 		def participante = cartaoInstance.funcionario
+		def sucesso = false
 		if(cartaoInstance){
 			cartaoInstance.status=StatusCartao.ATIVO
 			if(cartaoInstance.save(flush:true)){
 				log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} desbloqueado"
 				flash.message="Cartão DESBLOQUEADO com sucesso"
+				sucesso = true
 			}
 			else
 				flash.errors<<"Erro ao Desbloquear Cartão"
 			[cartaoInstance:cartaoInstance]
 		}
-		render view:'manageCard',model:[cartaoInstance:cartaoInstance,participante:participante]
+		render view:'manageCard',model:[cartaoInstance:cartaoInstance,participante:participante,sucesso: sucesso,goTo:params.goTo]
 	}
 	
 	/* Ao cancelar um determinado cartão, um novo é automaticamente gerado */
@@ -92,6 +169,7 @@ class CentralAtendimentoController {
 		flash.errors=[]
 		def cartaoInstance=Cartao.get(params.id)
 		def participante = cartaoInstance.funcionario
+		def sucesso = false
 		if(cartaoInstance){
 			//println "motivoCancelamento ${MotivoCancelamento.valueOf(params.motivoCancelamento)}"
 				if((params.motivoCancelamento as MotivoCancelamento) != MotivoCancelamento.SOLICITACAO_ADM){
@@ -104,15 +182,15 @@ class CentralAtendimentoController {
 					println "É igual a solicitacao_adm"
 					cartaoInstance.status=StatusCartao.CANCELADO
 					cartaoInstance.motivoCancelamento = MotivoCancelamento.valueOf(params.motivoCancelamento)
-					cartaoInstance.funcionario.status = Status.BLOQUEADO
-					Participante.executeUpdate("""update Participante p set p.status='BLOQUEADO' where p.id=:parId""",[parId:participante.id])
+					cartaoInstance.funcionario.status = Status.CANCELADO
+					Participante.executeUpdate("""update Participante p set p.status='CANCELADO' where p.id=:parId""",[parId:participante.id])
 				}
 				if(cartaoInstance.save(flush: true, failOnError: true)){
 					//cartaoInstance.save(flush: true, failOnError: true) &&
 					println "Salvou o cartao"
 					log.info "User:${springSecurityService.currentUser?.name}-Cartao ${cartaoInstance.numero} cancelado"
 					flash.message = "Cartão CANCELADO com sucesso, pelo motivo ${cartaoInstance.motivoCancelamento}"
-
+					sucesso = true
 				}else{
 				cartaoInstance.errors.allErrors.each {
 					log.error it
@@ -126,7 +204,7 @@ class CentralAtendimentoController {
 
 		}
 		println "cartaoInstance.status: ${cartaoInstance.funcionario.status}"
-		render view:'manageCard',model:[cartaoInstance:cartaoInstance, participante:participante]
+		render view:'manageCard',model:[cartaoInstance:cartaoInstance, participante:participante,sucesso: sucesso,goTo:params.goTo]
 	}
 	
 	

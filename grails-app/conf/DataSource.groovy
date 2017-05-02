@@ -27,7 +27,7 @@ environments {
     }
     homologation {
         def devUrl = System.env['AMAZONFROTA_DATABASE_HOMOLOGATION_URL']
-        if (!devUrl) devUrl = "jdbc:postgresql://148.5.7.215/amazonfrota_development";
+        if (!devUrl) devUrl = "jdbc:postgresql://148.5.7.216/amazonfrota_homologation";
 
         dataSource {
             password = "postgres"
