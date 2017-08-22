@@ -41,7 +41,7 @@ class PedidoCargaController extends BaseOwnerController {
 //and f.unidade.id=:unid
 //and f.status='ATIVO'""",[unid:unidadeInstance.id])[0]
 			
-			render(view:"form",model:[unidadeInstance:unidadeInstance,action:'novo'])
+			render(view:"form",model:[unidadeInstance:unidadeInstance,action:Util.ACTION_NEW])
 		}else{
 			flash.message="Unidade não selecionada!"
 			redirect(action:'list') 
@@ -54,8 +54,8 @@ class PedidoCargaController extends BaseOwnerController {
 
 	
 	def synchServer(){
-		
-		def funcId=params.funcId.toInteger()
+
+		def funcId=params.int("funcId")
 		def check=(params.check=="true")
 		
 		def funcList=session.funcionariosList
@@ -214,24 +214,23 @@ class PedidoCargaController extends BaseOwnerController {
 							log.debug "Valor da Carga ${cargaInstance.id} alterado no pedido ${pedidoCargaInstance.id}"
 						}
 					}
+
+                    if(!f.selecao){
+                        def itemPedido = ItemPedido.get(f.item as Long)
+                        pedidoCargaInstance.removeFromItens(itemPedido)
+                        itemPedido.delete()
+                    }
 				}
-				
-				def delFuncList=ssList.findAll{it.selecao==false}
-				
-				delFuncList.each{d->
-					ItemPedido.executeUpdate("delete from ItemPedido i where i.id=:id",[id:d.item])
-					ssList.remove(d)
-				}
-	
+
 			}
-			
             pedidoCargaInstance.properties = params
-            
+
 			pedidoCargaInstance.calcularTotal()
+
 			if (!pedidoCargaInstance.hasErrors() && pedidoCargaInstance.save(flush: true)) {
-				
+
 				clearSessionList()
-				
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), pedidoCargaInstance.id])}"
                 redirect(action: "show", id: pedidoCargaInstance.id)
             }
