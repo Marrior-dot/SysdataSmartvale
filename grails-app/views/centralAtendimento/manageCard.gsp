@@ -1,5 +1,6 @@
 <%@ page import="com.sysdata.gestaofrota.StatusCartao" %>
 <%@ page import="com.sysdata.gestaofrota.MotivoCancelamento" %>
+<%@ page import="com.sysdata.gestaofrota.Util" %>
 
 <html>
 	<head>

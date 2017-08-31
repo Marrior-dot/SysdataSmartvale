@@ -7,7 +7,8 @@ enum TipoTransacao {
 	CANCELAMENTO("Cancelamento"),
 	CONSULTA_PRECOS("Consulta de Preços"),
 	SERVICOS("Serviços"),
-	CANCELAMENTO_COMBUSTIVEL("Cancelamento combustível")
+	CANCELAMENTO_COMBUSTIVEL("Cancelamento combustível"),
+	TRANSFERENCIA_SALDO("Transferência de Saldo")
 	
 	String nome
 	
@@ -16,6 +17,6 @@ enum TipoTransacao {
 	}
 	
 	static asList(){
-		[CONFIGURACAO_PRECO,COMBUSTIVEL,CARGA_SALDO]
+		[CONFIGURACAO_PRECO,COMBUSTIVEL,CARGA_SALDO,TRANSFERENCIA_SALDO]
 	}
 }

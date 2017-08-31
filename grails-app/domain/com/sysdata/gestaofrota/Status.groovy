@@ -3,7 +3,8 @@ package com.sysdata.gestaofrota
 enum Status {
 	ATIVO("Ativo"),
 	INATIVO("Inativo"),
-	BLOQUEADO("Bloqueado")
+	BLOQUEADO("Bloqueado"),
+	CANCELADO("Cancelado")
 	
 	String nome
 	
@@ -12,10 +13,14 @@ enum Status {
 	}
 	
 	static asList(){
-		[ATIVO,INATIVO,BLOQUEADO]
+		[ATIVO,INATIVO,BLOQUEADO,CANCELADO]
 	}
 	
 	static asBloqueado(){
 		[ATIVO,BLOQUEADO]
+	}
+
+	static lista(){
+		[ATIVO,BLOQUEADO,CANCELADO]
 	}
 }

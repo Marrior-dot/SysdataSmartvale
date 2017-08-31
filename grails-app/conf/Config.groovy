@@ -11,6 +11,7 @@
 // }
 
 import com.sysdata.gestaofrota.cartao.NewGeradorCartaoService
+import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
@@ -227,7 +228,6 @@ project {
 
 
 }
-
 
 
 

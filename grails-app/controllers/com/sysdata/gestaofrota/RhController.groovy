@@ -238,28 +238,6 @@ class RhController extends BaseOwnerController {
     }
 
 
-    private void clearSession() {
-        if (session.mEstIds) {
-            session.mEstIds = null
-            println "Limpou Est IDS da HTTP Session"
-        }
-    }
-
-    /* Preenche map de estabelecimentos selecionados na HTTP Session conforme demanda
-     */
-
-    private void fillEstMapOnDemand(oid, chk) {
-        def mIds = session.mEstIds
-        if (!mIds) mIds = [:]
-
-        def eid = mIds.find { k, v -> k == oid }
-        if (eid) eid.value = chk
-        else mIds[oid] = chk
-
-        if (mIds) session.mEstIds = mIds
-
-    }
-
 
     @Secured(['IS_AUTHENTICATED_FULLY'])
     def listEmpresasJSON() {
@@ -441,4 +419,28 @@ class RhController extends BaseOwnerController {
         render retorno as JSON
     }
 
+
+	private void clearSession(){
+		if(session.mEstIds){
+			session.mEstIds=null
+			println "Limpou Est IDS da HTTP Session"
+		}
+	}
+	
+	
+	/* Preenche map de estabelecimentos selecionados na HTTP Session conforme demanda 
+	 */
+	private void fillEstMapOnDemand(oid,chk){
+		def mIds=session.mEstIds
+		if(!mIds) mIds=[:]
+
+		def eid=mIds.find{k,v->k==oid}
+		if(eid) eid.value=chk
+		else mIds[oid]=chk
+		
+		if(mIds) session.mEstIds=mIds
+	
+	}
+	
+	
 }
