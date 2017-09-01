@@ -147,4 +147,73 @@ class CentralAtendimentoController {
         render(view: "fuelTransaction", model: [commandInstance: cmd])
     }
 
+
+	def buscarFuncionarios={
+		flash.errors=[]
+		println "params: ${params}"
+		def numero=params.cartao
+		def cartaoDebito = params.cartaoParaTransferir
+		def cartaoCredito = params.cartaoParaReceber
+		def sucesso = false
+		if(cartaoDebito && cartaoCredito){
+			def cartaoInstanceDebito=Cartao.findByNumero(cartaoDebito)
+			def cartaoInstanceCredito=Cartao.findByNumero(cartaoCredito)
+			def participanteDebito = cartaoInstanceDebito?.funcionario
+			def participanteCredito = cartaoInstanceCredito?.funcionario
+			if(cartaoInstanceDebito && cartaoInstanceCredito){
+                if(cartaoInstanceDebito.funcionario.conta.saldo>0){
+                    if(cartaoInstanceDebito.funcionario.unidade == cartaoInstanceCredito.funcionario.unidade ){
+
+                        render(view:'manageCard',model:[cartaoInstanceDebito:cartaoInstanceDebito,cartaoInstanceCredito:cartaoInstanceCredito,goTo:params.goTo,participanteDebito:participanteDebito,participanteCredito:participanteCredito,sucesso:sucesso])
+                    }else{
+                        flash.errors<<"Os cartões inseridos devem ser do mesmo Rh."
+                        render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+                    }
+                }else{
+                    flash.errors<<"Não há saldo disponivel para transferência no cartão $cartaoInstanceDebito.numero    . Saldo: R\$ $cartaoInstanceDebito.funcionario.conta.saldo"
+                    render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+                }
+			}else if(!cartaoInstanceDebito){
+				flash.errors<<"Nenhum cartão localizado na base com o número ${cartaoDebito}"
+				render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+			}else if(!cartaoInstanceCredito){
+				flash.errors<<"Nenhum cartão localizado na base com o número ${cartaoCredito}"
+				render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+			}
+		}else{
+			flash.errors<<"Nº de cartão nulo"
+			render(view:'searchCards',model:[act:'buscarFuncionarios',goTo:params.goTo])
+		}
+	}
+	def transfSaldo={
+		println "params : $params"
+		flash.errors=[]
+		def cartaoInstanceDebito = Cartao.get(params.cartaoInstanceDebitoId)
+		def cartaoInstanceCredito = Cartao.get(params.cartaoInstanceCreditoId)
+		def participanteDebito = cartaoInstanceDebito.funcionario
+		def participanteCredito = cartaoInstanceCredito.funcionario
+		def valorTransf
+		def saldoPortador
+		def sucesso = false
+		if (cartaoInstanceCredito && cartaoInstanceDebito){
+			valorTransf = cartaoInstanceDebito.funcionario.conta.saldo
+			saldoPortador = cartaoInstanceCredito.funcionario.conta.saldo
+			println "saldo portador debito: $valorTransf - saldo portador credito: $saldoPortador"
+            if(centralAtendimentoService.tranferenciaSaldo(cartaoInstanceCredito,cartaoInstanceDebito,valorTransf)){
+                log.info "User:${springSecurityService.currentUser?.name}-Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero}"
+                flash.message = "Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero} com sucesso."
+                sucesso=true
+            }else{
+                cartaoInstanceCredito.errors.allErrors.each {
+                    log.error "Erro cartao ${cartaoInstanceCredito.numero}: $it"
+                }
+                cartaoInstanceDebito.errors.allErrors.each {
+                    log.error "Erro cartao ${cartaoInstanceDebito.numero}: $it"
+                }
+                flash.errors<<"Erro ao receber no cartao ${cartaoInstanceCredito.numero} o saldo transferido do cartão ${cartaoInstanceDebito.numero}!"
+            }
+		}
+        render view:'manageCard',model:[cartaoInstanceDebito:cartaoInstanceDebito,cartaoInstanceCredito:cartaoInstanceCredito,goTo:params.goTo,participanteDebito:participanteDebito,participanteCredito:participanteCredito,sucesso:sucesso]
+	}
+
 }

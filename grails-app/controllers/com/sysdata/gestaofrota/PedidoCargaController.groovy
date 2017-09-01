@@ -96,6 +96,64 @@ class PedidoCargaController extends BaseOwnerController {
         [pedidoCargaInstance: pedidoCargaInstance]
     }
 
+	def selectRhUnidade={
+		render(view:'/selectRhUnidade',model:[controller:"pedidoCarga",action:'novo'])
+	}
+
+	
+	def synchServer(){
+
+		def funcId=params.int("funcId")
+		def check=(params.check=="true")
+		
+		def funcList=session.funcionariosList
+		
+		def funcData=funcList.find{it.id==funcId}
+		
+		if(funcData){
+			
+			funcData['selecao']=check
+			
+			render "SUCESSO"
+			response.status=response.SC_OK
+		}else{
+			render "ERRO INTERNO: Funcionário não localizado na lista!"
+			response.status = response.SC_INTERNAL_SERVER_ERROR
+		}
+	}
+	
+	def synchCheckAll(){
+		
+		def categ=params.categ
+		def check=(params.check=="true")
+		
+		if(categ=='all'){
+			synchHttpSessionWithDB(session.funcionariosList,check)
+
+			render "SUCESSO"
+			response.status=response.SC_OK
+
+		}else{
+			def catId=params.categ as long
+			
+			def funcList=session.funcionariosList
+			
+			def foundList=funcList.findAll{it.categoria==catId}
+			
+			if(foundList){
+				foundList.each{i->
+					i['selecao']=check
+				}
+				render "SUCESSO"
+				response.status=response.SC_OK
+		
+			}else{
+				render "ERRO INTERNO: Categoria não localizado na lista!"
+				response.status = response.SC_INTERNAL_SERVER_ERROR
+			}
+		}
+	}
+	
     def save = {
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (!unidadeInstance) {
@@ -172,6 +230,11 @@ class PedidoCargaController extends BaseOwnerController {
 
     def show = {
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
+
+		def totalPedido = 0
+		pedidoCargaInstance.itens.each{
+			totalPedido+=it.valor
+		}
         if (!pedidoCargaInstance) {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
             redirect(action: "list")

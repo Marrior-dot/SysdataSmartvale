@@ -7,8 +7,9 @@ enum TipoLancamento {
 	TAXA_UTILIZACAO("Taxa de Utilização"),
 	MENSALIDADE("Mensalidade de Cartão"),
 	EMISSAO_CARTAO("Emissão de Cartão"),
-	REEMISSAO_CARTAO("Reemissão de Cartão")
-	
+	REEMISSAO_CARTAO("Reemissão de Cartão"),
+	TRANSFERENCIA_SALDO("Transferência de Saldo")
+
 	String nome
 	
 	TipoLancamento(nome){
@@ -16,6 +17,6 @@ enum TipoLancamento {
 	}
 	
 	static asList(){
-		[CARGA,COMPRA,REEMBOLSO]
+		[CARGA,COMPRA,REEMBOLSO,TRANSFERENCIA_SALDO]
 	}
 }

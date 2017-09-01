@@ -207,4 +207,55 @@ class VeiculoController extends BaseOwnerController {
         def veiculoInstance = Veiculo.findByPlaca(params.placa)
         render "${veiculoInstance?.marca?.nome} ${veiculoInstance?.modelo}"
     }
+
+	def listFuncionariosJSON={
+		def veiculoInstance=Veiculo.get(params.id)
+		def funcionariosList=veiculoInstance.funcionarios.collect {f->
+				 					[id:f.funcionario.id,
+									matricula:f.funcionario.matricula,
+									 nome:f.funcionario.nome,
+									 cpf:f.funcionario.cpf,
+									 acao:"""<a href='#' onclick='removeFuncionario(${f.funcionario.id});'><img src='${resource(dir:'images',file:'remove_person.png')}' alt='Remover'></a>"""]
+								}
+		def data=[totalRecords:funcionariosList.size(),results:funcionariosList]
+		render data as JSON
+			
+	}
+	
+	def addFuncionario={
+		if(params.idVeic && params.idFunc){
+			def veiculoInstance=Veiculo.get(params.idVeic)
+			def funcionarioInstance=Funcionario.get(params.idFunc)
+			if(veiculoInstance && funcionarioInstance){
+				def veicFunc=new MaquinaFuncionario()
+				veicFunc.funcionario=funcionarioInstance
+				veiculoInstance.addToFuncionarios(veicFunc)
+				if(veiculoInstance.save(flush:true))
+					render "Funcionário relacionado ao Veículo com sucesso!"
+				else
+					render "Falha ao relacionar Funcionário ao Veículo!"
+			}
+		}else{
+			render "Veículo ${params.idVeic} e/ou Funcionário ${params.idFunc} não encontrados!"
+		}
+	}
+	
+	def removeFuncionario={
+		if(params.idVeic && params.idFunc){
+			def idVeic=params.idVeic.toLong()
+			def idFunc=params.idFunc.toLong()
+			def veicFunc=MaquinaFuncionario.withCriteria(uniqueResult:true){
+								maquina{eq('id',idVeic)}
+								funcionario{eq('id',idFunc)}
+							}
+			veicFunc.delete()
+			if(MaquinaFuncionario.exists(veicFunc.id))
+				render "Relação entre Veículo e Funcionário removida"
+			else
+				render "Relação entre Veículo e Funcionário não pode ser removida, apenas desativada"
+		}
+	}
+	
+
+	
 }

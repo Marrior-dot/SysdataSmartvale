@@ -1,3 +1,4 @@
+import grails.util.Environment
 import org.grails.plugin.hibernate.filter.HibernateFilterDomainConfiguration
 
 dataSource {
@@ -12,31 +13,15 @@ hibernate {
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
 // environment specific settings
-environments {
-    development {
 
-        def urlDev=System.env["FROTA_DEV_DB"]
-        if(!urlDev) urlDev="jdbc:postgresql://148.5.7.215/amazonfrota_development"
-        dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = urlDev
-			password="postgres"
-        }
-    }
-    test {
-        dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop','update'
-            url = "jdbc:postgresql://148.5.7.215/amazonfrota_development"
-			password="postgres"
-        }
-    }
-    production {
 
-        def urlProd="jdbc:postgresql://148.5.7.215/amazonfrota_production"
-        dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = urlProd
-			password="jmml72"
-        }
-    }
+GroovyClassLoader classLoader=new GroovyClassLoader(getClass().classLoader)
+frota.projeto=new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass("FrotaConfig"))
+
+
+dataSource {
+    password = "postgres"
+    dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+    url = devUrl
 }
+

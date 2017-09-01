@@ -73,7 +73,7 @@
 	        	</div>
 	        </div>
 	        <div id="footer">
-				<p id="copyright">Copyright &copy; 2012-2016 Sysdata Tecnologia.	Todos os direitos reservados</p>
+				<p id="copyright">Copyright &copy; 2012-2017 Sysdata Tecnologia.	Todos os direitos reservados</p>
 			</div>
     	</div>
     
