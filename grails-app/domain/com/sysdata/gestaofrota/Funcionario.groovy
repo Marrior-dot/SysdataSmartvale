@@ -17,8 +17,9 @@ class Funcionario extends Participante {
 
     static belongsTo = [unidade: Unidade]
     static embedded = ['telefoneComercial']
-    static hasMany = [cartoes: Cartao, veiculos: MaquinaFuncionario]
+    static hasMany = [veiculos: MaquinaFuncionario]
     static transients = ['cartaoAtivo']
+    static hasOne=[portador:Portador]
 
     static constraints = {
         cpf(blank: false, cpf: true)
@@ -33,6 +34,7 @@ class Funcionario extends Participante {
 
         })
         cnh(blank: false)
+        portador nullable:true
     }
 
     Cartao getCartaoAtivo() {
