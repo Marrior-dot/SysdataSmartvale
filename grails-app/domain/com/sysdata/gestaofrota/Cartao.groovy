@@ -10,7 +10,7 @@ class Cartao {
 	String senha
 	Date validade
 	
-	static belongsTo=[funcionario:Funcionario]
+	static belongsTo=[portador:Portador]
 
 	static transients = ['numeroMascarado']
 	

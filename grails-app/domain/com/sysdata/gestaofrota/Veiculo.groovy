@@ -13,7 +13,7 @@ class Veiculo extends MaquinaMotorizada {
 	Date validadeExtintor
 	Long hodometro
 
-    static hasOne=[portador:Portador]
+    static hasOne=[portador:PortadorVeiculo]
 
 
     static constraints = {

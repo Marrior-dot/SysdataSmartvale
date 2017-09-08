@@ -19,7 +19,7 @@ class Funcionario extends Participante {
     static embedded = ['telefoneComercial']
     static hasMany = [veiculos: MaquinaFuncionario]
     static transients = ['cartaoAtivo']
-    static hasOne=[portador:Portador]
+    static hasOne=[portador:PortadorFuncionario]
 
     static constraints = {
         cpf(blank: false, cpf: true)

@@ -12,6 +12,7 @@ class Rh extends Empresa {
 	BigDecimal taxaEmissaoCartao=0
 	BigDecimal taxaReemissaoCartao=0
 	Integer qtdeContas=0
+    TipoVinculoCartao vinculoCartao=TipoVinculoCartao.FUNCIONARIO
 	
 	static hasMany=[unidades:Unidade,categoriasFuncionario:CategoriaFuncionario,empresas:PostoCombustivel,role:Role]
 	

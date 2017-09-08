@@ -57,6 +57,16 @@
     </div>
 
 
+    <div class="panel panel-default">
+        <div class="panel-heading">Cartão</div>
+
+        <div class="panel-body">
+
+        </div>
+
+    </div>
+
+
 
 	<div class="panel panel-default">
         <div class="panel-heading">
