@@ -43,7 +43,7 @@
     </content>
     <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library name="Grails User Library (GestaoFrota)">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
@@ -62,8 +62,8 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="GestaoFrota-grailsPlugins" />
-    <orderEntry type="library" name="grails-2.0.4" level="application" />
     <orderEntry type="library" name="grails-2.0.4 (2)" level="application" />
     <orderEntry type="library" name="grails-2.0.4 (3)" level="application" />
+    <orderEntry type="library" exported="" name="grails-2.0.4" level="application" />
   </component>
 </module>

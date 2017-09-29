@@ -25,8 +25,6 @@ class RhController extends BaseOwnerController {
         }
         def rhInstanceList = Rh.createCriteria().list(params, criteria)
         [rhInstanceList: rhInstanceList, rhInstanceTotal: Rh.count()]
-
-
     }
 
     @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
@@ -40,10 +38,19 @@ class RhController extends BaseOwnerController {
         rhInstance.endereco = params['endereco']
         rhInstance.telefone = params['telefone']
 
-        if (rhService.saveNew(rhInstance)) {
+        try {
+            rhInstance = rhService.save(rhInstance)
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-            redirect(action: "show", id: rhInstance.id)
-        } else {
+            redirect(action: 'show', id: rhInstance.id)
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace()
+            flash.error = e.message
+            render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+            flash.error = "Um erro ocorreu"
             render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
         }
     }
@@ -74,29 +81,44 @@ class RhController extends BaseOwnerController {
 
     @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
     def update = {
-        def rhInstance = Rh.get(params.id)
+        def rhInstance = Rh.get(params.long('id'))
         if (rhInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (rhInstance.version > version) {
-
                     rhInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Another user has updated this Rh while you were editing")
                     render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
                     return
                 }
             }
 
-            rhInstance.properties = params
-            rhInstance.endereco = params['endereco']
-            rhInstance.telefone = params['telefone']
-
-            participanteService.saveCidade(rhInstance.endereco)
-            if (!rhInstance.hasErrors() && rhInstance.save(flush: true)) {
+            try {
+                rhInstance = rhService.save(rhInstance)
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-                redirect(action: "show", id: rhInstance.id)
-            } else {
-                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+                redirect(action: 'show', id: rhInstance.id)
             }
+            catch (InvalidPropertiesFormatException e) {
+                e.printStackTrace()
+                flash.error = e.message
+                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+            }
+            catch (Exception e) {
+                e.printStackTrace()
+                flash.error = "Um erro ocorreu"
+                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+            }
+//            rhInstance.properties = params
+//            rhInstance.endereco = params['endereco']
+//            rhInstance.telefone = params['telefone']
+//
+//            participanteService.saveCidade(rhInstance.endereco)
+//            if (!rhInstance.hasErrors() && rhInstance.save(flush: true)) {
+//                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
+//                redirect(action: "show", id: rhInstance.id)
+//            } else {
+//                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+//            }
+
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Programa'), params.id])}"
             redirect(action: "newList")
@@ -236,7 +258,6 @@ class RhController extends BaseOwnerController {
         def data = [totalRecords: rhInstanceTotal, results: fields]
         render data as JSON
     }
-
 
 
     @Secured(['IS_AUTHENTICATED_FULLY'])
@@ -420,27 +441,27 @@ class RhController extends BaseOwnerController {
     }
 
 
-	private void clearSession(){
-		if(session.mEstIds){
-			session.mEstIds=null
-			println "Limpou Est IDS da HTTP Session"
-		}
-	}
-	
-	
-	/* Preenche map de estabelecimentos selecionados na HTTP Session conforme demanda 
-	 */
-	private void fillEstMapOnDemand(oid,chk){
-		def mIds=session.mEstIds
-		if(!mIds) mIds=[:]
+    private void clearSession() {
+        if (session.mEstIds) {
+            session.mEstIds = null
+            println "Limpou Est IDS da HTTP Session"
+        }
+    }
 
-		def eid=mIds.find{k,v->k==oid}
-		if(eid) eid.value=chk
-		else mIds[oid]=chk
-		
-		if(mIds) session.mEstIds=mIds
-	
-	}
-	
-	
+    /* Preenche map de estabelecimentos selecionados na HTTP Session conforme demanda
+     */
+
+    private void fillEstMapOnDemand(oid, chk) {
+        def mIds = session.mEstIds
+        if (!mIds) mIds = [:]
+
+        def eid = mIds.find { k, v -> k == oid }
+        if (eid) eid.value = chk
+        else mIds[oid] = chk
+
+        if (mIds) session.mEstIds = mIds
+
+    }
+
+
 }

@@ -61,11 +61,18 @@
         <div class="panel-heading">Cartão</div>
 
         <div class="panel-body">
-
+			<div class="form-group col-md-3">
+				<label for="vinculoCartao">Vincular Cartão a:</label>
+				<g:if test="${action == Util.ACTION_VIEW}">
+					<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled value="${rhInstance?.vinculoCartao}"/>
+				</g:if>
+				<g:else>
+					<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}" disabled="${rhInstance?.portadoresCount > 0}"
+							  class="form-control" optionKey="key" value="${rhInstance?.vinculoCartao}"/>
+				</g:else>
+			</div>
         </div>
-
     </div>
-
 
 
 	<div class="panel panel-default">

@@ -1,10 +1,10 @@
 package com.sysdata.gestaofrota.cartao
 
-import com.sysdata.gestaofrota.Funcionario
+import com.sysdata.gestaofrota.PortadorFuncionario
 import com.sysdata.gestaofrota.Util
 
+//TODO Remover essa e suas classes filhas. O código relevante daqui foi movido para o CartaoService
 abstract class GeradorCartaoService {
-
 
     private String calcularDV(String card) {
         int valor;
@@ -32,6 +32,5 @@ abstract class GeradorCartaoService {
     }
 
 
-    abstract String gerarNumero(Funcionario funcionario)
-
+    abstract String gerarNumero(PortadorFuncionario portador)
 }

@@ -5,23 +5,20 @@ dataSource {
     pooled = true
     driverClassName = "org.postgresql.Driver"
     username = "postgres"
-	configClass = HibernateFilterDomainConfiguration
+    configClass = HibernateFilterDomainConfiguration
 }
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
+
+GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
+frota.projeto = new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass("FrotaConfig"))
+
 // environment specific settings
-
-
-GroovyClassLoader classLoader=new GroovyClassLoader(getClass().classLoader)
-frota.projeto=new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass("FrotaConfig"))
-
-
 dataSource {
-    password = "postgres"
-    dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-    url = devUrl
+    dbCreate = frota.projeto.dataSource.dbCreate
+    url = frota.projeto.dataSource.url
+    password = frota.projeto.dataSource.password
 }
-

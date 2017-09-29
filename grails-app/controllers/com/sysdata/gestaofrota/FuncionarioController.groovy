@@ -56,37 +56,29 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def save = {
-        flash.errors = []
+        Funcionario funcionarioInstance = new Funcionario(params)
+        Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
-        def funcionarioInstance = new Funcionario(params)
-        Funcionario.withTransaction { status ->
+        if (unidadeInstance) {
             try {
-                if (params.unidId) {
-                    def unidadeInstance = Unidade.get(params.unidId)
-                    funcionarioInstance.unidade = unidadeInstance
+                funcionarioInstance.unidade = unidadeInstance
+                funcionarioInstance.endereco = params['endereco']
+                funcionarioInstance.telefone = params['telefone']
 
-                    funcionarioInstance.endereco = params['endereco']
-                    funcionarioInstance.telefone = params['telefone']
+                funcionarioInstance = funcionarioService.save(funcionarioInstance, true)
 
-                    if (funcionarioService.save(funcionarioInstance) && funcionarioService.gerarCartao(funcionarioInstance)) {
-                        flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionaroi'), funcionarioInstance.id])}"
-                        redirect(action: "show", id: funcionarioInstance.id)
-                        return
-                    } else {
-                        render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
-                    }
-                } else {
-                    flash.message = "Funcionário não relacionado a uma Unidade específica"
-                    render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
-                }
-            } catch (FuncionarioException e) {
-                log.error e
-                status.setRollbackOnly()
-                flash.errors << e.message
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionaroi'), funcionarioInstance.id])}"
+                redirect(action: "show", id: funcionarioInstance.id)
+            }
+            catch (Exception e) {
+                println(e.message)
+                flash.error = "Um erro ocorreu."
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
             }
+        } else {
+            flash.message = "Funcionário não relacionado a uma Unidade específica."
+            render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
         }
-
     }
 
     def show = {
@@ -102,7 +94,7 @@ class FuncionarioController extends BaseOwnerController {
     def edit = {
         Funcionario funcionarioInstance = Funcionario.get(params.id)
         if (!funcionarioInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), params.id])}"
             redirect(action: "list")
         } else {
             render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
@@ -110,40 +102,28 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def update = {
-        println("PARAMS: ${params.dump()}")
-        def funcionarioInstance = Funcionario.get(params.id)
+        def funcionarioInstance = Funcionario.get(params.long('id'))
         if (funcionarioInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (funcionarioInstance.version > version) {
-
-                    funcionarioInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [
-                            message(code: 'funcionario.label', default: 'Funcionario')]
-                            as Object[], "Another user has updated this Funcionario while you were editing")
-                    render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
-                    return
-                }
+            Long version = params.long('version')
+            if (version && funcionarioInstance.version > version) {
+                funcionarioInstance.errors.rejectValue("version", "Outro usuário estava alterando os dados desse Funcionário enquanto você o estava editando.")
+                render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
+                return
             }
 
-            Funcionario.withTransaction { status ->
-                try {
+            try {
+                funcionarioInstance.properties = params
+                funcionarioInstance.endereco = params['endereco']
+                funcionarioInstance.telefone = params['telefone']
 
-                    funcionarioInstance.properties = params
+                funcionarioInstance = funcionarioService.save(funcionarioInstance)
 
-                    funcionarioInstance.endereco = params['endereco']
-                    funcionarioInstance.telefone = params['telefone']
-
-                    if (funcionarioService.save(funcionarioInstance)) {
-                        println("funcionarioInstance: ${funcionarioInstance.dump()}")
-                        flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
-                        redirect(action: "show", id: funcionarioInstance.id)
-                    } else {
-                        render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
-                    }
-                } catch (FuncionarioException e) {
-                    status.setRollbackOnly()
-                    log.error e
-                }
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
+                redirect(action: "show", id: funcionarioInstance.id)
+            }
+            catch (Exception e) {
+                println(e.message)
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
             }
 
         } else {
@@ -254,7 +234,7 @@ class FuncionarioController extends BaseOwnerController {
                     id       : f.id,
                     matricula: f.matricula,
                     nome     : f.nome,
-                    cartao   : f.cartaoAtivo ? f.cartaoAtivo.numeroMascarado : '< Nenhum cartão ativo >',
+                    cartao   : f?.portador?.cartaoAtivo?.numeroMascarado ?: '< Nenhum cartão ativo >',
                     cpf      : "<a href=${createLink(action: 'show', id: f.id)}>${f.cpf}</a>"
             ]
 

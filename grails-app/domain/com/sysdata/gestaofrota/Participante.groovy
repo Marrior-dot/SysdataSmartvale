@@ -1,7 +1,6 @@
 package com.sysdata.gestaofrota
 
 class Participante {
-
     Conta conta = new Conta()
     String nome
     Endereco endereco

@@ -88,9 +88,7 @@
                     <label for="categoria.id">Categoria</label>
                     <g:select name="categoria.id" value="${funcionarioInstance?.categoria?.id}"
                               noSelection="${['null': 'Selecione a categoria...']}"
-                              from="${CategoriaFuncionario.withCriteria {
-                                  rh { eq('id', unidadeInstance?.rh?.id) }
-                              }}"
+                              from="${CategoriaFuncionario.withCriteria {rh { idEq( unidadeInstance?.rh?.id) }}}"
                               optionKey="id" class="form-control"
                               optionValue="nome"/>
                 </div>

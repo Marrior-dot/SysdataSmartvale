@@ -32,15 +32,12 @@
             <g:if test="${flash.message}">
                 <div class="alert alert-info">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${rhInstance}">
-                <div class="errors">
-                    <span style="font-weight:bold;padding-left:10px">Erro ao salvar ${entityName}</span>
-                    <g:renderErrors bean="${rhInstance}" as="list"/>
-                </div>
-            </g:hasErrors>
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger">${flash.error}</div>
+            </g:if>
+
             <g:if test="${action == Util.ACTION_VIEW}">
                 <div class="tabbable"><!-- Only required for left/right tabs -->
-
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab1" data-toggle="tab">Programa</a></li>
                         <li><a href="#tab2" data-toggle="tab">RH</a></li>
@@ -52,7 +49,7 @@
                         <div class="tab-content panel-body">
 
                             <div class="tab-pane active" id="tab1">
-                                <g:render template="basico" model="${[rhInstance: rhInstance]}"/>
+                                <g:render template="basico" model="${[rhInstance: rhInstance, action: action]}"/>
                             </div>
 
                             <div class="tab-pane" id="tab2">

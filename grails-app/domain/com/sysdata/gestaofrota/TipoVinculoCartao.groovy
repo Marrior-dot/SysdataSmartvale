@@ -6,11 +6,20 @@ package com.sysdata.gestaofrota
 enum TipoVinculoCartao {
 
     FUNCIONARIO("Funcionário"),
-    VEICULO("Veículo")
+    MAQUINA("Máquina")
 
     String nome
 
-    TipoVinculoCartao(nome){
-        this.nome=nome
+    public TipoVinculoCartao(nome) {
+        this.nome = nome
+    }
+
+    String getKey() {
+        return name()
+    }
+
+    @Override
+    String toString() {
+        return nome
     }
 }

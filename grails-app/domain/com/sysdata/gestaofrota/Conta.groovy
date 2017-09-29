@@ -3,34 +3,33 @@ package com.sysdata.gestaofrota
 import com.sysdata.gestaofrota.exception.InsufficientFundsException;
 
 class Conta {
+    Double saldo = 0.0
 
-	Double saldo=0.0
-	
-	static belongsTo=Participante
+    static belongsTo = [participante: Participante, portador: Portador]
 
-	static transients = ['participante']
-
+    static transients = ['participante']
     static constraints = {
+        participante nullable: true
+        portador nullable: true
     }
-	
-	static mapping={
-		id generator:'sequence',params:[sequence:'conta_seq']
-	}
-	
-	def updateSaldo(value){
-		if(value>0)
-			saldo+=value
-		else{
-			def newSaldo=saldo+value
-			if(newSaldo>=0)
-				saldo=newSaldo
-			else
-				throw new InsufficientFundsException(message:"Operação inválida. Saldo insuficiente na conta")
-		}
-	
-	}
+    static mapping = {
+        id generator: 'sequence', params: [sequence: 'conta_seq']
+    }
 
-    Participante getParticipante(){
+    def updateSaldo(value) {
+        if (value > 0)
+            saldo += value
+        else {
+            def newSaldo = saldo + value
+            if (newSaldo >= 0)
+                saldo = newSaldo
+            else
+                throw new InsufficientFundsException(message: "Operação inválida. Saldo insuficiente na conta")
+        }
+
+    }
+
+    Participante getParticipante() {
         Participante.findByConta(this)
     }
 }
