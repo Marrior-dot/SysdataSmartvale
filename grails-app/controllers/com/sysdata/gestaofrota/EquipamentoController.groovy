@@ -8,13 +8,10 @@ import org.springframework.http.HttpStatus
 class EquipamentoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    def equipamentoService
 
     def index = {
         redirect(action: "list", params: params)
-    }
-
-    def selectRhUnidade = {
-        render(view: '/selectRhUnidade', model: [controller: "equipamento", action: Util.ACTION_NEW])
     }
 
     def list = {
@@ -24,27 +21,34 @@ class EquipamentoController extends BaseOwnerController {
     def newList = {}
 
     def create = {
-        if (params.unidade_id) {
-            def unidadeInstance = Unidade.get(params.long('unidade_id'))
-            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW])
+        Unidade unidade = Unidade.get(params.long('unidade.id'))
+        if (unidade) {
+            render(view: "form", model: [unidadeInstance: unidade, action: Util.ACTION_NEW])
         } else {
-            redirect(action: 'selectRhUnidade')
+            flash.error = "Unidade não encontrada."
+            redirect(action: 'selecionarRhUnidade')
         }
     }
 
     def save = {
-        Equipamento.withTransaction {
-            if (params.unidId) {
-                def equipamentoInstance = new Equipamento(params)
-                def unidadeInstance = Unidade.get(params.unidId)
+        Equipamento equipamentoInstance = new Equipamento(params)
+        Unidade unidadeInstance = Unidade.get(params.long('unidId'))
+
+        if (unidadeInstance) {
+            try {
                 equipamentoInstance.unidade = unidadeInstance
-                if (equipamentoInstance.save(flush: true)) {
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
-                    redirect(action: "show", id: equipamentoInstance.id)
-                } else {
-                    render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW])
-                }
+                equipamentoInstance = equipamentoService.save(equipamentoInstance)
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
+                redirect(action: "show", id: equipamentoInstance.id)
             }
+            catch (Exception e) {
+                println(e.message)
+                flash.error = "Erros encontrados."
+                render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW])
+            }
+        } else {
+            flash.error = "Unidade não encontrada."
+            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW])
         }
     }
 
@@ -72,14 +76,11 @@ class EquipamentoController extends BaseOwnerController {
     def update = {
         def equipamentoInstance = Equipamento.get(params.long('id'))
         if (equipamentoInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (equipamentoInstance.version > version) {
-
-                    equipamentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'equipamento.label', default: '')] as Object[], "Another user has updated this Veiculo while you were editing")
-                    render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando'])
-                    return
-                }
+            long version = params.long('version')
+            if (version != null && equipamentoInstance.version > version) {
+                equipamentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", "Outro usuário estava editando esse Equipamento.")
+                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando'])
+                return
             }
             equipamentoInstance.properties = params
             if (!equipamentoInstance.hasErrors() && equipamentoInstance.save(flush: true)) {
@@ -180,4 +181,7 @@ class EquipamentoController extends BaseOwnerController {
         render data as JSON
     }
 
+    def selecionarRhUnidade() {
+        [rhInstanceList: Rh.list()]
+    }
 }

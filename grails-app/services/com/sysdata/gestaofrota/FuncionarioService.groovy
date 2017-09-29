@@ -8,12 +8,11 @@ class FuncionarioService {
     Funcionario save(Funcionario funcionarioInstance, boolean gerarCartao = false) {
         if (!funcionarioInstance.unidade) throw new RuntimeException("Funcionario não possui unidade.")
 
-        if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
-            if (funcionarioInstance.portador == null) {
-                funcionarioInstance.save()
-                PortadorFuncionario portadorFuncionario = portadorService.save(funcionarioInstance)
-                if (gerarCartao) cartaoService.gerar(portadorFuncionario)
-            }
+        if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO
+                && funcionarioInstance.portador == null) {
+            funcionarioInstance.save()
+            PortadorFuncionario portadorFuncionario = portadorService.save(funcionarioInstance)
+            if (gerarCartao) cartaoService.gerar(portadorFuncionario)
         }
 
         participanteService.saveCidade(funcionarioInstance.endereco)

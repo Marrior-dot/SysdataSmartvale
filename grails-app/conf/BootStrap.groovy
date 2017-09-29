@@ -9,18 +9,21 @@ import com.sysdata.gestaofrota.MotivoNegacao
 import com.sysdata.gestaofrota.ParametroSistema
 import com.sysdata.gestaofrota.Processadora
 import com.sysdata.gestaofrota.Role
+import com.sysdata.gestaofrota.Unidade
+import grails.converters.JSON
 
 class BootStrap {
     def fixtureLoader
 
     def init = { servletContext ->
         loadFixtures()
+        loadObjectMarshallers()
     }
 
     def destroy = {}
 
 
-    def loadFixtures() {
+    private void loadFixtures() {
         if (Administradora.count() == 0 || Processadora.count() == 0)
             fixtureLoader.load("processadora")
 
@@ -50,8 +53,18 @@ class BootStrap {
             fixtureLoader.load("reports")
         }
 
-        if(MotivoNegacao.count() == 0) {
-            fixtureLoader.load ("motivos_negacao")
+        if (MotivoNegacao.count() == 0) {
+            fixtureLoader.load("motivos_negacao")
+        }
+    }
+
+    private void loadObjectMarshallers() {
+        JSON.registerObjectMarshaller(Unidade) {
+            [
+                    id    : it.id,
+                    nome  : it.nome,
+                    codigo: it.codigo
+            ]
         }
     }
 

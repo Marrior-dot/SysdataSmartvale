@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title><g:layoutTitle default="Grails" /></title>
+    <title><g:layoutTitle default="Grails"/></title>
     <link rel="shortcut icon" href="${resource(dir:'images',file:'carro.png')}" type="image/x-icon" />
 %{--
     <g:javascript library="jquery" plugin="jquery"/>

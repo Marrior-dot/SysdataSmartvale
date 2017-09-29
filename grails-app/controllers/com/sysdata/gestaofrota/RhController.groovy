@@ -9,7 +9,6 @@ class RhController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def participanteService
     def rhService
 
     @Secured(['IS_AUTHENTICATED_FULLY'])

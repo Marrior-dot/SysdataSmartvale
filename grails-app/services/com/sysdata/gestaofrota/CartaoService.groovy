@@ -3,31 +3,30 @@ package com.sysdata.gestaofrota
 import grails.util.Holders
 
 class CartaoService {
-
-    Cartao gerar(PortadorFuncionario portadorInstance) {
+    Cartao gerar(Portador portador) {
         Cartao cartaoInstance = new Cartao()
-        cartaoInstance.numero = gerarNumero(portadorInstance)
+        cartaoInstance.numero = gerarNumero(portador)
         cartaoInstance.senha = gerarSenha()
         cartaoInstance.validade = gerarDataValidade()
-        cartaoInstance.portador = portadorInstance
+        cartaoInstance.portador = portador
 
         if (!cartaoInstance.save()) throw new RuntimeException("Erros de regras de negocio.")
 
-        portadorInstance.addToCartoes(cartaoInstance)
+        portador.addToCartoes(cartaoInstance)
         return cartaoInstance
     }
 
-    String gerarNumero(PortadorFuncionario portadorInstance) {
+    String gerarNumero(Portador portador) {
         def binPar = Administradora.list().first()
         def bin = binPar.bin
         def tipoProg = Holders.grailsApplication.config.project.tipoPrograma
         def parceiro = Holders.grailsApplication.config.project.parceiro
-        def cdRh = portadorInstance.funcionario.unidade.rh.id
-        def qtde = portadorInstance.funcionario.unidade.rh.qtdeContas
+        def cdRh = portador.unidade.rh.id
+        def qtde = portador.unidade.rh.qtdeContas
         def prov = sprintf("%6d%1d%1d%03d%07d", bin.toInteger(), tipoProg, parceiro, cdRh, ++qtde)
         def check = calcularDV(prov)
-        portadorInstance.funcionario.unidade.rh.qtdeContas = qtde
-        portadorInstance.funcionario.unidade.rh.save(flush: true)
+        portador.unidade.rh.qtdeContas = qtde
+        portador.unidade.rh.save(flush: true)
 
         prov + check
     }
