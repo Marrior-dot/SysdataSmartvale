@@ -8,5 +8,9 @@ class Telefone {
 
     static constraints = {
     }
-	
+
+	@Override
+	String toString() {
+		return "(${ddd}) ${numero}"
+	}
 }

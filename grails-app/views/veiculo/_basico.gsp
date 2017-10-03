@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         <tr>
-            <td>${unidadeInstance?.rh.nome}</td>
+            <td>${unidadeInstance?.rh?.nome}</td>
             <td>${unidadeInstance?.codigo}-${unidadeInstance?.nome}</td>
         </tr>
         </tbody>
@@ -83,8 +83,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class="buttons">
         <g:if test="${action=='novo'}">

@@ -26,6 +26,7 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>Ano</th>
+                        <th>Cartão</th>
                     </thead>
                 </table>
             </div>
@@ -52,7 +53,8 @@
                 {"data":"placa"},
                 {"data":"marca"},
                 {"data":"modelo"},
-                {"data":"ano"}
+                {"data":"ano"},
+                {"data": "cartao"}
             ]
         });
     });

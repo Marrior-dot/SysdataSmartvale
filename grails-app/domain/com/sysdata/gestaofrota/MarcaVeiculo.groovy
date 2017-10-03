@@ -6,4 +6,9 @@ class MarcaVeiculo {
 	
     static constraints = {
     }
+
+    @Override
+    String toString() {
+        return nome
+    }
 }

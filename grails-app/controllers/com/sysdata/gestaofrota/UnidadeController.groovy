@@ -24,8 +24,6 @@ class UnidadeController {
         long rhId = params.long('rh.id')
         String nome = params['nome']
 
-        println(params)
-
         List<Unidade> unidadeList = Unidade.createCriteria().list(params) {
             if (rhId != null) {
                 rh { idEq(rhId) }

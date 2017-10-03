@@ -173,7 +173,8 @@ class EquipamentoController extends BaseOwnerController {
                     id       : e.id,
                     codigo   : "<a href=${createLink(action: 'show')}/${e.id}>${e.codigo}</a>",
                     descricao: e.descricao,
-                    tipo     : e.tipo?.nome
+                    tipo     : e.tipo?.nome,
+                    cartao   : e?.portador?.cartaoAtivo?.numeroMascarado ?: '< Nenhum cartão ativo >',
             ]
         }
 

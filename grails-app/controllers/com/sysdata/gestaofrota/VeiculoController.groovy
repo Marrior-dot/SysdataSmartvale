@@ -11,6 +11,9 @@ class VeiculoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def portadorService
+    def cartaoService
+
     def index = {
         redirect(action: "list", params: params)
     }
@@ -41,23 +44,34 @@ class VeiculoController extends BaseOwnerController {
     }
 
     def save = {
-        Veiculo.withTransaction {
-            if (params.unidId) {
-                def veiculoInstance = new Veiculo(params)
-                def unidadeInstance = Unidade.get(params.unidId)
+        Veiculo veiculoInstance = new Veiculo(params)
+        Unidade unidadeInstance = Unidade.get(params.long('unidId'))
+
+        if (unidadeInstance) {
+            try {
                 veiculoInstance.unidade = unidadeInstance
-                if (veiculoInstance.save(flush: true)) {
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
-                    redirect(action: "show", id: veiculoInstance.id)
-                } else {
-                    render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW])
-                }
+                PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
+                cartaoService.gerar(portadorMaquina)
+
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
+                redirect(action: "show", id: veiculoInstance.id)
             }
+            catch (Exception e) {
+                e.printStackTrace()
+                println(e.message)
+                flash.error = "Um erro ocorreu."
+                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW])
+                return
+            }
+
+        } else {
+            flash.error = "Unidade não encontrada."
+            redirect(action: 'index')
         }
     }
 
     def show = {
-        def veiculoInstance = Veiculo.get(params.id)
+        def veiculoInstance = Veiculo.get(params.long('id'))
         if (!veiculoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
@@ -77,17 +91,15 @@ class VeiculoController extends BaseOwnerController {
     }
 
     def update = {
-        def veiculoInstance = Veiculo.get(params.id)
+        def veiculoInstance = Veiculo.get(params.long('id'))
         if (veiculoInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (veiculoInstance.version > version) {
-
-                    veiculoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'veiculo.label', default: 'Veiculo')] as Object[], "Another user has updated this Veiculo while you were editing")
-                    render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando'])
-                    return
-                }
+            long version = params.long('version')
+            if (version != null && veiculoInstance.version > version) {
+                veiculoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'veiculo.label', default: 'Veiculo')] as Object[], "Another user has updated this Veiculo while you were editing")
+                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando'])
+                return
             }
+
             veiculoInstance.properties = params
             if (!veiculoInstance.hasErrors() && veiculoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
@@ -118,7 +130,6 @@ class VeiculoController extends BaseOwnerController {
             redirect(action: "list")
         }
     }
-
 
 
     def listAllJSON = {
@@ -185,7 +196,8 @@ class VeiculoController extends BaseOwnerController {
              placa : "<a href=${createLink(action: 'show')}/${v.id}>${v.placa}</a>",
              marca : v.marca?.nome,
              modelo: v.modelo,
-             ano   : v.anoFabricacao
+             ano   : v.anoFabricacao,
+             cartao: v?.portador?.cartaoAtivo?.numeroMascarado ?: '< Nenhum cartão ativo >',
             ]
         }
 
@@ -208,54 +220,55 @@ class VeiculoController extends BaseOwnerController {
         render "${veiculoInstance?.marca?.nome} ${veiculoInstance?.modelo}"
     }
 
-	def listFuncionariosJSON={
-		def veiculoInstance=Veiculo.get(params.id)
-		def funcionariosList=veiculoInstance.funcionarios.collect {f->
-				 					[id:f.funcionario.id,
-									matricula:f.funcionario.matricula,
-									 nome:f.funcionario.nome,
-									 cpf:f.funcionario.cpf,
-									 acao:"""<a href='#' onclick='removeFuncionario(${f.funcionario.id});'><img src='${resource(dir:'images',file:'remove_person.png')}' alt='Remover'></a>"""]
-								}
-		def data=[totalRecords:funcionariosList.size(),results:funcionariosList]
-		render data as JSON
-			
-	}
-	
-	def addFuncionario={
-		if(params.idVeic && params.idFunc){
-			def veiculoInstance=Veiculo.get(params.idVeic)
-			def funcionarioInstance=Funcionario.get(params.idFunc)
-			if(veiculoInstance && funcionarioInstance){
-				def veicFunc=new MaquinaFuncionario()
-				veicFunc.funcionario=funcionarioInstance
-				veiculoInstance.addToFuncionarios(veicFunc)
-				if(veiculoInstance.save(flush:true))
-					render "Funcionário relacionado ao Veículo com sucesso!"
-				else
-					render "Falha ao relacionar Funcionário ao Veículo!"
-			}
-		}else{
-			render "Veículo ${params.idVeic} e/ou Funcionário ${params.idFunc} não encontrados!"
-		}
-	}
-	
-	def removeFuncionario={
-		if(params.idVeic && params.idFunc){
-			def idVeic=params.idVeic.toLong()
-			def idFunc=params.idFunc.toLong()
-			def veicFunc=MaquinaFuncionario.withCriteria(uniqueResult:true){
-								maquina{eq('id',idVeic)}
-								funcionario{eq('id',idFunc)}
-							}
-			veicFunc.delete()
-			if(MaquinaFuncionario.exists(veicFunc.id))
-				render "Relação entre Veículo e Funcionário removida"
-			else
-				render "Relação entre Veículo e Funcionário não pode ser removida, apenas desativada"
-		}
-	}
-	
+    def listFuncionariosJSON = {
+        def veiculoInstance = Veiculo.get(params.id)
+        def funcionariosList = veiculoInstance.funcionarios.collect { f ->
+            [id       : f.funcionario.id,
+             matricula: f.funcionario.matricula,
+             nome     : f.funcionario.nome,
+             cpf      : f.funcionario.cpf,
+             acao     : """<a href='#' onclick='removeFuncionario(${f.funcionario.id});'><img src='${
+                 resource(dir: 'images', file: 'remove_person.png')
+             }' alt='Remover'></a>"""]
+        }
+        def data = [totalRecords: funcionariosList.size(), results: funcionariosList]
+        render data as JSON
 
-	
+    }
+
+    def addFuncionario = {
+        if (params.idVeic && params.idFunc) {
+            def veiculoInstance = Veiculo.get(params.idVeic)
+            def funcionarioInstance = Funcionario.get(params.idFunc)
+            if (veiculoInstance && funcionarioInstance) {
+                def veicFunc = new MaquinaFuncionario()
+                veicFunc.funcionario = funcionarioInstance
+                veiculoInstance.addToFuncionarios(veicFunc)
+                if (veiculoInstance.save(flush: true))
+                    render "Funcionário relacionado ao Veículo com sucesso!"
+                else
+                    render "Falha ao relacionar Funcionário ao Veículo!"
+            }
+        } else {
+            render "Veículo ${params.idVeic} e/ou Funcionário ${params.idFunc} não encontrados!"
+        }
+    }
+
+    def removeFuncionario = {
+        if (params.idVeic && params.idFunc) {
+            def idVeic = params.idVeic.toLong()
+            def idFunc = params.idFunc.toLong()
+            def veicFunc = MaquinaFuncionario.withCriteria(uniqueResult: true) {
+                maquina { eq('id', idVeic) }
+                funcionario { eq('id', idFunc) }
+            }
+            veicFunc.delete()
+            if (MaquinaFuncionario.exists(veicFunc.id))
+                render "Relação entre Veículo e Funcionário removida"
+            else
+                render "Relação entre Veículo e Funcionário não pode ser removida, apenas desativada"
+        }
+    }
+
+
 }

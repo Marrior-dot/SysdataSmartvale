@@ -22,4 +22,9 @@ class Unidade {
         unidadePorRh(condition: 'rh_id=:rh_id', types: 'long')
 
     }
+
+    @Override
+    String toString() {
+        return "${rh?.nome} - ${rh?.unidades?.nome}"
+    }
 }

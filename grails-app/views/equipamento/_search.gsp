@@ -24,6 +24,7 @@
                         <th>Código</th>
                         <th>Descrição</th>
                         <th>Tipo</th>
+                        <th>Cartão</th>
                     </thead>
                 </table>
             </div>
@@ -46,7 +47,8 @@
             "columns":[
                 {"data":"codigo"},
                 {"data":"descricao"},
-                {"data":"tipo"}
+                {"data":"tipo"},
+                {"data":"cartao"}
             ]
         });
     });
