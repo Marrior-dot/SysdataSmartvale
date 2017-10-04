@@ -15,12 +15,10 @@ class CartaoService {
         portador.addToCartoes(cartaoInstance)
         return cartaoInstance
     }
-
     Cartao desbloquear(Cartao cartao) {
         cartao.status = StatusCartao.ATIVO
         cartao.save()
     }
-
     Cartao cancelar(Cartao cartao, MotivoCancelamento motivo) {
         cartao.status = StatusCartao.CANCELADO
         cartao.motivoCancelamento = motivo
@@ -38,7 +36,7 @@ class CartaoService {
         cartao.save()
     }
 
-    String gerarNumero(Portador portador) {
+    private String gerarNumero(Portador portador) {
         def binPar = Administradora.list().first()
         def bin = binPar.bin
         def tipoProg = Holders.grailsApplication.config.project.tipoPrograma
@@ -52,8 +50,7 @@ class CartaoService {
 
         prov + check
     }
-
-    String gerarSenha() {
+    private String gerarSenha() {
         Random random = new Random()
         int tamanho = (int) (Math.pow(10, Util.DIGITOS_SENHA) - 1)
         int senha = random.nextInt(tamanho)
@@ -61,8 +58,7 @@ class CartaoService {
 
         String.format(fmt, senha)
     }
-
-    Date gerarDataValidade() {
+    private Date gerarDataValidade() {
         Calendar cal = Calendar.getInstance()
         cal.setTime(new Date())
         Integer anosValidade = ParametroSistema.getValorAsInteger(ParametroSistema.ANOS_VALIDADE_CARTAO)
@@ -70,8 +66,7 @@ class CartaoService {
 
         cal.getTime()
     }
-
-    String calcularDV(String card) {
+    private String calcularDV(String card) {
         int valor;
         int soma = 0;
         int multiplicador = 1;
