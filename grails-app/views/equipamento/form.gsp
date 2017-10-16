@@ -69,8 +69,7 @@
                 </div>
             </g:if>
             <g:else>
-                <g:render template="basico"
-                          model="${[action: action, equipamentoInstance: equipamentoInstance, unidadeInstance: unidadeInstance]}"/>
+                <g:render template="basico" model="${[action: action, equipamentoInstance: equipamentoInstance, unidadeInstance: unidadeInstance, tamMaxEmbossing: tamMaxEmbossing]}"/>
             </g:else>
 
         </div>

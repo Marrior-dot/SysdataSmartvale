@@ -1,7 +1,6 @@
 package com.sysdata.gestaofrota
 
 class Veiculo extends MaquinaMotorizada {
-
     String placa
     MarcaVeiculo marca
     String modelo
@@ -10,7 +9,6 @@ class Veiculo extends MaquinaMotorizada {
     Long autonomia
     Date validadeExtintor
     Long hodometro
-
 
     static constraints = {
         validadeExtintor(nullable: true)
@@ -33,5 +31,10 @@ class Veiculo extends MaquinaMotorizada {
             else this.hodometro = 0
         }
         return this.hodometro
+    }
+
+    @Override
+    String getNomeEmbossing() {
+        "${placa} ${marca?.abreviacao} ${complementoEmbossing}".toUpperCase()
     }
 }

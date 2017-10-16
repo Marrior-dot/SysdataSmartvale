@@ -15,7 +15,7 @@ class PortadorService {
     }
 
     PortadorMaquina save(MaquinaMotorizada maquina) {
-        maquina.save()
+        if (!maquina.save()) throw new RuntimeException(maquina.errors.allErrors.toString())
         PortadorMaquina portadorMaquina = new PortadorMaquina()
         portadorMaquina.unidade = maquina.unidade
         portadorMaquina.maquina = maquina

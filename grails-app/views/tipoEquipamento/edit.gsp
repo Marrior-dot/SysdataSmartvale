@@ -39,13 +39,10 @@
 				<g:form method="post" >
 					<g:hiddenField name="id" value="${tipoEquipamentoInstance?.id}" />
 					<g:hiddenField name="version" value="${tipoEquipamentoInstance?.version}" />
-					<fieldset class="form">
-						<g:render template="form"/>
-					</fieldset>
-					<fieldset class="buttons">
-						<g:actionSubmit class="btn btn-default"  action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-						<g:actionSubmit class="btn btn-default"  action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-					</fieldset>
+
+					<g:render template="form" model="[tipoEquipamentoInstance: tipoEquipamentoInstance]"/>
+					<g:actionSubmit class="btn btn-default"  action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+					<g:actionSubmit class="btn btn-default"  action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</g:form>
 			</div>
 		</div>

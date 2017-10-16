@@ -9,6 +9,7 @@ class EquipamentoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     def equipamentoService
+    def processamentoService
 
     def index = {
         redirect(action: "list", params: params)
@@ -23,7 +24,13 @@ class EquipamentoController extends BaseOwnerController {
     def create = {
         Unidade unidade = Unidade.get(params.long('unidade.id'))
         if (unidade) {
-            render(view: "form", model: [unidadeInstance: unidade, action: Util.ACTION_NEW])
+            if (TipoEquipamento.count() == 0) {
+                flash.error = "É necessário criar primeiramente um Tipo de Equipamento."
+                redirect(controller: 'tipoEquipamento', action: 'list')
+                return
+            } else {
+                render(view: "form", model: [unidadeInstance: unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            }
         } else {
             flash.error = "Unidade não encontrada."
             redirect(action: 'selecionarRhUnidade')
@@ -44,11 +51,11 @@ class EquipamentoController extends BaseOwnerController {
             catch (Exception e) {
                 println(e.message)
                 flash.error = "Erros encontrados."
-                render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW])
+                render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
         } else {
             flash.error = "Unidade não encontrada."
-            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW])
+            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW,, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
@@ -60,7 +67,7 @@ class EquipamentoController extends BaseOwnerController {
             return;
         }
 
-        render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_VIEW])
+        render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
     }
 
     def edit = {
@@ -69,7 +76,7 @@ class EquipamentoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: ''), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando'])
+            render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
@@ -79,7 +86,7 @@ class EquipamentoController extends BaseOwnerController {
             long version = params.long('version')
             if (version != null && equipamentoInstance.version > version) {
                 equipamentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", "Outro usuário estava editando esse Equipamento.")
-                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando'])
+                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
                 return
             }
             equipamentoInstance.properties = params
@@ -87,7 +94,7 @@ class EquipamentoController extends BaseOwnerController {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'equipamento.label', default: 'Equipamento'), equipamentoInstance.id])}"
                 redirect(action: "show", id: equipamentoInstance.id)
             } else {
-                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando'])
+                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'equipamento.label', default: ''), params.id])}"

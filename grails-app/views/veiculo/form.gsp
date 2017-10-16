@@ -54,7 +54,7 @@
                         <div class="tab-content">
                             <br><br>
                             <div class="tab-pane active" id="tab1">
-                                <g:render template="basico" model="[veiculoInstance: veiculoInstance, unidadeInstance: unidadeInstance]"/>
+                                <g:render template="basico" model="[veiculoInstance: veiculoInstance, unidadeInstance: unidadeInstance, tamMaxEmbossing: tamMaxEmbossing]"/>
                             </div>
                             <div class="tab-pane" id="tab2">
                                 <g:render template="/maquinaMotorizada/funcionarios" model="${[instance: veiculoInstance, instanceName: 'Veículo']}"/>

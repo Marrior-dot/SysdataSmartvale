@@ -18,6 +18,7 @@ class FormUtilTagLib {
         def hasfeedback = attrs.hasfeedback ?: true
         def inline = attrs.inline ?: false
         def maxlength = attrs.maxlength ?: null
+        def onchange = attrs.onchange ? "onchange=\"" + attrs.onchange + "\"" : ''
 
         out << """
         <div class="form-group ${hasfeedback ? 'has-feedback' : ''}" ${inline ? 'style="display: inline-block"' : ''}>
@@ -27,7 +28,7 @@ class FormUtilTagLib {
             <input ${ id ? "id='${id}'" : '' } name="$name" type="$type" ${maxlength ? "maxlength=$maxlength" : ""} style="max-width: $width%" class="form-control $clazz"
                 ${ type.trim().equalsIgnoreCase('cpf')  ? 'data-rule-cpf="true"' : '' }
                 ${ type.trim().equalsIgnoreCase('cnpj') ? 'data-rule-cnpj="true"' : '' }
-                value="$value" ${required ? 'required' : ''} ${attrs.size ? "size='${attrs.size}'" : ''} ${disabled ? 'disabled' : ''}>
+                value="$value" ${required ? 'required' : ''} ${attrs.size ? "size='${attrs.size}'" : ''} ${disabled ? 'disabled' : ''} ${onchange}>
             ${hasfeedback ? "<span class='glyphicon form-control-feedback' aria-hidden='true'></span>" : ""}
             ${inline ? '</div>' : ''}
         </div>

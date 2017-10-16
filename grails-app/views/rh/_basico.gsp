@@ -71,6 +71,12 @@
 							  class="form-control" optionKey="key" value="${rhInstance?.vinculoCartao}"/>
 				</g:else>
 			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}> <strong>Cartão Com Chip</strong>
+				</label>
+			</div>
         </div>
     </div>
 

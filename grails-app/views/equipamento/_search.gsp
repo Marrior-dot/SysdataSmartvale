@@ -10,7 +10,7 @@
                     <span class="glyphicon glyphicon-home"></span>
                     <g:message code="default.home.label"/>
                 </a>
-                <g:link class="btn btn-default" controller="equipamento" action="create" params="${[unidade_id: unidade_id]}">
+                <g:link class="btn btn-default" controller="equipamento" action="create" params="['unidade.id': unidade_id]">
                     <span class="glyphicon glyphicon-plus"></span>
                     ${message(code:'default.new.label', args:[message(code:'equipamento')]) }
                 </g:link>

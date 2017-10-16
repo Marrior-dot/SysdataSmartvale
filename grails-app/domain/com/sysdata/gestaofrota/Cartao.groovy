@@ -9,6 +9,8 @@ class Cartao {
     MotivoCancelamento motivoCancelamento
     String senha
     Date validade
+    String cvv
+    Integer via = 1
 
     static belongsTo = [portador: Portador]
 
@@ -18,6 +20,8 @@ class Cartao {
         numero(unique: true)
         motivoCancelamento(nullable: true)
         arquivo(nullable: true)
+        cvv nullable: false, blank: false, maxSize: 3
+        via nullable: false
     }
 
 
@@ -41,5 +45,9 @@ class Cartao {
     @Override
     String toString() {
         return "${numeroMascarado} [${status.nome}]"
+    }
+
+    Portador getPortador(boolean has) {
+
     }
 }

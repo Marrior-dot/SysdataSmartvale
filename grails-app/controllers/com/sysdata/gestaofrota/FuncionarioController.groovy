@@ -2,12 +2,7 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import org.springframework.http.HttpStatus
-
 import java.text.SimpleDateFormat
-
-
-import com.sysdata.gestaofrota.exception.FuncionarioException
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class FuncionarioController extends BaseOwnerController {
@@ -15,6 +10,7 @@ class FuncionarioController extends BaseOwnerController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def funcionarioService
+    def processamentoService
 
     def index = {
         redirect(action: "list", params: params)
@@ -46,9 +42,14 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def create = {
-        if (params.unidade_id) {
-            def unidadeInstance = Unidade.get(params.unidade_id)
-            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW])
+        Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
+        if (unidadeInstance) {
+            if (CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
+                flash.error = "Não existe nenhuma Categoria de Funcionário. É necessário cadastrar uma primeiro."
+                redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
+                return
+            }
+            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -73,11 +74,11 @@ class FuncionarioController extends BaseOwnerController {
             catch (Exception e) {
                 println(e.message)
                 flash.error = "Um erro ocorreu."
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
         } else {
             flash.message = "Funcionário não relacionado a uma Unidade específica."
-            render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
+            render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
@@ -87,7 +88,7 @@ class FuncionarioController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_VIEW])
+            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
@@ -97,7 +98,7 @@ class FuncionarioController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
+            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
@@ -107,7 +108,7 @@ class FuncionarioController extends BaseOwnerController {
             Long version = params.long('version')
             if (version && funcionarioInstance.version > version) {
                 funcionarioInstance.errors.rejectValue("version", "Outro usuário estava alterando os dados desse Funcionário enquanto você o estava editando.")
-                render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT])
+                render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
                 return
             }
 
@@ -123,7 +124,7 @@ class FuncionarioController extends BaseOwnerController {
             }
             catch (Exception e) {
                 println(e.message)
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW])
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
 
         } else {
@@ -133,7 +134,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def delete = {
-        def funcionarioInstance = Funcionario.get(params.id)
+        def funcionarioInstance = Funcionario.get(params.long('id'))
         if (funcionarioInstance) {
             try {
                 log.debug("Inativando " + funcionarioInstance)

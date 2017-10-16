@@ -34,24 +34,7 @@
                     </div>
                 </g:hasErrors>
                 <g:form action="save" method="post" >
-                    <div class="dialog">
-                        <table>
-                            <tbody>
-
-                            <tr class="prop">
-                                <td valign="top" class="name">
-
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: marcaVeiculoInstance, field: 'nome', 'errors')}">
-                                    <label for="nome"><g:message code="marcaVeiculo.nome.label" default="Nome" /></label>
-                                    <g:textField class="form-control" name="nome" value="${marcaVeiculoInstance?.nome}" />
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <br><br>
+                    <g:render template="form" model="[marcaVeiculoInstance: marcaVeiculoInstance]"/>
                     <div class="buttons">
                         <span class="button"><g:submitButton name="create" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                     </div>

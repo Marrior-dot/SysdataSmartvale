@@ -1,8 +1,10 @@
 package com.sysdata.gestaofrota
 
+import grails.converters.JSON
+
 class MarcaVeiculoController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", find: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -24,8 +26,7 @@ class MarcaVeiculoController {
         if (marcaVeiculoInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), marcaVeiculoInstance.id])}"
             redirect(action: "show", id: marcaVeiculoInstance.id)
-        }
-        else {
+        } else {
             render(view: "create", model: [marcaVeiculoInstance: marcaVeiculoInstance])
         }
     }
@@ -35,8 +36,7 @@ class MarcaVeiculoController {
         if (!marcaVeiculoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), params.id])}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             [marcaVeiculoInstance: marcaVeiculoInstance]
         }
     }
@@ -46,8 +46,7 @@ class MarcaVeiculoController {
         if (!marcaVeiculoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), params.id])}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             return [marcaVeiculoInstance: marcaVeiculoInstance]
         }
     }
@@ -58,7 +57,7 @@ class MarcaVeiculoController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (marcaVeiculoInstance.version > version) {
-                    
+
                     marcaVeiculoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo')] as Object[], "Another user has updated this MarcaVeiculo while you were editing")
                     render(view: "edit", model: [marcaVeiculoInstance: marcaVeiculoInstance])
                     return
@@ -68,12 +67,10 @@ class MarcaVeiculoController {
             if (!marcaVeiculoInstance.hasErrors() && marcaVeiculoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), marcaVeiculoInstance.id])}"
                 redirect(action: "show", id: marcaVeiculoInstance.id)
-            }
-            else {
+            } else {
                 render(view: "edit", model: [marcaVeiculoInstance: marcaVeiculoInstance])
             }
-        }
-        else {
+        } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), params.id])}"
             redirect(action: "list")
         }
@@ -91,8 +88,7 @@ class MarcaVeiculoController {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), params.id])}"
                 redirect(action: "show", id: params.id)
             }
-        }
-        else {
+        } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'marcaVeiculo.label', default: 'MarcaVeiculo'), params.id])}"
             redirect(action: "list")
         }

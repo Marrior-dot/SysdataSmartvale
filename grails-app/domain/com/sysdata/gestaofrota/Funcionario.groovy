@@ -1,10 +1,10 @@
 package com.sysdata.gestaofrota
 
 class Funcionario extends Participante {
-
     String cpf
     String matricula
     String rg
+    String nomeEmbossing
     Date dataNascimento
     String cnh
     Date validadeCnh
@@ -32,6 +32,7 @@ class Funcionario extends Participante {
         })
         cnh(blank: false)
         portador nullable: true
+        nomeEmbossing nullable: true
     }
 
     public boolean isAtivoInPedido(PedidoCarga pedidoCarga) {
@@ -45,5 +46,10 @@ class Funcionario extends Participante {
         ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id && it.tipo == TipoItemPedido.CARGA }
         Double valor = item?.valor ?: categoria.valorCarga
         Util.toBigDecial(valor, decimalPlace)
+    }
+
+    @Override
+    String toString() {
+        return nome
     }
 }

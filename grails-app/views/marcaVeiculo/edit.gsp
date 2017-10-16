@@ -39,23 +39,8 @@
                 <g:form method="post" >
                     <g:hiddenField name="id" value="${marcaVeiculoInstance?.id}" />
                     <g:hiddenField name="version" value="${marcaVeiculoInstance?.version}" />
-                    <div class="dialog">
-                        <table>
-                            <tbody>
+                    <g:render template="form" model="[marcaVeiculoInstance: marcaVeiculoInstance]"/>
 
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: marcaVeiculoInstance, field: 'nome', 'errors')}">
-                                    <label for="nome"><g:message code="marcaVeiculo.nome.label" default="Nome" /></label>
-                                    <g:textField class="form-control" name="nome" value="${marcaVeiculoInstance?.nome}" />
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <br><br>
                     <div class="buttons">
                         <span class="button"><g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
                         <span class="button"><g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>

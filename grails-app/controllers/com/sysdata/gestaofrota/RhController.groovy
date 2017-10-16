@@ -28,7 +28,7 @@ class RhController extends BaseOwnerController {
 
     @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
     def create = {
-        render(view: 'form', model: [action: Util.ACTION_NEW])
+        render(view: 'form', model: [action: Util.ACTION_NEW, rhInstance: new Rh()])
     }
 
     @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
@@ -92,7 +92,8 @@ class RhController extends BaseOwnerController {
             }
 
             try {
-                rhInstance = rhService.save(rhInstance)
+                rhInstance.properties = params
+                rhInstance.save()
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                 redirect(action: 'show', id: rhInstance.id)
             }

@@ -10,6 +10,8 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+import com.sysdata.gestaofrota.TipoAdministradoraCartao
+import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.cartao.NewGeradorCartaoService
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
@@ -220,13 +222,11 @@ auditLog {
 }
 
 project {
-
-    geradorCartao=NewGeradorCartaoService
-
-    tipoPrograma=7
-    parceiro=2
-
-
+    geradorCartao = NewGeradorCartaoService
+    tipoPrograma = 7
+    parceiro = 2
+    tipoAdministradora = TipoAdministradoraCartao.MAXCARD
+    tipoEmbossadora = TipoEmbossadora.PAYSMART
 }
 
 

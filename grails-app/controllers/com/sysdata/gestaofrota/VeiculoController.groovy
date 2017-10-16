@@ -13,6 +13,7 @@ class VeiculoController extends BaseOwnerController {
 
     def portadorService
     def cartaoService
+    def processamentoService
 
     def index = {
         redirect(action: "list", params: params)
@@ -36,7 +37,8 @@ class VeiculoController extends BaseOwnerController {
     def create = {
         if (params.unidade_id) {
             def unidadeInstance = Unidade.get(params.unidade_id)
-            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW])
+            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -60,7 +62,8 @@ class VeiculoController extends BaseOwnerController {
                 e.printStackTrace()
                 println(e.message)
                 flash.error = "Um erro ocorreu."
-                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW])
+                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
                 return
             }
 
@@ -76,7 +79,8 @@ class VeiculoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW])
+            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: tamMaxEmbossing])
         }
     }
 
@@ -86,17 +90,19 @@ class VeiculoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando'])
+            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
         }
     }
 
     def update = {
         def veiculoInstance = Veiculo.get(params.long('id'))
         if (veiculoInstance) {
-            long version = params.long('version')
+            Long version = params.long('version')
             if (version != null && veiculoInstance.version > version) {
                 veiculoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'veiculo.label', default: 'Veiculo')] as Object[], "Another user has updated this Veiculo while you were editing")
-                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando'])
+                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
                 return
             }
 
@@ -105,7 +111,8 @@ class VeiculoController extends BaseOwnerController {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)
             } else {
-                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando'])
+                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"

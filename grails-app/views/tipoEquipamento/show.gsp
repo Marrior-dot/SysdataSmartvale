@@ -31,16 +31,15 @@
 					<div class="alert alert-info" role="status">${flash.message}</div>
 				</g:if>
 				<ul class="properties">
+					<li class="fieldcontain">
+						<span class="property-label p-label"><g:message code="tipoEquipamento.nome.label" default="Nome" /></span>
+						<span class="property-value p-value" aria-labelledby="nome-label"><g:fieldValue bean="${tipoEquipamentoInstance}" field="nome"/></span>
+					</li>
 
-					<g:if test="${tipoEquipamentoInstance?.nome}">
-						<li class="fieldcontain">
-							<span id="nome-label" class="property-label p-label"><g:message code="tipoEquipamento.nome.label" default="Nome" /></span>
-
-							<span class="property-value p-value" aria-labelledby="nome-label"><g:fieldValue bean="${tipoEquipamentoInstance}" field="nome"/></span>
-
-						</li>
-					</g:if>
-
+					<li class="fieldcontain">
+						<span class="property-label p-label"><g:message code="tipoEquipamento.abreviacao.label" default="Abreviação"/></span>
+						<span class="property-value p-value" aria-labelledby="nome-label"><g:fieldValue bean="${tipoEquipamentoInstance}" field="abreviacao"/></span>
+					</li>
 				</ul>
 				<g:form>
 					<fieldset class="buttons">

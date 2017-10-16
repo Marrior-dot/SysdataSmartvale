@@ -28,21 +28,17 @@
                         <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
                             <thead>
                             <tr>
-
                                 <g:sortableColumn property="id" title="${message(code: 'marcaVeiculo.id.label', default: 'Id')}" />
-
                                 <g:sortableColumn property="nome" title="${message(code: 'marcaVeiculo.nome.label', default: 'Nome')}" />
-
+                                <g:sortableColumn property="abreviacao" title="${message(code: 'marcaVeiculo.abreviacao.label', default: 'Abreviação')}" />
                             </tr>
                             </thead>
                             <tbody>
                             <g:each in="${marcaVeiculoInstanceList}" status="i" var="marcaVeiculoInstance">
-                                <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-
+                                <tr>
                                     <td><g:link action="show" id="${marcaVeiculoInstance.id}">${fieldValue(bean: marcaVeiculoInstance, field: "id")}</g:link></td>
-
                                     <td>${fieldValue(bean: marcaVeiculoInstance, field: "nome")}</td>
-
+                                    <td>${fieldValue(bean: marcaVeiculoInstance, field: "abreviacao")}</td>
                                 </tr>
                             </g:each>
                             </tbody>

@@ -67,7 +67,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="funcionarios">
-                            <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance]}"/>
+                            <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance, unidadeInstance: unidadeInstance, tamMaxEmbossing: tamMaxEmbossing]}"/>
                         </div>
                         <div class="tab-pane" id="cartoes">
                             <g:render template="cartao" model="[portador: funcionarioInstance.portador]"/>

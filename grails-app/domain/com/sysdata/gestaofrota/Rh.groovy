@@ -13,6 +13,7 @@ class Rh extends Empresa {
     BigDecimal taxaReemissaoCartao = 0
     Integer qtdeContas = 0
     TipoVinculoCartao vinculoCartao = TipoVinculoCartao.FUNCIONARIO
+    boolean cartaoComChip = false
 
     static hasMany = [unidades: Unidade, categoriasFuncionario: CategoriaFuncionario, empresas: PostoCombustivel, role: Role]
 
@@ -22,6 +23,7 @@ class Rh extends Empresa {
         taxaEmissaoCartao nullable: true
         taxaReemissaoCartao nullable: true
         qtdeContas nullable: true
+        cartaoComChip nullable: true
     }
 
     static transients = ['portadoresCount']

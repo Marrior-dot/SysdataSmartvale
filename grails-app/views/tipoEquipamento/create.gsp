@@ -34,12 +34,8 @@
 					</ul>
 				</g:hasErrors>
 				<g:form action="save" >
-					<fieldset class="form">
-						<g:render template="form"/>
-					</fieldset>
-					<fieldset class="buttons">
-						<g:submitButton name="create" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-					</fieldset>
+					<g:render template="form" model="[tipoEquipamentoInstance: tipoEquipamentoInstance]"/>
+					<g:submitButton name="create" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Create')}" />
 				</g:form>
 			</div>
 		</div>

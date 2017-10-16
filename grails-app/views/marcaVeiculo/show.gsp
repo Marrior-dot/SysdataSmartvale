@@ -38,6 +38,10 @@
                         <span class="p-label"><g:message code="marcaVeiculo.nome.label" default="Nome" /></span>
                         <span class="p-value">${fieldValue(bean: marcaVeiculoInstance, field: "nome")}</span>
                     </li>
+                    <li>
+                        <span class="p-label"><g:message code="marcaVeiculo.abreviacao.label" default="Abreviação"/></span>
+                        <span class="p-value">${fieldValue(bean: marcaVeiculoInstance, field: "abreviacao")}</span>
+                    </li>
                 </ul>
                 <div class="buttons">
                     <g:form>

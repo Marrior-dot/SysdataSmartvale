@@ -7,7 +7,6 @@ class MaquinaFuncionario {
     Date dateCreated
     Status status = Status.ATIVO
 
-
     static mapping = {
         id generator: "sequence", params: [sequence: "maqfunc_seq"]
     }

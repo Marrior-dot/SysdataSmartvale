@@ -4,7 +4,6 @@
 
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<br>
 <g:form method="post">
     <g:hiddenField name="id" value="${funcionarioInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
@@ -12,7 +11,7 @@
     <g:hiddenField name="action" value="${action}"/>
 
 
-    <table class="table" style="border:1px solid;border-color: #DDD;font-size:14px;">
+    <table class="table">
         <thead>
             <tr>
                 <th>${message(code: 'rh.label', default: 'RH')}</th>
@@ -21,8 +20,8 @@
         </thead>
         <tbody>
             <tr>
-                <td>${unidadeInstance?.rh.nome}</td>
-                <td>${unidadeInstance?.nome}</td>
+                <td><g:link controller="rh" action="show" id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></td>
+                <td><g:link controller="unidade" action="show" id="${unidadeInstance.id}">${unidadeInstance?.nome}</g:link></td>
             </tr>
         </tbody>
     </table>
@@ -33,51 +32,59 @@
         <div class="panel-body">
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="matricula">Matrícula</label>
-                    <g:textField class="form-control matricula" name="matricula" value="${funcionarioInstance?.matricula}" maxlength="10"/>
+                    <label for="matricula">Matrícula *</label>
+                    <g:textField class="form-control matricula" name="matricula" value="${funcionarioInstance?.matricula}" maxlength="10" required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="cpf">CPF</label>
-                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"/>
+                    <label for="cpf">CPF *</label>
+                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf" required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="rg">RG</label>
-                    <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10" class="form-control only-numbers"/>
+                    <label for="rg">RG *</label>
+                    <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10" class="form-control only-numbers" required="required"/>
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-md-8">
-                    <label for="nome">Nome</label>
-                    <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control"/>
+                <div class="form-group col-md-6">
+                    <label for="nome">Nome *</label>
+                    <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control" required="required"/>
                 </div>
 
-                <div class="form-group col-md-4">
-                    <label for="dataNascimento">Data Nascimento</label>
-                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento"
+                <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
+                    <div class="form-group col-md-6">
+                        <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
+                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing" maxlength="${tamMaxEmbossing}"
+                               placeholder="Digite aqui o nome que será impresso no seu cartão." value="${funcionarioInstance?.nomeEmbossing}" required/>
+                        <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
+                    </div>
+                </g:if>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="dataNascimento">Data Nascimento *</label>
+                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento" required
                            value="${Util.formattedDate(funcionarioInstance?.dataNascimento)}"/>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-md-4">
-                    <label for="cnh">CNH</label>
-                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}" maxlength="11"/>
                 </div>
 
-                <div class="form-group col-md-4">
-                    <label for="validadeCnh">Validade CNH</label>
-                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh"
+                <div class="form-group col-md-3">
+                    <label for="cnh">CNH *</label>
+                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}" maxlength="11" required="required"/>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="validadeCnh">Validade CNH *</label>
+                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh" required
                            value="${Util.formattedDate(funcionarioInstance?.validadeCnh)}"/>
                 </div>
 
-                <div class="form-group col-md-4">
-                    <label for="categoriaCnh">Categoria CNH</label>
+                <div class="form-group col-md-3">
+                    <label for="categoriaCnh">Categoria CNH *</label>
                     <g:select name="categoriaCnh" from="${CategoriaCnh.values()}"
-                              optionValue="nome" class="form-control"
+                              optionValue="nome" class="form-control" required="required"
                               noSelection="${['null': 'Selecione uma Categ. CNH...']}"
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
@@ -85,22 +92,20 @@
 
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="categoria.id">Categoria</label>
-                    <g:select name="categoria.id" value="${funcionarioInstance?.categoria?.id}"
+                    <label for="categoria.id">Categoria *</label>
+                    <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance).list()}"
+                              value="${funcionarioInstance?.categoria?.id}" required="required"
                               noSelection="${['null': 'Selecione a categoria...']}"
-                              from="${CategoriaFuncionario.withCriteria {rh { idEq( unidadeInstance?.rh?.id) }}}"
-                              optionKey="id" class="form-control"
-                              optionValue="nome"/>
+                              optionKey="id" class="form-control" optionValue="nome"/>
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="status">Status</label>
-                    <g:select name="status" from="${Status.asBloqueado()}" class="form-control"
-                              value="${funcionarioInstance?.status}" optionKey=""
-                              optionValue=""/>
+                    <label for="status">Status *</label>
+                    <g:select name="status" from="${Status.asBloqueado()}" class="form-control" required="required"
+                              value="${funcionarioInstance?.status}" optionKey="key"/>
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="gestor">Gestor</label>
                     <div class="checkbox">
                         <label>
@@ -129,6 +134,5 @@
             </g:if>
         </div>
     </sec:ifAnyGranted>
-
 
 </g:form>
