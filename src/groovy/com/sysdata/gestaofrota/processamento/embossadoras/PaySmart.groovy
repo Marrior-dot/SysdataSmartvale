@@ -67,7 +67,7 @@ class PaySmart extends Embossadora {
         final String emb4 = String.format("%-24s", " ")
         final String serviceCode = "606"
         final String titularidade = "01"
-        final String campoCel = String.format("%18s", " ")
+        final String campoCel = String.format("%19s", " ")
         final String dataEfetivacao = new SimpleDateFormat("yyMMdd").format(new Date())
         final String aplicacoes = String.format("%10s", " ")
         final String binBlock = String.format("%16s", " ")
@@ -76,7 +76,7 @@ class PaySmart extends Embossadora {
         StringBuilder builder = new StringBuilder()
         int sequencial = 2
         cartoes.each { c ->
-            String nome = c.portador.nomeEmbossing; nome = nome.substring(0, Math.min(26, nome.length()))
+            String nome = c.portador.nomeEmbossing; nome = nome.substring(0, Math.min(26, nome.length())).toUpperCase()
             String pan = c.numero.substring(0, 16)
             String validade = sdfAAMM.format(c.validade)
             String via = c.via.toString().padLeft(2, "0")
@@ -91,13 +91,13 @@ class PaySmart extends Embossadora {
             String campoCnpj = cnpj.length() > 0 ? "CNPJ${cnpj}" : String.format("%19s", " ")
 
             builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${tipoCartao}${agencia}${posto}${numeroConta}" +
-                    "\$${getNumeroCartaoFormatado(c.numero)}" + // primeira linha de embossing (número do cartão formatado)
-                    "*${sdfMMAA.format(c.validade)}" +          // segunda linha de embossing (data validade cartão formato: MM/AA)
-                    "*${getNomeTitular(c.portador)}" +          // terceira linha de embossing (nome do portador)
-                    "*${emb4}" +                                // quarta linha de embossing (agencia + posto; não se aplica)
-                    "${rfu2}" +                                 // campo reservado uso futuro
-                    "%${trilha1}?" +                            // trilha 1
-                    ";${trilha2}?" +                            // trilha 2
+                    "\$${getNumeroCartaoFormatado(c.numero)} " +            // primeira linha de embossing (número do cartão formatado)
+                    "*${sdfMMAA.format(c.validade).padRight(24, " ")}" +    // segunda linha de embossing (data validade cartão formato: MM/AA)
+                    "*${getNomeTitular(c.portador).padRight(24, " ")}" +    // terceira linha de embossing (nome do portador)
+                    "*${emb4}" +                                            // quarta linha de embossing (agencia + posto; não se aplica)
+                    "${rfu2}" +                                             // campo reservado uso futuro
+                    "%${trilha1}?" +                                        // trilha 1
+                    ";${trilha2}?" +                                        // trilha 2
                     "|${getDadosPostagem(c.portador.endereco)}" +
                     "${c.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}" +
                     "${aplicacoes}${binBlock}  #CH#" +

@@ -45,7 +45,9 @@ abstract class Embossadora implements IGeradorArquivo {
     }
 
     protected String getNomeTitular(Portador portador) {
-        portador.nomeEmbossing.substring(0, getTamanhoMaximoNomeTitular()).toUpperCase()
+        portador.nomeEmbossing.substring(0,
+                Math.min(portador.nomeEmbossing.length(), getTamanhoMaximoNomeTitular())
+        ).toUpperCase()
     }
     protected String getNumeroCartaoFormatado(String numero) {
         numero = numero.replaceAll(" ", "")
