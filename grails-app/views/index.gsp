@@ -1,7 +1,7 @@
 7<html>
     <head>
         <title>Bem vindo ao Sistema Gestão de Frota</title>
-        <meta name="layout" content="bootstrap-layout" />
+        <meta name="layout" content="layout-restrito" />
 		<script type="text/javascript" src="${resource(dir:'js',file:'chart-config.js') }"></script>
 		<script type="text/javascript" src="${resource(dir:'js',file:'plugins/Chart.min.js') }"></script>
 		<style>
@@ -20,26 +20,29 @@
 		}
 
 		</style>
-
-
 	</head>
     <body>
 	<br><br>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<i class="fa fa-bar-chart-o fa-fw"></i> Transações de Combustível (R$)
-			<div class="pull-right">
-				<g:form>
-					%{--<g:select name="mesEscolhido" class="form-down-option-graphics"
-							  from="${['Todos', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']}" ></g:select>
-					<g:select name="anoEscolhido" class="form-down-option-graphics" from="${2016..2012}"></g:select>--}%
-					<g:set var="today" value="${new Date()}"/> %{--Seta a data de Hoje--}%
-					<g:set var="months" value="${['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez','Todos']}"/> %{--Faz uma lista dos meses--}%
-					<g:select name="mesEscolhido" class="form-down-option-graphics"
-							  from="${months as List}" value="${months[today[Calendar.MONTH]]}"></g:select> %{--Faz o select dos meses no value mostrando o mes atual--}%
-					<g:select name="anoEscolhido" class="form-down-option-graphics" from="${2014..2020}" value="${today[Calendar.YEAR]}"></g:select> %{--Faz o select dos anos no value mostrando o ano atual--}%
-
-				</g:form>
+			<div class="row">
+				<div class="col-md-8">
+					<h4><i class="fa fa-bar-chart-o fa-fw"></i> Transações de Combustível (R$)</h4>
+				</div>
+				<div class="col-md-4">
+					<g:form>
+						<g:set var="today" value="${new Date()}"/>
+						<g:set var="anoAtual" value="${today[Calendar.YEAR]}"/>
+						<g:set var="months" value="${['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Todos']}"/>
+						<div class="input-group">
+							<g:select name="mesEscolhido" class="form-control" from="${months as List}"
+									  value="${months[today[Calendar.MONTH]]}"/>
+							<span class="input-group-addon">de</span>
+							<g:select name="anoEscolhido" class="form-control" from="${2010..anoAtual}"
+									  value="${anoAtual}"/>
+						</div>
+					</g:form>
+				</div>
 			</div>
 		</div>
 		<div class="panel-body">

@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="bootstrap-layout">
+		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'motivoNegacao.label', default: 'Motivo Negação')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
 	</head>

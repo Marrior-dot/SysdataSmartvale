@@ -13,12 +13,20 @@ hibernate {
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
 
-GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
-frota.projeto = new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass("FrotaConfig"))
+// ======================================== ATENÇÃO!! ========================================
+//                              NÃO HÁ MAIS VARIAVEIS DE AMBIENTE DE SISTEMA!
+// Para permitir flexibilidade na escolha do banco por PROJETO, um arquivo de configuração de projeto
+// deve ser definido na raiz do projeto '/FrotaConfig.groovy'.
+// Esse arquivo pode ser do tipo Java Properties ou um script ConfigSlurper e deverá conter as variaveis
+// de url e password do banco (dentre outras). Dessa forma, ele será usado dinamicamente pela aplicação.
+// Esse arquivo DEVE SER IGNORADO PELO GIT pois cada projeto terá um arquivo com valores diferentes.
+// ===========================================================================================
 
-// environment specific settings
+GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
+def config = new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass('FrotaConfig'))
+
 dataSource {
-    dbCreate = frota.projeto.dataSource.dbCreate
-    url = frota.projeto.dataSource.url
-    password = frota.projeto.dataSource.password
+    dbCreate = config.dbCreate
+    url = config.url
+    password = config.password
 }

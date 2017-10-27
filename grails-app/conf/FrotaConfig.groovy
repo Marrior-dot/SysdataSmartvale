@@ -1,33 +1,32 @@
+import com.sysdata.gestaofrota.TipoAdministradoraCartao
+import com.sysdata.gestaofrota.TipoEmbossadora
+
+/**
+ * ESSE ARQUIVO DEVE SER IGNORADO PELO GIT
+ * Cada projeto terá suas proprias variaveis
+ */
+
 environments {
     development {
-        def urlDev = System.env["FROTA_DEV_DB"]
-        if (!urlDev) urlDev = "jdbc:postgresql://localhost/vrfrota_development"
-        dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop','update'
-            url = urlDev
-            password = "postgres"
-        }
-    }
+        nome = "Maxxcard"
+        tipoPrograma = 7
+        parceiro = 2
+        tipoAdministradora = TipoAdministradoraCartao.MAXCARD
+        tipoEmbossadora = TipoEmbossadora.PAYSMART
 
-    homologation {
-        def devUrl = System.env['FROTA_DB_HOM_URL']
-        if (!devUrl) devUrl = "jdbc:postgresql://148.5.7.216/amazonfrota_homologation";
+        // ** DATABASE **
+        dbCreate = "update" // one of 'create', 'create-drop','update'
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://localhost/vrfrota_development"
+        password = "postgres"
+        // ** DATABASE **
 
-        dataSource {
-            password = "postgres"
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = devUrl
-        }
-    }
-
-    production {
-        def devUrl = System.env['FROTA_DB_PRD_URL']
-        if (!devUrl) devUrl = "jdbc:postgresql://148.5.7.211/amazonfrota_production";
-
-        dataSource {
-            password = "jmml72"
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = devUrl
-        }
+        /**
+         * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
+         * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
+         */
+        pasta = "maxxcard"
+        //geradorCartao = NewGeradorCartaoService
+        corPrimaria = "red"
+        corSecundaria = "#f2b941"
     }
 }

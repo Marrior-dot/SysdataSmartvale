@@ -3,7 +3,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="bootstrap-layout">
+		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'parameterReport.label', default: 'ParameterReport')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 	</head>

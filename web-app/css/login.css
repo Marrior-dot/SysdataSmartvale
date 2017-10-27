@@ -1,17 +1,3 @@
-/*.container-home {
-    !*background-color: #444;*!
-    !*url(../images/amazon_photo.jpg) no-repeat fixed left*!
-    background: url(../images/truck-fleet.jpg) repeat fixed left;
-    background-size: 100%;
-}*/
-
-body {
-    /*background-color: #444;*/
-    /*url(../images/amazon_photo.jpg) no-repeat fixed left*/
-    background: url(../images/frota.png) no-repeat fixed left;
-    background-size: 100%;
-}
-
 .center {
     float: none;
     margin-left: auto;

@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="bootstrap-layout">
+		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'tipoEquipamento.label', default: 'Tipo de Equipamento')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 	</head>

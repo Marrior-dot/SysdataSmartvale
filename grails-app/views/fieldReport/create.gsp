@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="bootstrap-layout">
+		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'fieldReport.label', default: 'FieldReport')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
 	</head>

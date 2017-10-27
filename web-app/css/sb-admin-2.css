@@ -48,7 +48,7 @@ body {
 #nav-top.navbar-static-top > ul > li > a:focus,
 #nav-top.navbar-static-top > ul > li > a:hover,
 #nav-top.navbar-static-top > ul > li > a:active {
-    background-color: #096840;
+    background-color: rgba(0, 0, 0, 0.24);
     color: #FFFFFF;
 }
 

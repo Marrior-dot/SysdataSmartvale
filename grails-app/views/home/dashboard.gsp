@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <head>
-    <meta name="layout" content="bootstrap-menu"/>
+    <meta name="layout" content="layout-restrito"/>
     <title>Coop - Dashboard</title>
 
     <link type="text/css" href="${resource(dir: 'css', file: 'index.css')}"/>

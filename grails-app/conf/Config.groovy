@@ -1,18 +1,3 @@
-// locations to search for config files that get merged into the main config
-// config files can either be Java properties files or ConfigSlurper scripts
-
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if(System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
-
-import com.sysdata.gestaofrota.TipoAdministradoraCartao
-import com.sysdata.gestaofrota.TipoEmbossadora
-import com.sysdata.gestaofrota.cartao.NewGeradorCartaoService
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -143,15 +128,6 @@ grails {
 //	 "mail.smtp.socketFactory.fallback":"false"]
 //	}
 }
-
-//log4j.logger.org.springframework.security='off,stdout'
-
-//log4j.logger.org.springframework.security='off,stdout'
-
-//log4j.logger.org.springframework.security='off,stdout'
-
-//log4j.logger.org.springframework.security='off,stdout'
-// Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.ui.register.postResetUrl = '/'
 grails.plugin.springsecurity.ui.forgotPassword.emailBody = 'Prezado (a) <br> Clique na URL abaixo para criar uma nova senha<br>'
 grails.plugin.springsecurity.ui.forgotPassword.emailFrom = 'no-reply@sysdata.com.br'
@@ -221,13 +197,5 @@ auditLog {
     }
 }
 
-project {
-    geradorCartao = NewGeradorCartaoService
-    tipoPrograma = 7
-    parceiro = 2
-    tipoAdministradora = TipoAdministradoraCartao.MAXCARD
-    tipoEmbossadora = TipoEmbossadora.PAYSMART
-}
-
-
-
+GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
+project = new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass('FrotaConfig'))
