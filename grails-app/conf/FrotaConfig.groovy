@@ -26,7 +26,7 @@ environments {
          */
         pasta = "maxxcard"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "red"
+        corPrimaria = "#f63535"
         corSecundaria = "#f2b941"
     }
 }
