@@ -45,7 +45,7 @@
 	            	<a href="${createLink(controller:'login',action:'menu')}?servico=cadastros">
 	            		<img alt="Cadastros" src="${resource(dir:"images",file:"cadastro.png") }">
 	            	</a>
-					<h2>Cadastros</h2>						            	
+					<h2>Cadastros</h2>
 	            </div>
 	            </sec:ifAnyGranted>
 	            
@@ -67,7 +67,7 @@
 		            </div>
 		        </sec:ifAnyGranted>
 		            
-		        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+		        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
 		            <div class="servico">
 						<a href="${createLink(controller:'login',action:'menu')}?servico=ca">
 		            		<img alt="Central de Atendimento" src="${resource(dir:"images",file:"ca.png") }">
