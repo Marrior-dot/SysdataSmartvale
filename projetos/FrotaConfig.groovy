@@ -16,7 +16,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://localhost/amazonfrota_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://localhost/vrfrota_development"
         password = "postgres"
         // ** DATABASE **
 
