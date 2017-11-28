@@ -153,6 +153,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/auditLogEvent/**'             : ['ROLE_PROC'],
         '/j_spring_security_switch_user': ['ROLE_ADMIN', 'isFullyAuthenticated()'],
         '/reportViewer/**'              : allRoles,
+        '/produtoEstabelecimento/**'    : allRoles,
         '/estado/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/cidade/**'                    : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/marcaVeiculo/**'              : ['ROLE_PROC', 'ROLE_ADMIN'],

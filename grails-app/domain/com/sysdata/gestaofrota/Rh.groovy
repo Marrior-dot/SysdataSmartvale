@@ -37,6 +37,8 @@ class Rh extends Empresa {
         taxaReemissaoCartao nullable: true
         qtdeContas nullable: true
         cartaoComChip nullable: true
+        diasToleranciaAtraso nullable: true
+        modeloCobranca nullable: true
     }
 
     static transients = ['portadoresCount']

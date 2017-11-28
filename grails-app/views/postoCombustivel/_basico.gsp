@@ -50,7 +50,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-6">
-					<bs:formField id="taxaReembolso" name="taxaReembolso" label="Taxa" value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="currency"/>
+					<bs:formField id="taxaReembolso" required="true" name="taxaReembolso" label="Taxa" value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="currency"/>
 				</div>
 			</div>
 		</div>
