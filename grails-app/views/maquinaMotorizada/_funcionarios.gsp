@@ -86,6 +86,9 @@
                 }
             }
         });
+
+        //Por alguma razão, se o z-index não for settado para esse valor o dialog fica desabilitado
+        $("div.modal-dialog").css('z-index', '6000');
     }
 
     function loadModalFuncionario() {

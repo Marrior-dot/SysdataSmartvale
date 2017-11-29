@@ -2,9 +2,10 @@
     <div class="panel panel-default">
         <div class="panel-heading"></div>
         <div class="panel-body">
-            <div class="buttons">
-                <g:actionSubmit class="btn btn-default" action="zerarHodometro" value="Zerar Hodômetro" />
-            </div>
+            %{--NÃO IMPLEMENTADO--}%
+            %{--<div class="buttons">--}%
+                %{--<g:actionSubmit class="btn btn-default" action="zerarHodometro" value="Zerar Hodômetro" />--}%
+            %{--</div>--}%
 
             <br>
 

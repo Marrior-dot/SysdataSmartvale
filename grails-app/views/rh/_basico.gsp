@@ -72,13 +72,27 @@
 				</g:else>
 			</div>
 
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}> <strong>Cartão Com Chip</strong>
-				</label>
+			<div class="form-group col-md-3">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}> <strong>Cartão Com Chip</strong>
+					</label>
+				</div>
 			</div>
         </div>
     </div>
+
+	<div class="panel panel-default">
+        <div class="panel-heading">Fatura</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
+					<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control" min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<div class="panel panel-default">
@@ -116,11 +130,11 @@
 		<div class="panel-body">
 
 			<div class="row">
-				<div class="col-xs-4">
-					<bs:formField  required="true" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
+				<div class="col-xs-3">
+					<bs:formField required="true" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
 				</div>
 
-				<div class="col-xs-4">
+				<div class="col-xs-3">
 					<bs:formField required="true" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
 				</div>
 			</div>
