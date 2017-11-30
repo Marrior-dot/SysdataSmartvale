@@ -1,62 +1,46 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 
-<g:form controller="${controller}">
-
+<g:form controller="${controller}" action="create">
     <input type="hidden" name="empId" value="${empId}"/>
 
-    <g:if test="${!action || action==Util.ACTION_VIEW}">
+    <g:if test="${!action || action == Util.ACTION_VIEW}">
+        <br/>
         <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-            <div class="buttons">
-                <br><br>
-                <g:actionSubmit class="btn btn-default" action="create" value="Criar Estabelecimento"/>
-            </div>
+            <button type="submit" class="btn btn-default">Criar Estabelecimento</button>
         </sec:ifAnyGranted>
     </g:if>
 
 
     <br/>
-	
 
-
-
-	<div class="list">
-
+    <div class="list">
         <table id="estTable" class="table table-striped table-bordered table-hover table-condensed table-default">
-
             <thead>
-                <th>Cod.Estab</th>
-                <th>Razão Social</th>
-                <th>Nome Fantasia</th>
-                <th></th>
+            <th>Cod.Estab</th>
+            <th>Razão Social</th>
+            <th>Nome Fantasia</th>
+            <th></th>
             </thead>
-
         </table>
-
     </div>
-
-
 </g:form>
 
 
 <script type="text/javascript">
-
-    $(document).ready(function(){
-
+    $(document).ready(function () {
         $("#estTable").DataTable({
-
-            "ajax":{
-                "url":"${createLink(controller:'estabelecimento',action:'listAllJSON')}",
-                "data":{"empId":"${empId}"},
-                "dataSrc":"results"
+            "ajax": {
+                "url": "${createLink(controller:'estabelecimento',action:'listAllJSON')}",
+                "data": {"empId": "${empId}"},
+                "dataSrc": "results"
             },
-            "columns":[
+            "columns": [
 
-                {"data":"codEstab"},
-                {"data":"razao"},
-                {"data":"nomeFantasia"},
+                {"data": "codEstab"},
+                {"data": "razao"},
+                {"data": "nomeFantasia"},
             ]
         });
     });
-
 </script>

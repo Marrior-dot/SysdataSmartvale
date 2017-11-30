@@ -49,22 +49,21 @@ class VeiculoController extends BaseOwnerController {
         Veiculo veiculoInstance = new Veiculo(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
-        if (unidadeInstance) {
+        if (unidadeInstance != null) {
             try {
                 veiculoInstance.unidade = unidadeInstance
                 PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
                 cartaoService.gerar(portadorMaquina)
 
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
-                redirect(action: "show", id: veiculoInstance.id)
+                redirect(controller: 'unidade', action: "show", id: unidadeInstance.id)
             }
             catch (Exception e) {
-                e.printStackTrace()
                 println(e.message)
+                e.printStackTrace()
                 flash.error = "Um erro ocorreu."
                 int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
-                return
+                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
             }
 
         } else {
@@ -79,8 +78,7 @@ class VeiculoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: tamMaxEmbossing])
+            redirect(action: 'list')
         }
     }
 

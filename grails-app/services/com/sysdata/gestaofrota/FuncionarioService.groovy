@@ -10,13 +10,13 @@ class FuncionarioService {
 
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO
                 && funcionarioInstance.portador == null) {
-            if(!funcionarioInstance.save()) throw new RuntimeException(funcionarioInstance.errors.toString())
+            if(!funcionarioInstance.save()) throw new RuntimeException(funcionarioInstance.showErrors())
             PortadorFuncionario portadorFuncionario = portadorService.save(funcionarioInstance)
             if (gerarCartao) cartaoService.gerar(portadorFuncionario)
         }
 
         participanteService.saveCidade(funcionarioInstance.endereco)
-        if (!funcionarioInstance.save(flush: true)) throw new RuntimeException("Erro de regra de negocio.")
+        if (!funcionarioInstance.save()) throw new RuntimeException("Erro de regra de negocio.")
 
         funcionarioInstance
     }

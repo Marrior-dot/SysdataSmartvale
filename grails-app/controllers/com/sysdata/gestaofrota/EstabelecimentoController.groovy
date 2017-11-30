@@ -21,7 +21,7 @@ class EstabelecimentoController {
 
     def create = {
         if (params.empId) {
-            def empresaInstance = PostoCombustivel.get(params.empId)
+            PostoCombustivel empresaInstance = PostoCombustivel.get(params.long('empId'))
             render(view: "form", model: [empresaInstance: empresaInstance, action: Util.ACTION_NEW])
         } else {
             flash.message = "Empresa não selecionada!"

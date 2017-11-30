@@ -11,7 +11,7 @@ environments {
         nome = "Maxxcard"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradora = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
@@ -34,7 +34,7 @@ environments {
         nome = "Maxxcard"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradora = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **

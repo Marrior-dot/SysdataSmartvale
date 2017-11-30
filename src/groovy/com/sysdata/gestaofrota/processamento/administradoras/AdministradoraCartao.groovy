@@ -20,7 +20,7 @@ abstract class AdministradoraCartao implements IGeradorCartao {
 
 
     @Override
-    abstract String gerarNumero(Portador portador)
+    abstract String gerarNumero(Administradora administradora, Portador portador)
 
     @Override
     String gerarSenha(){}

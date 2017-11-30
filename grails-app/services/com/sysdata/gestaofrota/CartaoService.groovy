@@ -6,18 +6,20 @@ class CartaoService {
     def processamentoService
 
     Cartao gerar(Portador portador) {
-        AdministradoraCartao administradoraCartao = processamentoService.getAdministradora()
+        AdministradoraCartao administradoraCartao = processamentoService.getAdministradoraCartao()
+        Administradora administradora = processamentoService.getAdministradoraProjeto()
 
         Cartao cartaoInstance = new Cartao()
         cartaoInstance.portador = portador
-        cartaoInstance.numero = administradoraCartao.gerarNumero(portador)
+        cartaoInstance.numero = administradoraCartao.gerarNumero(administradora, portador)
         cartaoInstance.senha = administradoraCartao.gerarSenha()
         cartaoInstance.validade = administradoraCartao.gerarDataValidade()
         cartaoInstance.cvv = administradoraCartao.gerarCVV()
 
-        if (!cartaoInstance.save()) throw new RuntimeException("Erros de regras de negocio.")
+        if (!cartaoInstance.save()) throw new RuntimeException(cartaoInstance.showErrors())
 
         portador.addToCartoes(cartaoInstance)
+        portador.save()
         return cartaoInstance
     }
 

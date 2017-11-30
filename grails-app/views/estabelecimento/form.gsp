@@ -44,7 +44,7 @@
                 </div>
             </g:hasErrors>
 
-            <g:render template="basico"/>
+            <g:render template="basico" model="[empresaInstance: empresaInstance]"/>
         </div>
     </div>
 </div>

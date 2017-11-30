@@ -14,10 +14,13 @@ import grails.converters.JSON
 
 class BootStrap {
     def fixtureLoader
+    def grailsApplication
+    def messageSource
 
     def init = { servletContext ->
         loadFixtures()
         loadObjectMarshallers()
+        bindFrontEndErrorsForDomainClasses()
     }
 
     def destroy = {}
@@ -68,4 +71,24 @@ class BootStrap {
         }
     }
 
+
+
+/**
+ * Toda vez que um método validate() ou save() ocorrer em uma instância de dominio, basta usar o método
+ * showErrors() para obter uma String contendo todos os errors dessa instância no formato legivel
+ * para o usuário front end. Vá em grails-app/i18n/messages.properties ou messages_pt_PT.properties para
+ * definir essas mensagens
+ */
+    void bindFrontEndErrorsForDomainClasses() {
+        println("... Binding Front End Erros")
+        String newLine = System.getProperty("line.separator")
+        grailsApplication.domainClasses.each { domainClass ->
+            if (domainClass.clazz.name.contains("com.sysdata.gestaofrota")) {
+                domainClass.metaClass.showErrors = {
+                    def list = delegate?.errors?.allErrors?.collect { messageSource.getMessage(it, null) }
+                    return list?.join(newLine)
+                }
+            }
+        }
+    }
 }

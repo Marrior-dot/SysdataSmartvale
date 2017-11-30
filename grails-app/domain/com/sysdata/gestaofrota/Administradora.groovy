@@ -2,11 +2,12 @@ package com.sysdata.gestaofrota
 
 class Administradora extends Participante {
 
-	String bin
-	
-	static hasMany=[role:Role]
+    String bin
+    Integer qtdCartoes = 0
+
+    static hasMany = [role: Role]
     static constraints = {
-		bin(nullable:true)
+        bin nullable: true
+        qtdCartoes nullable: false, min: 0
     }
-	
 }

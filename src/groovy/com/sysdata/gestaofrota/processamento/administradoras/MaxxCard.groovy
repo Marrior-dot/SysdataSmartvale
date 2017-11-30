@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.processamento.administradoras
 
+import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.ParametroSistema
 import com.sysdata.gestaofrota.Portador
 import com.sysdata.gestaofrota.Util
@@ -7,23 +8,22 @@ import com.sysdata.gestaofrota.Util
 /**
  * Created by hyago on 06/10/17.
  */
-class MaxCard extends AdministradoraCartao {
+class MaxxCard extends AdministradoraCartao {
 
-    MaxCard() {
+    MaxxCard() {
         super()
     }
 
     @Override
-    String gerarNumero(Portador portador) {
-        int qtde = portador.unidade.rh.qtdeContas
-
+    String gerarNumero(Administradora administradora, Portador portador) {
         final String pp = "05"
-        final String nnnnnnn = (++qtde).toString().padLeft(7, '0')
-
-        portador.unidade.rh.qtdeContas = qtde
-        portador.unidade.rh.save()
-
+        final String nnnnnnn = administradora.qtdCartoes.toString().padLeft(7, '0')
         String numero = "${getBin()}${pp}${nnnnnnn}"
+
+        administradora.qtdCartoes++
+        administradora.save()
+        portador.unidade.rh.qtdeContas++
+        portador.unidade.rh.save()
 
         numero + calcularDV(numero)
     }

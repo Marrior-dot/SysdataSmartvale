@@ -16,15 +16,15 @@ class Sysdata extends AdministradoraCartao {
     }
 
     @Override
-    String gerarNumero(Portador portador) {
+    String gerarNumero(Administradora administradora, Portador portador) {
         def tipoProg = Holders.grailsApplication.config.project.tipoPrograma
         def parceiro = Holders.grailsApplication.config.project.parceiro
         def cdRh = portador.unidade.rh.id
-        def qtde = portador.conta unidade.rh.qtdeContas
-        def prov = sprintf("%6d%1d%1d%03d%07d", getBin().toInteger(), tipoProg, parceiro, cdRh, ++qtde)
+        def prov = sprintf("%6d%1d%1d%03d%07d", getBin().toInteger(), tipoProg, parceiro, cdRh, administradora.qtdCartoes)
+
+        administradora.qtdCartoes++
+        administradora.save()
         def check = calcularDV(prov)
-        portador.unidade.rh.qtdeContas = qtde
-        portador.unidade.rh.save(flush: true)
 
         prov + check
     }

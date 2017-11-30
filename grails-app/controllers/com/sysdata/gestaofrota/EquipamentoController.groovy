@@ -49,7 +49,7 @@ class EquipamentoController extends BaseOwnerController {
                 redirect(action: "show", id: equipamentoInstance.id)
             }
             catch (Exception e) {
-                println(e.message)
+                e.printStackTrace()
                 flash.error = "Erros encontrados."
                 render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }

@@ -120,7 +120,7 @@
     <g:render template="/endereco/form" model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
 
     <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
-    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial']"/>
+    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial', required: true]"/>
     <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
         <div class="buttons">
             <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">

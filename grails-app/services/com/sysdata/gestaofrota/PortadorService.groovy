@@ -7,7 +7,7 @@ class PortadorService {
         portadorFuncionario.funcionario = funcionario
         funcionario.portador = portadorFuncionario
         portadorFuncionario.unidade = funcionario.unidade
-        if (!portadorFuncionario.save()) throw new RuntimeException("Erro de regra de negocio.");
+        if (!portadorFuncionario.save()) throw new RuntimeException(portadorFuncionario.showErrors());
         funcionario.unidade.addToPortadores(portadorFuncionario)
         funcionario.unidade.save()
 
@@ -15,12 +15,12 @@ class PortadorService {
     }
 
     PortadorMaquina save(MaquinaMotorizada maquina) {
-        if (!maquina.save()) throw new RuntimeException(maquina.errors.allErrors.toString())
+        if (!maquina.save()) throw new RuntimeException(maquina.showErrors())
         PortadorMaquina portadorMaquina = new PortadorMaquina()
         portadorMaquina.unidade = maquina.unidade
         portadorMaquina.maquina = maquina
         maquina.portador = portadorMaquina
-        if (!portadorMaquina.save()) throw new RuntimeException(portadorMaquina.errors.allErrors.join(', '))
+        if (!portadorMaquina.save()) throw new RuntimeException(portadorMaquina.showErrors())
         maquina.unidade.addToPortadores(portadorMaquina)
         maquina.unidade.save()
 

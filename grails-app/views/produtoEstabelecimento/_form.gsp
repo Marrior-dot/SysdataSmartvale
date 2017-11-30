@@ -1,12 +1,12 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <g:form controller="produtoEstabelecimento" action="save" method="POST">
-    <g:hiddenField name="estabelecimento.id" value="${estabelecimento.id}"/>
+    <g:hiddenField name="estabelecimento.id" value="${estabelecimento?.id}"/>
 
     <div class="panel panel-default">
         <div class="panel-heading">
             Produtos Disponíveis
         </div>
-        <g:if test="${produtoList.size() > 0}">
+        <g:if test="${produtoList?.size() > 0}">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -44,7 +44,7 @@
             <button type="submit" class="btn btn-default">Salvar Produtos</button>
         </g:if>
         <g:elseif test="${action == Util.ACTION_VIEW}">
-            <g:link class="btn btn-default" controller="estabelecimento" action="edit" id="${estabelecimento.id}">Editar</g:link>
+            <g:link class="btn btn-default" controller="estabelecimento" action="edit" id="${estabelecimento?.id}">Editar</g:link>
         </g:elseif>
     </sec:ifAnyGranted>
 </g:form>
