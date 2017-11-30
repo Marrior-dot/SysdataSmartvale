@@ -52,6 +52,8 @@ class VeiculoController extends BaseOwnerController {
         if (unidadeInstance != null) {
             try {
                 veiculoInstance.unidade = unidadeInstance
+                veiculoInstance.validate()
+                if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
                 PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
                 cartaoService.gerar(portadorMaquina)
 

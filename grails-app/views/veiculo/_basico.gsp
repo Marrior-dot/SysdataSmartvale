@@ -34,7 +34,8 @@
 
             <div class="row">
                 <div class="col-xs-3">
-                    <bs:formField id="placa" class="placa" name="placa" label="Placa" value="${veiculoInstance?.placa}" onchange="updateNomeEmbossing('placa', 'marca.id')"></bs:formField>
+                    <bs:formField id="placa" class="placa" name="placa" label="Placa" required="required"
+                                  value="${veiculoInstance?.placa}" onchange="updateNomeEmbossing('placa', 'marca.id')"></bs:formField>
                 </div>
                 <div class="col-xs-3">
                     <label for="marca.id">MARCA</label>
@@ -47,21 +48,25 @@
                               optionValue="abreviacao" optionKey="id"/>
                 </div>
                 <div class="col-xs-3">
-                    <bs:formField id="modelo" name="modelo" label="Modelo" value="${veiculoInstance?.modelo}"></bs:formField>
+                    <bs:formField id="modelo" name="modelo" label="Modelo" required="required" value="${veiculoInstance?.modelo}"></bs:formField>
                 </div>
                 <div class="col-xs-3">
-                    <bs:formField id="ano" name="anoFabricacao" label="Ano Fabricação" value="${veiculoInstance?.anoFabricacao}"></bs:formField>
+                    <bs:formField id="ano" name="anoFabricacao" label="Ano Fabricação" required="required" value="${veiculoInstance?.anoFabricacao}"></bs:formField>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-4">
-                    <bs:formField id="chassi" name="chassi" label="Chassi" value="${veiculoInstance?.chassi}"></bs:formField>
+                <div class="col-md-4">
+                    <bs:formField id="chassi" name="chassi" label="Chassi" required="required" value="${veiculoInstance?.chassi}"></bs:formField>
                 </div>
-                <div class="col-xs-4">
-                    <bs:formField id="capacidadeTanque" name="capacidadeTanque" label="Capacidade Tanque (lt)" value="${veiculoInstance?.capacidadeTanque}"></bs:formField>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="capacidadeTanque">Capacidade Tanque (lt) *</label>
+                    <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control"
+                           value="${veiculoInstance?.capacidadeTanque}" min="0" maxlength="5" required>
                 </div>
-                <div class="col-xs-4">
-                    <bs:formField id="autonomia" name="autonomia" label="Autonomia (Km/l)" value="${veiculoInstance?.autonomia}"></bs:formField>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="autonomia">Autonomia (Km/l) *</label>
+                    <input id="autonomia" name="autonomia" type="number" class="form-control"
+                           value="${veiculoInstance?.autonomia}" min="0" maxlength="5" required>
                 </div>
             </div>
             <div class="row">
@@ -73,9 +78,9 @@
                 </div>
 
                 <div class="col-xs-4">
-                    <label for="validadeExtintor">Validade Extintor</label>
+                    <label for="validadeExtintor">Validade Extintor *</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"
-                           value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}"/>
+                           value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}" required/>
                 </div>
                 <g:if test="${programaMaquina}">
                     <div class="form-group col-xs-4">

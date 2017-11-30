@@ -59,14 +59,14 @@
 		<div class="row">
 			<div class="form-group col-md-3">
 				<label for="capacidadeTanque">Capacidade Tanque (litros)</label>
-				<g:textField name="capacidadeTanque" class="numeric form-control"
-							 value="${equipamentoInstance?.capacidadeTanque}" size="5" maxlength="5" />
+				<input type="number" class="form-control" id="capacidadeTanque" name="capacidadeTanque"
+					   value="${equipamentoInstance?.capacidadeTanque}" min="0" maxlength="5" required/>
 			</div>
 
 			<div class="form-group col-md-3">
-				<label for="mediaConsumo">Média de Consumo (litros/dia)</label>
-				<g:textField name="mediaConsumo" value="${equipamentoInstance?.mediaConsumo}"
-							 class="numeric form-control" size="5" maxlength="5"/>
+				<label for="mediaConsumo">Média de Consumo (litros/dia) *</label>
+				<input type="number" class="form-control" id="mediaConsumo" name="mediaConsumo"
+					   value="${equipamentoInstance?.mediaConsumo}" min="0" maxlength="5" required/>
 			</div>
 
 			<g:if test="${programaMaquina}">
