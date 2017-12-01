@@ -1,7 +1,5 @@
-<script>
+<script type="application/javascript">
     $(function () {
-        //waitingDialog.show("Aguarde...");
-
         carregarComboBox();
         carregarTabela();
         verificarDisponibilidadeBotao();
@@ -112,20 +110,19 @@
     });
 </script>
 <g:hiddenField name="rhId" value="${rhInstance?.id}"/>
-<div id="mensagem">
+<div id="mensagem"></div>
 
-</div>
 <div class="row">
-    <div class="col-md-8">
-        <select name="estabelecimentos" id="estabs" class="form-control enable">
-            <option value="none">Selecionar Estabelecimento</option>
-        </select>
-    </div>
-    <div class="col-md-2">
-        <button class="btn btn-primary" id="addButton">Adicionar</button>
+    <div class="col-md-6">
+        <div class="input-group">
+            <select name="estabelecimentos" id="estabs" class="form-control enable">
+                <option value="none">Selecionar Estabelecimento</option>
+            </select>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" id="addButton">Adicionar</button>
+            </span>
+        </div>
     </div>
 </div>
-<br><br>
-<div id="estabTable">
-
-</div>
+<hr/>
+<div id="estabTable"></div>

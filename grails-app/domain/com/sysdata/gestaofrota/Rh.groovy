@@ -1,26 +1,30 @@
 package com.sysdata.gestaofrota
 
 class Rh extends Empresa {
-
     String codigo
-    Integer validadeCarga
-    Integer maximoTrnPorDia
-    Integer diasInatividade
-    Integer diasToleranciaAtraso
+    Integer validadeCarga = 0
+    Integer maximoTrnPorDia = 0
+    Integer diasInatividade = 0
+    Integer diasToleranciaAtraso = 0
     Integer qtdeContas = 0
-    Double taxaPedido = 0
-    BigDecimal taxaUtilizacao = 0
-    BigDecimal taxaMensalidade = 0
-    BigDecimal taxaEmissaoCartao = 0
-    BigDecimal taxaReemissaoCartao = 0
+    Integer prazoPgtFatura = 0
+    BigDecimal taxaPedido = 0
+    BigDecimal taxaUtilizacao = 0D
+    BigDecimal taxaMensalidade = 0D
+    BigDecimal taxaEmissaoCartao = 0D
+    BigDecimal taxaReemissaoCartao = 0D
     BigDecimal jurosProRata = 0D
     BigDecimal multaAtraso = 0D
     BigDecimal taxaAdministracao = 0D
     BigDecimal taxaManutencao = 0D
+    // TODO: colocar em Portador
+//    BigDecimal limiteMensal = 0D
+//    BigDecimal limiteDiario = 0D
+//    BigDecimal limiteCredito = 0D
     TipoVinculoCartao vinculoCartao = TipoVinculoCartao.FUNCIONARIO
-    TipoCobranca modeloCobranca
+    TipoCobranca modeloCobranca = TipoCobranca.POS_PAGO
     boolean cartaoComChip = false
-    boolean renavacaoLimite = false
+    boolean renovarLimite = false
 
     static hasMany = [
             unidades             : Unidade,
@@ -31,14 +35,7 @@ class Rh extends Empresa {
     ]
 
     static constraints = {
-        taxaUtilizacao nullable: true
-        taxaMensalidade nullable: true
-        taxaEmissaoCartao nullable: true
-        taxaReemissaoCartao nullable: true
-        qtdeContas nullable: true
-        cartaoComChip nullable: true
-        diasToleranciaAtraso nullable: true
-        modeloCobranca nullable: true
+        codigo nullable: false, blank: false
     }
 
     static transients = ['portadoresCount']

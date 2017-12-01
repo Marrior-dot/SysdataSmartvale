@@ -5,32 +5,27 @@
     <g:hiddenField name="version" value="${rhInstance?.version}" />
     <g:hiddenField name="action" value="${action}"/>
 
-
 	<div class="panel panel-default">
-
 		<div class="panel-heading">
 			Dados Básicos
 		</div>
 
 		<div class="panel-body">
-
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-md-4">
 					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" required="true" value="${rhInstance?.cnpj}" />
 				</div>
-
-				<div class="col-xs-4">
+			</div>
+			<div class="row">
+				<div class="col-md-6">
 					<bs:formField class="uppercase" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col-xs-6">
+				<div class="col-md-6">
 					<bs:formField class="uppercase" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
@@ -45,38 +40,46 @@
         <div class="panel-body">
 
             <div class="row">
-                <div class="col-xs-4">
-                    <bs:formField required="true" id="taxaPedido" label="Taxa Pedido (%)" value="${rhInstance?.taxaPedido}" />
-                </div>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa Pedido *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaPedido" id="taxaPedido" value="${rhInstance?.taxaPedido}"
+							   min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
 
-                <div class="col-xs-4">
-                    <bs:formField required="true" id="validadeCarga" label="Validade Carga (dias)" value="${rhInstance?.validadeCarga}" />
-                </div>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Validade Carga *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="validadeCarga" id="validadeCarga" value="${rhInstance?.validadeCarga}"
+							   min="0" required/>
+						<span class="input-group-addon">dias</span>
+					</div>
+				</div>
             </div>
         </div>
     </div>
-
 
     <div class="panel panel-default">
         <div class="panel-heading">Cartão</div>
 
         <div class="panel-body">
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-4">
 				<label for="vinculoCartao">Vincular Cartão a:</label>
-				<g:if test="${action == Util.ACTION_VIEW}">
-					<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled value="${rhInstance?.vinculoCartao}"/>
-				</g:if>
-				<g:else>
-					<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}" disabled="${rhInstance?.portadoresCount > 0}"
-							  class="form-control" optionKey="key" value="${rhInstance?.vinculoCartao}"/>
-				</g:else>
-			</div>
-
-			<div class="form-group col-md-3">
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}> <strong>Cartão Com Chip</strong>
-					</label>
+				<div class="input-group">
+					<g:if test="${action == Util.ACTION_VIEW}">
+						<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled value="${rhInstance?.vinculoCartao}"/>
+					</g:if>
+					<g:else>
+						<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
+								  disabled="${rhInstance?.portadoresCount > 0}"
+								  class="form-control" optionKey="key" value="${rhInstance?.vinculoCartao}"/>
+					</g:else>
+					<span class="input-group-addon">
+						<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}>
+						<strong>Cartão com chip</strong>
+					</span>
 				</div>
 			</div>
         </div>
@@ -88,83 +91,166 @@
 			<div class="row">
 				<div class="form-group col-md-3">
 					<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
-					<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control" min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
+					<div class="input-group">
+						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
+							   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
+						<span class="input-group-addon">dias</span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
 	<div class="panel panel-default">
         <div class="panel-heading">
-			Taxas de Cartão
+			Taxas do Cartão
 		</div>
 
 		<div class="panel-body">
             <div class="row">
-                <div class="col-xs-4">
-                    <bs:formField id="taxaUtilizacao" name="taxaUtilizacao" label="Utilização (R\$)" value="${rhInstance?.taxaUtilizacao}" />
-                </div>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
+							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
+					</div>
+				</div>
 
-                <div class="col-xs-4">
-                    <bs:formField id="taxaMensalidade" label="Mensalidade (R\$)" value="${rhInstance?.taxaMensalidade}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <bs:formField id="taxaEmissaoCartao" name="taxaEmissaoCartao" label="Emissão de Cartão (R\$)" value="${rhInstance?.taxaEmissaoCartao}" />
-                </div>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaMensalidade">Mensalidade *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaMensalidade" id="taxaMensalidade"
+							   value="${rhInstance?.taxaMensalidade}" min="0" step="0.01" required/>
+					</div>
+				</div>
 
-                <div class="col-xs-4">
-                    <bs:formField id="taxaReemissaoCartao" label="Remissão de Cartão (R\$)" value="${rhInstance?.taxaReemissaoCartao}" />
-                </div>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaEmissaoCartao">Emissão *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaEmissaoCartao" id="taxaEmissaoCartao"
+							   value="${rhInstance?.taxaEmissaoCartao}" min="0" step="0.01" required/>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaReemissaoCartao">Reemissão *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaReemissaoCartao" id="taxaReemissaoCartao"
+							   value="${rhInstance?.taxaReemissaoCartao}" min="0" step="0.01" required/>
+					</div>
+				</div>
             </div>
 		</div>
     </div>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			Parâmetros Autorizador
+			Parâmetros do Programa
 		</div>
-
 		<div class="panel-body">
-
 			<div class="row">
-				<div class="col-xs-3">
-					<bs:formField required="true" id="maximoTrnPorDia" label="Máximo Transações Por Dia" value="${rhInstance?.maximoTrnPorDia}" />
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
+							   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
 				</div>
 
-				<div class="col-xs-3">
-					<bs:formField required="true" id="diasInatividade" label="Dias de Inatividade" value="${rhInstance?.diasInatividade}" />
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
+							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="multaAtraso">Multa por Atraso *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="multaAtraso" id="multaAtraso"
+							   value="${rhInstance?.multaAtraso}" min="0" step="0.01" required/>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="jurosProRata">Juros Pró-Rata por Atraso *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="jurosProRata" id="jurosProRata"
+							   value="${rhInstance?.jurosProRata}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="prazoPgtFatura">Prazo Pagamento Fatura *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="prazoPgtFatura" id="prazoPgtFatura"
+							   value="${rhInstance?.prazoPgtFatura}" min="0" required/>
+						<span class="input-group-addon">dias</span>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
+					<div class="input-group">
+						<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.values()}"
+							class="form-control" optionKey="key" optionValue="nome" value="${rhInstance?.modeloCobranca}" required="required"/>
+						<span class="input-group-addon">
+							<input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''}>
+							<strong>Renovar Limite</strong>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
-	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-		<div class="buttons">
-			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-				<span class="button">
-					<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}"
-									value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-
-			</g:if>
-			<g:if test="${action==Util.ACTION_VIEW}">
-				<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
-					<span class="glyphicon glyphicon-edit"></span>
-					<g:message code="default.button.edit.label" default="Edit"/>
-				</g:link>
-
-				<g:form action="delete" id="${rhInstance.id}" method="delete">
-
-					<button type="submit" class="btn btn-default"
-							onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-						<span class="glyphicon glyphicon-floppy-remove"></span>
-						<g:message code="default.button.delete.label" default="Inativar"/>
-					</button>
-				</g:form>
-			</g:if>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Parâmetros do Autorizador
 		</div>
-	</sec:ifAnyGranted>
+
+		<div class="panel-body">
+			<div class="form-group col-md-3">
+				<label class="control-label" for="maximoTrnPorDia">Máximo Transações *</label>
+				<div class="input-group">
+					<input type="number" class="form-control" name="maximoTrnPorDia" id="maximoTrnPorDia" value="${rhInstance?.maximoTrnPorDia}"
+						   min="0" required/>
+					<span class="input-group-addon">por dia</span>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label class="control-label" for="diasInatividade">Inatividade *</label>
+				<div class="input-group">
+					<input type="number" class="form-control" name="diasInatividade" id="diasInatividade" value="${rhInstance?.diasInatividade}"
+						   min="0" required/>
+					<span class="input-group-addon">dias</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<g:if test="${action == Util.ACTION_VIEW}">
+		<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
+			<span class="glyphicon glyphicon-edit"></span>
+			<g:message code="default.button.edit.label" default="Edit"/>
+		</g:link>
+
+		<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
+	</g:if>
+	<g:elseif test="${action == Util.ACTION_NEW}">
+		<g:actionSubmit class="btn btn-default" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+	</g:elseif>
+	<g:elseif test="${action == Util.ACTION_EDIT}">
+		<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+	</g:elseif>
 </g:form>

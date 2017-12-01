@@ -2,21 +2,16 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 
-import grails.plugins.springsecurity.Secured
-
-
 class RhController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def rhService
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def index = {
         redirect(action: "list", params: params)
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
@@ -26,16 +21,26 @@ class RhController extends BaseOwnerController {
         [rhInstanceList: rhInstanceList, rhInstanceTotal: Rh.count()]
     }
 
-    @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
     def create = {
         render(view: 'form', model: [action: Util.ACTION_NEW, rhInstance: new Rh()])
     }
 
-    @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
-    def save = {
-        def rhInstance = new Rh(params)
+    def show() {
+        Rh rhInstance = Rh.get(params.long('id'))
+        if (!rhInstance) {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
+            redirect(action: "list")
+        } else {
+            clearSession()
+            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW])
+        }
+    }
+
+    def save(Rh rhInstance) {
         rhInstance.endereco = params['endereco']
         rhInstance.telefone = params['telefone']
+
+        println("renovarLimite: ${rhInstance?.renovarLimite}")
 
         try {
             rhInstance = rhService.save(rhInstance)
@@ -54,22 +59,8 @@ class RhController extends BaseOwnerController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
-    def show = {
-        def rhInstance = Rh.get(params.long('id'))
-
-        if (!rhInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
-            redirect(action: "list")
-        } else {
-            clearSession()
-            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW])
-        }
-    }
-
-    @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
-    def edit = {
-        def rhInstance = Rh.get(params.id)
+    def edit() {
+        Rh rhInstance = Rh.get(params.long('id'))
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
             redirect(action: "list")
@@ -78,9 +69,9 @@ class RhController extends BaseOwnerController {
         }
     }
 
-    @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
-    def update = {
-        def rhInstance = Rh.get(params.long('id'))
+    def update() {
+        Rh rhInstance = Rh.get(params.long('id'))
+
         if (rhInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -107,61 +98,27 @@ class RhController extends BaseOwnerController {
                 flash.error = "Um erro ocorreu"
                 render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
             }
-//            rhInstance.properties = params
-//            rhInstance.endereco = params['endereco']
-//            rhInstance.telefone = params['telefone']
-//
-//            participanteService.saveCidade(rhInstance.endereco)
-//            if (!rhInstance.hasErrors() && rhInstance.save(flush: true)) {
-//                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-//                redirect(action: "show", id: rhInstance.id)
-//            } else {
-//                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
-//            }
 
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Programa'), params.id])}"
-            redirect(action: "newList")
+            redirect(action: "list")
         }
     }
 
-    @Secured(['ROLE_PROC', 'ROLE_ADMIN'])
-    def delete = {
-        def rhInstance = Rh.get(params.id)
+    def delete() {
+        def rhInstance = Rh.get(params.long('id'))
+        println("id: ${rhInstance.id}")
+
         if (rhInstance) {
-            try {
-                log.debug("Inativando " + rhInstance)
-                rhInstance.status = Status.INATIVO
-                rhInstance.empresas.each { empresa ->
-                    log.debug("Inativando " + empresa)
-                    empresa.status = Status.INATIVO
-                    empresa.estabelecimentos.each { estabelecimento ->
-                        log.debug("Inativando " + estabelecimento)
-                        estabelecimento.status = Status.INATIVO
-                    }
-                }
-                rhInstance.unidades.each { uni ->
-                    log.debug("Inativando " + uni)
-                    uni.status = Status.INATIVO
-                    uni.funcionarios.each { fun ->
-                        log.debug("Inativando " + fun)
-                        fun.status = Status.INATIVO
-                    }
-                }
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-                redirect(action: "newList")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-                redirect(action: "show", params: [rhId: rhInstance.id])
-            }
+            rhService.inativar(rhInstance)
+            flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+            redirect(action: "list")
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
-            redirect(action: "newList")
+            redirect(action: "list")
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def autoCompleteJSON = {
 
         def list
@@ -186,7 +143,6 @@ class RhController extends BaseOwnerController {
         render jsonResult as JSON
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def listAllJSON = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 0
@@ -259,8 +215,6 @@ class RhController extends BaseOwnerController {
         render data as JSON
     }
 
-
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def listEmpresasJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ? params.int('offset') : 0
@@ -286,7 +240,6 @@ class RhController extends BaseOwnerController {
         render jsonList as JSON
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def syncOne() {
         def oid = params.oid as long
         def chk = params.chk
@@ -296,14 +249,12 @@ class RhController extends BaseOwnerController {
         render "ok"
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def syncAll() {
         session.selAllEst = params.chk ?: null
         render "ok"
 
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def saveEstabs() {
         def progInstance = Rh.get(params.prgId)
         log.debug("session:" + session)
@@ -389,7 +340,6 @@ class RhController extends BaseOwnerController {
         render data as JSON
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def listEstabNaoVinculados() {
         def estabs = PostoCombustivel.createCriteria().list {
             eq('status', Status.ATIVO)
@@ -404,7 +354,6 @@ class RhController extends BaseOwnerController {
         render estabsFiltered.collect { e -> [id: e.id, nome: e.nomeFantasia + " (" + e.cnpj + ")"] } as JSON
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def salvarEstabelecimentosVinculados() {
         def retorno = [:]
         def estab = PostoCombustivel.get(params.long('selectedEstabId'))
@@ -419,14 +368,11 @@ class RhController extends BaseOwnerController {
         render retorno as JSON
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def listEstabVinculados() {
         def estabs = Rh.get(params.prgId as Long).empresas
         render template: 'tabelaEstabVinculados', model: [estabelecimentoInstanceList: estabs]
     }
 
-
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def desvincularEstab() {
         def retorno = [:]
         def estab = PostoCombustivel.get(params.selectedEstabId as Long)
@@ -439,7 +385,6 @@ class RhController extends BaseOwnerController {
         }
         render retorno as JSON
     }
-
 
     private void clearSession() {
         if (session.mEstIds) {
@@ -460,8 +405,5 @@ class RhController extends BaseOwnerController {
         else mIds[oid] = chk
 
         if (mIds) session.mEstIds = mIds
-
     }
-
-
 }

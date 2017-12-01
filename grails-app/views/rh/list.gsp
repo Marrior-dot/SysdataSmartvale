@@ -15,7 +15,7 @@
         </div>
         <div class="panel-body">
             <g:if test="${flash.message}">
-                <div class="message">${flash.message}</div>
+                <div class="alert alert-info" role="alert">${flash.message}</div>
             </g:if>
             <g:form>
 

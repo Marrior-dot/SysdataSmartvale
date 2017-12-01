@@ -115,10 +115,8 @@
         });
     });
 </script>
-<br><br>
-<div id="mensagem">
+<div id="mensagem"></div>
 
-</div>
 <button class="btn btn-default" id="buttonAdd"> Adicionar Categoria</button>
 <br><br>
 <div class="panel panel-default">
