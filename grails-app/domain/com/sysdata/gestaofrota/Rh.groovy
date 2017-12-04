@@ -17,10 +17,6 @@ class Rh extends Empresa {
     BigDecimal multaAtraso = 0D
     BigDecimal taxaAdministracao = 0D
     BigDecimal taxaManutencao = 0D
-    // TODO: colocar em Portador
-//    BigDecimal limiteMensal = 0D
-//    BigDecimal limiteDiario = 0D
-//    BigDecimal limiteCredito = 0D
     TipoVinculoCartao vinculoCartao = TipoVinculoCartao.FUNCIONARIO
     TipoCobranca modeloCobranca = TipoCobranca.POS_PAGO
     boolean cartaoComChip = false

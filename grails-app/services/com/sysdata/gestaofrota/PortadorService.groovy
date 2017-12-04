@@ -3,7 +3,11 @@ package com.sysdata.gestaofrota
 class PortadorService {
 
     PortadorFuncionario save(Funcionario funcionario) {
-        PortadorFuncionario portadorFuncionario = new PortadorFuncionario()
+        PortadorFuncionario portadorFuncionario = funcionario.portador
+        if (portadorFuncionario.tipoLimite == null) portadorFuncionario.tipoLimite = TipoLimite.MENSAL
+        if (portadorFuncionario.valorLimite == null) portadorFuncionario.valorLimite = 0D
+        if (portadorFuncionario.unidade == null) portadorFuncionario.unidade = funcionario.unidade
+
         portadorFuncionario.funcionario = funcionario
         funcionario.portador = portadorFuncionario
         portadorFuncionario.unidade = funcionario.unidade

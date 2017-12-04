@@ -49,7 +49,12 @@ class FuncionarioController extends BaseOwnerController {
                 redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
                 return
             }
-            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            Funcionario funcionario = new Funcionario()
+            funcionario.portador = new PortadorFuncionario()
+            render(view: "form", model: [funcionario    : funcionario,
+                                         unidadeInstance: unidadeInstance,
+                                         action         : Util.ACTION_NEW,
+                                         tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -65,6 +70,10 @@ class FuncionarioController extends BaseOwnerController {
                 funcionarioInstance.unidade = unidadeInstance
                 funcionarioInstance.endereco = params['endereco']
                 funcionarioInstance.telefone = params['telefone']
+                funcionarioInstance.portador = new PortadorFuncionario()
+                funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
+                funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
+                funcionarioInstance.portador.unidade = unidadeInstance
 
                 funcionarioInstance = funcionarioService.save(funcionarioInstance, true)
 
@@ -116,6 +125,8 @@ class FuncionarioController extends BaseOwnerController {
                 funcionarioInstance.properties = params
                 funcionarioInstance.endereco = params['endereco']
                 funcionarioInstance.telefone = params['telefone']
+                funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
+                funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
 
                 funcionarioInstance = funcionarioService.save(funcionarioInstance)
 

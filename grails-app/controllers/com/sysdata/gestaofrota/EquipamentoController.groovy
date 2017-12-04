@@ -44,6 +44,10 @@ class EquipamentoController extends BaseOwnerController {
         if (unidadeInstance) {
             try {
                 equipamentoInstance.unidade = unidadeInstance
+                equipamentoInstance.portador = new PortadorMaquina()
+                equipamentoInstance.portador.unidade = unidadeInstance
+                equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
+                equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
                 equipamentoInstance = equipamentoService.save(equipamentoInstance)
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
                 redirect(action: "show", id: equipamentoInstance.id)
@@ -90,6 +94,8 @@ class EquipamentoController extends BaseOwnerController {
                 return
             }
             equipamentoInstance.properties = params
+            equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
+            equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
             if (!equipamentoInstance.hasErrors() && equipamentoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'equipamento.label', default: 'Equipamento'), equipamentoInstance.id])}"
                 redirect(action: "show", id: equipamentoInstance.id)

@@ -58,7 +58,6 @@
             <br>
 
             <g:if test="${action == Util.ACTION_VIEW}">
-
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#funcionarios" data-toggle="tab">Funcionários</a></li>
@@ -77,7 +76,7 @@
                 </div>
             </g:if>
             <g:else>
-                <g:render template="basico"/>
+                <g:render template="basico" model="[funcionario: funcionario]"/>
             </g:else>
         </div>
     </div>

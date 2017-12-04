@@ -31,7 +31,7 @@
 		<g:hiddenField name="programa-maquina" value="${programaMaquina}"/>
 		
 		<div class="row">
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-3">
 				<label for="codigo">Código</label>
 				<g:textField class="form-control" name="codigo" value="${equipamentoInstance?.codigo}" maxlength="10"
 							 onchange="updateNomeEmbossing('codigo', 'tipo.id')"/>
@@ -48,28 +48,34 @@
 						  optionValue="abreviacao" optionKey="id"/>
 			</div>
 
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-2">
 				<label for="tipoAbastecimento">Tipo de Combustível</label>
 				<g:select class="form-control" name="tipoAbastecimento"
 						  from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
 						  value="${equipamentoInstance?.tipoAbastecimento}"/>
 			</div>
+
+			<div class="form-group col-md-2">
+				<label for="capacidadeTanque">Capacidade Tanque</label>
+				<div class="input-group">
+					<input type="number" class="form-control" id="capacidadeTanque" name="capacidadeTanque"
+						   value="${equipamentoInstance?.capacidadeTanque}" min="0" maxlength="5" required/>
+					<span class="input-group-addon">litros</span>
+				</div>
+			</div>
+
+			<div class="form-group col-md-2">
+				<label for="mediaConsumo">Média de Consumo *</label>
+				<div class="input-group">
+					<input type="number" class="form-control" id="mediaConsumo" name="mediaConsumo"
+						   value="${equipamentoInstance?.mediaConsumo}" min="0" maxlength="5" required/>
+					<span class="input-group-addon">litros/dia</span>
+				</div>
+			</div>
 		</div>
 
-		<div class="row">
-			<div class="form-group col-md-3">
-				<label for="capacidadeTanque">Capacidade Tanque (litros)</label>
-				<input type="number" class="form-control" id="capacidadeTanque" name="capacidadeTanque"
-					   value="${equipamentoInstance?.capacidadeTanque}" min="0" maxlength="5" required/>
-			</div>
-
-			<div class="form-group col-md-3">
-				<label for="mediaConsumo">Média de Consumo (litros/dia) *</label>
-				<input type="number" class="form-control" id="mediaConsumo" name="mediaConsumo"
-					   value="${equipamentoInstance?.mediaConsumo}" min="0" maxlength="5" required/>
-			</div>
-
-			<g:if test="${programaMaquina}">
+		<g:if test="${programaMaquina}">
+			<div class="row">
 				<div class="form-group col-md-6">
 					<label for="complementoEmbossing">Nome Impresso no Cartão</label>
 					<div class="input-group">
@@ -81,8 +87,26 @@
 					</div>
 					<span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing - codigoTipoLength}</strong> caracteres.</span>
 				</div>
-			</g:if>
-		</div>
+
+				<div class="form-group col-md-3">
+					<label for="portador.valorLimite">Limite *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" min="0" step="0.01" class="form-control"
+							   id="portador.valorLimite" name="portador.valorLimite"
+							   value="${equipamentoInstance?.portador?.valorLimite}" required/>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label for="portador.tipoLimite">Tipo Limite *</label>
+					<g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
+							  required="required" value="${equipamentoInstance?.portador?.tipoLimite}"
+							  class="form-control" optionValue="nome"/>
+				</div>
+			</div>
+		</g:if>
+
 		<div class="row">
 			<div class="form-group col-md-12">
 				<label for="descricao">Descrição</label>

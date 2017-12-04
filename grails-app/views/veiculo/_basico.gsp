@@ -55,35 +55,46 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <bs:formField id="chassi" name="chassi" label="Chassi" required="required" value="${veiculoInstance?.chassi}"></bs:formField>
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="capacidadeTanque">Chassi *</label>
+                    <input type="text" class="form-control" id="chassi" name="chassi" value="${veiculoInstance?.chassi}" maxlength="30" required/>
                 </div>
-                <div class="form-group col-md-4">
-                    <label class="control-label" for="capacidadeTanque">Capacidade Tanque (lt) *</label>
-                    <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control"
-                           value="${veiculoInstance?.capacidadeTanque}" min="0" maxlength="5" required>
+
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="capacidadeTanque">Capacidade Tanque *</label>
+                    <div class="input-group">
+                        <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control"
+                               value="${veiculoInstance?.capacidadeTanque}" min="0" maxlength="5" required>
+                        <span class="input-group-addon">litros</span>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label class="control-label" for="autonomia">Autonomia (Km/l) *</label>
-                    <input id="autonomia" name="autonomia" type="number" class="form-control"
-                           value="${veiculoInstance?.autonomia}" min="0" maxlength="5" required>
+
+                <div class="form-group col-md-3">
+                    <label class="control-label" for="autonomia">Autonomia *</label>
+                    <div class="input-group">
+                        <input id="autonomia" name="autonomia" type="number" class="form-control"
+                               value="${veiculoInstance?.autonomia}" min="0" maxlength="5" required>
+                        <span class="input-group-addon">Km/l</span>
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="tipoAbastecimento">Tipo de Combustível</label>
+                    <g:select name="tipoAbastecimento" optionValue="nome" class="form-control"
+                              from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
+                              value="${veiculoInstance?.tipoAbastecimento}"/>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-4">
-                    <label for="tipoAbastecimento">Tipo de Combustível</label>
-                        <g:select name="tipoAbastecimento" optionValue="nome" class="form-control"
-                                  from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
-                                  value="${veiculoInstance?.tipoAbastecimento}"/>
-                </div>
-
-                <div class="col-xs-4">
+                <div class="col-md-3">
                     <label for="validadeExtintor">Validade Extintor *</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"
                            value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}" required/>
                 </div>
+
                 <g:if test="${programaMaquina}">
-                    <div class="form-group col-xs-4">
+                    <div class="form-group col-md-5">
                         <label for="complementoEmbossing">Nome Impresso no Cartão</label>
                         <div class="input-group">
                             <span class="input-group-addon" id="placa-modelo-addon">${veiculoInstance?.placa ?: "PLACA"} ${veiculoInstance?.marca?.abreviacao ?: "MODELO"}</span>
@@ -93,6 +104,23 @@
                                    placeholder="Digite aqui algum complemento (ex: modelo)" value="${veiculoInstance?.complementoEmbossing}" required/>
                         </div>
                         <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing - placaMarcaLength}</strong> caracteres.</span>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="portador.valorLimite">Limite *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="number" min="0" step="0.01" class="form-control"
+                                   id="portador.valorLimite" name="portador.valorLimite"
+                                   value="${veiculoInstance?.portador?.valorLimite}" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="portador.tipoLimite">Tipo Limite *</label>
+                        <g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
+                                  required="required" value="${veiculoInstance?.portador?.tipoLimite}"
+                                  class="form-control" optionValue="nome"/>
                     </div>
                 </g:if>
             </div>

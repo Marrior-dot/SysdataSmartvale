@@ -8,7 +8,7 @@ class Equipamento extends MaquinaMotorizada {
 
     static constraints = {
         codigo blank: false, unique: true
-        descricao blank: false, nullable: true
+        descricao blank: true, nullable: true
         mediaConsumo blank: false
         tipo blank: false
     }

@@ -2,6 +2,9 @@ package com.sysdata.gestaofrota
 
 abstract class Portador {
     Conta conta = new Conta()
+    TipoLimite tipoLimite = TipoLimite.CREDITO
+    BigDecimal valorLimite = 0D
+
 
     static hasMany = [cartoes: Cartao]
     static belongsTo = [unidade: Unidade]

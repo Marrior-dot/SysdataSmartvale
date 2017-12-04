@@ -50,20 +50,14 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="nome">Nome *</label>
-                    <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control" required="required"/>
+                    <div class="input-group">
+                        <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control" required="required"/>
+                        <span class="input-group-addon">
+                            <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
+                        </span>
+                    </div>
                 </div>
 
-                <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
-                    <div class="form-group col-md-6">
-                        <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
-                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing" maxlength="${tamMaxEmbossing}"
-                               placeholder="Digite aqui o nome que será impresso no seu cartão." value="${funcionarioInstance?.nomeEmbossing}" required/>
-                        <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
-                    </div>
-                </g:if>
-            </div>
-
-            <div class="row">
                 <div class="form-group col-md-3">
                     <label for="dataNascimento">Data Nascimento *</label>
                     <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento" required
@@ -74,7 +68,37 @@
                     <label for="cnh">CNH *</label>
                     <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}" maxlength="11" required="required"/>
                 </div>
+            </div>
 
+            <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
+                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing" maxlength="${tamMaxEmbossing}"
+                               placeholder="Digite aqui o nome que será impresso no seu cartão." value="${funcionarioInstance?.nomeEmbossing}" required/>
+                        <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="portador.valorLimite">Limite *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="number" min="0" step="0.01" class="form-control"
+                                   id="portador.valorLimite" name="portador.valorLimite"
+                                   value="${funcionarioInstance?.portador?.valorLimite}" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="portador.tipoLimite">Tipo Limite *</label>
+                        <g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
+                                  required="required" value="${funcionarioInstance?.portador?.tipoLimite}"
+                                  class="form-control" optionValue="nome"/>
+                    </div>
+                </div>
+            </g:if>
+
+            <div class="row">
                 <div class="form-group col-md-3">
                     <label for="validadeCnh">Validade CNH *</label>
                     <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh" required
@@ -88,10 +112,8 @@
                               noSelection="${['null': 'Selecione uma Categ. CNH...']}"
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="categoria.id">Categoria *</label>
                     <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance).list()}"
                               value="${funcionarioInstance?.categoria?.id}" required="required"
@@ -99,19 +121,10 @@
                               optionKey="id" class="form-control" optionValue="nome"/>
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="status">Status *</label>
                     <g:select name="status" from="${Status.asBloqueado()}" class="form-control" required="required"
                               value="${funcionarioInstance?.status}" optionKey="key"/>
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="gestor">Gestor</label>
-                    <div class="checkbox">
-                        <label>
-                            <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
-                        </label>
-                    </div>
                 </div>
             </div>
         </div>

@@ -52,6 +52,10 @@ class VeiculoController extends BaseOwnerController {
         if (unidadeInstance != null) {
             try {
                 veiculoInstance.unidade = unidadeInstance
+                veiculoInstance.portador = new PortadorMaquina()
+                veiculoInstance.portador.unidade = unidadeInstance
+                veiculoInstance.portador.valorLimite = params.double('portador.valorLimite')
+                veiculoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
                 veiculoInstance.validate()
                 if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
                 PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
@@ -80,7 +84,8 @@ class VeiculoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            redirect(action: 'list')
+            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+            render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: tamMaxEmbossing])
         }
     }
 
@@ -107,6 +112,8 @@ class VeiculoController extends BaseOwnerController {
             }
 
             veiculoInstance.properties = params
+            veiculoInstance.portador.valorLimite = params.double('portador.valorLimite')
+            veiculoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
             if (!veiculoInstance.hasErrors() && veiculoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)
