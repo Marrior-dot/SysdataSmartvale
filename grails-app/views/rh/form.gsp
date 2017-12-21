@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.Util;com.sysdata.gestaofrota.TipoCobranca" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -42,6 +42,9 @@
                         <li><a href="#rh" data-toggle="tab">RH</a></li>
                         <li><a href="#categorias" data-toggle="tab">Categorias de Funcionários</a></li>
                         <li><a href="#estabelecimentos" data-toggle="tab">Estabelecimentos</a></li>
+                        <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
+                            <li><a href="#fechamentos" data-toggle="tab">Fechamentos</a></li>
+                        </g:if>
                     </ul>
 
                     <div class="panel">
@@ -63,6 +66,12 @@
                             <div class="tab-pane" id="estabelecimentos">
                                 <g:render template="newEstabelecimentos" bean="${rhInstance}"/>
                             </div>
+
+                            <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
+                                <div class="tab-pane" id="fechamentos">
+                                    <g:render template="/fechamento/tab" model="[rhInstance: rhInstance]"/>
+                                </div>
+                            </g:if>
                         </div>
                     </div>
                 </div>

@@ -202,7 +202,7 @@
 					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
 					<div class="input-group">
 						<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.values()}"
-							class="form-control" optionKey="key" optionValue="nome" value="${rhInstance?.modeloCobranca}" required="required"/>
+							class="form-control" optionValue="nome" value="${rhInstance?.modeloCobranca}" required="required"/>
 						<span class="input-group-addon">
 							<input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''}>
 							<strong>Renovar Limite</strong>

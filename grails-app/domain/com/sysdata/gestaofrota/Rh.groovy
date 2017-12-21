@@ -27,7 +27,7 @@ class Rh extends Empresa {
             categoriasFuncionario: CategoriaFuncionario,
             empresas             : PostoCombustivel,
             role                 : Role,
-            agendamentos         : Agendamento
+            fechamentos         : Fechamento
     ]
 
     static constraints = {
@@ -37,11 +37,12 @@ class Rh extends Empresa {
     static transients = ['portadoresCount']
 
     String toString() {
-        def flat = ""
-        this.properties.each {
-            flat += "${it}\n"
-        }
-        flat
+        "${codigo} - ${nome}"
+//        def flat = ""
+//        this.properties.each {
+//            flat += "${it}\n"
+//        }
+//        flat
     }
 
     int getPortadoresCount() {

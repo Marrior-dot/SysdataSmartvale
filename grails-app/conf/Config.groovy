@@ -171,6 +171,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/home/dataGraficoResgate'      : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/home/dataGraficoMesResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/rh/**'                        : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/fechamento/**'                : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/user/**'                      : allRoles,
         '/user/create'                  : masterRoles,
         '/user/list'                    : masterRoles,
