@@ -34,7 +34,7 @@ class Rh extends Empresa {
         codigo nullable: false, blank: false
     }
 
-    static transients = ['portadoresCount']
+    static transients = ['portadoresCount',"corteAberto"]
 
     String toString() {
         "${codigo} - ${nome}"
@@ -48,4 +48,13 @@ class Rh extends Empresa {
     int getPortadoresCount() {
         unidades?.sum { it.portadores.size() } ?: 0
     }
+
+    Corte getCorteAberto(){
+        Corte.withCriteria(uniqueResult:true) {
+            'in'("fechamento",this.fechamentos)
+            eq("status",StatusCorte.ABERTO)
+        }
+    }
+
+
 }

@@ -95,14 +95,39 @@ class TransacaoService {
         dataReembolso
     }
 
-    def agendarAbastecimento(abastInstance) {
+
+    def agendarAbastecimento(Transacao abastInstance) {
+
+
+        /*
+            Se modelo de cobrança do programa for PÓS-PAGO:
+
+                1. Encontra corte aberto para vincular ao lançamento
+
+         */
+
+        Rh rh=abastInstance.cartao.portador.unidade.rh
+
+
+        if(rh.modeloCobranca==TipoCobranca.POS_PAGO){
+            Corte corteAberto=abastInstance.cartao.portador.unidade.rh.corteAberto
+            if(!corteAberto) throw new RuntimeException("Nao ha nenhum corte aberto para a empresa '${rh.nome}'")
+
+            Lancamento compra=new Lancamento()
+            compra.with{
+                tipo=TipoLancamento.COMPRA
+                status=StatusLancamento.A_EFETIVAR
+            }
+        }
 
         //Lancamento funcionario
         def lancCompra = new Lancamento(tipo: TipoLancamento.COMPRA,
                 status: StatusLancamento.EFETIVADO,
                 valor: abastInstance.valor,
                 dataEfetivacao: new Date(),
-                conta: abastInstance.participante.conta)
+                conta: abastInstance.participante.conta,
+                statusFaturamento: StatusFaturamento.NAO_FATURADO
+        )
         abastInstance.addToLancamentos(lancCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)

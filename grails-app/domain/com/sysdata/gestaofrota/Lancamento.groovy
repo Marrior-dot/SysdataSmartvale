@@ -8,6 +8,7 @@ class Lancamento {
 	TipoLancamento tipo
 	StatusLancamento status
     String referencia
+	StatusFaturamento statusFaturamento
 
 	static transients = ['descricao']
 	
