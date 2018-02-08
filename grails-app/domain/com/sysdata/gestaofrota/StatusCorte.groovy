@@ -6,7 +6,8 @@ package com.sysdata.gestaofrota
 enum StatusCorte {
 
     ABERTO("Aberto"),
-    FECHADO("Fechado")
+    FECHADO("Fechado"),
+    CANCELADO("Cancelado")
 
     String nome
 

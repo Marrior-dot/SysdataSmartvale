@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
+
 class Rh extends Empresa {
     String codigo
     Integer validadeCarga = 0
@@ -50,9 +52,27 @@ class Rh extends Empresa {
     }
 
     Corte getCorteAberto(){
-        Corte.withCriteria(uniqueResult:true) {
+
+
+        Corte corteAberto=Corte.withCriteria(uniqueResult:true) {
             'in'("fechamento",this.fechamentos)
             eq("status",StatusCorte.ABERTO)
+        }
+
+        //Senão houver corte aberto, cria o primeiro corte
+        if(!corteAberto){
+
+            def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
+            def diaProc=dataProc[Calendar.DAY_OF_MONTH]
+
+            def diaAnt=1
+
+            this.fechamentos.sort{it.diaCorte}.each{f->
+
+                if(diaAnt>=diaProc && diaProc<=f.diaCorte)
+                    return f.diaCorte
+
+            }
         }
     }
 

@@ -117,17 +117,19 @@ class TransacaoService {
             compra.with{
                 tipo=TipoLancamento.COMPRA
                 status=StatusLancamento.A_EFETIVAR
+
             }
+        }else{
+            //Lancamento funcionario
+            def lancCompra = new Lancamento(tipo: TipoLancamento.COMPRA,
+                    status: StatusLancamento.EFETIVADO,
+                    valor: abastInstance.valor,
+                    dataEfetivacao: new Date(),
+                    conta: abastInstance.participante.conta,
+                    statusFaturamento: StatusFaturamento.NAO_FATURADO
+            )
         }
 
-        //Lancamento funcionario
-        def lancCompra = new Lancamento(tipo: TipoLancamento.COMPRA,
-                status: StatusLancamento.EFETIVADO,
-                valor: abastInstance.valor,
-                dataEfetivacao: new Date(),
-                conta: abastInstance.participante.conta,
-                statusFaturamento: StatusFaturamento.NAO_FATURADO
-        )
         abastInstance.addToLancamentos(lancCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)
