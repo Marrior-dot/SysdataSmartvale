@@ -53,7 +53,6 @@ class Rh extends Empresa {
 
     Corte getCorteAberto(){
 
-
         Corte corteAberto=Corte.withCriteria(uniqueResult:true) {
             'in'("fechamento",this.fechamentos)
             eq("status",StatusCorte.ABERTO)
@@ -64,14 +63,31 @@ class Rh extends Empresa {
 
             def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
             def diaProc=dataProc[Calendar.DAY_OF_MONTH]
+            def mesProc=dataProc[Calendar.MONTH]
+            def anoProc=dataProc[Calendar.YEAR]
 
             def diaAnt=1
+            Fechamento fechamento
 
-            this.fechamentos.sort{it.diaCorte}.each{f->
+            this.fechamentos.sort{it.diaCorte}.find{f->
+                if(diaAnt<=diaProc && diaProc<f.diaCorte){
+                    fechamento=f
+                    return true
+                }
+                diaAnt=f.diaCorte
+                return false
+            }
 
-                if(diaAnt>=diaProc && diaProc<=f.diaCorte)
-                    return f.diaCorte
 
+            def dataCorte=new Date().clearTime()
+            dataCorte.set([dayOfMonth:fechamento.diaCorte,month:mesProc,year:anoProc])
+
+            corteAberto=new Corte()
+            corteAberto.with{
+                dataFechamento=dataCorte
+                dataCobranca=dataCorte+fechamento.diasAteVencimento
+
+                status=StatusCorte.ABERTO
             }
         }
     }
