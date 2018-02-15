@@ -95,49 +95,59 @@ class TransacaoService {
         dataReembolso
     }
 
-
+    /**
+     *
+     * Se modelo de cobrança for PÓS-PAGO:
+     *
+     * - Procura o corte aberto para agendar lançamento portador
+     *
+     * Se modelo de cobrança for PRÉ-PAGO:
+     *
+     * - Agendamento Portador é apenas informativo
+     */
     def agendarAbastecimento(Transacao abastInstance) {
 
+        def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
 
-        /*
-            Se modelo de cobrança do programa for PÓS-PAGO:
-
-                1. Encontra corte aberto para vincular ao lançamento
-
-         */
+        LancamentoPortador lctoCompra
 
         Rh rh=abastInstance.cartao.portador.unidade.rh
 
-
         if(rh.modeloCobranca==TipoCobranca.POS_PAGO){
             Corte corteAberto=abastInstance.cartao.portador.unidade.rh.corteAberto
-            if(!corteAberto) throw new RuntimeException("Nao ha nenhum corte aberto para a empresa '${rh.nome}'")
-
-            Lancamento compra=new Lancamento()
-            compra.with{
-                tipo=TipoLancamento.COMPRA
-                status=StatusLancamento.A_EFETIVAR
-
+            if(corteAberto) {
+                lctoCompra=new LancamentoPortador()
+                lctoCompra.with{
+                    tipo=TipoLancamento.COMPRA
+                    status=StatusLancamento.A_EFETIVAR
+                    corte=corteAberto
+                    valor=abastInstance.valor
+                    conta=abastInstance.participante.conta
+                    statusFaturamento=StatusFaturamento.NAO_FATURADO
+                    dataEfetivacao=dataProc
+                }
+                lctoCompra.save flush: true
             }
+
         }else{
             //Lancamento funcionario
-            def lancCompra = new Lancamento(tipo: TipoLancamento.COMPRA,
+            lctoCompra=new LancamentoPortador(tipo: TipoLancamento.COMPRA,
                     status: StatusLancamento.EFETIVADO,
                     valor: abastInstance.valor,
-                    dataEfetivacao: new Date(),
+                    dataEfetivacao: dataProc,
                     conta: abastInstance.participante.conta,
                     statusFaturamento: StatusFaturamento.NAO_FATURADO
             )
         }
 
-        abastInstance.addToLancamentos(lancCompra)
+        abastInstance.addToLancamentos(lctoCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)
         double valoReemb = (abastInstance.valor * estabelecimentoInstance.empresa.taxaReembolso / 100.0)
         //Arredonda
         def arrend = Util.roundCurrency(valoReemb)
 
-        def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa, ReferenceDateProcessing.calcuteReferenceDate())
+        def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa,dataProc )
 
         if (dataReembolso) {
             def lancReembolso = new Lancamento(tipo: TipoLancamento.REEMBOLSO,

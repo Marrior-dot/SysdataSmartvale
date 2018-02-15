@@ -7,7 +7,6 @@ class Lancamento {
 	Date dataEfetivacao
 	TipoLancamento tipo
 	StatusLancamento status
-    String referencia
 	StatusFaturamento statusFaturamento
 
 	static transients = ['descricao']
@@ -16,7 +15,6 @@ class Lancamento {
 	
     static constraints = {
         dataEfetivacao nullable: true
-        referencia nullable: true
 		transacao nullable: true
     }
 

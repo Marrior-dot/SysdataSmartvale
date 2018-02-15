@@ -53,4 +53,9 @@ abstract class Portador {
 
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
+
+    void faturar(dataProc){
+
+    }
+
 }

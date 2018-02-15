@@ -58,7 +58,7 @@ class Rh extends Empresa {
             eq("status",StatusCorte.ABERTO)
         }
 
-        //Senão houver corte aberto, cria o primeiro corte
+        //Senão houver corte aberto, cria primeiros cortes
         if(!corteAberto){
 
             def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
@@ -78,7 +78,6 @@ class Rh extends Empresa {
                 return false
             }
 
-
             def dataCorte=new Date().clearTime()
             dataCorte.set([dayOfMonth:fechamento.diaCorte,month:mesProc,year:anoProc])
 
@@ -86,10 +85,12 @@ class Rh extends Empresa {
             corteAberto.with{
                 dataFechamento=dataCorte
                 dataCobranca=dataCorte+fechamento.diasAteVencimento
-
+                dataInicioCiclo=dataProc
                 status=StatusCorte.ABERTO
             }
+            corteAberto.save flush:true
         }
+        corteAberto
     }
 
 
