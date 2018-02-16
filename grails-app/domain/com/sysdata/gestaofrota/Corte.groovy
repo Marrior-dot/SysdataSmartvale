@@ -34,7 +34,7 @@ class Corte {
 
         contasId.each{
             Conta conta=Conta.get(it)
-            conta.portador.faturar(dataProc)
+            conta.portador.faturar(this,dataProc)
         }
 
 
