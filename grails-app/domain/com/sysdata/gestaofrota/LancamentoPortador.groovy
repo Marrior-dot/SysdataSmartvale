@@ -4,7 +4,6 @@ class LancamentoPortador extends Lancamento {
 
     Corte corte
 
-
     static transients=["extrato"]
 
     static constraints = {
@@ -25,7 +24,6 @@ class LancamentoPortador extends Lancamento {
 
         desc
     }
-
 
     ItemFatura faturar(){
         ItemFatura item=new ItemFatura()

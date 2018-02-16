@@ -7,7 +7,8 @@ class Conta {
 
     static belongsTo = [participante: Participante, portador: Portador]
 
-    static transients = ['participante']
+    static transients = ['participante','ultimaFatura']
+
     static constraints = {
         participante nullable: true
         portador nullable: true
@@ -32,4 +33,15 @@ class Conta {
     Participante getParticipante() {
         Participante.findByConta(this)
     }
+
+    Fatura getUltimaFatura(){
+        def ultFat=Fatura.withCriteria(uniqueResult:true){
+            eq("conta",this)
+            eq("status",StatusFatura.ABERTA)
+            firstResult(1)
+            order("data","desc")
+        }
+        ultFat
+    }
+
 }
