@@ -81,7 +81,8 @@ class FuncionarioController extends BaseOwnerController {
                 redirect(action: "show", id: funcionarioInstance.id)
             }
             catch (Exception e) {
-                println(e.message)
+
+                log.error "Erro: $e.message"
                 flash.error = "Um erro ocorreu."
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
