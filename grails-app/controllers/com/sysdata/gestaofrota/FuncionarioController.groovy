@@ -70,10 +70,13 @@ class FuncionarioController extends BaseOwnerController {
                 funcionarioInstance.unidade = unidadeInstance
                 funcionarioInstance.endereco = params['endereco']
                 funcionarioInstance.telefone = params['telefone']
-                funcionarioInstance.portador = new PortadorFuncionario()
-                funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
-                funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-                funcionarioInstance.portador.unidade = unidadeInstance
+
+                if(funcionarioInstance.unidade.rh.vinculoCartao==TipoVinculoCartao.FUNCIONARIO){
+                    funcionarioInstance.portador = new PortadorFuncionario()
+                    funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
+                    funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
+                    funcionarioInstance.portador.unidade = unidadeInstance
+                }
 
                 funcionarioInstance = funcionarioService.save(funcionarioInstance, true)
 

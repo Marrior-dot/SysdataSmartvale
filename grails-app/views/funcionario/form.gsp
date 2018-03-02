@@ -1,5 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Funcionario" %>
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Funcionario; com.sysdata.gestaofrota.Util" %>
 
 <html>
 <head>
@@ -61,17 +60,19 @@
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#funcionarios" data-toggle="tab">Funcionários</a></li>
-                        <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+                        <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao==TipoVinculoCartao.FUNCIONARIO}">
+                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+                        </g:if>
                     </ul>
-
                     <div class="tab-content">
                         <div class="tab-pane active" id="funcionarios">
                             <g:render template="basico" model="${[funcionarioInstance: funcionarioInstance, unidadeInstance: unidadeInstance, tamMaxEmbossing: tamMaxEmbossing]}"/>
                         </div>
-                        <div class="tab-pane" id="cartoes">
-                            <g:render template="cartao" model="[portador: funcionarioInstance.portador]"/>
-                        </div>
-
+                        <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao==TipoVinculoCartao.FUNCIONARIO}">
+                            <div class="tab-pane" id="cartoes">
+                                <g:render template="cartao" model="[portador: funcionarioInstance.portador]"/>
+                            </div>
+                        </g:if>
                     </div>
                 </div>
             </g:if>
