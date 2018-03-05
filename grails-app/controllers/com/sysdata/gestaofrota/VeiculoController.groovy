@@ -46,36 +46,23 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    @Transactional
-    def save() {
+    def save = {
         Veiculo veiculoInstance = new Veiculo(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
         if (unidadeInstance != null) {
             try {
                 veiculoInstance.unidade = unidadeInstance
-                veiculoInstance.save flush: true
 
                 if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
-                    veiculoInstance.portador = new PortadorMaquina()
-                    veiculoInstance.portador.unidade = unidadeInstance
-                    veiculoInstance.portador.limiteTotal = params.double('portador.limiteTotal')
-                    veiculoInstance.portador.saldoTotal = veiculoInstance.portador.limiteTotal
 
-                    if(params.double('portador.limiteDiario')){
-                        veiculoInstance.portador.limiteDiario = params.double('portador.limiteDiario')
-                        veiculoInstance.portador.saldoDiario = veiculoInstance.portador.limiteDiario
-                    }
-                    if(params.double('portador.limiteMensal')){
-                        veiculoInstance.portador.limiteMensal = params.double('portador.limiteMensal')
-                        veiculoInstance.portador.saldoMensal = veiculoInstance.portador.limiteMensal
-                    }
-
-                    PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
+                    PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance,params)
                     if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
+                    veiculoInstance.save flush: true
                     cartaoService.gerar(portadorMaquina)
 
-                }
+                }else
+                    veiculoInstance.save flush: true
 
 
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
@@ -129,8 +116,15 @@ class VeiculoController extends BaseOwnerController {
             }
 
             veiculoInstance.properties = params
-            veiculoInstance.portador.valorLimite = params.double('portador.valorLimite')
-            veiculoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
+
+            veiculoInstance.portador.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
+
+            if(params.portador.limiteDiario)
+                veiculoInstance.portador.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
+
+            if(params.portador.limiteMensal)
+                veiculoInstance.portador.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
+
             if (!veiculoInstance.hasErrors() && veiculoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)

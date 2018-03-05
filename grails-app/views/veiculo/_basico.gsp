@@ -116,8 +116,7 @@
                     <div class="form-group col-md-2">
                         <label for="portador.limiteTotal">Limite Total *</label>
                         <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="number" min="0" step="0.01" class="form-control"
+                            <input class="form-control money"
                                    id="portador.limiteTotal" name="portador.limiteTotal"
                                    value="${veiculoInstance?.portador?.limiteTotal}" required/>
                         </div>
@@ -126,20 +125,18 @@
                     <div class="form-group col-md-2">
                         <label for="portador.limiteDiario">Limite Diário *</label>
                         <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="number" min="0" step="0.01" class="form-control"
+                            <input  class="form-control money"
                                    id="portador.limiteDiario" name="portador.limiteDiario"
-                                   value="${veiculoInstance?.portador?.limiteDiario}" required/>
+                                   value="${veiculoInstance?.portador?.limiteDiario}" />
                         </div>
                     </div>
 
                     <div class="form-group col-md-2">
                         <label for="portador.limiteMensal">Limite Mensal *</label>
                         <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="number" min="0" step="0.01" class="form-control"
+                            <input  class="form-control money"
                                    id="portador.limiteMensal" name="portador.limiteMensal"
-                                   value="${veiculoInstance?.portador?.limiteMensal}" required/>
+                                   value="${veiculoInstance?.portador?.limiteMensal}" />
                         </div>
                     </div>
 

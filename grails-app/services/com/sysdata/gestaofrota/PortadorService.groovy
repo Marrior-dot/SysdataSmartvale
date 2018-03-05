@@ -18,12 +18,26 @@ class PortadorService {
         portadorFuncionario
     }
 
-    PortadorMaquina save(MaquinaMotorizada maquina) {
+    PortadorMaquina save(MaquinaMotorizada maquina,params) {
+
         if (!maquina.save()) throw new RuntimeException(maquina.showErrors())
-        PortadorMaquina portadorMaquina = new PortadorMaquina()
-        portadorMaquina.unidade = maquina.unidade
-        portadorMaquina.maquina = maquina
-        maquina.portador = portadorMaquina
+
+        PortadorMaquina portadorMaquina=new PortadorMaquina()
+        portadorMaquina.unidade=maquina.unidade
+        portadorMaquina.maquina=maquina
+        portadorMaquina.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
+        portadorMaquina.saldoTotal=portadorMaquina.limiteTotal
+
+
+        if(params.portador.limiteDiario){
+            portadorMaquina.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
+            portadorMaquina.saldoDiario=portadorMaquina.limiteDiario
+        }
+        if(params.portador.limiteMensal){
+            portadorMaquina.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
+            portadorMaquina.saldoMensal=portadorMaquina.limiteMensal
+        }
+
         if (!portadorMaquina.save()) throw new RuntimeException(portadorMaquina.showErrors())
         maquina.unidade.addToPortadores(portadorMaquina)
         maquina.unidade.save()
