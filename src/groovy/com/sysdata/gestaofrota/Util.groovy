@@ -108,9 +108,10 @@ class Util {
     }
 
     static def convertToCurrency(value) {
-        if (value ==~ /\d+,\d{2}/) {
-            def convValue = value.replace(",", ".")
-            convValue = convValue.toDouble()
+        if (value ==~ /[\d|\.]*,*\d{0,2}/) {
+            def convValue=value.contains(".")?value.replace(".",""):value
+            convValue=convValue.replace(",", ".")
+            convValue=convValue as BigDecimal
             convValue
         } else {
             throw new InvalidCurrencyException(message: "Valor $value não é um valor monetário válido!")

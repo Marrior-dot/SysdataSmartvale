@@ -79,23 +79,44 @@
                         <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
                     </div>
 
+
+
+                </div>
+
+
+                <div class="row">
+
                     <div class="form-group col-md-3">
-                        <label for="portador.valorLimite">Limite *</label>
+                        <label for="portador.limiteTotal">Limite Total *</label>
                         <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="number" min="0" step="0.01" class="form-control"
-                                   id="portador.valorLimite" name="portador.valorLimite"
-                                   value="${funcionarioInstance?.portador?.valorLimite}" required/>
+                            <input class="form-control money"
+                                   id="portador.limiteTotal" name="portador.limiteTotal"
+                                   value="${funcionarioInstance?.portador?.limiteTotal}" required/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label for="portador.limiteDiario">Limite Diário *</label>
+                        <div class="input-group">
+                            <input  class="form-control money"
+                                    id="portador.limiteDiario" name="portador.limiteDiario"
+                                    value="${funcionarioInstance?.portador?.limiteDiario}" />
                         </div>
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="portador.tipoLimite">Tipo Limite *</label>
-                        <g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
-                                  required="required" value="${funcionarioInstance?.portador?.tipoLimite}"
-                                  class="form-control" optionValue="nome"/>
+                        <label for="portador.limiteMensal">Limite Mensal *</label>
+                        <div class="input-group">
+                            <input  class="form-control money"
+                                    id="portador.limiteMensal" name="portador.limiteMensal"
+                                    value="${funcionarioInstance?.portador?.limiteMensal}" />
+                        </div>
                     </div>
+
                 </div>
+
+
             </g:if>
 
             <div class="row">
