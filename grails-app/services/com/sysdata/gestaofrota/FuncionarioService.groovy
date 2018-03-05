@@ -5,12 +5,12 @@ class FuncionarioService {
     def cartaoService
     def portadorService
 
-    Funcionario save(Funcionario funcionarioInstance, boolean gerarCartao = false) {
+    Funcionario save(params,Funcionario funcionarioInstance, boolean gerarCartao = false) {
         if (!funcionarioInstance.unidade) throw new RuntimeException("Funcionario não possui unidade.")
 
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
             if(!funcionarioInstance.save()) throw new RuntimeException(funcionarioInstance.showErrors())
-            PortadorFuncionario portadorFuncionario = portadorService.save(funcionarioInstance)
+            PortadorFuncionario portadorFuncionario = portadorService.save(params,funcionarioInstance)
             if (gerarCartao) cartaoService.gerar(portadorFuncionario)
         }
 

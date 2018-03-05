@@ -71,14 +71,7 @@ class FuncionarioController extends BaseOwnerController {
                 funcionarioInstance.endereco = params['endereco']
                 funcionarioInstance.telefone = params['telefone']
 
-                if(funcionarioInstance.unidade.rh.vinculoCartao==TipoVinculoCartao.FUNCIONARIO){
-                    funcionarioInstance.portador = new PortadorFuncionario()
-                    funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
-                    funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-                    funcionarioInstance.portador.unidade = unidadeInstance
-                }
-
-                funcionarioInstance = funcionarioService.save(funcionarioInstance, true)
+                funcionarioInstance = funcionarioService.save(params,funcionarioInstance, true)
 
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionaroi'), funcionarioInstance.id])}"
                 redirect(action: "show", id: funcionarioInstance.id)

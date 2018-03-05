@@ -2,11 +2,29 @@ package com.sysdata.gestaofrota
 
 class PortadorService {
 
-    PortadorFuncionario save(Funcionario funcionario) {
-        PortadorFuncionario portadorFuncionario = funcionario.portador
-        if (portadorFuncionario.tipoLimite == null) portadorFuncionario.tipoLimite = TipoLimite.MENSAL
-        if (portadorFuncionario.valorLimite == null) portadorFuncionario.valorLimite = 0D
+    PortadorFuncionario save(params,Funcionario funcionario) {
+
+        PortadorFuncionario portadorFuncionario
+
+        if(funcionario.portador) portadorFuncionario = funcionario.portador
+        else portadorFuncionario = new PortadorFuncionario()
+
         if (portadorFuncionario.unidade == null) portadorFuncionario.unidade = funcionario.unidade
+
+
+        portadorFuncionario.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
+        portadorFuncionario.saldoTotal=portadorFuncionario.limiteTotal
+
+
+        if(params.portador.limiteDiario){
+            portadorFuncionario.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
+            portadorFuncionario.saldoDiario=portadorFuncionario.limiteDiario
+        }
+        if(params.portador.limiteMensal){
+            portadorFuncionario.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
+            portadorFuncionario.saldoMensal=portadorFuncionario.limiteMensal
+        }
+
 
         portadorFuncionario.funcionario = funcionario
         funcionario.portador = portadorFuncionario
