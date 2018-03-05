@@ -5,7 +5,7 @@ import grails.plugins.springsecurity.Secured
 
 class EnderecoController {
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
+    //@Secured(['IS_AUTHENTICATED_FULLY'])
     def filtrarCidadesPorEstado() {
         if(params?.cidade) params.cidade = Util.replaceSpecialChars(params.cidade.toString())
         println("PARAMS: ${params}")
