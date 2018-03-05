@@ -2,14 +2,24 @@ package com.sysdata.gestaofrota
 
 abstract class Portador {
     Conta conta = new Conta()
-    TipoLimite tipoLimite = TipoLimite.CREDITO
-    BigDecimal valorLimite = 0D
+    BigDecimal limiteTotal=0D
+    BigDecimal limiteDiario
+    BigDecimal limiteMensal
+
+    BigDecimal saldoTotal=0D
+    BigDecimal saldoDiario
+    BigDecimal saldoMensal
+
 
 
     static hasMany = [cartoes: Cartao]
     static belongsTo = [unidade: Unidade]
 
     static constraints = {
+        limiteDiario nullable:true
+        limiteMensal nullable:true
+        saldoDiario nullable:true
+        saldoMensal nullable:true
     }
 
     static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone']

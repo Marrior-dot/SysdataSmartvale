@@ -3,6 +3,7 @@ package com.sysdata.gestaofrota
 import grails.converters.*
 import grails.plugins.springsecurity.Secured
 import org.springframework.http.HttpStatus
+import org.springframework.transaction.annotation.Transactional
 
 import java.text.SimpleDateFormat
 
@@ -45,21 +46,37 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def save = {
+    @Transactional
+    def save() {
         Veiculo veiculoInstance = new Veiculo(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
         if (unidadeInstance != null) {
             try {
                 veiculoInstance.unidade = unidadeInstance
-                veiculoInstance.portador = new PortadorMaquina()
-                veiculoInstance.portador.unidade = unidadeInstance
-                veiculoInstance.portador.valorLimite = params.double('portador.valorLimite')
-                veiculoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-                veiculoInstance.validate()
-                if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
-                PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
-                cartaoService.gerar(portadorMaquina)
+                veiculoInstance.save flush: true
+
+                if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
+                    veiculoInstance.portador = new PortadorMaquina()
+                    veiculoInstance.portador.unidade = unidadeInstance
+                    veiculoInstance.portador.limiteTotal = params.double('portador.limiteTotal')
+                    veiculoInstance.portador.saldoTotal = veiculoInstance.portador.limiteTotal
+
+                    if(params.double('portador.limiteDiario')){
+                        veiculoInstance.portador.limiteDiario = params.double('portador.limiteDiario')
+                        veiculoInstance.portador.saldoDiario = veiculoInstance.portador.limiteDiario
+                    }
+                    if(params.double('portador.limiteMensal')){
+                        veiculoInstance.portador.limiteMensal = params.double('portador.limiteMensal')
+                        veiculoInstance.portador.saldoMensal = veiculoInstance.portador.limiteMensal
+                    }
+
+                    PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance)
+                    if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
+                    cartaoService.gerar(portadorMaquina)
+
+                }
+
 
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(controller: 'unidade', action: "show", id: unidadeInstance.id)

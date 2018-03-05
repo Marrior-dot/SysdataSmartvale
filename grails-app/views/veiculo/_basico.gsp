@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.ModeloMaquina; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Veiculo" %>
+<%@ page import="com.sysdata.gestaofrota.ModeloMaquina; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Veiculo; com.sysdata.gestaofrota.TipoVinculoCartao" %>
 <%@ page import="com.sysdata.gestaofrota.MarcaVeiculo" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
@@ -106,24 +106,49 @@
                         <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing - placaMarcaLength}</strong> caracteres.</span>
                     </div>
 
+                </g:if>
+            </div>
+
+
+            <g:if test="${unidadeInstance?.rh.vinculoCartao==TipoVinculoCartao.MAQUINA}">
+                <div class="row">
+
                     <div class="form-group col-md-2">
-                        <label for="portador.valorLimite">Limite *</label>
+                        <label for="portador.limiteTotal">Limite Total *</label>
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input type="number" min="0" step="0.01" class="form-control"
-                                   id="portador.valorLimite" name="portador.valorLimite"
-                                   value="${veiculoInstance?.portador?.valorLimite}" required/>
+                                   id="portador.limiteTotal" name="portador.limiteTotal"
+                                   value="${veiculoInstance?.portador?.limiteTotal}" required/>
                         </div>
                     </div>
 
                     <div class="form-group col-md-2">
-                        <label for="portador.tipoLimite">Tipo Limite *</label>
-                        <g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
-                                  required="required" value="${veiculoInstance?.portador?.tipoLimite}"
-                                  class="form-control" optionValue="nome"/>
+                        <label for="portador.limiteDiario">Limite Diário *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="number" min="0" step="0.01" class="form-control"
+                                   id="portador.limiteDiario" name="portador.limiteDiario"
+                                   value="${veiculoInstance?.portador?.limiteDiario}" required/>
+                        </div>
                     </div>
-                </g:if>
-            </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="portador.limiteMensal">Limite Mensal *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="number" min="0" step="0.01" class="form-control"
+                                   id="portador.limiteMensal" name="portador.limiteMensal"
+                                   value="${veiculoInstance?.portador?.limiteMensal}" required/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </g:if>
+
+
+
         </div>
     </div>
 
