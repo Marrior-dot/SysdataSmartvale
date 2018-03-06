@@ -122,7 +122,7 @@ class TransacaoService {
                     status=StatusLancamento.A_EFETIVAR
                     corte=corteAberto
                     valor=abastInstance.valor
-                    conta=abastInstance.participante.conta
+                    conta=abastInstance.cartao.portador.conta
                     statusFaturamento=StatusFaturamento.NAO_FATURADO
                     dataEfetivacao=dataProc
                 }

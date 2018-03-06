@@ -53,6 +53,8 @@ class Rh extends Empresa {
 
     Corte getCorteAberto(){
 
+        if(!this.fechamentos) throw new RuntimeException("Nao ha dias de fechamento definidos para o programa $this")
+
         Corte corteAberto=Corte.withCriteria(uniqueResult:true) {
             'in'("fechamento",this.fechamentos)
             eq("status",StatusCorte.ABERTO)
@@ -67,28 +69,30 @@ class Rh extends Empresa {
             def anoProc=dataProc[Calendar.YEAR]
 
             def diaAnt=1
-            Fechamento fechamento
+            Fechamento ciclo
 
             this.fechamentos.sort{it.diaCorte}.find{f->
                 if(diaAnt<=diaProc && diaProc<f.diaCorte){
-                    fechamento=f
+                    ciclo=f
                     return true
                 }
                 diaAnt=f.diaCorte
                 return false
             }
 
-            def dataCorte=new Date().clearTime()
-            dataCorte.set([dayOfMonth:fechamento.diaCorte,month:mesProc,year:anoProc])
+            def dataCorte=dataProc
+            dataCorte.set([dayOfMonth:ciclo.diaCorte,month:mesProc,year:anoProc])
 
             corteAberto=new Corte()
             corteAberto.with{
-                dataFechamento=dataCorte
-                dataCobranca=dataCorte+fechamento.diasAteVencimento
+                dataPrevista=dataCorte
+                dataCobranca=dataCorte+ciclo.diasAteVencimento
                 dataInicioCiclo=dataProc
                 status=StatusCorte.ABERTO
+                fechamento=ciclo
             }
             corteAberto.save flush:true
+            log.info "Corte $corteAberto criado"
         }
         corteAberto
     }

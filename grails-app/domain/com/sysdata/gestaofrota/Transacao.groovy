@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 class Transacao {
 
-	Double valor
+	BigDecimal valor
 	Date dateCreated
 	Date dataHora
 	StatusTransacao status
@@ -20,7 +20,7 @@ class Transacao {
 	Boolean autorizada
 	TipoCombustivel combustivel
 	Long quilometragem
-	Double precoUnitario
+	BigDecimal precoUnitario
 	MotivoNegacao motivoNegacao
 	MaquinaMotorizada maquina
 	String codigoEquipamento

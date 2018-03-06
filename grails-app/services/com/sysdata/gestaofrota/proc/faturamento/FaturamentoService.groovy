@@ -5,7 +5,7 @@ import com.sysdata.gestaofrota.StatusCorte
 import com.sysdata.gestaofrota.proc.Processamento
 import org.springframework.transaction.annotation.Transactional
 
-class FechamentoService implements Processamento {
+class FaturamentoService implements Processamento {
 
     @Transactional
     @Override

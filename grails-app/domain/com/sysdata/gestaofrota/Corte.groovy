@@ -12,7 +12,13 @@ class Corte {
     static belongsTo = [fechamento: Fechamento]
 
     static constraints = {
+        dataFechamento nullable: true
     }
+
+    String toString(){
+        "#${this.id} dt.prev:${this.dataPrevista.format('dd/MM/yyyy')} dt.cob:${this.dataCobranca.format('dd/MM/yyyy')}"
+    }
+
 
     /**
      * Fatura todas as contas individuais (portadores)
