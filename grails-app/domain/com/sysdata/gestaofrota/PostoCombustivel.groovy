@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 class PostoCombustivel extends Empresa {
 	
-	Double taxaReembolso=0.0
+	BigDecimal taxaReembolso=0.0
 	
 	TipoReembolso tipoReembolso
 

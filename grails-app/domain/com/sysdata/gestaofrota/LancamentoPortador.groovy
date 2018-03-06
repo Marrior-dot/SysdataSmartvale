@@ -7,6 +7,7 @@ class LancamentoPortador extends Lancamento {
     static transients=["extrato"]
 
     static constraints = {
+        corte nullable: true
     }
 
     String getExtrato(){

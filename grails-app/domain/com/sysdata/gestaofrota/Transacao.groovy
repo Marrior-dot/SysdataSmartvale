@@ -24,6 +24,8 @@ class Transacao {
 	MotivoNegacao motivoNegacao
 	MaquinaMotorizada maquina
 	String codigoEquipamento
+	BigDecimal taxaAdm
+	BigDecimal valorReembolso
 	
 	static belongsTo=[participante:Participante]
 	
@@ -49,6 +51,8 @@ class Transacao {
 		motivoNegacao(nullable:true)
 		maquina nullable:true
 		codigoEquipamento nullable:true
+		taxaAdm nullable: true
+		valorReembolso nullable: true
     }
 	
 	

@@ -21,6 +21,12 @@ class BootStrap {
         loadFixtures()
         loadObjectMarshallers()
         bindFrontEndErrorsForDomainClasses()
+
+        /* Adição do método ** round ** a classe BigDecimal: arredondamento para cima */
+        BigDecimal.metaClass.round = { prec ->
+            delegate.setScale(prec, BigDecimal.ROUND_HALF_UP)
+        }
+
     }
 
     def destroy = {}
