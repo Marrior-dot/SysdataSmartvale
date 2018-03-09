@@ -140,7 +140,7 @@ grails.plugins.springsecurity.authority.className = 'com.sysdata.gestaofrota.Rol
 
 
 grails.plugins.springsecurity.rejectIfNoRule = true
-
+grails.plugin.console.enabled = true
 grails.plugins.springsecurity.securityConfigType = "Annotation"
 
 def allRoles = ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_LOG', 'ROLE_HELP']
@@ -168,7 +168,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/produto/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/role/**'                      : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/transacao/listPendentes'      : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/console/**'                   : ['ROLE_PROC'],
+        '/console/**'                   : ['ROLE_PROC','ROLE_ADMIN'],
         '/home/dataGraficoResgate'      : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/home/dataGraficoMesResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/rh/**'                        : ['ROLE_PROC', 'ROLE_ADMIN'],

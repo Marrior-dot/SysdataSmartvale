@@ -41,16 +41,26 @@ class EquipamentoController extends BaseOwnerController {
         Equipamento equipamentoInstance = new Equipamento(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
-        if (unidadeInstance) {
+        if (unidadeInstance != null) {
             try {
                 equipamentoInstance.unidade = unidadeInstance
-                equipamentoInstance.portador = new PortadorMaquina()
-                equipamentoInstance.portador.unidade = unidadeInstance
-                equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
-                equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-                equipamentoInstance = equipamentoService.save(equipamentoInstance)
+
+                if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
+
+                    equipamentoInstance.portador = new PortadorMaquina()
+                    equipamentoInstance.portador.unidade = unidadeInstance
+                    equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
+                    equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
+                    equipamentoInstance = equipamentoService.save(equipamentoInstance)
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
+                    redirect(action: "show", id: equipamentoInstance.id)
+
+                }else
+                    equipamentoInstance.save flush: true
+
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
-                redirect(action: "show", id: equipamentoInstance.id)
+                redirect(controller: 'unidade', action: "show", id: unidadeInstance.id)
+
             }
             catch (Exception e) {
                 e.printStackTrace()
@@ -59,7 +69,7 @@ class EquipamentoController extends BaseOwnerController {
             }
         } else {
             flash.error = "Unidade não encontrada."
-            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW,, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
     }
 
