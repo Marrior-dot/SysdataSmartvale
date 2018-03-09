@@ -143,18 +143,31 @@ class TransacaoService {
         abastInstance.addToLancamentos(lctoCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)
-        double valoReemb = (abastInstance.valor * estabelecimentoInstance.empresa.taxaReembolso / 100.0)
+
+        if(!estabelecimentoInstance.empresa.taxaReembolso) throw new RuntimeException("Nao ha taxa adm nao definida para lojista #${estabelecimentoInstance.empresa.id}")
+
+        def taxaAdm=estabelecimentoInstance.empresa.taxaReembolso
+
+        BigDecimal valTxAdm = (abastInstance.valor * taxaAdm / 100.0)
+
+        abastInstance.taxaAdm=taxaAdm
+        abastInstance.valorReembolso=abastInstance.valor-valTxAdm
+
         //Arredonda
-        def arrend = Util.roundCurrency(valoReemb)
+        def arrend=valTxAdm.round(2)
+        def valReemb=abastInstance.valor-arrend
 
         def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa,dataProc )
 
         if (dataReembolso) {
-            def lancReembolso = new Lancamento(tipo: TipoLancamento.REEMBOLSO,
+            def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,
+                    dataPrevista: dataReembolso,
                     status: StatusLancamento.A_EFETIVAR,
-                    valor: abastInstance.valor - arrend,
+                    valor:valReemb,
+                    valorTaxa: valTxAdm,
                     dataEfetivacao: dataReembolso,
-                    conta: estabelecimentoInstance.empresa.conta)
+                    conta: estabelecimentoInstance.empresa.conta,
+                    statusFaturamento: StatusFaturamento.NAO_FATURADO)
             abastInstance.addToLancamentos(lancReembolso)
             ret.ok = true
         } else {
@@ -175,8 +188,10 @@ class TransacaoService {
             agendarTransacao(tr)
             if (ret.ok)
                 log.debug "Transacao #${tr.id}  AGENDADA"
-            else
+            else {
                 log.debug "Transacao #${tr.id}  NAO AGENDADA - " + ret.msg
+                throw new RuntimeException("Transacao #${tr.id}  NAO AGENDADA")
+            }
         }
 
         log.info agendarList.size() > 0 ? "Lancamentos financeiros gerados" : "Nao ha lancamentos financeiros para agendar"

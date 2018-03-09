@@ -81,7 +81,11 @@ class Rh extends Empresa {
             }
 
             def dataCorte=dataProc
-            dataCorte.set([dayOfMonth:ciclo.diaCorte,month:mesProc,year:anoProc])
+            def cal=dataCorte.toCalendar()
+            cal.set(Calendar.DAY_OF_MONTH,ciclo.diaCorte)
+            cal.set(Calendar.MONTH,mesProc)
+            cal.set(Calendar.YEAR,anoProc)
+            dataCorte=cal.time
 
             corteAberto=new Corte()
             corteAberto.with{

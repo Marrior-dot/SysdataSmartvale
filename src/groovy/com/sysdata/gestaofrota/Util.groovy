@@ -131,11 +131,10 @@ class Util {
 
 
     static def formatCurrency(curr) {
-        if (curr instanceof Double) {
-            def dfs = new DecimalFormatSymbols(LOCAL)
-            dfs.decimalSeparator = ","
-            new DecimalFormat("#0.00", dfs).format(curr)
-        }
+        if(!curr) curr=0.00
+        def dfs = new DecimalFormatSymbols(LOCAL)
+        dfs.decimalSeparator = ","
+        new DecimalFormat("#0.00", dfs).format(curr)
     }
 
     static def roundCurrency(curr) {
