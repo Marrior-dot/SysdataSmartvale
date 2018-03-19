@@ -37,7 +37,7 @@ grails.project.dependency.resolution = {
         compile "org.grails.plugins:audit-logging:1.0.5"
 		compile ":hibernate-filter:0.3.2"
 		compile ':quartz:1.0.2'
-        compile ":console:1.5.5"
+        runtime ":console:1.5.5"
         compile "org.grails.plugins:remote-pagination:0.4.8"
         compile "org.grails.plugins:export:1.6"
 
