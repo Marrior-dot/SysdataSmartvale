@@ -25,6 +25,9 @@ class Corte {
      */
     void faturar(dataProc){
 
+
+
+
         def contasId=LancamentoPortador.withCriteria{
             projections{
                 distinct("conta.id")
@@ -34,6 +37,14 @@ class Corte {
             eq("corte",this)
             order("conta.id")
         }
+
+        contasId=Conta.withCriteria {
+            projections {
+                property("id")
+            }
+
+        }
+
 
         if(contasId.isEmpty()) log.info "Nao ha contas a faturar para este corte"
         else log.info "Total de Contas a Faturar: ${contasId.size()}"
