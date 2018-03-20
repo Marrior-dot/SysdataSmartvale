@@ -25,9 +25,7 @@ class Corte {
      */
     void faturar(dataProc){
 
-
-
-
+/*
         def contasId=LancamentoPortador.withCriteria{
             projections{
                 distinct("conta.id")
@@ -37,8 +35,9 @@ class Corte {
             eq("corte",this)
             order("conta.id")
         }
+*/
 
-        contasId=Conta.withCriteria {
+        def contasId=Conta.withCriteria {
             projections {
                 property("id")
             }
