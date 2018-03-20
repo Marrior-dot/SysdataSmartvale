@@ -5,6 +5,7 @@ enum TipoLancamento {
 	COMPRA("Compra"),
 	REEMBOLSO("Reembolso"),
 	TAXA_UTILIZACAO("Taxa de Utilização"),
+	TAXA_MANUTENCAO("Taxa de Manutenção"),
 	MENSALIDADE("Mensalidade de Cartão"),
 	EMISSAO_CARTAO("Emissão de Cartão"),
 	REEMISSAO_CARTAO("Reemissão de Cartão"),

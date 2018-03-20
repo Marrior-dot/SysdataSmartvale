@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota
 
+import grails.util.Holders
+
 abstract class Portador {
     Conta conta = new Conta()
     BigDecimal limiteTotal=0D
@@ -9,8 +11,6 @@ abstract class Portador {
     BigDecimal saldoTotal=0D
     BigDecimal saldoDiario
     BigDecimal saldoMensal
-
-
 
     static hasMany = [cartoes: Cartao]
     static belongsTo = [unidade: Unidade]
@@ -64,15 +64,32 @@ abstract class Portador {
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
 
+    private def initContext(Corte corte){
+
+        def ctx=new Expando()
+
+        ctx.conta=this.conta
+        ctx.fatura=new Fatura(corte:corte)
+
+        ctx
+    }
+
+
     Fatura faturar(Corte corte, dataProc){
 
+        def fatConfig=Holders.grailsApplication.config.project.faturamento
+
+        def ctx=initContext(corte)
+
+
+        //Lançamentos a FATURAR
         def lctosAFat=LancamentoPortador.withCriteria {
             eq("conta",this.conta)
             eq("statusFaturamento",StatusFaturamento.NAO_FATURADO)
             eq("corte",corte)
             order("dataEfetivacao")
         }
-        Fatura fatura=new Fatura()
+        Fatura fatura=ctx.fatura
         fatura.with{
             dataVencimento=corte.dataCobranca
             data=dataProc
@@ -85,6 +102,12 @@ abstract class Portador {
             lcto.statusFaturamento=StatusFaturamento.FATURADO
         }
         fatura.save()
+
+        //Roda extensoes
+        fatConfig.extensoes.each{
+
+        }
+
         //Fecha última fatura
         Fatura ultFat=this.conta.ultimaFatura
         ultFat.status=StatusFatura.FECHADA

@@ -37,11 +37,18 @@ class Corte {
         }
 */
 
-        def contasId=Conta.withCriteria {
+        def contasId=Portador.withCriteria {
             projections {
-                property("id")
+                property("conta.id")
             }
-
+            unidade{
+                rh{
+                    fechamentos{
+                        eq("id",this.fechamento.id)
+                    }
+                }
+            }
+            order("conta.id")
         }
 
 
