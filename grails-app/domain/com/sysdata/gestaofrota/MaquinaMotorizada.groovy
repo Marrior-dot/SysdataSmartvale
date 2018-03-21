@@ -5,6 +5,7 @@ abstract class MaquinaMotorizada {
     TipoAbastecimento tipoAbastecimento
     Date dateCreated
     String complementoEmbossing
+    Status status
 
     static auditable = true
 
@@ -16,6 +17,7 @@ abstract class MaquinaMotorizada {
         dateCreated nullable: true
         portador nullable: true
         complementoEmbossing nullable: true
+        status nullable:true
     }
 
     static mapping = {

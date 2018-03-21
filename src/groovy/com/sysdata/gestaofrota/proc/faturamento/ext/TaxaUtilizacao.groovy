@@ -1,23 +1,11 @@
 package com.sysdata.gestaofrota.proc.faturamento.ext
 
-import com.sysdata.gestaofrota.Cartao
-import com.sysdata.gestaofrota.Conta
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.StatusCartao
-import com.sysdata.gestaofrota.StatusControleAutorizacao
-import com.sysdata.gestaofrota.StatusFaturamento
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.StatusTransacao
-import com.sysdata.gestaofrota.TipoLancamento
-import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.*
 
 /**
  * Created by acception on 20/03/18.
  */
-class TarifaUtilizacao implements ExtensaoFaturamento {
+class TaxaUtilizacao implements ExtensaoFaturamento {
 
     /**
      *
@@ -32,8 +20,9 @@ class TarifaUtilizacao implements ExtensaoFaturamento {
         if(taxUtiliz>0){
 
             Fatura fatura=ctx.fatura
+            Corte corte=fatura.corte
 
-            def count=Transacao.withCriteria {
+            def count=Transacao.withCriteria(uniqueResult:true){
                 projections {
                     rowCount('id')
                 }
@@ -41,6 +30,8 @@ class TarifaUtilizacao implements ExtensaoFaturamento {
                     eq("portador",portador)
                 }
                 'in'("statusControle",[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA])
+                ge("dataHora",corte.dataInicioCiclo)
+                le("dataHora",corte.dataFechamento)
             }
 
             if(count>0){

@@ -6,6 +6,7 @@ import com.sysdata.gestaofrota.Fatura
 import com.sysdata.gestaofrota.ItemFatura
 import com.sysdata.gestaofrota.LancamentoPortador
 import com.sysdata.gestaofrota.Portador
+import com.sysdata.gestaofrota.PortadorFuncionario
 import com.sysdata.gestaofrota.StatusCartao
 import com.sysdata.gestaofrota.StatusFaturamento
 import com.sysdata.gestaofrota.StatusLancamento
@@ -17,10 +18,13 @@ import groovy.util.logging.Log4j
  */
 
 @Log4j
-class TarifaManutencao implements ExtensaoFaturamento {
+class TaxaManutencao implements ExtensaoFaturamento {
 
     /**
-     * Cobra tarifa se cartão atual do portador estiver ATIVO no momento do fechamento
+     * Cobra taxa:
+     * 1. Se portador de cartão (funcionário/máquina) estiver ATIVO
+     * ou
+     * 2. Se taxa de utilização já tiver sido cobrada
      */
 
     @Override
@@ -33,9 +37,8 @@ class TarifaManutencao implements ExtensaoFaturamento {
 
         if(taxManut>0){
 
-            Cartao cartao=portador.cartaoAtual
-
-            if(cartao.status==StatusCartao.ATIVO){
+            Fatura fatura=ctx.fatura
+            if(portador.ativo || fatura.itens.find{it.lancamento.tipo==TipoLancamento.TAXA_UTILIZACAO}){
                 LancamentoPortador lcnTaxManut=new LancamentoPortador()
                 lcnTaxManut.with{
                     conta=cnt
@@ -47,7 +50,7 @@ class TarifaManutencao implements ExtensaoFaturamento {
                 }
                 lcnTaxManut.save()
 
-                Fatura fatura=ctx.fatura
+
                 ItemFatura itTxMan=new ItemFatura()
                 itTxMan.with{
                     data=lcnTaxManut.dataEfetivacao

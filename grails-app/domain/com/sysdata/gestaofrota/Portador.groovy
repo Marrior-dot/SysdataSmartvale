@@ -22,8 +22,19 @@ abstract class Portador {
         saldoMensal nullable:true
     }
 
-    static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone']
+    static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone','ativo']
 
+
+    Boolean getAtivo(){
+
+        if(this.instanceOf(PortadorFuncionario)){
+            PortadorFuncionario portFunc=this as PortadorFuncionario
+            return portFunc.funcionario.status==Status.ATIVO
+        }else if(this.instanceOf(PortadorMaquina)){
+            PortadorMaquina portMaq=this as PortadorMaquina
+            return portMaq.maquina.status==Status.ATIVO
+        }
+    }
 
     Cartao getCartaoAtivo() {
         cartoes.find { it.status == StatusCartao.ATIVO || it.status == StatusCartao.EMBOSSING }
@@ -65,12 +76,9 @@ abstract class Portador {
     }
 
     private def initContext(Corte corte){
-
         def ctx=new Expando()
-
         ctx.conta=this.conta
         ctx.fatura=new Fatura(corte:corte)
-
         ctx
     }
 

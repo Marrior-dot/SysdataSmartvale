@@ -1,7 +1,8 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
-import com.sysdata.gestaofrota.proc.faturamento.ext.TarifaManutencao
-import com.sysdata.gestaofrota.proc.faturamento.ext.TarifaUtilizacao
+import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
+import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaManutencao
+import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 /**
  * ESSE ARQUIVO DEVE SER IGNORADO PELO GIT
@@ -36,5 +37,5 @@ environments {
 
 faturamento{
     controlaSaldo=true
-    extensoes=[TarifaManutencao,TarifaUtilizacao]
+    extensoes=[TaxaUtilizacao,TaxaManutencao,TaxaAdministracao]
 }
