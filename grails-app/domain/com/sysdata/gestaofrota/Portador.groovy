@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.util.Holders
 
 abstract class Portador {
@@ -75,10 +77,33 @@ abstract class Portador {
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
 
-    private def initContext(Corte corte){
+    private def initContext(Corte corte,dataProc){
         def ctx=new Expando()
-        ctx.conta=this.conta
-        ctx.fatura=new Fatura(corte:corte)
+
+        //Fecha última fatura
+        ctx.ultimaFatura=this.conta.ultimaFatura
+        ctx.atrasado=false
+
+        //Data de referência para atraso pagamento
+        ctx.dataRefCob=ctx.ultimaFatura?ctx.ultimaFatura.dataVencimento:dataProc
+
+        //Inicializa (cria) objeto Fatura
+        Fatura fatura=new Fatura()
+        fatura.with{
+            conta=this.conta
+            dataVencimento=corte.dataCobranca
+            data=dataProc
+            corte=corte
+            status=StatusFatura.ABERTA
+        }
+
+
+        ctx.addSaldo={tpSld,val->
+            if(!ctx.novosSaldos.containsKey(tpSld)) ctx.novosSaldos[tpSld]=0.0
+            ctx.novosSaldos[tpSld]+=val
+        }
+
+
         ctx
     }
 
@@ -87,8 +112,7 @@ abstract class Portador {
 
         def fatConfig=Holders.grailsApplication.config.project.faturamento
 
-        def ctx=initContext(corte)
-
+        def ctx=initContext(corte,dataProc)
 
         //Lançamentos a FATURAR
         def lctosAFat=LancamentoPortador.withCriteria {
@@ -98,26 +122,34 @@ abstract class Portador {
             order("dataEfetivacao")
         }
         Fatura fatura=ctx.fatura
-        fatura.with{
-            dataVencimento=corte.dataCobranca
-            data=dataProc
-            corte=corte
-            status=StatusFatura.ABERTA
-        }
         lctosAFat.each{lcto->
+
             ItemFatura item=lcto.faturar()
             fatura.addToItens item
             lcto.statusFaturamento=StatusFaturamento.FATURADO
+
+
+
+
+            switch(lcto.tipo){
+                case TipoLancamento.COMPRA:
+                    if(fatConfig.controlaSaldo) ctx.addSaldo(TipoLancamento.COMPRA,lcto.valor)
+                    break
+                default:
+                    new RuntimeException("Tipo de Lancamento (${lcto.tipo}) nao tratado no faturamento!")
+            }
+
+
+
         }
         fatura.save()
 
         //Roda extensoes
-        fatConfig.extensoes.each{
-
+        fatConfig.extensoes.each{e->
+            ExtensaoFaturamento ext=ExtensaoFactory.getInstance(e)
+            ext.tratar(ctx)
         }
 
-        //Fecha última fatura
-        Fatura ultFat=this.conta.ultimaFatura
         ultFat.status=StatusFatura.FECHADA
         ultFat.save()
 

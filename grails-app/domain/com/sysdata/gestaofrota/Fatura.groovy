@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 class Fatura {
 
+    Conta conta
     Corte corte
     Date data
     Date dataVencimento
