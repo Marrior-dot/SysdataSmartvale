@@ -51,7 +51,6 @@ class Corte {
             order("conta.id")
         }
 
-
         if(contasId.isEmpty()) log.info "Nao ha contas a faturar para este corte"
         else log.info "Total de Contas a Faturar: ${contasId.size()}"
 
@@ -60,7 +59,7 @@ class Corte {
         contasId.each{
             Conta conta=Conta.get(it)
             Fatura fatura=conta.portador.faturar(this,dataProc)
-            totalGeral+=fatura.valorTotal
+
         }
 
 

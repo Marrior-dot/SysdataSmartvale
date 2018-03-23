@@ -11,7 +11,9 @@ enum TipoLancamento {
 	EMISSAO_CARTAO("Emissão de Cartão"),
 	REEMISSAO_CARTAO("Reemissão de Cartão"),
 	TRANSFERENCIA_SALDO("Transferência de Saldo"),
-	PAGAMENTO("Pagamento")
+	PAGAMENTO("Pagamento"),
+    MULTA("Multa"),
+    MORA("Juros Moratórios")
 
 	String nome
 	

@@ -28,7 +28,7 @@ class TaxaManutencao implements ExtensaoFaturamento {
      */
 
     @Override
-    def tratar(ctx) {
+    void tratar(ctx) {
 
         Conta cnt=ctx.conta
         Portador portador=cnt.participante as Portador

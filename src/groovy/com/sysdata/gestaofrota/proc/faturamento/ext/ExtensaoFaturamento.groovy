@@ -5,5 +5,5 @@ package com.sysdata.gestaofrota.proc.faturamento.ext
  */
 interface ExtensaoFaturamento {
 
-    def tratar(ctx)
+    void tratar(ctx)
 }

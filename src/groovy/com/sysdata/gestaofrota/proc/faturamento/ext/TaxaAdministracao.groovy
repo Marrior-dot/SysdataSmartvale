@@ -18,7 +18,7 @@ import com.sysdata.gestaofrota.Transacao
 class TaxaAdministracao implements ExtensaoFaturamento {
 
     @Override
-    def tratar(ctx) {
+    void tratar(ctx) {
         Conta cnt=ctx.conta
         Portador portador=cnt.participante as Portador
         def taxAdm=portador.unidade.rh.taxaAdministracao
