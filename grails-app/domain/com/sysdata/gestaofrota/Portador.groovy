@@ -128,9 +128,6 @@ abstract class Portador {
             fatura.addToItens item
             lcto.statusFaturamento=StatusFaturamento.FATURADO
 
-
-
-
             switch(lcto.tipo){
                 case TipoLancamento.COMPRA:
                     if(fatConfig.controlaSaldo) ctx.addSaldo(TipoLancamento.COMPRA,lcto.valor)

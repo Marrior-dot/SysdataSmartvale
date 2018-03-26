@@ -6,6 +6,7 @@ class ItemFatura {
     String descricao
     BigDecimal valor
     Lancamento lancamento
+    BigDecimal saldo
 
     static belongsTo = [fatura:Fatura]
 

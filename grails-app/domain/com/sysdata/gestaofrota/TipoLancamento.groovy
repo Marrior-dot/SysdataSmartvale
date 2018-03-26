@@ -13,7 +13,9 @@ enum TipoLancamento {
 	TRANSFERENCIA_SALDO("Transferência de Saldo"),
 	PAGAMENTO("Pagamento"),
     MULTA("Multa"),
-    MORA("Juros Moratórios")
+    MORA("Juros Moratórios"),
+	FECHAMENTO_FATURA("Fechamento"),
+	SALDO_ANTERIOR("Saldo Anterior")
 
 	String nome
 	

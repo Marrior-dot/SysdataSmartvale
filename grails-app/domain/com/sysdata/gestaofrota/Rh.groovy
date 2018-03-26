@@ -60,7 +60,7 @@ class Rh extends Empresa {
             eq("status",StatusCorte.ABERTO)
         }
 
-        //Senão houver corte aberto, cria primeiros cortes
+        //Senão houver corte aberto, cria primeiro Corte
         if(!corteAberto){
 
             def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
