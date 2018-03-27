@@ -8,6 +8,7 @@ class Corte {
     Date dataCobranca
     Date dataInicioCiclo
     StatusCorte status
+    Boolean liberado=false
 
     static belongsTo = [fechamento: Fechamento]
 
@@ -104,7 +105,6 @@ class Corte {
         if(fechIter.hasNext()) fechProx=fechIter.next()
         else fechProx=fechList[0]
 
-
         def dataCorte=dataProc
         Calendar cal=dataCorte.toCalendar()
 
@@ -135,7 +135,6 @@ class Corte {
      */
     void faturar(dataProc){
 
-
         def contasId=Portador.withCriteria {
             projections {
                 property("conta.id")
@@ -153,20 +152,22 @@ class Corte {
         if(contasId.isEmpty()) log.info "Nao ha contas a faturar para este corte"
         else {
             log.info "Total de Contas a Faturar: ${contasId.size()}"
-
             Conta contaRh=this.fechamento.programa.conta
-            Fatura fatRh=new Fatura(conta:contaRh,corte:this)
-
-            tratarAtraso(contaRh,dataProc)
-
-            def itensFatRh=[]
-
+            Fatura fatRh=new Fatura( )
+            fatRh.with{
+                conta=contaRh
+                corte=this
+                data=dataProc
+                dataVencimento=this.dataCobranca
+                status=StatusFatura.ABERTA
+            }
+            tratarAtraso(fatRh,dataProc)
+            def itensFatRh=[:]
             contasId.each{
                 Conta conta=Conta.get(it)
                 Fatura fatPort=conta.portador.faturar(this,dataProc)
-
                 fatPort.itens.each{itf->
-                    if(!itensFatRh.contains(itf.lancamento.tipo)) itensFatRh[itf.lancamento.tipo]=0.0
+                    if(!itensFatRh.containsKey(itf.lancamento.tipo)) itensFatRh[itf.lancamento.tipo]=0.0
                     itensFatRh[itf.lancamento.tipo]+=itf.valor
                 }
             }

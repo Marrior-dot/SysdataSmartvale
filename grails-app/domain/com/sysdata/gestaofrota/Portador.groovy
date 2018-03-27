@@ -77,7 +77,7 @@ abstract class Portador {
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
 
-    private def initContext(Corte corte,dataProc){
+    private def initContext(Corte corteAberto,dataProc){
         def ctx=new Expando()
 
         //Fecha última fatura
@@ -91,19 +91,18 @@ abstract class Portador {
         Fatura fatura=new Fatura()
         fatura.with{
             conta=this.conta
-            dataVencimento=corte.dataCobranca
+            dataVencimento=corteAberto.dataCobranca
             data=dataProc
-            corte=corte
+            corte=corteAberto
             status=StatusFatura.ABERTA
         }
+        ctx.fatura=fatura
 
-
+        /*
         ctx.addSaldo={tpSld,val->
             if(!ctx.novosSaldos.containsKey(tpSld)) ctx.novosSaldos[tpSld]=0.0
             ctx.novosSaldos[tpSld]+=val
-        }
-
-
+        }*/
         ctx
     }
 
@@ -123,23 +122,10 @@ abstract class Portador {
         }
         Fatura fatura=ctx.fatura
         lctosAFat.each{lcto->
-
             ItemFatura item=lcto.faturar()
             fatura.addToItens item
             lcto.statusFaturamento=StatusFaturamento.FATURADO
-
-            switch(lcto.tipo){
-                case TipoLancamento.COMPRA:
-                    if(fatConfig.controlaSaldo) ctx.addSaldo(TipoLancamento.COMPRA,lcto.valor)
-                    break
-                default:
-                    new RuntimeException("Tipo de Lancamento (${lcto.tipo}) nao tratado no faturamento!")
-            }
-
-
-
         }
-        fatura.save()
 
         //Roda extensoes
         fatConfig.extensoes.each{e->
@@ -147,8 +133,18 @@ abstract class Portador {
             ext.tratar(ctx)
         }
 
-        ultFat.status=StatusFatura.FECHADA
-        ultFat.save()
+        fatura.save(flush:true,failOnError:true)
+
+        Fatura ultFat=ctx.ultimaFatura
+        if(ultFat){
+            ultFat.status=StatusFatura.FECHADA
+            ultFat.save()
+        }
+
+        //Log fatura
+        log.debug fatura
+        fatura.itens.sort{it.data}.each{ log.debug it }
+
 
         fatura
     }
