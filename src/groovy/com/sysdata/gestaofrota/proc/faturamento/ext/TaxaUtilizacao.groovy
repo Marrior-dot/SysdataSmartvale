@@ -14,13 +14,17 @@ class TaxaUtilizacao implements ExtensaoFaturamento {
 
     @Override
     void tratar(ctx) {
-        Conta cnt=ctx.conta
-        Portador portador=cnt.participante as Portador
+        Conta cnt=ctx.fatura.conta
+        Portador portador=ctx.portador
+
         def taxUtiliz=portador.unidade.rh.taxaUtilizacao
+        println "Taxa Utilizacao: $taxUtiliz"
+
         if(taxUtiliz>0){
 
             Fatura fatura=ctx.fatura
-            Corte corte=fatura.corte
+            Corte corteAtual=fatura.corte
+            println "Corte (inicio:${corteAtual.dataInicioCiclo.format('dd/MM/yyyy')} fech:${corteAtual.dataFechamento.format('dd/MM/yyyy')})"
 
             def count=Transacao.withCriteria(uniqueResult:true){
                 projections {
@@ -30,28 +34,33 @@ class TaxaUtilizacao implements ExtensaoFaturamento {
                     eq("portador",portador)
                 }
                 'in'("statusControle",[StatusControleAutorizacao.PENDENTE,StatusControleAutorizacao.CONFIRMADA])
-                ge("dataHora",corte.dataInicioCiclo)
-                le("dataHora",corte.dataFechamento)
+                ge("dataHora",corteAtual.dataInicioCiclo)
+                le("dataHora",corteAtual.dataFechamento)
             }
 
+            println "Qtde Trs: ${count}"
+
             if(count>0){
+
+
                 LancamentoPortador lcnTaxUtiliz=new LancamentoPortador()
-                taxUtiliz.with{
+                lcnTaxUtiliz.with{
+                    corte=corteAtual
                     conta=cnt
                     tipo=TipoLancamento.TAXA_UTILIZACAO
-                    dataEfetivacao=new Date().clearTime()
+                    dataEfetivacao=ctx.dataProcessamento
                     valor=taxUtiliz
                     status=StatusLancamento.EFETIVADO
                     statusFaturamento=StatusFaturamento.FATURADO
                 }
-                taxUtiliz.save()
+                lcnTaxUtiliz.save(failOnError:true)
 
                 ItemFatura itTxUtil=new ItemFatura()
                 itTxUtil.with{
-                    data=taxUtiliz.dataEfetivacao
-                    descricao=taxUtiliz.tipo.nome
-                    valor=taxUtiliz.valor
-                    lancamento=taxUtiliz
+                    data=lcnTaxUtiliz.dataEfetivacao
+                    descricao=lcnTaxUtiliz.tipo.nome
+                    valor=lcnTaxUtiliz.valor
+                    lancamento=lcnTaxUtiliz
                 }
                 fatura.addToItens itTxUtil
                 fatura.save()

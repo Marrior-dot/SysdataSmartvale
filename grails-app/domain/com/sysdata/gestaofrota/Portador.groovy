@@ -80,6 +80,8 @@ abstract class Portador {
     private def initContext(Corte corteAberto,dataProc){
         def ctx=new Expando()
 
+        ctx.dataProcessamento=dataProc
+
         //Fecha última fatura
         ctx.ultimaFatura=this.conta.ultimaFatura
         ctx.atrasado=false
@@ -97,6 +99,7 @@ abstract class Portador {
             status=StatusFatura.ABERTA
         }
         ctx.fatura=fatura
+        ctx.portador=this
 
         /*
         ctx.addSaldo={tpSld,val->
@@ -125,22 +128,20 @@ abstract class Portador {
             ItemFatura item=lcto.faturar()
             fatura.addToItens item
             lcto.statusFaturamento=StatusFaturamento.FATURADO
+            lcto.status=StatusLancamento.EFETIVADO
         }
-
         //Roda extensoes
         fatConfig.extensoes.each{e->
             ExtensaoFaturamento ext=ExtensaoFactory.getInstance(e)
             ext.tratar(ctx)
         }
-
-        fatura.save(flush:true,failOnError:true)
+        fatura.save(flush:true)
 
         Fatura ultFat=ctx.ultimaFatura
         if(ultFat){
             ultFat.status=StatusFatura.FECHADA
             ultFat.save()
         }
-
         //Log fatura
         log.debug fatura
         fatura.itens.sort{it.data}.each{ log.debug it }

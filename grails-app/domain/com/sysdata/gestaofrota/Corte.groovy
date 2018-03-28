@@ -93,7 +93,7 @@ class Corte {
 
     private Corte fechar(dataProc){
         //Define data de fechamento (corte) para a data de processamento
-        this.dataFechamento=dataProc
+
         this.status=StatusCorte.FECHADO
 
         Fechamento fechAberto=this.fechamento
@@ -151,6 +151,8 @@ class Corte {
 
         if(contasId.isEmpty()) log.info "Nao ha contas a faturar para este corte"
         else {
+            this.dataFechamento=dataProc
+
             log.info "Total de Contas a Faturar: ${contasId.size()}"
             Conta contaRh=this.fechamento.programa.conta
             Fatura fatRh=new Fatura( )

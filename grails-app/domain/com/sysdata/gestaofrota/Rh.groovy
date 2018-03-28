@@ -66,32 +66,51 @@ class Rh extends Empresa {
             def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
             def diaProc=dataProc[Calendar.DAY_OF_MONTH]
             def mesProc=dataProc[Calendar.MONTH]
-            def anoProc=dataProc[Calendar.YEAR]
 
             def diaAnt=1
-            Fechamento ciclo
+            Fechamento ciclo, cicloAnterior
 
-            this.fechamentos.sort{it.diaCorte}.find{f->
+            def ordFechList=this.fechamentos.sort{it.diaCorte}
+
+            ordFechList.find{f->
                 if(diaAnt<=diaProc && diaProc<f.diaCorte){
                     ciclo=f
                     return true
                 }
                 diaAnt=f.diaCorte
+                cicloAnterior=f
                 return false
             }
+            //Se ciclo não encontrado, volta para o primeiro
 
+            //Calcula Data Prevista pra Corte
             def dataCorte=dataProc
+            def datInicCiclo=dataProc
             def cal=dataCorte.toCalendar()
-            cal.set(Calendar.DAY_OF_MONTH,ciclo.diaCorte)
-            cal.set(Calendar.MONTH,mesProc)
-            cal.set(Calendar.YEAR,anoProc)
+            def calInic=datInicCiclo.toCalendar()
+
+            if(!ciclo) {
+                ciclo=ordFechList[0]
+                cal.set(Calendar.DAY_OF_MONTH,ciclo.diaCorte)
+                cal.set(Calendar.MONTH,mesProc+1)
+            }else{
+                cal.set(Calendar.DAY_OF_MONTH,ciclo.diaCorte)
+                cal.set(Calendar.MONTH,mesProc)
+            }
             dataCorte=cal.time
+
+            //Calcula Data Inicio Ciclo
+            if(!cicloAnterior) cicloAnterior=ordFechList[ordFechList.size()-1]
+            if(cicloAnterior.diaCorte>ciclo.diaCorte) calInic.set(Calendar.MONTH,mesProc-1)
+            else calInic.set(Calendar.MONTH,mesProc)
+            calInic.set(Calendar.DAY_OF_MONTH,cicloAnterior.diaCorte+1)
+            datInicCiclo=calInic.time
 
             corteAberto=new Corte()
             corteAberto.with{
                 dataPrevista=dataCorte
                 dataCobranca=dataCorte+ciclo.diasAteVencimento
-                dataInicioCiclo=dataProc
+                dataInicioCiclo=datInicCiclo
                 status=StatusCorte.ABERTO
                 fechamento=ciclo
             }

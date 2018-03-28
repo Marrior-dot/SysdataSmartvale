@@ -19,13 +19,13 @@ class TaxaAdministracao implements ExtensaoFaturamento {
 
     @Override
     void tratar(ctx) {
-        Conta cnt=ctx.conta
-        Portador portador=cnt.participante as Portador
+        Conta cnt=ctx.fatura.conta
+        Portador portador=ctx.portador
         def taxAdm=portador.unidade.rh.taxaAdministracao
         if(taxAdm>0){
 
-            Corte corte=ctx.fatura.corte
-            def totalAprov=Transacao.withCriteria {
+            Corte corteAtual=ctx.fatura.corte
+            def totalAprov=Transacao.withCriteria(uniqueResult:true) {
                                 projections {
                                     sum("valor")
                                 }
@@ -34,8 +34,8 @@ class TaxaAdministracao implements ExtensaoFaturamento {
                                 }
                                 'in'("statusControle",[StatusControleAutorizacao.CONFIRMADA,
                                                        StatusControleAutorizacao.PENDENTE])
-                                ge("dataHora",corte.dataInicioCiclo)
-                                le("dataHora",corte.dataFechamento)
+                                ge("dataHora",corteAtual.dataInicioCiclo)
+                                le("dataHora",corteAtual.dataFechamento)
                             }
             if(totalAprov>0){
 
@@ -43,14 +43,15 @@ class TaxaAdministracao implements ExtensaoFaturamento {
                 def valTaxAdm=(totalAprov*taxAdm/100.00).round(2)
                 LancamentoPortador lcnTaxaAdm=new LancamentoPortador()
                 lcnTaxaAdm.with {
+                    corte=corteAtual
                     conta=cnt
                     tipo=TipoLancamento.TAXA_ADM
-                    dataEfetivacao=new Date().clearTime()
+                    dataEfetivacao=ctx.dataProcessamento
                     valor=valTaxAdm
                     status=StatusLancamento.EFETIVADO
                     statusFaturamento=StatusFaturamento.FATURADO
                 }
-                lcnTaxaAdm.save()
+                lcnTaxaAdm.save(failOnError:true)
 
                 ItemFatura itTxAdm=new ItemFatura()
                 itTxAdm.with{

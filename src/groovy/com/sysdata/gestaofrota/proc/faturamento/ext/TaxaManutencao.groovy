@@ -30,8 +30,8 @@ class TaxaManutencao implements ExtensaoFaturamento {
     @Override
     void tratar(ctx) {
 
-        Conta cnt=ctx.conta
-        Portador portador=cnt.participante as Portador
+        Conta cnt=ctx.fatura.conta
+        Portador portador=ctx.portador
 
         def taxManut=portador.unidade.rh.taxaManutencao
 
@@ -41,14 +41,15 @@ class TaxaManutencao implements ExtensaoFaturamento {
             if(portador.ativo || fatura.itens.find{it.lancamento.tipo==TipoLancamento.TAXA_UTILIZACAO}){
                 LancamentoPortador lcnTaxManut=new LancamentoPortador()
                 lcnTaxManut.with{
+                    corte=fatura.corte
                     conta=cnt
                     tipo=TipoLancamento.TAXA_MANUTENCAO
-                    dataEfetivacao=new Date().clearTime()
+                    dataEfetivacao=ctx.dataProcessamento
                     valor=taxManut
                     status=StatusLancamento.EFETIVADO
                     statusFaturamento=StatusFaturamento.FATURADO
                 }
-                lcnTaxManut.save()
+                lcnTaxManut.save(failOnError:true)
 
 
                 ItemFatura itTxMan=new ItemFatura()
