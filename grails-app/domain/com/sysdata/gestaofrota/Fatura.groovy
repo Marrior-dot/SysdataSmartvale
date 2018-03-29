@@ -8,7 +8,7 @@ class Fatura {
     Date dataVencimento
     StatusFatura status
 
-    static hasMany = [itens:ItemFatura]
+    static hasMany = [itens:ItemFatura,boletos:Boleto]
 
     static transients = ['valorTotal']
 

@@ -195,7 +195,8 @@ class Util {
         if (raw) {
             raw = raw.replace('.', '')
             raw = raw.replace('-', '')
-            Util.leftPad(raw, 11, (char) '0')
+            sprintf("%011d",raw)
+
         } else {
             raw
         }

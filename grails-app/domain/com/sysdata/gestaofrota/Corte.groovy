@@ -1,5 +1,13 @@
 package com.sysdata.gestaofrota
 
+import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa
+import org.jrimum.domkee.financeiro.banco.febraban.Cedente
+import org.jrimum.domkee.financeiro.banco.febraban.Sacado
+import org.jrimum.domkee.comum.pessoa.endereco.Endereco
+
+import com.sysdata.gestaofrota.Endereco as EnderecoFleet
+
+
 class Corte {
 
     Date dateCreated
@@ -130,6 +138,48 @@ class Corte {
     }
 
 
+    private Endereco montarEndereco(participante){
+
+        EnderecoFleet domainEndereco = participante.endereco
+        if (domainEndereco == null) throw new Exception("Endereço não encontrado")
+        Endereco endereco = new Endereco()
+        String siglaUF = domainEndereco.cidade?.estado?.uf?.toUpperCase() ?: domainEndereco.cidade?.estado?.uf?.toUpperCase()
+        endereco.setUF(UnidadeFederativa.valueOfSigla(siglaUF))
+        endereco.setLocalidade(domainEndereco.cidade?.nome)
+        endereco.setCep(Util.rawToCep(domainEndereco.cep))
+        endereco.setBairro(domainEndereco.bairro)
+        endereco.setLogradouro(domainEndereco.logradouro)
+        endereco.setNumero(domainEndereco.numero)
+
+        return endereco
+
+
+    }
+
+
+    private void gerarBoleto(Fatura fatura){
+
+        def docCedente
+        def docSacado
+
+
+        Administradora adm=Administradora.all[0]
+        Rh rh=fatura.conta.participante as Rh
+
+
+
+        Cedente cedente=new Cedente(adm.nome,docCedente)
+        Sacado sacado=new Sacado(rh.nome,docSacado)
+        sacado.addEndereco(montarEndereco(rh))
+
+
+
+
+
+
+    }
+
+
     /**
      * Fatura todas as contas individuais (portadores)
      */
@@ -197,6 +247,9 @@ class Corte {
                 fatRh.addToItens itemFatura
                 fatRh.save()
             }
+
+            //Gera boleto
+            this.gerarBoleto(fatRh)
 
             //Fecha última fatura e transfere saldo
 
