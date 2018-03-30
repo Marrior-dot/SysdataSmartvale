@@ -58,6 +58,10 @@ environments {
 
 }
 
+administradora{
+
+}
+
 
 faturamento{
     controlaSaldo=true

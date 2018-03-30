@@ -146,7 +146,7 @@ class Corte {
         String siglaUF = domainEndereco.cidade?.estado?.uf?.toUpperCase() ?: domainEndereco.cidade?.estado?.uf?.toUpperCase()
         endereco.setUF(UnidadeFederativa.valueOfSigla(siglaUF))
         endereco.setLocalidade(domainEndereco.cidade?.nome)
-        endereco.setCep(Util.rawToCep(domainEndereco.cep))
+        endereco.setCep(domainEndereco.cep)
         endereco.setBairro(domainEndereco.bairro)
         endereco.setLogradouro(domainEndereco.logradouro)
         endereco.setNumero(domainEndereco.numero)
@@ -165,8 +165,6 @@ class Corte {
 
         Administradora adm=Administradora.all[0]
         Rh rh=fatura.conta.participante as Rh
-
-
 
         Cedente cedente=new Cedente(adm.nome,docCedente)
         Sacado sacado=new Sacado(rh.nome,docSacado)
