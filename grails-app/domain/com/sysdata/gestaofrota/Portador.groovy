@@ -135,16 +135,25 @@ abstract class Portador {
             ExtensaoFaturamento ext=ExtensaoFactory.getInstance(e)
             ext.tratar(ctx)
         }
-        fatura.save(flush:true)
 
-        Fatura ultFat=ctx.ultimaFatura
-        if(ultFat){
-            ultFat.status=StatusFatura.FECHADA
-            ultFat.save()
+        if(fatura.itens){
+            fatura.save(flush:true)
+
+            Fatura ultFat=ctx.ultimaFatura
+            if(ultFat){
+                ultFat.status=StatusFatura.FECHADA
+                ultFat.save()
+            }
+            //Log fatura
+            log.debug fatura
+            fatura.itens.sort{it.data}.each{ log.debug it }
+
+        }else{
+            fatura.discard()
+            log.debug "CNT => #${fatura.conta.id} sem faturamento"
         }
-        //Log fatura
-        log.debug fatura
-        fatura.itens.sort{it.data}.each{ log.debug it }
+
+
 
 
         fatura
