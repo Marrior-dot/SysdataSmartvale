@@ -10,6 +10,8 @@ class EquipamentoController extends BaseOwnerController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     def equipamentoService
     def processamentoService
+    def cartaoService
+    def portadorService
 
     def index = {
         redirect(action: "list", params: params)
@@ -47,13 +49,10 @@ class EquipamentoController extends BaseOwnerController {
 
                 if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
 
-                    equipamentoInstance.portador = new PortadorMaquina()
-                    equipamentoInstance.portador.unidade = unidadeInstance
-                    equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
-                    equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-                    equipamentoInstance = equipamentoService.save(equipamentoInstance)
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'equipamento.label', default: ''), equipamentoInstance.id])}"
-                    redirect(action: "show", id: equipamentoInstance.id)
+                    PortadorMaquina portadorMaquina = portadorService.save(equipamentoInstance,params)
+                    if (equipamentoInstance.hasErrors()) throw new Exception(equipamentoInstance.showErrors())
+                    equipamentoInstance.save flush: true
+                    cartaoService.gerar(portadorMaquina)
 
                 }else
                     equipamentoInstance.save flush: true

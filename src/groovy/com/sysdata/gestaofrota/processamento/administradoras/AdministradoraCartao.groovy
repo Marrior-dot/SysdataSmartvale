@@ -149,6 +149,8 @@ abstract class AdministradoraCartao implements IGeradorCartao {
         resto = soma % 11;
         dv = 11 - resto;
         //retorna o digito verificador
+        if(dv > 9 || dv == 0 )
+            dv = 1
         return dv;
     }
 }

@@ -15,6 +15,7 @@
                         <th>Nome</th>
                         <th>Tipo</th>
                         <th>Valor (R$)</th>
+                        <th>Valor Anterior(R$)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,7 @@
                             <td>${fieldValue(bean: produto, field: "nome")}</td>
                             <td>${fieldValue(bean: produto, field: "tipo")}</td>
                             <td><input type="text" class="form-control money" name="valor[${produto.id}]" value="${prodEst?.valor ?: 0}"/></td>
+                            <td><input type="text" class="form-control money" name="valorAnterior" value="${prodEst?.valorAnterior ?: 0}" disabled /></td>
                         </tr>
                     </g:each>
                 </tbody>

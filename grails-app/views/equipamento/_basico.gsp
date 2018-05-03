@@ -48,13 +48,15 @@
 						  optionValue="abreviacao" optionKey="id"/>
 			</div>
 
-			<div class="form-group col-md-2">
+			<div class="form-group col-md-5">
 				<label for="tipoAbastecimento">Tipo de Combustível</label>
 				<g:select class="form-control" name="tipoAbastecimento"
 						  from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
 						  value="${equipamentoInstance?.tipoAbastecimento}"/>
 			</div>
+		</div>
 
+		<div class="row">
 			<div class="form-group col-md-2">
 				<label for="capacidadeTanque">Capacidade Tanque</label>
 				<div class="input-group">
@@ -64,7 +66,7 @@
 				</div>
 			</div>
 
-			<div class="form-group col-md-2">
+			<div class="form-group col-md-4">
 				<label for="mediaConsumo">Média de Consumo *</label>
 				<div class="input-group">
 					<input type="number" class="form-control" id="mediaConsumo" name="mediaConsumo"
@@ -88,22 +90,52 @@
 					<span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing - codigoTipoLength}</strong> caracteres.</span>
 				</div>
 
-				<div class="form-group col-md-3">
+				%{--<div class="form-group col-md-3">
 					<label for="portador.valorLimite">Limite *</label>
 					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" min="0" step="0.01" class="form-control"
+						<input type="number" min="0" step="0.01" class="form-control money"
 							   id="portador.valorLimite" name="portador.valorLimite"
-							   value="${equipamentoInstance?.portador?.valorLimite}" required/>
+							   value="${equipamentoInstance?.portador?.limiteTotal}" required/>
 					</div>
-				</div>
+				</div>--}%
 
-				<div class="form-group col-md-3">
+				%{--<div class="form-group col-md-3">
 					<label for="portador.tipoLimite">Tipo Limite *</label>
 					<g:select name="portador.tipoLimite" from="${com.sysdata.gestaofrota.TipoLimite.values()}"
 							  required="required" value="${equipamentoInstance?.portador?.tipoLimite}"
 							  class="form-control" optionValue="nome"/>
+				</div>--}%
+			</div>
+
+			<div class="row">
+
+				<div class="form-group col-md-2">
+					<label for="portador.limiteTotal">Limite Total *</label>
+					<div class="input-group">
+						<input class="form-control money"
+							   id="portador.limiteTotal" name="portador.limiteTotal"
+							   value="${equipamentoInstance?.portador?.limiteTotal}" required/>
+					</div>
 				</div>
+
+				<div class="form-group col-md-2">
+					<label for="portador.limiteDiario">Limite Diário *</label>
+					<div class="input-group">
+						<input  class="form-control money"
+								id="portador.limiteDiario" name="portador.limiteDiario"
+								value="${equipamentoInstance?.portador?.limiteDiario}" />
+					</div>
+				</div>
+
+				<div class="form-group col-md-2">
+					<label for="portador.limiteMensal">Limite Mensal *</label>
+					<div class="input-group">
+						<input  class="form-control money"
+								id="portador.limiteMensal" name="portador.limiteMensal"
+								value="${equipamentoInstance?.portador?.limiteMensal}" />
+					</div>
+				</div>
+
 			</div>
 		</g:if>
 

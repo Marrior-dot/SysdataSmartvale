@@ -16,7 +16,7 @@ class MaxxCard extends AdministradoraCartao {
 
     @Override
     String gerarNumero(Administradora administradora, Portador portador) {
-        final String pp = "05"
+        final String pp = "06"
         final String nnnnnnn = administradora.qtdCartoes.toString().padLeft(7, '0')
         String numero = "${getBin()}${pp}${nnnnnnn}"
 
