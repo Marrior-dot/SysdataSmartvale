@@ -1,4 +1,6 @@
-package com.sysdata.gestaofrota.proc.faturamento.cobranca
+package com.sysdata.gestaofrota.proc.cobrancaBancaria.arquivo.cnab240
+
+import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 
 /**
  * Created by luiz on 14/04/18.

@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.faturamento.cobranca
+package com.sysdata.gestaofrota.proc.cobrancaBancaria.arquivo.cnab240
 
 /**
  * Created by luiz on 15/04/18.

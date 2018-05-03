@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.proc.faturamento
 import com.sysdata.gestaofrota.Boleto
 import com.sysdata.gestaofrota.StatusBoleto
 import com.sysdata.gestaofrota.proc.Processamento
-import com.sysdata.gestaofrota.proc.faturamento.cobranca.Cnab400Arquivo
+import com.sysdata.gestaofrota.proc.cobrancaBancaria.arquivo.cnab240.Cnab400Arquivo
 
 class GeracaoArquivoCobrancaService implements Processamento {
 

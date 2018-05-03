@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.faturamento.cobranca.itau
+package com.sysdata.gestaofrota.proc.cobrancaBancaria.itau
 
 /**
  * Created by luiz on 14/04/18.

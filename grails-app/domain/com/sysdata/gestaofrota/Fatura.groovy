@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota
 
 import com.mrkonno.plugin.jrimum.dsl.BoletoDsl
+import com.sysdata.gestaofrota.proc.cobrancaBancaria.BancoCobranca
+import grails.util.Holders
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente
 import org.jrimum.domkee.financeiro.banco.febraban.Sacado
@@ -47,47 +49,46 @@ class Fatura {
     }
 
 
-    private int calcularDAC(String num,multip=2){
-        def soma=0
-        for(int i=num.length();i>=0;i--){
-            multip=multip==0?2:multip-1
-            def prod=num[i]*multip
-            prod=(prod%10==0)?prod:(int)(prod/10)+prod%10
-            soma+=prod
-        }
-        return 10-(soma%10)
-    }
-
-
     Boleto gerarBoleto(){
-        def docCedente
-        def docSacado
 
+        Boleto boleto=new Boleto()
+        boleto.status=StatusBoleto.CRIADO
 
-        Administradora adm=Administradora.all[0]
+        def nomeCedente=Holders.grailsApplication.config.project.administradora.nome
+        def cnpjCedente=Holders.grailsApplication.config.project.administradora.cnpj
+        def codigoBanco=Holders.grailsApplication.config.project.administradora.contaBancaria.banco
+        def contaCorrente=Holders.grailsApplication.config.project.administradora.contaBancaria.numero
+        def contaDv=Holders.grailsApplication.config.project.administradora.contaBancaria.numeroDv
+        def cart=Holders.grailsApplication.config.project.administradora.contaBancaria.carteira
+        def codigoAgencia=Holders.grailsApplication.config.project.administradora.contaBancaria.agencia
+        def agenciaDv=Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv
+
+        BancoCobranca bancoCobranca=BancoCobranca.factoryMethod(codigoBanco)
+
         Rh rh=this.conta.participante as Rh
 
-        Cedente cedente=new Cedente(adm.nome,docCedente)
-        Sacado sacado=new Sacado(rh.nome,docSacado)
-        sacado.addEndereco(montarEndereco(rh))
+        def nossoNumero=this.id.toString().padLeft(7,"0")
 
+        def dacNossoNumero=bancoCobranca.calcularDacNossoNumero(nossoNumero)
 
         def boletoDsl=BoletoDsl.boleto{
 
-            sacado(rh.nome,rh.cnpj){}
-            cedente(grailsApplication.config.project.administradora.nome,grailsApplication.config.project.administradora.cnpj){}
+            sacado(rh.nome,rh.cnpj){
+                enderecos{montarEndereco(rh)}
+            }
+            cedente(nomeCedente,cnpjCedente){}
 
             contaBancaria{
-                banco grailsApplication.config.project.administradora.contaBancaria.banco
-                conta grailsApplication.config.project.administradora.contaBancaria.conta,grailsApplication.config.project.administradora.contaBancaria.contadv
-                carteira grailsApplication.config.project.administradora.contaBancaria.carteira
-                agencia grailsApplication.config.project.administradora.contaBancaria.agencia,grailsApplication.config.project.administradora.contaBancaria.agenciadv
+                banco bancoCobranca.banco
+                agencia codigoAgencia,agenciaDv
+                conta contaCorrente,contaDv
+                carteira cart
             }
 
             dataVencimento this.dataVencimento
             numeroDocumento this.id
-            nossoNumero
-            digitoNossoNumero
+            nossoNumero nossoNumero
+            digitoNossoNumero dacNossoNumero
             valor this.valorTotal
             tipoTitulo TipoDeTitulo.DM_DUPLICATA_MERCANTIL
             localPagamento "Pagável em qualquer Banco"
@@ -98,6 +99,11 @@ Cobrar multa de 7% e juros
 
         }
 
+        boleto.linhaDigitavel=boletoDsl.boleto.linhaDigitavel.write
+        boleto.nossoNumero=nossoNumero+dacNossoNumero
+        boleto.imagem=boletoDsl.bytes
+        this.addToBoletos(boleto)
+        boleto
 
     }
 

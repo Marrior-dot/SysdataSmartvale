@@ -57,6 +57,22 @@ environments {
     }
 }
 
+administradora {
+
+    nome="MAXXCARD ADMINISTRADORA DE CARTOES LTDA"
+    cnpj="12.387.832/0001-91"
+
+    contaBancaria {
+        banco=341
+        agencia="7162"
+        agenciaDv=""
+        numero="14722"
+        numeroDv="2"
+        carteira="1"
+    }
+}
+
+
 
 processamentos=[
 
