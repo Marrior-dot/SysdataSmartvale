@@ -13,7 +13,7 @@ class Cnab400Record {
         ++sequence
     }
 
-    def setProperty(String name,args){
+    void setProperty(String name,args){
         def fld=fields.find{it.id==name}
         if(!fld) throw new RuntimeException("Campo ($name) nao mapeado! Verifique configuracao")
 
@@ -33,13 +33,6 @@ class Cnab400Record {
                 default:
                     throw new RuntimeException("Tipo de Dado nao identificado! Verifique configuracao")
             }
-
-
         }
-
     }
-
-
-
-
 }

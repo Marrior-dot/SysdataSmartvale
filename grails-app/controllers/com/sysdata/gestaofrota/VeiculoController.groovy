@@ -142,6 +142,11 @@ class VeiculoController extends BaseOwnerController {
         def veiculoInstance = Veiculo.get(params.id)
         if (veiculoInstance) {
             try {
+				//TODO Adicionar um atributo status no veiculo para que o mesmo seja inativado
+				//após isso  é necessário alterar a view para filtrar somente os ativos e no autorizador para não existir transações com veiculos inativos.
+
+				//log.debug("Inativando " + veiculoInstance)
+				//veiculoInstance.
                 veiculoInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
                 redirect(action: "list")

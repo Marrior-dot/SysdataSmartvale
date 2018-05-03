@@ -226,4 +226,15 @@ class Util {
         if (d) r = r + '-' + d
         r
     }
+
+    static Date calcularDataProc(){
+        def agora=new Date()
+        def hora=agora[Calendar.HOUR_OF_DAY]
+        def min=agora[Calendar.MINUTE]
+        def dataRef=agora.clearTime()
+        if(hora in (0..9) && min in (0..59)) dataRef--
+        dataRef
+    }
+
+
 }

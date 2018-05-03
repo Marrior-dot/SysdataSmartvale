@@ -119,7 +119,7 @@ class TransacaoService {
                 lctoCompra=new LancamentoPortador()
                 lctoCompra.with{
                     tipo=TipoLancamento.COMPRA
-                    status=StatusLancamento.A_EFETIVAR
+                    status=StatusLancamento.EFETIVADO
                     corte=corteAberto
                     valor=abastInstance.valor
                     conta=abastInstance.cartao.portador.conta
