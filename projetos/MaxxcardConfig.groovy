@@ -1,3 +1,4 @@
+import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
@@ -60,6 +61,17 @@ environments {
 
 administradora{
 
+    nome="MAXXCARD ADMINISTRADORA DE CARTOES LTDA"
+    cnpj="12.387.832/0001-91"
+
+    contaBancaria{
+        banco="BANCO_ITAU"
+        conta="14722"
+        contadv="2"
+        carteira=6
+        agencia="716"
+        agenciadv="2"
+    }
 }
 
 

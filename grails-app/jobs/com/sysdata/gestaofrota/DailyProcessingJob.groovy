@@ -7,13 +7,27 @@ class DailyProcessingJob {
     }
 	
 	def transacaoService
+
+    def grailsApplication
 	
     def execute() {
+
+        def nomeProj=grailsApplication.config.project.nome
+
+        def dataProc=Util.calcularDataProc()
 		
-		log.info "Sysdata - Amazon Card - Gestão de Frota - 2015"
-		log.info "Iniciando Processamento Diário..."
-		
-        transacaoService.agendarAll()
+		log.info "Sysdata - Gestao de Frota - ${nomeProj}"
+
+		log.info "Iniciando Processamento Diário (${dataProc.format('dd/MM/yyyy')})..."
+
+        grailsApplication.config.processamentos.each{pr->
+
+            def proc=grailsApplication.mainContext.getBean(pr)
+            proc.execute()
+        }
+
+
+        //transacaoService.agendarAll()
 		
 		log.info "Processamento Diário finalizado"
     }

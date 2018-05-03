@@ -58,6 +58,13 @@ environments {
 }
 
 
+processamentos=[
+
+]
+
+
+
+
 faturamento{
     controlaSaldo=true
     extensoes=[TaxaUtilizacao,TaxaManutencao,TaxaAdministracao]
