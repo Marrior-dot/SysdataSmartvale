@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 class TransacaoProduto {
 
-	Double precoUnitario
+	BigDecimal precoUnitario
 	
 	static belongsTo=[transacao:Transacao,produto:Produto]
 	
