@@ -1,3 +1,4 @@
+import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
@@ -14,7 +15,7 @@ environments {
         nome = "Maxxcard"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradora = TipoAdministradoraCartao.MAXCARD
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
@@ -42,7 +43,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://148.5.7.216/maxxcard_development"
+        url = "jdbc:postgresql://148.5.7.216/maxxcard_homologation"
         password = "postgres"
         // ** DATABASE **
 
@@ -55,14 +56,23 @@ environments {
         corPrimaria = "#f63535"
         corSecundaria = "#f2b941"
     }
+
 }
 
+administradora{
 
-processamentos=[
+    nome="MAXXCARD ADMINISTRADORA DE CARTOES LTDA"
+    cnpj="12.387.832/0001-91"
 
-]
-
-
+    contaBancaria{
+        banco="BANCO_ITAU"
+        conta="14722"
+        contadv="2"
+        carteira=6
+        agencia="716"
+        agenciadv="2"
+    }
+}
 
 
 faturamento{

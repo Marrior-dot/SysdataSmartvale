@@ -9,7 +9,7 @@ import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Veiculo
 
 
-Cartao crt=Cartao.findByNumero("6234090500000004")
+Cartao crt=Cartao.findByNumero("6234090500000047")
 Estabelecimento estab=Estabelecimento.findByCodigo("000000000000002")
 
 

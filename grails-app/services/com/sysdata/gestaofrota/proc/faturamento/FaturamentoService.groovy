@@ -15,7 +15,7 @@ class FaturamentoService implements Processamento {
         def cortes=Corte.withCriteria {
             eq("liberado",true)
             eq("status",StatusCorte.ABERTO)
-            ge("dataPrevista",dataProc)
+            le("dataPrevista",dataProc)
         }
 
         if(cortes.isEmpty()) log.info "Nao ha cortes para faturar"

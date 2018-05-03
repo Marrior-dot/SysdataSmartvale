@@ -79,14 +79,18 @@
 
 			</sec:ifAnyGranted>
 
-			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
 				<g:if test="${servico=='ca'}">
 					<h2>Central de Atendimento</h2>
 					<ul>
-						<li><g:link controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Novo Cartão</g:link></li></br>
-						<li><g:link controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li></br>
+						<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+							<li><g:link controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Novo Cartão</g:link></li></br>
+							<li><g:link controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li></br>
+						</sec:ifAnyGranted>
+
 						<li><g:link controller="centralAtendimento" action="searchCards" params="[act:'buscarFuncionarios',goTo:'transfSaldo']">Transferência de Saldo</g:link></li></br>
-						
+
+
 						<sec:ifAnyGranted roles="ROLE_PROC">
 							<li><g:link controller="centralAtendimento" action="settingPriceTransaction" >Configuração de Preços de Combustível</g:link></li></br>
 							<li><g:link controller="centralAtendimento" action="fuelTransaction" >Transação de Combustível</g:link></li></br>

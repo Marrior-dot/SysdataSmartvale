@@ -5,10 +5,17 @@ enum TipoLancamento {
 	COMPRA("Compra"),
 	REEMBOLSO("Reembolso"),
 	TAXA_UTILIZACAO("Taxa de Utilização"),
+	TAXA_MANUTENCAO("Taxa de Manutenção"),
+	TAXA_ADM("Taxa de Administração"),
 	MENSALIDADE("Mensalidade de Cartão"),
 	EMISSAO_CARTAO("Emissão de Cartão"),
 	REEMISSAO_CARTAO("Reemissão de Cartão"),
-	TRANSFERENCIA_SALDO("Transferência de Saldo")
+	TRANSFERENCIA_SALDO("Transferência de Saldo"),
+	PAGAMENTO("Pagamento"),
+    MULTA("Multa"),
+    MORA("Juros Moratórios"),
+	FECHAMENTO_FATURA("Fechamento"),
+	SALDO_ANTERIOR("Saldo Anterior")
 
 	String nome
 	

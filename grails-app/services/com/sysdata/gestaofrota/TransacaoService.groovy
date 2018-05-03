@@ -119,7 +119,7 @@ class TransacaoService {
                 lctoCompra=new LancamentoPortador()
                 lctoCompra.with{
                     tipo=TipoLancamento.COMPRA
-                    status=StatusLancamento.A_EFETIVAR
+                    status=StatusLancamento.EFETIVADO
                     corte=corteAberto
                     valor=abastInstance.valor
                     conta=abastInstance.cartao.portador.conta
@@ -143,22 +143,15 @@ class TransacaoService {
         abastInstance.addToLancamentos(lctoCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)
-
         if(!estabelecimentoInstance.empresa.taxaReembolso) throw new RuntimeException("Nao ha taxa adm nao definida para lojista #${estabelecimentoInstance.empresa.id}")
-
         def taxaAdm=estabelecimentoInstance.empresa.taxaReembolso
-
-        BigDecimal valTxAdm = (abastInstance.valor * taxaAdm / 100.0)
-
+        BigDecimal valTxAdm=(abastInstance.valor*taxaAdm/100.0)
         abastInstance.taxaAdm=taxaAdm
         abastInstance.valorReembolso=abastInstance.valor-valTxAdm
-
         //Arredonda
         def arrend=valTxAdm.round(2)
         def valReemb=abastInstance.valor-arrend
-
         def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa,dataProc )
-
         if (dataReembolso) {
             def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,
                     dataPrevista: dataReembolso,
