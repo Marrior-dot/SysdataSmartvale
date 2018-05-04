@@ -15,17 +15,15 @@ class ItauCobranca extends BancoCobranca {
     @Override
     String calcularDacNossoNumero(String nossoNumero) {
         def agencia=Holders.grailsApplication.config.project.administradora.contaBancaria.agencia
-        def conta=Holders.grailsApplication.config.project.administradora.contaBancaria.conta
+        def conta=Holders.grailsApplication.config.project.administradora.contaBancaria.numero
         def carteira=Holders.grailsApplication.config.project.administradora.contaBancaria.carteira
         def aux=agencia+conta+carteira+nossoNumero
-
-        println aux
 
         final int multip=2
         def soma=0
         for(int i=aux.length()-1;i>=0;i--){
             multip=multip==0?2:multip-1
-            def prod=aux[i]*multip
+            def prod=(aux[i] as int)*multip
             prod=(prod%10==0)?prod:(int)(prod/10)+prod%10
             soma+=prod
         }

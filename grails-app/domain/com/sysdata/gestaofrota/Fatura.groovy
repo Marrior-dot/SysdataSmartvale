@@ -3,10 +3,16 @@ package com.sysdata.gestaofrota
 import com.mrkonno.plugin.jrimum.dsl.BoletoDsl
 import com.sysdata.gestaofrota.proc.cobrancaBancaria.BancoCobranca
 import grails.util.Holders
+import org.jrimum.bopepo.view.BoletoViewer
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa
+import org.jrimum.domkee.financeiro.banco.febraban.Agencia
+import org.jrimum.domkee.financeiro.banco.febraban.Carteira
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente
+import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria
+import org.jrimum.domkee.financeiro.banco.febraban.NumeroDaConta
 import org.jrimum.domkee.financeiro.banco.febraban.Sacado
 import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo
+import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 
 class Fatura {
 
@@ -35,16 +41,6 @@ class Fatura {
 
 
     private org.jrimum.domkee.comum.pessoa.endereco.Endereco montarEndereco(participante){
-        Endereco domainEndereco = participante.endereco
-        if (domainEndereco == null) throw new Exception("Endereço não encontrado")
-        org.jrimum.domkee.comum.pessoa.endereco.Endereco endereco = new org.jrimum.domkee.comum.pessoa.endereco.Endereco()
-        String siglaUF = domainEndereco.cidade?.estado?.uf?.toUpperCase() ?: domainEndereco.cidade?.estado?.uf?.toUpperCase()
-        endereco.setUF(UnidadeFederativa.valueOfSigla(siglaUF))
-        endereco.setLocalidade(domainEndereco.cidade?.nome)
-        endereco.setCep(domainEndereco.cep)
-        endereco.setBairro(domainEndereco.bairro)
-        endereco.setLogradouro(domainEndereco.logradouro)
-        endereco.setNumero(domainEndereco.numero)
         return endereco
     }
 
@@ -67,44 +63,56 @@ class Fatura {
 
         Rh rh=this.conta.participante as Rh
 
-        def nossoNumero=this.id.toString().padLeft(7,"0")
+        def nossoNum=this.id.toString().padLeft(8,"0")
+        def dacNossoNumero=bancoCobranca.calcularDacNossoNumero(nossoNum)
 
-        def dacNossoNumero=bancoCobranca.calcularDacNossoNumero(nossoNumero)
+        Cedente cedente=new Cedente(nomeCedente,cnpjCedente)
+        Sacado sacado=new Sacado(rh.nome,rh.cnpj)
 
-        def boletoDsl=BoletoDsl.boleto{
+        Endereco domainEndereco=rh.endereco
+        if (domainEndereco==null) throw new Exception("Endereço não encontrado")
+        org.jrimum.domkee.comum.pessoa.endereco.Endereco endereco = new org.jrimum.domkee.comum.pessoa.endereco.Endereco()
+        String siglaUF = domainEndereco.cidade?.estado?.uf?.toUpperCase() ?: domainEndereco.cidade?.estado?.uf?.toUpperCase()
+        endereco.setUF(UnidadeFederativa.valueOfSigla(siglaUF))
+        endereco.setLocalidade(domainEndereco.cidade?.nome)
+        endereco.setCep(domainEndereco.cep)
+        endereco.setBairro(domainEndereco.bairro)
+        endereco.setLogradouro(domainEndereco.logradouro)
+        endereco.setNumero(domainEndereco.numero)
+        sacado.addEndereco(endereco)
 
-            sacado(rh.nome,rh.cnpj){
-                enderecos{montarEndereco(rh)}
-            }
-            cedente(nomeCedente,cnpjCedente){}
+        //Dados de Conta Bancária
+        ContaBancaria contaBancaria=new ContaBancaria()
+        contaBancaria.setBanco(bancoCobranca.banco)
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(contaCorrente as int,contaDv))
+        contaBancaria.setAgencia(new Agencia(codigoAgencia.toInteger(),agenciaDv))
+        contaBancaria.setCarteira(new Carteira(cart.toInteger()))
 
-            contaBancaria{
-                banco bancoCobranca.banco
-                agencia codigoAgencia,agenciaDv
-                conta contaCorrente,contaDv
-                carteira cart
-            }
-
-            dataVencimento this.dataVencimento
-            numeroDocumento this.id
-            nossoNumero nossoNumero
-            digitoNossoNumero dacNossoNumero
-            valor this.valorTotal
-            tipoTitulo TipoDeTitulo.DM_DUPLICATA_MERCANTIL
-            localPagamento "Pagável em qualquer Banco"
-            instrucoes """Aceitar ate a data de vencimento
-Apos o vencimento aceito apenas nas agencias do Banco do Brasil
-Cobrar multa de 7% e juros
-"""
-
+        Titulo titulo=new Titulo(contaBancaria,sacado,cedente)
+        titulo.with {
+            dataDoDocumento=new Date().clearTime()
+            dataDoVencimento=this.dataVencimento
+            numeroDoDocumento=this.id
+            nossoNumero=nossoNum
+            digitoDoNossoNumero=dacNossoNumero
+            valor=this.valorTotal
+            tipoDeDocumento=TipoDeTitulo.DM_DUPLICATA_MERCANTIL
         }
 
-        boleto.linhaDigitavel=boletoDsl.boleto.linhaDigitavel.write
-        boleto.nossoNumero=nossoNumero+dacNossoNumero
-        boleto.imagem=boletoDsl.bytes
-        this.addToBoletos(boleto)
-        boleto
+        org.jrimum.bopepo.Boleto bolJr=new org.jrimum.bopepo.Boleto(titulo)
+        bolJr.setLocalPagamento("Pagável em qualquer Banco até a data de vencimento")
+        bolJr.setInstrucao1("Aceitar até a data de vencimento")
+        bolJr.setInstrucao2("Após o vencimento aceito apenas nas agências do ITAU")
 
+        BoletoViewer boletoViewer=new BoletoViewer(bolJr)
+        boleto.titulo= bolJr.titulo.numeroDoDocumento
+        boleto.linhaDigitavel=bolJr.linhaDigitavel.write()
+        boleto.imagem=boletoViewer.pdfAsByteArray
+        boleto.nossoNumero=nossoNum+dacNossoNumero
+        boleto.dataVencimento=this.dataVencimento
+
+        addToBoletos(boleto)
+        boleto
     }
 
 

@@ -65,10 +65,10 @@ administradora {
     contaBancaria {
         banco=341
         agencia="7162"
-        agenciaDv=""
+        agenciaDv="0"
         numero="14722"
         numeroDv="2"
-        carteira="1"
+        carteira="109"
     }
 }
 
