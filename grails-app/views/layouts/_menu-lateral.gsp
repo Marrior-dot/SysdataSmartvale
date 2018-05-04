@@ -102,6 +102,7 @@
                     <ul class="nav nav-second-level">
                         <li>
                             <g:link class="submenu-logado" controller="console" target="Console">Console</g:link>
+                            <g:link class="submenu-logado" controller="processamento" >Processamentos</g:link>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

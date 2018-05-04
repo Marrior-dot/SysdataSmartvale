@@ -75,7 +75,8 @@ administradora {
 
 
 processamentos=[
-
+    "faturamentoService",
+    "geracaoArquivoCobrancaService"
 ]
 
 
