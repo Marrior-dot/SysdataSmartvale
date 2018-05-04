@@ -8,6 +8,8 @@ import org.jrimum.domkee.financeiro.banco.febraban.Banco
 abstract class BancoCobranca {
 
     Banco banco
+    String codigoCompensacao
+    String nome
 
     static BancoCobranca factoryMethod(codigo){
         BancoCobranca bancoCobranca

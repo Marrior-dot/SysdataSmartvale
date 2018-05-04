@@ -35,6 +35,14 @@
             });
         });
     }
+
+    function abrirCortes(id) {
+        $.ajax({
+            url:"${createLink(action:'')}"
+        })
+    }
+
+
 </script>
 
 <div class="row">

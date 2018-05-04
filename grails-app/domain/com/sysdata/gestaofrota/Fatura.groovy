@@ -39,12 +39,6 @@ class Fatura {
         "FAT => #${this.id} cnt:${this.conta.id} vcto:${this.dataVencimento.format('dd/MM/yyyy')} sts:${this.status.nome} total:${Util.formatCurrency(this.valorTotal)}"
     }
 
-
-    private org.jrimum.domkee.comum.pessoa.endereco.Endereco montarEndereco(participante){
-        return endereco
-    }
-
-
     Boleto gerarBoleto(){
 
         Boleto boleto=new Boleto()

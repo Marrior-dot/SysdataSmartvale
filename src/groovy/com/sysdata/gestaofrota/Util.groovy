@@ -196,11 +196,23 @@ class Util {
             raw = raw.replace('.', '')
             raw = raw.replace('-', '')
             sprintf("%011d",raw)
-
         } else {
             raw
         }
     }
+
+    static String cnpjToRaw(String cnpj){
+        def raw=cnpj
+        if(raw){
+            raw=raw.replace('.','')
+            raw=raw.replace('-','')
+            sprintf("%014d",raw)
+        }else{
+            raw
+        }
+
+    }
+
 
     static String rawToCpf(String raw) {
         if (!raw) return null

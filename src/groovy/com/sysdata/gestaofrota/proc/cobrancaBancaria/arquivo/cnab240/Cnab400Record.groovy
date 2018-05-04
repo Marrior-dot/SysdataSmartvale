@@ -11,7 +11,7 @@ class Cnab400Record {
 
     protected def fields
 
-    int nextSequence(){
+    static int nextSequence(){
         ++sequence
     }
 
@@ -36,5 +36,13 @@ class Cnab400Record {
                     throw new RuntimeException("Tipo de Dado nao identificado! Verifique configuracao")
             }
         }
+    }
+
+    String flatten(){
+        StringBuilder sb=new StringBuilder()
+        fields.each{
+            sb.append(it.val)
+        }
+        sb.toString()
     }
 }

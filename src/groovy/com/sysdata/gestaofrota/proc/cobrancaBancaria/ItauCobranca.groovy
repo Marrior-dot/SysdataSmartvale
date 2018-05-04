@@ -10,6 +10,8 @@ class ItauCobranca extends BancoCobranca {
 
     ItauCobranca(){
         banco=BancosSuportados.BANCO_ITAU.create()
+        codigoCompensacao=BancosSuportados.BANCO_ITAU.codigoDeCompensacao
+        nome="BANCO ITAU SA"
     }
 
     @Override
