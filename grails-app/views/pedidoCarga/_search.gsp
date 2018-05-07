@@ -126,7 +126,7 @@
                 "data":{"unidade_id":${unidade_id?:'null'}},
                 "dataSrc":"results"
             },
-            "campos":[
+            "defCampos":[
                 {"data":"id"},
                 {"data":"rh"},
                 {"data":"unidade"},

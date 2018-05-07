@@ -20,7 +20,7 @@ class Arquivo {
 	}
 
 	static Integer nextLote(TipoArquivo tipo){
-		def lote=Arquivo.withCriteria{
+		def lote=Arquivo.withCriteria(uniqueResult:true){
 			projections{
 				max('lote')
 			}

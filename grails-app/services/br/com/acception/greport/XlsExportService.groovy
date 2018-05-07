@@ -246,7 +246,7 @@ class XlsExportService {
 		
 		def noGrpFields=reportInstance.fields.findAll{!it.groupBy}
 		
-		/* Inicializa mapa para campos de agrupamento */
+		/* Inicializa mapa para defCampos de agrupamento */
 		groupFields.each{fld->
 			currGroup[fld]=""
 		}
@@ -280,7 +280,7 @@ class XlsExportService {
 		
 		numLine=printEmptyLine(sheet,numLine)
 		
-		/* Imprime cabeçalho de campos quando não existes agrupamentos */
+		/* Imprime cabeçalho de defCampos quando não existes agrupamentos */
 		if(groupFields.isEmpty()){
 			numLine=printHeaderFields(noGrpFields,wb,sheet,numLine)
 		}

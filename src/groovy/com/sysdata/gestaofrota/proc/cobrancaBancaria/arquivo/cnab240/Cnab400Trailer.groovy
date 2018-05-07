@@ -8,10 +8,10 @@ import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 class Cnab400Trailer extends Cnab400Registro {
 
     static {
-        campos = [
+        defCampos = [
                 [id: "tipoRegistro"],
                 [id: "filler", type: DataType.ALPHA, size: 393],
-                [id: "sequencial", val: Cnab400Registro.nextSequence(), size: 6, type: DataType.NUMERIC]
+                [id:"sequencial",type:DataType.NUMERIC,val:{Cnab400Registro.nextSequence()},size:6]
         ]
 
     }

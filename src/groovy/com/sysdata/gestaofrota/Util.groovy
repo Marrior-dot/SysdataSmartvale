@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.Normalizer
 import java.text.SimpleDateFormat
 
 import com.sysdata.gestaofrota.exception.InvalidCurrencyException
@@ -247,6 +248,12 @@ class Util {
         def dataRef=agora.clearTime()
         if(hora in (0..9) && min in (0..59)) dataRef--
         dataRef
+    }
+
+    static String normalize(str){
+        str=Normalizer.normalize(str,Normalizer.Form.NFD)
+        str=str.replaceAll("[^\\p{ASCII}]","")
+        str
     }
 
 

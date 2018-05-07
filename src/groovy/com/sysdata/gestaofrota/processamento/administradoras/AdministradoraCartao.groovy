@@ -80,7 +80,7 @@ abstract class AdministradoraCartao implements IGeradorCartao {
                 multiplicador = 2;
             }
         }
-        // Realiza a soma dos campos de acordo com a regra
+        // Realiza a soma dos defCampos de acordo com a regra
         for (int i = (numeros.length - 1); i > 0; i--) {
             aux = String.valueOf(Integer.valueOf(numeros[i]));
             if (aux.length() > 1) {

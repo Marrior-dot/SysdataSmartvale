@@ -21,7 +21,7 @@ class ItauCobranca extends BancoCobranca {
         def carteira=Holders.grailsApplication.config.project.administradora.contaBancaria.carteira
         def aux=agencia+conta+carteira+nossoNumero
 
-        final int multip=2
+        int multip=2
         def soma=0
         for(int i=aux.length()-1;i>=0;i--){
             multip=multip==0?2:multip-1

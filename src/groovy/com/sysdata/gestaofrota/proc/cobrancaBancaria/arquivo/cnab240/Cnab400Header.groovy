@@ -8,7 +8,7 @@ import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 class Cnab400Header extends Cnab400Registro {
 
     static {
-        campos=[
+        defCampos=[
                 [id:"tipoRegistro"],
                 [id:"operacao"],
                 [id:"literalRemessa"],
@@ -24,7 +24,7 @@ class Cnab400Header extends Cnab400Registro {
                 [id:"nomeBanco",type:DataType.ALPHA,size:15],
                 [id:"dataGeracao",type:DataType.DATE,format:"ddMMyy"],
                 [id:"filler3",type:DataType.ALPHA,size:294],
-                [id:"sequencial",type:DataType.NUMERIC,val:Cnab400Registro.nextSequence(),size:6]
+                [id:"sequencial",type:DataType.NUMERIC,val:{Cnab400Registro.nextSequence()},size:6]
         ]
     }
 }

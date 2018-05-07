@@ -46,11 +46,15 @@ class GeracaoArquivoCobrancaService implements Processamento {
                 agencia=agenciaAdm as int
                 conta=contaAdm as int
                 contaDv=numDv as int
+                filler2=""
                 nomeEmpresa=grailsApplication.config.project.administradora.nome
                 codigoBanco=bancoCobranca.codigoCompensacao
                 nomeBanco=bancoCobranca.nome
+                filler3=""
                 dataGeracao=dataProc
             }
+
+           // println header.campos
 
             sbFile.append(header.flatten())
 
@@ -73,7 +77,8 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     filler2="    "
                     nossoNumero=b.nossoNumero.toLong()
                     qtdeMoeda=0
-                    numeroCarteira=grailsApplication.config.project.administradora.contaBancaria.carteira
+                    numeroCarteira=grailsApplication.config.project.administradora.contaBancaria.carteira as int
+                    usoBanco=""
                     carteira="1"
                     codigoOcorrencia="01"
                     numeroDocumento=b.titulo
@@ -86,18 +91,18 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     dataEmissao=dataProc
                     instrucao1="05"
                     instrucao2="05"
-                    juros1Dia="0"
+                    juros1Dia=0
                     descontoAte="000000"
-                    valorDesconto="0"
-                    valorIOF="0"
-                    abatimento="0"
+                    valorDesconto=0
+                    valorIOF=0
+                    abatimento=0
                     codInscPagador="02"
                     numInscPagador=Util.cnpjToRaw(rh.cnpj)
                     nomePagador=rh.nome
                     filler3=""
                     logradouroPagador=(rh.endereco?.logradouro)?:""
                     bairroPagador=(rh.endereco?.bairro)?:""
-                    cepPagador=(rh.endereco?.cep)?:"0"
+                    cepPagador=(rh.endereco?.cep)? rh.endereco?.cep.replace("-","") as int:0
                     cidadePagador=(rh.endereco?.cidade?.nome)?:""
                     estadoPagador=(rh.endereco?.cidade?.estado?.uf)?:""
                     sacadorAvalista=""
@@ -107,7 +112,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     filler5=" "
                 }
 
-                details<<detail
+                //println detail.campos
 
                 sbFile.append(detail.flatten())
 
@@ -117,8 +122,10 @@ class GeracaoArquivoCobrancaService implements Processamento {
                 tipoRegistro="9"
                 filler=""
             }
+
             sbFile.append(trailer.flatten())
 
+            println "Chegou aqui!"
 
             //Salva arquivo no banco
             Arquivo arqRemessa=new Arquivo()
@@ -131,7 +138,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
             }
             arqRemessa.save flush:true
 
-            Boleto.executeQuery("update Boleto set status=:newSt where status=:oldSt",[newSt:StatusBoleto.REMESSA,oldSt:StatusBoleto.CRIADO])
+            //Boleto.executeUpdate("update Boleto set status=:newSt where status=:oldSt",[newSt:StatusBoleto.REMESSA,oldSt:StatusBoleto.CRIADO])
 
 
         }else
