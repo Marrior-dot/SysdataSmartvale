@@ -5,30 +5,26 @@ import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 /**
  * Created by luiz on 14/04/18.
  */
-class Cnab400Header extends Cnab400Record {
+class Cnab400Header extends Cnab400Registro {
 
-    Cnab400Header(){
-        fields=[
-                [id:"tipoRegistro",val:"0"],
-                [id:"operacao",val:"1"],
-                [id:"literalRemessa",val:"REMESSA"],
-                [id:"codigoServico",val:"01"],
-                [id:"literalServico",val:"COBRANCA",type:DataType.ALPHA,size:15],
+    static {
+        campos=[
+                [id:"tipoRegistro"],
+                [id:"operacao"],
+                [id:"literalRemessa"],
+                [id:"codigoServico"],
+                [id:"literalServico",type:DataType.ALPHA,size:15],
                 [id:"agencia",type:DataType.NUMERIC,size:4],
-                [id:"filler1",val:"00"],
+                [id:"filler1"],
                 [id:"conta",type:DataType.NUMERIC,size:5],
-                [id:"contaDv"],
+                [id:"contaDv",type:DataType.NUMERIC,size:1],
                 [id:"filler2",type:DataType.ALPHA,size:8],
                 [id:"nomeEmpresa",type:DataType.ALPHA,size:30],
                 [id:"codigoBanco"],
                 [id:"nomeBanco",type:DataType.ALPHA,size:15],
                 [id:"dataGeracao",type:DataType.DATE,format:"ddMMyy"],
                 [id:"filler3",type:DataType.ALPHA,size:294],
-                [id:"sequencial",val:Cnab400Record.nextSequence(),size:6]
+                [id:"sequencial",type:DataType.NUMERIC,val:Cnab400Registro.nextSequence(),size:6]
         ]
-
     }
-
-
-
 }

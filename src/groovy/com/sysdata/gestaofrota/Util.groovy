@@ -206,7 +206,8 @@ class Util {
         if(raw){
             raw=raw.replace('.','')
             raw=raw.replace('-','')
-            sprintf("%014d",raw)
+            raw=raw.replace('/','')
+            sprintf("%014d",raw as long)
         }else{
             raw
         }

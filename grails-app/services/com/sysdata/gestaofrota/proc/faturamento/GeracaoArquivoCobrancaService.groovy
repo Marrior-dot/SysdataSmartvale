@@ -37,9 +37,15 @@ class GeracaoArquivoCobrancaService implements Processamento {
             StringBuilder sbFile=new StringBuilder()
 
             Cnab400Header header=Cnab400Arquivo.makeHeader{
-                agencia=agenciaAdm
-                conta=contaAdm
-                contaDv=numDv
+                tipoRegistro="0"
+                operacao="1"
+                literalRemessa="REMESSA"
+                codigoServico="01"
+                literalServico="COBRANCA"
+                filler1="00"
+                agencia=agenciaAdm as int
+                conta=contaAdm as int
+                contaDv=numDv as int
                 nomeEmpresa=grailsApplication.config.project.administradora.nome
                 codigoBanco=bancoCobranca.codigoCompensacao
                 nomeBanco=bancoCobranca.nome
@@ -55,14 +61,18 @@ class GeracaoArquivoCobrancaService implements Processamento {
                 Rh rh=b.fatura.conta.participante as Rh
 
                 Cnab400Detalhe detail=Cnab400Arquivo.makeDetail{
+                    tipoRegistro="1"
                     codigoInscricao="02"
-                    numeroInscricao= Util.cnpjToRaw(rh.cnpj)
+                    numeroInscricao=rh.cnpj?Util.cnpjToRaw(rh.cnpj) as long:0
                     agencia=agenciaAdm
                     filler1="00"
                     conta=contaAdm
                     dac=numDv
+                    instrucao="0000"
+                    usoEmpresa=""
                     filler2="    "
-                    nossoNumero=b.nossoNumero
+                    nossoNumero=b.nossoNumero.toLong()
+                    qtdeMoeda=0
                     numeroCarteira=grailsApplication.config.project.administradora.contaBancaria.carteira
                     carteira="1"
                     codigoOcorrencia="01"
@@ -81,13 +91,13 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     valorDesconto="0"
                     valorIOF="0"
                     abatimento="0"
-                    codigoInscricao="02"
+                    codInscPagador="02"
                     numInscPagador=Util.cnpjToRaw(rh.cnpj)
                     nomePagador=rh.nome
                     filler3=""
                     logradouroPagador=(rh.endereco?.logradouro)?:""
                     bairroPagador=(rh.endereco?.bairro)?:""
-                    cepPagador=(rh.endereco?.cep)?:""
+                    cepPagador=(rh.endereco?.cep)?:"0"
                     cidadePagador=(rh.endereco?.cidade?.nome)?:""
                     estadoPagador=(rh.endereco?.cidade?.estado?.uf)?:""
                     sacadorAvalista=""

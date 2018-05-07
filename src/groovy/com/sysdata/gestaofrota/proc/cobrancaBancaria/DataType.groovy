@@ -10,4 +10,8 @@ enum DataType {
     DATE("Data")
 
     String name
+
+    DataType(name){
+        this.name=name
+    }
 }

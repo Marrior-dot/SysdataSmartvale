@@ -5,13 +5,13 @@ import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 /**
  * Created by luiz on 14/04/18.
  */
-class Cnab400Trailer extends Cnab400Record {
+class Cnab400Trailer extends Cnab400Registro {
 
-    Cnab400Trailer(){
-        fields=[
-                [id:"tipoRegistro"],
-                [id:"filler",type:DataType.ALPHA,size:393],
-                [id:"sequencial",val:Cnab400Record.nextSequence(),size:6,type:DataType.NUMERIC]
+    static {
+        campos = [
+                [id: "tipoRegistro"],
+                [id: "filler", type: DataType.ALPHA, size: 393],
+                [id: "sequencial", val: Cnab400Registro.nextSequence(), size: 6, type: DataType.NUMERIC]
         ]
 
     }
