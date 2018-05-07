@@ -5,10 +5,11 @@
 		<div class="list">
 			<table id="arqTable" class="table table-striped table-bordered table-hover table-condensed table-default">
 				<thead>
-				<th>DATA/HORA</th>
-				<th>TIPO</th>
-				<th>NOME DO ARQUIVO	</th>
-				<th>STATUS</th>
+				<th>Data/Hora</th>
+				<th>Tipo</th>
+				<th>Nome</th>
+				<th>Status</th>
+				<th>Ações</th>
 				</thead>
 			</table>
 		</div>
@@ -30,7 +31,8 @@
 				{"data":"date"},
 				{"data":"tipo"},
 				{"data":"nome"},
-				{"data":"status"}
+				{"data":"status"},
+				{"data":"acao"}
 			]
 		});
 	});

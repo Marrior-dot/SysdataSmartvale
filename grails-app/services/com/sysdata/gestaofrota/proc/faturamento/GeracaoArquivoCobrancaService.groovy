@@ -125,13 +125,12 @@ class GeracaoArquivoCobrancaService implements Processamento {
 
             sbFile.append(trailer.flatten())
 
-            println "Chegou aqui!"
-
             //Salva arquivo no banco
             Arquivo arqRemessa=new Arquivo()
+            def loteArq=Arquivo.nextLote(TipoArquivo.REMESSA_COBRANCA)
             arqRemessa.with{
-                nome="remessa_${bancoCobranca.codigoCompensacao}.rem"
-                lote=Arquivo.nextLote(TipoArquivo.REMESSA_COBRANCA)
+                nome="remessa_${bancoCobranca.codigoCompensacao}_${loteArq}.rem"
+                lote=loteArq
                 status=StatusArquivo.GERADO
                 conteudo=sbFile.toString()
                 tipo=TipoArquivo.REMESSA_COBRANCA

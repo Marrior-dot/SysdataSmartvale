@@ -57,7 +57,7 @@ class ArquivoController {
 				tipo:a.tipo.name,
 				status:a.status.name,
 				nome:a.nome,
-				acao:"""<a href="${createLink(action:'downloadFile',id:a.id)}" class="download" title="Download Arquivo"/>"""
+				acao:"""<a href="${createLink(action:'downloadFile',id:a.id)}" >Download</a>"""
 			]
 		}
 		def data=[totalRecords:arquivoCount,results:fields]
@@ -80,7 +80,6 @@ class ArquivoController {
 	def downloadFile={
 		def arquivoInstance=Arquivo.get(params.id)
 		if(arquivoInstance?.conteudo){
-			
 			response.setContentLength(arquivoInstance.conteudo.size())
 			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
 			response.outputStream<<arquivoInstance.conteudo

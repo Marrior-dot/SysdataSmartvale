@@ -9,7 +9,7 @@
     <body>
     <br><br><br>
     <div class="panel panel-default">
-        <div class="panel-heading">            <h4><g:message code="default.list.label" args="[entityName]" /></h4>
+        <div class="panel-heading"><h4><g:message code="default.list.label" args="[entityName]" /></h4>
         </div>
         <div class="panel-body">
             <div class="nav">
