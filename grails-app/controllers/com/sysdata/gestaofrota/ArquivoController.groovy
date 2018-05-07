@@ -77,12 +77,14 @@ class ArquivoController {
 		redirect(action: "list", params: params)
 	}
 	
-	def downloadFile={
-		def arquivoInstance=Arquivo.get(params.id)
-		if(arquivoInstance?.conteudo){
-			response.setContentLength(arquivoInstance.conteudo.size())
+	def downloadFile() {
+		def arquivoInstance=Arquivo.get(params.id.toLong())
+		byte[] bFile=arquivoInstance.conteudo
+		String conteudo = new String(bFile);
+		if(conteudo){
+			response.setContentLength(conteudo.size())
 			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
-			response.outputStream<<arquivoInstance.conteudo
+			response.outputStream<<conteudo
 		}else
 			response.sendError(404)
 	}

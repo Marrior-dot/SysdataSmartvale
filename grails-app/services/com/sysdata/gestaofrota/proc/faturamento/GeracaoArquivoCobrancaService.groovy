@@ -67,7 +67,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
                 Cnab400Detalhe detail=Cnab400Arquivo.makeDetail{
                     tipoRegistro="1"
                     codigoInscricao="02"
-                    numeroInscricao=rh.cnpj?Util.cnpjToRaw(rh.cnpj) as long:0
+                    numeroInscricao=Util.cnpjToRaw(cnpjAdm) as long
                     agencia=agenciaAdm
                     filler1="00"
                     conta=contaAdm
@@ -79,7 +79,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     qtdeMoeda=0
                     numeroCarteira=grailsApplication.config.project.administradora.contaBancaria.carteira as int
                     usoBanco=""
-                    carteira="1"
+                    carteira="I"
                     codigoOcorrencia="01"
                     numeroDocumento=b.titulo
                     vencimento=b.dataVencimento
@@ -97,7 +97,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
                     valorIOF=0
                     abatimento=0
                     codInscPagador="02"
-                    numInscPagador=Util.cnpjToRaw(rh.cnpj)
+                    numInscPagador=Util.cnpjToRaw(rh.cnpj) as long
                     nomePagador=rh.nome
                     filler3=""
                     logradouroPagador=(rh.endereco?.logradouro)?:""
@@ -124,17 +124,14 @@ class GeracaoArquivoCobrancaService implements Processamento {
             }
 
             sbFile.append(trailer.flatten())
-
             //Salva arquivo no banco
             Arquivo arqRemessa=new Arquivo()
             def loteArq=Arquivo.nextLote(TipoArquivo.REMESSA_COBRANCA)
-            arqRemessa.with{
-                nome="remessa_${bancoCobranca.codigoCompensacao}_${loteArq}.rem"
-                lote=loteArq
-                status=StatusArquivo.GERADO
-                conteudo=sbFile.toString()
-                tipo=TipoArquivo.REMESSA_COBRANCA
-            }
+            arqRemessa.nome="remessa_${bancoCobranca.codigoCompensacao}_${loteArq}.rem"
+            arqRemessa.lote=loteArq
+            arqRemessa.status=StatusArquivo.GERADO
+            arqRemessa.conteudo=sbFile.toString()
+            arqRemessa.tipo=TipoArquivo.REMESSA_COBRANCA
             arqRemessa.save flush:true
 
             //Boleto.executeUpdate("update Boleto set status=:newSt where status=:oldSt",[newSt:StatusBoleto.REMESSA,oldSt:StatusBoleto.CRIADO])
