@@ -38,7 +38,11 @@
 
     function abrirCortes(id) {
         $.ajax({
-            url:"${createLink(action:'')}"
+            url:"${createLink(controller:'fechamento',action:'abrirCortes')}/"+id,
+            method:'POST',
+            success:function(data){
+                $("#fechamento-index").html(data);
+            }
         })
     }
 

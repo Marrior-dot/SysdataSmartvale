@@ -105,6 +105,16 @@ class Fatura {
         boleto.nossoNumero=nossoNum+dacNossoNumero
         boleto.dataVencimento=this.dataVencimento
 
+
+
+
+        def filename="/home/acception/tmp/boleto_${bolJr.titulo.numeroDoDocumento}.pdf"
+        def file=new File(filename)
+
+        file.withDataOutputStream {o->
+            o.write(boletoViewer.pdfAsByteArray)
+        }
+
         addToBoletos(boleto)
         boleto
     }
