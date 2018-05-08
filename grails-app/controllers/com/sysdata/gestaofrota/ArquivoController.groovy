@@ -79,8 +79,10 @@ class ArquivoController {
 	
 	def downloadFile() {
 		def arquivoInstance=Arquivo.get(params.id.toLong())
-		byte[] bFile=arquivoInstance.conteudo
-		String conteudo = new String(bFile);
+
+
+        String conteudo=new String(result)
+
 		if(conteudo){
 			response.setContentLength(conteudo.size())
 			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
