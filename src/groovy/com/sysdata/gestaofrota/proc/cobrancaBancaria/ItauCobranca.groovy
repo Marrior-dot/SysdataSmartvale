@@ -24,11 +24,13 @@ class ItauCobranca extends BancoCobranca {
         int multip=2
         def soma=0
         for(int i=aux.length()-1;i>=0;i--){
-            multip=multip==0?2:multip-1
             def prod=(aux[i] as int)*multip
             prod=(prod%10==0)?prod:(int)(prod/10)+prod%10
+            //println "$i: ${aux[i]} x $multip = $prod"
             soma+=prod
+            multip=(multip-1)==0?2:multip-1
         }
+        //println "Soma: $soma"
         return 10-(soma%10)
     }
 
