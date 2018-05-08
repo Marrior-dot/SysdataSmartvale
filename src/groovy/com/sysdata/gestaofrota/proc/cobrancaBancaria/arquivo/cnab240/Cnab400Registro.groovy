@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.proc.cobrancaBancaria.arquivo.cnab240
 
+import com.sysdata.gestaofrota.Util
 import com.sysdata.gestaofrota.proc.cobrancaBancaria.DataType
 
 /**
@@ -29,6 +30,8 @@ class Cnab400Registro {
                     break
                 case DataType.ALPHA:
                     if(args && args.length()>fld.size) args=args[0..fld.size-1]
+                    args=Util.normalize(args)
+                    args=args.toUpperCase()
                     val = sprintf("%-${fld.size}s", args)
                     break
                 case DataType.DATE:

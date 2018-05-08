@@ -124,6 +124,15 @@ class GeracaoArquivoCobrancaService implements Processamento {
             }
 
             sbFile.append(trailer.flatten())
+
+            def filename="/home/acception/tmp/remessa_${bancoCobranca.codigoCompensacao}.rem"
+            def file=new File(filename)
+
+            file.withWriter("UTF-8") {w->
+                w.write sbFile.toString()
+            }
+
+/*
             //Salva arquivo no banco
             Arquivo arqRemessa=new Arquivo()
             def loteArq=Arquivo.nextLote(TipoArquivo.REMESSA_COBRANCA)
@@ -133,7 +142,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
             arqRemessa.conteudo=sbFile.toString()
             arqRemessa.tipo=TipoArquivo.REMESSA_COBRANCA
             arqRemessa.save flush:true
-
+*/
             //Boleto.executeUpdate("update Boleto set status=:newSt where status=:oldSt",[newSt:StatusBoleto.REMESSA,oldSt:StatusBoleto.CRIADO])
 
 
