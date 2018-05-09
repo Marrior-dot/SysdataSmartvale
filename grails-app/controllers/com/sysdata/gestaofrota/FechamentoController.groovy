@@ -39,4 +39,36 @@ class FechamentoController {
         response.status = HttpStatus.OK.value()
         render (['msg': 'ok'] as JSON)
     }
+
+    def abrirCortes(){
+        Fechamento fechamento=Fechamento.get(params.long('id'))
+        def cortes=fechamento.cortes.sort{it.dataPrevista}
+        render template:'cortes',model:[cortes:cortes,prgId:fechamento.programa.id]
+    }
+
+    def downloadBoleto(){
+        Corte corte=Corte.get(params.corId as long)
+        Rh rh=Rh.get(params.prgId as long)
+
+        def fatura=Fatura.executeQuery("""select f
+from Fatura f, Conta c, Participante p
+where f.conta=c
+and p.conta=c
+and p.id=:id
+""",[id:rh.id])[0]
+
+
+        if(fatura.boletos){
+            Boleto boleto=fatura.boletos.asList()[0]
+            byte[] pdf=boleto.imagem
+
+            response.setContentType("application/pdf")
+            response.setHeader("Content-disposition","attachment;filename=boleto_${boleto.titulo}.pdf")
+            response.outputStream<<pdf
+            response.outputStream.flush()
+        }
+
+
+    }
+
 }

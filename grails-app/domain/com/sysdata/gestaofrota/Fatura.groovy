@@ -1,10 +1,18 @@
 package com.sysdata.gestaofrota
 
 import com.mrkonno.plugin.jrimum.dsl.BoletoDsl
+import com.sysdata.gestaofrota.proc.cobrancaBancaria.BancoCobranca
+import grails.util.Holders
+import org.jrimum.bopepo.view.BoletoViewer
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa
+import org.jrimum.domkee.financeiro.banco.febraban.Agencia
+import org.jrimum.domkee.financeiro.banco.febraban.Carteira
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente
+import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria
+import org.jrimum.domkee.financeiro.banco.febraban.NumeroDaConta
 import org.jrimum.domkee.financeiro.banco.febraban.Sacado
 import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo
+import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 
 class Fatura {
 
@@ -31,10 +39,32 @@ class Fatura {
         "FAT => #${this.id} cnt:${this.conta.id} vcto:${this.dataVencimento.format('dd/MM/yyyy')} sts:${this.status.nome} total:${Util.formatCurrency(this.valorTotal)}"
     }
 
+    Boleto gerarBoleto(){
 
-    private org.jrimum.domkee.comum.pessoa.endereco.Endereco montarEndereco(participante){
-        Endereco domainEndereco = participante.endereco
-        if (domainEndereco == null) throw new Exception("Endereço não encontrado")
+        Boleto boleto=new Boleto()
+        boleto.status=StatusBoleto.CRIADO
+
+        def nomeCedente=Holders.grailsApplication.config.project.administradora.nome
+        def cnpjCedente=Holders.grailsApplication.config.project.administradora.cnpj
+        def codigoBanco=Holders.grailsApplication.config.project.administradora.contaBancaria.banco
+        def contaCorrente=Holders.grailsApplication.config.project.administradora.contaBancaria.numero
+        def contaDv=Holders.grailsApplication.config.project.administradora.contaBancaria.numeroDv
+        def cart=Holders.grailsApplication.config.project.administradora.contaBancaria.carteira
+        def codigoAgencia=Holders.grailsApplication.config.project.administradora.contaBancaria.agencia
+        def agenciaDv=Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv
+
+        BancoCobranca bancoCobranca=BancoCobranca.factoryMethod(codigoBanco)
+
+        Rh rh=this.conta.participante as Rh
+
+        def nossoNum=this.id.toString().padLeft(8,"0")
+        def dacNossoNumero=bancoCobranca.calcularDacNossoNumero(nossoNum)
+
+        Cedente cedente=new Cedente(nomeCedente,cnpjCedente)
+        Sacado sacado=new Sacado(rh.nome,rh.cnpj)
+
+        Endereco domainEndereco=rh.endereco
+        if (domainEndereco==null) throw new Exception("Endereço não encontrado")
         org.jrimum.domkee.comum.pessoa.endereco.Endereco endereco = new org.jrimum.domkee.comum.pessoa.endereco.Endereco()
         String siglaUF = domainEndereco.cidade?.estado?.uf?.toUpperCase() ?: domainEndereco.cidade?.estado?.uf?.toUpperCase()
         endereco.setUF(UnidadeFederativa.valueOfSigla(siglaUF))
@@ -43,62 +73,50 @@ class Fatura {
         endereco.setBairro(domainEndereco.bairro)
         endereco.setLogradouro(domainEndereco.logradouro)
         endereco.setNumero(domainEndereco.numero)
-        return endereco
-    }
+        sacado.addEndereco(endereco)
 
+        //Dados de Conta Bancária
+        ContaBancaria contaBancaria=new ContaBancaria()
+        contaBancaria.setBanco(bancoCobranca.banco)
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(contaCorrente as int,contaDv))
+        contaBancaria.setAgencia(new Agencia(codigoAgencia.toInteger(),agenciaDv))
+        contaBancaria.setCarteira(new Carteira(cart.toInteger()))
 
-    private int calcularDAC(String num,multip=2){
-        def soma=0
-        for(int i=num.length();i>=0;i--){
-            multip=multip==0?2:multip-1
-            def prod=num[i]*multip
-            prod=(prod%10==0)?prod:(int)(prod/10)+prod%10
-            soma+=prod
-        }
-        return 10-(soma%10)
-    }
-
-
-    Boleto gerarBoleto(){
-        def docCedente
-        def docSacado
-
-
-        Administradora adm=Administradora.all[0]
-        Rh rh=this.conta.participante as Rh
-
-        Cedente cedente=new Cedente(adm.nome,docCedente)
-        Sacado sacado=new Sacado(rh.nome,docSacado)
-        sacado.addEndereco(montarEndereco(rh))
-
-
-        def boletoDsl=BoletoDsl.boleto{
-
-            sacado(rh.nome,rh.cnpj){}
-            cedente(grailsApplication.config.project.administradora.nome,grailsApplication.config.project.administradora.cnpj){}
-
-            contaBancaria{
-                banco grailsApplication.config.project.administradora.contaBancaria.banco
-                conta grailsApplication.config.project.administradora.contaBancaria.conta,grailsApplication.config.project.administradora.contaBancaria.contadv
-                carteira grailsApplication.config.project.administradora.contaBancaria.carteira
-                agencia grailsApplication.config.project.administradora.contaBancaria.agencia,grailsApplication.config.project.administradora.contaBancaria.agenciadv
-            }
-
-            dataVencimento this.dataVencimento
-            numeroDocumento this.id
-            nossoNumero
-            digitoNossoNumero
-            valor this.valorTotal
-            tipoTitulo TipoDeTitulo.DM_DUPLICATA_MERCANTIL
-            localPagamento "Pagável em qualquer Banco"
-            instrucoes """Aceitar ate a data de vencimento
-Apos o vencimento aceito apenas nas agencias do Banco do Brasil
-Cobrar multa de 7% e juros
-"""
-
+        Titulo titulo=new Titulo(contaBancaria,sacado,cedente)
+        titulo.with {
+            dataDoDocumento=new Date().clearTime()
+            dataDoVencimento=this.dataVencimento
+            numeroDoDocumento=this.id
+            nossoNumero=nossoNum
+            digitoDoNossoNumero=dacNossoNumero
+            valor=this.valorTotal
+            tipoDeDocumento=TipoDeTitulo.DM_DUPLICATA_MERCANTIL
         }
 
+        org.jrimum.bopepo.Boleto bolJr=new org.jrimum.bopepo.Boleto(titulo)
+        bolJr.setLocalPagamento("Pagável em qualquer Banco até a data de vencimento")
+        bolJr.setInstrucao1("Aceitar até a data de vencimento")
+        bolJr.setInstrucao2("Após o vencimento aceito apenas nas agências do ITAU")
 
+        BoletoViewer boletoViewer=new BoletoViewer(bolJr)
+        boleto.titulo= bolJr.titulo.numeroDoDocumento
+        boleto.linhaDigitavel=bolJr.linhaDigitavel.write()
+        boleto.imagem=boletoViewer.pdfAsByteArray
+        boleto.nossoNumero=nossoNum+dacNossoNumero
+        boleto.dataVencimento=this.dataVencimento
+
+
+
+
+        def filename="/home/acception/tmp/boleto_${bolJr.titulo.numeroDoDocumento}.pdf"
+        def file=new File(filename)
+
+        file.withDataOutputStream {o->
+            o.write(boletoViewer.pdfAsByteArray)
+        }
+
+        addToBoletos(boleto)
+        boleto
     }
 
 

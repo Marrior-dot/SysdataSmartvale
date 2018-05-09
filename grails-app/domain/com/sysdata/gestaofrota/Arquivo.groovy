@@ -6,14 +6,25 @@ class Arquivo {
 	Date dateCreated
 	TipoArquivo tipo
 	StatusArquivo status
-	String conteudo
+	byte[] conteudo
+	Integer lote
 	
     static constraints = {
 		conteudo(nullable:true)
+		lote nullable:true
     }
 	
 	static mapping={
 		id generator:'sequence',params:[sequence:'arquivo_seq']
-		conteudo type:'text' 
+	}
+
+	static Integer nextLote(TipoArquivo tipo){
+		def lote=Arquivo.withCriteria(uniqueResult:true){
+			projections{
+				max('lote')
+			}
+			eq("tipo",tipo)
+		}
+		lote?lote+1:1
 	}
 }

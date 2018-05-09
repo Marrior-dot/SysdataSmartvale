@@ -78,7 +78,6 @@
 				</g:if>
 
 			</sec:ifAnyGranted>
-
 			<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC,ROLE_RH">
 				<g:if test="${servico=='ca'}">
 					<h2>Central de Atendimento</h2>

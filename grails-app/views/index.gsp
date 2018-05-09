@@ -1,4 +1,4 @@
-7<html>
+<html>
     <head>
         <title>Bem vindo ao Sistema Gestão de Frota</title>
         <meta name="layout" content="layout-restrito" />

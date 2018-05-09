@@ -35,6 +35,18 @@
             });
         });
     }
+
+    function abrirCortes(id) {
+        $.ajax({
+            url:"${createLink(controller:'fechamento',action:'abrirCortes')}/"+id,
+            method:'POST',
+            success:function(data){
+                $("#fechamento-index").html(data);
+            }
+        })
+    }
+
+
 </script>
 
 <div class="row">
