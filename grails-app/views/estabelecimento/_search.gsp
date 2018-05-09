@@ -20,7 +20,6 @@
             <th>Cod.Estab</th>
             <th>Razão Social</th>
             <th>Nome Fantasia</th>
-            <th></th>
             </thead>
         </table>
     </div>
