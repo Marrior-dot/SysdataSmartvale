@@ -12,14 +12,14 @@ class TransacaoCommand {
     String codigoEstabelecimento
     String placa
     String numeroCartao
-    Double valor
+    BigDecimal valor
     String senha
     Veiculo veiculo
     Cartao cartao
     Estabelecimento estabelecimento
     String combustivel
     Long quilometragem
-    Double precoUnitario
+    BigDecimal precoUnitario
     Long ultimaQuilometragem
 }
 
@@ -78,7 +78,6 @@ class TransacaoController extends BaseOwnerController {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.sort = 'id'
         params.order = 'desc'
-
         [transacaoInstanceList : Transacao.createCriteria().list(params, criteria),
          transacaoInstanceTotal: Transacao.createCriteria().count(criteria),
          params                : params]
