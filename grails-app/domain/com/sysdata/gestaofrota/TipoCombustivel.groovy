@@ -13,6 +13,6 @@ enum TipoCombustivel {
 	}
 	
 	static asList(){
-		[GASOLINA,ALCOOL,DIESEL]
+		[GASOLINA,ALCOOL,DIESEL,BIODIESEL]
 	}
 }
