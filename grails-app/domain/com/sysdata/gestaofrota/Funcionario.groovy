@@ -21,14 +21,8 @@ class Funcionario extends Participante {
     static constraints = {
         cpf(blank: false, cpf: true)
         matricula(blank: false, validator: { val, obj ->
-
-            def func = Funcionario.withCriteria {
-                unidade { eq("id", obj.unidade.id) }
-                eq("matricula", val)
-            }
-
-            if (func && func.find { it != obj }) return "funcionario.matricula.unica"
-
+            Funcionario funcionario = Funcionario.findByUnidadeAndMatricula(obj.unidade, val)
+            if (funcionario && funcionario.id != obj.id) return "funcionario.matricula.unica"
         })
         cnh(blank: false)
         portador nullable: true

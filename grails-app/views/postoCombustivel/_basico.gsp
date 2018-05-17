@@ -56,8 +56,6 @@
 		</div>
 	</div>
 
-
-
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">
 			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
@@ -71,7 +69,6 @@
 			</g:if>
 		</div>
 	</sec:ifAnyGranted>
-
 </g:form>
 
 

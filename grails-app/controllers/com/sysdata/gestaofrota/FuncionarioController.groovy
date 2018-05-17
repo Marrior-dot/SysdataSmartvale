@@ -122,17 +122,16 @@ class FuncionarioController extends BaseOwnerController {
                 funcionarioInstance.properties = params
                 funcionarioInstance.endereco = params['endereco']
                 funcionarioInstance.telefone = params['telefone']
-                funcionarioInstance.portador.valorLimite = params.double('portador.valorLimite')
-                funcionarioInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
 
-                funcionarioInstance = funcionarioService.save(funcionarioInstance)
+                funcionarioInstance = funcionarioService.save(params, funcionarioInstance)
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
                 redirect(action: "show", id: funcionarioInstance.id)
             }
             catch (Exception e) {
-                println(e.message)
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                e.printStackTrace()
+                flash.error = e.message
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
 
         } else {

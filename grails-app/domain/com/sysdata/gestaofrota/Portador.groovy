@@ -6,11 +6,12 @@ import grails.util.Holders
 
 abstract class Portador {
     Conta conta = new Conta()
-    BigDecimal limiteTotal=0D
+    BigDecimal limiteTotal = 0D
     BigDecimal limiteDiario
     BigDecimal limiteMensal
+    BigDecimal limiteCredito
 
-    BigDecimal saldoTotal=0D
+    BigDecimal saldoTotal = 0D
     BigDecimal saldoDiario
     BigDecimal saldoMensal
 
@@ -18,23 +19,25 @@ abstract class Portador {
     static belongsTo = [unidade: Unidade]
 
     static constraints = {
-        limiteDiario nullable:true
-        limiteMensal nullable:true
-        saldoDiario nullable:true
-        saldoMensal nullable:true
+        limiteDiario nullable: true
+        limiteMensal nullable: true
+        limiteCredito nullable: true
+
+        saldoDiario nullable: true
+        saldoMensal nullable: true
     }
 
-    static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone','ativo']
+    static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone', 'ativo']
 
 
-    Boolean getAtivo(){
+    Boolean getAtivo() {
 
-        if(this.instanceOf(PortadorFuncionario)){
-            PortadorFuncionario portFunc=this as PortadorFuncionario
-            return portFunc.funcionario.status==Status.ATIVO
-        }else if(this.instanceOf(PortadorMaquina)){
-            PortadorMaquina portMaq=this as PortadorMaquina
-            return portMaq.maquina.status==Status.ATIVO
+        if (this.instanceOf(PortadorFuncionario)) {
+            PortadorFuncionario portFunc = this as PortadorFuncionario
+            return portFunc.funcionario.status == Status.ATIVO
+        } else if (this.instanceOf(PortadorMaquina)) {
+            PortadorMaquina portMaq = this as PortadorMaquina
+            return portMaq.maquina.status == Status.ATIVO
         }
     }
 
@@ -77,29 +80,29 @@ abstract class Portador {
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
 
-    private def initContext(Corte corteAberto,dataProc){
-        def ctx=new Expando()
+    private def initContext(Corte corteAberto, dataProc) {
+        def ctx = new Expando()
 
-        ctx.dataProcessamento=dataProc
+        ctx.dataProcessamento = dataProc
 
         //Fecha última fatura
-        ctx.ultimaFatura=this.conta.ultimaFatura
-        ctx.atrasado=false
+        ctx.ultimaFatura = this.conta.ultimaFatura
+        ctx.atrasado = false
 
         //Data de referência para atraso pagamento
-        ctx.dataRefCob=ctx.ultimaFatura?ctx.ultimaFatura.dataVencimento:dataProc
+        ctx.dataRefCob = ctx.ultimaFatura ? ctx.ultimaFatura.dataVencimento : dataProc
 
         //Inicializa (cria) objeto Fatura
-        Fatura fatura=new Fatura()
-        fatura.with{
-            conta=this.conta
-            dataVencimento=corteAberto.dataCobranca
-            data=dataProc
-            corte=corteAberto
-            status=StatusFatura.ABERTA
+        Fatura fatura = new Fatura()
+        fatura.with {
+            conta = this.conta
+            dataVencimento = corteAberto.dataCobranca
+            data = dataProc
+            corte = corteAberto
+            status = StatusFatura.ABERTA
         }
-        ctx.fatura=fatura
-        ctx.portador=this
+        ctx.fatura = fatura
+        ctx.portador = this
 
         /*
         ctx.addSaldo={tpSld,val->
@@ -110,45 +113,45 @@ abstract class Portador {
     }
 
 
-    Fatura faturar(Corte corte, dataProc){
+    Fatura faturar(Corte corte, dataProc) {
 
-        def fatConfig=Holders.grailsApplication.config.project.faturamento
+        def fatConfig = Holders.grailsApplication.config.project.faturamento
 
-        def ctx=initContext(corte,dataProc)
+        def ctx = initContext(corte, dataProc)
 
         //Lançamentos a FATURAR
-        def lctosAFat=LancamentoPortador.withCriteria {
-            eq("conta",this.conta)
-            eq("statusFaturamento",StatusFaturamento.NAO_FATURADO)
-            eq("corte",corte)
+        def lctosAFat = LancamentoPortador.withCriteria {
+            eq("conta", this.conta)
+            eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+            eq("corte", corte)
             order("dataEfetivacao")
         }
-        Fatura fatura=ctx.fatura
-        lctosAFat.each{lcto->
-            ItemFatura item=lcto.faturar()
+        Fatura fatura = ctx.fatura
+        lctosAFat.each { lcto ->
+            ItemFatura item = lcto.faturar()
             fatura.addToItens item
-            lcto.statusFaturamento=StatusFaturamento.FATURADO
-            lcto.status=StatusLancamento.EFETIVADO
+            lcto.statusFaturamento = StatusFaturamento.FATURADO
+            lcto.status = StatusLancamento.EFETIVADO
         }
         //Roda extensoes
-        fatConfig.extensoes.each{e->
-            ExtensaoFaturamento ext=ExtensaoFactory.getInstance(e)
+        fatConfig.extensoes.each { e ->
+            ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e)
             ext.tratar(ctx)
         }
 
-        if(fatura.itens){
-            fatura.save(flush:true)
+        if (fatura.itens) {
+            fatura.save(flush: true)
 
-            Fatura ultFat=ctx.ultimaFatura
-            if(ultFat){
-                ultFat.status=StatusFatura.FECHADA
+            Fatura ultFat = ctx.ultimaFatura
+            if (ultFat) {
+                ultFat.status = StatusFatura.FECHADA
                 ultFat.save()
             }
             //Log fatura
             log.debug fatura
-            fatura.itens.sort{it.data}.each{ log.debug it }
+            fatura.itens.sort { it.data }.each { log.debug it }
 
-        }else{
+        } else {
             fatura.discard()
             log.debug "CNT => #${fatura.conta.id} sem faturamento"
         }

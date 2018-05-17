@@ -1,12 +1,8 @@
 package com.sysdata.gestaofrota
 
-import grails.gorm.DetachedCriteria
-import grails.plugins.springsecurity.Secured
-
 import com.sysdata.gestaofrota.exception.TransacaoException
-import grails.plugins.springsecurity.SecurityTagLib
+import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-
 
 class TransacaoCommand {
     String codigoEstabelecimento
@@ -52,6 +48,15 @@ class TransacaoController extends BaseOwnerController {
         }
 
         def criteria = {
+            if (params.dataInicial && params.dataInicial.toString().length() > 0) {
+                Date data = params.date('dataInicial', 'dd/MM/yyyy')
+                gt('dateCreated', data)
+            }
+            if (params.dataFinal && params.dataFinal.toString().length() > 0) {
+                Date data = params.date('dataFinal', 'dd/MM/yyyy') + 1
+                lt('dateCreated', data)
+            }
+
             if (params?.cartao && params.cartao.toString().length() > 0) {
                 eq('numeroCartao', params.cartao)
             }
@@ -61,7 +66,7 @@ class TransacaoController extends BaseOwnerController {
             }
 
             if (params?.nsu && params.nsu.toString().length() > 0) {
-                eq('nsu', params.nsu)
+                eq('nsu', params.int('nsu'))
             }
 
             if (unidadeInstance) {
@@ -331,7 +336,7 @@ class TransacaoController extends BaseOwnerController {
 
     def estornar = {
         flash.errors = []
-        def transacaoInstance = Transacao.get(params.id)
+        def transacaoInstance = Transacao.get(params.long('id'))
         try {
             estornoService.estornarTransacao(transacaoInstance)
         } catch (TransacaoException e) {

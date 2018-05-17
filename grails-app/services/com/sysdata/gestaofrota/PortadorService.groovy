@@ -2,29 +2,31 @@ package com.sysdata.gestaofrota
 
 class PortadorService {
 
-    PortadorFuncionario save(params,Funcionario funcionario) {
+    PortadorFuncionario save(params, Funcionario funcionario) {
 
         PortadorFuncionario portadorFuncionario
 
-        if(funcionario.portador) portadorFuncionario = funcionario.portador
+        if (funcionario.portador) portadorFuncionario = funcionario.portador
         else portadorFuncionario = new PortadorFuncionario()
 
         if (portadorFuncionario.unidade == null) portadorFuncionario.unidade = funcionario.unidade
 
 
-        portadorFuncionario.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
-        portadorFuncionario.saldoTotal=portadorFuncionario.limiteTotal
+        portadorFuncionario.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
+        portadorFuncionario.saldoTotal = portadorFuncionario.limiteTotal
 
 
-        if(params.portador.limiteDiario){
-            portadorFuncionario.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
-            portadorFuncionario.saldoDiario=portadorFuncionario.limiteDiario
+        if (params.portador.limiteDiario) {
+            portadorFuncionario.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
+            portadorFuncionario.saldoDiario = portadorFuncionario.limiteDiario
         }
-        if(params.portador.limiteMensal){
-            portadorFuncionario.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
-            portadorFuncionario.saldoMensal=portadorFuncionario.limiteMensal
+        if (params.portador.limiteMensal) {
+            portadorFuncionario.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
+            portadorFuncionario.saldoMensal = portadorFuncionario.limiteMensal
         }
-
+        if (params.portador.limiteCredito) {
+            portadorFuncionario.limiteCredito = Util.convertToCurrency(params.portador.limiteCredito)
+        }
 
         portadorFuncionario.funcionario = funcionario
         funcionario.portador = portadorFuncionario
@@ -36,24 +38,24 @@ class PortadorService {
         portadorFuncionario
     }
 
-    PortadorMaquina save(MaquinaMotorizada maquina,params) {
+    PortadorMaquina save(MaquinaMotorizada maquina, params) {
 
         if (!maquina.save()) throw new RuntimeException(maquina.showErrors())
 
-        PortadorMaquina portadorMaquina=new PortadorMaquina()
-        portadorMaquina.unidade=maquina.unidade
-        portadorMaquina.maquina=maquina
-        portadorMaquina.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
-        portadorMaquina.saldoTotal=portadorMaquina.limiteTotal
+        PortadorMaquina portadorMaquina = new PortadorMaquina()
+        portadorMaquina.unidade = maquina.unidade
+        portadorMaquina.maquina = maquina
+        portadorMaquina.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
+        portadorMaquina.saldoTotal = portadorMaquina.limiteTotal
 
 
-        if(params.portador.limiteDiario){
-            portadorMaquina.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
-            portadorMaquina.saldoDiario=portadorMaquina.limiteDiario
+        if (params.portador.limiteDiario) {
+            portadorMaquina.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
+            portadorMaquina.saldoDiario = portadorMaquina.limiteDiario
         }
-        if(params.portador.limiteMensal){
-            portadorMaquina.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
-            portadorMaquina.saldoMensal=portadorMaquina.limiteMensal
+        if (params.portador.limiteMensal) {
+            portadorMaquina.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
+            portadorMaquina.saldoMensal = portadorMaquina.limiteMensal
         }
 
         if (!portadorMaquina.save()) throw new RuntimeException(portadorMaquina.showErrors())

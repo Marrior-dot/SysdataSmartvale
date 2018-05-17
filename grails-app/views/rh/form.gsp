@@ -59,8 +59,8 @@
                             </div>
 
                             <div class="tab-pane" id="categorias">
-                                <g:render template="/categoriaFuncionario/newSearch"
-                                          model="[controller: 'categoriaFuncionario', rhId: rhInstance?.id]"/>
+                                <g:render template="/categoriaFuncionario/tab"
+                                          model="[controller: 'categoriaFuncionario', rhInstance: rhInstance]"/>
                             </div>
 
                             <div class="tab-pane" id="estabelecimentos">

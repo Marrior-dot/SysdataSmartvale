@@ -36,4 +36,24 @@ class CategoriaFuncionarioService {
 
         [categoriaInstanceList: categoriaInstanceList, categoriaInstanceCount: categoriaInstanceCount]
     }
+
+    void save(Rh rh, String nome, Double valorCarga) {
+        CategoriaFuncionario categoria = new CategoriaFuncionario(nome: nome, valorCarga: valorCarga)
+        rh.addToCategoriasFuncionario(categoria)
+        categoria.save(failOnError: true)
+    }
+
+    void delete(CategoriaFuncionario categoriaFuncionario) {
+        Rh rh = categoriaFuncionario.rh
+        rh.removeFromCategoriasFuncionario(categoriaFuncionario)
+        categoriaFuncionario.delete()
+        rh.save()
+    }
+
+    void update(CategoriaFuncionario categoria, String nome, Double valor) {
+        if (categoria == null) return
+        categoria.nome = nome
+        categoria.valorCarga = valor
+        categoria.save()
+    }
 }

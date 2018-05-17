@@ -1,4 +1,31 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
+<script type="application/javascript">
+	$(document).ready(function () {
+		alterarModeloCobranca();
+	});
+
+	function alterarModeloCobranca() {
+		var duration = 500;
+		var modeloCobranca = $("select#modeloCobranca").val();
+		var pedidoCargaPanel = $("div.panel#pedido-carga");
+		var faturaPanel = $("div.panel#fatura");
+
+		if (modeloCobranca === "POS_PAGO") {
+			pedidoCargaPanel.find("input").each(function (index, element) {
+				element.value = '0';
+			});
+			pedidoCargaPanel.hide(duration);
+			faturaPanel.show(duration);
+		}
+		else if (modeloCobranca === "PRE_PAGO") {
+			pedidoCargaPanel.show(duration);
+			faturaPanel.find("input").each(function (index, element) {
+				element.value = '0';
+			});
+			faturaPanel.hide(duration);
+		}
+	}
+</script>
 
 <g:form method="post" >
     <g:hiddenField name="id" value="${rhInstance?.id}" />
@@ -12,8 +39,19 @@
 
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" required="true" value="${rhInstance?.cnpj}" />
+				</div>
+
+				<g:set var="bloquearModCob" value="${action == Util.ACTION_EDIT && (rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0)}"/>
+				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
+					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
+					<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.values()}" class="form-control"
+							  optionValue="nome" value="${rhInstance?.modeloCobranca}" onchange="alterarModeloCobranca()"
+							  aria-describedby="modelo-cobranca" disabled="${bloquearModCob}" required="required"/>
+				<g:if test="${bloquearModCob}">
+					<span id="modelo-cobranca" class="help-block">Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados.</span>
+				</g:if>
 				</div>
 			</div>
 			<div class="row">
@@ -28,18 +66,13 @@
 		</div>
 	</div>
 
-	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
+	<div class="panel panel-default" id="pedido-carga">
+		<div class="panel-heading">
+			Pedido de Carga
+		</div>
 
-	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Pedido de Carga
-        </div>
-
-        <div class="panel-body">
-
-            <div class="row">
+		<div class="panel-body">
+			<div class="row">
 				<div class="form-group col-md-3">
 					<label class="control-label" for="taxaAdministracao">Taxa Pedido *</label>
 					<div class="input-group">
@@ -57,36 +90,12 @@
 						<span class="input-group-addon">dias</span>
 					</div>
 				</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Cartão</div>
-
-        <div class="panel-body">
-			<div class="form-group col-md-4">
-				<label for="vinculoCartao">Vincular Cartão a:</label>
-				<div class="input-group">
-					<g:if test="${action == Util.ACTION_VIEW}">
-						<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled value="${rhInstance?.vinculoCartao}"/>
-					</g:if>
-					<g:else>
-						<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
-								  disabled="${rhInstance?.portadoresCount > 0}"
-								  class="form-control" optionKey="key" value="${rhInstance?.vinculoCartao}"/>
-					</g:else>
-					<span class="input-group-addon">
-						<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''}>
-						<strong>Cartão com chip</strong>
-					</span>
-				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 
-	<div class="panel panel-default">
-        <div class="panel-heading">Fatura</div>
+	<div class="panel panel-default" id="fatura">
+		<div class="panel-heading">Fatura</div>
 		<div class="panel-body">
 			<div class="row">
 				<div class="form-group col-md-3">
@@ -95,79 +104,6 @@
 						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
 							   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
 						<span class="input-group-addon">dias</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="panel panel-default">
-        <div class="panel-heading">
-			Taxas do Cartão
-		</div>
-
-		<div class="panel-body">
-            <div class="row">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
-							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaMensalidade">Mensalidade *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaMensalidade" id="taxaMensalidade"
-							   value="${rhInstance?.taxaMensalidade}" min="0" step="0.01" required/>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaEmissaoCartao">Emissão *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaEmissaoCartao" id="taxaEmissaoCartao"
-							   value="${rhInstance?.taxaEmissaoCartao}" min="0" step="0.01" required/>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaReemissaoCartao">Reemissão *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaReemissaoCartao" id="taxaReemissaoCartao"
-							   value="${rhInstance?.taxaReemissaoCartao}" min="0" step="0.01" required/>
-					</div>
-				</div>
-            </div>
-		</div>
-    </div>
-
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			Parâmetros do Programa
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
-							   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
-						<span class="input-group-addon">%</span>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
-							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
-						<span class="input-group-addon">%</span>
 					</div>
 				</div>
 
@@ -197,21 +133,89 @@
 						<span class="input-group-addon">dias</span>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
 
-				<div class="form-group col-md-3">
-					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
+	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
+
+	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Cartão</div>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
+					<label class="control-label" for="vinculoCartao">Vincular Cartão a:</label>
+
 					<div class="input-group">
-						<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.values()}"
-							class="form-control" optionValue="nome" value="${rhInstance?.modeloCobranca}" required="required"/>
+						<g:if test="${action == Util.ACTION_VIEW}">
+							<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled
+								   value="${rhInstance?.vinculoCartao}" aria-describedby="vinculo-cartao"/>
+						</g:if>
+						<g:else>
+							<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
+									  disabled="${bloquearModCob}" class="form-control" aria-describedby="vinculo-cartao"
+									  optionKey="key" value="${rhInstance?.vinculoCartao}"/>
+						</g:else>
 						<span class="input-group-addon">
-							<input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''}>
+							<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
+							<strong>Cartão com chip</strong>
+						</span>
+						<span class="input-group-addon">
+							<input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
 							<strong>Renovar Limite</strong>
 						</span>
 					</div>
+					<g:if test="${bloquearModCob}">
+						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
+					</g:if>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="panel panel-default">
+        <div class="panel-heading">
+			Taxas do Cartão
+		</div>
+
+		<div class="panel-body">
+            <div class="row">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
+							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
+							   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
+							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<input type="hidden" name="taxaMensalidade" id="taxaMensalidade" value="0">
+				<input type="hidden" name="taxaEmissaoCartao" id="taxaEmissaoCartao" value="0">
+				<input type="hidden" name="taxaReemissaoCartao" id="taxaReemissaoCartao" value="0">
+            </div>
+		</div>
+    </div>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -219,21 +223,23 @@
 		</div>
 
 		<div class="panel-body">
-			<div class="form-group col-md-3">
-				<label class="control-label" for="maximoTrnPorDia">Máximo Transações *</label>
-				<div class="input-group">
-					<input type="number" class="form-control" name="maximoTrnPorDia" id="maximoTrnPorDia" value="${rhInstance?.maximoTrnPorDia}"
-						   min="0" required/>
-					<span class="input-group-addon">por dia</span>
+			<div class="row">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="maximoTrnPorDia">Máximo Transações *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="maximoTrnPorDia" id="maximoTrnPorDia" value="${rhInstance?.maximoTrnPorDia}"
+							   min="0" required/>
+						<span class="input-group-addon">por dia</span>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group col-md-3">
-				<label class="control-label" for="diasInatividade">Inatividade *</label>
-				<div class="input-group">
-					<input type="number" class="form-control" name="diasInatividade" id="diasInatividade" value="${rhInstance?.diasInatividade}"
-						   min="0" required/>
-					<span class="input-group-addon">dias</span>
+				<div class="form-group col-md-3">
+					<label class="control-label" for="diasInatividade">Inatividade *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="diasInatividade" id="diasInatividade" value="${rhInstance?.diasInatividade}"
+							   min="0" required/>
+						<span class="input-group-addon">dias</span>
+					</div>
 				</div>
 			</div>
 		</div>

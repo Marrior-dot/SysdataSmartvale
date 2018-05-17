@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.CategoriaFuncionario" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.CategoriaFuncionario" %>
 <%@ page import="com.sysdata.gestaofrota.Status" %>
 <%@ page import="com.sysdata.gestaofrota.CategoriaCnh" %>
 
@@ -13,45 +13,53 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>${message(code: 'rh.label', default: 'RH')}</th>
-                <th>${message(code: 'unidade.label', default: 'Unidade')}</th>
-            </tr>
+        <tr>
+            <th>${message(code: 'rh.label', default: 'RH')}</th>
+            <th>${message(code: 'unidade.label', default: 'Unidade')}</th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><g:link controller="rh" action="show" id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></td>
-                <td><g:link controller="unidade" action="show" id="${unidadeInstance.id}">${unidadeInstance?.nome}</g:link></td>
-            </tr>
+        <tr>
+            <td><g:link controller="rh" action="show"
+                        id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></td>
+            <td><g:link controller="unidade" action="show"
+                        id="${unidadeInstance.id}">${unidadeInstance?.nome}</g:link></td>
+        </tr>
         </tbody>
     </table>
 
-    %{--dados basicos--}%
+%{--dados basicos--}%
     <div class="panel panel-default">
         <div class="panel-heading">Dados Básicos</div>
+
         <div class="panel-body">
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="matricula">Matrícula *</label>
-                    <g:textField class="form-control matricula" name="matricula" value="${funcionarioInstance?.matricula}" maxlength="10" required="required"/>
+                    <g:textField class="form-control matricula" name="matricula"
+                                 value="${funcionarioInstance?.matricula}" maxlength="10" required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="cpf">CPF *</label>
-                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf" required="required"/>
+                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"
+                                 required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="rg">RG *</label>
-                    <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10" class="form-control only-numbers" required="required"/>
+                    <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10"
+                                 class="form-control only-numbers" required="required"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="nome">Nome *</label>
+
                     <div class="input-group">
-                        <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50" class="form-control" required="required"/>
+                        <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50"
+                                     class="form-control" required="required"/>
                         <span class="input-group-addon">
                             <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
                         </span>
@@ -66,7 +74,8 @@
 
                 <div class="form-group col-md-3">
                     <label for="cnh">CNH *</label>
-                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}" maxlength="11" required="required"/>
+                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}"
+                                 maxlength="11" required="required"/>
                 </div>
             </div>
 
@@ -74,49 +83,43 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
-                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing" maxlength="${tamMaxEmbossing}"
-                               placeholder="Digite aqui o nome que será impresso no seu cartão." value="${funcionarioInstance?.nomeEmbossing}" required/>
-                        <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
+                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing"
+                               maxlength="${tamMaxEmbossing}"
+                               placeholder="Digite aqui o nome que será impresso no seu cartão."
+                               value="${funcionarioInstance?.nomeEmbossing}" required/>
+                        <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong
+                                id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
                     </div>
-
-
-
                 </div>
 
 
                 <div class="row">
-
                     <div class="form-group col-md-3">
                         <label for="portador.limiteTotal">Limite Total *</label>
-                        <div class="input-group">
-                            <input class="form-control money"
-                                   id="portador.limiteTotal" name="portador.limiteTotal"
-                                   value="${funcionarioInstance?.portador?.limiteTotal}" required/>
-                        </div>
+                        <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
+                               value="${funcionarioInstance?.portador?.limiteTotal}" required/>
                     </div>
-
 
                     <div class="form-group col-md-3">
                         <label for="portador.limiteDiario">Limite Diário *</label>
-                        <div class="input-group">
-                            <input  class="form-control money"
-                                    id="portador.limiteDiario" name="portador.limiteDiario"
-                                    value="${funcionarioInstance?.portador?.limiteDiario}" />
-                        </div>
+                        <input class="form-control money" id="portador.limiteDiario" name="portador.limiteDiario"
+                               value="${funcionarioInstance?.portador?.limiteDiario}"/>
                     </div>
 
                     <div class="form-group col-md-3">
                         <label for="portador.limiteMensal">Limite Mensal *</label>
-                        <div class="input-group">
-                            <input  class="form-control money"
-                                    id="portador.limiteMensal" name="portador.limiteMensal"
-                                    value="${funcionarioInstance?.portador?.limiteMensal}" />
-                        </div>
+                        <input class="form-control money" id="portador.limiteMensal" name="portador.limiteMensal"
+                               value="${funcionarioInstance?.portador?.limiteMensal}"/>
                     </div>
 
+                    <g:if test="${funcionarioInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+                        <div class="form-group col-md-3">
+                            <label for="portador.limiteCredito">Limite Crédito *</label>
+                            <input class="form-control money" id="portador.limiteCredito" name="portador.limiteCredito"
+                                   value="${funcionarioInstance?.portador?.limiteCredito ?: 0D}"/>
+                        </div>
+                    </g:if>
                 </div>
-
-
             </g:if>
 
             <div class="row">
@@ -151,10 +154,13 @@
         </div>
     </div>
 
-    <g:render template="/endereco/form" model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
+    <g:render template="/endereco/form"
+              model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
 
-    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
-    <g:render template="/telefone/form" model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial', required: true]"/>
+    <g:render template="/telefone/form"
+              model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
+    <g:render template="/telefone/form"
+              model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial', required: true]"/>
     <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
         <div class="buttons">
             <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
@@ -162,8 +168,10 @@
                                 value="${message(code: 'default.button.update.label', default: 'Update')}"/>
             </g:if>
             <g:if test="${action == Util.ACTION_VIEW}">
-                <g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
-                <g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+                <g:actionSubmit class="btn btn-default" action="edit"
+                                value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
+                <g:actionSubmit class="btn btn-default" action="delete"
+                                value="${message(code: 'default.button.delete.label', default: 'Delete')}"
                                 onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
             </g:if>
         </div>

@@ -14,18 +14,21 @@
  * @param {DOM Form} form formulário que será enviado via AJAX
  * @param {int delay} tempo de espera (em segundos) antes da submissão ser enviada. defaults 1
  */
-function submitFormByAjax(form, delay, successCallback, erroCallback) {
+function submitFormByAjax(form, delay, successCallback, erroCallback, resetForm, dataType) {
     if (form === undefined || form.length === 0) {
         console.error("Formulário enviado a função 'submitFormByAjax' não encontrado.");
         return;
     }
 
-    var delay = delay ? delay * 1000 : 1000;
+    var delay = delay !== undefined ? delay * 1000 : 1000;
     var succesAlertComponent = form.find("div.alert-success");
     var erroAlertComponent = form.find("div.alert-danger");
 
+    if (resetForm === undefined) resetForm = false;
+    if (dataType === undefined) dataType = 'json';
+
     var criarAlertContainer = function () {
-        var alertsContainer = $('<div id="alertsContainer"></div>');
+        var alertsContainer = $('<div id="alertsContainer" class="col-md-12"></div>');
         form.prepend(alertsContainer);
 
         return alertsContainer;
@@ -46,7 +49,6 @@ function submitFormByAjax(form, delay, successCallback, erroCallback) {
     succesAlertComponent.hide();
     erroAlertComponent.hide();
 
-
     form.submit(function (event) {
         event.preventDefault();
         succesAlertComponent.hide();
@@ -56,15 +58,18 @@ function submitFormByAjax(form, delay, successCallback, erroCallback) {
         var url = form.attr('action');
         var method = form.attr('method');
 
+        if(dataType === 'json') url += '.json';
+
         if (url == undefined) {
             console.error("Formulário não contem endereço.");
             return;
         }
+
         var callAJAX = function () {
             $.ajax({
                 type: method !== undefined ? method : "POST",
-                url: url + ".json",
-                dataType: 'json',
+                url: url,
+                dataType: dataType,
                 data: form.serialize(),
 
                 success: function (data) {
@@ -72,16 +77,29 @@ function submitFormByAjax(form, delay, successCallback, erroCallback) {
                         successCallback(data, form);
                     }
 
-                    form[0].reset();
-                    if (data.msg && data.msg.length > 0) {
-                        succesAlertComponent.html(data.msg);
-                        succesAlertComponent.show();
+                    if (resetForm) form[0].reset();
+                    if (data) {
+                        if (dataType === 'json' && data.msg && data.msg.length > 0) {
+                            succesAlertComponent.html(data.msg);
+                            succesAlertComponent.show();
+                        }
+                        else if (dataType === 'html' && data.responseText > 0) {
+                            succesAlertComponent.html(data);
+                            succesAlertComponent.show();
+                        }
                     }
                 },
                 error: function (request) {
-                    if (request.responseJSON && request.responseJSON.erro &&
+                    //console.error(request);
+                    if (dataType === 'json' && request.responseJSON && request.responseJSON.erro &&
                         request.responseJSON.erro.length > 0) {
                         erroAlertComponent.html(request.responseJSON.erro);
+                        erroAlertComponent.show();
+                    }
+                    else if(dataType === 'html' && request.responseText.length > 0){
+                        if(request.statusText === "Internal Server Error")
+                            erroAlertComponent.html("Erro interno no Servidor");
+                        else erroAlertComponent.html(request.responseText);
                         erroAlertComponent.show();
                     }
                     if (erroCallback && typeof erroCallback === "function") {

@@ -31,7 +31,14 @@ class EstabelecimentoController {
 
     def save = {
         flash.errors = []
-        def estabelecimentoInstance = new Estabelecimento(params)
+        Estabelecimento estabelecimentoInstance = new Estabelecimento(params)
+        int estabelecimentoCadastrados = Estabelecimento.countByCnpj(estabelecimentoInstance.cnpj)
+        if (estabelecimentoCadastrados > 0) {
+            estabelecimentoInstance.errors.rejectValue('cnpj', "Já existe um Estabelecimento cadastrado com o CNPJ ${estabelecimentoInstance.cnpj}")
+            render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'novo'])
+            return
+        }
+
         estabelecimentoInstance.endereco = params['endereco']
         estabelecimentoInstance.telefone = params['telefone']
 
@@ -92,19 +99,26 @@ class EstabelecimentoController {
     }
 
     def update = {
-        def estabelecimentoInstance = Estabelecimento.get(params.id)
+        def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
         if (estabelecimentoInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (estabelecimentoInstance.version > version) {
-
                     estabelecimentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'estabelecimento.label', default: 'Estabelecimento')] as Object[], "Another user has updated this Estabelecimento while you were editing")
-                    render(view: "edit", model: [estabelecimentoInstance: estabelecimentoInstance])
+                    render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'editando'])
                     return
                 }
             }
-            estabelecimentoInstance.properties = params
 
+            Estabelecimento estabelecimentoCadastrado = Estabelecimento.findByCnpj(estabelecimentoInstance.cnpj)
+            if (estabelecimentoCadastrado && estabelecimentoCadastrado.id != estabelecimentoInstance.id) {
+                estabelecimentoInstance.errors.rejectValue('cnpj', "Já existe um Estabelecimento cadastrado com o CNPJ ${estabelecimentoInstance.cnpj}")
+                render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'editando'])
+                return
+            }
+
+
+            estabelecimentoInstance.properties = params
             estabelecimentoInstance.endereco = params['endereco']
             estabelecimentoInstance.telefone = params['telefone']
 
@@ -112,7 +126,7 @@ class EstabelecimentoController {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), estabelecimentoInstance.id])}"
                 redirect(action: "show", id: estabelecimentoInstance.id)
             } else {
-                render(view: "edit", model: [estabelecimentoInstance: estabelecimentoInstance])
+                render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'editando'])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"

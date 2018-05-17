@@ -38,8 +38,8 @@
                 <div class="alert alert-info">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${estabelecimentoInstance}">
-                <div class="errors">
-                    <span style="font-weight:bold;padding-left:10px">Erro ao salvar Estabelecimento</span>
+                <div class="alert alert-danger" role="alert">
+                    <p><strong>Erro ao salvar Estabelecimento</strong></p>
                     <g:renderErrors bean="${estabelecimentoInstance}" as="list"/>
                 </div>
             </g:hasErrors>

@@ -110,19 +110,23 @@ class Util {
 
     static def convertToCurrency(value) {
         if (value ==~ /[\d|\.]*,*\d{0,2}/) {
-            def convValue=value.contains(".")?value.replace(".",""):value
-            convValue=convValue.replace(",", ".")
-            convValue=convValue as BigDecimal
+            def convValue = value.contains(".") ? value.replace(".", "") : value
+            convValue = convValue.replace(",", ".")
+            convValue = convValue as BigDecimal
             convValue
         } else {
             throw new InvalidCurrencyException(message: "Valor $value não é um valor monetário válido!")
         }
     }
 
+    static Double convertToDouble(String value) {
+        String convValue = value.contains(".") ? value.replace(".", "") : value
+        convValue = convValue.replace(",", ".").replace("R\$ ", "")
+        return convValue as BigDecimal
+    }
+
     static def formattedDate(date) {
-
         date ? new SimpleDateFormat("dd/MM/yyyy").format(date) : ''
-
     }
 
     static def formattedDateTime(date) {
@@ -132,7 +136,7 @@ class Util {
 
 
     static def formatCurrency(curr) {
-        if(!curr) curr=0.00
+        if (!curr) curr = 0.00
         def dfs = new DecimalFormatSymbols(LOCAL)
         dfs.decimalSeparator = ","
         new DecimalFormat("#0.00", dfs).format(curr)
@@ -147,7 +151,7 @@ class Util {
     }
 
     static String maskCard(String numero) {
-        if (numero.length() > 6) {
+        if (numero?.length() > 6) {
             return numero[0..3] + "****" + numero[(numero.length() - 3)..(numero.length() - 1)]
         } else "<< NÚMERO IMASCARÁVEL >>"
     }
@@ -196,20 +200,20 @@ class Util {
         if (raw) {
             raw = raw.replace('.', '')
             raw = raw.replace('-', '')
-            sprintf("%011d",raw)
+            sprintf("%011d", raw)
         } else {
             raw
         }
     }
 
-    static String cnpjToRaw(String cnpj){
-        def raw=cnpj
-        if(raw){
-            raw=raw.replace('.','')
-            raw=raw.replace('-','')
-            raw=raw.replace('/','')
-            sprintf("%014d",raw as long)
-        }else{
+    static String cnpjToRaw(String cnpj) {
+        def raw = cnpj
+        if (raw) {
+            raw = raw.replace('.', '')
+            raw = raw.replace('-', '')
+            raw = raw.replace('/', '')
+            sprintf("%014d", raw as long)
+        } else {
             raw
         }
 
@@ -241,20 +245,18 @@ class Util {
         r
     }
 
-    static Date calcularDataProc(){
-        def agora=new Date()
-        def hora=agora[Calendar.HOUR_OF_DAY]
-        def min=agora[Calendar.MINUTE]
-        def dataRef=agora.clearTime()
-        if(hora in (0..9) && min in (0..59)) dataRef--
+    static Date calcularDataProc() {
+        def agora = new Date()
+        def hora = agora[Calendar.HOUR_OF_DAY]
+        def min = agora[Calendar.MINUTE]
+        def dataRef = agora.clearTime()
+        if (hora in (0..9) && min in (0..59)) dataRef--
         dataRef
     }
 
-    static String normalize(str){
-        str=Normalizer.normalize(str,Normalizer.Form.NFD)
-        str=str.replaceAll("[^\\p{ASCII}]","")
+    static String normalize(str) {
+        str = Normalizer.normalize(str, Normalizer.Form.NFD)
+        str = str.replaceAll("[^\\p{ASCII}]", "")
         str
     }
-
-
 }
