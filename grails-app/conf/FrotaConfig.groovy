@@ -42,7 +42,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://148.5.7.216/maxxcard_development"
+        url = "jdbc:postgresql://148.5.7.216/maxxcard_homologation-2"
         password = "postgres"
         // ** DATABASE **
 
