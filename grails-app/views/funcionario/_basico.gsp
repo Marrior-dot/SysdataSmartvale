@@ -36,14 +36,14 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="matricula">Matrícula *</label>
-                    <g:textField class="form-control matricula" name="matricula"
-                                 value="${funcionarioInstance?.matricula}" maxlength="10" required="required"/>
+                    <input type="text" minlength="10" maxlength="10" class="form-control matricula" name="matricula" id="matricula"
+                           value="${funcionarioInstance?.matricula}" required>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="cpf">CPF *</label>
                     <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"
-                                 required="required"/>
+                                 minlength="14" required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
@@ -68,7 +68,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="dataNascimento">Data Nascimento *</label>
-                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento" required
+                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento" minlength="8" required
                            value="${Util.formattedDate(funcionarioInstance?.dataNascimento)}"/>
                 </div>
 
@@ -112,7 +112,7 @@
                                value="${funcionarioInstance?.portador?.limiteMensal}"/>
                     </div>
 
-                    <g:if test="${funcionarioInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+                    <g:if test="${funcionarioInstance?.unidade?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
                         <div class="form-group col-md-3">
                             <label for="portador.limiteCredito">Limite Crédito *</label>
                             <input class="form-control money" id="portador.limiteCredito" name="portador.limiteCredito"
@@ -139,7 +139,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="categoria.id">Categoria *</label>
-                    <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance).list()}"
+                    <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance)?.list()}"
                               value="${funcionarioInstance?.categoria?.id}" required="required"
                               noSelection="${['null': 'Selecione a categoria...']}"
                               optionKey="id" class="form-control" optionValue="nome"/>
@@ -172,7 +172,7 @@
                                 value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
                 <g:actionSubmit class="btn btn-default" action="delete"
                                 value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');"/>
             </g:if>
         </div>
     </sec:ifAnyGranted>
