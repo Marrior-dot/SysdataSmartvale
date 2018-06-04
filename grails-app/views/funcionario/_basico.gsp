@@ -93,33 +93,6 @@
                 </div>
 
 
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="portador.limiteTotal">Limite Total *</label>
-                        <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
-                               value="${funcionarioInstance?.portador?.limiteTotal}" required/>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label for="portador.limiteDiario">Limite Diário *</label>
-                        <input class="form-control money" id="portador.limiteDiario" name="portador.limiteDiario"
-                               value="${funcionarioInstance?.portador?.limiteDiario}"/>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label for="portador.limiteMensal">Limite Mensal *</label>
-                        <input class="form-control money" id="portador.limiteMensal" name="portador.limiteMensal"
-                               value="${funcionarioInstance?.portador?.limiteMensal}"/>
-                    </div>
-
-                    <g:if test="${funcionarioInstance?.unidade?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
-                        <div class="form-group col-md-3">
-                            <label for="portador.limiteCredito">Limite Crédito *</label>
-                            <input class="form-control money" id="portador.limiteCredito" name="portador.limiteCredito"
-                                   value="${funcionarioInstance?.portador?.limiteCredito ?: 0D}"/>
-                        </div>
-                    </g:if>
-                </div>
             </g:if>
 
             <div class="row">
@@ -153,6 +126,36 @@
             </div>
         </div>
     </div>
+
+
+    <g:if test="${unidadeInstance?.rh?.vinculoCartao==com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO ||
+                    unidadeInstance?.rh?.modeloCobranca==TipoCobranca.POS_PAGO}">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Limites</div>
+            <div class="panel-body">
+                <div class="row">
+                     <div class="form-group col-md-3">
+                        <label for="portador.limiteTotal">Limite Total *</label>
+                        <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
+                               value="${funcionarioInstance?.portador?.limiteTotal}" required/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="portador.limiteDiario">Limite Diário *</label>
+                        <input class="form-control money" id="portador.limiteDiario" name="portador.limiteDiario"
+                               value="${funcionarioInstance?.portador?.limiteDiario}"/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="portador.limiteMensal">Limite Mensal *</label>
+                        <input class="form-control money" id="portador.limiteMensal" name="portador.limiteMensal"
+                               value="${funcionarioInstance?.portador?.limiteMensal}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </g:if>
+
+
 
     <g:render template="/endereco/form"
               model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
