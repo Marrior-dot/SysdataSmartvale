@@ -52,11 +52,11 @@ class Rh extends Empresa {
     }
 
     int getFuncionariosCount() {
-        unidades?.sum { it.funcionarios.size() } ?: 0
+        this.unidades.sum{it.funcionariosCount}?:0
     }
 
     int getVeiculosCount() {
-        unidades?.sum { it.veiculos.size() } ?: 0
+        this.unidades.sum{it.veiculosCount}?:0
     }
 
     Corte getCorteAberto() {
