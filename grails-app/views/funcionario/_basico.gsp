@@ -128,7 +128,7 @@
     </div>
 
 
-    <g:if test="${unidadeInstance?.rh?.vinculoCartao==com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO ||
+    <g:if test="${unidadeInstance?.rh?.vinculoCartao==com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
                     unidadeInstance?.rh?.modeloCobranca==TipoCobranca.POS_PAGO}">
 
         <div class="panel panel-default">

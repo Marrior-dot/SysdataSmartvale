@@ -68,6 +68,6 @@ class Cnab400Registro {
             }
             sb.append valor
         }
-        sb.toString()+"\n"
+        sb.toString()+"\r\n"
     }
 }

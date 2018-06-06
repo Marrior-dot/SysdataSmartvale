@@ -38,10 +38,12 @@ class ItauCobranca extends BancoCobranca {
 
     @Override
     void adicionarExtensoes(Boleto boleto, Titulo titulo) {
-        String nossoNumeroParaExibicao = printf("%d/%s-%s",
+
+        String nossoNumeroParaExibicao = sprintf("%d/%s-%s",
                 titulo.getContaBancaria().getCarteira().getCodigo(),
                 titulo.getNossoNumero(),
                 titulo.getDigitoDoNossoNumero());
+
         boleto.addTextosExtras("txtFcNossoNumero", nossoNumeroParaExibicao);
         boleto.addTextosExtras("txtRsNossoNumero", nossoNumeroParaExibicao);
     }

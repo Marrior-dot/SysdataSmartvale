@@ -96,9 +96,9 @@ class Fatura {
         org.jrimum.bopepo.Boleto bolJr=new org.jrimum.bopepo.Boleto(titulo)
         bancoCobranca.adicionarExtensoes(bolJr,titulo)
 
-        bolJr.setLocalPagamento(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.localPagamento)
-        bolJr.setInstrucao1(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.instrucao1)
-        bolJr.setInstrucao2(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.instrucao2)
+        bolJr.setLocalPagamento(Holders.grailsApplication.config.project.administradora.contaBancaria.boleto.localPagamento)
+        bolJr.setInstrucao1(Holders.grailsApplication.config.project.administradora.contaBancaria.boleto.instrucao1)
+        bolJr.setInstrucao2(Holders.grailsApplication.config.project.administradora.contaBancaria.boleto.instrucao2)
 
         BoletoViewer boletoViewer=new BoletoViewer(bolJr)
         boleto.titulo= bolJr.titulo.numeroDoDocumento

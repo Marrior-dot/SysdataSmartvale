@@ -9,7 +9,7 @@ import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Veiculo
 
 
-Cartao crt=Cartao.findByNumero("6234090500000047")
+Cartao crt=Cartao.findByNumero("6234090600000022")
 Estabelecimento estab=Estabelecimento.findByCodigo("000000000000002")
 
 
@@ -18,7 +18,7 @@ Veiculo veiculo=((crt.portador as PortadorMaquina).maquina as Veiculo)
 
 def trn=new Transacao()
 trn.with{
-    valor=1.99
+    valor=10.00
     dataHora=new Date()
     status= StatusTransacao.AGENDAR
     nsu=1

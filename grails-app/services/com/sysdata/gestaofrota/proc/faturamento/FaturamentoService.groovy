@@ -23,7 +23,5 @@ class FaturamentoService implements Processamento {
         cortes.each{cr->
             cr.faturar(dataProc)
         }
-
-
     }
 }

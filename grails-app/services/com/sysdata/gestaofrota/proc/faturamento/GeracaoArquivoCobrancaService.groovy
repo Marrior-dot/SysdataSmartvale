@@ -134,7 +134,7 @@ class GeracaoArquivoCobrancaService implements Processamento {
 
 /*
             //Salva arquivo no banco
-            Arquivo arqRemessa=new Arquivo()
+            Arquivo arqRemessa=new Arquivo()\\
             def loteArq=Arquivo.nextLote(TipoArquivo.REMESSA_COBRANCA)
             arqRemessa.nome="remessa_${bancoCobranca.codigoCompensacao}_${loteArq}.rem"
             arqRemessa.lote=loteArq
