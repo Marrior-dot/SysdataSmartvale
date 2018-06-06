@@ -2,6 +2,8 @@ package com.sysdata.gestaofrota.proc.cobrancaBancaria
 
 import grails.util.Holders
 import org.jrimum.bopepo.BancosSuportados
+import org.jrimum.bopepo.Boleto
+import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 
 /**
  * Created by acception on 03/05/18.
@@ -30,8 +32,18 @@ class ItauCobranca extends BancoCobranca {
             soma+=prod
             multip=(multip-1)==0?2:multip-1
         }
-        //println "Soma: $soma"
-        return 10-(soma%10)
+        def resto=(soma%10)?:0
+        return resto>0?10-resto:0
+    }
+
+    @Override
+    void adicionarExtensoes(Boleto boleto, Titulo titulo) {
+        String nossoNumeroParaExibicao = printf("%d/%s-%s",
+                titulo.getContaBancaria().getCarteira().getCodigo(),
+                titulo.getNossoNumero(),
+                titulo.getDigitoDoNossoNumero());
+        boleto.addTextosExtras("txtFcNossoNumero", nossoNumeroParaExibicao);
+        boleto.addTextosExtras("txtRsNossoNumero", nossoNumeroParaExibicao);
     }
 
 }

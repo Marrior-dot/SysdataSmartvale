@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota.proc.cobrancaBancaria
 
+import org.jrimum.bopepo.Boleto
 import org.jrimum.domkee.financeiro.banco.febraban.Banco
+import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 
 /**
  * Created by acception on 03/05/18.
@@ -24,4 +26,5 @@ abstract class BancoCobranca {
     }
 
     abstract String calcularDacNossoNumero(String nossoNumero)
+    abstract void adicionarExtensoes(Boleto boleto, Titulo titulo)
 }

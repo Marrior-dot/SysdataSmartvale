@@ -94,9 +94,11 @@ class Fatura {
         }
 
         org.jrimum.bopepo.Boleto bolJr=new org.jrimum.bopepo.Boleto(titulo)
-        bolJr.setLocalPagamento("Pagável em qualquer Banco até a data de vencimento")
-        bolJr.setInstrucao1("Aceitar até a data de vencimento")
-        bolJr.setInstrucao2("Após o vencimento aceito apenas nas agências do ITAU")
+        bancoCobranca.adicionarExtensoes(bolJr,titulo)
+
+        bolJr.setLocalPagamento(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.localPagamento)
+        bolJr.setInstrucao1(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.instrucao1)
+        bolJr.setInstrucao2(Holders.grailsApplication.config.project.administradora.contaBancaria.agenciaDv.boleto.instrucao2)
 
         BoletoViewer boletoViewer=new BoletoViewer(bolJr)
         boleto.titulo= bolJr.titulo.numeroDoDocumento
@@ -104,9 +106,6 @@ class Fatura {
         boleto.imagem=boletoViewer.pdfAsByteArray
         boleto.nossoNumero=nossoNum+dacNossoNumero
         boleto.dataVencimento=this.dataVencimento
-
-
-
 
         def filename="/home/acception/tmp/boleto_${bolJr.titulo.numeroDoDocumento}.pdf"
         def file=new File(filename)
