@@ -69,17 +69,19 @@ administradora {
         numero="14722"
         numeroDv="2"
         carteira="109"
+
+        boleto {
+            localPagamento="Pagável em qualquer Banco até a data de vencimento"
+            instrucao1="Aceitar até a data de vencimento"
+            instrucao2="Após o vencimento aceito apenas nas agências do ITAU"
+        }
     }
 }
-
-
 
 processamentos=[
     "faturamentoService",
     "geracaoArquivoCobrancaService"
 ]
-
-
 
 
 faturamento{
