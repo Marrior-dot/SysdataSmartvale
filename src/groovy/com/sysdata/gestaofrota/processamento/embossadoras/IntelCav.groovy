@@ -50,7 +50,7 @@ class IntelCav extends Embossadora {
             ))
             builder.append(terminadorLinha)
         }
-
+        println "builder: ${builder.toString()}"
         return builder.toString()
     }
 

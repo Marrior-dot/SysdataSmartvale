@@ -1,13 +1,20 @@
 package com.sysdata.gestaofrota
 
 import com.sysdata.gestaofrota.processamento.administradoras.AdministradoraCartao
+import com.sysdata.gestaofrota.processamento.administradoras.Sysdata
 
 class CartaoService {
     def processamentoService
 
-    Cartao gerar(Portador portador) {
-        AdministradoraCartao administradoraCartao = processamentoService.getAdministradoraCartao()
+    Cartao gerar(Portador portador, comChip = true) {
+        AdministradoraCartao administradoraCartao
         Administradora administradora = processamentoService.getAdministradoraProjeto()
+        if(comChip){
+            administradoraCartao = processamentoService.getAdministradoraCartao()
+        }else{
+            administradoraCartao = new Sysdata()
+        }
+
 
         Cartao cartaoInstance = new Cartao()
         cartaoInstance.portador = portador

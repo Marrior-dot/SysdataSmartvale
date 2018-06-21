@@ -12,25 +12,27 @@ class PortadorService {
         if (portadorFuncionario.unidade == null) portadorFuncionario.unidade = funcionario.unidade
 
 
-        portadorFuncionario.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
-        portadorFuncionario.saldoTotal = portadorFuncionario.limiteTotal
-
-
-        if (params.portador.limiteDiario) {
-            portadorFuncionario.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
-            portadorFuncionario.saldoDiario = portadorFuncionario.limiteDiario
-        }
-        if (params.portador.limiteMensal) {
-            portadorFuncionario.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
-            portadorFuncionario.saldoMensal = portadorFuncionario.limiteMensal
-        }
-        if (params.portador.limiteCredito) {
-            portadorFuncionario.limiteCredito = Util.convertToCurrency(params.portador.limiteCredito)
-        }
-
         portadorFuncionario.funcionario = funcionario
         funcionario.portador = portadorFuncionario
-        portadorFuncionario.unidade = funcionario.unidade
+
+        if(funcionario.unidade?.rh?.modeloCobranca==TipoCobranca.POS_PAGO){
+            portadorFuncionario.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
+            portadorFuncionario.saldoTotal = portadorFuncionario.limiteTotal
+
+            if (funcionario.portador.limiteDiario) {
+                portadorFuncionario.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
+                portadorFuncionario.saldoDiario = portadorFuncionario.limiteDiario
+            }
+            if (funcionario.portador.limiteMensal) {
+                portadorFuncionario.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
+                portadorFuncionario.saldoMensal = portadorFuncionario.limiteMensal
+            }
+            if (funcionario.portador.limiteCredito) {
+                portadorFuncionario.limiteCredito = Util.convertToCurrency(params.portador.limiteCredito)
+            }
+        }
+
+
         if (!portadorFuncionario.save()) throw new RuntimeException(portadorFuncionario.showErrors());
         funcionario.unidade.addToPortadores(portadorFuncionario)
         funcionario.unidade.save()

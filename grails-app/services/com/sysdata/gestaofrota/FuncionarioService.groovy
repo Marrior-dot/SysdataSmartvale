@@ -11,7 +11,15 @@ class FuncionarioService {
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
             if (!funcionarioInstance.save()) throw new RuntimeException(funcionarioInstance.showErrors())
             PortadorFuncionario portadorFuncionario = portadorService.save(params, funcionarioInstance)
-            if (gerarCartao) cartaoService.gerar(portadorFuncionario)
+            if (gerarCartao){
+                if(portadorFuncionario.funcionario.unidade.rh.cartaoComChip){
+                    cartaoService.gerar(portadorFuncionario)
+                }else{
+                    cartaoService.gerar(portadorFuncionario,false)
+                }
+
+            }
+
         }
 
         participanteService.saveCidade(funcionarioInstance.endereco)
