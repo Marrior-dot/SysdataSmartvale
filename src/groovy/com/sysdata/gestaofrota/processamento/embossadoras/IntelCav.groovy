@@ -2,6 +2,8 @@ package com.sysdata.gestaofrota.processamento.embossadoras
 
 import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Cartao
+import com.sysdata.gestaofrota.StatusCartao
+
 import java.text.SimpleDateFormat
 
 /**
@@ -49,6 +51,8 @@ class IntelCav extends Embossadora {
                     c.numero.substring(18, 19)
             ))
             builder.append(terminadorLinha)
+            c.status = StatusCartao.EMBOSSING
+            c.save(flush: true, failOnError: true)
         }
         println "builder: ${builder.toString()}"
         return builder.toString()

@@ -18,19 +18,19 @@ class PortadorService {
         if(funcionario.unidade?.rh?.modeloCobranca==TipoCobranca.POS_PAGO){
             portadorFuncionario.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
             portadorFuncionario.saldoTotal = portadorFuncionario.limiteTotal
-
-            if (funcionario.portador.limiteDiario) {
+            if (funcionario.portador.limiteDiario != null || funcionario.portador.limiteDiario !='') {
                 portadorFuncionario.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
                 portadorFuncionario.saldoDiario = portadorFuncionario.limiteDiario
             }
-            if (funcionario.portador.limiteMensal) {
+            if (funcionario.portador.limiteMensal != null || funcionario.portador.limiteMensal != '') {
                 portadorFuncionario.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
                 portadorFuncionario.saldoMensal = portadorFuncionario.limiteMensal
             }
-            if (funcionario.portador.limiteCredito) {
+            /*if (funcionario.portador.limiteCredito != null || funcionario.portador.limiteCredito != '') {
                 portadorFuncionario.limiteCredito = Util.convertToCurrency(params.portador.limiteCredito)
-            }
-        }
+                println "params limite credito"
+            }*/
+        }/**/
 
 
         if (!portadorFuncionario.save()) throw new RuntimeException(portadorFuncionario.showErrors());
@@ -47,15 +47,16 @@ class PortadorService {
         PortadorMaquina portadorMaquina = new PortadorMaquina()
         portadorMaquina.unidade = maquina.unidade
         portadorMaquina.maquina = maquina
+
         portadorMaquina.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
         portadorMaquina.saldoTotal = portadorMaquina.limiteTotal
 
 
-        if (params.portador.limiteDiario) {
+        if (params.portador.limiteDiario != null || params.portador.limiteDiario != '') {
             portadorMaquina.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
             portadorMaquina.saldoDiario = portadorMaquina.limiteDiario
         }
-        if (params.portador.limiteMensal) {
+        if (params.portador.limiteMensal != null || params.portador.limiteMensal != '') {
             portadorMaquina.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
             portadorMaquina.saldoMensal = portadorMaquina.limiteMensal
         }

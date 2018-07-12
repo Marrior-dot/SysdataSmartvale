@@ -73,7 +73,7 @@ class FuncionarioController extends BaseOwnerController {
 
                 funcionarioInstance = funcionarioService.save(params,funcionarioInstance, true)
 
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionaroi'), funcionarioInstance.id])}"
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
                 redirect(action: "show", id: funcionarioInstance.id)
             }
             catch (Exception e) {

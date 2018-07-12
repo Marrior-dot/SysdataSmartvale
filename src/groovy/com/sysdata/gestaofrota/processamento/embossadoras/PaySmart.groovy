@@ -28,9 +28,9 @@ class PaySmart extends Embossadora {
         final String idAplicacao = "VN"
         final String data = new SimpleDateFormat("ddMMyy").format(new Date())
         final String idPerfilEletronico = "01"
-        final String idAgrupamentoPostagem = "0"    //TODO perguntar
-        final String idQuebraDepartamento = "0"     //TODO perguntar
-        final String flagImpressaoSenha = "1"       //TODO perguntar
+        final String idAgrupamentoPostagem = "1"    //TODO perguntar
+        final String idQuebraDepartamento = "1"     //TODO perguntar
+        final String flagImpressaoSenha = "0"       //TODO perguntar
 
         "${idCliente}_${getBin()}_${idAplicacao}_${data}_${idPerfilEletronico}${idAgrupamentoPostagem}${idQuebraDepartamento}${flagImpressaoSenha}"
     }
@@ -38,10 +38,10 @@ class PaySmart extends Embossadora {
     @Override
     protected String getCabecalho() {
         final String sequencial = "1".padLeft(8, '0')
-        final String versao = "07"
-        final String nomeEmpresa = String.format("%-16s", "ACCEPTION")
-        final String bin = "000000"
-        final String produto = String.format("%-34s", "ProdutoTeste")
+        final String versao = "08"
+        final String nomeEmpresa = String.format("%-16s", "SYSDATA")
+        final String bin = getBin()
+        final String produto = String.format("%-34s", "MAXXCARDFROTA")
         final String data = new SimpleDateFormat("yyyyMMdd").format(new Date())
         final String fileSequence = "1".padLeft(5, '0')
         final String modo = "TEST" //TODO: mudar para 'PROD'
@@ -70,7 +70,7 @@ class PaySmart extends Embossadora {
         final String campoCel = String.format("%19s", " ")
         final String dataEfetivacao = new SimpleDateFormat("yyMMdd").format(new Date())
         final String aplicacoes = String.format("%10s", " ")
-        final String binBlock = String.format("%16s", " ")
+        final String pinBlock = String.format("%16s", " ")
 
 
         StringBuilder builder = new StringBuilder()
@@ -100,7 +100,7 @@ class PaySmart extends Embossadora {
                     ";${trilha2}?" +                                        // trilha 2
                     "|${getDadosPostagem(c.portador.endereco)}" +
                     "${c.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}" +
-                    "${aplicacoes}${binBlock}  #CH#" +
+                    "${aplicacoes}${pinBlock}  #CH#" +
                     "${getTerminadorLinha()}")
 
             sequencial++

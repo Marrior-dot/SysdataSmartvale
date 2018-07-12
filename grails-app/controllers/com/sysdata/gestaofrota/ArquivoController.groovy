@@ -74,6 +74,7 @@ class ArquivoController {
 			flash.message="Erro ao gerar Arquivo de Embossing"
 			log.error e
 		}
+		println "params ${params}"
 		redirect(action: "list", params: params)
 	}
 	

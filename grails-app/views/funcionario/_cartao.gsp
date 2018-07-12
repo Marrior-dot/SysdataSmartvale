@@ -19,13 +19,17 @@
 	<thead>
 	<tr>
 		<th>Cartão</th>
-		<th>Saldo Disponível</th>
+		<th>Saldo Total</th>
+		<th>Saldo Mensal</th>
+		<th>Saldo Diário</th>
 	</tr>
 	</thead>
 	<tbody>
 	<tr>
 		<td>${portador?.cartaoAtual}</td>
-		<td>${Util.formatCurrency(portador?.saldo)}</td>
+		<td>${Util.formatCurrency(portador?.saldoTotal)}</td>
+		<td>${Util.formatCurrency(portador?.saldoMensal)}</td>
+		<td>${Util.formatCurrency(portador?.saldoDiario)}</td>
 	</tr>
 	</tbody>
 </table>

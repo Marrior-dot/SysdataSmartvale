@@ -59,7 +59,12 @@ class VeiculoController extends BaseOwnerController {
                     PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance,params)
                     if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
                     veiculoInstance.save flush: true
-                    cartaoService.gerar(portadorMaquina)
+
+                    if(portadorMaquina.unidade.rh.cartaoComChip){
+                        cartaoService.gerar(portadorMaquina)
+                    }else{
+                        cartaoService.gerar(portadorMaquina,false)
+                    }
 
                 }else
                     veiculoInstance.save flush: true

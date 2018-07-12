@@ -28,7 +28,7 @@ class GeracaoArquivoEmbossingService {
         println "Cartoes sem Chip: ${cartoesSemChip}"
         Embossadora embossadora = null
 
-/*        if (cartoesComChip.size() > 0) {
+      if (cartoesComChip.size() > 0) {
             println "Qtd cartoes com chip: ${cartoesComChip.size()}"
             embossadora = new PaySmart(cartoesComChip)
             Arquivo arquivo = embossadora.gerar()
@@ -36,34 +36,41 @@ class GeracaoArquivoEmbossingService {
             println("Cartoes com chip: ")
             println(arquivo.conteudo)
 
-//            if (!arquivo.save(flush: true)) {
-//                arquivo.errors.allErrors.each {
-//                    log.error "Atributo: ${it.field} Valor Rejeitado: ${it.rejectedValue}"
-                      return false
-//                }
-//                throw new ArquivoException(message: "Erro ao salvar arquivo PaySmart (cartões com chip).")
-//            }else{
-                  return true
-              }
-        }*/
+            if (arquivo.save(flush: true, failOnError: true)) {
+                println "binario: ${arquivo.conteudo}"
+                String aa = new String(arquivo.conteudo)
+                println "Conteudo depois de salvo: ${aa}"
+                File file = new File("/home/diego/${arquivo.nome}")
+                file.withWriter {w ->
+                    w.write(aa)
+
+                }
+                return true
+            }else{
+                arquivo.errors.allErrors.each {
+                    log.error "Atributo: ${it.field} Valor Rejeitado: ${it.rejectedValue}"
+                    return false
+                }
+                throw new ArquivoException(message: "Erro ao salvar arquivo PaySmart (cartões com chip).")
+            }
+        }
 
         if (cartoesSemChip.size() > 0) {
             embossadora = new IntelCav(cartoesSemChip)
             Arquivo arquivo = embossadora.gerar()
-
             println("Cartoes sem chip: ")
             println(arquivo.conteudo)
 
-            String a = new String(arquivo.conteudo)
-            println "a: ${a}"
-            println "a string: ${a.toString()}"
-
             if(arquivo.save(flush: true, failOnError: true)){
-                println "Salvou o arquivo. ${arquivo.dump()}"
                 String aa = new String(arquivo.conteudo)
-                println "conteudo depois de salvo: ${aa}"
+                println "Conteudo depois de salvo: ${aa}"
+                File file = new File("/home/diego/${arquivo.nome}")
+                file.withWriter {w ->
+                    w.write(aa)
+
+                }
+                return true
             }else{
-               println "deu ruim"
                return false
                throw new ArquivoException(message: "Erro ao salvar arquivo IntelCav (cartões sem chip).")
            }
