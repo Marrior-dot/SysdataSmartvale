@@ -2,6 +2,8 @@ package com.sysdata.gestaofrota
 
 
 import grails.converters.JSON
+import grails.orm.PagedResultList
+
 import java.text.SimpleDateFormat
 
 
@@ -27,40 +29,13 @@ class ArquivoController {
 	}
 	
 	def listAllJSON={
-				
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		def offset=params.offset?params.offset as int:0
-		
-		def dataInicio=params.dataInicio
-		def dataFim=params.dataFim
+        Integer offset = params.int('offset', 0)
+        Integer max = params.int('max', 100)
+        PagedResultList arquivoList = Arquivo.createCriteria().list(max: max, offset: offset){
+            order('dateCreated','desc')
+        }
 
-		def tipoArquivo=params.tipoArquivo
-		def arquivoList
-		def arquivoCount=0
-
-			arquivoList=Arquivo.withCriteria(){
-				if(dataInicio && dataFim)
-					between('dateCreated',dataInicio,dataFim+1)
-			}
-			
-			arquivoCount=Arquivo.withCriteria(){
-
-				if(dataInicio && dataFim)
-					between('dateCreated',dataInicio,dataFim+1)
-				projections{rowCount()}
-			}
-
-		
-		def fields=arquivoList.collect{a->
-			[	id:a.id,
-				date:new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(a.dateCreated),
-				tipo:a.tipo.name,
-				status:a.status.name,
-				nome:a.nome,
-				acao:"""<a href="${createLink(action:'downloadFile',id:a.id)}" >Download</a>"""
-			]
-		}
-		def data=[totalRecords:arquivoCount,results:fields]
+        def data=[totalRecords:arquivoList.getTotalCount(), results:arquivoList as List<Arquivo>]
 		render data as JSON
 	}
 
@@ -80,12 +55,11 @@ class ArquivoController {
 	
 	def downloadFile() {
 		Arquivo arquivoInstance=Arquivo.get(params.long('id'))
-        println "conteudo bruto: ${arquivoInstance.conteudo}"
-		String conteudo = new String(arquivoInstance.conteudo);
-        println "conteudo string: ${conteudo.toString()}"
+		String conteudo = new String(arquivoInstance.conteudoText)
 		if(conteudo){
 			response.setContentLength(conteudo.size())
-			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
+			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}.txt")
+			println "conteudo: ${conteudo}"
 			response.outputStream<<conteudo
 		}else
 			response.sendError(404)

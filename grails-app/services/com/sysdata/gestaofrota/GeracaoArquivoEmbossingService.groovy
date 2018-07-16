@@ -34,17 +34,13 @@ class GeracaoArquivoEmbossingService {
             Arquivo arquivo = embossadora.gerar()
 
             println("Cartoes com chip: ")
-            println(arquivo.conteudo)
+            println(arquivo.conteudoText)
 
             if (arquivo.save(flush: true, failOnError: true)) {
-                println "binario: ${arquivo.conteudo}"
-                String aa = new String(arquivo.conteudo)
-                println "Conteudo depois de salvo: ${aa}"
-                File file = new File("/home/diego/${arquivo.nome}")
-                file.withWriter {w ->
-                    w.write(aa)
-
-                }
+                //File file = new File("/home/diego/${arquivo.nome}")
+                //file.withWriter {w ->
+                //    w.write(aa)
+                //}
                 return true
             }else{
                 arquivo.errors.allErrors.each {
@@ -59,16 +55,16 @@ class GeracaoArquivoEmbossingService {
             embossadora = new IntelCav(cartoesSemChip)
             Arquivo arquivo = embossadora.gerar()
             println("Cartoes sem chip: ")
-            println(arquivo.conteudo)
+            println(arquivo.conteudoText)
 
             if(arquivo.save(flush: true, failOnError: true)){
-                String aa = new String(arquivo.conteudo)
+                /*String aa = new String(arquivo.conteudo)
                 println "Conteudo depois de salvo: ${aa}"
                 File file = new File("/home/diego/${arquivo.nome}")
                 file.withWriter {w ->
                     w.write(aa)
 
-                }
+                }*/
                 return true
             }else{
                return false

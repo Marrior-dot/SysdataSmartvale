@@ -4,6 +4,7 @@ import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Cartao
 import com.sysdata.gestaofrota.Endereco
 import com.sysdata.gestaofrota.PortadorFuncionario
+import com.sysdata.gestaofrota.StatusCartao
 import com.sysdata.gestaofrota.Telefone
 
 import java.text.SimpleDateFormat
@@ -104,6 +105,7 @@ class PaySmart extends Embossadora {
                     "${getTerminadorLinha()}")
 
             sequencial++
+            c.status = StatusCartao.EMBOSSING
         }
 
         return builder.toString()

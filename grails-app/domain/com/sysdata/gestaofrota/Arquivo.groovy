@@ -7,15 +7,19 @@ class Arquivo {
 	TipoArquivo tipo
 	StatusArquivo status
 	byte[] conteudo
+	String conteudoText
 	Integer lote
 	
     static constraints = {
 		conteudo(nullable:true)
 		lote nullable:true
+		conteudoText(nullable:true)
+
     }
 	
 	static mapping={
 		id generator:'sequence',params:[sequence:'arquivo_seq']
+		conteudoText type:'text'
 	}
 
 	static Integer nextLote(TipoArquivo tipo){

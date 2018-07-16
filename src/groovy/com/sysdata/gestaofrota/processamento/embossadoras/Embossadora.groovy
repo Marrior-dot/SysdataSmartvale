@@ -38,7 +38,7 @@ abstract class Embossadora implements IGeradorArquivo {
         builder.append(getRegistros(arquivoInstance))
         builder.append(getTerminador())
 
-        arquivoInstance.conteudo = builder.toString().getBytes()
+        arquivoInstance.conteudoText = builder.toString()
         arquivoInstance.status = StatusArquivo.GERADO
 
         return arquivoInstance

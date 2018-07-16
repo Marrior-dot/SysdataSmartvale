@@ -54,7 +54,7 @@ class GeracaoCartaSenhaService {
 			             ]
 			 
 			def template=engine.createTemplate(FILE_TEMPLATE).make(binding)
-			 arquivoInstance.conteudo=template.toString()
+			 arquivoInstance.conteudoText=template.toString()
 			 arquivoInstance.status=StatusArquivo.GERADO
 			 if(!arquivoInstance.save(flush:true)){
 				 arquivoInstance.errors.allErrors.each{

@@ -1,5 +1,6 @@
 import br.com.acception.greport.Report
 import com.sysdata.gestaofrota.Administradora
+import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.Cidade
 import com.sysdata.gestaofrota.Estado
@@ -12,10 +13,13 @@ import com.sysdata.gestaofrota.Role
 import com.sysdata.gestaofrota.Unidade
 import grails.converters.JSON
 
+import java.text.SimpleDateFormat
+
 class BootStrap {
     def fixtureLoader
     def grailsApplication
     def messageSource
+    def grailsLinkGenerator
 
     def init = { servletContext ->
         loadFixtures()
@@ -73,6 +77,20 @@ class BootStrap {
                     id    : it.id,
                     nome  : it.nome,
                     codigo: it.codigo
+            ]
+        }
+
+        JSON.registerObjectMarshaller(Arquivo) { Arquivo a ->
+            final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+            final String link = grailsLinkGenerator.link(controller: 'arquivo', action: 'downloadFile', id: a.id)
+
+            [
+                    id: a.id,
+                 date: sdf.format(a.dateCreated),
+                 tipo: a.tipo.name,
+                 status: a.status.name,
+                 nome: a.nome,
+                 acao: "<a href='${link}'>Download</a>"
             ]
         }
     }
