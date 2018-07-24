@@ -41,11 +41,11 @@
 						</li>
 					</g:if>
 
-					<g:if test="${motivoNegacaoInstance?.descricao}">
+					<g:if test="${motivoNegacaoInstance?.ocorrencia}">
 						<li class="fieldcontain">
 							<span id="descricao-label" class="property-label p-label"><g:message code="motivoNegacao.descricao.label" default="Descricao" /></span>
 
-							<span class="property-value p-value" aria-labelledby="descricao-label"><g:fieldValue bean="${motivoNegacaoInstance}" field="descricao"/></span>
+							<span class="property-value p-value" aria-labelledby="descricao-label"><g:fieldValue bean="${motivoNegacaoInstance}" field="ocorrencia"/></span>
 
 						</li>
 					</g:if>

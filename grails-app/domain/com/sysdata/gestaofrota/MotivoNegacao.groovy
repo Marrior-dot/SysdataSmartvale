@@ -4,6 +4,7 @@ class MotivoNegacao {
 
 	String codigo
 	String descricao
+	String ocorrencia
 	
     static constraints = {
     }

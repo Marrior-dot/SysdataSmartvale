@@ -40,15 +40,15 @@
 
 								<td><g:link action="show" id="${motivoNegacaoInstance.id}">${fieldValue(bean: motivoNegacaoInstance, field: "codigo")}</g:link></td>
 
-								<td>${fieldValue(bean: motivoNegacaoInstance, field: "descricao")}</td>
+								<td>${fieldValue(bean: motivoNegacaoInstance, field: "ocorrencia")}</td>
 
 							</tr>
 						</g:each>
 						</tbody>
 					</table>
-					%{--<div class="paginateButtons">
+					<div class="paginateButtons">
 						<g:paginate total="${motivoNegacaoInstanceTotal}" />
-					</div>--}%
+					</div>
 				</div>
 			</div>
 		</div>
