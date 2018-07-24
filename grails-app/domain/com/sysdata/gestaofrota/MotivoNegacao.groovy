@@ -7,6 +7,7 @@ class MotivoNegacao {
 	String ocorrencia
 	
     static constraints = {
+		ocorrencia(nullable: true)
     }
 	
 	static mapping={

@@ -162,7 +162,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/endereco/**'          : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG', 'ROLE_HELP'],
         '/estabelecimento/**'           : ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_LOG'],
         '/arquivo/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/motivoNegacao/**'             : ['ROLE_PROC'],
+        '/motivoNegacao/**'             : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/parametroSistema/**'          : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/tipoEquipamento/**'           : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/produto/**'                   : ['ROLE_PROC', 'ROLE_ADMIN'],

@@ -11,7 +11,9 @@ class MotivoNegacaoController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 100, 100)
+        params.sort = "codigo"
+        params.order = "asc"
         [motivoNegacaoInstanceList: MotivoNegacao.list(params), motivoNegacaoInstanceTotal: MotivoNegacao.count()]
     }
 
