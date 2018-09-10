@@ -2,7 +2,7 @@
 
 
 <div class="panel panel-default">
-    <div class="panel-heading">Lista de RHs</div>
+    <div class="panel-heading">Lista de centros de Custo</div>
 
     <div class="panel-body">
 
@@ -11,7 +11,7 @@
 
             <div class="buttons">
                 <g:link controller="unidade" action="create" class="btn btn-default" params="[rhId: rhId]">
-                    <span class="glyphicon glyphicon-plus"></span> Criar RH
+                    <span class="glyphicon glyphicon-plus"></span> Criar Centro de Custo
                 </g:link>
             </div>
             <br><br>

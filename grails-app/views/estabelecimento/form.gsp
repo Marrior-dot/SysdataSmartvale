@@ -23,7 +23,7 @@
                 <g:message code="default.home.label"/></a>
             <g:link class="btn btn-default" controller="postoCombustivel" action="show" id="${empresaInstance?.id}">
                 <span class="glyphicon glyphicon-eye-open"></span>
-                <g:message code="empresa.label" default="Visualizar Empresa"/></g:link>
+                Credenciado</g:link>
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
                 <g:link class="btn btn-default" action="create" params="[empId: empresaInstance?.id]">
                     <span class="glyphicon glyphicon-plus"></span>

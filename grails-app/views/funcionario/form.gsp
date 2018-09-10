@@ -45,7 +45,7 @@
                 <a class="btn btn-default"
                    href="${g.createLink(controller: 'rh', action: 'list')}">
                     <span class="glyphicon glyphicon-list"></span>
-                    Lista de RH
+                    Lista de Centro de Custo
                 </a>
 
                 <a class="btn btn-default"

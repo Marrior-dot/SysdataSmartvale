@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="layout-restrito"/>
-    <g:set var="entityName" value="${message(code: 'rh.label', default: 'Programas')}"/>
+    <g:set var="entityName" value="Empresa"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 <body>
@@ -38,9 +38,9 @@
             <g:if test="${action == Util.ACTION_VIEW}">
                 <div class="tabbable"><!-- Only required for left/right tabs -->
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#programas" data-toggle="tab">Programa</a></li>
-                        <li><a href="#rh" data-toggle="tab">RH</a></li>
-                        <li><a href="#categorias" data-toggle="tab">Categorias de Funcionários</a></li>
+                        <li class="active"><a href="#empresas" data-toggle="tab">Empresa</a></li>
+                        <li><a href="#centroDeCusto" data-toggle="tab">Centro de Custo</a></li>
+                        <li><a href="#perfis" data-toggle="tab">Perfil de Recarga</a></li>
                         <li><a href="#estabelecimentos" data-toggle="tab">Estabelecimentos</a></li>
                         <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
                             <li><a href="#fechamentos" data-toggle="tab">Fechamentos</a></li>
@@ -49,16 +49,16 @@
 
                     <div class="panel">
                         <div class="tab-content panel-body">
-                            <div class="tab-pane active" id="programas">
+                            <div class="tab-pane active" id="empresas">
                                 <g:render template="basico" model="${[rhInstance: rhInstance, action: action]}"/>
                             </div>
 
-                            <div class="tab-pane" id="rh">
+                            <div class="tab-pane" id="centroDeCusto">
                                 <g:render template="/unidade/search"
                                           model="[controller: 'unidade', rhId: rhInstance?.id]"/>
                             </div>
 
-                            <div class="tab-pane" id="categorias">
+                            <div class="tab-pane" id="perfis">
                                 <g:render template="/categoriaFuncionario/tab"
                                           model="[controller: 'categoriaFuncionario', rhInstance: rhInstance]"/>
                             </div>

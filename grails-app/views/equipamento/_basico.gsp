@@ -15,8 +15,8 @@
 		<table class="table table-striped">
 			<thead>
 			<tr>
-				<th>${message(code: 'rh.label', default: 'RH')}</th>
-				<th>${message(code: 'unidade.label', default: 'Unidade')}</th>
+				<th>${"Empresa"}</th>
+				<th>${"Centro de Custo"}</th>
 			</tr>
 			</thead>
 			<tbody>

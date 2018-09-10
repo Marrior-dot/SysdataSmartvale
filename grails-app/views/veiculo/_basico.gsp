@@ -14,8 +14,8 @@
     <table class="table">
         <thead>
         <tr>
-            <th>${message(code: 'rh.label', default: 'RH')}</th>
-            <th>${message(code: 'unidade.label', default: 'Unidade')}</th>
+            <th>${"Empresa"}</th>
+            <th>${"Centro de Custo"}</th>
         </tr>
         </thead>
         <tbody>
@@ -88,9 +88,9 @@
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <label for="validadeExtintor">Validade Extintor *</label>
+                    <label for="validadeExtintor">Validade Extintor</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"
-                           value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}" required/>
+                           value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}"/>
                 </div>
 
                 <g:if test="${programaMaquina}">

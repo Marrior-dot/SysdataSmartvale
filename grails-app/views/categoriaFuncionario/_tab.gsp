@@ -45,7 +45,7 @@
 
 <g:if test="${rhInstance.modeloCobranca == TipoCobranca.POS_PAGO}">
     <div class="alert alert-warning" role="alert">
-        <strong>Atenção:</strong> Categorias não possuem valores devido seu modelo de cobrança ser <strong>${rhInstance.modeloCobranca.nome}</strong>.
+        <strong>Atenção:</strong> perfis não possuem valores devido seu modelo de cobrança ser <strong>${rhInstance.modeloCobranca.nome}</strong>.
     </div>
 </g:if>
 
@@ -61,7 +61,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Nova Categoria</h4>
+                <h4 class="modal-title">Novo Perfil</h4>
             </div>
 
             <div class="modal-body">
@@ -99,7 +99,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Editar Categoria</h4>
+                <h4 class="modal-title">Editar Perfil</h4>
             </div>
 
             <div class="modal-body">

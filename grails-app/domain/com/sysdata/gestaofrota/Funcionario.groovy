@@ -27,6 +27,7 @@ class Funcionario extends Participante {
         cnh(blank: false)
         portador nullable: true
         nomeEmbossing nullable: true
+        telefoneComercial nullable: true
     }
 
     public boolean isAtivoInPedido(PedidoCarga pedidoCarga) {

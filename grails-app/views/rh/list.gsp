@@ -3,13 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="layout-restrito"/>
-    <g:set var="entityName" value="${message(code: 'rh.label', default: 'Programas')}"/>
-    <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <g:set var="entityName" value="Empresa"/>
+    <title>Lista de Empresas</title>
 </head>
 
 <body>
 <div class="body">
-    <br><br>
+    <bxxr><br>
 
     <div class="panel panel-default">
         <div class="panel-heading">

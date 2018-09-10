@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="layout-restrito" />
-        <g:set var="entityName" value="${message(code: 'unidade.label', default: 'Unidade')}" />
+        <g:set var="entityName" value="Centro de Custo" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -52,7 +52,7 @@
                     <div class="tabbable">
 
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1" data-toggle="tab">RH</a> </li>
+                            <li class="active"><a href="#tab1" data-toggle="tab">Centro de Custo</a> </li>
                             <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
                             <li><a href="#tab3" data-toggle="tab">Veículos</a></li>
                             <li><a href="#tab4" data-toggle="tab">Equipamentos</a></li>
