@@ -136,8 +136,8 @@
                         <td>${transacaoInstance.codigoEstabelecimento}</td>
                         <td>${transacaoInstance.numeroCartao ? Util.maskCard(transacaoInstance.numeroCartao) : '---'}</td>
                         <td>${transacaoInstance.participante?.nome}</td>
-                        <td>${transacaoInstance.tipo.nome}</td>
-                        <td>${transacaoInstance.status.nome}</td>
+                        <td>${transacaoInstance?.tipo?.nome}</td>
+                        <td>${transacaoInstance.status?.nome}</td>
                         <td>${transacaoInstance.statusControle?.nome}</td>
                         <td><g:formatNumber number="${transacaoInstance.valor}" format="#0.00"/></td>
 
