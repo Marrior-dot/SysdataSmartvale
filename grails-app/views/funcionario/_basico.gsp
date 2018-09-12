@@ -83,10 +83,14 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
-                        <input type="text" class="form-control" id="nomeEmbossing" name="nomeEmbossing"
+                        <input type="text" list="nomeEmbossing-itens" autocomplete="off"
+                               class="form-control" id="nomeEmbossing" name="nomeEmbossing"
                                maxlength="${tamMaxEmbossing}"
                                placeholder="Digite aqui o nome que será impresso no seu cartão."
-                               value="${funcionarioInstance?.nomeEmbossing}" required/>
+                               value="${funcionarioInstance?.nomeEmbossing}" required>
+                        <datalist id="nomeEmbossing-itens">
+                        </datalist>
+
                         <span id="helpBlock" class="help-block">O campo acima pode conter no máximo <strong
                                 id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
                     </div>
@@ -129,13 +133,13 @@
 
 
     <g:if test="${unidadeInstance?.rh?.vinculoCartao==com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
-                    unidadeInstance?.rh?.modeloCobranca==TipoCobranca.POS_PAGO}">
+            unidadeInstance?.rh?.modeloCobranca==TipoCobranca.POS_PAGO}">
 
         <div class="panel panel-default">
             <div class="panel-heading">Limites</div>
             <div class="panel-body">
                 <div class="row">
-                     <div class="form-group col-md-3">
+                    <div class="form-group col-md-3">
                         <label for="portador.limiteTotal">Limite Total *</label>
                         <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
                                value="${funcionarioInstance?.portador?.limiteTotal}" required/>
@@ -181,3 +185,22 @@
     </sec:ifAnyGranted>
 
 </g:form>
+
+
+<script>
+    $(function() {
+        $('#nome').blur(function() {
+
+            $.ajax({
+                url: "/GestaoFrota/funcionario/sugestoes.json",
+                data: {nome: this.value},
+                dataType : "json"
+            }).done(function( data ) {
+                $('#nomeEmbossing-itens option').remove()
+                jQuery.each(data.sug, function(index, value){
+                    $('#nomeEmbossing-itens').append('<option value="' + value + '">' + value + '</option>');
+                });
+            });
+        });
+    });
+</script>
