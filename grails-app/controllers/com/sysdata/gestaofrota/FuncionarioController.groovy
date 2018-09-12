@@ -17,6 +17,7 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def list = {
+        funcionarioService.sugestoes("Luciano Pinheiro Ramos Silda")
         Participante participanteInstance = getCurrentUser()?.owner
         Unidade unidadeInstance = null
         if (participanteInstance?.instanceOf(Rh)) {
@@ -39,6 +40,16 @@ class FuncionarioController extends BaseOwnerController {
 
     def selectRhUnidade = {
         render(view: '/selectRhUnidade', model: [controller: "funcionario", action: Util.ACTION_NEW])
+    }
+
+    def sugestoes = {
+        try {
+            def sugestoes = funcionarioService.sugestoes(params?.nome)
+            render([sug: sugestoes] as JSON)
+        }catch (e){
+            println(e.message)
+            render(['erro'] as JSON)
+        }
     }
 
     def create = {
