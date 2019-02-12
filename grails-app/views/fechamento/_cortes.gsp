@@ -4,6 +4,7 @@
 
     <div class="panel-body">
 
+
         <g:if test="${cortes}">
 
             <table class="table table-striped table-hover table-condensed">
@@ -44,5 +45,8 @@
             <div class="well text-center">Sem Faturamentos até o momento</div>
         </g:else>
 
+        <a type="button" class="btn btn-sm btn-default" title="Voltar" onclick="abrirFechamentos(${prgId})">
+            Voltar</i>
+        </a>
     </div>
 </div>

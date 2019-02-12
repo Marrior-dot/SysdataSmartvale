@@ -14,7 +14,7 @@ class PedidoCarga {
     Double total = 0D
 
     static hasMany = [itens: ItemPedido]
-    static transients = ['categoriasFuncionario']
+    static transients = ['categoriasFuncionario','dataCargaClear']
 
     static constraints = {
         usuario(nullable: true)
@@ -60,5 +60,9 @@ class PedidoCarga {
 
     public def getCategoriasFuncionario(){
         unidade?.rh?.categoriasFuncionario
+    }
+
+    public def getDataCargaClear(){
+        Date.parse('dd/MM/yyyy', dataCarga)
     }
 }

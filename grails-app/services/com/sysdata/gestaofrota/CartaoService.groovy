@@ -31,10 +31,11 @@ class CartaoService {
     }
 
     Cartao desbloquear(Cartao cartao) {
-        cartao.status = StatusCartao.ATIVO
-        cartao.save()
+       cartao.status = StatusCartao.ATIVO
+       cartao.save()
     }
     Cartao cancelar(Cartao cartao, MotivoCancelamento motivo) {
+
         cartao.status = StatusCartao.CANCELADO
         cartao.motivoCancelamento = motivo
 

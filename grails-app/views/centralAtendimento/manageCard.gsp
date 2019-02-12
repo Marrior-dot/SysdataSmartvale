@@ -150,13 +150,13 @@
                 <g:form action="${goTo}" name="action-form">
                     <g:hiddenField name="id" value="${cartaoInstance?.id}"/>
 
-                    <g:if test="${cartaoInstance?.status == StatusCartao.EMBOSSING}">
+                    <g:if test="${goTo=='unlockNewCard'}">
                         <button type="submit" class="btn btn-primary">
                             <i class="glyphicon glyphicon-ok"></i> Desbloquear Cartão
                         </button>
                     </g:if>
 
-                    <g:elseif test="${cartaoInstance?.status == StatusCartao.ATIVO}">
+                    <g:elseif test="${goTo=='cancelCard'}">
                         <div class="btn-group">
                             <button type="submit" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="glyphicon glyphicon-remove"></i> Cancelar Cartão <span class="caret"></span>

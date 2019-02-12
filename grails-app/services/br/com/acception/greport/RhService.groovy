@@ -9,8 +9,9 @@ class RhService {
 
     Rh save(Rh rh) {
         rh.codigo = getProximoCodigoFormatado()
-
-        if (rh.validate()) rh.save()
+        if (rh.validate()) {
+            rh.save()
+        }
         else throw new RuntimeException(rh.showErrors())
 
         participanteService.saveCidade(rh.endereco)

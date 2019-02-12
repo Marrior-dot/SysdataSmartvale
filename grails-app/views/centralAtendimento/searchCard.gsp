@@ -18,9 +18,17 @@
                 </g:each>
             </div>
         </g:if>
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="width: 40%">
             <div class="panel-heading">
-                <h4>Desbloqueio de Cartão</h4>
+
+                <g:if test="${goTo == 'unlockNewCard'}">
+                    <h4>Desbloqueio de Cartão</h4>
+                </g:if>
+                <g:if test="${goTo == 'cancelCard'}">
+                    <h4>Cancelamento de Cartão</h4>
+                </g:if>
+
+
             </div>
             <div class="panel-body">
                 <div class="buttons">
@@ -34,7 +42,7 @@
                 <g:form method="post" action="${act}">
                     <g:hiddenField name="goTo" value="${goTo}"/>
 
-                    <bs:formField id="cartao" name="cartao" label="Cartão" class="only-numbers" maxlength="19"/>
+                    <bs:formField id="cartao" name="cartao" label="Cartão" class="only-numbers" maxlength="19" />
 
                     <button class="btn btn-default" type="submit" name="${act}">
                         <i class="glyphicon glyphicon-search"></i>
