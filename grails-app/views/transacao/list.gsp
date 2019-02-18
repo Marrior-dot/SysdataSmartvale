@@ -136,8 +136,8 @@
                         <td>${transacaoInstance.codigoEstabelecimento}</td>
                         <td>${transacaoInstance.numeroCartao ? Util.maskCard(transacaoInstance.numeroCartao) : '---'}</td>
                         <td>${transacaoInstance.participante?.nome}</td>
-                        <td>${transacaoInstance.tipo.nome}</td>
-                        <td>${transacaoInstance.status.nome}</td>
+                        <td>${transacaoInstance?.tipo?.nome}</td>
+                        <td>${transacaoInstance.status?.nome}</td>
                         <td>${transacaoInstance.statusControle?.nome}</td>
                         <td><g:formatNumber number="${transacaoInstance.valor}" format="#0.00"/></td>
 
@@ -147,7 +147,7 @@
                                         transacaoInstance.tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] &&
                                         transacaoInstance.statusControle == StatusControleAutorizacao.CONFIRMADA}">
                                     <a class="btn btn-default btn-sm" title="Estornar" href="${createLink(action: 'estornar', id: transacaoInstance.id)}">
-                                        <i class="glyphicon glyphicon-repeat"></i>
+                                        <i class="glyphicon glyphicon-remove-circle"></i>
                                     </a>
                                 </g:if>
                             </td>

@@ -35,13 +35,25 @@
 </div>
 
 
+<style>
+thead input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+</style>
 
 
 <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#veicTable thead th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
+        } );
 
-    $(document).ready(function(){
-
-        $("#veicTable").DataTable({
+        // DataTable
+        var table =  $("#veicTable").DataTable({
 
             //"serverSide": true,
             "ajax":{
@@ -57,5 +69,33 @@
                 {"data": "cartao"}
             ]
         });
-    });
+
+        // Seleção de um funcionário na tabela
+        $("#veicTable tbody").on("click", 'tr', function () {
+            var fid = $(this).find("td:first").html();
+            if ($(thi   s).hasClass("selected")) {
+                $(this).removeClass("selected");
+                funcSel.pop(fid);
+            }
+            else {
+                $(this).addClass("selected");
+                funcSel.push(fid);
+            }
+        });
+
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+
+            $( 'input', this.header() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        $('#veicTable_filter').hide()
+    } );
 </script>

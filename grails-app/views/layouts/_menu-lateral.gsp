@@ -34,6 +34,7 @@
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_PROC">
+                            <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="auditLogEvent" action="list">Audit Log</g:link></li>
                         </sec:ifAnyGranted>
                     </ul>
@@ -47,25 +48,25 @@
                     <ul class="nav nav-second-level">
                         <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="list">Pedido de Carga</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
-                        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                            <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listPendentes">Transações Pendentes</g:link></li>
-                        </sec:ifAnyGranted>
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
+                        <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listPendentes">Transações Pendentes</g:link></li>
 
-                <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
-                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
-                        %{--<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="settingPriceTransaction">Configuração de Preços de Combustível</g:link></li>
-                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="fuelTransaction" >Transação de Combustível</g:link></li>
-                        </sec:ifAnyGranted>--}%
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
+                <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+                    <li>
+                        <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
+                            %{--<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                                <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="settingPriceTransaction">Configuração de Preços de Combustível</g:link></li>
+                                <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="fuelTransaction" >Transação de Combustível</g:link></li>
+                            </sec:ifAnyGranted>--}%
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                </sec:ifAnyGranted>
 
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
@@ -134,9 +135,20 @@
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                     </ul>
                 </li>
-
                 <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-wrench fa-fw"></i> Sistema<span class="fa arrow"></span></a>
+                    <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
+                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
+                        %{--<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="settingPriceTransaction">Configuração de Preços de Combustível</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="fuelTransaction" >Transação de Combustível</g:link></li>
+                        </sec:ifAnyGranted>--}%
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+                <li>
+                    <a href="#" class="menu-logado"><i class="fa fa-shield fa-fw"></i> Segurança<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li class="controller"><g:link class="submenu-logado" controller="user" action="meusDados" id="${sec.loggedInUserInfo(field: 'id')}">Meus Dados</g:link></li>
                     </ul>

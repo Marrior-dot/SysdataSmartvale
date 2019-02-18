@@ -41,6 +41,16 @@ class FuncionarioController extends BaseOwnerController {
         render(view: '/selectRhUnidade', model: [controller: "funcionario", action: Util.ACTION_NEW])
     }
 
+    def sugestoes = {
+        try {
+            def sugestoes = funcionarioService.sugestoes(params?.nome)
+            render([sug: sugestoes] as JSON)
+        }catch (e){
+            println(e.message)
+            render(['erro'] as JSON)
+        }
+    }
+
     def create = {
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (unidadeInstance) {

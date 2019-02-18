@@ -31,7 +31,6 @@
     <g:hiddenField name="id" value="${rhInstance?.id}" />
     <g:hiddenField name="version" value="${rhInstance?.version}" />
     <g:hiddenField name="action" value="${action}"/>
-
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			Dados Básicos
@@ -117,10 +116,11 @@
 				</div>
 
 				<div class="form-group col-md-3">
+
 					<label class="control-label" for="jurosProRata">Juros Pró-Rata por Atraso *</label>
 					<div class="input-group">
 						<input type="number" class="form-control" name="jurosProRata" id="jurosProRata"
-							   value="${rhInstance?.jurosProRata}" min="0" max="100" step="0.01" required/>
+							   value="${rhInstance?.jurosProRata}" min="0" step="0.01" max="100.00" required/>
 						<span class="input-group-addon">%</span>
 					</div>
 				</div>
@@ -245,13 +245,15 @@
 		</div>
 	</div>
 
-	<g:if test="${action == Util.ACTION_VIEW}">
+	<g:if test="${action == Util.ACTION_VIEW }">
 		<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
 			<span class="glyphicon glyphicon-edit"></span>
 			<g:message code="default.button.edit.label" default="Edit"/>
 		</g:link>
+		<g:if test="${!roleRh}">
+			<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
+		</g:if>
 
-		<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
 	</g:if>
 	<g:elseif test="${action == Util.ACTION_NEW}">
 		<g:actionSubmit class="btn btn-default" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}"/>

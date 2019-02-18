@@ -46,6 +46,15 @@
         })
     }
 
+    function abrirFechamentos(id) {
+        $.ajax({
+            url:"${createLink(controller:'fechamento',action:'abrirFechamentos')}/"+id,
+            method:'POST',
+            success:function(data){
+                $("#fechamento-index").html(data);
+            }
+        })
+    }
 
 </script>
 
