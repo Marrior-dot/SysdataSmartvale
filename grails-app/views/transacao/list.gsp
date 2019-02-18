@@ -147,7 +147,7 @@
                                         transacaoInstance.tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] &&
                                         transacaoInstance.statusControle == StatusControleAutorizacao.CONFIRMADA}">
                                     <a class="btn btn-default btn-sm" title="Estornar" href="${createLink(action: 'estornar', id: transacaoInstance.id)}">
-                                        <i class="glyphicon glyphicon-repeat"></i>
+                                        <i class="glyphicon glyphicon-remove-circle"></i>
                                     </a>
                                 </g:if>
                             </td>

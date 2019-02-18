@@ -3,6 +3,9 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PedidoCargaController extends BaseOwnerController {
@@ -34,18 +37,20 @@ class PedidoCargaController extends BaseOwnerController {
 //            return;
 //        }
 
-
+        println "params:${params}"
         def criteria = {
-            if (params?.searchDataCarga) {
-                Date beginDay = Date.parse('dd/MM/yyyy', params.searchDataCarga.toString()).clearTime()
-                gt('dataCarga', beginDay)
-                lt('dataCarga', beginDay + 1)
+            if (params.searchDataCarga) {
+                Date beginDay = params.date('searchDataCarga','dd/MM/yyyy').clearTime()
+                println beginDay
+                eq('dataCarga', beginDay)
+
             }
 
-            if (params?.searchDataPedido) {
-                Date beginDay = Date.parse('dd/MM/yyyy', params.searchDataPedido.toString()).clearTime()
+
+            if (params.searchDataPedido) {
+                Date beginDay = params.date('searchDataPedido','dd/MM/yyyy').clearTime()
                 gt('dateCreated', beginDay)
-                lt('dateCreated', beginDay + 1)
+                lt('dateCreated', beginDay+1)
             }
 
             unidade {
@@ -72,6 +77,7 @@ class PedidoCargaController extends BaseOwnerController {
         params.order = "desc"
         def pedidoCargaInstanceList = PedidoCarga.createCriteria().list(params, criteria)
         def pedidoCargaInstanceCount = PedidoCarga.createCriteria().count(criteria)
+        println "pedido : ${pedidoCargaInstanceList*.dataCarga}"
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
@@ -165,7 +171,9 @@ class PedidoCargaController extends BaseOwnerController {
             redirect(action: 'list')
             return;
         }
+
         Date dataCarga = Date.parse("dd/MM/yyyy", params.dataCarga.toString())
+        println "dataCarga view : ${params.dataCarga} - ${params.dataCarga.class} - ${dataCarga} - ${dataCarga.class}"
         if (!dataCarga) {
             flash.errors = "Data de carga não definida"
             redirect(action: 'create', params: [unidade_id: unidadeInstance.id])

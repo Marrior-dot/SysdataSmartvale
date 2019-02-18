@@ -171,12 +171,15 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
         '/console/**'                   : ['ROLE_PROC','ROLE_ADMIN'],
         '/home/dataGraficoResgate'      : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/home/dataGraficoMesResgate'   : ['ROLE_PROC', 'ROLE_ADMIN'],
-        '/rh/**'                        : ['ROLE_PROC', 'ROLE_ADMIN'],
+        '/rh/**'                        : ['ROLE_PROC', 'ROLE_ADMIN','ROLE_RH'],
         '/fechamento/**'                : ['ROLE_PROC', 'ROLE_ADMIN'],
         '/processamento/**'             : ['ROLE_PROC'],
+        '/cartao/**'                    : ['ROLE_PROC'],
+
         '/user/**'                      : allRoles,
         '/user/create'                  : masterRoles,
         '/user/list'                    : masterRoles,
+        '/user/meusDados'               : allRoles,
 
         '/plugins/**'                   : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/js/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],

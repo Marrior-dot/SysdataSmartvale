@@ -228,7 +228,9 @@ class UserController extends BaseOwnerController {
         }
 
         if(userInstance.owner.instanceOf(Rh)){
-            redirect(controller: 'rh', action: 'show', id: userInstance.owner.id)
+            Rh rhInstance = Rh.get(userInstance.owner.id)
+            //redirect(controller: 'rh', action: 'show', id: userInristance.owner.id)
+            redirect(action: 'show', id: userInstance.id)
             return ;
         }
         else if(userInstance.owner.instanceOf(PostoCombustivel)){

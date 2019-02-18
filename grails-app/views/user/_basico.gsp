@@ -32,11 +32,21 @@
 			} %>
 
 			<div class="row">
-				<div class="form-group col-md-6">
-					<label for="owner">Organização</label>
-					<g:select id="owner" name="owner.id" from="${l}" value="${userInstance?.owner?.id}" class="form-control"
-							  optionKey="id" optionValue="nome"/>
-				</div>
+                <g:if test="${userInstance?.owner?.instanceOf(Rh)}">
+                    <div class="form-group col-md-6">
+                        <label for="owner">Organização</label>
+                        <g:select id="owner" name="owner.id" from="${l}" value="${userInstance?.owner?.id}" class="form-control"
+                                  optionKey="id" optionValue="nome" disabled="disabled"/>
+                    </div>
+                </g:if>
+                <g:else>
+                    <div class="form-group col-md-6">
+                        <label for="owner">Organização</label>
+                        <g:select id="owner" name="owner.id" from="${l}" value="${userInstance?.owner?.id}" class="form-control"
+                                  optionKey="id" optionValue="nome"/>
+                    </div>
+                </g:else>
+
 				<g:if test="${action in [Util.ACTION_NEW]}">
 					<div class="form-group col-md-6">
 						<label for="role">Papel</label>
@@ -89,11 +99,21 @@
 
 			<div class="row">
 				<g:if test="${action in [Util.ACTION_EDIT]}">
-					<div class="form-group col-md-6">
-						<label for="role">Papel</label>
-						<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
-								  value="" optionKey="id" optionValue="authority" class="form-control"/>
-					</div>
+					<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
+						<div class="form-group col-md-6">
+							<label for="role">Papel</label>
+							<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
+									  value="" optionKey="id" optionValue="authority" disabled="disableb" class="form-control"/>
+						</div>
+					</g:if>
+					<g:else>
+						<div class="form-group col-md-6">
+							<label for="role">Papel</label>
+							<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
+									  value="" optionKey="id" optionValue="authority" class="form-control"/>
+						</div>
+					</g:else>
+
 				</g:if>
 				<g:if test="${action in [Util.ACTION_VIEW]}">
 					<div class="form-group col-md-6">
@@ -147,7 +167,8 @@
 				</g:if>
 				<g:if test="${action in [Util.ACTION_EDIT]}">
 					<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-					<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<g:actionSubmit class="btn btn-default" action="show" value="${message(code: 'default.button.cancel.label', default: 'Cancelar')}" onclick="return confirm('${message(code: 'default.button.cancel.confirm.message', default: 'Are you sure?')}');" />
+					<button type="reset" class="btn btn-default pull-right">Cancelar</button>
 				</g:if>
 			</div>
 		</g:form>

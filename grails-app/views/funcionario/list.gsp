@@ -9,15 +9,26 @@
 </head>
 <body>
 <div class="body">
+    <br><br>
 
-            <g:if test="${flash.message}">
-                <div class="message">${flash.message}</div>
-            </g:if>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><g:message code="default.list.label" args="[entityName]"/></h4>
+            </div>
 
-            <br><br>
-            
-            <g:render template="search" model="[controller:'funcionario', unidade_id: unidadeInstance?.id]"/>
+            <div class="panel-body">
+                <g:if test="${flash.message}">
+                    <div class="alert alert-info" role="alert">${flash.message}</div>
+                </g:if>
+                <g:form>
+                    <br><br>
 
+                    <div class="list">
+                        <g:render template="search" model="[controller:'funcionario', unidade_id: unidadeInstance?.id]"/>
+                    </div>
+                </g:form>
+            </div>
+        </div>
 </div>
 </body>
 </html>

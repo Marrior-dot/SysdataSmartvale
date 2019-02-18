@@ -54,9 +54,25 @@ class CentralAtendimentoController {
     }
 
     def findFuncionario = {
+        flash.errors = []
         String numero = params['cartao']
         if (numero.length() > 0) {
             Cartao cartaoInstance = Cartao.findByNumero(numero)
+            //BEGIN
+            // verifica se é usuario o cartão pertence ao usuario rh
+            User usuario = springSecurityService.getCurrentUser()
+            println "usuario:${usuario}"
+            def dono = cartaoInstance.portador.unidade.rh
+            println "dono:${dono}"
+            if(usuario.authorities.authority.contains('ROLE_RH')){
+                println "contem a role rh"
+                if(usuario.owner != dono){
+                    flash.errors << "O cartão ${cartaoInstance.numero} não pertence ao Centro de Custo ${usuario.owner}."
+                    //render(view: 'searchCard', model: [act: 'findFuncionario', goTo: params.goTo])
+                    redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: params.goTo])
+                }
+            }
+            //END
             if (cartaoInstance) {
                 render(view: 'manageCard', model: [cartaoInstance: cartaoInstance, goTo: params.goTo])
             } else {
@@ -70,29 +86,44 @@ class CentralAtendimentoController {
     }
 
     def unlockNewCard = {
+        flash.errors = []
         Cartao cartaoInstance = Cartao.get(params.long('id'))
         if (cartaoInstance) {
-            cartaoInstance = cartaoService.desbloquear(cartaoInstance)
-            flash.message = "Cartão DESBLOQUEADO com sucesso"
-            render(view: 'manageCard', model: [cartaoInstance: cartaoInstance])
-            return
+            if(cartaoInstance.status == StatusCartao.EMBOSSING){
+                cartaoInstance = cartaoService.desbloquear(cartaoInstance)
+                flash.message = "Cartão DESBLOQUEADO com sucesso"
+                render(view: 'manageCard', model: [cartaoInstance: cartaoInstance])
+                return
+            }
+            else{
+                flash.errors << "Cartão não possui status compatível para o desbloqueio. Status: ${cartaoInstance.status}"
+                redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: 'unlockNewCard'])
+            }
+
         } else {
-            flash.error = "Cartão não encontrado."
+            flash.errors = "Cartão não encontrado."
             redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: 'unlockNewCard'])
         }
     }
 
     def cancelCard = {
-
+        flash.errors = []
         Cartao cartaoInstance = Cartao.get(params.long('id'))
         MotivoCancelamento motivo = MotivoCancelamento.valueOf(params['motivo'])
         if (cartaoInstance && motivo) {
-            cartaoInstance = cartaoService.cancelar(cartaoInstance, motivo)
-            flash.message = "Cartão ${cartaoInstance.numero} CANCELADO com sucesso. Um novo cartão foi gerado para você."
-            render(view: 'manageCard', model: [cartaoInstance: cartaoInstance])
+            if(cartaoInstance.status == StatusCartao.ATIVO){
+                cartaoInstance = cartaoService.cancelar(cartaoInstance, motivo)
+                flash.message = "Cartão ${cartaoInstance.numero} CANCELADO com sucesso. Um novo cartão foi gerado para você."
+                render(view: 'manageCard', model: [cartaoInstance: cartaoInstance])
+            }else{
+                flash.errors << "Cartão não possui status compatível para o cancelamento. Status: ${cartaoInstance.status}"
+                redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: 'cancelCard'])
+            }
+
         } else {
-            flash.error = "Cartão não encontrado."
-            if (motivo == null) flash.error += " Selecione um motivo de cancelamento."
+            def mensagem = "Cartão não encontrado."
+            if (motivo == null) mensagem += " Selecione um motivo de cancelamento."
+            flash.errors << mensagem
             redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: 'cancelCard'])
         }
     }

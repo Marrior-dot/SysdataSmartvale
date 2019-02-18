@@ -9,9 +9,10 @@
 
 <body>
 <div class="body">
-    <bxxr><br>
+    <br><br>
 
     <div class="panel panel-default">
+
         <div class="panel-heading">
             <h4><g:message code="default.list.label" args="[entityName]"/></h4>
         </div>

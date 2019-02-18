@@ -17,7 +17,6 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def list = {
-        funcionarioService.sugestoes("Luciano Pinheiro Ramos Silda")
         Participante participanteInstance = getCurrentUser()?.owner
         Unidade unidadeInstance = null
         if (participanteInstance?.instanceOf(Rh)) {

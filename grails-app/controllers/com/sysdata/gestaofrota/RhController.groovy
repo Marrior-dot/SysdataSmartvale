@@ -27,22 +27,38 @@ class RhController extends BaseOwnerController {
 
     def show() {
         Rh rhInstance = Rh.get(params.long('id'))
+        User usuario = springSecurityService.getCurrentUser()
+        def roleRh
+        if(usuario.authorities.authority.contains('ROLE_RH')){
+            roleRh = true
+        }else{
+            roleRh = false
+        }
+
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
         } else {
             clearSession()
-            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW])
+            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW, roleRh:roleRh])
         }
     }
 
     def save(Rh rhInstance) {
         rhInstance.endereco = params['endereco']
         rhInstance.telefone = params['telefone']
-
-        println("renovarLimite: ${rhInstance?.renovarLimite}")
+        println "params: ${params}"
 
         try {
+            rhInstance.jurosProRata = params.jurosProRata as BigDecimal
+            rhInstance.taxaPedido = params.taxaPedido as BigDecimal
+            rhInstance.taxaUtilizacao = params.taxaUtilizacao as BigDecimal
+            rhInstance.taxaMensalidade = params.taxaMensalidade as BigDecimal
+            rhInstance.taxaEmissaoCartao = params.taxaEmissaoCartao as BigDecimal
+            rhInstance.taxaReemissaoCartao = params.taxaReemissaoCartao as BigDecimal
+            rhInstance.taxaAdministracao = params.taxaAdministracao as BigDecimal
+            rhInstance.taxaManutencao = params.taxaManutencao as BigDecimal
+            rhInstance.multaAtraso = params.multaAtraso as BigDecimal
             rhInstance = rhService.save(rhInstance)
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
             redirect(action: 'show', id: rhInstance.id)
@@ -77,13 +93,31 @@ class RhController extends BaseOwnerController {
                 def version = params.version.toLong()
                 if (rhInstance.version > version) {
                     rhInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Another user has updated this Rh while you were editing")
+                    flash.error = "Outro usuario alterou este Centro de Custo enquanto você estava alterando."
                     render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
                     return
                 }
             }
+            println "params: ${params}"
+            if((rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0) && params.containsKey('modeloCobranca')){
+                println "Entrou no erro modelo"
+                rhInstance.errors.rejectValue("modeloCobranca", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados.")
+                flash.error = "Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados."
+                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+                return
+            }
+
+            if(params.containsKey('vinculoCartao') || params.containsKey('cartaoComChip') || params.containsKey('renovarLimite')){
+                println "Entrou no erro vinculo"
+                flash.error = "Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados."
+                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+            }
 
             try {
+
+                def juros = params.jurosProRata as BigDecimal
                 rhInstance.properties = params
+                rhInstance.jurosProRata = juros
                 rhInstance.save()
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                 redirect(action: 'show', id: rhInstance.id)

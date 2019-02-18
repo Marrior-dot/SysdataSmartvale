@@ -2,11 +2,12 @@
 <html>
 	<head>
 		<meta name='layout' content='layout-publico' />
+		%{--<link rel="stylesheet" type="text/css" href="/GestaoFrota/css/login.css">--}%
 		<title>Login</title>
 	</head>
 
 	<body>
-	<div class="col-md-4">
+	<div class="col-md-4 ">
 		<br/>
 		<div class="panel panel-primary">
 			<div class="panel-heading">

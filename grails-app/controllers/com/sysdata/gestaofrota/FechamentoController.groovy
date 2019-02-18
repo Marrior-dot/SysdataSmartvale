@@ -46,6 +46,11 @@ class FechamentoController {
         render template:'cortes',model:[cortes:cortes,prgId:fechamento.programa.id]
     }
 
+    def abrirFechamentos(){
+        def fechamentoList = Fechamento.findAllByPrograma(Rh.get(params.long('id')))
+        render template: 'index', model:[fechamentoList:fechamentoList]
+    }
+
     def downloadBoleto(){
         Corte corte=Corte.get(params.corId as long)
         Rh rh=Rh.get(params.prgId as long)
