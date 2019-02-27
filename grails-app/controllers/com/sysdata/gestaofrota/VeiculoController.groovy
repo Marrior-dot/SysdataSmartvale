@@ -12,9 +12,11 @@ class VeiculoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def veiculoService
     def portadorService
     def cartaoService
     def processamentoService
+    def springSecurityService
 
     def index = {
         redirect(action: "list", params: params)
@@ -303,6 +305,22 @@ class VeiculoController extends BaseOwnerController {
             else
                 render "Relação entre Veículo e Funcionário não pode ser removida, apenas desativada"
         }
+    }
+
+    def alterarHodometro = {
+        println "params: params"
+        int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
+        def valor = params.hodometro as long
+        User user = springSecurityService.currentUser
+        def veiculoInstance = Veiculo.get(params.id)
+        if(veiculoService.alteraHodometro(veiculoInstance,valor, user)){
+            flash.message = "Hodômetro alterado com sucesso."
+        }else{
+            flash.message = "Um erro ocorreu no momento de alterar o hodômetro. Tente novamente ou contate o suporte."
+        }
+        render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW,tamMaxEmbossing: tamMaxEmbossing])
+
+
     }
 
 

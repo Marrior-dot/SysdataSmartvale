@@ -18,6 +18,7 @@ class FormUtilTagLib {
         def hasfeedback = attrs.hasfeedback ?: true
         def inline = attrs.inline ?: false
         def maxlength = attrs.maxlength ?: null
+        def min = attrs.min ?: null
         def onchange = attrs.onchange ? "onchange=\"" + attrs.onchange + "\"" : ''
 
         out << """
@@ -25,7 +26,7 @@ class FormUtilTagLib {
             <label class="control-label" for="$id">$label</label>
             ${disabled ? "<input id='$id' name='$name' type='hidden' value='$value'>" : ''}
             ${inline ? '<div class="form-inline">' : ''}
-            <input ${ id ? "id='${id}'" : '' } name="$name" type="$type" ${maxlength ? "maxlength=$maxlength" : ""} style="max-width: $width%" class="form-control $clazz"
+            <input ${ id ? "id='${id}'" : '' } name="$name" type="$type" ${min ? "min=$min" : ""} ${maxlength ? "max=$maxlength" : ""} style="max-width: $width%" class="form-control $clazz"
                 ${ type.trim().equalsIgnoreCase('cpf')  ? 'data-rule-cpf="true"' : '' }
                 ${ type.trim().equalsIgnoreCase('cnpj') ? 'data-rule-cnpj="true"' : '' }
                 value="$value" ${required ? 'required' : ''} ${attrs.size ? "size='${attrs.size}'" : ''} ${disabled ? 'disabled' : ''} ${onchange}>

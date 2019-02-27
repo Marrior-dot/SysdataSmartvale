@@ -14,6 +14,7 @@ class Unidade {
     static transients = ['funcionariosCount','veiculosCount']
 
     static constraints = {
+        nome nullable: false, blank: false
     }
 
     static mapping = {

@@ -22,13 +22,20 @@
                         <span class="glyphicon glyphicon-home"></span>
                         <g:message code="default.home.label"/>
                     </a>
+                    <a class="btn btn-default" href="${createLink(controller:'rh',action:'show',id:rhInstance.id)}">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Empresa
+                </a>
                   %{--  <g:link class="btn btn-default" controller="rh" action="show" params="[id:rhInstance?.id]">
                         <span class="glyphicon glyphicon-plus"></span> Criar Unidade
                     </g:link>--}%
-                    <g:link class="btn btn-default" action="generateCartaSenha" params="[id:unidadeInstance?.id]">
-                        <span class="glyphicon glyphicon-open-file"></span>
-                        Gerar Carta Senha
-                    </g:link>
+                    %{--<g:if test="${action==Util.ACTION_VIEW}">
+                        <g:link class="btn btn-default" action="generateCartaSenha" params="[id:unidadeInstance?.id]">
+                            <span class="glyphicon glyphicon-open-file"></span>
+                            Gerar Carta Senha
+                        </g:link>
+                    </g:if>--}%
+
                 </div>
                 <br><br>
                 <g:if test="${flash.message}">
