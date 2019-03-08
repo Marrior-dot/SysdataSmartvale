@@ -179,10 +179,7 @@ class VeiculoController extends BaseOwnerController {
         def veiculoInstanceList
 
         withSecurity { ownerList ->
-            veiculoInstanceList = Veiculo
-                    .createCriteria()
-            //.list(max:params.max,offset:offset){
-                    .list() {
+            veiculoInstanceList = Veiculo.createCriteria().list() {
 
                 if (ownerList.size > 0)
                     unidade { rh { 'in'('id', ownerList) } }
@@ -205,27 +202,26 @@ class VeiculoController extends BaseOwnerController {
 
         def veiculoInstanceTotal
 
-        withSecurity { ownerList ->
-            veiculoInstanceTotal = Veiculo
-                    .createCriteria()
-                    .list() {
 
-                if (ownerList.size > 0)
-                    unidade { rh { 'in'('id', ownerList) } }
+            withSecurity { ownerList ->
+                veiculoInstanceTotal = Veiculo.createCriteria().list() {
 
-                if (unidId)
-                    unidade { eq('id', unidId) }
-                if (params.opcao && params.filtro) {
-                    //Placa
-                    if (opcao == 1)
-                        like('placa', filtro + '%')
-                    //Marca
-                    else if (opcao == 2)
-                        like('modelo', filtro + '%')
+                    if (ownerList.size > 0)
+                        unidade { rh { 'in'('id', ownerList) } }
+
+                    if (unidId)
+                        unidade { eq('id', unidId) }
+                    if (params.opcao && params.filtro) {
+                        //Placa
+                        if (opcao == 1)
+                            like('placa', filtro + '%')
+                        //Marca
+                        else if (opcao == 2)
+                            like('modelo', filtro + '%')
+                    }
+                    projections { rowCount() }
                 }
-                projections { rowCount() }
             }
-        }
 
 
         def fields = veiculoInstanceList.collect { v ->

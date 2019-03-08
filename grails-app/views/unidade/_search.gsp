@@ -20,6 +20,7 @@
         <div class="list">
             <table class="table table-striped table-bordered table-hover table-condensed table-default" >
                 <thead>
+                    <th>Código</th>
                     <th>Nome</th>
                     <th>Status</th>
                     <th></th>
@@ -27,7 +28,8 @@
                 <tbody>
                     <g:each in="${Unidade.withCriteria{rh{eq('id',rhId)}}}" var="unidade" >
                         <tr>
-                            <td><g:link controller="unidade" action="show" id="${unidade.id}"> ${unidade?.nome}</g:link></td>
+                            <td><g:link controller="unidade" action="show" id="${unidade.id}">${unidade?.codigo}</g:link></td>
+                            <td>${unidade?.nome}</td>
                             <td>${unidade?.status}</td>
                             <td></td>
                         </tr>

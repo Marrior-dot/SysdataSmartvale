@@ -41,12 +41,12 @@
                 <g:if test="${flash.message}">
                     <div class="alert alert-info">${flash.message}</div>
                 </g:if>
-                <g:hasErrors bean="${unidadeInstance}">
-                    <div class="errors">
-                        <span style="font-weight:bold;padding-left:10px">Erro ao salvar ${entityName} </span>
-                        <g:renderErrors bean="${unidadeInstance}" as="list" />
-                    </div>
-                </g:hasErrors>
+                    <g:hasErrors bean="${unidadeInstance}">
+                        <div class="errors">
+                            <span style="font-weight:bold;padding-left:10px">Erro ao salvar ${entityName} </span>
+                            <g:renderErrors bean="${unidadeInstance}" as="list" />
+                        </div>
+                    </g:hasErrors>
                 <br>
 
                %{-- <fieldset style="border:1px solid;font-size:14px;">
