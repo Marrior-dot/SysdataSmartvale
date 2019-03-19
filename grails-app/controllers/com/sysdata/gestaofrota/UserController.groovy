@@ -229,8 +229,8 @@ class UserController extends BaseOwnerController {
 
         if(userInstance.owner.instanceOf(Rh)){
             Rh rhInstance = Rh.get(userInstance.owner.id)
-            //redirect(controller: 'rh', action: 'show', id: userInristance.owner.id)
-            redirect(action: 'show', id: userInstance.id)
+            def userRole = UserRole.findByUser(userInstance)
+            render(view: 'meusDados', model: [userInstance: userInstance,  role: userRole?.role,action: Util.ACTION_VIEW, ownerList: listOwners()])
             return ;
         }
         else if(userInstance.owner.instanceOf(PostoCombustivel)){

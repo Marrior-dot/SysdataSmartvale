@@ -3,13 +3,14 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 <script type="text/javascript" src="${resource(dir:'js',file:'complementoNomeEmbossing.js') }"></script>
-
+<script type="text/javascript" src="${resource(dir:'js',file:'jquery/mascaras.js')}"></script>
 <g:form method="post" >
     <g:hiddenField name="id" value="${veiculoInstance?.id}" />
     <g:hiddenField name="version" value="${funcionarioInstance?.version}" />
     <g:hiddenField name="unidId" value="${unidadeInstance?.id}"/>
     <g:hiddenField name="action" value="${action}"/>
     <g:hiddenField name="tam-max-embossing" value="${tamMaxEmbossing}"/>
+
 
     <table class="table">
         <thead>
@@ -51,7 +52,7 @@
                     <bs:formField id="modelo" name="modelo" label="Modelo" required="required" value="${veiculoInstance?.modelo}"></bs:formField>
                 </div>
                 <div class="col-xs-3">
-                    <bs:formField id="ano" name="anoFabricacao" label="Ano Fabricação" required="required" value="${veiculoInstance?.anoFabricacao}"></bs:formField>
+                    <bs:formField id="anoFabricacao" type="number" class="anoFabricacao" name="anoFabricacao" label="Ano Fabricação" required="required" min="1950" value="${veiculoInstance?.anoFabricacao}"></bs:formField>
                 </div>
             </div>
             <div class="row">
@@ -63,7 +64,7 @@
                 <div class="form-group col-md-3">
                     <label class="control-label" for="capacidadeTanque">Capacidade Tanque *</label>
                     <div class="input-group">
-                        <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control"
+                        <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control maxValor"
                                value="${veiculoInstance?.capacidadeTanque}" min="0" maxlength="5" required>
                         <span class="input-group-addon">litros</span>
                     </div>
@@ -72,7 +73,7 @@
                 <div class="form-group col-md-3">
                     <label class="control-label" for="autonomia">Autonomia *</label>
                     <div class="input-group">
-                        <input id="autonomia" name="autonomia" type="number" class="form-control"
+                        <input id="autonomia" name="autonomia" type="number" class="form-control maxValor"
                                value="${veiculoInstance?.autonomia}" min="0" maxlength="5" required>
                         <span class="input-group-addon">Km/l</span>
                     </div>

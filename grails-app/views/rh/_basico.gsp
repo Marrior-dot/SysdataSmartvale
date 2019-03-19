@@ -244,21 +244,22 @@
 			</div>
 		</div>
 	</div>
+	<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+		<g:if test="${action == Util.ACTION_VIEW }">
+			<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
+				<span class="glyphicon glyphicon-edit"></span>
+				<g:message code="default.button.edit.label" default="Edit"/>
+			</g:link>
+			<g:if test="${!roleRh}">
+				<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
+			</g:if>
 
-	<g:if test="${action == Util.ACTION_VIEW }">
-		<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
-			<span class="glyphicon glyphicon-edit"></span>
-			<g:message code="default.button.edit.label" default="Edit"/>
-		</g:link>
-		<g:if test="${!roleRh}">
-			<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
 		</g:if>
-
-	</g:if>
-	<g:elseif test="${action == Util.ACTION_NEW}">
-		<g:actionSubmit class="btn btn-default" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
-	</g:elseif>
-	<g:elseif test="${action == Util.ACTION_EDIT}">
-		<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-	</g:elseif>
+		<g:elseif test="${action == Util.ACTION_NEW}">
+			<g:actionSubmit class="btn btn-default" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+		</g:elseif>
+		<g:elseif test="${action == Util.ACTION_EDIT}">
+			<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+		</g:elseif>
+	</sec:ifAnyGranted>
 </g:form>

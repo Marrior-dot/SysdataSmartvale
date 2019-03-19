@@ -10,14 +10,14 @@ class UnidadeController {
     def geracaoCartaSenhaService
     def unidadeService
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-        redirect(controller: 'rh', action: 'show', params: [unidId: params.rhId])
+        redirect(controller: 'rh', action: 'show', params: [id: params.rhId])
     }
 
     def find() {
@@ -37,6 +37,7 @@ class UnidadeController {
     }
 
     def create = {
+        println "chegou aqui"
         def rhInstance = Rh.get(params.rhId)
         render(view: 'form', model: [action: Util.ACTION_NEW, rhInstance: rhInstance])
     }
@@ -61,6 +62,7 @@ class UnidadeController {
     }
 
     def show = {
+        println params
         def unidadeInstance = Unidade.get(params.id)
         if (!unidadeInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
@@ -106,19 +108,34 @@ class UnidadeController {
     }
 
     def delete = {
+        println "entrou: ${params}"
         def unidadeInstance = Unidade.get(params.id)
+        println "unidade: ${unidadeInstance}"
+        def equipamento = Equipamento.findByUnidade(unidadeInstance)
+        println "equip: ${equipamento}"
+        def funcionarios = Funcionario.findByUnidade(unidadeInstance)
+        println "func: ${funcionarios}"
+        def veiculos = Veiculo.findByUnidade(unidadeInstance)
+        println "veic: ${veiculos}"
         if (unidadeInstance) {
-            try {
-                unidadeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
-                redirect(action: "list", params: [rhId: unidadeInstance.rh.id])
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
-                redirect(action: "show", model: [unidId: unidadeInstance.id])
+
+            if(funcionarios==null && veiculos==null && equipamento==null) {
+                println "não tem funcionarios, veiculos e equipamentos"
+                 def rhId = unidadeInstance.rh.id
+                 def nomeUnidade = unidadeInstance.nome
+                 println "rhId: ${rhId}"
+                 unidadeInstance.rh.removeFromUnidades(unidadeInstance)
+                 unidadeInstance.delete(flush: true)
+                 flash.message = "Centro de custo ${nomeUnidade} removido com sucesso."
+                 redirect(controller: 'rh', action: 'show', params: [id: rhId])
+            }else{
+                println "possui dados vinculados a unidade"
+                flash.message = "Não é possível remover um centro de custo que possui vinculo com funcionários, veículos ou equipamentos."
+                redirect(action: "show", params: [id: unidadeInstance.id])
+
             }
         } else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade')])}"
             redirect(action: "list")
         }
     }

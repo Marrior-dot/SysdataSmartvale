@@ -13,7 +13,11 @@ class FechamentoController {
 
     def index() {
         Rh programa = Rh.get(params.long('programa.id'))
-        render(template: 'index', model: [fechamentoList: Fechamento.ativosPorPrograma(programa).list()])
+        println "programa: ${programa}"
+        def fechamentoList = Fechamento.ativosPorPrograma(programa).list()
+        println "fechamentoList: ${fechamentoList}"
+        User usuario = User.get(params.long('usuario'))
+        render(template: 'index', model: [fechamentoList: fechamentoList, usuario:usuario])
     }
 
     def save(Fechamento fechamentoInstance) {
@@ -48,6 +52,8 @@ class FechamentoController {
 
     def abrirFechamentos(){
         def fechamentoList = Fechamento.findAllByPrograma(Rh.get(params.long('id')))
+
+        println "fechamentos: ${fechamentoList}"
         render template: 'index', model:[fechamentoList:fechamentoList]
     }
 

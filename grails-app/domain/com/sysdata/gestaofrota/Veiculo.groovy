@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+
 class Veiculo extends MaquinaMotorizada {
     String placa
     MarcaVeiculo marca
@@ -21,13 +22,20 @@ class Veiculo extends MaquinaMotorizada {
 
     static mapping = {
     }
-
-    String getHodometro() {
+    @Override
+    Long getHodometro() {
+        def hodometroAntigo = this.hodometro?:0
         if (!this.hodometro) {
             def ultTr = Transacao
                     .executeQuery("select max(t) from Transacao t where t.maquina=:maq and t.statusControle in (:sts)",
                     [maq: this, sts: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
-            if (ultTr[0]) this.hodometro = ultTr[0].quilometragem
+            if (ultTr[0]){
+                this.hodometro = ultTr[0].quilometragem
+                HistoricoHodometro historicoHodometro = new HistoricoHodometro(veiculo: this,hodometroAntigo: hodometroAntigo, hodometroNovo: this.hodometro)
+                historicoHodometro.save()
+                println "Veiculo: ${this.placa} - Hodometro antigo: ${hodometroAntigo} - Hodometro Novo: ${this.hodometro}"
+            }
+
             else this.hodometro = 0
         }
         return this.hodometro

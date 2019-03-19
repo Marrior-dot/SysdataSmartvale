@@ -17,7 +17,7 @@
                 </div>
             </sec:ifAnyGranted>
         </g:if>
-
+        <br>
         <g:form controller="${controller}">
             <div class="list">
                 <table id="veicTable" class="table table-striped table-bordered table-hover table-condensed table-default">
@@ -45,6 +45,7 @@ thead input {
 
 
 <script type="text/javascript">
+    var veicSel = [];
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
         $('#veicTable thead th').each( function () {
@@ -66,20 +67,20 @@ thead input {
                 {"data":"marca"},
                 {"data":"modelo"},
                 {"data":"ano"},
-                {"data": "cartao"}
+                {"data":"cartao"}
             ]
         });
 
         // Seleção de um funcionário na tabela
         $("#veicTable tbody").on("click", 'tr', function () {
             var fid = $(this).find("td:first").html();
-            if ($(thi   s).hasClass("selected")) {
+            if ($(this).hasClass("selected")) {
                 $(this).removeClass("selected");
-                funcSel.pop(fid);
+                veicSel.pop(fid);
             }
             else {
                 $(this).addClass("selected");
-                funcSel.push(fid);
+                veicSel.push(fid);
             }
         });
 
