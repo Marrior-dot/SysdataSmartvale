@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota
 
 import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
+import grails.orm.PagedResultList
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 class TransacaoService {
 
@@ -45,7 +47,6 @@ class TransacaoService {
 
         ret.ok = true
     }
-
 
     def calcularDataReembolso(posto, data) {
 
@@ -107,31 +108,31 @@ class TransacaoService {
      */
     def agendarAbastecimento(Transacao abastInstance) {
 
-        def dataProc=ReferenceDateProcessing.calcuteReferenceDate()
+        def dataProc = ReferenceDateProcessing.calcuteReferenceDate()
 
         LancamentoPortador lctoCompra
 
-        Rh rh=abastInstance.cartao.portador.unidade.rh
+        Rh rh = abastInstance.cartao.portador.unidade.rh
 
-        if(rh.modeloCobranca==TipoCobranca.POS_PAGO){
-            Corte corteAberto=abastInstance.cartao.portador.unidade.rh.corteAberto
-            if(corteAberto) {
-                lctoCompra=new LancamentoPortador()
-                lctoCompra.with{
-                    tipo=TipoLancamento.COMPRA
-                    status=StatusLancamento.EFETIVADO
-                    corte=corteAberto
-                    valor=abastInstance.valor
-                    conta=abastInstance.cartao.portador.conta
-                    statusFaturamento=StatusFaturamento.NAO_FATURADO
-                    dataEfetivacao=dataProc
+        if (rh.modeloCobranca == TipoCobranca.POS_PAGO) {
+            Corte corteAberto = abastInstance.cartao.portador.unidade.rh.corteAberto
+            if (corteAberto) {
+                lctoCompra = new LancamentoPortador()
+                lctoCompra.with {
+                    tipo = TipoLancamento.COMPRA
+                    status = StatusLancamento.EFETIVADO
+                    corte = corteAberto
+                    valor = abastInstance.valor
+                    conta = abastInstance.cartao.portador.conta
+                    statusFaturamento = StatusFaturamento.NAO_FATURADO
+                    dataEfetivacao = dataProc
                 }
                 lctoCompra.save flush: true
             }
 
-        }else{
+        } else {
             //Lancamento funcionario
-            lctoCompra=new LancamentoPortador(tipo: TipoLancamento.COMPRA,
+            lctoCompra = new LancamentoPortador(tipo: TipoLancamento.COMPRA,
                     status: StatusLancamento.EFETIVADO,
                     valor: abastInstance.valor,
                     dataEfetivacao: dataProc,
@@ -143,20 +144,20 @@ class TransacaoService {
         abastInstance.addToLancamentos(lctoCompra)
         //Lancamento estabelecimento
         def estabelecimentoInstance = Estabelecimento.findByCodigo(abastInstance.codigoEstabelecimento)
-        if(!estabelecimentoInstance.empresa.taxaReembolso) throw new RuntimeException("Nao ha taxa adm nao definida para lojista #${estabelecimentoInstance.empresa.id}")
-        def taxaAdm=estabelecimentoInstance.empresa.taxaReembolso
-        BigDecimal valTxAdm=(abastInstance.valor*taxaAdm/100.0)
-        abastInstance.taxaAdm=taxaAdm
-        abastInstance.valorReembolso=abastInstance.valor-valTxAdm
+        if (!estabelecimentoInstance.empresa.taxaReembolso) throw new RuntimeException("Nao ha taxa adm nao definida para lojista #${estabelecimentoInstance.empresa.id}")
+        def taxaAdm = estabelecimentoInstance.empresa.taxaReembolso
+        BigDecimal valTxAdm = (abastInstance.valor * taxaAdm / 100.0)
+        abastInstance.taxaAdm = taxaAdm
+        abastInstance.valorReembolso = abastInstance.valor - valTxAdm
         //Arredonda
-        def arrend=valTxAdm.round(2)
-        def valReemb=abastInstance.valor-arrend
-        def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa,dataProc )
+        def arrend = valTxAdm.round(2)
+        def valReemb = abastInstance.valor - arrend
+        def dataReembolso = calcularDataReembolso(estabelecimentoInstance.empresa, dataProc)
         if (dataReembolso) {
             def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,
                     dataPrevista: dataReembolso,
                     status: StatusLancamento.A_EFETIVAR,
-                    valor:valReemb,
+                    valor: valReemb,
                     valorTaxa: valTxAdm,
                     dataEfetivacao: dataReembolso,
                     conta: estabelecimentoInstance.empresa.conta,
@@ -192,5 +193,80 @@ class TransacaoService {
         ret
     }
 
+    /**
+     * Realiza a pesquisa de transações com o filtro e paginação repassados
+     * @param participante
+     * @param filtro
+     * @param paginacao
+     * @return Um PagedResultList contendo a pesquisa paginada
+     */
+    PagedResultList pesquisar(final Participante participante, final Map filtro, final Map paginacao) {
+        Unidade unidade
+        Estabelecimento estabelecimento
 
+        if (SpringSecurityUtils.ifAllGranted("ROLE_ESTAB") && participante?.instanceOf(PostoCombustivel)) {
+            PostoCombustivel postoCombustivel = PostoCombustivel.get(participante.id)
+            estabelecimento = Estabelecimento.findByEmpresa(postoCombustivel)
+        } else if (SpringSecurityUtils.ifAllGranted("ROLE_RH") && participante?.instanceOf(Rh)) {
+            Rh rh = Rh.get(participante.id)
+            unidade = Unidade.findByRh(rh)
+        }
+
+        return Transacao.createCriteria().list(paginacao) {
+            if (filtro.dataInicial) gt('dateCreated', filtro.dataInicial)
+            if (filtro.dataFinal) lt('dateCreated', filtro.dataFinal)
+            if (filtro.numeroCartao) eq("numeroCartao", filtro.numeroCartao)
+            if (filtro.codigoEstabelecimento) eq("codigoEstabelecimento", filtro.codigoEstabelecimento)
+            if (filtro.nsu) eq("nsu", filtro.nsu)
+            if (filtro.tipos) 'in'('tipo', filtro.tipos)
+            if (filtro.statusControle) {
+                if (filtro.statusControle instanceof StatusControleAutorizacao)
+                    eq('statusControle', filtro.statusControle)
+                else eq('statusControle', StatusControleAutorizacao.valueOf(filtro.statusControle.toString()))
+            }
+
+            if (unidade) {
+                'participante' {
+                    eq('unidade', unidade)
+                }
+            }
+            if (estabelecimento?.codigo?.length() > 0) {
+                eq("codigoEstabelecimento", estabelecimento.codigo)
+            }
+        }
+    }
+
+    void confirmar(List<Long> ids) {
+        ids.each { confirmar(Transacao.get(it)) }
+    }
+
+    Transacao confirmar(Transacao transacao) {
+        if (transacao == null) return
+
+        if (transacao.tipo == TipoTransacao.COMBUSTIVEL || transacao.tipo == TipoTransacao.SERVICOS) {
+            transacao.statusControle = StatusControleAutorizacao.CONFIRMADA
+            transacao.status = StatusTransacao.AGENDAR
+        } else if (transacao.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
+            transacao.statusControle = StatusControleAutorizacao.CONFIRMADA
+        }
+
+        transacao.save()
+    }
+
+    void desfazer(List<Long> ids) {
+        ids.each { desfazer(Transacao.get(it)) }
+    }
+
+    Transacao desfazer(Transacao transacao) {
+        if (transacao == null) return
+
+        if (transacao.tipo == TipoTransacao.COMBUSTIVEL || transacao.tipo == TipoTransacao.SERVICOS) {
+            transacao.statusControle = StatusControleAutorizacao.DESFEITA
+            transacao.participante.conta.saldo += transacao.valor
+        } else if (transacao.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
+            transacao.statusControle = StatusControleAutorizacao.DESFEITA
+        }
+
+        transacao.save()
+    }
 }

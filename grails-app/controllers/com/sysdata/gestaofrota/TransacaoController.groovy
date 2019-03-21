@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import com.sysdata.gestaofrota.exception.TransacaoException
+import grails.orm.PagedResultList
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
@@ -27,193 +28,91 @@ class TransacaoController extends BaseOwnerController {
     def transacaoService
     def autorizadorService
     def estornoService
-    def springSecurityUtils
 
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-//        println("Authorities: ${getCurrentUser().authorities*.authority}")
-        Participante participanteInstance = getCurrentUser()?.owner
-        Unidade unidadeInstance = null
-        Estabelecimento estabelecimentoInstance = null
+        final Map paginacao = [
+                max   : params.int('max') ?: 10,
+                offset: params.int('offset') ?: 0,
+                sort  : 'id',
+                order : 'desc'
+        ]
+        final Map filtro = [
+                dataInicial          : params.date('dataInicial', 'dd/MM/yyyy'),
+                dataFinal            : params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
+                numeroCartao         : params.numeroCartao,
+                codigoEstabelecimento: params.codigoEstabelecimento,
+                nsu                  : params.int('nsu')
+        ]
+        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
+        if (filtro.dataFinal) filtro.dataFinal -= 1
+        [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
+    }
 
-        if (SpringSecurityUtils.ifAllGranted("ROLE_ESTAB") && participanteInstance?.instanceOf(PostoCombustivel)) {
-            PostoCombustivel postoCombustivel = PostoCombustivel.get(participanteInstance.id)
-            estabelecimentoInstance = Estabelecimento.findByEmpresa(postoCombustivel)
-        } else if (SpringSecurityUtils.ifAllGranted("ROLE_RH") && participanteInstance?.instanceOf(Rh)) {
-            Rh rh = Rh.get(participanteInstance.id)
-            unidadeInstance = Unidade.findByRh(rh)
-        }
-
-        def criteria = {
-            if (params.dataInicial && params.dataInicial.toString().length() > 0) {
-                Date data = params.date('dataInicial', 'dd/MM/yyyy')
-                gt('dateCreated', data)
-            }
-            if (params.dataFinal && params.dataFinal.toString().length() > 0) {
-                Date data = params.date('dataFinal', 'dd/MM/yyyy') + 1
-                lt('dateCreated', data)
-            }
-
-            if (params?.cartao && params.cartao.toString().length() > 0) {
-                eq('numeroCartao', params.cartao)
-            }
-
-            if (params?.codEstab && params.codEstab.toString().length() > 0) {
-                eq('codigoEstabelecimento', params.codEstab)
-            }
-
-            if (params?.nsu && params.nsu.toString().length() > 0) {
-                eq('nsu', params.int('nsu'))
-            }
-
-            if (unidadeInstance) {
-                participante {
-                    eq('unidade', unidadeInstance)
-                }
-            }
-
-            if (estabelecimentoInstance?.codigo?.length() > 0) {
-                eq("codigoEstabelecimento", estabelecimentoInstance.codigo)
-            }
-        }
-
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.sort = 'id'
-        params.order = 'desc'
-        [transacaoInstanceList : Transacao.createCriteria().list(params, criteria),
-         transacaoInstanceTotal: Transacao.createCriteria().count(criteria),
-         params                : params]
-
-        /*      CÓDIGO ANTIGO =============================================================================
-
-            def transacaoInstanceList
-            def transacaoInstanceTotal
-
-            withSecurity { ownerList ->
-
-                def pars = [:]
-                pars.max = params.max
-                pars.offset = params.offset ? params.offset as int : 0
-                pars.ids = ownerList
-
-
-                transacaoInstanceList = Transacao.executeQuery("""select tr
-                                        from Transacao tr, Funcionario f
-                                        where tr.participante=f
-
-                                        ${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-                                        ${
-                    if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''
-                }
-                                        ${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
-
-                                        and f.unidade.rh.id in (:ids)
-                                        order by tr.id desc""", pars)
-
-                transacaoInstanceTotal = Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
-                    where tr.participante=f
-                    ${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-                    ${if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''}
-                    ${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
-
-                    and f.unidade.rh.id in (:ids)""", [ids: ownerList])[0]
-
-            }
-
-            CÓDIGO ANTIGO =============================================================================
-            */
+    def listAdmin = {
+        final Map paginacao = [
+                max   : params.int('max') ?: 10,
+                offset: params.int('offset') ?: 0,
+                sort  : 'id',
+                order : 'desc'
+        ]
+        final Map filtro = [
+                dataInicial          : params.date('dataInicial', 'dd/MM/yyyy'),
+                dataFinal            : params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
+                numeroCartao         : params.numeroCartao,
+                codigoEstabelecimento: params.codigoEstabelecimento,
+                nsu                  : params.int('nsu'),
+                tipos                : [
+                        TipoTransacao.CONSULTA_PRECOS,
+                        TipoTransacao.CONFIGURACAO_PRECO,
+                        TipoTransacao.CARGA_SALDO,
+                        TipoTransacao.TRANSFERENCIA_SALDO
+                ]
+        ]
+        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
+        if (filtro.dataFinal) filtro.dataFinal -= 1
+        [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
     }
 
     def listPendentes = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-
-        def transacaoInstanceList
-        def transacaoInstanceTotal
-
-        withSecurity { ownerList ->
-
-            def pars = [:]
-            pars.max = params.max
-            pars.offset = params.offset ? params.offset as int : 0
-            pars.ids = ownerList
-
-
-            transacaoInstanceList = Transacao.executeQuery("""select tr
-									from Transacao tr, Funcionario f
-									where tr.participante=f and tr.statusControle='PENDENTE'
-
-									${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-									${
-                if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''
-            }
-									${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
-
-									and f.unidade.rh.id in (:ids)
-									order by tr.id desc and tr.""", pars)
-
-            transacaoInstanceTotal = Transacao.executeQuery("""select count(tr) from Transacao tr, Funcionario f
-				where tr.participante=f and tr.statusControle='PENDENTE'
-				${if (params.cartao) "and tr.numeroCartao='" + params.cartao + "'" else ''}
-				${if (params.codEstab) "and tr.codigoEstabelecimento='" + params.codEstab + "'" else ''}
-				${if (params.nsu) "and tr.nsu=" + params.nsu else ''}
-
-				and f.unidade.rh.id in (:ids)""", [ids: ownerList])[0]
-
-        }
-
-        [transacaoInstanceList: transacaoInstanceList, transacaoInstanceTotal: transacaoInstanceTotal, params: params]
+        final Map paginacao = [
+                max   : params.int('max') ?: 10,
+                offset: params.int('offset') ?: 0,
+                sort  : 'id',
+                order : 'desc'
+        ]
+        final Map filtro = [
+                dataInicial          : params.date('dataInicial', 'dd/MM/yyyy'),
+                dataFinal            : params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
+                numeroCartao         : params.numeroCartao,
+                codigoEstabelecimento: params.codigoEstabelecimento,
+                nsu                  : params.int('nsu'),
+                statusControle       : StatusControleAutorizacao.PENDENTE
+        ]
+        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
+        if (filtro.dataFinal) filtro.dataFinal -= 1
+        [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
     }
 
-    def desfazer = {
-        if (params.transacoes) {
-            def idsConvertido = []
-            params.transacoes.each {
-                idsConvertido.add(new Long(it))
+    def alterarStatus = {
+        final String tipo = params.tipoAlteracao.toString().toLowerCase()
+        final List<Long> idsTransacoes = params.list('transacoes')
+        if (idsTransacoes?.size() > 0) {
+            if (tipo == 'confirmacao') {
+                transacaoService.confirmar(idsTransacoes)
+                flash.message = "Transações confirmadas."
+            } else if (tipo == 'desfazimento') {
+                transacaoService.desfazer(idsTransacoes)
+                flash.message = "Transações desfeitas."
             }
-
-            Transacao.findAllByIdInList(idsConvertido).each {
-
-                if (params['selecionado' + it.id]) {
-                    if (it.tipo == TipoTransacao.COMBUSTIVEL || it.tipo == TipoTransacao.SERVICOS) {
-                        it.statusControle = StatusControleAutorizacao.DESFEITA
-                        it.participante.conta.saldo += it.valor
-                    } else if (it.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
-                        it.statusControle = StatusControleAutorizacao.DESFEITA
-                    }
-                }
-
-            }
+        } else {
+            flash.error = "Nenhuma Transação foi selecionada."
         }
-        redirect(action: 'listPendentes')
-    }
 
-    def confirmar = {
-        if (params.transacoes) {
-            def idsConvertido = []
-            if (params.transacoes.class.isArray()) {
-                params.transacoes.each {
-                    idsConvertido.add(new Long(it))
-                }
-            } else {
-                idsConvertido.add(new Long(params.transacoes))
-            }
 
-            Transacao.findAllByIdInList(idsConvertido).each {
-
-                if (params['selecionado' + it.id]) {
-                    if (it.tipo == TipoTransacao.COMBUSTIVEL || it.tipo == TipoTransacao.SERVICOS) {
-                        it.statusControle = StatusControleAutorizacao.CONFIRMADA
-                        it.status = StatusTransacao.AGENDAR
-                    } else if (it.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
-                        it.statusControle = StatusControleAutorizacao.CONFIRMADA
-                    }
-                }
-
-            }
-        }
         redirect(action: 'listPendentes')
     }
 
@@ -347,6 +246,4 @@ class TransacaoController extends BaseOwnerController {
         redirect action: "list", params: params
 
     }
-
-
 }
