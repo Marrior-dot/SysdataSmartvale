@@ -3,7 +3,7 @@ import org.grails.plugin.hibernate.filter.HibernateFilterDomainConfiguration
 dataSource {
     pooled = true
     driverClassName = "org.postgresql.Driver"
-    username = "postgres"
+    //username = "postgres"
 	configClass = HibernateFilterDomainConfiguration
 }
 hibernate {
@@ -54,10 +54,11 @@ environments {
     }*/
     production {
         def devUrl = System.env['AMAZONFROTA_DATABASE_PRODUCTION_URL']
-        if (!devUrl) devUrl = "jdbc:postgresql://148.5.7.211/amazonfrota_production";
+        if (!devUrl) devUrl = "jdbc:postgresql://172.16.100.40/amazonfrota_production";
 
         dataSource {
-            password = "jmml72"
+            username = "amazonfrota_production"
+            password = 'r40UGrz8a*6VChy'
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = devUrl
         }
