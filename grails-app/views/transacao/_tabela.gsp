@@ -1,3 +1,4 @@
+<%@ page import="com.sysdata.gestaofrota.Util" %>
 <g:if test="${transacaoInstanceTotal > 0}">
     <table class="table table-striped table-bordered table-condensed" style="font-size: 12px">
         <thead>

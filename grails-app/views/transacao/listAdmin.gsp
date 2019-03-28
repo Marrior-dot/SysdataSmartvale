@@ -58,7 +58,8 @@
                 </div>
             </g:if>
 
-            <g:render template="filtro" model="[action: 'listAdmin']"/>
+            <g:render template="filtro"
+                      model="[action: 'listAdmin', tipos: tipos]"/>
 
             <g:render template="tabela"/>
         </div>

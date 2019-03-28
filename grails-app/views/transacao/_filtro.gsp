@@ -3,7 +3,7 @@
         <h4>Pesquisa</h4>
     </div>
     <div class="panel-body">
-        <g:form action="${action}">
+        <g:form name="filtro" action="${action}">
             <div class="row">
                 <div class="col-md-4">
                     <label for="dataInicial">Período</label>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="numeroCartao">Cartão</label>
                     <input type="text" class="form-control cartao" name="numeroCartao" id="numeroCartao" value="${numeroCartao}">
                 </div>
@@ -27,16 +27,26 @@
                     <input type="text" class="form-control" name="codigoEstabelecimento" id="codigoEstabelecimento" value="${codigoEstabelecimento}">
                 </div>
 
-                <div class="col-md-3">
+                <div class="form-group col-md-2">
                     <label for="nsu">NSU</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="nsu" id="nsu" value="${nsu}">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default">Pesquisar</button>
-                        </span>
-                    </div>
+                    <input type="number" class="form-control" name="nsu" id="nsu" value="${nsu}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <label for="tipo">Tipo</label>
+                    <g:select name="tipo" class="form-control" from="${tipos}" value="${tipo}"
+                              optionValue="nome" noSelection="['': 'Todos']"/>
                 </div>
             </div>
         </g:form>
+    </div>
+
+    <div class="panel-footer text-right">
+        <button type="submit" class="btn btn-default" form="filtro">
+            <i class="glyphicon glyphicon-search"></i>
+            Pesquisar
+        </button>
     </div>
 </div>

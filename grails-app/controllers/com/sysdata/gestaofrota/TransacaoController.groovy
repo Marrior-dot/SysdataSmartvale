@@ -34,6 +34,7 @@ class TransacaoController extends BaseOwnerController {
     }
 
     def list = {
+        println(params)
         final Map paginacao = [
                 max   : params.int('max') ?: 10,
                 offset: params.int('offset') ?: 0,
@@ -45,8 +46,16 @@ class TransacaoController extends BaseOwnerController {
                 dataFinal            : params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
                 numeroCartao         : params.numeroCartao,
                 codigoEstabelecimento: params.codigoEstabelecimento,
-                nsu                  : params.int('nsu')
+                nsu                  : params.int('nsu'),
+                tipo                 : params.tipo ? TipoTransacao.valueOf(params.tipo.toString()) : null,
+                tipos                : [
+                        TipoTransacao.COMBUSTIVEL,
+                        TipoTransacao.SERVICOS,
+                        TipoTransacao.CANCELAMENTO,
+                        TipoTransacao.CANCELAMENTO_COMBUSTIVEL
+                ]
         ]
+
         final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
         if (filtro.dataFinal) filtro.dataFinal -= 1
         [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
@@ -65,6 +74,7 @@ class TransacaoController extends BaseOwnerController {
                 numeroCartao         : params.numeroCartao,
                 codigoEstabelecimento: params.codigoEstabelecimento,
                 nsu                  : params.int('nsu'),
+                tipo                 : params.tipo ? TipoTransacao.valueOf(params.tipo.toString()) : null,
                 tipos                : [
                         TipoTransacao.CONSULTA_PRECOS,
                         TipoTransacao.CONFIGURACAO_PRECO,

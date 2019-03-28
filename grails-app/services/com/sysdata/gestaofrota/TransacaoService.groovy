@@ -218,6 +218,7 @@ class TransacaoService {
             if (filtro.numeroCartao) eq("numeroCartao", filtro.numeroCartao)
             if (filtro.codigoEstabelecimento) eq("codigoEstabelecimento", filtro.codigoEstabelecimento)
             if (filtro.nsu) eq("nsu", filtro.nsu)
+            if (filtro.tipo) eq('tipo', filtro.tipo)
             if (filtro.tipos) 'in'('tipo', filtro.tipos)
             if (filtro.statusControle) {
                 if (filtro.statusControle instanceof StatusControleAutorizacao)
