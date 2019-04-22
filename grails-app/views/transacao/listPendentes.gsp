@@ -9,12 +9,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="layout" content="layout-restrito" />
-    <g:set var="entityName" value="${message(code: 'transacao.label', default: 'Transacao')}" />
+    <g:set var="entityName" value="Transações Pendentes" />
     <g:javascript src="transacoesPendentes.js"/>
     <title><g:message code="default.list.label" args="[entityName]" /></title>
 </head>
 <body>
 <br><br>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4><g:message code="default.list.label" args="[entityName]" /></h4>
@@ -34,74 +35,25 @@
         </div>
         <br><br>
         <div class="body">
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger" role="alert">${flash.error}</div>
+            </g:if>
             <g:if test="${flash.message}">
-                <div class="message">${flash.message}</div>
-            </g:if>
-            <g:if test="${flash.errors}">
-                <div class="errors">
-                    <span style="font-weight:bold;padding-left:10px">ERROS</span>
-                    <ul>
-                        <g:each in="${flash.errors}" var="err">
-                            <li>${err}</li>
-                        </g:each>
-                    </ul>
-                </div>
+                <div class="alert alert-info" role="alert">${flash.message}</div>
             </g:if>
 
-            <g:form action="listPendentes">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4>Pesquisa por filtro</h4>
-                    </div>
-                    <div class="panel-body">
-                        <fieldset class="search">
+            <g:render template="filtro" model="[action: 'listPendentes']"/>
 
-                            <label>Cartão: <g:textField class="form-control" name="cartao" value="${params.cartao}"/></label>
-                            <label>Cod.Estab: <g:textField class="form-control" name="codEstab" value="${params.codEstab}"/></label>
-                            <label>NSU: <g:textField class="form-control" name="nsu" value="${params.nsu}"/></label>
-                        </fieldset>
-
-                        <div class="buttons">
-%{--
-                            <g:submitButton class="list btn btn-default" name="list" value="Listar" />
---}%
-                            <g:link class="btn btn-default" action="desfazer" name="desfazer"
-                                    onclick="return confirm('Tem certeza que deseja desfazer as transações selecionadas?');">
-                                    <span class="glyphicon glyphicon-remove-sign"></span> Desfazer Selecionados
-                            </g:link>
-                            <g:link class="btn btn-default" action="confirmar" name="confirmar"
-                                    onclick="return confirm('Tem certeza que deseja confirmar as transações selecionadas?');">
-                                    <span class="glyphicon glyphicon-ok-sign"></span> Confirmar Selecionados
-                            </g:link>
-                            %{--<g:actionSubmit class="desfazer btn btn-default" action="desfazer" name="desfazer" value="Desfazer Selecionados"
-                                            onclick="return confirm('Tem certeza que deseja desfazer as transações selecionadas?');">Desfazer</g:actionSubmit>
-                            <g:actionSubmit class="confirmar btn btn-default" action="confirmar" name="confirmar" value="Confirmar Selecionados"
-                                            onclick="return confirm('Tem certeza que deseja confirmar as transações selecionadas?');"></g:actionSubmit>--}%
-                        </div>
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Transações</h3>
                 </div>
-
 
                 <div class="list">
-                    <table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
+                    <table class="table table-striped table-bordered table-condensed" style="font-size: 12px">
                         <thead>
                         <tr>
-                            <th><g:checkBox name="geral" value="${false}"/></th>
-                            %{--<g:sortableColumn property="id" title="ID" />
-                            <th><g:message code="transacao.nsu.label" default="" /></th>
-                            <g:sortableColumn property="dateCreated" title="Data/Hora" />
-                            <th><g:message code="transacao.codigoEstabelecimento.label" default="" /></th>
-                            <th><g:message code="transacao.cartao.label" default="" /></th>
-                            <th><g:message code="transacao.participante.label" default="Funcionário" /></th>
-                            <g:sortableColumn property="tipo" title="${message(code: 'transacao.tipo.label', default: '')}" />
-                            <g:sortableColumn property="status" title="${message(code: 'transacao.status.label', default: '')}" />
-                            <g:sortableColumn property="statusControle" title="${message(code: 'transacao.statusControle.label', default: '')}" />
-                            <g:sortableColumn property="valor" title="${message(code: 'transacao.valor.label', default: '')}" />
-
-                            <sec:ifAnyGranted roles="ROLE_PROC">
-                                <th>Ações</th>
-                            </sec:ifAnyGranted>--}%
-
+                            <th class="text-center"><g:checkBox name="geral" value="${false}"/></th>
                             <th>ID</th>
                             <th><g:message code="transacao.nsu.label" default="NSU" /></th>
                             <th>Data/Hora</th>
@@ -113,64 +65,68 @@
                             <th><g:message code="transacao.statusControle.label" default="Status Controle" /></th>
                             <th><g:message code="transacao.valor.label" default="Valor" /></th>
                             <sec:ifAnyGranted roles="ROLE_PROC">
-                                <th>Ações</th>
+                                <th class="text-center">Ações</th>
                             </sec:ifAnyGranted>
-
                         </tr>
                         </thead>
                         <tbody>
-                        <g:each in="${transacaoInstanceList}" status="i" var="transacaoInstance">
-                            <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                                <td>
-                                    <g:hiddenField name="transacoes" value="${transacaoInstance.id}"/>
-                                    <g:checkBox name="selecionado${transacaoInstance.id}"/>
-                                </td>
-                                <td><g:link action="show" id="${transacaoInstance.id}">${fieldValue(bean: transacaoInstance, field: "id")}</g:link></td>
-                                <td>${transacaoInstance.nsu}</td>
-                                <td><g:formatDate date="${transacaoInstance.dateCreated}" format="dd/MM/yyyy HH:mm:ss" /></td>
-                                <td>${transacaoInstance.codigoEstabelecimento}</td>
-                                <td>${Util.maskCard(transacaoInstance.numeroCartao)}</td>
-                                <td>${transacaoInstance.participante?.nome}</td>
-                                <g:if test="${transacaoInstance.tipo.nome == "Cancelamento"}">
-                                    <td>${transacaoInstance.tipo.nome}¹</td>
-                                </g:if>
-                                <g:else>
-                                    <td>${transacaoInstance.tipo.nome}</td>
-                                </g:else>
-                                <td>${transacaoInstance.status.nome}</td>
-                                <td>${transacaoInstance.statusControle?.nome}</td>
-                                <td><g:formatNumber number="${transacaoInstance.valor}" format="#0.00" /></td>
-
-                                <sec:ifAnyGranted roles="ROLE_PROC">
-                                    <td>
-                                        <g:if test="${transacaoInstance.status in [StatusTransacao.AGENDAR,StatusTransacao.AGENDADA] &&
-                                                transacaoInstance.tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] &&
-                                                transacaoInstance.statusControle==StatusControleAutorizacao.CONFIRMADA}">
-
-                                            <span title="Estornar"><g:link class="undo" action="estornar" id="${transacaoInstance.id}"></g:link></span>
-
-                                        </g:if>
+                        <g:form action="alterarStatus" name="desfazerConfirmarTransacoes">
+                            <g:hiddenField name="tipoAlteracao"/>
+                            <g:each in="${transacaoInstanceList}" var="transacao">
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="transacoes" id="transacoes" value="${transacao.id}">
                                     </td>
-                                </sec:ifAnyGranted>
+                                    <td><g:link action="show" id="${transacao.id}">${fieldValue(bean: transacao, field: "id")}</g:link></td>
+                                    <td>${transacao.nsu}</td>
+                                    <td><g:formatDate date="${transacao.dateCreated}" format="dd/MM/yyyy HH:mm:ss" /></td>
+                                    <td>${transacao.codigoEstabelecimento}</td>
+                                    <td>${Util.maskCard(transacao.numeroCartao)}</td>
+                                    <td>${transacao.participante?.nome}</td>
+                                    <g:if test="${transacao.tipo.nome == "Cancelamento"}">
+                                        <td>${transacao.tipo.nome}¹</td>
+                                    </g:if>
+                                    <g:else>
+                                        <td>${transacao.tipo.nome}</td>
+                                    </g:else>
+                                    <td>${transacao.status.nome}</td>
+                                    <td>${transacao.statusControle?.nome}</td>
+                                    <td><g:formatNumber number="${transacao.valor}" format="#0.00" /></td>
 
-
-
-                            </tr>
-                        </g:each>
+                                    <sec:ifAnyGranted roles="ROLE_PROC">
+                                        <td>
+                                            <g:if test="${transacao.estornavel}">
+                                                <span title="Estornar">
+                                                    <g:link class="undo" action="estornar" id="${transacao.id}"></g:link>
+                                                </span>
+                                            </g:if>
+                                        </td>
+                                    </sec:ifAnyGranted>
+                                </tr>
+                            </g:each>
+                        </g:form>
                         </tbody>
                     </table>
                 </div>
-                <div class="paginateButtons">
+
+                <div class="panel-body">
                     <g:paginate total="${transacaoInstanceTotal}" params="${params}"/>
-
-                </div>
-                <br/>
-                ¹Obs: Não é possível confirmar transações de cancelamento no momento.
-                <div>
-
                 </div>
 
-            </g:form>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-default" form="desfazerConfirmarTransacoes"
+                            onclick="$('input:hidden#tipoAlteracao').val('desfazimento');return confirm('Tem certeza que deseja desfazer as transações selecionadas?');">
+                        <span class="glyphicon glyphicon-remove-sign"></span> Desfazer Selecionados
+                    </button>
+
+                    <button type="submit" class="btn btn-default" form="desfazerConfirmarTransacoes"
+                            onclick="$('input:hidden#tipoAlteracao').val('confirmacao');return confirm('Tem certeza que deseja confirmar as transações selecionadas?');">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Confirmar Selecionados
+                    </button>
+                    <hr>
+                    <strong>¹Obs: Não é possível confirmar transações de cancelamento no momento.</strong>
+                </div>
+            </div>
         </div>
     </div>
 </div>

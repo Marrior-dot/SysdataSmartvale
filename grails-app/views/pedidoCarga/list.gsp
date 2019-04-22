@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga; com.sysdata.gestaofrota.Util" %>
 
 <html>
     <head>
@@ -56,7 +56,7 @@
                                 <g:bootstrapSortableColumn property="dataCarga" title="Data Carga"/>
                                 <g:bootstrapSortableColumn property="total" title="Total" sign="_19"/>
                                 <g:bootstrapSortableColumn property="statusSolicitacaoCarga" title="Status" sign="az"/>
-                                <g:bootstrapSortableColumn property="acoes" title="Ações"/>
+                                <th class="text-center">Ações</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -73,14 +73,14 @@
                                         <td><g:formatReal value="${pedido?.total}"/></td>
                                         <td>${pedido.status}</td>
                                         <td class="text-center">
-                                            <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADM">
-                                                <g:if test="${pedido.status==com.sysdata.gestaofrota.StatusPedidoCarga.NOVO}">
-                                                    <g:link class="btn btn-primary btn-xs" action="liberarPedido" id="${pedido.id}">Liberar</g:link>
+                                            <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
+                                                <g:if test="${pedido.status == StatusPedidoCarga.NOVO}">
+                                                    <g:link class="btn btn-primary btn-sm" action="liberarPedido" id="${pedido.id}" title="Liberar">
+                                                        <i class="glyphicon glyphicon-share"></i>
+                                                    </g:link>
                                                 </g:if>
                                             </sec:ifAnyGranted>
                                         </td>
-
-
                                     </tr>
                                 </g:each>
                             </tbody>
