@@ -69,31 +69,39 @@ thead input {
 </script>
 
 
-<g:if test="${!action || action == Util.ACTION_VIEW}">
-    <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
-        <nav class="buttons">
-            <a class="btn btn-default" href="${createLink(uri: '/')}"><span
-                    class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-            <g:link class="btn btn-default" controller="funcionario"
-                    action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id: unidade_id]">
-                <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
-            </g:link>
-        </nav>
-    </sec:ifAnyGranted>
-</g:if>
-<g:form controller="${controller}">
-    <div class="list">
-        <table id="funcTable"
-               class="table table-striped table-bordered
-               table-hover table-condensed table-default">
-            <thead>
-            <th>ID</th>
-            <th>CPF</th>
-            <th>Nome</th>
-            <th>Matrícula</th>
-            <th>Cartão</th>
-            </thead>
 
-        </table>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>Lista de Funcionários</h4></div>
+    </br>
+    <g:if test="${!action || action == Util.ACTION_VIEW}">
+        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+            <nav class="buttons">
+            %{--<a class="btn btn-default" href="${createLink(uri: '/')}"><span
+                    class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>--}%
+                <g:link class="btn btn-default" style="margin-left: 15px" controller="funcionario"
+                        action="${unidade_id ? 'create' : 'selectRhUnidade'}" params="[unidade_id: unidade_id]">
+                    <span class="glyphicon glyphicon-plus"></span>${g.message(code: 'default.new.label', args: [message(code: 'funcionario.label', default: 'Funcionario')])}
+                </g:link>
+            </nav>
+        </sec:ifAnyGranted>
+    </g:if>
+    <div class="panel-body">
+        <g:form controller="${controller}">
+            <div class="list">
+                <table id="funcTable"
+                       class="table table-striped table-bordered
+               table-hover table-condensed table-default">
+                    <thead>
+                    <th>ID</th>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Cartão</th>
+                    </thead>
+
+                </table>
+            </div>
+        </g:form>6
     </div>
-</g:form>
+</div>
+

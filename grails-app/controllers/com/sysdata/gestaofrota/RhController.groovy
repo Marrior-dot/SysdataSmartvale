@@ -39,8 +39,9 @@ class RhController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
         } else {
+            println "usuario: ${usuario}"
             clearSession()
-            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW, roleRh:roleRh])
+            render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW, roleRh:roleRh, usuario:usuario])
         }
     }
 

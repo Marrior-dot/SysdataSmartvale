@@ -60,7 +60,7 @@
 			<div class="form-group col-md-2">
 				<label for="capacidadeTanque">Capacidade Tanque</label>
 				<div class="input-group">
-					<input type="number" class="form-control" id="capacidadeTanque" name="capacidadeTanque"
+					<input type="number" class="form-control maxValor" id="capacidadeTanque" name="capacidadeTanque"
 						   value="${equipamentoInstance?.capacidadeTanque}" min="0" maxlength="5" required/>
 					<span class="input-group-addon">litros</span>
 				</div>
@@ -69,7 +69,7 @@
 			<div class="form-group col-md-4">
 				<label for="mediaConsumo">Média de Consumo *</label>
 				<div class="input-group">
-					<input type="number" class="form-control" id="mediaConsumo" name="mediaConsumo"
+					<input type="number" class="form-control maxValor" id="mediaConsumo" name="mediaConsumo"
 						   value="${equipamentoInstance?.mediaConsumo}" min="0" maxlength="5" required/>
 					<span class="input-group-addon">litros/dia</span>
 				</div>

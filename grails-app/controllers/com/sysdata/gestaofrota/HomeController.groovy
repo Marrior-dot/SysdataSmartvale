@@ -45,8 +45,9 @@ class HomeController {
         def statusTransacaoRede = [StatusControleAutorizacao.CONFIRMADA, StatusControleAutorizacao.NEGADA, StatusControleAutorizacao.DESFEITA, StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CANCELADA]
         def data = new ChartModel()
         def isMaster =  SpringSecurityUtils.ifAnyGranted('ROLE_PROC')
+        def isAdm =  SpringSecurityUtils.ifAnyGranted('ROLE_ADMIN')
         statusTransacaoRede.each { status ->
-            if ((isMaster || status == StatusControleAutorizacao.CONFIRMADA)) {
+            if ((isMaster || isAdm || status == StatusControleAutorizacao.CONFIRMADA)) {
                 def serie = new DataSet(data)
                 serie.label = "Valores"
                 data.addDataSet(serie)

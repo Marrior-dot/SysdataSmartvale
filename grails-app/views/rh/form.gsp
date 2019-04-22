@@ -5,6 +5,9 @@
     <meta name="layout" content="layout-restrito"/>
     <g:set var="entityName" value="Empresa"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
+    <script type="application/javascript">
+        console.log("usuario: ${usuario.authorities.authority}")
+    </script>
 </head>
 <body>
 <br/>
@@ -69,7 +72,7 @@
 
                             <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
                                 <div class="tab-pane" id="fechamentos">
-                                    <g:render template="/fechamento/tab" model="[rhInstance: rhInstance]"/>
+                                    <g:render template="/fechamento/tab" model="[rhInstance: rhInstance, usuario:usuario]"/>
                                 </div>
                             </g:if>
                         </div>

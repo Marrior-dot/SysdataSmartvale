@@ -36,6 +36,9 @@ function configInputMasks() {
 	$('.percentual').mask('000.00 %');
 	$('.money').maskMoney({prefix: 'R$ ', decimal: ',', thousands: '.', affixesStay: false});
 	$(".placa").mask("AAA-9999", {placeholder: "___-____"});
+	$(".anoFabricacao").mask("9999");
+	$(".maxValor").mask("99999");
+	$(".hodometro").mask("999999999");
 
 	$('.only-numbers').keyup(function () {
 		var n = this.value.replace(/[^0-9\.]/g, '');

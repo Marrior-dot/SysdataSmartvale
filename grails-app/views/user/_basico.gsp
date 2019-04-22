@@ -163,12 +163,18 @@
 				</g:if>
 				<g:if test="${action in [Util.ACTION_VIEW]}">
 					<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
-					<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<sec:ifAnyGranted roles='ROLE_ADMIN,ROLE_MASTER'>
+						<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					</sec:ifAnyGranted>
 				</g:if>
 				<g:if test="${action in [Util.ACTION_EDIT]}">
 					<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-					<g:actionSubmit class="btn btn-default" action="show" value="${message(code: 'default.button.cancel.label', default: 'Cancelar')}" onclick="return confirm('${message(code: 'default.button.cancel.confirm.message', default: 'Are you sure?')}');" />
-					<button type="reset" class="btn btn-default pull-right">Cancelar</button>
+					<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
+						<g:actionSubmit class="btn btn-default" action="meusDados" value="${message(code: 'default.button.cancel.label', default: 'Cancelar')}" onclick="return confirm('${message(code: 'default.button.cancel.confirm.message', default: 'Are you sure?')}');" />
+					</g:if>
+                    <g:else>
+                        <g:actionSubmit class="btn btn-default" action="show" value="${message(code: 'default.button.cancel.label', default: 'Cancelar')}" onclick="return confirm('${message(code: 'default.button.cancel.confirm.message', default: 'Are you sure?')}');" />
+                    </g:else>
 				</g:if>
 			</div>
 		</g:form>

@@ -33,21 +33,30 @@
                         <span class="glyphicon glyphicon-floppy-save"></span>
                         <g:message code="default.button.update.label"/>
                     </button>--}%
-
-
                 </g:if>
-				<g:if test="${action==Util.ACTION_VIEW}">
-                    <g:link class="btn btn-default" action="edit" resource="${unidadeInstance}" id="${unidadeInstance?.id}">
-                        <span class="glyphicon glyphicon-edit"></span>
-                        <g:message code="default.button.edit.label" default="Edit"/>
-                    </g:link>
-
-                    <button type="submit" class="btn btn-default"  onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                        <span class="glyphicon glyphicon-floppy-remove"></span>
-                        <g:message code="default.button.delete.label"/>
-                    </button>
-                </g:if>
-			</fieldset>
-		</div>
-	</div>
 </g:form>
+<g:form  controller="unidade" action="delete" id="${unidadeInstance?.id}" method="delete">
+
+    <g:if test="${action==Util.ACTION_VIEW}">
+        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+                <g:link type="button" class="btn btn-default" action="edit" resource="${unidadeInstance}" id="${unidadeInstance?.id}">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <g:message code="default.button.edit.label" default="Edit"/>
+                </g:link>
+
+
+            <button type="submit" class="btn btn-default"  onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                <span class="glyphicon glyphicon-floppy-remove"></span>
+                <g:message code="default.button.delete.label"/>
+            </button>
+        </sec:ifAnyGranted>
+            </g:if>
+
+</g:form>
+
+        </fieldset>
+    </div>
+</div>
+
+
+
