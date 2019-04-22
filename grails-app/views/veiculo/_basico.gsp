@@ -87,7 +87,11 @@
                               value="${veiculoInstance?.tipoAbastecimento}"/>
                 </div>
             </div>
+
+
+
             <div class="row">
+
                 <div class="col-md-3">
                     <label for="validadeExtintor">Validade Extintor</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"

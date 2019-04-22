@@ -1,6 +1,5 @@
 <script type="application/javascript">
     function editar(){
-        console.log($("input#hodometro"))
         $("input#hodometro").removeAttr("disabled");
         $("button#editarHodometro").hide()
         $("button#salvarHodometro").show()
@@ -25,7 +24,7 @@
             <div class="row">
 
                 <div class="col-xs-4">
-                    <bs:formField id="hodometro" class="hodometro" type="number" name="hodometro" label="Última Leitura" value="${veiculoInstance?.hodometro ?: 0}"></bs:formField>
+                    <bs:formField id="hodometro" class="hodometro" type="number" name="hodometro" label="Última Leitura" value="${veiculoInstance?.hodometroAtualizado ?: 0}"></bs:formField>
                 </div>
             </div>
 

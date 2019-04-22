@@ -8,20 +8,36 @@ import org.springframework.http.HttpStatus
 class MaquinaMotorizadaController {
 
     def listFuncionariosJSON() {
-        MaquinaMotorizada maquinaInstance = MaquinaMotorizada.get(params.long('id'))
-        def funcionariosList = maquinaInstance.funcionarios.collect { f ->
-            [
-                    id       : f.funcionario.id,
-                    matricula: f.funcionario.matricula,
-                    nome     : f.funcionario.nome,
-                    cpf      : f.funcionario.cpf,
-                    acao     : "<a href='#' onclick='removeFuncionario(${f.funcionario.id});'>" +
-                            "<img src='${resource(dir: 'images', file: 'remove_person.png')}' alt='Remover'>" +
-                            "</a>"
-            ]
+
+        println "params: ${params}"
+        MaquinaMotorizada maquinaInstance
+        if(params?.instance == "Veiculo"){
+             maquinaInstance = Veiculo.get(params.long('id'))
+        }else{
+             maquinaInstance = Equipamento.get(params.long('id'))
         }
-        def data = [totalRecords: funcionariosList.size(), results: funcionariosList.sort { it.nome }]
-        render data as JSON
+
+        println "maquina: ${maquinaInstance}"
+
+        def funcionariosList
+        def data
+        if(maquinaInstance?.funcionarios!= null){
+            funcionariosList = maquinaInstance?.funcionarios?.collect { f ->
+                [
+                        id       : f.funcionario.id,
+                        matricula: f.funcionario.matricula,
+                        nome     : f.funcionario.nome,
+                        cpf      : f.funcionario.cpf,
+                        acao     : "<a href='#' onclick='removeFuncionario(${f.funcionario.id});'>" +
+                                "<img src='${resource(dir: 'images', file: 'remove_person.png')}' alt='Remover'>" +
+                                "</a>"
+                ]
+            }
+            data = [totalRecords: funcionariosList.size()?:0, results: funcionariosList?.sort { it.nome }]
+        }else{
+            data = [totalRecords: 0, results: []]
+        }
+       render data as JSON
     }
 
     def addFuncionario = {

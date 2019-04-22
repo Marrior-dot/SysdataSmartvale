@@ -179,7 +179,7 @@
 			</div>
 		</g:form>
 
-		<sec:ifAnyGranted roles='ROLE_ADMIN'>
+		<sec:ifAnyGranted roles='ROLE_PROC'>
 			<form action='${request.contextPath}/j_spring_security_switch_user' method='POST'>
 				<input class="btn btn-primary" type='submit' value='Logar'/>
 				<input type='hidden' name='j_username' value="${userInstance?.username}"/> <br/>

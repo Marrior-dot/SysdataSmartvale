@@ -41,9 +41,14 @@ class PortadorService {
     }
 
     PortadorMaquina save(MaquinaMotorizada maquina, params) {
-
-        if (!maquina.save()) throw new RuntimeException(maquina.showErrors())
-
+        println "entrou no portador"
+        try {
+            maquina.save()
+        }catch (Exception e){
+            println "Deu erro: ${e}"
+        }
+        //if (!maquina.save()) throw new RuntimeException(maquina.showErrors())
+        println "passou do save"
         PortadorMaquina portadorMaquina = new PortadorMaquina()
         portadorMaquina.unidade = maquina.unidade
         portadorMaquina.maquina = maquina

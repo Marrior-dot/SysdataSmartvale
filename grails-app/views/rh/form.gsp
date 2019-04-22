@@ -5,13 +5,9 @@
     <meta name="layout" content="layout-restrito"/>
     <g:set var="entityName" value="Empresa"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
-    <script type="application/javascript">
-        console.log("usuario: ${usuario.authorities.authority}")
-    </script>
 </head>
 <body>
 <br/>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4><g:message code="default.create.label" args="[entityName]"/> - [${action}]</h4>
