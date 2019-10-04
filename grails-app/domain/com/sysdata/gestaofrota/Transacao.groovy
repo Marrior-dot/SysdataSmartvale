@@ -26,6 +26,7 @@ class Transacao {
     String codigoEquipamento
     BigDecimal taxaAdm
     BigDecimal valorReembolso
+    BigDecimal qtd_litros
 
     static belongsTo = [participante: Participante]
 
@@ -55,6 +56,7 @@ class Transacao {
         codigoEquipamento nullable: true
         taxaAdm nullable: true
         valorReembolso nullable: true
+        qtd_litros nullable: true
     }
 
 

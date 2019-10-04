@@ -10,7 +10,7 @@
         tabelaFuncionariosHabilitados = $("table#funcionariosHabilitados").DataTable({
             "ajax": {
                 "url": "${createLink(controller:'maquinaMotorizada', action:'listFuncionariosJSON')}",
-                "data": {"id": ${instance?.id}},
+                "data": {"id": ${instance?.id},"instance":'${instanceName}'},
                 "dataSrc": "results"
             },
             "columns": [

@@ -49,7 +49,10 @@ class VeiculoController extends BaseOwnerController {
     }
 
     def save = {
+
+        println "entrou aqui"
         Veiculo veiculoInstance = new Veiculo(params)
+        println "não passou"
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
         if (unidadeInstance != null) {
@@ -57,11 +60,11 @@ class VeiculoController extends BaseOwnerController {
                 veiculoInstance.unidade = unidadeInstance
 
                 if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
+                    MaquinaMotorizada veiculo = veiculoInstance.save flush: true
+                    PortadorMaquina portadorMaquina = portadorService.save(veiculo,params)
 
-                    PortadorMaquina portadorMaquina = portadorService.save(veiculoInstance,params)
-                    if (veiculoInstance.hasErrors()) throw new Exception(veiculoInstance.showErrors())
-                    veiculoInstance.save flush: true
 
+                    println "chegou aqui asda"
                     if(portadorMaquina.unidade.rh.cartaoComChip){
                         cartaoService.gerar(portadorMaquina)
                     }else{

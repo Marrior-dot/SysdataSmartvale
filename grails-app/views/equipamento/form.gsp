@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="tab-pane" id="tab2">
-                            <g:render template="/maquinaMotorizada/funcionarios" model="${[instance: equipamentoInstance, instanceName: 'Equipamento']}"/>
+                            <g:render template="/maquinaMotorizada/funcionarios" model="${[instance: equipamentoInstance, instanceName: "Equipamento"]}"/>
                         </div>
                     </div>
                 </div>
