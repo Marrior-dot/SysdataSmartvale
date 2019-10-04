@@ -4,7 +4,8 @@ enum TipoAdministradoraCartao {
     SYSDATA("Sysdata"),
     MAXCARD("Max Card"),
     AMAZONCARD("Amazon Card"),
-    LASA("Lasa")
+    LASA("Lasa"),
+    BANPARA("Banpara")
 
 
     String nome
