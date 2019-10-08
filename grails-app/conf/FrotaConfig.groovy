@@ -34,15 +34,15 @@ environments {
     }
 
     homologation {
-        nome = "Maxxcard"
+        nome = "Banpara"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/banpara_homologation"
+        url = "jdbc:postgresql://192.168.250.41/maxxcard_homologation"
         password = "postgres"
         // ** DATABASE **
 
@@ -52,8 +52,8 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#f63535"
-        corSecundaria = "#f2b941"
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
     }
 }
 
