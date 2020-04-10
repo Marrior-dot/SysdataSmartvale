@@ -11,15 +11,15 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "Maxxcard"
+        nome = "Banpara"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://localhost/maxxcard_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banpara_development"
         password = "postgres"
         // ** DATABASE **
 
@@ -27,17 +27,17 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "maxxcard"
+        pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#f63535"
-        corSecundaria = "#f2b941"
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
     }
 
     homologation {
-        nome = "Maxxcard"
+        nome = "Banpara"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
@@ -50,10 +50,10 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "maxxcard"
+        pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#f63535"
-        corSecundaria = "#f2b941"
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
     }
 }
 
