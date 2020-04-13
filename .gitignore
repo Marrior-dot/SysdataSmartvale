@@ -12,3 +12,5 @@ Thumbs.db
 *.sql
 
 grails-app/conf/FrotaConfig\.groovy
+
+fleet3/gradle/wrapper/
