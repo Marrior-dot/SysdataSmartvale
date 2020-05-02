@@ -11,12 +11,16 @@ class User implements Serializable {
 
     private static final long serialVersionUID = 1
 
+    String name
     String username
     String password
+    String email
     boolean enabled = true
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
+
+    Participante owner
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
@@ -25,6 +29,8 @@ class User implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
+        name nullable: true
+        email nullable: true, email: true
     }
 
     static mapping = {

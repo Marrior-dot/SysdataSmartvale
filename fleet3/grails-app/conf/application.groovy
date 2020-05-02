@@ -106,7 +106,6 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
 
-
 grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/',               access: ['permitAll']],
         [pattern: '/error',          access: ['permitAll']],
@@ -117,8 +116,33 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/**/images/**',   access: ['permitAll']],
         [pattern: '/**/favicon.ico', access: ['permitAll']],
 
-        [pattern: '/login/**',       access: ['permitAll']],
-        [pattern: '/logout/**',      access: ['permitAll']],
-        [pattern: '/dashboard/**',   access: ['IS_AUTHENTICATED_FULLY']]
+        [pattern: '/login/**',              access: ['permitAll']],
+        [pattern: '/logout/**',             access: ['permitAll']],
+        [pattern: '/dashboard/**',          access: ['IS_AUTHENTICATED_FULLY']],
+        [pattern: '/rh/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/unidade/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/funcionario/**',        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/postoCombustivel/**',   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/cartao/**',             access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/pedidoCarga/**',        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/transacao/**',          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/endereco/**',           access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+
+
+        [pattern: '/produto/**',            access: ['ROLE_PROC']],
+        [pattern: '/marcaVeiculo/**',       access: ['ROLE_PROC']],
+        [pattern: '/tipoEquipamento/**',    access: ['ROLE_PROC']],
+        [pattern: '/motivoNegacao/**',      access: ['ROLE_PROC']],
+        [pattern: '/user/**',               access: ['ROLE_PROC']],
+        [pattern: '/role/**',               access: ['ROLE_PROC']],
+
+
+
+        [pattern: '/console/**',        access: ['ROLE_PROC']],
+        [pattern: "/static/console/**", access: ['ROLE_PROC']]
+
+
 
 ]
+
+

@@ -14,4 +14,8 @@ enum TipoCobranca {
     String getKey() {
         name()
     }
+
+    static def list() {
+        [TipoCobranca.PRE_PAGO]
+    }
 }

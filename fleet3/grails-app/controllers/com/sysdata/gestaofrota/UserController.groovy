@@ -2,8 +2,6 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 
-
-//@Secured(["ROLE_PROC", "ROLE_ADMIN"])
 class UserController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -81,21 +79,15 @@ class UserController extends BaseOwnerController {
 
     }
 
-    def create = {
+    def create() {
         def userInstance = new User()
         userInstance.properties = params
-
         render(view: 'form', model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
-
-
     }
 
-    def save = {
-
+    def save() {
         def userInstance = new User(params)
-
         userInstance.enabled = true
-
         if (params.password == params.confirmPassword) {
 
             def roleInstance = Role.get(params.role)
@@ -119,7 +111,7 @@ class UserController extends BaseOwnerController {
 
     }
 
-    def show = {
+    def show() {
         User userInstance = User.get(params.long('id'))
         if (!userInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
@@ -132,7 +124,7 @@ class UserController extends BaseOwnerController {
         render(view: 'form', model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_VIEW, ownerList: listOwners()])
     }
 
-    def edit = {
+    def edit() {
         def userInstance = User.get(params.id)
         if (!userInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
@@ -143,7 +135,7 @@ class UserController extends BaseOwnerController {
         }
     }
 
-    def update = {
+    def update() {
         def userInstance = User.get(params.id)
         if (userInstance) {
             if (params.version) {
@@ -173,7 +165,7 @@ class UserController extends BaseOwnerController {
         }
     }
 
-    def delete = {
+    def delete() {
         def userInstance = User.get(params.id)
         if (userInstance) {
             try {
@@ -191,12 +183,12 @@ class UserController extends BaseOwnerController {
         }
     }
 
-    def editPassword = {
+    def editPassword() {
         def currentUser = springSecurityService.currentUser
         [userInstance: currentUser]
     }
 
-    def saveNewPassword = {
+    def saveNewPassword() {
         def userInstance = User.get(params.id)
 
         def currentPassword = params.currentPassword
@@ -218,7 +210,7 @@ class UserController extends BaseOwnerController {
         }
     }
 
-    def meusDados = {
+    def meusDados() {
         User userInstance = User.get(params.long('id'))
         if (!userInstance?.owner) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participante.label', default: 'Participante'), params.id])}"
@@ -266,8 +258,6 @@ class UserController extends BaseOwnerController {
         def roles = Role.withCriteria {
             eq("owner", params.classe)
         }
-
         render roles as JSON
-
     }
 }

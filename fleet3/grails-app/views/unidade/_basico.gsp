@@ -6,33 +6,26 @@
     <g:hiddenField name="action" value="${action}"/>
     <g:hiddenField name="rhId" value="${rhInstance?.id}"/>
 
-	<div class="panel panel-default">
+	<div class="panel panel-default panel-top">
 		<div class="panel-heading">Dados Básicos</div>
 
 		<div class="panel-body">
-
             <div class="row">
                 <g:if test="${action == Util.ACTION_VIEW}">
-                    <div class="col-xs-2">
-                        <bs:formField id="id" name="id" label="Código" class="id" value="${unidadeInstance?.id}" />
+                    <div class="col-md-2">
+                        <bs:formField id="codigo" name="codigo" label="Código" value="${unidadeInstance?.codigo}" />
                     </div>
                 </g:if>
 
-                <div class="col-xs-4">
-                    <bs:formField id="nome" name="nome" label="Nome" class="nome" value="${unidadeInstance?.nome}" />
+                <div class="col-md-4">
+                    <bs:formField id="nome" name="nome" label="Nome" value="${unidadeInstance?.nome}" />
                 </div>
-
             </div>
-
-
-			<fieldset class="buttons">
-				<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-                    <g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}"
-                                    value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    %{--<button type="submit" class="btn btn-default" >
-                        <span class="glyphicon glyphicon-floppy-save"></span>
-                        <g:message code="default.button.update.label"/>
-                    </button>--}%
+			<div class="panel-footer">
+				<g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
+                    <button type="submit" class="btn btn-success" name="_action_${action==Util.ACTION_NEW?'save':'update'}" >
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.create.label" default="Create" ></g:message>
+                    </button>
                 </g:if>
 </g:form>
 <g:form  controller="unidade" action="delete" id="${unidadeInstance?.id}" method="delete">
@@ -45,8 +38,9 @@
                 </g:link>
 
 
-            <button type="submit" class="btn btn-default"  onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                <span class="glyphicon glyphicon-floppy-remove"></span>
+            <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                <span class="glyphicon glyphicon-remove"></span>
                 <g:message code="default.button.delete.label"/>
             </button>
         </sec:ifAnyGranted>
@@ -54,7 +48,7 @@
 
 </g:form>
 
-        </fieldset>
+        </div>
     </div>
 </div>
 

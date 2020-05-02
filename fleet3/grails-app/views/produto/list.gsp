@@ -21,9 +21,7 @@
 				<a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
 				<g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
 			</div>
-			<br>
-			<br>
-			<table class="table table-striped table-bordered table-hover table-condensed" style="font-size: 12px">
+			<table class="table table-striped table-bordered table-hover table-condensed" style="margin-top: 1em;">
 				<thead>
 				<tr>
 

@@ -101,7 +101,7 @@ thead input {
 
                 </table>
             </div>
-        </g:form>6
+        </g:form>
     </div>
 </div>
 

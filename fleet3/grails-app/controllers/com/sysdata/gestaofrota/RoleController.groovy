@@ -1,103 +1,105 @@
 package com.sysdata.gestaofrota
 
-import org.springframework.dao.DataIntegrityViolationException
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
 
-class RoleController extends BaseOwnerController{
+class RoleController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    RoleService roleService
 
-    def index() {
-        redirect(action: "list", params: params)
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond roleService.list(params), model:[roleCount: roleService.count()]
     }
 
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [roleInstanceList: Role.list(params), roleInstanceTotal: Role.count()]
+    def show(Long id) {
+        respond roleService.get(id)
     }
 
     def create() {
-        [roleInstance: new Role(params), ownerList:listOwners()]
+        respond new Role(params)
     }
 
-    def save() {
-        def roleInstance = new Role(params)
-        if (!roleInstance.save(flush: true)) {
-            render(view: "create", model: [roleInstance: roleInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), roleInstance.id])
-        redirect(action: "show", id: roleInstance.id)
-    }
-
-    def show() {
-        def roleInstance = Role.get(params.id)
-        if (!roleInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [roleInstance: roleInstance]
-    }
-
-    def edit() {
-        def roleInstance = Role.get(params.id)
-        if (!roleInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [roleInstance: roleInstance, ownerList:listOwners()]
-    }
-
-    def update() {
-        def roleInstance = Role.get(params.id)
-        if (!roleInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        if (params.version) {
-            def version = params.version.toLong()
-            if (roleInstance.version > version) {
-                roleInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'role.label', default: 'Role')] as Object[],
-                          "Another user has updated this Role while you were editing")
-                render(view: "edit", model: [roleInstance: roleInstance])
-                return
-            }
-        }
-
-        roleInstance.properties = params
-
-        if (!roleInstance.save(flush: true)) {
-            render(view: "edit", model: [roleInstance: roleInstance])
-            return
-        }
-
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'role.label', default: 'Role'), roleInstance.id])
-        redirect(action: "show", id: roleInstance.id)
-    }
-
-    def delete() {
-        def roleInstance = Role.get(params.id)
-        if (!roleInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "list")
+    def save(Role role) {
+        if (role == null) {
+            notFound()
             return
         }
 
         try {
-            roleInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "list")
+            roleService.save(role)
+        } catch (ValidationException e) {
+            respond role.errors, view:'create'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-            redirect(action: "show", id: params.id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), role.id])
+                redirect role
+            }
+            '*' { respond role, [status: CREATED] }
+        }
+    }
+
+    def edit(Long id) {
+        respond roleService.get(id)
+    }
+
+    def update(Role role) {
+        if (role == null) {
+            notFound()
+            return
+        }
+
+        try {
+            roleService.save(role)
+        } catch (ValidationException e) {
+            respond role.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'role.label', default: 'Role'), role.id])
+                redirect role
+            }
+            '*'{ respond role, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+        try {
+            roleService.delete(id)
+        } catch (e) {
+            log.error "Erro ao remover Role:\n $e"
+            flash.message = "Papél não pode ser removido, pois já possui Usuários vinculados"
+            redirect action: 'show', id: id
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'role.label', default: 'Role'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

@@ -7,39 +7,36 @@
     <title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 <body>
-<br/>
-<div class="panel panel-default">
+<div class="panel panel-default panel-top">
     <div class="panel-heading">
         <h4><g:message code="default.create.label" args="[entityName]"/> - [${action}]</h4>
     </div>
 
     <div class="panel-body">
-        <div class="nav">
-            <a class="btn btn-default" href="${createLink(uri: '/')}">
-                <span class="glyphicon glyphicon-home"></span>
-                <g:message code="default.home.label"/>
-            </a>
-            <g:link class="btn btn-default" action="list">
-                <span class="glyphicon glyphicon-list"></span>
-                <g:message code="default.list.label" args="[entityName]"/>
-            </g:link>
-        </div>
-        <hr/>
+        <a class="btn btn-default" href="${createLink(uri: '/')}">
+            <span class="glyphicon glyphicon-home"></span>
+            <g:message code="default.home.label"/>
+        </a>
+        <g:link class="btn btn-default" action="list">
+            <span class="glyphicon glyphicon-list"></span>
+            <g:message code="default.list.label" args="[entityName]"/>
+        </g:link>
 
-        <div class="body">
-            <g:if test="${flash.message}">
-                <div class="alert alert-info">${flash.message}</div>
-            </g:if>
-            <g:if test="${flash.error}">
-                <div class="alert alert-danger">${flash.error}</div>
-            </g:if>
+        <g:if test="${flash.message}">
+            <div class="alert alert-info">${flash.message}</div>
+        </g:if>
+        <g:if test="${flash.error}">
+            <div class="alert alert-danger">${flash.error}</div>
+        </g:if>
+
+        <div class="panel panel-default panel-top">
 
             <g:if test="${action == Util.ACTION_VIEW}">
                 <div class="tabbable"><!-- Only required for left/right tabs -->
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#empresas" data-toggle="tab">Empresa</a></li>
-                        <li><a href="#centroDeCusto" data-toggle="tab">Centro de Custo</a></li>
-                        <li><a href="#perfis" data-toggle="tab">Perfil de Recarga</a></li>
+                        <li><a href="#centroDeCusto" data-toggle="tab">Unidades</a></li>
+                        <li><a href="#perfis" data-toggle="tab">Perfis de Recarga</a></li>
                         <li><a href="#estabelecimentos" data-toggle="tab">Estabelecimentos</a></li>
                         <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
                             <li><a href="#fechamentos" data-toggle="tab">Fechamentos</a></li>

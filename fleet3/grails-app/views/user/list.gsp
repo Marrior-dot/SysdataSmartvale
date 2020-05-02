@@ -22,24 +22,20 @@
             <h4><g:message code="default.list.label" args="[entityName]" /></h4>
         </div>
         <div class="panel-body">
-            <div class="buttons">
-                <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-                <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
-                    <g:actionSubmit class="btn btn-default" action="create" value="Novo Usuário"/>
-                </sec:ifAnyGranted>
-                <g:link action="create" class="btn btn-default">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Novo Usuário
-                </g:link>
+            <a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
+            <sec:ifAnyGranted roles="['ROLE_ADMIN', 'ROLE_PROC']">
+                <g:actionSubmit class="btn btn-default" action="create" value="Novo Usuário"/>
+            </sec:ifAnyGranted>
+            <g:link action="create" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus"></span>
+                Novo Usuário
+            </g:link>
 
-            </div>
-            <div class="body">
-                <g:if test="${flash.message}">
-                    <div class="message">${flash.message}</div>
-                </g:if>
+            <g:if test="${flash.message}">
+                <div class="message">${flash.message}</div>
+            </g:if>
 
-                <g:render template="search" model="[controller:'user']"/>
-            </div>
+            <g:render template="search" model="[controller:'user']"/>
         </div>
     </div>
 

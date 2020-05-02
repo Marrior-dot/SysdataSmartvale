@@ -23,7 +23,28 @@ abstract class MaquinaMotorizada {
     static mapping = {
         id generator: 'sequence', params: [sequence: 'maquina_seq']
     }
+
     static transients = ['nomeEmbossing']
+
+    static namedQueries = {
+
+        countMaquinasRh { Rh rh ->
+            projections {
+                rowCount("id")
+            }
+            unidade {
+                eq("rh", rh)
+            }
+        }
+
+        countMaquinasUnidade { Unidade unidade ->
+            projections {
+                rowCount("id")
+            }
+            eq("unidade", unidade)
+        }
+    }
+
 
     @Override
     String toString() {

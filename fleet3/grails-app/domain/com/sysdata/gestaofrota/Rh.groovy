@@ -3,7 +3,6 @@ package com.sysdata.gestaofrota
 import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
 
 class Rh extends Empresa {
-    String codigo
     Integer validadeCarga = 0
     Integer maximoTrnPorDia = 0
     Integer diasInatividade = 0
@@ -33,10 +32,12 @@ class Rh extends Empresa {
     ]
 
     static constraints = {
-        codigo nullable: false, blank: false
+        unidades lazy: false
     }
 
     static transients = ['portadoresCount', "corteAberto", "funcionariosCount", "veiculosCount"]
+
+
 
     String toString() {
         "${codigo} - ${nome}"
@@ -47,16 +48,16 @@ class Rh extends Empresa {
 //        flat
     }
 
-    int getPortadoresCount() {
-        unidades?.sum { it.portadores.size() } ?: 0
-    }
+//    int getPortadoresCount() {
+//        unidades?.sum { it.portadores.size() } ?: 0
+//    }
 
     int getFuncionariosCount() {
-        this.unidades.sum{it.funcionariosCount}?:0
+        Funcionario.countFuncionariosRh(this).get()
     }
 
     int getVeiculosCount() {
-        this.unidades.sum{it.veiculosCount}?:0
+        MaquinaMotorizada.countMaquinasRh(this).get()
     }
 
     Corte getCorteAberto() {

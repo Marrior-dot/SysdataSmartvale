@@ -8,11 +8,11 @@ class RhController extends BaseOwnerController {
 
     def rhService
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id', 'desc')
@@ -21,7 +21,7 @@ class RhController extends BaseOwnerController {
         [rhInstanceList: rhInstanceList, rhInstanceTotal: Rh.count()]
     }
 
-    def create = {
+    def create() {
         render(view: 'form', model: [action: Util.ACTION_NEW, rhInstance: new Rh()])
     }
 
@@ -39,39 +39,20 @@ class RhController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
         } else {
-            println "usuario: ${usuario}"
             clearSession()
             render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW, roleRh:roleRh, usuario:usuario])
         }
     }
 
     def save(Rh rhInstance) {
-        rhInstance.endereco = params['endereco']
-        rhInstance.telefone = params['telefone']
-        println "params: ${params}"
-
         try {
-            rhInstance.jurosProRata = params.jurosProRata as BigDecimal
-            rhInstance.taxaPedido = params.taxaPedido as BigDecimal
-            rhInstance.taxaUtilizacao = params.taxaUtilizacao as BigDecimal
-            rhInstance.taxaMensalidade = params.taxaMensalidade as BigDecimal
-            rhInstance.taxaEmissaoCartao = params.taxaEmissaoCartao as BigDecimal
-            rhInstance.taxaReemissaoCartao = params.taxaReemissaoCartao as BigDecimal
-            rhInstance.taxaAdministracao = params.taxaAdministracao as BigDecimal
-            rhInstance.taxaManutencao = params.taxaManutencao as BigDecimal
-            rhInstance.multaAtraso = params.multaAtraso as BigDecimal
-            rhInstance = rhService.save(rhInstance)
+            rhInstance.save(flush: true)
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
             redirect(action: 'show', id: rhInstance.id)
         }
-        catch (RuntimeException e) {
+        catch (e) {
             e.printStackTrace()
             flash.error = e.message
-            render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
-        }
-        catch (Exception e) {
-            e.printStackTrace()
-            flash.error = "Um erro ocorreu"
             render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
         }
     }
@@ -88,52 +69,17 @@ class RhController extends BaseOwnerController {
 
     def update() {
         Rh rhInstance = Rh.get(params.long('id'))
-
         if (rhInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (rhInstance.version > version) {
-                    rhInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Another user has updated this Rh while you were editing")
-                    flash.error = "Outro usuario alterou este Centro de Custo enquanto você estava alterando."
-                    render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
-                    return
-                }
-            }
-            println "params: ${params}"
-            if((rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0) && params.containsKey('modeloCobranca')){
-                println "Entrou no erro modelo"
-                rhInstance.errors.rejectValue("modeloCobranca", "default.optimistic.locking.failure", [message(code: 'rh.label', default: 'Programa')] as Object[], "Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados.")
-                flash.error = "Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados."
-                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
-                return
-            }
-
-            if(params.containsKey('vinculoCartao') || params.containsKey('cartaoComChip') || params.containsKey('renovarLimite')){
-                println "Entrou no erro vinculo"
-                flash.error = "Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados."
-                render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
-            }
-
+            rhInstance.properties = params
             try {
-
-                def juros = params.jurosProRata as BigDecimal
-                rhInstance.properties = params
-                rhInstance.jurosProRata = juros
-                rhInstance.save()
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-                redirect(action: 'show', id: rhInstance.id)
-            }
-            catch (InvalidPropertiesFormatException e) {
+                rhService.update(rhInstance)
+            } catch (e) {
                 e.printStackTrace()
                 flash.error = e.message
-                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
             }
-            catch (Exception e) {
-                e.printStackTrace()
-                flash.error = "Um erro ocorreu"
-                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
-            }
-
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
+            redirect(action: 'show', id: rhInstance.id)
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Programa'), params.id])}"
             redirect(action: "list")
@@ -142,11 +88,9 @@ class RhController extends BaseOwnerController {
 
     def delete() {
         def rhInstance = Rh.get(params.long('id'))
-        println("id: ${rhInstance.id}")
-
         if (rhInstance) {
-            rhService.inativar(rhInstance)
-            flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
+            def msg = rhService.delete(rhInstance)
+            flash.message = msg
             redirect(action: "list")
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
@@ -154,7 +98,7 @@ class RhController extends BaseOwnerController {
         }
     }
 
-    def autoCompleteJSON = {
+    def autoCompleteJSON() {
 
         def list
         withSecurity { ownerList ->
@@ -178,7 +122,7 @@ class RhController extends BaseOwnerController {
         render jsonResult as JSON
     }
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 0
         def opcao
@@ -238,12 +182,11 @@ class RhController extends BaseOwnerController {
         }
 
         def fields = rhInstanceList.collect { r ->
-            [id      : r.id,
-             codigo  : r.codigo,
-             razao   : "<a href=${createLink(action: 'show')}/${r.id}>" + r.nome + "</a>",
-             fantasia: r.nomeFantasia,
-             cnpj    : r.cnpj,
-             acao    : "<a class='show' href=${createLink(action: 'show')}/${r.id}></a>"]
+            [   id      : r.id,
+                razao   : r.nome,
+                fantasia: r.nomeFantasia,
+                cnpj    : """<a href='${createLink(action: 'show', id: r.id)}'>${r.cnpj}</a>"""
+            ]
         }
 
         def data = [totalRecords: rhInstanceTotal, results: fields]

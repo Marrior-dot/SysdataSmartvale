@@ -11,11 +11,11 @@ class UnidadeController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         redirect(controller: 'rh', action: 'show', params: [id: params.rhId])
     }
 
@@ -35,14 +35,12 @@ class UnidadeController {
         }
     }
 
-    def create = {
-        println "chegou aqui"
+    def create() {
         def rhInstance = Rh.get(params.rhId)
         render(view: 'form', model: [action: Util.ACTION_NEW, rhInstance: rhInstance])
     }
 
-    def save = {
-        log.debug("teste" + params.rhId)
+    def save() {
         if (params.rhId) {
             def rhId = params.rhId
             def unidadeInstance = new Unidade(params)
@@ -55,13 +53,12 @@ class UnidadeController {
                 render(view: "form", model: [unidadeInstance: unidadeInstance, rhInstance: unidadeInstance.rh, action: Util.ACTION_NEW])
             }
         } else {
-            log.error "ERRO INTERNO: Unidade não relacionada a um Rh específico!"
+            log.error "Unidade não relacionada a um Rh específico!"
             redirect(action: "list")
         }
     }
 
-    def show = {
-        println params
+    def show() {
         def unidadeInstance = Unidade.get(params.id)
         if (!unidadeInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
@@ -71,7 +68,7 @@ class UnidadeController {
         }
     }
 
-    def edit = {
+    def edit() {
         def unidadeInstance = Unidade.get(params.id)
         if (!unidadeInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade'), params.id])}"
@@ -81,7 +78,7 @@ class UnidadeController {
         }
     }
 
-    def update = {
+    def update() {
         def unidadeInstance = Unidade.get(params.id)
         if (unidadeInstance) {
             if (params.version) {
@@ -106,41 +103,19 @@ class UnidadeController {
         }
     }
 
-    def delete = {
-        println "entrou: ${params}"
+    def delete() {
         def unidadeInstance = Unidade.get(params.id)
-        println "unidade: ${unidadeInstance}"
-        def equipamento = Equipamento.findByUnidade(unidadeInstance)
-        println "equip: ${equipamento}"
-        def funcionarios = Funcionario.findByUnidade(unidadeInstance)
-        println "func: ${funcionarios}"
-        def veiculos = Veiculo.findByUnidade(unidadeInstance)
-        println "veic: ${veiculos}"
         if (unidadeInstance) {
-
-            if(funcionarios==null && veiculos==null && equipamento==null) {
-                println "não tem funcionarios, veiculos e equipamentos"
-                 def rhId = unidadeInstance.rh.id
-                 def nomeUnidade = unidadeInstance.nome
-                 println "rhId: ${rhId}"
-                 unidadeInstance.rh.removeFromUnidades(unidadeInstance)
-                 unidadeInstance.delete(flush: true)
-                 flash.message = "Centro de custo ${nomeUnidade} removido com sucesso."
-                 redirect(controller: 'rh', action: 'show', params: [id: rhId])
-            }else{
-                println "possui dados vinculados a unidade"
-                flash.message = "Não é possível remover um centro de custo que possui vinculo com funcionários, veículos ou equipamentos."
-                redirect(action: "show", params: [id: unidadeInstance.id])
-
-            }
+            def ret = unidadeService.delete(unidadeInstance)
+             flash.message = ret.message
+             redirect(controller: 'rh', action: 'show', params: [id: unidadeInstance.rh.id])
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade')])}"
             redirect(action: "list")
         }
     }
 
-//    @Secured(['IS_AUTHENTICATED_FULLY'])
-    def autoCompleteJSON = {
+    def autoCompleteJSON() {
         long rhId = params?.long('rhId') ?: 0
         def list = Unidade.withCriteria {
             rh { idEq(rhId) }
@@ -154,7 +129,7 @@ class UnidadeController {
         render jsonResult as JSON
     }
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 0
         def opcao
@@ -214,7 +189,7 @@ class UnidadeController {
         render data as JSON
     }
 
-    def generateCartaSenha = {
+    def generateCartaSenha() {
         def unidadeInstance = Unidade.get(params.id)
 
         try {

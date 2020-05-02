@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+    font-size: 12px;
 }
 
 #nav-top.navbar-static-top {
@@ -19,4 +20,16 @@ html, body {
 
 #page-wrapper {
     background-color: #f6f6f6;
+}
+
+.table {
+    font-size: 12px;
+}
+
+.table-list {
+    margin-top: 1em;
+}
+
+.panel-top {
+    margin-top: 2em;
 }

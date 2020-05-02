@@ -3,7 +3,6 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 
-//@Secured(['IS_AUTHENTICATED_FULLY'])
 class FuncionarioController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -11,11 +10,11 @@ class FuncionarioController extends BaseOwnerController {
     def funcionarioService
     def processamentoService
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         Participante participanteInstance = getCurrentUser()?.owner
         Unidade unidadeInstance = null
         if (participanteInstance?.instanceOf(Rh)) {
@@ -36,21 +35,21 @@ class FuncionarioController extends BaseOwnerController {
         [funcionarioInstanceList: funcionarioInstanceList, funcionarioInstanceTotal: Rh.count()]
     }
 
-    def selectRhUnidade = {
+    def selectRhUnidade() {
         render(view: '/selectRhUnidade', model: [controller: "funcionario", action: Util.ACTION_NEW])
     }
 
-    def sugestoes = {
+    def sugestoes() {
         try {
             def sugestoes = funcionarioService.sugestoes(params?.nome)
             render([sug: sugestoes] as JSON)
-        }catch (e){
+        } catch (e){
             println(e.message)
             render(['erro'] as JSON)
         }
     }
 
-    def create = {
+    def create() {
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (unidadeInstance) {
             if (CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
@@ -70,7 +69,7 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def save = {
+    def save() {
         Funcionario funcionarioInstance = new Funcionario(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
@@ -168,7 +167,7 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.start ?: 0
         def opcao

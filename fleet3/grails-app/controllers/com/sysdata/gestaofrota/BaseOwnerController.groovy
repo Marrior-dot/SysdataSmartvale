@@ -4,7 +4,7 @@ class BaseOwnerController {
     def springSecurityService
 
     def withSecurity = { cls ->
-        def userInstance = springSecurityService.currentUser
+        User userInstance = springSecurityService.currentUser
 
         def ownerList = []
 
@@ -28,8 +28,6 @@ class BaseOwnerController {
 
     def listOwners() {
         def userInstance = springSecurityService.currentUser
-        println userInstance.owner
-
         def ownerList = []
 
         if (userInstance?.owner?.instanceOf(Rh)) {
@@ -44,9 +42,6 @@ class BaseOwnerController {
             ownerList += Rh.all
             ownerList += PostoCombustivel.all
         }
-
-        println ownerList
-
         ownerList
 
     }

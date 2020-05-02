@@ -45,7 +45,7 @@
 				<g:set var="bloquearModCob" value="${action == Util.ACTION_EDIT && (rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0)}"/>
 				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
 					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
-					<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.values()}" class="form-control"
+					<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.list()}" class="form-control"
 							  optionValue="nome" value="${rhInstance?.modeloCobranca}" onchange="alterarModeloCobranca()"
 							  aria-describedby="modelo-cobranca" disabled="${bloquearModCob}" required="required"/>
 				<g:if test="${bloquearModCob}">
@@ -55,11 +55,48 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField class="uppercase" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
+					<bs:formField class="form-control" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
 				</div>
 
 				<div class="col-md-6">
-					<bs:formField class="uppercase" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
+					<bs:formField class="form-control" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Cartão</div>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
+					<label class="control-label" for="vinculoCartao">Vincular Cartão a:</label>
+
+					<div class="input-group">
+						<g:if test="${action == Util.ACTION_VIEW}">
+							<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled
+								   value="${rhInstance?.vinculoCartao}" aria-describedby="vinculo-cartao"/>
+						</g:if>
+						<g:else>
+							<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
+									  disabled="${bloquearModCob}" class="form-control" aria-describedby="vinculo-cartao"
+									  optionKey="key" value="${rhInstance?.vinculoCartao}"/>
+						</g:else>
+						<span class="input-group-addon">
+							<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip || action == Util.ACTION_NEW ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
+							<strong>Cartão com chip</strong>
+						</span>
+						%{--
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
+                                                    <strong>Renovar Limite</strong>
+                                                </span>
+                        --}%
+					</div>
+					<g:if test="${bloquearModCob}">
+						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
+					</g:if>
 				</div>
 			</div>
 		</div>
@@ -73,11 +110,9 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Taxa Pedido *</label>
 					<div class="input-group">
-						<input type="number" class="form-control" name="taxaPedido" id="taxaPedido" value="${rhInstance?.taxaPedido}"
-							   min="0" max="100" step="0.01" required/>
-						<span class="input-group-addon">%</span>
+						<bs:formField name="taxaPedido" label="Taxa Pedido" class="form-control percentual" value="${rhInstance?.taxaPedido}"
+									  required="true"></bs:formField>
 					</div>
 				</div>
 
@@ -100,7 +135,7 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
 					<div class="input-group">
-						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
+						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" action == Util.ACTION_VIEWclass="form-control"
 							   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
 						<span class="input-group-addon">dias</span>
 					</div>
@@ -141,40 +176,6 @@
 
 	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
 
-	<div class="panel panel-default">
-		<div class="panel-heading">Cartão</div>
-
-		<div class="panel-body">
-			<div class="row">
-				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
-					<label class="control-label" for="vinculoCartao">Vincular Cartão a:</label>
-
-					<div class="input-group">
-						<g:if test="${action == Util.ACTION_VIEW}">
-							<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled
-								   value="${rhInstance?.vinculoCartao}" aria-describedby="vinculo-cartao"/>
-						</g:if>
-						<g:else>
-							<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
-									  disabled="${bloquearModCob}" class="form-control" aria-describedby="vinculo-cartao"
-									  optionKey="key" value="${rhInstance?.vinculoCartao}"/>
-						</g:else>
-						<span class="input-group-addon">
-							<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
-							<strong>Cartão com chip</strong>
-						</span>
-						<span class="input-group-addon">
-							<input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
-							<strong>Renovar Limite</strong>
-						</span>
-					</div>
-					<g:if test="${bloquearModCob}">
-						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
-					</g:if>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<div class="panel panel-default">
         <div class="panel-heading">
@@ -244,22 +245,35 @@
 			</div>
 		</div>
 	</div>
-	<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
-		<g:if test="${action == Util.ACTION_VIEW }">
-			<g:link class="btn btn-default" action="edit" id="${rhInstance.id}">
-				<span class="glyphicon glyphicon-edit"></span>
-				<g:message code="default.button.edit.label" default="Edit"/>
-			</g:link>
-			<g:if test="${!roleRh}">
-				<g:actionSubmit class="btn btn-danger" action="delete" value="Inativar"/>
-			</g:if>
 
-		</g:if>
-		<g:elseif test="${action == Util.ACTION_NEW}">
-			<g:actionSubmit class="btn btn-default" action="save" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
-		</g:elseif>
-		<g:elseif test="${action == Util.ACTION_EDIT}">
-			<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-		</g:elseif>
-	</sec:ifAnyGranted>
+
+	<div class="panel-footer">
+		<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+			<g:if test="${action == Util.ACTION_VIEW }">
+				<g:link class="btn btn-default" action="edit" id="${rhInstance.id}"><span class="glyphicon glyphicon-edit"></span>
+					<g:message code="default.button.edit.label" default="Edit"/>
+				</g:link>
+				<g:if test="${!roleRh}">
+					<button name="_action_delete" type="submit" class="btn btn-danger"
+							onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+						<span class="glyphicon glyphicon-remove"></span>&nbsp;Remover</button>
+				</g:if>
+
+			</g:if>
+			<g:elseif test="${action == Util.ACTION_NEW}">
+				<button name="_action_save" type="submit" class="btn btn-success" >
+					<span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.create.label" default="Create"></g:message>
+				</button>
+
+			</g:elseif>
+			<g:elseif test="${action == Util.ACTION_EDIT}">
+				<button name="_action_update" type="submit" class="btn btn-success" >
+					<span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.update.label" default="Update"></g:message>
+				</button>
+			</g:elseif>
+		</sec:ifAnyGranted>
+
+	</div>
+
+
 </g:form>

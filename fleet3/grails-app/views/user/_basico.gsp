@@ -5,7 +5,6 @@
 <%@ page import="com.sysdata.gestaofrota.Role" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<script type="text/javascript" src="${resource(dir:'js',file:'roles.js') }"></script>
 
 <br/>
 <div class="panel panel-default">

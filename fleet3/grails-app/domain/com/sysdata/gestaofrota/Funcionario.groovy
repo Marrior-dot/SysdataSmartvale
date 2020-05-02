@@ -30,6 +30,26 @@ class Funcionario extends Participante {
         telefoneComercial nullable: true
     }
 
+    static namedQueries = {
+
+        countFuncionariosRh { Rh rh ->
+            projections {
+                rowCount("id")
+            }
+            unidade {
+                eq("rh", rh)
+            }
+        }
+
+        countFuncionariosUnidade { Unidade unidade ->
+            projections {
+                rowCount("id")
+            }
+            eq("unidade", unidade)
+        }
+    }
+
+
     public boolean isAtivoInPedido(PedidoCarga pedidoCarga) {
         if (!pedidoCarga) return false
         ItemPedido item = pedidoCarga.itens.find { it.participante.id == this.id && it.tipo == TipoItemPedido.CARGA }

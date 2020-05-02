@@ -3,10 +3,6 @@
         <title>Bem vindo ao Sistema Gestão de Frota</title>
         <meta name="layout" content="layout-restrito" />
 
-
-		<asset:javascript src="application.js"/>
-
-
 		<style>
 		#chartjs-tooltip {
 			opacity: 0;

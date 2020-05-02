@@ -7,6 +7,7 @@ class Telefone {
 	String ramal
 
     static constraints = {
+		ramal nullable: true
     }
 
 	@Override

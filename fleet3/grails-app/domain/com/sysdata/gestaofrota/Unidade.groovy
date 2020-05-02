@@ -31,6 +31,7 @@ class Unidade {
         return "${rh?.nome} - ${rh?.unidades?.nome}"
     }
 
+/*
     def getFuncionariosCount(){
         Funcionario.countByUnidade(this)?:0
     }
@@ -38,4 +39,6 @@ class Unidade {
     def getVeiculosCount(){
         Veiculo.countByUnidade(this)?:0
     }
+*/
+
 }

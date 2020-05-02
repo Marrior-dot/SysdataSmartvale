@@ -1,11 +1,10 @@
 <g:form controller="${controller}">
 	<div class="list">
-		<table id="rhsTable"
-			   class="table table-striped table-bordered table-hover table-condensed table-default">
+		<table id="rhsTable" class="table table-striped table-bordered table-hover table-condensed table-default">
 			<thead>
+			<th>CNPJ</th>
 			<th>Razão Social</th>
 			<th>Nome Fantasia</th>
-			<th>CNPJ</th>
 			</thead>
 		</table>
 	</div>
@@ -20,14 +19,14 @@
 		$("#rhsTable").DataTable({
 			//"serverSide": true,
 			"ajax": {
-				"url": "${createLink(controller:'rh',action:'listAllJSON')}",
+				"url": "${createLink(controller:'rh', action:'listAllJSON')}",
 				"data": {"unidade_id": ${unidade_id ?: 'null'} },
 				"dataSrc": "results"
 			},
 			"columns": [
-				{"data":"razao"},
-				{"data": "fantasia"},
-				{"data": "cnpj"}
+				{"data": "cnpj"},
+				{"data": "razao"},
+				{"data": "fantasia"}
 			]
 		});
 

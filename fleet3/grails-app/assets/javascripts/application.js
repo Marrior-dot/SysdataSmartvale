@@ -7,8 +7,14 @@
 //
 //= require jquery-2.2.0.min
 //= require bootstrap
-//= require chart-config
-//= require Chart.min
+//= require sb-admin-2
+//= require mentisMenu.min
+//= require dataTable/jquery.dataTables.min
+//= require mascaras
+//= require bootstrap-datepicker
+//= require bootstrap-waitingfor
+//= require jquery.mask.min
+//= require jquery.maskMoney.min
 //= require_tree .
 //= require_self
 
