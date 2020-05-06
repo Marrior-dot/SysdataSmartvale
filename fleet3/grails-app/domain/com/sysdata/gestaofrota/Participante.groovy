@@ -6,7 +6,7 @@ class Participante {
     Endereco endereco
     Telefone telefone
     Status status = Status.ATIVO
-    Date dateCreated
+    Date dateCreated = new Date()
     DadoBancario dadoBancario
 
     static auditable = true

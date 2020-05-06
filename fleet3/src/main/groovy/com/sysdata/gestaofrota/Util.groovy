@@ -119,7 +119,7 @@ class Util {
         }
     }
 
-    static Double convertToDouble(String value) {
+    static BigDecimal convertToDouble(String value) {
         String convValue = value.contains(".") ? value.replace(".", "") : value
         convValue = convValue.replace(",", ".").replace("R\$ ", "")
         return convValue as BigDecimal

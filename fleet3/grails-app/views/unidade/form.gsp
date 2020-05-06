@@ -20,7 +20,7 @@
                     <g:message code="default.home.label"/>
                 </a>
                 <a class="btn btn-default" href="${createLink(controller:'rh',action:'show',id:rhInstance.id)}">
-                <span class="glyphicon glyphicon-search"></span>&nbsp;Empresa
+                <span class="glyphicon glyphicon glyphicon-triangle-left"></span>&nbsp;Empresa
                 </a>
                 <g:if test="${flash.message}">
                     <div class="alert alert-info">${flash.message}</div>
@@ -34,7 +34,7 @@
 
                 <div class="well well-lg panel-top">
                     <h4><strong>Empresa</strong></h4>
-                    <h5>${rhInstance?.cnpj} - ${rhInstance?.nome}</h5>
+                    <h5><g:link controller="rh" action="show" id="${rhInstance?.id}">${rhInstance?.cnpj} - ${rhInstance?.nome}</g:link></h5>
                 </div>
 
                 <div class="panel panel-default panel-top">

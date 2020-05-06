@@ -17,15 +17,12 @@ class Sysdata extends AdministradoraCartao {
 
     @Override
     String gerarNumero(Administradora administradora, Portador portador) {
-        def tipoProg = Holders.grailsApplication.config.project.tipoPrograma
-        def parceiro = Holders.grailsApplication.config.project.parceiro
+        def tipoProg = Holders.grailsApplication.config.projeto.tipoPrograma
+        def parceiro = Holders.grailsApplication.config.projeto.parceiro
         def cdRh = portador.unidade.rh.id
-        def prov = sprintf("%6d%1d%1d%03d%07d", getBin().toInteger(), tipoProg, parceiro, cdRh, administradora.qtdCartoes)
-
-        administradora.qtdCartoes++
-        administradora.save()
+        def prov = sprintf("%6d%1d%1d%03d%07d", this.bin.toInteger(), tipoProg, parceiro, cdRh, ++administradora.qtdCartoes)
+        administradora.save(flush: true)
         def check = calcularDV(prov)
-
         prov + check
     }
 
@@ -44,6 +41,8 @@ class Sysdata extends AdministradoraCartao {
         Calendar cal = Calendar.getInstance()
         cal.setTime(new Date())
         Integer anosValidade = ParametroSistema.getValorAsInteger(ParametroSistema.ANOS_VALIDADE_CARTAO)
+        if (! anosValidade)
+            throw new RuntimeException("Parâmetro Anos de Validade Cartão não definido!")
         cal.add(Calendar.YEAR, anosValidade)
 
         cal.getTime()

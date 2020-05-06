@@ -17,7 +17,16 @@
                         <th></th>
                     </thead>
                     <tbody>
-                        <g:each in="${Unidade.withCriteria{rh{eq('id',rhId)}}}" var="unidade" >
+                        <%
+                            def unidadeList = Unidade.withCriteria {
+                                                        rh {
+                                                            eq('id',rhId)
+                                                        }
+                                                        order("dateCreated")
+                                            }
+                        %>
+
+                        <g:each in="${unidadeList}" var="unidade" >
                             <tr>
                                 <td><g:link controller="unidade" action="show" id="${unidade.id}">${unidade?.codigo}</g:link></td>
                                 <td>${unidade?.nome}</td>

@@ -62,7 +62,6 @@
 
     <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js/plugins',file:'sweetalert.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'ajaxFormSubmition.js') }"></script>
     <script type="text/javascript" src="${resource(dir:'js/jquery',file:'application-common.js') }"></script>
 
     <script type="text/javascript" src="${resource(dir:'js',file:'bootstrap-waitingfor.js') }"></script>

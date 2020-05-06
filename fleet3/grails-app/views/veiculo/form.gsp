@@ -8,30 +8,39 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
-    <br><br>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
             </div>
 
             <div class="panel-body">
-                <div class="buttons">
-                    <a class="btn btn-default" href="${createLink(uri: '/')}">
-                    <span class="glyphicon glyphicon-home"></span>
-                    <g:message code="default.home.label"/>
-                    </a>
-                    <a class="btn btn-default"
-                       href="${g.createLink(controller: 'unidade', action: 'show', id: "${unidadeInstance.id}")}">
-                        <span class="glyphicon glyphicon-list"></span>
-                        Centro de Custo
-                    </a>
-                    <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        <g:message code="default.new.label" args="[entityName]" />
-                        </g:link>
+                <a class="btn btn-default" href="${createLink(uri: '/')}">
+                <span class="glyphicon glyphicon-home"></span>
+                <g:message code="default.home.label"/>
+                </a>
+                <a class="btn btn-default"
+                   href="${g.createLink(controller: 'unidade', action: 'show', id: "${unidadeInstance.id}")}">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                    Unidade
+                </a>
+                <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <g:message code="default.new.label" args="[entityName]" />
+                    </g:link>
+
+                <div class="well well-lg panel-top">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h4><strong>Empresa</strong></h4>
+                            <h5><g:link controller="rh" action="show" id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></h5>
+                        </div>
+                        <div class="col-md-3">
+                            <h4><strong>Unidade</strong></h4>
+                            <h5><g:link controller="unidade" action="show" id="${unidadeInstance?.id}">${unidadeInstance?.nome}</g:link></h5>
+                        </div>
+                    </div>
                 </div>
 
-                <br>
                 <g:if test="${flash.message}">
                     <div class="alert alert-info" role="alert">${flash.message}</div>
                 </g:if>

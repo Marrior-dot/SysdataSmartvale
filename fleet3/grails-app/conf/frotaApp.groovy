@@ -63,9 +63,9 @@ environments {
 }
 
 administradora {
-
-    nome = "MAXXCARD ADMINISTRADORA DE CARTOES LTDA"
-    cnpj = "12.387.832/0001-91"
+    nome = "BANPARA"
+    bin = "605009"
+    anosValidadeCartao = 2
 
     contaBancaria {
         banco = 341

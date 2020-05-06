@@ -5,16 +5,11 @@ import com.sysdata.gestaofrota.processamento.administradoras.Sysdata
 
 class CartaoService {
     def processamentoService
+    def sysdataConfig
 
-    Cartao gerar(Portador portador, comChip = true) {
-        AdministradoraCartao administradoraCartao
+    synchronized Cartao gerar(Portador portador, comChip = true) {
+        AdministradoraCartao administradoraCartao = sysdataConfig
         Administradora administradora = processamentoService.getAdministradoraProjeto()
-        if(comChip){
-            administradoraCartao = processamentoService.getAdministradoraCartao()
-        }else{
-            administradoraCartao = new Sysdata()
-        }
-
 
         Cartao cartaoInstance = new Cartao()
         cartaoInstance.portador = portador

@@ -116,12 +116,16 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/**/images/**',   access: ['permitAll']],
         [pattern: '/**/favicon.ico', access: ['permitAll']],
 
-        [pattern: '/login/**',              access: ['permitAll']],
-        [pattern: '/logout/**',             access: ['permitAll']],
-        [pattern: '/dashboard/**',          access: ['IS_AUTHENTICATED_FULLY']],
-        [pattern: '/rh/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/unidade/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/funcionario/**',        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/login/**',                  access: ['permitAll']],
+        [pattern: '/logout/**',                 access: ['permitAll']],
+        [pattern: '/dashboard/**',              access: ['IS_AUTHENTICATED_FULLY']],
+        [pattern: '/rh/**',                     access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/unidade/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/funcionario/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/veiculo/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/categoriaFuncionario/**',   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+
+
         [pattern: '/postoCombustivel/**',   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/cartao/**',             access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/pedidoCarga/**',        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],

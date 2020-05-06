@@ -40,7 +40,8 @@ class CategoriaFuncionarioService {
     void save(Rh rh, String nome, Double valorCarga) {
         CategoriaFuncionario categoria = new CategoriaFuncionario(nome: nome, valorCarga: valorCarga)
         rh.addToCategoriasFuncionario(categoria)
-        categoria.save(failOnError: true)
+        //categoria.save(failOnError: true)
+        rh.save(flush: true)
     }
 
     void delete(CategoriaFuncionario categoriaFuncionario) {

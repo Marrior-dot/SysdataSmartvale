@@ -7,12 +7,19 @@ $(document).ready(function () {
 });
 
 function configDatepicker() {
-	$(".datepicker").datepicker({
-		dateFormat: 'dd/mm/yy',
-		clearBtn: true,
-		daysOfWeekHighlighted: [0, 6],
-		language: 'pt-BR'
-	});
+	$.fn.datepicker.dates['pt-BR'] = {
+		days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"],
+		daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+		daysMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Otu", "Nov", "Dez"],
+		today: "Hoje",
+		clear: "Limpar",
+		format: "dd/mm/yyyy",
+		titleFormat: "MM yyyy",
+		weekStart: 0
+	};
+	$('.datepicker').datepicker({language: 'pt-BR'});
 }
 
 function configInputMasks() {

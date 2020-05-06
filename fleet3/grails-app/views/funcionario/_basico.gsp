@@ -11,23 +11,6 @@
     <g:hiddenField name="action" value="${action}"/>
 
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Empresa</th>
-            <th>Centro de Custo</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><g:link controller="rh" action="show"
-                        id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></td>
-            <td><g:link controller="unidade" action="show"
-                        id="${unidadeInstance.id}">${unidadeInstance?.nome}</g:link></td>
-        </tr>
-        </tbody>
-    </table>
-
 %{--dados basicos--}%
     <div class="panel panel-default">
         <div class="panel-heading">Dados Básicos</div>
@@ -36,7 +19,8 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="matricula">Matrícula *</label>
-                    <input type="text" minlength="10" maxlength="10" class="form-control matricula" name="matricula" id="matricula"
+                    <input type="text" minlength="10" maxlength="10" class="form-control matricula" name="matricula"
+                           id="matricula"
                            value="${funcionarioInstance?.matricula}" required>
                 </div>
 
@@ -68,7 +52,8 @@
 
                 <div class="form-group col-md-3">
                     <label for="dataNascimento">Data Nascimento *</label>
-                    <input type="text" class="form-control date" id="dataNascimento" name="dataNascimento" minlength="8" required
+                    <input type="text" class="form-control datepicker" id="dataNascimento" name="dataNascimento"
+                           minlength="8" required
                            value="${Util.formattedDate(funcionarioInstance?.dataNascimento)}"/>
                 </div>
 
@@ -95,7 +80,6 @@
                                 id="tam-max-embossing-str">${tamMaxEmbossing}</strong> caracteres.</span>
                     </div>
                 </div>
-
 
             </g:if>
 
@@ -132,11 +116,12 @@
     </div>
 
 
-    <g:if test="${unidadeInstance?.rh?.vinculoCartao==com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
-            unidadeInstance?.rh?.modeloCobranca==TipoCobranca.POS_PAGO}">
+    <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
+            unidadeInstance?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
 
         <div class="panel panel-default">
             <div class="panel-heading">Limites</div>
+
             <div class="panel-body">
                 <div class="row">
                     <div class="form-group col-md-3">
@@ -144,11 +129,13 @@
                         <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
                                value="${funcionarioInstance?.portador?.limiteTotal}" required/>
                     </div>
+
                     <div class="form-group col-md-3">
                         <label for="portador.limiteDiario">Limite Diário *</label>
                         <input class="form-control money" id="portador.limiteDiario" name="portador.limiteDiario"
                                value="${funcionarioInstance?.portador?.limiteDiario}"/>
                     </div>
+
                     <div class="form-group col-md-3">
                         <label for="portador.limiteMensal">Limite Mensal *</label>
                         <input class="form-control money" id="portador.limiteMensal" name="portador.limiteMensal"
@@ -169,35 +156,47 @@
     <g:render template="/telefone/form"
               model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial', required: true]"/>
     <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
-        <div class="buttons">
+
+        <div class="panel-footer">
             <g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
-                <g:actionSubmit class="btn btn-default" action="${action == Util.ACTION_NEW ? 'save' : 'update'}"
-                                value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+                <button type="submit" class="btn btn-success"
+                        name="_action_${action == Util.ACTION_NEW ? 'save' : 'update'}">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.update.label"
+                                                                                   default="Update"></g:message>
+                </button>
             </g:if>
             <g:if test="${action == Util.ACTION_VIEW}">
-                <g:actionSubmit class="btn btn-default" action="edit"
-                                value="${message(code: 'default.button.edit.label', default: 'Edit')}"/>
-                <g:actionSubmit class="btn btn-default" action="delete"
-                                value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');"/>
+
+                <button type="submit" class="btn btn-default" name="_action_edit">
+                    <span class="glyphicon glyphicon-edit"></span>&nbsp;<g:message
+                        code="default.button.edit.label.label" default="Edit"></g:message>
+                </button>
+
+                <button type="submit" class="btn btn-danger" name="_action_delete"
+                        onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');">
+                    <span class="glyphicon glyphicon-remove"></span>&nbsp;<g:message code="default.button.delete.label"
+                                                                                     default="Delete"></g:message>
+                </button>
+
             </g:if>
         </div>
+
     </sec:ifAnyGranted>
 
 </g:form>
 
 
 <script>
-    $(function() {
-        $('#nome').blur(function() {
+    $(function () {
+        $('#nome').blur(function () {
 
             $.ajax({
                 url: "/GestaoFrota/funcionario/sugestoes.json",
                 data: {nome: this.value},
-                dataType : "json"
-            }).done(function( data ) {
+                dataType: "json"
+            }).done(function (data) {
                 $('#nomeEmbossing-itens option').remove()
-                jQuery.each(data.sug, function(index, value){
+                jQuery.each(data.sug, function (index, value) {
                     $('#nomeEmbossing-itens').append('<option value="' + value + '">' + value + '</option>');
                 });
             });

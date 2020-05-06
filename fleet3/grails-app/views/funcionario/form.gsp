@@ -30,31 +30,41 @@
                 </div>
             </g:hasErrors>
 
-            <div class="buttons">
-                <a class="btn btn-default" href="${createLink(uri: '/')}">
-                    <span class="glyphicon glyphicon-home"></span>
-                    <g:message code="default.home.label"/>
-                </a>
+            <a class="btn btn-default" href="${createLink(uri: '/')}">
+                <span class="glyphicon glyphicon-home"></span>
+                <g:message code="default.home.label"/>
+            </a>
 
-                <a class="btn btn-default"
-                   href="${g.createLink(controller: 'funcionario', action: 'create', params:[unidade_id: unidadeInstance?.id])}">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <g:message code="default.new.label" args="[entityName]"/>
-                </a>
+            <a class="btn btn-default"
+               href="${g.createLink(controller: 'funcionario', action: 'create', params:[unidade_id: unidadeInstance?.id])}">
+                <span class="glyphicon glyphicon-plus"></span>
+                <g:message code="default.new.label" args="[entityName]"/>
+            </a>
 
-                <a class="btn btn-default"
-                   href="${g.createLink(controller: 'unidade', action: 'show', id: "${unidadeInstance.id}")}">
-                    <span class="glyphicon glyphicon-list"></span>
-                    Centro de Custo
-                </a>
+            <a class="btn btn-default"
+               href="${g.createLink(controller: 'unidade', action: 'show', id: "${unidadeInstance.id}")}">
+                <span class="glyphicon glyphicon-triangle-left"></span>
+                Unidade
+            </a>
 
-                <a class="btn btn-default"
-                   href="${g.createLink(controller: 'funcionario', action: 'list', params:[unidade_id: unidadeInstance?.id])}">
-                    <span class="glyphicon glyphicon-list"></span>
-                    <g:message code="default.list.label" args="[entityName]"/>
-                </a>
+            <a class="btn btn-default"
+               href="${g.createLink(controller: 'funcionario', action: 'list', params:[unidade_id: unidadeInstance?.id])}">
+                <span class="glyphicon glyphicon-list"></span>
+                <g:message code="default.list.label" args="[entityName]"/>
+            </a>
+
+            <div class="well well-lg panel-top">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h4><strong>Empresa</strong></h4>
+                        <h5><g:link controller="rh" action="show" id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h4><strong>Unidade</strong></h4>
+                        <h5><g:link controller="unidade" action="show" id="${unidadeInstance?.id}">${unidadeInstance?.nome}</g:link></h5>
+                    </div>
+                </div>
             </div>
-            <br>
 
             <g:if test="${action == Util.ACTION_VIEW}">
                 <div class="tabbable">

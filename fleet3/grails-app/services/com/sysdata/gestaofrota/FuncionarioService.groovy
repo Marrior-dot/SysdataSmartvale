@@ -6,25 +6,23 @@ class FuncionarioService {
     def portadorService
 
     Funcionario save(params, Funcionario funcionarioInstance, boolean gerarCartao = false) {
-        if (!funcionarioInstance.unidade) throw new RuntimeException("Funcionario não possui unidade.")
+        if (!funcionarioInstance.unidade)
+            throw new RuntimeException("Funcionario não possui unidade.")
 
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
-            if (!funcionarioInstance.save()) throw new RuntimeException(funcionarioInstance.showErrors())
+            if (! funcionarioInstance.save())
+                throw new RuntimeException(funcionarioInstance.showErrors())
             PortadorFuncionario portadorFuncionario = portadorService.save(params, funcionarioInstance)
             if (gerarCartao){
-                if(portadorFuncionario.funcionario.unidade.rh.cartaoComChip){
+                if (portadorFuncionario.funcionario.unidade.rh.cartaoComChip)
                     cartaoService.gerar(portadorFuncionario)
-                }else{
+                else
                     cartaoService.gerar(portadorFuncionario,false)
-                }
-
             }
-
         }
-
-        participanteService.saveCidade(funcionarioInstance.endereco)
-        if (!funcionarioInstance.save()) throw new RuntimeException("Erro de regra de negocio.")
-
+        //participanteService.saveCidade(funcionarioInstance.endereco)
+        if (! funcionarioInstance.save(flush: true))
+            throw new RuntimeException("Erro de regra de negocio.")
         funcionarioInstance
     }
 
@@ -53,5 +51,38 @@ class FuncionarioService {
         }
 
         return sugestoes
+    }
+
+    def delete(Funcionario funcionario) {
+        if (funcionario.portador && funcionario.portador.cartaoAtivo) {
+            Cartao cartao = funcionario.portador.cartaoAtivo
+            cartao.status = StatusCartao.CANCELADO
+            cartao.save()
+            log.info "CRT #$cartao.id cancelado"
+
+            funcionario.status = Status.INATIVO
+            funcionario.save(flush: true)
+            log.info "FUNC #$funcionario.id inativado"
+
+        } else if (funcionario.portador) {
+            Portador portador = funcionario.portador
+            Cartao cartao = portador.cartaoAtual
+            def funcId = funcionario.id
+            def crtId = cartao.id
+            def prtId = portador.id
+/*
+            cartao.delete()
+            log.info "CRT #$crtId del"
+*/
+            portador.delete()
+            log.info "PRT #$prtId del"
+            funcionario.delete(flush: true)
+            log.info "FUNC #$funcId del"
+
+        } else if (funcionario.veiculos) {
+            funcionario.status = Status.INATIVO
+            funcionario.save(flush: true)
+            log.info "FUNC #$funcionario.id inativado"
+        }
     }
 }

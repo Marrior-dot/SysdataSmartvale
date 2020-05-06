@@ -136,9 +136,7 @@ class UnidadeController {
         def filtro
         def rhId = params.rhId ? params.rhId.toLong() : null
 
-        def unidadeInstanceList = Unidade
-                .createCriteria()
-                .list(max: params.max, offset: offset) {
+        def criteria = {
             if (rhId)
                 rh { eq('id', rhId) }
             if (params.opcao && params.filtro) {
@@ -152,31 +150,17 @@ class UnidadeController {
                     like('nome', filtro + '%')
             }
         }
-        def unidadeInstanceTotal = Unidade
-                .createCriteria()
-                .list() {
-            if (rhId)
-                rh { eq('id', rhId) }
-            if (params.opcao && params.filtro) {
-                opcao = params.opcao.toInteger()
-                filtro = params.filtro
-                //Código
-                if (opcao == 1)
-                    eq('id', filtro as long)
-                //Nome
-                else if (opcao == 2)
-                    like('nome', filtro + '%')
-            }
-            projections { rowCount() }
-        }
+
+        def unidadeInstanceList = Unidade.createCriteria().list(max: params.max, offset: offset, sort: 'id', criteria)
+        def unidadeInstanceTotal = Unidade.createCriteria().count(criteria)
+
 
         def fields = unidadeInstanceList.collect { u ->
             [id    : u.id,
              nome  : u.nome,
              status: u.status.nome,
              acoes : """<a class="show" href='${createLink(action: 'show')}/${u.id}'></a> |
-
-									${
+${
                  if (u.status == Status.ATIVO)
                      "<a href='${createLink(action: 'block', id: u.id)}'>Bloquear</a> | <a href='${createLink(action: 'unable', id: u.id)}'>Inativar</a>"
                  else if (u.status == Status.BLOQUEADO)

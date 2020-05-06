@@ -59,6 +59,8 @@ class FuncionarioController extends BaseOwnerController {
             }
             Funcionario funcionario = new Funcionario()
             funcionario.portador = new PortadorFuncionario()
+
+            // TODO: Refatorar Embossing
             render(view: "form", model: [funcionario    : funcionario,
                                          unidadeInstance: unidadeInstance,
                                          action         : Util.ACTION_NEW,
@@ -69,24 +71,18 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def save() {
-        Funcionario funcionarioInstance = new Funcionario(params)
+    def save(Funcionario funcionarioInstance) {
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
-
         if (unidadeInstance) {
             try {
                 funcionarioInstance.unidade = unidadeInstance
-                funcionarioInstance.endereco = params['endereco']
-                funcionarioInstance.telefone = params['telefone']
-
                 funcionarioInstance = funcionarioService.save(params,funcionarioInstance, true)
 
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
                 redirect(action: "show", id: funcionarioInstance.id)
             }
             catch (Exception e) {
-
-                log.error "Erro: $e.message"
+                e.printStackTrace()
                 flash.error = "Um erro ocorreu."
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
@@ -96,9 +92,9 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def show = {
+    def show() {
         def funcionarioInstance = Funcionario.get(params.long('id'))
-        if (!funcionarioInstance) {
+        if (! funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")
         } else {
@@ -106,7 +102,7 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def edit = {
+    def edit() {
         Funcionario funcionarioInstance = Funcionario.get(params.id)
         if (!funcionarioInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), params.id])}"
@@ -116,21 +112,11 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def update = {
+    def update() {
         def funcionarioInstance = Funcionario.get(params.long('id'))
         if (funcionarioInstance) {
-            Long version = params.long('version')
-            if (version && funcionarioInstance.version > version) {
-                funcionarioInstance.errors.rejectValue("version", "Outro usuário estava alterando os dados desse Funcionário enquanto você o estava editando.")
-                render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
-                return
-            }
-
             try {
                 funcionarioInstance.properties = params
-                funcionarioInstance.endereco = params['endereco']
-                funcionarioInstance.telefone = params['telefone']
-
                 funcionarioInstance = funcionarioService.save(params, funcionarioInstance)
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
@@ -148,22 +134,22 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def delete = {
-        def funcionarioInstance = Funcionario.get(params.long('id'))
+    def delete(Funcionario funcionarioInstance) {
         if (funcionarioInstance) {
             try {
-                log.debug("Inativando " + funcionarioInstance)
-                funcionarioInstance.status = Status.INATIVO
+                def unidId = funcionarioInstance.unidade.id
+                funcionarioService.delete(funcionarioInstance)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
-                redirect(action: "list")
+                redirect(controller: "unidade", action: "show", id: unidId)
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
+                e.printStackTrace()
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
-                redirect(action: "show", params: [funcId: funcionarioInstance.id])
+                redirect(action: "show", id: funcionarioInstance.id)
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
-            redirect(action: "list")
+            redirect(controller: "unidade", action: "list")
         }
     }
 
@@ -176,16 +162,22 @@ class FuncionarioController extends BaseOwnerController {
         def categId = params.categId
         def gestor = params.gestor
 
+
         def funcionarioInstanceList
+        def funcionarioInstanceTotal
 
         withSecurity { ownerList ->
-            funcionarioInstanceList = Funcionario.createCriteria().list() {
+
+            def criteria = {
+
                 eq('status', Status.ATIVO)
-                if (ownerList.size > 0)
-                    unidade { rh { 'in'('id', ownerList) } }
 
                 if (unidId)
                     unidade { eq('id', unidId) }
+
+                else if (ownerList.size() > 0)
+                    unidade { rh { 'in'('id', ownerList) } }
+
 
                 if (categId)
                     categoria { eq('id', categId) }
@@ -207,43 +199,12 @@ class FuncionarioController extends BaseOwnerController {
                         like('cpf', filtro + '%')
                 }
 
-                order("nome")
             }
+
+            funcionarioInstanceList = Funcionario.createCriteria().list([order: 'nome', max: params.max, offset: offset], criteria)
+            funcionarioInstanceTotal = Funcionario.createCriteria().count(criteria)
         }
 
-        def funcionarioInstanceTotal
-
-        withSecurity { ownerList ->
-            funcionarioInstanceTotal = Funcionario
-                    .createCriteria()
-                    .list() {
-                eq('status', Status.ATIVO)
-                if (ownerList.size > 0)
-                    unidade { rh { 'in'('id', ownerList) } }
-
-                if (unidId)
-                    unidade { eq('id', unidId) }
-
-                if (categId)
-                    categoria { eq('id', categId) }
-
-                if (gestor != "null")
-                    eq("gestor", true)
-
-                if (params.opcao && params.filtro) {
-                    //Matricula
-                    if (opcao == 1)
-                        like('matricula', filtro + '%')
-                    //Nome
-                    else if (opcao == 2)
-                        like('nome', filtro + '%')
-                    //CPF
-                    else if (opcao == 3)
-                        like('cpf', filtro + '%')
-                }
-                projections { rowCount() }
-            }
-        }
 
         def fields = funcionarioInstanceList.collect { f ->
             [
@@ -256,7 +217,7 @@ class FuncionarioController extends BaseOwnerController {
 
         }
 
-        def data = [recordsTotal: funcionarioInstanceTotal, results: fields.sort { it.nome }]
+        def data = [recordsTotal: funcionarioInstanceTotal, results: fields]
 
         render data as JSON
     }

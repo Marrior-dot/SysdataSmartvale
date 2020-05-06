@@ -58,8 +58,8 @@ thead input {
 
             //"serverSide": true,
             "ajax":{
-                "url":"${createLink(controller:'veiculo',action:'listAllJSON')}",
-                "data":{"unidade_id":${unidade_id ?: 'null'}},
+                "url":"${createLink(controller: 'veiculo', action: 'listAllJSON')}",
+                "data":{"unidade_id": ${unidade_id ?: 'null'}},
                 "dataSrc":"results"
             },
             "columns":[

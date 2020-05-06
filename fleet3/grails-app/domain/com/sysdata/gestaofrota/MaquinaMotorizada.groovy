@@ -5,7 +5,7 @@ abstract class MaquinaMotorizada {
     TipoAbastecimento tipoAbastecimento
     Date dateCreated
     String complementoEmbossing
-    Status status
+    Status status = Status.ATIVO
 
     static auditable = true
 

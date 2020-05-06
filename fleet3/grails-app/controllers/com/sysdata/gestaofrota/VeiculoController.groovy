@@ -4,7 +4,6 @@ import grails.converters.JSON
 
 import java.text.SimpleDateFormat
 
-//@Secured(['IS_AUTHENTICATED_FULLY'])
 class VeiculoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -15,7 +14,7 @@ class VeiculoController extends BaseOwnerController {
     def processamentoService
     def springSecurityService
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
@@ -25,7 +24,7 @@ class VeiculoController extends BaseOwnerController {
 
     def list = {}
 
-    def newList = {
+    def newList() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id')
@@ -34,53 +33,32 @@ class VeiculoController extends BaseOwnerController {
         [veiculoInstanceList: veiculoInstanceList, veiculoInstanceTotal: Veiculo.count()]
     }
 
-    def create = {
+    def create() {
         if (params.unidade_id) {
             def unidadeInstance = Unidade.get(params.unidade_id)
             int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            render(view: "form", model: [unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
+            Veiculo veiculo = new Veiculo(params)
+            veiculo.unidade = unidadeInstance
+            render(view: "form", model: [veiculoInstance: veiculo, unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
         }
     }
 
-    def save = {
+    def save(Veiculo veiculoInstance) {
 
-        println "entrou aqui"
-        Veiculo veiculoInstance = new Veiculo(params)
-        println "não passou"
-        Unidade unidadeInstance = Unidade.get(params.long('unidId'))
-
-        if (unidadeInstance != null) {
+        if (veiculoInstance) {
             try {
-                veiculoInstance.unidade = unidadeInstance
-
-                if(unidadeInstance.rh.vinculoCartao==TipoVinculoCartao.MAQUINA){
-                    MaquinaMotorizada veiculo = veiculoInstance.save flush: true
-                    PortadorMaquina portadorMaquina = portadorService.save(veiculo,params)
-
-
-                    println "chegou aqui asda"
-                    if(portadorMaquina.unidade.rh.cartaoComChip){
-                        cartaoService.gerar(portadorMaquina)
-                    }else{
-                        cartaoService.gerar(portadorMaquina,false)
-                    }
-
-                }else
-                    veiculoInstance.save flush: true
-
-
+                veiculoService.save(veiculoInstance)
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
-                redirect(controller: 'unidade', action: "show", id: unidadeInstance.id)
+                redirect(controller: 'unidade', action: "show", id: veiculoInstance.unidade.id)
             }
             catch (Exception e) {
-                println(e.message)
                 e.printStackTrace()
-                flash.error = "Um erro ocorreu."
+                flash.error = "Erro Interno. Contatar suporte"
                 int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
+                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
             }
 
         } else {
@@ -89,7 +67,7 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def show = {
+    def show() {
         def veiculoInstance = Veiculo.get(params.long('id'))
         if (!veiculoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
@@ -100,7 +78,7 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def edit = {
+    def edit() {
         def veiculoInstance = Veiculo.get(params.id)
         if (!veiculoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
@@ -111,31 +89,16 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def update = {
-        def veiculoInstance = Veiculo.get(params.long('id'))
+    def update(Veiculo veiculoInstance) {
         if (veiculoInstance) {
-            Long version = params.long('version')
-            if (version != null && veiculoInstance.version > version) {
-                veiculoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'veiculo.label', default: 'Veiculo')] as Object[], "Another user has updated this Veiculo while you were editing")
-                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
-                return
-            }
-
             veiculoInstance.properties = params
-
-            veiculoInstance.portador.limiteTotal=Util.convertToCurrency(params.portador.limiteTotal)
-
-            if(params.portador.limiteDiario)
-                veiculoInstance.portador.limiteDiario=Util.convertToCurrency(params.portador.limiteDiario)
-
-            if(params.portador.limiteMensal)
-                veiculoInstance.portador.limiteMensal=Util.convertToCurrency(params.portador.limiteMensal)
-
-            if (!veiculoInstance.hasErrors() && veiculoInstance.save(flush: true)) {
+            try {
+                veiculoService.update(veiculoInstance)
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)
-            } else {
+            } catch (e) {
+                e.printStackTrace()
+                flash.error = "Erro Interno. Contatar suporte"
                 int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
                 render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
             }
@@ -145,18 +108,13 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def delete = {
-        def veiculoInstance = Veiculo.get(params.id)
+    def delete(Veiculo veiculoInstance) {
         if (veiculoInstance) {
             try {
-				//TODO Adicionar um atributo status no veiculo para que o mesmo seja inativado
-				//após isso  é necessário alterar a view para filtrar somente os ativos e no autorizador para não existir transações com veiculos inativos.
-
-				//log.debug("Inativando " + veiculoInstance)
-				//veiculoInstance.
-                veiculoInstance.delete(flush: true)
+                def unidId = veiculoInstance.unidade.id
+                veiculoService.delete(veiculoInstance)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
-                redirect(action: "list")
+                redirect(controller: "unidade", action: "show", id: unidId)
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
@@ -164,28 +122,32 @@ class VeiculoController extends BaseOwnerController {
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
-            redirect(action: "list")
+            redirect(controller: "unidade", action: "list")
         }
     }
 
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def offset = params.start ?: 10
+        params.offset = params.start ?: 10
         def opcao
         def filtro
         def unidId = params.unidade_id ? (params.unidade_id != 'null' ? params.unidade_id.toLong() : null) : null
 
         def veiculoInstanceList
+        def veiculoInstanceTotal
 
         withSecurity { ownerList ->
-            veiculoInstanceList = Veiculo.createCriteria().list() {
 
-                if (ownerList.size > 0)
+            def criteria = {
+                eq("status", Status.ATIVO)
+
+                if (unidId) {
+                    unidade { eq('id', unidId) }
+                }
+                else if (ownerList.size() > 0)
                     unidade { rh { 'in'('id', ownerList) } }
 
-                if (unidId)
-                    unidade { eq('id', unidId) }
                 if (params.opcao && params.filtro) {
                     opcao = params.opcao.toInteger()
                     filtro = params.filtro
@@ -198,31 +160,9 @@ class VeiculoController extends BaseOwnerController {
                 }
             }
 
+            veiculoInstanceList = Veiculo.createCriteria().list(params: params, criteria)
+            veiculoInstanceTotal = Veiculo.createCriteria().count(criteria)
         }
-
-        def veiculoInstanceTotal
-
-
-            withSecurity { ownerList ->
-                veiculoInstanceTotal = Veiculo.createCriteria().list() {
-
-                    if (ownerList.size > 0)
-                        unidade { rh { 'in'('id', ownerList) } }
-
-                    if (unidId)
-                        unidade { eq('id', unidId) }
-                    if (params.opcao && params.filtro) {
-                        //Placa
-                        if (opcao == 1)
-                            like('placa', filtro + '%')
-                        //Marca
-                        else if (opcao == 2)
-                            like('modelo', filtro + '%')
-                    }
-                    projections { rowCount() }
-                }
-            }
-
 
         def fields = veiculoInstanceList.collect { v ->
             [id    : v.id,
@@ -235,6 +175,7 @@ class VeiculoController extends BaseOwnerController {
         }
 
         def data = [recordsTotal: veiculoInstanceTotal, results: fields]
+
         render data as JSON
     }
 
@@ -248,12 +189,12 @@ class VeiculoController extends BaseOwnerController {
     ]
 
 
-    def getByPlaca = {
+    def getByPlaca() {
         def veiculoInstance = Veiculo.findByPlaca(params.placa)
         render "${veiculoInstance?.marca?.nome} ${veiculoInstance?.modelo}"
     }
 
-    def listFuncionariosJSON = {
+    def listFuncionariosJSON() {
         def veiculoInstance = Veiculo.get(params.id)
         def funcionariosList = veiculoInstance.funcionarios.collect { f ->
             [id       : f.funcionario.id,
@@ -269,7 +210,7 @@ class VeiculoController extends BaseOwnerController {
 
     }
 
-    def addFuncionario = {
+    def addFuncionario() {
         if (params.idVeic && params.idFunc) {
             def veiculoInstance = Veiculo.get(params.idVeic)
             def funcionarioInstance = Funcionario.get(params.idFunc)
@@ -287,7 +228,7 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def removeFuncionario = {
+    def removeFuncionario() {
         if (params.idVeic && params.idFunc) {
             def idVeic = params.idVeic.toLong()
             def idFunc = params.idFunc.toLong()
@@ -303,8 +244,7 @@ class VeiculoController extends BaseOwnerController {
         }
     }
 
-    def alterarHodometro = {
-        println "params: params"
+    def alterarHodometro() {
         int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
         def valor = params.hodometro as long
         User user = springSecurityService.currentUser
@@ -315,9 +255,6 @@ class VeiculoController extends BaseOwnerController {
             flash.message = "Um erro ocorreu no momento de alterar o hodômetro. Tente novamente ou contate o suporte."
         }
         render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW,tamMaxEmbossing: tamMaxEmbossing])
-
-
     }
-
 
 }

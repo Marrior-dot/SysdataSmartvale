@@ -8,15 +8,19 @@ class BaseOwnerController {
 
         def ownerList = []
 
-        if (userInstance.owner instanceof Rh) {
+        if (userInstance && userInstance.owner instanceof Rh) {
             ownerList << userInstance.owner.id
-        } else if (userInstance.owner instanceof Administradora) {
+        } else if (userInstance && userInstance.owner instanceof Administradora) {
             ownerList << userInstance.owner.id
             ownerList += Rh.all.id
             ownerList += Empresa.all.id
-        } else {
+        } else if (userInstance) {
             ownerList << userInstance.owner.id
             ownerList += Administradora.all.id
+            ownerList += Rh.all.id
+            ownerList += Empresa.all.id
+        } else {
+            ownerList << Administradora.all.id
             ownerList += Rh.all.id
             ownerList += Empresa.all.id
         }
