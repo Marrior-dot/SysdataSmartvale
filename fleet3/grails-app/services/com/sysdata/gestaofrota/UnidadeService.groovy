@@ -21,14 +21,23 @@ class UnidadeService {
         if (! cannotDelete) {
             cannotDelete = unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA && MaquinaMotorizada.countMaquinasUnidade(unidade).get() > 0
             if (! cannotDelete) {
+
+                Rh rh = unidade.rh
+                rh.removeFromUnidades(unidade)
                 unidade.delete(flush: true)
-                ret.message = "Unidade #$unidade.id removida com sucesso"
+                rh.save(flush: true)
+                ret.message = "Unidade #$unidade removida com sucesso"
             }
             else {
-                unidade.status = Status.INATIVO
-                unidade.save(flush: true)
-                ret.success = false
-                ret.message = "Unidade #$unidade.id inativada. Não pode ser removida, pois já possui Funcionários/Máquinas"
+                if (unidade.status != Status.INATIVO)  {
+                    unidade.status = Status.INATIVO
+                    unidade.save(flush: true)
+                    ret.success = false
+                    ret.message = "Unidade #$unidade inativada. Não pode ser removida, pois já possui Funcionários/Máquinas"
+                } else {
+                    ret.success = false
+                    ret.message = "Unidade #$unidade já inativada. Não pode ser removida, pois já possui Funcionários/Máquinas"
+                }
             }
         }
         log.info ret.message

@@ -9,9 +9,8 @@
 
 <body>
 <div class="body">
-    <br><br>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-top">
 
         <div class="panel-heading">
             <h4><g:message code="default.list.label" args="[entityName]"/></h4>
@@ -33,13 +32,14 @@
                         </g:link>
                     </div>
                 </sec:ifAnyGranted>
-                <br><br>
 
-                <div class="list">
+                <div class="panel-top">
                     <g:render template="search"></g:render>
                 </div>
+
             </g:form>
         </div>
+
     </div>
 </div>
 </body>

@@ -1,20 +1,18 @@
 <%@ page import="com.sysdata.gestaofrota.TipoArquivo" %>
 
-<fieldset class="search">
-	<g:form controller="${controller}">
-		<div class="list">
-			<table id="arqTable" class="table table-striped table-bordered table-hover table-condensed table-default">
-				<thead>
-				<th>Data/Hora</th>
-				<th>Tipo</th>
-				<th>Nome</th>
-				<th>Status</th>
-				<th>Ações</th>
-				</thead>
-			</table>
-		</div>
-	</g:form>
-</fieldset>
+<g:form controller="${controller}">
+	<div class="list">
+		<table id="arqTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+			<thead>
+			<th>Data/Hora</th>
+			<th>Tipo</th>
+			<th>Nome</th>
+			<th>Status</th>
+			<th>Ações</th>
+			</thead>
+		</table>
+	</div>
+</g:form>
 
 <script>
 	$(document).ready(function(){
@@ -28,7 +26,7 @@
 				"dataSrc":"results"
 			},
 			"columns":[
-				{"data":"date"},
+				{"data":"data"},
 				{"data":"tipo"},
 				{"data":"nome"},
 				{"data":"status"},

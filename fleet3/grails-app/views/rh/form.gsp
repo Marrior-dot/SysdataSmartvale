@@ -13,6 +13,15 @@
     </div>
 
     <div class="panel-body">
+
+        <g:if test="${flash.message}">
+            <div class="alert alert-info">${flash.message}</div>
+        </g:if>
+        <g:if test="${flash.error}">
+            <div class="alert alert-danger">${flash.error}</div>
+        </g:if>
+
+
         <a class="btn btn-default" href="${createLink(uri: '/')}">
             <span class="glyphicon glyphicon-home"></span>
             <g:message code="default.home.label"/>
@@ -22,12 +31,6 @@
             <g:message code="default.list.label" args="[entityName]"/>
         </g:link>
 
-        <g:if test="${flash.message}">
-            <div class="alert alert-info">${flash.message}</div>
-        </g:if>
-        <g:if test="${flash.error}">
-            <div class="alert alert-danger">${flash.error}</div>
-        </g:if>
 
         <div class="panel panel-default panel-top">
 

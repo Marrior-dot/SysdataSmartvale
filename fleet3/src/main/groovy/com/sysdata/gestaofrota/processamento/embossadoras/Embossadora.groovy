@@ -59,7 +59,7 @@ abstract class Embossadora implements IGeradorArquivo {
 
     protected abstract int getTamanhoMaximoNomeTitular()
     protected abstract String getNomeArquivo()
-    protected abstract String getCabecalho() //Header
+    protected abstract String getCabecalho(Arquivo arquivo) //Header
     protected abstract String getRegistros(Arquivo arquivo) //Records
     protected abstract String getTerminador() //Trailer
 }

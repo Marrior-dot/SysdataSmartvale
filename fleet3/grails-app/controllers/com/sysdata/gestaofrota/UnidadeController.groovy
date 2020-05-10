@@ -47,7 +47,7 @@ class UnidadeController {
             def rhInstance = Rh.get(rhId as Long)
             unidadeInstance.rh = rhInstance
             if (unidadeService.saveNew(unidadeInstance)) {
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'unidade.label', default: 'Unidade'), unidadeInstance.id])}"
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'unidade.label', default: 'Unidade'), unidadeInstance])}"
                 redirect(action: "show", id: unidadeInstance.id)
             } else {
                 render(view: "form", model: [unidadeInstance: unidadeInstance, rhInstance: unidadeInstance.rh, action: Util.ACTION_NEW])

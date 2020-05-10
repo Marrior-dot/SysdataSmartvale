@@ -26,8 +26,8 @@ class IntelCav extends Embossadora {
     }
 
     @Override
-    protected String getCabecalho() {
-        return ""
+    protected String getCabecalho(Arquivo arquivo) {
+        ""
     }
 
     @Override

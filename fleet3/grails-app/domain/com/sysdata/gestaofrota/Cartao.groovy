@@ -14,7 +14,7 @@ class Cartao {
 
     static belongsTo = [portador: Portador]
 
-    static transients = ['numeroMascarado']
+    static transients = ['numeroMascarado', 'numeroFormatado']
 
     static constraints = {
         numero(unique: true)
@@ -39,7 +39,22 @@ class Cartao {
     }
 
     String getNumeroMascarado() {
-        Util.maskCard(this.numero)
+        if (this.numero.length() > 6) {
+            return this.numero[0..3] + "****" + this.numero[(this.numero.length() - 3)..(this.numero.length() - 1)]
+        } else "<< NÚMERO IMASCARÁVEL >>"
+
+    }
+
+    private String splitCartao(String num) {
+        def corte = (num.length() >= 4) ? 4 : num.length()
+        if (corte == 4)
+            splitCartao(num[corte..(num.length() - 1)])
+        return num[0..corte - 1] + " "
+    }
+
+    String getNumeroFormatado() {
+        String formatado = splitCartao(this.numero)
+        formatado[0..(formatado.length() - 2)]
     }
 
     @Override

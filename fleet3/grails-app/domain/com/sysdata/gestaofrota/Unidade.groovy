@@ -28,7 +28,7 @@ class Unidade {
 
     @Override
     String toString() {
-        return "${rh?.nome} - ${rh?.unidades?.nome}"
+        return "${this.codigo} - ${this.nome}"
     }
 
 /*

@@ -83,6 +83,12 @@ administradora {
     }
 }
 
+embossing {
+    produto = "BANPARA FROTA"
+    idCliente = "BANPR"
+}
+
+
 processamentos = [
         "faturamentoService",
         "geracaoArquivoCobrancaService"

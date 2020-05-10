@@ -6,6 +6,8 @@ import com.sysdata.gestaofrota.Endereco
 import com.sysdata.gestaofrota.PortadorFuncionario
 import com.sysdata.gestaofrota.StatusCartao
 import com.sysdata.gestaofrota.Telefone
+import com.sysdata.gestaofrota.TipoArquivo
+import grails.util.Holders
 
 import java.text.SimpleDateFormat
 
@@ -25,29 +27,37 @@ class PaySmart extends Embossadora {
 
     @Override
     protected String getNomeArquivo() {
-        final String idCliente = "MAXXC"
+
+        def config = Holders.grailsApplication.config.projeto
+        final String idCliente = config.embossing.idCliente
         final String idAplicacao = "VN"
         final String data = new SimpleDateFormat("ddMMyy").format(new Date())
         final String idPerfilEletronico = "01"
-        final String idAgrupamentoPostagem = "1"    //TODO perguntar
-        final String idQuebraDepartamento = "1"     //TODO perguntar
-        final String flagImpressaoSenha = "0"       //TODO perguntar
 
-        "${idCliente}_${getBin()}_${idAplicacao}_${data}_${idPerfilEletronico}${idAgrupamentoPostagem}${idQuebraDepartamento}${flagImpressaoSenha}"
+        "${idCliente}_${getBin()}_${idAplicacao}_${data}_${idPerfilEletronico}"
     }
 
     @Override
-    protected String getCabecalho() {
+    protected String getCabecalho(Arquivo arquivo) {
+
+        def config = Holders.grailsApplication.config.projeto
+
         final String sequencial = "1".padLeft(8, '0')
-        final String versao = "08"
+        final String versao = "09"
         final String nomeEmpresa = String.format("%-16s", "SYSDATA")
         final String bin = getBin()
-        final String produto = String.format("%-34s", "MAXXCARDFROTA")
+        final String produto = String.format("%-34s", config.embossing.produto)
         final String data = new SimpleDateFormat("yyyyMMdd").format(new Date())
-        final String fileSequence = "1".padLeft(5, '0')
+
+        String fileSeq = Arquivo.nextLote(TipoArquivo.EMBOSSING)
+        final String fileSequence = fileSeq.padLeft(5, '0')
+
         final String modo = "TEST" //TODO: mudar para 'PROD'
         final String qtd = cartoes.size().toString().padLeft(8, '0')
-        final String nsa = fileSequence
+
+        String fileNsa = Arquivo.nextNsa(TipoArquivo.EMBOSSING)
+        final String nsa = fileNsa.padLeft(5, '0')
+
         final String rfu = String.format("%58s", " ")
 
         return "H${sequencial}${versao}${nomeEmpresa}BIN=${bin}${produto}DATE=${data}" +
@@ -59,7 +69,8 @@ class PaySmart extends Embossadora {
         final String rfu = String.format("%7s", " ")
         final String rfu2 = String.format("%-6s", "*")
         final String rfu3 = String.format("%105s", " ")
-        final String tipoCartao = "20"                          // conta corrent pf
+
+        final String produto = "20"                          // conta corrent pf
         final String agencia = String.format("%4s", " ")        // não se aplica
         final String posto = String.format("%2s", " ")          // não se aplica
         final String numeroConta = String.format("%10s", " ")   // não se aplica
@@ -91,8 +102,8 @@ class PaySmart extends Embossadora {
             String campoCpf = cpf.length() > 0 ? "CPF=${cpf}" : String.format("%18s", " ")
             String campoCnpj = cnpj.length() > 0 ? "CNPJ${cnpj}" : String.format("%19s", " ")
 
-            builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${tipoCartao}${agencia}${posto}${numeroConta}" +
-                    "\$${getNumeroCartaoFormatado(c.numero)} " +            // primeira linha de embossing (número do cartão formatado)
+            builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${produto}${agencia}${posto}${numeroConta}" +
+                    "\$${c.numeroFormatado.padRight(20, " ")} " +           // primeira linha de embossing (número do cartão formatado)
                     "*${sdfMMAA.format(c.validade).padRight(24, " ")}" +    // segunda linha de embossing (data validade cartão formato: MM/AA)
                     "*${getNomeTitular(c.portador).padRight(24, " ")}" +    // terceira linha de embossing (nome do portador)
                     "*${emb4}" +                                            // quarta linha de embossing (agencia + posto; não se aplica)

@@ -10,6 +10,7 @@ class GeracaoArquivoEmbossingService {
 
     boolean gerarArquivo() {
 
+        log.info "Iniciando Geração Embossing..."
         boolean cartaoComChip = true
         Closure criteria = {
             eq('status', StatusCartao.CRIADO)
@@ -22,19 +23,15 @@ class GeracaoArquivoEmbossingService {
             }
         }
 
-        List<Cartao> cartoesComChip = Cartao.createCriteria().list(criteria); cartaoComChip = false
-        println "Cartoes com Chip: ${cartoesComChip}"
+        List<Cartao> cartoesComChip = Cartao.createCriteria().list(criteria);
+        cartaoComChip = false
         List<Cartao> cartoesSemChip = Cartao.createCriteria().list(criteria)
-        println "Cartoes sem Chip: ${cartoesSemChip}"
         Embossadora embossadora = null
 
       if (cartoesComChip.size() > 0) {
-            println "Qtd cartoes com chip: ${cartoesComChip.size()}"
+            log.info "Qtde com chip: ${cartoesComChip.size()}"
             embossadora = new PaySmart(cartoesComChip)
             Arquivo arquivo = embossadora.gerar()
-
-            println("Cartoes com chip: ")
-            println(arquivo.conteudoText)
 
             if (arquivo.save(flush: true, failOnError: true)) {
                 //File file = new File("/home/diego/${arquivo.nome}")
@@ -52,10 +49,9 @@ class GeracaoArquivoEmbossingService {
         }
 
         if (cartoesSemChip.size() > 0) {
+            log.info "Qtde com chip: ${cartoesSemChip.size()}"
             embossadora = new IntelCav(cartoesSemChip)
             Arquivo arquivo = embossadora.gerar()
-            println("Cartoes sem chip: ")
-            println(arquivo.conteudoText)
 
             if(arquivo.save(flush: true, failOnError: true)){
                 /*String aa = new String(arquivo.conteudo)

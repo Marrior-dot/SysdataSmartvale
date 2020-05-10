@@ -37,20 +37,9 @@ class Rh extends Empresa {
 
     static transients = ['portadoresCount', "corteAberto", "funcionariosCount", "veiculosCount"]
 
-
-
     String toString() {
-        "${codigo} - ${nome}"
-//        def flat = ""
-//        this.properties.each {
-//            flat += "${it}\n"
-//        }
-//        flat
+        "${this.cnpj} - ${this.nome}"
     }
-
-//    int getPortadoresCount() {
-//        unidades?.sum { it.portadores.size() } ?: 0
-//    }
 
     int getFuncionariosCount() {
         Funcionario.countFuncionariosRh(this).get()
