@@ -8,13 +8,9 @@ import com.sysdata.gestaofrota.processamento.IGeradorCartao
  * Created by hyago on 06/10/17.
  */
 abstract class AdministradoraCartao implements IGeradorCartao {
-    protected String bin
 
 
     AdministradoraCartao() {
-        Administradora.withNewSession {
-            this.bin = Administradora.first().bin
-        }
     }
 
 

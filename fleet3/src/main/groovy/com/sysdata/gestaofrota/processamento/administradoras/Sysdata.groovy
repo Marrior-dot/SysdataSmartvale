@@ -20,7 +20,7 @@ class Sysdata extends AdministradoraCartao {
         def tipoProg = Holders.grailsApplication.config.projeto.tipoPrograma
         def parceiro = Holders.grailsApplication.config.projeto.parceiro
         def cdRh = portador.unidade.rh.id
-        def prov = sprintf("%6d%1d%1d%03d%07d", this.bin.toInteger(), tipoProg, parceiro, cdRh, ++administradora.qtdCartoes)
+        def prov = sprintf("%6d%1d%1d%03d%07d", administradora.bin as int, tipoProg, parceiro, cdRh, ++administradora.qtdCartoes)
         administradora.save(flush: true)
         def check = calcularDV(prov)
         prov + check
