@@ -11,7 +11,7 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "Banpara"
+        nome = "ShowRoom"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -20,7 +20,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banpara_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/showroom_development"
 
         username = "postgres"
         password = "postgres"
@@ -30,16 +30,16 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "banpara"
+        pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#0F9682"
+        corSecundaria = "#000000"
 
-        context = "/banpara-frota"
+        context = "/showroom-frota"
     }
 
     homologation {
-        nome = "Banpara"
+        nome = "ShowRoom"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -48,44 +48,33 @@ environments {
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
         url = "jdbc:postgresql://192.168.250.41/maxxcard_homologation"
+        username = "postgres"
         password = "postgres"
-        // ** DATABASE **
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "banpara"
+        pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#E40000"
+        corSecundaria = "#000000"
+
+        context = "/showroom-hom"
     }
+
 }
 
 administradora {
-    nome = "BANPARA"
+    nome = "Sysdata Sistemas Integrados"
     bin = "605009"
     anosValidadeCartao = 2
 
-    contaBancaria {
-        banco = 341
-        agencia = "7162"
-        agenciaDv = "0"
-        numero = "14722"
-        numeroDv = "2"
-        carteira = "109"
-
-        boleto {
-            localPagamento = "Pagável em qualquer Banco até a data de vencimento"
-            instrucao1 = "Aceitar até a data de vencimento"
-            instrucao2 = "Após o vencimento aceito apenas nas agências do ITAU"
-        }
-    }
 }
 
 embossing {
-    produto = "BANPARA FROTA"
-    idCliente = "BANPR"
+    produto = "SYSDATA FROTA"
+    idCliente = "SYSDT"
 }
 
 
