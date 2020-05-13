@@ -6,6 +6,9 @@ class UserController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    UserService userService
+
+
     def index = {
         redirect(action: "list", params: params)
     }
@@ -85,30 +88,16 @@ class UserController extends BaseOwnerController {
         render(view: 'form', model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
     }
 
-    def save() {
-        def userInstance = new User(params)
-        userInstance.enabled = true
-        if (params.password == params.confirmPassword) {
+    def save(User userInstance) {
 
-            def roleInstance = Role.get(params.role)
-            if (roleInstance) {
-                if (userInstance.save(flush: true)) {
-
-                    UserRole.create userInstance, Role.get(params.role)
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])}"
-                    redirect(action: "show", id: userInstance.id)
-                } else
-                    render(view: "form", model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
-            } else {
-                flash.message = "Papel não definido para usuário"
-                render view: "form", model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()]
-            }
-
+        def ret = userService.saveNew(userInstance, params)
+        if (ret.success) {
+            flash.message = ret.message
+            redirect(action: "show", id: userInstance.id)
         } else {
-            flash.message = "Confirmação não confere com Senha informada"
+            flash.message = ret.message
             render(view: "form", model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
         }
-
     }
 
     def show() {
@@ -260,4 +249,5 @@ class UserController extends BaseOwnerController {
         }
         render roles as JSON
     }
+
 }

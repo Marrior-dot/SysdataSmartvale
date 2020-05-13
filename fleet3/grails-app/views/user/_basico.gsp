@@ -46,12 +46,6 @@
                     </div>
                 </g:else>
 
-				<g:if test="${action in [Util.ACTION_NEW]}">
-					<div class="form-group col-md-6">
-						<label for="role">Papel</label>
-						<g:select name="role" id="role" from="" value="" optionKey="id" optionValue="authority" class="form-control"/>
-					</div>
-				</g:if>
 			</div>
 
 			<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
@@ -109,7 +103,7 @@
 						<div class="form-group col-md-6">
 							<label for="role">Papel</label>
 							<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
-									  value="" optionKey="id" optionValue="authority" class="form-control"/>
+									  value="${userInstance}" optionKey="id" optionValue="authority" class="form-control"/>
 						</div>
 					</g:else>
 
@@ -156,6 +150,31 @@
 				</label>
 			</div>
 
+			<div class="panel panel-default">
+				<div class="panel-heading">Papéis</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="form-group col-md-4">
+
+							<g:if test="${ action == Util.ACTION_NEW }">
+								<span id="roles"></span>
+							</g:if>
+							<g:else>
+
+								<%
+								    def userAuths = userInstance.authorities as List
+								%>
+
+								 <g:each in="${Role.findAllByOwner(userInstance.owner)}" var="r" >
+									 <g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
+								 </g:each>
+							</g:else>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="buttons">
 				<g:if test="${action in [Util.ACTION_NEW]}">
 					<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" />
@@ -187,6 +206,33 @@
 	</div>
 </div>
 
+<script>
+
+	$(document).ready(function() {
+		loadPerfis($("select#owner").val())
+	})
+
+
+	$("select#owner").change(function() {
+		loadPerfis($(this).val())
+	})
+
+
+	function loadPerfis(ownerId) {
+		$("span#roles").html("")
+
+		$.getJSON("${createLink(controller: 'role', action: 'getRolesByOwner')}", { ownerId: ownerId },  function(data) {
+
+			let roles = []
+			$.each(data, function(k, v) {
+				roles.push("<input type='checkbox' name="+ v.authority + ">" + v.authority + "</input>")
+			})
+
+			$("span#roles").html(roles.join("<br/>"))
+		})
+	}
+
+</script>
 
 
 

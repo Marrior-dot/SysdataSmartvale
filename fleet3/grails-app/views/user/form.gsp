@@ -29,10 +29,14 @@
                             <span class="glyphicon glyphicon-list"></span>
                             <g:message code="default.list.label" args="[entityName]" />
                         </g:link>
-                        <g:link class="btn btn-default" action="create">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            <g:message code="default.new.label" args="[entityName]" />
-                        </g:link>
+
+                        <g:if test="${action == Util.ACTION_VIEW}">
+                            <g:link class="btn btn-default" action="create">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                <g:message code="default.new.label" args="[entityName]" />
+                            </g:link>
+                        </g:if>
+
                     </div>
 
                     <g:render template="basico" model="${[action: action]}"/>

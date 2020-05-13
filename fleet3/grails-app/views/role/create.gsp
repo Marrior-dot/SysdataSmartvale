@@ -36,7 +36,10 @@
                             </div>
                             <div class="form-group col-sm-3">
                                 <label>Participante</label>
-                                <g:textField name="owner" class="form-control" value="${this.role.owner}"></g:textField>
+
+                                <g:select name="owner" class="form-control" from="${ownerList}" optionKey="id" optionValue="nome" value="${this.role.owner}"></g:select>
+
+
                             </div>
                         </div>
                     </div>

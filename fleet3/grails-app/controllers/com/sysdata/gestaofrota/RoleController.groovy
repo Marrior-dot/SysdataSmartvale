@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
@@ -19,7 +20,13 @@ class RoleController {
     }
 
     def create() {
-        respond new Role(params)
+        def ownerList = []
+        ownerList += Processadora.all
+        ownerList += Administradora.all
+        ownerList += Rh.all
+        ownerList += PostoCombustivel.all
+
+        respond new Role(params), model: [ownerList: ownerList]
     }
 
     def save(Role role) {
@@ -102,4 +109,14 @@ class RoleController {
             '*'{ render status: NOT_FOUND }
         }
     }
+
+    def getRolesByOwner(long ownerId) {
+        def rolesList = Role.withCriteria {
+            owner {
+                eq("id", ownerId)
+            }
+        }
+        render rolesList as JSON
+    }
+
 }
