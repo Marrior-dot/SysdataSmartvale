@@ -27,11 +27,11 @@ class PostoCombustivelController {
 
     def postoCombustivelService
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def criteria = {
             order('id')
@@ -41,11 +41,21 @@ class PostoCombustivelController {
     }
 
 
-    def create = {
+    def create() {
         render(view: "form", model: [action: 'novo'])
     }
 
-    def save = {
+    def save(PostoCombustivel postoCombustivelInstance) {
+
+        if (postoCombustivelInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
+            redirect(action: "show", id: postoCombustivelInstance.id)
+        } else {
+            render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: Util.ACTION_NEW])
+        }
+
+
+/*
         def postoCombustivelInstance = new PostoCombustivel(params)
         int postosCadastrados = PostoCombustivel.countByCnpj(postoCombustivelInstance.cnpj)
         if (postosCadastrados > 0) {
@@ -64,6 +74,7 @@ class PostoCombustivelController {
         } else {
             render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'novo'])
         }
+*/
     }
 
     def show = {
@@ -148,7 +159,7 @@ class PostoCombustivelController {
     }
 
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 10
         def opcao
@@ -208,7 +219,7 @@ class PostoCombustivelController {
         render data as JSON
     }
 
-    def getIntervalosReembolso = {
+    def getIntervalosReembolso() {
         def postoCombustivelInstance = PostoCombustivel.get(params.id)
 
         def jsonData
@@ -219,7 +230,7 @@ class PostoCombustivelController {
                  fim          : r.fimIntervalo,
                  diaEfetivacao: r.diaEfetivacao,
                  meses        : r.meses,
-                 acao         : "<a href='#' onclick='openModal(${r.id});'><img src='${resource(dir: 'images', file: 'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir: 'images', file: 'delete_mini.png')}' alt='Excluir'></a>"
+                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
                 ]
             }
 
@@ -230,7 +241,7 @@ class PostoCombustivelController {
         render jsonData as JSON
     }
 
-    def deleteReembolso = {
+    def deleteReembolso() {
         def retorno
         def reembolsoInstance = Reembolso.get(params.id)
         if (reembolsoInstance) {
@@ -246,7 +257,7 @@ class PostoCombustivelController {
     }
 
 
-    def getReembolsoSemanal = {
+    def getReembolsoSemanal() {
         def postoCombustivelInstance = PostoCombustivel.get(params.id)
 
         def jsonData
@@ -256,7 +267,7 @@ class PostoCombustivelController {
             def fields = postoCombustivelInstance.reembolsos.collect { r ->
                 [diaSemana    : r.diaSemana.nome,
                  intervaloDias: r.intervaloDias,
-                 acao         : "<a href='#' onclick='openModal(${r.id});'><img src='${resource(dir: 'images', file: 'edit_mini.png')}' alt='Editar'></a> <a href='#' onclick='deleteReembolso(${r.id});'><img src='${resource(dir: 'images', file: 'delete_mini.png')}' alt='Excluir'></a>"
+                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
                 ]
             }
 
@@ -269,7 +280,7 @@ class PostoCombustivelController {
     }
 
 
-    def manageReembolso = {
+    def manageReembolso() {
         def reembolsoCommand
 
         def reembolsoInstance = Reembolso.get(params.id)
@@ -286,7 +297,7 @@ class PostoCombustivelController {
     }
 
 
-    def manageReembolsoSemanal = {
+    def manageReembolsoSemanal() {
         def reembolsoCommand
 
         def reembolsoInstance = Reembolso.get(params.id)
@@ -302,7 +313,7 @@ class PostoCombustivelController {
     }
 
 
-    def saveReembolsoSemanal = { ReembolsoSemanalCommand cmd ->
+    def saveReembolsoSemanal(ReembolsoSemanalCommand cmd) {
 
         def postoCombustivelInstance = PostoCombustivel.get(cmd.parId)
         def reembolsoInstance = ReembolsoSemanal.get(cmd.id)
@@ -329,6 +340,7 @@ class PostoCombustivelController {
 
         } else {
             reembolsoInstance.properties = cmd.properties
+            reembolsoInstance.save(flush: true)
             retorno = [type: "ok", message: "Reembolso alterado"]
         }
         render retorno as JSON
@@ -336,7 +348,7 @@ class PostoCombustivelController {
     }
 
 
-    def saveReembolso = { IntervaloReembolsoCommand cmd ->
+    def saveReembolso(IntervaloReembolsoCommand cmd) {
 
         def postoCombustivelInstance = PostoCombustivel.get(cmd.parId)
         def reembolsoInstance = ReembolsoIntervalo.get(cmd.id)
@@ -371,6 +383,7 @@ class PostoCombustivelController {
                         retorno = [type: "ok", message: "Reembolso inserido"]
                     } else {
                         reembolsoInstance.properties = cmd.properties
+                        reembolsoInstance.save(flush: true)
                         retorno = [type: "ok", message: "Reembolso alterado"]
                     }
                     render retorno as JSON

@@ -214,6 +214,12 @@
 <g:hiddenField name="version" value="${pedidoCargaInstance?.version}"/>
 <g:hiddenField name="action" value="${action}"/>
 
+
+
+
+
+
+
 <table class="table table-bordered">
     <tbody>
     <tr>
@@ -226,6 +232,9 @@
     </tr>
     </tbody>
 </table>
+
+
+
 
 <div class="form-horizontal row">
     <div class="col-xs-3 input-group-sm">

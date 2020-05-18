@@ -1,6 +1,7 @@
 package fleet3
 
 import com.sysdata.gestaofrota.Administradora
+import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.Cidade
 import com.sysdata.gestaofrota.EscopoParametro
 import com.sysdata.gestaofrota.Estado
@@ -22,6 +23,7 @@ class BootStrap {
         criarAdministradora()
         criarAutenticacaoInicial()
         criarCidades()
+        criarBancos()
     }
 
     def destroy = {
@@ -59,6 +61,14 @@ class BootStrap {
         Estado bahia = Estado.findOrCreateWhere([nome: "Bahia", uf: "BA"]).save(flush: true)
         Cidade.findOrCreateWhere([nome: "Belém", estado: para]).save(flush: true)
         Cidade.findOrCreateWhere([nome: "Salvador", estado: bahia]).save(flush: true)
+    }
+
+    def criarBancos() {
+        Banco.findOrCreateWhere([codigo: "1", nome:"BANCO DO BRASIL S.A"]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "104", nome:"CAIXA ECONOMICA FEDERAL"]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "33", nome:"BANCO SANTANDER BRASIL S.A."]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "237", nome:"BANCO BRADESCO S.A."]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "341", nome:"BANCO ITAU S.A."]).save(flush: true)
     }
 
 }

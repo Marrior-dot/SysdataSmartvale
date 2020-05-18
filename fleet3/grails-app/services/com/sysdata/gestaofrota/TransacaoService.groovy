@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
 import grails.orm.PagedResultList
+import grails.plugin.springsecurity.SpringSecurityUtils
 
 class TransacaoService {
 

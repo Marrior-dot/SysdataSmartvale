@@ -8,7 +8,7 @@
         <g:form method="post" >
             <g:hiddenField name="id" value="${estabelecimentoInstance?.id}" />
             <g:hiddenField name="version" value="${estabelecimentoInstance?.version}" />
-            <g:hiddenField name="empId" value="${empresaInstance?.id}" />
+            <g:hiddenField name="empresa.id" value="${empresaInstance?.id}" />
             <g:hiddenField name="action" value="${action}"/>
 
             <div class="panel panel-default">

@@ -6,20 +6,20 @@ class EstabelecimentoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def estabelecimentoService
+    EstabelecimentoService estabelecimentoService
 
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def estabelecimentoInstanceList = Estabelecimento.list(params)
         [estabelecimentoInstanceList: estabelecimentoInstanceList, estabelecimentoInstanceTotal: Estabelecimento.count()]
     }
 
-    def create = {
+    def create() {
         if (params.empId) {
             PostoCombustivel empresaInstance = PostoCombustivel.get(params.long('empId'))
             render(view: "form", model: [empresaInstance: empresaInstance, action: Util.ACTION_NEW])
@@ -29,7 +29,16 @@ class EstabelecimentoController {
         }
     }
 
-    def save = {
+    def save(Estabelecimento estabelecimento) {
+
+        if (estabelecimentoService.gerarCodigo(estabelecimento) && estabelecimento.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), estabelecimento.nome])}"
+            redirect(action: "show", id: estabelecimento.id)
+        } else {
+            render(view: "form", model: [estabelecimentoInstance: estabelecimento, empresaInstance: estabelecimento.empresa, action: Util.ACTION_NEW])
+        }
+
+/*
         flash.errors = []
         Estabelecimento estabelecimentoInstance = new Estabelecimento(params)
         int estabelecimentoCadastrados = Estabelecimento.countByCnpj(estabelecimentoInstance.cnpj)
@@ -63,9 +72,10 @@ class EstabelecimentoController {
             flash.errors = e.message
             render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, empresaInstance: estabelecimentoInstance.empresa, action: Util.ACTION_NEW])
         }
+*/
     }
 
-    def show = {
+    def show() {
         def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
 
         if (!estabelecimentoInstance) {
@@ -82,7 +92,7 @@ class EstabelecimentoController {
         }
     }
 
-    def edit = {
+    def edit() {
         def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
 
         if (!estabelecimentoInstance) {
@@ -98,7 +108,7 @@ class EstabelecimentoController {
         }
     }
 
-    def update = {
+    def update() {
         def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
         if (estabelecimentoInstance) {
             if (params.version) {
@@ -134,7 +144,7 @@ class EstabelecimentoController {
         }
     }
 
-    def delete = {
+    def delete() {
         def estabelecimentoInstance = Estabelecimento.get(params.id)
         if (estabelecimentoInstance) {
             try {
@@ -153,7 +163,7 @@ class EstabelecimentoController {
         }
     }
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.start ?: 10
         def empId = params.empId != 'null' ? params.empId.toLong() : null
@@ -181,7 +191,7 @@ class EstabelecimentoController {
         render data as JSON
     }
 
-    def getByCodigo = {
+    def getByCodigo() {
         def estabelecimentoInstance = Estabelecimento.findByCodigo(params.codigo)
         def data = [razao: estabelecimentoInstance?.empresa?.nome]
         render data as JSON

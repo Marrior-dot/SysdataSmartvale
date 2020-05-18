@@ -13,11 +13,11 @@ class PedidoCargaController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         Participante participante = getCurrentUser()?.owner
         Unidade unidadeInstance = participante.instanceOf(Rh) ? Unidade.findByRh(participante) : null
 
@@ -36,7 +36,6 @@ class PedidoCargaController extends BaseOwnerController {
 //            return;
 //        }
 
-        println "params:${params}"
         def criteria = {
             if (params.searchDataCarga) {
                 Date beginDay = params.date('searchDataCarga','dd/MM/yyyy').clearTime()
@@ -76,7 +75,6 @@ class PedidoCargaController extends BaseOwnerController {
         params.order = "desc"
         def pedidoCargaInstanceList = PedidoCarga.createCriteria().list(params, criteria)
         def pedidoCargaInstanceCount = PedidoCarga.createCriteria().count(criteria)
-        println "pedido : ${pedidoCargaInstanceList*.dataCarga}"
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
@@ -88,27 +86,9 @@ class PedidoCargaController extends BaseOwnerController {
          searchStatus            : params?.searchStatus]
     }
 
-    def create() {
-        def unidadeInstance = Unidade.get(params.long('unidade_id'))
-
-        if (!unidadeInstance) {
-            flash.errors = "Unidade não selecionada!"
-            redirect(action: 'list')
-            return;
-        }
-
-        PedidoCarga pedidoCargaInstance = new PedidoCarga()
-        pedidoCargaInstance.unidade = unidadeInstance
-        pedidoCargaInstance.dataCarga = new Date().clearTime()
-        pedidoCargaInstance.taxa = unidadeInstance.rh.taxaPedido
-
-        [pedidoCargaInstance: pedidoCargaInstance]
+    def create(PedidoCarga pedidoCarga) {
+        [pedidoCargaInstance: pedidoCarga]
     }
-
-    def selectRhUnidade = {
-        render(view: '/selectRhUnidade', model: [controller: "pedidoCarga", action: 'novo'])
-    }
-
 
     def synchServer() {
 
@@ -163,7 +143,7 @@ class PedidoCargaController extends BaseOwnerController {
         }
     }
 
-    def save = {
+    def save() {
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (!unidadeInstance) {
             flash.errors = "Unidade não selecionada"
@@ -239,7 +219,7 @@ class PedidoCargaController extends BaseOwnerController {
         redirect(action: 'list')
     }
 
-    def show = {
+    def show() {
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
 
         def totalPedido = 0
@@ -256,7 +236,7 @@ class PedidoCargaController extends BaseOwnerController {
         [pedidoCargaInstance: pedidoCargaInstance]
     }
 
-    def edit = {
+    def edit() {
         def pedidoCargaInstance = PedidoCarga.get(params.long('id'))
         if (!pedidoCargaInstance) {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
@@ -266,7 +246,7 @@ class PedidoCargaController extends BaseOwnerController {
         [pedidoCargaInstance: pedidoCargaInstance]
     }
 
-    def update = {
+    def update() {
 
         def pedidoCarga = PedidoCarga.get(params.long('id'))
         if (!pedidoCarga) {
@@ -388,7 +368,7 @@ class PedidoCargaController extends BaseOwnerController {
         }
     }
 
-    def filterFuncionarios = {
+    def filterFuncionarios() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
@@ -426,7 +406,7 @@ class PedidoCargaController extends BaseOwnerController {
                         action                  : params.actionView])
     }
 
-    def getAllFuncionariosIds = {
+    def getAllFuncionariosIds() {
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
 
@@ -450,7 +430,7 @@ class PedidoCargaController extends BaseOwnerController {
         render model as JSON
     }
 
-    def gerarPlanilha = {
+    def gerarPlanilha() {
 
         PedidoCarga pedidoCarga = PedidoCarga.get(params.long('id'))
         if (!pedidoCarga) {

@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="layout-restrito" />
         <g:set var="entityName" value="Credenciado" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title>${action} ${entityName}</title>
     </head>
     <body>
     <br/>
@@ -39,10 +39,13 @@
                         </a>
 
                         <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                            <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <g:message code="default.new.label" args="[entityName]" />
-                            </a>
+                            <g:if test="${action == Util.ACTION_VIEW}">
+                                <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <g:message code="default.new.label" args="[entityName]" />
+                                </a>
+                            </g:if>
+
                         </sec:ifAnyGranted>
                     </div>
                     <br>

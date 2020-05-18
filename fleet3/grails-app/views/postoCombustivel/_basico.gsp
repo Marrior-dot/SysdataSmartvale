@@ -49,8 +49,9 @@
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-xs-6">
-					<bs:formField id="taxaReembolso" required="true" name="taxaReembolso" label="Taxa" value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="currency"/>
+				<div class="col-md-4">
+					<bs:formField id="taxaReembolso" required="true" name="taxaReembolso" label="Taxa"
+								  value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="form-control percentual"/>
 				</div>
 			</div>
 		</div>
@@ -58,14 +59,22 @@
 
 	<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 		<div class="buttons">
-			<g:if test="${action in [Util.ACTION_NEW,Util.ACTION_EDIT]}">
-				<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}"
-								value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+			<g:if test="${action in [Util.ACTION_NEW, Util.ACTION_EDIT]}">
+				<button type="submit" class="btn btn-success" name="_action_${action==Util.ACTION_NEW?'save':'update'}">
+					<span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.update.label" default="Update"></g:message>
+				</button>
 			</g:if>
 			<g:if test="${action==Util.ACTION_VIEW}">
-				<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
-				<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-								onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+
+				<button type="submit" class="btn btn-default" name="_action_edit">
+					<span class="glyphicon glyphicon-edit"></span>&nbsp;<g:message code="default.button.edit.label" default="Edit"></g:message>
+				</button>
+
+				<button type="submit" class="btn btn-danger" name="_action_delete"
+						onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;<g:message code="default.button.delete.label" default="Delete"></g:message>
+				</button>
+
 			</g:if>
 		</div>
 	</sec:ifAnyGranted>

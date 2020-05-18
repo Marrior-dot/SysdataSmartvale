@@ -15,7 +15,7 @@
 		<g:message code="motivoNegacao.descricao.label" default="Descricao" />
 		
 	</label>
-	<g:textField name="ocorrencia" class="form-control" value="${motivoNegacaoInstance?.ocorrencia}"/>
+	<g:textField name="descricao" class="form-control" value="${motivoNegacaoInstance?.descricao}"/>
 </div>
 <br><br>
 

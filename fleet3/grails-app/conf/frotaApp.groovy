@@ -47,7 +47,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/maxxcard_homologation"
+        url = "jdbc:postgresql://192.168.250.41/showroom"
         username = "postgres"
         password = "postgres"
 
@@ -57,7 +57,7 @@ environments {
          */
         pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#E40000"
+        corPrimaria = "#0F9682"
         corSecundaria = "#000000"
 
         context = "/showroom-hom"

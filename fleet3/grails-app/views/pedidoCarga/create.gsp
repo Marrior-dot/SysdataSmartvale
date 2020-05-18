@@ -35,24 +35,19 @@
             </g:hasErrors>
 
 
-            <div class="nav">
-                <a class="btn btn-default" href="${createLink(uri: '/')}">
-                    <span class="glyphicon glyphicon-home"></span>
-                    <g:message code="default.home.label"/>
-                </a>
-                <g:link class="btn btn-default" action="list">
-                    <i class="glyphicon glyphicon-th-list"></i>
-                    <g:message code="default.list.label" args="[entityName]"/>
-                </g:link>
-            </div>
+            <a class="btn btn-default" href="${createLink(uri: '/')}">
+                <span class="glyphicon glyphicon-home"></span>
+                <g:message code="default.home.label"/>
+            </a>
+            <g:link class="btn btn-default" action="list">
+                <i class="glyphicon glyphicon-th-list"></i>
+                <g:message code="default.list.label" args="[entityName]"/>
+            </g:link>
 
-            <div class="body">
-                <br/>
-                <g:form method="POST" controller="pedidoCarga" name="defaultForm">
-                    <g:render template="form" model="${[action: Util.ACTION_NEW]}"/>
-                    <g:actionSubmit action="save" id="submitButton" disabled="" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Criar')}"/>
-                </g:form>
-            </div>
+            <g:form method="POST" controller="pedidoCarga" name="defaultForm">
+                <g:render template="form" model="${[action: Util.ACTION_NEW]}"/>
+                <g:actionSubmit action="save" id="submitButton" disabled="" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Criar')}"/>
+            </g:form>
         </div>
     </div>
 

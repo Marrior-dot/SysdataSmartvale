@@ -11,7 +11,7 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "ShowRoom"
+        nome = "Banpara"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -20,7 +20,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/showroom_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banpara_development"
 
         username = "postgres"
         password = "postgres"
@@ -30,16 +30,16 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "showroom"
+        pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
 
-        context = "/showroom-frota"
+        context = "/banpara-frota"
     }
 
     homologation {
-        nome = "ShowRoom"
+        nome = "Banpara"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -47,7 +47,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/showroom"
+        url = "jdbc:postgresql://192.168.250.41/banpara_homologation"
         username = "postgres"
         password = "postgres"
 
@@ -55,26 +55,50 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "showroom"
+        pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
 
-        context = "/showroom-hom"
+        context = "/banpara-hom"
     }
 
+    production {
+        nome = "Banpara"
+        tipoPrograma = 7
+        parceiro = 2
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
+        tipoEmbossadora = TipoEmbossadora.PAYSMART
+
+        // ** DATABASE **
+        dbCreate = "update" // one of 'create', 'create-drop','update'
+        url = "jdbc:postgresql://192.168.250.41/banpara_production"
+        username = "banpara_production"
+        password = "postgres"
+
+        /**
+         * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
+         * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
+         */
+        pasta = "banpara"
+        //geradorCartao = NewGeradorCartaoService
+        corPrimaria = "#BEBEBE"
+        corSecundaria = "#696969"
+
+        context = "/banpara-hom"
+    }
 }
 
 administradora {
-    nome = "Sysdata Sistemas Integrados"
-    bin = "605009"
+    nome = "BANPARA"
+    bin = "530370"
     anosValidadeCartao = 2
 
 }
 
 embossing {
-    produto = "SYSDATA FROTA"
-    idCliente = "SYSDT"
+    produto = "BANPARA FROTA"
+    idCliente = "BANPR"
 }
 
 

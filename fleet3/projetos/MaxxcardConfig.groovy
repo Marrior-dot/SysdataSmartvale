@@ -1,3 +1,4 @@
+import com.sysdata.gestaofrota.Banco
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
@@ -11,18 +12,15 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "ShowRoom"
+        nome = "Maxxcard"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
+        tipoAdministradora = TipoAdministradoraCartao.MAXCARD
         tipoEmbossadora = TipoEmbossadora.PAYSMART
-
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/showroom_development"
-
-        username = "postgres"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://localhost/maxxcard_development"
         password = "postgres"
         // ** DATABASE **
 
@@ -30,61 +28,54 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "showroom"
+        pasta = "maxxcard"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
-
-        context = "/showroom-frota"
+        corPrimaria = "#f63535"
+        corSecundaria = "#f2b941"
     }
 
     homologation {
-        nome = "ShowRoom"
+        nome = "Maxxcard"
         tipoPrograma = 7
         parceiro = 2
-        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
+        tipoAdministradoraCartao = TipoAdministradoraCartao.MAXCARD
         tipoEmbossadora = TipoEmbossadora.PAYSMART
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/showroom"
-        username = "postgres"
+        url = "jdbc:postgresql://148.5.7.216/maxxcard_homologation"
         password = "postgres"
+        // ** DATABASE **
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "showroom"
+        pasta = "maxxcard"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
-
-        context = "/showroom-hom"
+        corPrimaria = "#f63535"
+        corSecundaria = "#f2b941"
     }
 
 }
 
-administradora {
-    nome = "Sysdata Sistemas Integrados"
-    bin = "605009"
-    anosValidadeCartao = 2
+administradora{
 
+    nome="MAXXCARD ADMINISTRADORA DE CARTOES LTDA"
+    cnpj="12.387.832/0001-91"
+
+    contaBancaria{
+        banco="BANCO_ITAU"
+        conta="14722"
+        contadv="2"
+        carteira=6
+        agencia="716"
+        agenciadv="2"
+    }
 }
 
-embossing {
-    produto = "SYSDATA FROTA"
-    idCliente = "SYSDT"
-}
 
-
-processamentos = [
-        "faturamentoService",
-        "geracaoArquivoCobrancaService"
-]
-
-
-faturamento {
-    controlaSaldo = true
-    extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+faturamento{
+    controlaSaldo=true
+    extensoes=[TaxaUtilizacao,TaxaManutencao,TaxaAdministracao]
 }
