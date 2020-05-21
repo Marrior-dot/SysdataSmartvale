@@ -28,13 +28,13 @@
 
 <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
 	<button type="button" class="btn btn-default" onclick="openModal(0);">
-		Adicionar Reembolso
+		<i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar Reembolso
 	</button>
 </sec:ifAnyGranted>
 
 
 
-<div id="divSemanal">
+<div id="divSemanal" class="panel-top">
 
     <div class="list">
         <table id="rbSemanalTable" class="table table-striped table-bordered table-hover table-condensed table-default">

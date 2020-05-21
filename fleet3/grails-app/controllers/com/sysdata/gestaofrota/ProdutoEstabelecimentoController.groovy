@@ -50,6 +50,7 @@ class ProdutoEstabelecimentoController {
 
             String valorStr = params["valor[${produto.id}]"] ?: "0"
             produtoEstabelecimento.ativo = true
+            produtoEstabelecimento.valorAnterior = produtoEstabelecimento.valor
             produtoEstabelecimento.valor = Util.parseCurrency(valorStr)
 
             if (! produtoEstabelecimento.save(flush: true)){

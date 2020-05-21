@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div style="float: right; margin-top: 1em">
+            <div style="float: right; margin-top: 1em; margin-bottom: 1em;">
                 <button type="button" class="btn btn-default" onclick="pesquisarFuncionario()">
                     <i class="glyphicon glyphicon-search"></i>
                     Pesquisar
@@ -39,16 +39,20 @@
         </div>
         %{--SEARCH--}%
 
-        <br/><br/>
+%{--
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="selectAll" class="checkbox" checked
                        onclick="selecinaTodosFuncionarios()"> Seleciona Todos Funcionários
             </label>
         </div>
-        <div id="funcionario-list">
-            %{--<g:render template="funcionarioList"--}%
-                      %{--model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>--}%
+--}%
+
+        <div class="panel-top">
+            <div id="funcionario-list">
+                %{--<g:render template="funcionarioList"--}%
+                %{--model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>--}%
+            </div>
         </div>
     </div>
 </div>

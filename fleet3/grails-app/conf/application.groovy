@@ -142,19 +142,16 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/reportViewer/**',           access: ['ROLE_PROC', 'ROLE_ADMIN']],
 
 
-        [pattern: '/produto/**',                access: ['ROLE_PROC']],
-        [pattern: '/marcaVeiculo/**',           access: ['ROLE_PROC']],
-        [pattern: '/tipoEquipamento/**',        access: ['ROLE_PROC']],
+        [pattern: '/produto/**',                access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/marcaVeiculo/**',           access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/tipoEquipamento/**',        access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/motivoNegacao/**',          access: ['ROLE_PROC']],
-        [pattern: '/user/**',                   access: ['ROLE_PROC']],
+        [pattern: '/user/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/role/**',                   access: ['ROLE_PROC']],
-        [pattern: '/report/**',                 access: ['ROLE_PROC']],
         [pattern: '/fieldReport/**',            access: ['ROLE_PROC']],
         [pattern: '/parameterReport/**',        access: ['ROLE_PROC']],
         [pattern: '/processamento/**',          access: ['ROLE_PROC']],
-        [pattern: '/centralAtendimento/**',     access: ['ROLE_PROC']],
-
-
+        [pattern: '/centralAtendimento/**',     access: ['ROLE_PROC', 'ROLE_ADMIN']],
 
         [pattern: '/console/**',        access: ['ROLE_PROC']],
         [pattern: "/static/console/**", access: ['ROLE_PROC']]

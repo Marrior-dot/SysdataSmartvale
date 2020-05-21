@@ -29,7 +29,7 @@
                             <td>${fieldValue(bean: produto, field: "nome")}</td>
                             <td>${produto.tipo?.nome}</td>
                             <td><input type="text" class="form-control money" name="valor[${produto.id}]" value="${Util.formatCurrency(prodEst?.valor)}"/></td>
-                            <td><input type="text" class="form-control money" name="valorAnterior" value="${prodEst?.valorAnterior ?: 0}" disabled /></td>
+                            <td><input type="text" class="form-control money" name="valorAnterior" value="${Util.formatCurrency(prodEst?.valorAnterior)}" disabled /></td>
                         </tr>
                     </g:each>
                 </tbody>

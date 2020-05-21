@@ -7,14 +7,12 @@
     <g:if test="${!action || action == Util.ACTION_VIEW}">
         <br/>
         <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-            <button type="submit" class="btn btn-default">Criar Estabelecimento</button>
+            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i>&nbsp;Criar Estabelecimento</button>
         </sec:ifAnyGranted>
     </g:if>
 
 
-    <br/>
-
-    <div class="list">
+    <div class="panel-top">
         <table id="estTable" class="table table-striped table-bordered table-hover table-condensed table-default">
             <thead>
             <th>Cod.Estab</th>

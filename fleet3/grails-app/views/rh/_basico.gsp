@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
 <script type="application/javascript">
 	$(document).ready(function () {
 		alterarModeloCobranca();
@@ -179,47 +179,48 @@
 
 	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
 
+	<g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Taxas do Cartão
+			</div>
 
-	<div class="panel panel-default">
-        <div class="panel-heading">
-			Taxas do Cartão
+			<div class="panel-body">
+				<div class="row">
+					<div class="form-group col-md-3">
+						<label class="control-label" for="taxaUtilizacao">Utilização *</label>
+						<div class="input-group">
+							<span class="input-group-addon">R$</span>
+							<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
+								   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-3">
+						<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
+						<div class="input-group">
+							<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
+								   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+
+					<div class="form-group col-md-3">
+						<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
+						<div class="input-group">
+							<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
+								   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+
+					<input type="hidden" name="taxaMensalidade" id="taxaMensalidade" value="0">
+					<input type="hidden" name="taxaEmissaoCartao" id="taxaEmissaoCartao" value="0">
+					<input type="hidden" name="taxaReemissaoCartao" id="taxaReemissaoCartao" value="0">
+				</div>
+			</div>
 		</div>
-
-		<div class="panel-body">
-            <div class="row">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
-							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
-							   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
-						<span class="input-group-addon">%</span>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
-							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
-						<span class="input-group-addon">%</span>
-					</div>
-				</div>
-
-				<input type="hidden" name="taxaMensalidade" id="taxaMensalidade" value="0">
-				<input type="hidden" name="taxaEmissaoCartao" id="taxaEmissaoCartao" value="0">
-				<input type="hidden" name="taxaReemissaoCartao" id="taxaReemissaoCartao" value="0">
-            </div>
-		</div>
-    </div>
+	</g:if>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">

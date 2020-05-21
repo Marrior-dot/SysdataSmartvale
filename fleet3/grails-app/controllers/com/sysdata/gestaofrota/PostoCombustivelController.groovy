@@ -267,7 +267,7 @@ class PostoCombustivelController {
             def fields = postoCombustivelInstance.reembolsos.collect { r ->
                 [diaSemana    : r.diaSemana.nome,
                  intervaloDias: r.intervaloDias,
-                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
+                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-trash'/></a>"
                 ]
             }
 

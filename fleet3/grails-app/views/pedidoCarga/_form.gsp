@@ -143,6 +143,7 @@
         if (action === "visualizando") {
             $("input[type='checkbox']").each(function (e) {
                 $(this).attr("disabled", "true");
+                $(this).attr("checked", "true");
             });
         }
         else if(action === "novo" || action === "editando") {
@@ -332,13 +333,28 @@
                 <div class="col-xs-3 input-group-sm">
                     <label class="control-label">Status</label>
 
+                    <%
+                        def labelClass
+                        switch (pedidoCargaInstance?.status) {
+                            case StatusPedidoCarga.NOVO:
+                                labelClass = "label-primary"
+                                break
+                            case StatusPedidoCarga.LIBERADO:
+                                labelClass = "label-info"
+                                break
+                            case StatusPedidoCarga.FINALIZADO:
+                                labelClass = "label-success"
+                                break
+                            case StatusPedidoCarga.CANCELADO:
+                                labelClass = "label-danger"
+                                break
+                            default:
+                                labelClass = "label-default"
+                                break
+                        }
+                    %>
 
-                    <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.LIBERADO}">
-                        <h5><span class="label label-info">${pedidoCargaInstance?.status?.nome}</span></h5>
-                    </g:if>
-                    <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.CANCELADO}">
-                        <h5><span class="label label-danger">${pedidoCargaInstance?.status?.nome}</span></h5>
-                    </g:if>
+                    <h5><span class="label ${labelClass}">${pedidoCargaInstance?.status?.nome}</span></h5>
 
                 </div>
             </g:if>

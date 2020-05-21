@@ -112,7 +112,7 @@ class PaySmart extends Embossadora {
                     ";${trilha2}?" +                                        // trilha 2
                     "|${getDadosPostagem(c.portador.endereco)}" +
                     "${c.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}" +
-                    "${aplicacoes}${pinBlock}  #CH#" +
+                    "${aplicacoes}${pinBlock} #CH#" +
                     "${getTerminadorLinha()}")
 
             sequencial++

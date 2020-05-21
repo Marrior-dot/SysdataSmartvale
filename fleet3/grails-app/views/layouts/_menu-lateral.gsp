@@ -26,7 +26,7 @@
                             <li class="controller"><g:link class="submenu-logado"  controller="arquivo" action="list">Arquivos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado"  controller="marcaVeiculo" action="list">Marcas de Veículos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado"  controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
-                            <li class="controller"><g:link class="submenu-logado" controller="motivoNegacao" action="list">Motivos Negação</g:link></li>
+
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_ESTAB">
@@ -34,6 +34,7 @@
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_PROC">
+                            <li class="controller"><g:link class="submenu-logado" controller="motivoNegacao" action="list">Motivos Negação</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="auditLogEvent" action="list">Audit Log</g:link></li>
                         </sec:ifAnyGranted>
