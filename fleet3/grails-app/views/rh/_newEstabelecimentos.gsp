@@ -4,17 +4,16 @@
         carregarTabela();
         verificarDisponibilidadeBotao();
 
-
-
         $('#estabs').change(function () {
             verificarDisponibilidadeBotao();
         });
 
         $('#addButton').click(function () {
             waitingDialog.show("Aguarde...");
+            console.log($("select#estabs option:selected").val())
             $.ajax({
                 url: "${g.createLink(controller:'rh', action:'salvarEstabelecimentosVinculados')}",
-                data: {prgId:$("#rhId").val(), selectedEstabId: $("select#estabs option:selected").val()},
+                data: { prgId:$("#rhId").val(), selEstId: $("select#estabs option:selected").val()},
                 dataType: 'json',
                 success: function (data) {
                     carregarComboBox();

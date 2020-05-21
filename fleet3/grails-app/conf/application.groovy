@@ -123,31 +123,36 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/unidade/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/funcionario/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/veiculo/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/equipamento/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/maquinaMotorizada/**',      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/categoriaFuncionario/**',   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/arquivo/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
-        [pattern: '/postoCombustivel/**',   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/estabelecimento/**',    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/cartao/**',             access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/pedidoCarga/**',        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/transacao/**',          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/endereco/**',           access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/postoCombustivel/**',       access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
-        [pattern: '/reportViewer/**',          access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/cartao/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/pedidoCarga/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/transacao/**',              access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/endereco/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+
+        [pattern: '/estabelecimento/**',        access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/produtoEstabelecimento/**', access: ['ROLE_PROC', 'ROLE_ADMIN']],
+
+        [pattern: '/reportViewer/**',           access: ['ROLE_PROC', 'ROLE_ADMIN']],
 
 
-        [pattern: '/produto/**',            access: ['ROLE_PROC']],
-        [pattern: '/marcaVeiculo/**',       access: ['ROLE_PROC']],
-        [pattern: '/tipoEquipamento/**',    access: ['ROLE_PROC']],
-        [pattern: '/motivoNegacao/**',      access: ['ROLE_PROC']],
-        [pattern: '/user/**',               access: ['ROLE_PROC']],
-        [pattern: '/role/**',               access: ['ROLE_PROC']],
-        [pattern: '/report/**',             access: ['ROLE_PROC']],
-        [pattern: '/fieldReport/**',        access: ['ROLE_PROC']],
-        [pattern: '/parameterReport/**',    access: ['ROLE_PROC']],
-        [pattern: '/processamento/**',      access: ['ROLE_PROC']],
-        [pattern: '/centralAtendimento/**', access: ['ROLE_PROC']],
+        [pattern: '/produto/**',                access: ['ROLE_PROC']],
+        [pattern: '/marcaVeiculo/**',           access: ['ROLE_PROC']],
+        [pattern: '/tipoEquipamento/**',        access: ['ROLE_PROC']],
+        [pattern: '/motivoNegacao/**',          access: ['ROLE_PROC']],
+        [pattern: '/user/**',                   access: ['ROLE_PROC']],
+        [pattern: '/role/**',                   access: ['ROLE_PROC']],
+        [pattern: '/report/**',                 access: ['ROLE_PROC']],
+        [pattern: '/fieldReport/**',            access: ['ROLE_PROC']],
+        [pattern: '/parameterReport/**',        access: ['ROLE_PROC']],
+        [pattern: '/processamento/**',          access: ['ROLE_PROC']],
+        [pattern: '/centralAtendimento/**',     access: ['ROLE_PROC']],
 
 
 

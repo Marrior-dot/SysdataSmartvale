@@ -1,36 +1,53 @@
-import grails.util.BuildSettings
+import ch.qos.logback.classic.AsyncAppender
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.rolling.RollingFileAppender
+import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+import ch.qos.logback.core.util.FileSize
 import grails.util.Environment
-import org.springframework.boot.logging.logback.ColorConverter
-import org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter
 
-import java.nio.charset.Charset
+projeto = new ConfigSlurper(Environment.current.name).parse(getClass().classLoader.loadClass("frotaApp"))
 
-conversionRule 'clr', ColorConverter
-conversionRule 'wex', WhitespaceThrowableProxyConverter
+final String LOG_NAME = projeto.projectId
+final String PATTERN = "[%d{yyyy-MM-dd HH:mm:ss.SSS}] ${LOG_NAME} %p - %m%n"
+List<String> appenderList = ["CONSOLE"]
 
-// See http://logback.qos.ch/manual/groovy.html for details on configuration
-appender('STDOUT', ConsoleAppender) {
+appender("CONSOLE", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        charset = Charset.forName('UTF-8')
-
-        pattern =
-                '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} ' + // Date
-                        '%clr(%5p) ' + // Log level
-                        '%clr(---){faint} %clr([%15.15t]){faint} ' + // Thread
-                        '%clr(%-40.40logger{39}){cyan} %clr(:){faint} ' + // Logger
-                        '%m%n%wex' // Message
+        pattern = PATTERN
     }
 }
 
-def targetDir = BuildSettings.TARGET_DIR
-if (Environment.isDevelopmentMode() && targetDir != null) {
-    appender("FULL_STACKTRACE", FileAppender) {
-        file = "${targetDir}/stacktrace.log"
-        append = true
-        encoder(PatternLayoutEncoder) {
-            pattern = "%level %logger - %msg%n"
-        }
+//if (Environment.current.name.toLowerCase() in ["homologation", "production"]) {
+final String LOG_PATH = (System.properties['catalina.base'] ?: '.') + "/logs"
+
+appender("DAILLY", RollingFileAppender){
+    file = "${LOG_PATH}/${LOG_NAME}/${LOG_NAME}.log"
+    rollingPolicy(TimeBasedRollingPolicy) {
+        fileNamePattern = "${LOG_PATH}/${LOG_NAME}.log.%d{yyyy-MM-dd}"
+        maxHistory = 90
+        totalSizeCap = FileSize.valueOf("1GB")
     }
-    logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
+    encoder(PatternLayoutEncoder) {
+        pattern = PATTERN
+    }
 }
-root(ERROR, ['STDOUT'])
+
+appender("ASYNC", AsyncAppender) {
+    appenderRef("DAILLY")
+}
+appenderList.add("ASYNC")
+//}
+
+logger("fleet3", ALL, appenderList, false)
+logger("com.sysdata.gestaofrota", ALL, appenderList, false)
+logger("com.fourLions.processingControl", ALL, appenderList, false)
+logger("groovyx.net.http", ALL, appenderList, false)
+
+/*
+logger 'org.hibernate.type.descriptor.sql.BasicBinder', TRACE, appenderList
+logger 'org.hibernate.SQL', TRACE, appenderList
+*/
+
+
+root(ERROR, appenderList)

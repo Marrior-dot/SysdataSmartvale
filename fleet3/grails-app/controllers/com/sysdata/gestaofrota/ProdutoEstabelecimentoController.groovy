@@ -22,6 +22,19 @@ class ProdutoEstabelecimentoController {
 //        [produtoEstabelecimentoInstance: new ProdutoEstabelecimento(params)]
 //    }
 
+    def edit() {
+
+        Estabelecimento estabelecimento = Estabelecimento.get(params.long('estId'))
+        def produtoList = Produto.list()
+        def produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimento)
+        render template: 'form', model: [estabelecimentoInstance   : estabelecimento,
+                                     produtoList               : produtoList,
+                                     produtoEstabelecimentoList: produtoEstabelecimentoList,
+                                     action                    : Util.ACTION_EDIT]
+
+    }
+
+
     def save() {
         Estabelecimento estabelecimento = Estabelecimento.get(params.long('estabelecimento.id'))
         List<Produto> produtosSelecionados = params.list('produtosSelecionados').collect { Produto.get(it) }
@@ -36,15 +49,16 @@ class ProdutoEstabelecimentoController {
                     new ProdutoEstabelecimento(produto: produto, estabelecimento: estabelecimento, valorAnterior: 0D)
 
             String valorStr = params["valor[${produto.id}]"] ?: "0"
-            valorStr = valorStr.replace("R\$", "").replaceAll('\\.', '').replaceAll(',', '.')
             produtoEstabelecimento.ativo = true
-            produtoEstabelecimento.valor = Double.parseDouble(valorStr)
+            produtoEstabelecimento.valor = Util.parseCurrency(valorStr)
 
-            produtoEstabelecimentoService.save(produtoEstabelecimento)
+            if (! produtoEstabelecimento.save(flush: true)){
+                log.error produtoEstabelecimento.errors
+                flash.message = "Erro ao vincular Produto ao Estabelecimento"
+                redirect(controller: 'estabelecimento', action: "show", id: estabelecimento.id)
+            }
         }
-
-
-        flash.message = "Produtos Registrados"
+        flash.message = "Produtos vinculados ao Estabelecimento"
         redirect(controller: 'estabelecimento', action: "show", id: estabelecimento.id)
     }
 

@@ -2,9 +2,9 @@ package com.sysdata.gestaofrota
 
 class CategoriaFuncionario {
 
+    Date dateCreated
     String nome
     Double valorCarga
-    Date dateCreated
 
     static belongsTo = [rh: Rh]
     static transients = ['funcionarios']

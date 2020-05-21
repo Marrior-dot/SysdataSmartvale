@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
 
 %{--<script type="text/javascript">--}%
 	%{--var generateNewPassword=function(){--}%
@@ -20,16 +20,22 @@
 	<tr>
 		<th>Cartão</th>
 		<th>Saldo Total</th>
-		<th>Saldo Mensal</th>
-		<th>Saldo Diário</th>
+
+		<g:if test="${portador.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+			<th>Saldo Mensal</th>
+			<th>Saldo Diário</th>
+		</g:if>
+
 	</tr>
 	</thead>
 	<tbody>
 	<tr>
 		<td>${portador?.cartaoAtual}</td>
 		<td>${Util.formatCurrency(portador?.saldoTotal)}</td>
-		<td>${Util.formatCurrency(portador?.saldoMensal)}</td>
-		<td>${Util.formatCurrency(portador?.saldoDiario)}</td>
+		<g:if test="${portador.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+			<td>${Util.formatCurrency(portador?.saldoMensal)}</td>
+			<td>${Util.formatCurrency(portador?.saldoDiario)}</td>
+		</g:if>
 	</tr>
 	</tbody>
 </table>

@@ -8,7 +8,7 @@
 <g:form method="post">
     <g:hiddenField name="id" value="${veiculoInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
-    <g:hiddenField name="unidId" value="${unidadeInstance?.id}"/>
+    <g:hiddenField name="unidade.id" value="${veiculoInstance?.unidade?.id}"/>
     <g:hiddenField name="action" value="${action}"/>
     <g:hiddenField name="tam-max-embossing" value="${tamMaxEmbossing}"/>
 
@@ -18,7 +18,7 @@
 
         <div class="panel-body">
             <g:set var="programaMaquina"
-                   value="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.MAQUINA}"/>
+                   value="${veiculoInstance?.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.MAQUINA}"/>
             <g:hiddenField name="programa-maquina" value="${programaMaquina}"/>
 
             <div class="row">
@@ -121,7 +121,7 @@
             </div>
 
 
-            <g:if test="${unidadeInstance?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+            <g:if test="${veiculoInstance?.unidade?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                 <div class="row">
 
                     <div class="form-group col-md-2">

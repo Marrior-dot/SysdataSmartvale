@@ -19,6 +19,12 @@ class BootStrap {
     GrailsApplication grailsApplication
 
     def init = { servletContext ->
+
+        /* Adição do método ** round ** a classe BigDecimal: arredondamento para baixo. P.ex: 1.5 -> 1.0 (padrão -> halfUp = false) */
+        BigDecimal.metaClass.round = { precision, halfUp = true ->
+            delegate.setScale(precision, halfUp ? BigDecimal.ROUND_HALF_UP : BigDecimal.ROUND_HALF_DOWN)
+        }
+
         criarProcessadora()
         criarAdministradora()
         criarAutenticacaoInicial()

@@ -22,7 +22,7 @@ class EquipamentoController extends BaseOwnerController {
 
     def newList = {}
 
-    def create = {
+    def create() {
         Unidade unidade = Unidade.get(params.long('unidade.id'))
         if (unidade) {
             if (TipoEquipamento.count() == 0) {
@@ -38,7 +38,7 @@ class EquipamentoController extends BaseOwnerController {
         }
     }
 
-    def save = {
+    def save() {
         Equipamento equipamentoInstance = new Equipamento(params)
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
 
@@ -71,7 +71,7 @@ class EquipamentoController extends BaseOwnerController {
         }
     }
 
-    def show = {
+    def show() {
         def equipamentoInstance = Equipamento.get(params.long('id'))
         if (!equipamentoInstance) {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'equipamento.label', default: ''), params.id])}"
@@ -82,7 +82,7 @@ class EquipamentoController extends BaseOwnerController {
         render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
     }
 
-    def edit = {
+    def edit() {
         def equipamentoInstance = Equipamento.get(params.id)
         if (!equipamentoInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: ''), params.id])}"
@@ -92,7 +92,7 @@ class EquipamentoController extends BaseOwnerController {
         }
     }
 
-    def update = {
+    def update() {
         def equipamentoInstance = Equipamento.get(params.long('id'))
         if (equipamentoInstance) {
             long version = params.long('version')
@@ -116,7 +116,7 @@ class EquipamentoController extends BaseOwnerController {
         }
     }
 
-    def delete = {
+    def delete() {
         def equipamentoInstance = Equipamento.get(params.id)
         if (equipamentoInstance) {
             try {
@@ -134,7 +134,7 @@ class EquipamentoController extends BaseOwnerController {
         }
     }
 
-    def listAllJSON = {
+    def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 //        def offset = params.start ?: 10
         def opcao

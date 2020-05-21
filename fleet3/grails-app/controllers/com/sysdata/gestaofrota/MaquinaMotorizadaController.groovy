@@ -6,17 +6,16 @@ import org.springframework.http.HttpStatus
 //@Secured(['IS_AUTHENTICATED_FULLY'])
 class MaquinaMotorizadaController {
 
-    def listFuncionariosJSON() {
+    MaquinaMotorizadaService maquinaMotorizadaService
 
-        println "params: ${params}"
+
+    def listFuncionariosJSON() {
         MaquinaMotorizada maquinaInstance
         if(params?.instance == "Veiculo"){
              maquinaInstance = Veiculo.get(params.long('id'))
         }else{
              maquinaInstance = Equipamento.get(params.long('id'))
         }
-
-        println "maquina: ${maquinaInstance}"
 
         def funcionariosList
         def data
@@ -28,8 +27,7 @@ class MaquinaMotorizadaController {
                         nome     : f.funcionario.nome,
                         cpf      : f.funcionario.cpf,
                         acao     : "<a href='#' onclick='removeFuncionario(${f.funcionario.id});'>" +
-                                "<img src='${resource(dir: 'images', file: 'remove_person.png')}' alt='Remover'>" +
-                                "</a>"
+                                "<span class='glyphicon glyphicon-trash'/></a>"
                 ]
             }
             data = [totalRecords: funcionariosList.size()?:0, results: funcionariosList?.sort { it.nome }]
@@ -39,58 +37,41 @@ class MaquinaMotorizadaController {
        render data as JSON
     }
 
-    def addFuncionario = {
-        MaquinaMotorizada instance = MaquinaMotorizada.get(params?.long('id'))
-        if (!instance) {
+    def addFuncionario() {
+        MaquinaMotorizada maquina = MaquinaMotorizada.get(params?.long('id'))
+        if (! maquina) {
             render status: HttpStatus.NOT_FOUND, text: "Equipamento/Veiculo não encontrado"
-            return;
+            return
         }
-
-        List<Long> idsFuncionariosSelecionados = params.list('funcionarios[]').collect { it as Long }
-
-        for (int i = 0; i < idsFuncionariosSelecionados.size(); i++) {
-            long id = idsFuncionariosSelecionados[i]
-            MaquinaFuncionario maqFuncInstance = instance.funcionarios.find { it.funcionario.id == id }
-            if (maqFuncInstance) continue; //funcionario já associado a instancia! Continuar para o próximo da lista
-
-            Funcionario funcionarioInstance = Funcionario.get(id)
-
-            if (funcionarioInstance) {
-                MaquinaFuncionario instanceFuncionario = new MaquinaFuncionario()
-                instanceFuncionario.funcionario = funcionarioInstance
-                instanceFuncionario.status = Status.ATIVO
-                instance.addToFuncionarios(instanceFuncionario)
-            }
+        def ret = maquinaMotorizadaService.linkMaquinaToFuncionario(maquina, params)
+        if (ret.success) {
+            render status: HttpStatus.OK, text: "Funcionário(s) relacionado(s) ao ${params?.instanceName} com sucesso!"
+            return
+        } else {
+            render status: HttpStatus.INTERNAL_SERVER_ERROR, text: ret.message
+            return
         }
-
-        instance.save()
-        render status: HttpStatus.OK, text: "Funcionário(s) relacionado(s) ao ${params?.instanceName} com sucesso!"
     }
 
-    def removeFuncionario = {
-        MaquinaMotorizada instance = MaquinaMotorizada.get(params.long('id'))
-        if (!instance) {
+    def removeFuncionario() {
+        MaquinaMotorizada maquina = MaquinaMotorizada.get(params.long('id'))
+        if (! maquina) {
             render status: HttpStatus.NOT_FOUND, text: "Equipamento/Veiculo não encontrado"
-            return;
+            return
+        }
+        long funcId = params.long('funcionario')
+        if (! funcId) {
+            render status: HttpStatus.NOT_FOUND, text: "Id de funcionário não informado."
+            return
+        }
+        def ret = maquinaMotorizadaService.unlinkMaquinaToFuncionario(maquina, funcId)
+        if (ret.success) {
+            render status: HttpStatus.OK, text: ret.message
+            return
+        } else {
+            render status: HttpStatus.INTERNAL_SERVER_ERROR, text: ret.message
+            return
         }
 
-        long funcionarioId = params.long('funcionario')
-        if (!funcionarioId) {
-            render status: HttpStatus.NOT_FOUND, text: "Id de funcionário não cedido."
-            return;
-        }
-
-        MaquinaFuncionario maqFuncInstance = instance.funcionarios.find { it.funcionario.id == funcionarioId }
-        if (maqFuncInstance) {
-            instance.removeFromFuncionarios(maqFuncInstance)
-            maqFuncInstance.delete()
-            if (MaquinaFuncionario.exists(maqFuncInstance.id))
-                render "Relação entre ${params?.instanceName} e Funcionários removida."
-            else {
-                //TODO: verificar se é necessário a linha abaixo
-                //maqFuncInstance.status = Status.INATIVO
-                render "Relação entre ${params?.instanceName} e Funcionários não pode ser removida, apenas desativada."
-            }
-        }
     }
 }

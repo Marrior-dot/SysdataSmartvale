@@ -2,15 +2,15 @@ package com.sysdata.gestaofrota
 
 class ItemPedido {
 
-    static belongsTo = [pedido: PedidoCarga]
-    static transients = ['funcionario']
-
     Participante participante
-    Double valor
-    Double sobra
+    BigDecimal valor
+    BigDecimal sobra = 0
     boolean ativo
     Lancamento lancamento
     TipoItemPedido tipo
+
+    static belongsTo = [pedido: PedidoCarga]
+    static transients = ['funcionario']
 
 
     static constraints = {

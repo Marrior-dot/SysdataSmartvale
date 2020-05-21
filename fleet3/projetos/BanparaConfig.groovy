@@ -112,3 +112,5 @@ faturamento {
     controlaSaldo = true
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
+
+projectId = "banpara"

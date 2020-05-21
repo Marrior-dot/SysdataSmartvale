@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota
 
+import grails.converters.JSON
+import grails.gorm.DetachedCriteria
 import org.springframework.http.HttpStatus
 
 
@@ -32,5 +34,22 @@ class CategoriaFuncionarioController {
         categoriaFuncionarioService.delete(categoriaFuncionario)
         response.status = HttpStatus.OK.value()
         render(template: 'tabela', model: [rhInstance: rh])
+    }
+
+    def getAllByUnidade() {
+        def unidId = params.unidId ? params.long('unidId') : 0 as long
+        def categList = Funcionario.withCriteria {
+                            projections {
+                                distinct "categoria"
+                            }
+                            unidade {
+                                idEq(unidId)
+                            }
+                        }
+        if (categList)
+            render categList.collect { [ id: it.id, nome: it.nome, valorCarga: Util.formatCurrency(it.valorCarga) ] } as JSON
+        else
+            render categList as JSON
+
     }
 }

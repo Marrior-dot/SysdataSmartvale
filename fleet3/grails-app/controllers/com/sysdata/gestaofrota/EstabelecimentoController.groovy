@@ -104,7 +104,7 @@ class EstabelecimentoController {
             render view: 'form', model: [estabelecimentoInstance   : estabelecimentoInstance,
                                          produtoList               : produtoList,
                                          produtoEstabelecimentoList: produtoEstabelecimentoList,
-                                         action                    : 'editando']
+                                         action                    : Util.ACTION_EDIT]
         }
     }
 

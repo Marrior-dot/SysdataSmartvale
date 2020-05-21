@@ -4,6 +4,11 @@
 
     $(document).ready(function () {
         carregaFuncionariosHabilitados();
+
+
+        $('table#funcionariosHabilitados tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+        } );
     });
 
     function carregaFuncionariosHabilitados() {
@@ -125,13 +130,17 @@
 
         <div id="message" style="margin-top: 10px"></div>
 
-        <table id="funcionariosHabilitados" class="table table-striped table-bordered">
-            <thead>
-            <th>CPF</th>
-            <th>Nome</th>
-            <th>Matrícula</th>
-            <th>Ação</th>
-            </thead>
-        </table>
+        <div class="panel-top">
+            <table id="funcionariosHabilitados" class="table table-striped table-bordered">
+                <thead>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>Ação</th>
+                </thead>
+            </table>
+
+        </div>
+
     </div>
 </div>

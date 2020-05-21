@@ -1,4 +1,4 @@
-<%@ page import="java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
+<%@ page import="com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh; java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
@@ -6,7 +6,6 @@
 <script type="application/javascript">
     var itensPedidos = [];
     var valorCategoria;
-
 
     $(document).ready(function () {
         valorCategoria = $("input#valorCargaCategoria").val();
@@ -22,7 +21,7 @@
         defaultForm.submit(function (e) {
             waitingDialog.show();
             //remove os inputs desnecessários
-            $("input[type=search],[type=checkbox]:not([name='selectAll']),[type=text]:not([name='dataCarga'])", $(this)).remove();
+            $("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_']),[type=text]:not([name='dataCarga'])", $(this)).remove();
             var esse = $(this);
 
             itensPedidos.forEach(function (item) {
@@ -32,13 +31,72 @@
             });
         });
 
-        //seleciona a primeira categoria
-        $('input:radio[name=categoriaSelecionada]:first').attr('checked', true);
-        selecionaCategoria();
 
         //Carrega taxas de cartão a serem cobradas, caso existam
-        carregarTaxasCartao();
+        //carregarTaxasCartao();
+
+
+        carregarPerfisRecarga("${pedidoCargaInstance?.unidade?.id}")
+        carregarFuncionarios("${pedidoCargaInstance?.unidade?.id}")
+
+
+        $("select[name=empresa]").change(function() {
+            carregarTaxasRh($(this).val())
+            carregarUnidades($(this).val())
+        })
+
+        $("select[name=unidade]").change(function() {
+            carregarPerfisRecarga($(this).val())
+            carregarFuncionarios($(this).val())
+        })
+
+
     });
+
+    function carregarFuncionarios(unidId) {
+
+        filtrarFuncionarios(unidId);
+
+        //seleciona a primeira categoria
+        $('input:radio[name=categoriaSelecionada]:first').attr('checked', true);
+
+    }
+
+    function carregarPerfisRecarga(unidId) {
+
+        $.getJSON("${createLink(controller: 'categoriaFuncionario', action: 'getAllByUnidade')}", { unidId: unidId },
+                function(data, status) {
+                    $("#tabCateg > tbody").html("")
+
+                    if (status === 'success') {
+                        data.forEach(function(categ) {
+                            $("#tabCateg > tbody:last-child").append("<tr><td><input type='radio' name='categoriaSelecionada' value='" + categ.id + "'"  +
+                            "onchange='filtrarFuncionarios()' class='enable'/></td>" +
+                                    "<td>" + categ.nome + "</td>" +
+                                    "<td>" + categ.valorCarga + "</td></tr>")
+                        })
+                    }
+                })
+
+    }
+
+    function carregarUnidades(rhId) {
+        $.getJSON("${createLink(controller: 'unidade', action: 'getAllByRh')}", { rhId: rhId },
+                function(data, status) {
+                    let selUnid = $("select[name=unidade]")
+                    selUnid.html("")
+                    if (status === 'success') {
+                        let unidList = []
+                        unidList.push("<option value>--Selecione uma Unidade--</option>")
+                        $.each(data, function(i, unid) {
+                            unidList.push("<option value='" + unid.id + "'>" + unid.name + "</option>")
+                        })
+                        selUnid.append(unidList)
+                    } else {
+                        alert("Erro no Servidor (Código: " + status + ")")
+                    }
+                })
+    }
 
     function limparFuncionario(){
         $("input#searchMatricula").val('');
@@ -160,11 +218,12 @@
         }
     }
 
-    function selecionaCategoria() {
+    function filtrarFuncionarios(unidId) {
         var output = {
             id: $("input#id").val(),
             categoria: $('input[name=categoriaSelecionada]:checked').val(),
-            actionView: $("input#action").val()
+            actionView: $("input#action").val(),
+            unidade: unidId
         };
 
         waitingDialog.show("Aguarde...");
@@ -205,54 +264,86 @@
         });
     }
 
+    function carregarTaxasRh(rhId) {
+        $.getJSON("${createLink(controller: 'rh', action: 'getTaxas')}", { rhId: rhId },
+                function (data, status) {
+                    if (status === 'success') {
+                        console.log(data.taxaPedido)
+                        $("p#taxaPedido").html(data.taxaPedido)
+                    }
+                })
+    }
+
 
 </script>
 
 <g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
-<g:hiddenField name="unidade_id" value="${pedidoCargaInstance?.unidade?.id}"/>
+%{--<g:hiddenField name="unidade_id" value="${pedidoCargaInstance?.unidade?.id}"/>--}%
 <g:hiddenField name="valorCargaCategoria" value="${pedidoCargaInstance?.categoriasFuncionario?.valorCarga}"/>
 <g:hiddenField name="version" value="${pedidoCargaInstance?.version}"/>
 <g:hiddenField name="action" value="${action}"/>
 
-
-
-
-
-
-
-<table class="table table-bordered">
-    <tbody>
-    <tr>
-        <td>RH</td>
-        <td><b>${pedidoCargaInstance?.unidade?.rh?.nome}</b></td>
-    </tr>
-    <tr>
-        <td>Unidade</td>
-        <td><b>${pedidoCargaInstance?.unidade?.nome}</b></td>
-    </tr>
-    </tbody>
-</table>
-
-
-
-
-<div class="form-horizontal row">
-    <div class="col-xs-3 input-group-sm">
-        <label class="control-label" for="dataCarga">Data de Carga</label>
-        <input type="text" id="dataCarga" name="dataCarga" class="form-control datepicker"
-               value="${Util.formattedDate(pedidoCargaInstance?.dataCarga)}"/>
+<div class="panel panel-default panel-top">
+    <div class="panel-heading">
+        <h3 class="panel-title">Empresa / Unidade</h3>
     </div>
 
-    <div class="col-xs-3 input-group-sm">
-        <label class="control-label">Taxa Pedido</label>
-        <p class="form-control-static">${pedidoCargaInstance?.taxa ?: 0}%</p>
-    </div>
-    <g:if test="${action != Util.ACTION_NEW && pedidoCargaInstance}">
-        <div class="col-xs-3 input-group-sm">
-            <label class="control-label">Total Pedido (+ taxa)</label>
-            <p class="form-control-static"><g:formatReal value="${pedidoCargaInstance?.total}"/></p>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-4 input-group-sm">
+                <label class="control-label" for="empresa">Empresa</label>
+                <g:select name="empresa" from="${Rh.list(order: 'nome')}" class="form-control" value="${pedidoCargaInstance?.unidade?.rh?.id}"
+                    optionKey="id" optionValue="nome" noSelection="['': '--Selecione uma Empresa--']"/>
+            </div>
+            <div class="col-xs-4 input-group-sm">
+                <label class="control-label" for="unidade">Unidade</label>
+                <g:select name="unidade" from="${Unidade.list(order: 'nome')}" class="form-control" value="${pedidoCargaInstance?.unidade?.id}"
+                    optionKey="id" optionValue="nome" noSelection="['': '--Selecione uma Unidade--']"/>
+            </div>
         </div>
-    </g:if>
+    </div>
+</div>
+
+
+<div class="panel panel-default panel-top">
+    <div class="panel-heading">
+        <h3 class="panel-title">Dados Pedido</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-xs-3 input-group-sm">
+                <label class="control-label" for="dataCarga">Data de Carga</label>
+                <input type="text" id="dataCarga" name="dataCarga" class="form-control datepicker"
+                       value="${Util.formattedDate(pedidoCargaInstance?.dataCarga)}"/>
+            </div>
+
+            <div class="col-xs-3 input-group-sm">
+                <label class="control-label">Taxa Pedido</label>
+                <p id="taxaPedido" class="form-control-static">${pedidoCargaInstance?.taxa ?: 0}%</p>
+            </div>
+
+            <g:if test="${action != Util.ACTION_NEW && pedidoCargaInstance}">
+                <div class="col-xs-3 input-group-sm">
+                    <label class="control-label">Total Pedido (+ taxa)</label>
+                    <p class="form-control-static"> <g:formatNumber number="${pedidoCargaInstance?.total}" type="currency"/></p>
+                </div>
+                <div class="col-xs-3 input-group-sm">
+                    <label class="control-label">Status</label>
+
+
+                    <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.LIBERADO}">
+                        <h5><span class="label label-info">${pedidoCargaInstance?.status?.nome}</span></h5>
+                    </g:if>
+                    <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.CANCELADO}">
+                        <h5><span class="label label-danger">${pedidoCargaInstance?.status?.nome}</span></h5>
+                    </g:if>
+
+                </div>
+            </g:if>
+        </div>
+    </div>
 </div>
 
 <g:render template="/categoriaFuncionario/list"
@@ -262,6 +353,6 @@
 <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
 
 
-<g:render template="taxasCartao" />
+%{--<g:render template="taxasCartao" />--}%
 
 <br/>

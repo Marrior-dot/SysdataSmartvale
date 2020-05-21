@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import grails.converters.JSON
 import org.springframework.dao.DataIntegrityViolationException
 
 class CartaoController {
@@ -100,4 +101,20 @@ class CartaoController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    def listAllJSON() {
+        def cartaoList = Cartao.list()
+
+        def fields = cartaoList.collect { c ->
+            [
+                numero   : """<a href='${createLink(action: 'show', id: c.id)}'>${c.numeroMascarado}</a>""",
+                portador : c.portador.nomeEmbossing,
+                validade : c.validade.format('dd/MM/yyyy'),
+                status   : c.status.nome
+            ]
+        }
+        def data = [totalRecords: Cartao.count(), results: fields]
+        render data as JSON
+    }
+
 }

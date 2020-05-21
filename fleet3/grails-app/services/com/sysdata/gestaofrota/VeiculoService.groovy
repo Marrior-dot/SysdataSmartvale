@@ -24,6 +24,9 @@ class VeiculoService {
     }
 
     def save(Veiculo veiculo) {
+
+        def ret = [success: true]
+
         if (veiculo.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
             PortadorMaquina portadorMaquina = portadorService.save(veiculo, params)
             if (portadorMaquina.unidade.rh.cartaoComChip)
@@ -31,7 +34,14 @@ class VeiculoService {
             else
                 cartaoService.gerar(portadorMaquina, false)
         }
-        veiculo.save flush: true
+
+        if (! veiculo.save(flush: true)) {
+            ret.success = false
+            ret.message = veiculo.errors
+            return ret
+        }
+
+        ret
     }
 
     def update(Veiculo veiculoInstance, params) {

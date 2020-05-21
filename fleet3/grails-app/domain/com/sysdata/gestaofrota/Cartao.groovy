@@ -40,7 +40,7 @@ class Cartao {
 
     String getNumeroMascarado() {
         if (this.numero.length() > 6) {
-            return this.numero[0..3] + "****" + this.numero[(this.numero.length() - 3)..(this.numero.length() - 1)]
+            return this.numero[0..5] + "****" + this.numero[(this.numero.length() - 4)..(this.numero.length() - 1)]
         } else "<< NÚMERO IMASCARÁVEL >>"
 
     }

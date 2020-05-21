@@ -47,6 +47,10 @@ class Funcionario extends Participante {
             }
             eq("unidade", unidade)
         }
+
+        getFuncionariosAtivosUnidade { Unidade unidade ->
+            eq("unidade", unidade)
+        }
     }
 
 

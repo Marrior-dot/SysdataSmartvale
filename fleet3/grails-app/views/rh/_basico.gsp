@@ -6,7 +6,8 @@
 
 	function alterarModeloCobranca() {
 		var duration = 500;
-		var modeloCobranca = $("select#modeloCobranca").val();
+		/*var modeloCobranca = $("select#modeloCobranca").val();*/
+		var modeloCobranca = "PRE_PAGO"
 		var pedidoCargaPanel = $("div.panel#pedido-carga");
 		var faturaPanel = $("div.panel#fatura");
 
@@ -43,6 +44,7 @@
 				</div>
 
 				<g:set var="bloquearModCob" value="${action == Util.ACTION_EDIT && (rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0)}"/>
+%{--
 				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
 					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
 					<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.list()}" class="form-control"
@@ -52,6 +54,7 @@
 					<span id="modelo-cobranca" class="help-block">Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados.</span>
 				</g:if>
 				</div>
+--}%
 			</div>
 			<div class="row">
 				<div class="col-md-6">
@@ -65,7 +68,7 @@
 		</div>
 	</div>
 
-	<div class="panel panel-default">
+%{--	<div class="panel panel-default">
 		<div class="panel-heading">Cartão</div>
 
 		<div class="panel-body">
@@ -87,12 +90,12 @@
 							<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip || action == Util.ACTION_NEW ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
 							<strong>Cartão com chip</strong>
 						</span>
-						%{--
+						--}%%{--
                                                 <span class="input-group-addon">
                                                     <input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
                                                     <strong>Renovar Limite</strong>
                                                 </span>
-                        --}%
+                        --}%%{--
 					</div>
 					<g:if test="${bloquearModCob}">
 						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
@@ -100,7 +103,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>--}%
 
 	<div class="panel panel-default" id="pedido-carga">
 		<div class="panel-heading">

@@ -39,7 +39,7 @@ class VeiculoController extends BaseOwnerController {
             int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
             Veiculo veiculo = new Veiculo(params)
             veiculo.unidade = unidadeInstance
-            render(view: "form", model: [veiculoInstance: veiculo, unidadeInstance: unidadeInstance, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
+            render(view: "form", model: [veiculoInstance: veiculo, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -50,9 +50,14 @@ class VeiculoController extends BaseOwnerController {
 
         if (veiculoInstance) {
             try {
-                veiculoService.save(veiculoInstance)
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
-                redirect(controller: 'unidade', action: "show", id: veiculoInstance.unidade.id)
+                def ret = veiculoService.save(veiculoInstance)
+                if (ret.success) {
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
+                    redirect(controller: 'unidade', action: "show", id: veiculoInstance.unidade.id)
+                } else {
+                    flash.error = ret.message
+                    redirect(action: 'create', params: [unidade_id: veiculoInstance.unidade.id])
+                }
             }
             catch (Exception e) {
                 e.printStackTrace()

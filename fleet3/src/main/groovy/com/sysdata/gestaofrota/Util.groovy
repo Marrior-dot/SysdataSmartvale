@@ -3,6 +3,7 @@ package com.sysdata.gestaofrota
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.Normalizer
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 import com.sysdata.gestaofrota.exception.InvalidCurrencyException
@@ -14,7 +15,7 @@ class Util {
     static final String ACTION_EDIT = "editando"
     static final String ACTION_FILTER = "filtrando"
 
-    static final Locale LOCAL = new Locale("pt", "BR");
+    static final Locale LOCALE = new Locale("pt", "BR");
 
     static final int DIGITOS_SENHA = 4;
 
@@ -134,12 +135,22 @@ class Util {
         df.format(date)
     }
 
+    static def formatCurrency(val) {
+        if (! val) val = 0
+        NumberFormat nf = NumberFormat.getCurrencyInstance(LOCALE);
+        nf.format(val)
+    }
 
-    static def formatCurrency(curr) {
-        if (!curr) curr = 0.00
-        def dfs = new DecimalFormatSymbols(LOCAL)
-        dfs.decimalSeparator = ","
-        new DecimalFormat("#0.00", dfs).format(curr)
+    static def parseCurrency(val) {
+        if (! val) val = "0,00"
+        NumberFormat nf = NumberFormat.getCurrencyInstance(LOCALE);
+        nf.parse(val) as Double
+    }
+
+    static def formatPercentage(val) {
+        if (! val) val = 0
+        DecimalFormat df = new DecimalFormat("#0.00")
+        df.format(val) + "%"
     }
 
     static def roundCurrency(curr) {

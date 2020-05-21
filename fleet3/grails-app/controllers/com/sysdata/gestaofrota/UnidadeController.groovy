@@ -129,6 +129,15 @@ class UnidadeController {
         render jsonResult as JSON
     }
 
+    def getAllByRh() {
+        long rhId = params?.long('rhId') ?: 0
+        def unidList = Unidade.withCriteria {
+                        rh { idEq(rhId) }
+                    }
+        def jsonList = unidList.collect { [id: it.id, name: it.nome] }
+        render jsonList as JSON
+    }
+
     def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 0

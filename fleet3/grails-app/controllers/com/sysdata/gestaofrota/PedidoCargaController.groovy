@@ -11,6 +11,8 @@ class PedidoCargaController extends BaseOwnerController {
     def exportService
     def authenticateService
 
+    PedidoCargaService pedidoCargaService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -86,8 +88,8 @@ class PedidoCargaController extends BaseOwnerController {
          searchStatus            : params?.searchStatus]
     }
 
-    def create(PedidoCarga pedidoCarga) {
-        [pedidoCargaInstance: pedidoCarga]
+    def create() {
+        [pedidoCargaInstance: new PedidoCarga()]
     }
 
     def synchServer() {
@@ -143,97 +145,28 @@ class PedidoCargaController extends BaseOwnerController {
         }
     }
 
-    def save() {
-        Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
-        if (!unidadeInstance) {
-            flash.errors = "Unidade não selecionada"
-            redirect(action: 'list')
-            return;
+    def save(PedidoCarga pedidoCarga) {
+        def ret = pedidoCargaService.save(pedidoCarga, params)
+        if (ret.success) {
+            flash.message = ret.message
+            redirect(action: "show", id: pedidoCarga.id)
+        } else {
+            flash.errors = ret.message
+            redirect(action: 'create')
         }
-
-        Date dataCarga = Date.parse("dd/MM/yyyy", params.dataCarga.toString())
-        println "dataCarga view : ${params.dataCarga} - ${params.dataCarga.class} - ${dataCarga} - ${dataCarga.class}"
-        if (!dataCarga) {
-            flash.errors = "Data de carga não definida"
-            redirect(action: 'create', params: [unidade_id: unidadeInstance.id])
-            return;
-        }
-        if (dataCarga < new Date() - 1) {
-            flash.errors = "Data não pode ser inferior a hoje"
-            redirect(action: 'create', params: [unidade_id: unidadeInstance.id])
-            return;
-        }
-        def funcionariosInativosIds = params.list('funcionariosInativos')?.collect { it as Long }
-        def funcionarios = Funcionario.findAllByCategoriaInList(unidadeInstance?.rh?.categoriasFuncionario)
-
-        PedidoCarga pedidoCarga = new PedidoCarga()
-        pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
-        pedidoCarga.dataCarga = dataCarga.clearTime()
-        pedidoCarga.unidade = unidadeInstance
-        pedidoCarga.validade = 180
-        pedidoCarga.taxa = unidadeInstance?.rh?.taxaPedido
-        pedidoCarga.total = 0D
-
-        funcionarios.each { funcionario ->
-            ItemPedido itemPedido = new ItemPedido()
-            itemPedido.participante = funcionario
-            itemPedido.valor = params?.double("valorCarga[${funcionario.id}]") ?: funcionario?.categoria?.valorCarga
-            itemPedido.sobra = 0.0D
-            itemPedido.ativo = !funcionariosInativosIds.contains(funcionario.id)
-            itemPedido.tipo = TipoItemPedido.CARGA
-            itemPedido.save(flush: true)
-
-            pedidoCarga.addToItens(itemPedido)
-            if (itemPedido.ativo) pedidoCarga.total += itemPedido.valor
-        }
-
-        //Vincula taxas de cartão a efetivar ao pedido, caso existam
-        def taxasList = getTaxasACobrar(unidadeInstance)
-        taxasList.each { tx ->
-            def item = new ItemPedido()
-            item.with {
-                participante = tx.conta.participante
-                valor = tx.valor
-                lancamento = tx
-                tipo = TipoItemPedido.TAXA
-                sobra = 0
-                ativo = true
-                save(flush: true)
-            }
-            pedidoCarga.addToItens(item)
-            pedidoCarga.total += item.valor
-            //Marca lançamento como EFETIVADO
-            tx.status = StatusLancamento.EFETIVADO
-            tx.save(flush: true);
-        }
-
-        pedidoCarga.status = StatusPedidoCarga.NOVO
-        Double taxa = pedidoCarga?.unidade?.rh?.taxaPedido ?: 0.0D
-        pedidoCarga.total += taxa / 100 * pedidoCarga.total
-        if (!pedidoCarga.save(flush: true)) {
-            flash.errors = pedidoCarga.errors
-            redirect(action: 'create', params: [unidade_id: unidadeInstance.id])
-            return;
-        } else flash.message = "Pedido criado com sucesso!"
-
-        redirect(action: 'list')
     }
 
-    def show() {
-        PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
-
+    def show(PedidoCarga pedidoCarga) {
         def totalPedido = 0
-        pedidoCargaInstance.itens.each {
+        pedidoCarga?.itens.each {
             totalPedido += it.valor
         }
-        if (!pedidoCargaInstance) {
+        if (! pedidoCarga) {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
             redirect(action: "list")
             return;
         }
-
-
-        [pedidoCargaInstance: pedidoCargaInstance]
+        [pedidoCargaInstance: pedidoCarga]
     }
 
     def edit() {
@@ -374,6 +307,14 @@ class PedidoCargaController extends BaseOwnerController {
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
 
         def criteria = {
+
+            if (! categoriaInstance) {
+                def unidId = params.unidade ? params.long('unidade') : null
+                unidade {
+                    idEq(unidId)
+                }
+            }
+
             if (params?.searchMatricula && params?.searchMatricula.length() > 0) {
                 eq('matricula', params.searchMatricula)
             }
@@ -564,5 +505,14 @@ and i.pedido=:ped
         redirect(action: 'list')
     }
 
-
+    def cancelarPedido() {
+        def pedidoCarga = PedidoCarga.get(params.id as long)
+        if (pedidoCarga) {
+            def ret = pedidoCargaService.cancelPedido(pedidoCarga)
+            flash.message = ret.message
+        } else {
+            flash.message = "Pedido não encontrado com ID: $params.id"
+        }
+        redirect(action: 'list')
+    }
 }

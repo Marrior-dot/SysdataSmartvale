@@ -15,7 +15,7 @@
         <g:each in="${funcionarioInstanceList}" var="funcionario">
             <tr>
                 <td>
-                    <input type="checkbox" class="checkbox" name="funcionariosAtivos" value="${funcionario.id}"
+                    <input type="checkbox" class="checkbox" name="func_${funcionario.id}"
                            onchange="setItemPedido(${funcionario.id})" ${funcionario?.isAtivoInPedido(pedidoCargaInstance) || action == Util.ACTION_NEW ? 'checked' : ''} />
                 </td>
                 <td>${funcionario?.matricula}</td>
@@ -27,7 +27,7 @@
                 </g:if>
                 <g:else>
                     <td>
-                        <input type="text" class="form-control money" id="valorCarga-${funcionario.id}"
+                        <input type="text" class="form-control money" id="valorCarga_${funcionario.id}"
                                value="${funcionario?.valorInPedido(pedidoCargaInstance)}"
                                onchange="setItemPedido(${funcionario?.id})"/>
                     </td>

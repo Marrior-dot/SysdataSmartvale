@@ -231,7 +231,7 @@ class FuncionarioController extends BaseOwnerController {
             only  : ['save', 'update']
     ]
 
-    def search = {
+    def search() {
         //render(template:"search",model:[controller:params.controller,unidade_id:params.unidade_id,action:params.action])
         render template: "search", model: params
     }

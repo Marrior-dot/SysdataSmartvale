@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Util" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -19,11 +19,11 @@
                 <g:message code="default.home.label"/>
                 </a>
                 <a class="btn btn-default"
-                   href="${g.createLink(controller: 'unidade', action: 'show', id: "${unidadeInstance.id}")}">
+                   href="${g.createLink(controller: 'unidade', action: 'show', id: "${veiculoInstance?.unidade?.id}")}">
                     <span class="glyphicon glyphicon-triangle-left"></span>
                     Unidade
                 </a>
-                <g:link class="btn btn-default" action="create" params="[unidade_id:unidadeInstance?.id]">
+                <g:link class="btn btn-default" action="create" params="[unidade_id: veiculoInstance?.unidade?.id]">
                     <span class="glyphicon glyphicon-plus"></span>
                     <g:message code="default.new.label" args="[entityName]" />
                     </g:link>
@@ -32,11 +32,11 @@
                     <div class="row">
                         <div class="col-md-3">
                             <h4><strong>Empresa</strong></h4>
-                            <h5><g:link controller="rh" action="show" id="${unidadeInstance?.rh.id}">${unidadeInstance?.rh.nome}</g:link></h5>
+                            <h5><g:link controller="rh" action="show" id="${veiculoInstance?.unidade?.rh?.id}">${veiculoInstance?.unidade?.rh?.nome}</g:link></h5>
                         </div>
                         <div class="col-md-3">
                             <h4><strong>Unidade</strong></h4>
-                            <h5><g:link controller="unidade" action="show" id="${unidadeInstance?.id}">${unidadeInstance?.nome}</g:link></h5>
+                            <h5><g:link controller="unidade" action="show" id="${veiculoInstance?.unidade?.id}">${veiculoInstance?.unidade?.nome}</g:link></h5>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,9 @@
                             <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
                             <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
                             <li><a href="#tab3" data-toggle="tab">Hodômetro</a></li>
-                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+
+%{--                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>--}%
+
                         </ul>
                         <div class="tab-content">
                             <br><br>
@@ -72,9 +74,13 @@
                             <div class="tab-pane" id="tab3">
                                 <g:render template="hodometro"/>
                             </div>
+
+%{--
                             <div class="tab-pane" id="cartoes">
                                 <g:render template="/funcionario/cartao" model="[portador: veiculoInstance.portador]"/>
                             </div>
+--}%
+
                         </div>
                     </div>
                 </g:if>

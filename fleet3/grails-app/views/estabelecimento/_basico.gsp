@@ -61,7 +61,12 @@
     </div>
 
     <div role="tabpanel" class="tab-pane" id="produto">
-        <g:render template="/produtoEstabelecimento/form"
-                  model="[produtoList: produtoList, produtoEstabelecimentoList: produtoEstabelecimentoList, estabelecimento: estabelecimentoInstance]"/>
+
+        <div id="produtosEstabelecimento">
+            <g:render template="/produtoEstabelecimento/form"
+                      model="[produtoList: produtoList, produtoEstabelecimentoList: produtoEstabelecimentoList, estabelecimento: estabelecimentoInstance]"/>
+
+        </div>
+
     </div>
 </div>

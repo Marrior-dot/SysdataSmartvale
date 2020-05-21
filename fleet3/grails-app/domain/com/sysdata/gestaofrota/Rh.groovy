@@ -19,8 +19,8 @@ class Rh extends Empresa {
     BigDecimal taxaAdministracao = 0D
     BigDecimal taxaManutencao = 0D
     TipoVinculoCartao vinculoCartao = TipoVinculoCartao.FUNCIONARIO
-    TipoCobranca modeloCobranca = TipoCobranca.POS_PAGO
-    boolean cartaoComChip = false
+    TipoCobranca modeloCobranca = TipoCobranca.PRE_PAGO
+    boolean cartaoComChip = true
     boolean renovarLimite = false
 
     static hasMany = [

@@ -39,12 +39,12 @@
                     <table class="table table-striped table-bordered table-hover table-condensed">
                         <thead>
                         <tr>
-                            <g:bootstrapSortableColumn property="id" title="Id" sign="_19"/>
-                            <g:bootstrapSortableColumn property="unidade" title="Unidade" sign="az"/>
-                            <g:bootstrapSortableColumn property="dataPedido" title="Data Pedido"/>
-                            <g:bootstrapSortableColumn property="dataCarga" title="Data Carga"/>
-                            <g:bootstrapSortableColumn property="total" title="Total" sign="_19"/>
-                            <g:bootstrapSortableColumn property="statusSolicitacaoCarga" title="Status" sign="az"/>
+                            <th>#</th>
+                            <th>Unidade</th>
+                            <th>Data Pedido</th>
+                            <th>Data Carga</th>
+                            <th>Total</th>
+                            <th>Status</th>
                             <th class="text-center">Ações</th>
                         </tr>
                         </thead>
@@ -59,14 +59,18 @@
                                     <td>${pedido?.unidade?.nome}</td>
                                     <td><g:formatDate date="${pedido?.dateCreated}" format="dd/MM/yyyy"/></td>
                                     <td><g:formatDate date="${pedido?.dataCarga}" format="dd/MM/yyyy"/></td>
-                                    <td><g:formatReal value="${pedido?.total}"/></td>
-                                    <td>${pedido.status}</td>
+                                    <td><g:formatNumber number="${pedido?.total}" type="currency"/></td>
+                                    <td>${pedido.status.nome}</td>
                                     <td class="text-center">
                                         <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
                                             <g:if test="${pedido.status == StatusPedidoCarga.NOVO}">
-                                                <g:link class="btn btn-primary btn-sm" action="liberarPedido" id="${pedido.id}" title="Liberar">
+                                                <g:link class="btn btn-primary" action="liberarPedido" id="${pedido.id}" title="Liberar">
                                                     <i class="glyphicon glyphicon-share"></i>
                                                 </g:link>
+                                                <g:link class="btn btn-danger" action="cancelarPedido" id="${pedido.id}" title="Cancelar">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </g:link>
+
                                             </g:if>
                                         </sec:ifAnyGranted>
                                     </td>

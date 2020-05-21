@@ -16,3 +16,7 @@
 .panel-primary, .panel-default {
     border-color: var(--cor-primaria) !important;
 }
+
+table tbody tr.selected {
+    background-color: var(--cor-primaria) !important;
+}

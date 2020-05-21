@@ -27,24 +27,24 @@ thead input {
                     "dataSrc": "results"
                 },
                 "columns": [
+                    {"data": "id", visible: false},
                     {"data": "cpf"},
                     {"data": "nome"},
                     {"data": "matricula"},
                     {"data": "cartao"}
-                ]
+                ],
             });
 
         // Seleção de um funcionário na tabela
         $("#funcTable tbody").on("click", 'tr', function () {
-            var fid = $(this).find("td:first").html();
-            if ($(this).hasClass("selected")) {
-                $(this).removeClass("selected");
-                funcSel.pop(fid);
-            }
-            else {
-                $(this).addClass("selected");
-                funcSel.push(fid);
-            }
+            $(this).toggleClass("selected")
+            let tr = $(this).closest('tr')
+            let row = table.row(tr)
+            let fid = row.data().id
+            if ($(this).hasClass("selected"))
+                funcSel.push(fid)
+            else
+                funcSel.pop(fid)
         });
 
         // Apply the search
@@ -88,9 +88,9 @@ thead input {
         <g:form controller="${controller}">
             <div class="list">
                 <table id="funcTable"
-                       class="table table-striped table-bordered
-               table-hover table-condensed table-default">
+                       class="table table-bordered table-condensed table-default">
                     <thead>
+                    <th>ID</th>
                     <th>CPF</th>
                     <th>Nome</th>
                     <th>Matrícula</th>

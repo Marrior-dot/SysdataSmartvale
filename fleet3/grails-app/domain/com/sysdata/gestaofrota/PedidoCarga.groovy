@@ -12,6 +12,7 @@ class PedidoCarga {
     User usuario
     Double taxa = 0D
     Double total = 0D
+    Date dataCancelamento
 
     static hasMany = [itens: ItemPedido]
     static transients = ['categoriasFuncionario','dataCargaClear']
@@ -20,6 +21,7 @@ class PedidoCarga {
         usuario(nullable: true)
         taxa nullable: true
         total nullable: true
+        dataCancelamento nullable: true
     }
 
     static mapping = {

@@ -49,5 +49,23 @@
     </div>
 </div>
 
+<script>
+    $("#btnEditProd").click(function() {
+        $.ajax({
+            url: "${createLink(controller: 'produtoEstabelecimento', action: 'edit')}",
+            data: {estId: "${estabelecimentoInstance.id}"},
+            dataType: "html"
+
+        }).done(function(data){
+            $("div#produtosEstabelecimento").html(data)
+            // Forçar máscara
+            $('.money').maskMoney({prefix: 'R$ ', decimal: ',', thousands: '.', affixesStay: true});
+        }).error(function(x, status, err) {
+            alert("Erro " + status + ": " + err)
+        })
+
+    })
+</script>
+
 </body>
 </html>

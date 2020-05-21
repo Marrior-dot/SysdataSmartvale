@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
+import org.springframework.http.HttpStatus
 
 class RhController extends BaseOwnerController {
 
@@ -334,8 +335,12 @@ class RhController extends BaseOwnerController {
 
     def salvarEstabelecimentosVinculados() {
         def retorno = [:]
-        def estab = PostoCombustivel.get(params.long('selectedEstabId'))
-        log.debug(estab)
+        def estab = PostoCombustivel.get(params.long('selEstId'))
+        if (! estab) {
+            render status: HttpStatus.NOT_FOUND, text: "Estabelecimento não localizado!"
+            return
+        }
+
         def prg = Rh.get(params.prgId as Long)
         prg.addToEmpresas(estab)
         if (prg.save(flush: true, failOnError: true)) {
@@ -362,6 +367,17 @@ class RhController extends BaseOwnerController {
             retorno.mensagem = "Erro ao desvincular"
         }
         render retorno as JSON
+    }
+
+    def getTaxas() {
+        def taxas = [:]
+        Rh rh = Rh.get(params.long('rhId'))
+        if (rh) {
+            println "Taxa Pedido: $rh.taxaPedido"
+            taxas.taxaPedido = Util.formatPercentage(rh.taxaPedido)
+        }
+        render taxas as JSON
+
     }
 
     private void clearSession() {

@@ -46,7 +46,10 @@
 
             <g:form method="POST" controller="pedidoCarga" name="defaultForm">
                 <g:render template="form" model="${[action: Util.ACTION_NEW]}"/>
-                <g:actionSubmit action="save" id="submitButton" disabled="" class="btn btn-default" value="${message(code: 'default.button.create.label', default: 'Criar')}"/>
+                <button id="submitButton" type="submit" name="_action_save" class="btn btn-success">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<g:message code="default.button.create.label" default="Create"></g:message>
+                </button>
+
             </g:form>
         </div>
     </div>
