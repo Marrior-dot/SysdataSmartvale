@@ -83,7 +83,7 @@ class FuncionarioController extends BaseOwnerController {
             }
             catch (Exception e) {
                 e.printStackTrace()
-                flash.error = "Um erro ocorreu."
+                flash.error = "Erro Interno. Contatar suporte"
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
         } else {

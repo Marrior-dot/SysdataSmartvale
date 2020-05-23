@@ -73,7 +73,7 @@ administradora {
 
 embossing {
     produto = "SMART VALE"
-    idCliente = "SMTVLE"
+    idCliente = "SVALE"
 }
 
 

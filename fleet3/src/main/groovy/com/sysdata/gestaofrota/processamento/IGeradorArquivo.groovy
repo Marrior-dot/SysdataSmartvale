@@ -8,4 +8,5 @@ import com.sysdata.gestaofrota.Cartao
  */
 interface IGeradorArquivo {
     Arquivo gerar()
+    def regerar(Arquivo arquivo)
 }

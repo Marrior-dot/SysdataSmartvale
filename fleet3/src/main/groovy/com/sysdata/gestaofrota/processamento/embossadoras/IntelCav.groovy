@@ -36,7 +36,7 @@ class IntelCav extends Embossadora {
         SimpleDateFormat anoFormatter = new SimpleDateFormat("yy")
         SimpleDateFormat mesFormatter = new SimpleDateFormat("MM")
 
-        cartoes.each { c ->
+        cartoesIds.each { c ->
 
             builder.append(String.format("""#DCC##EMB#%4s %4s %4s %3s"%-27s"%-27s"#ENC#;%19s=%2s%2s000001060000%1s?#END#@@@@@@""",
                     c.numero.substring(4, 8),

@@ -1,27 +1,26 @@
 package com.sysdata.gestaofrota
 
-import com.sysdata.gestaofrota.processamento.administradoras.AdministradoraCartao
-import com.sysdata.gestaofrota.processamento.administradoras.Sysdata
-
 class CartaoService {
     def processamentoService
-    def sysdataConfig
+    def geradorCartao
 
     synchronized Cartao gerar(Portador portador, comChip = true) {
-        AdministradoraCartao administradoraCartao = sysdataConfig
         Administradora administradora = processamentoService.getAdministradoraProjeto()
-
         Cartao cartaoInstance = new Cartao()
         cartaoInstance.portador = portador
-        cartaoInstance.numero = administradoraCartao.gerarNumero(administradora, portador)
-        cartaoInstance.senha = administradoraCartao.gerarSenha()
-        cartaoInstance.validade = administradoraCartao.gerarDataValidade()
-        cartaoInstance.cvv = administradoraCartao.gerarCVV()
+        cartaoInstance.numero = geradorCartao.gerarNumero(administradora, portador)
+        cartaoInstance.senha = geradorCartao.gerarSenha()
+        cartaoInstance.validade = geradorCartao.gerarDataValidade()
+        cartaoInstance.cvv = geradorCartao.gerarCVV()
 
         if (!cartaoInstance.save()) throw new RuntimeException(cartaoInstance.showErrors())
 
         portador.addToCartoes(cartaoInstance)
         portador.save()
+
+        administradora.qtdCartoes++
+        administradora.save(flush: true)
+
         return cartaoInstance
     }
 

@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota.processamento.administradoras
 
 import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.processamento.IGeradorCartao
+import com.sysdata.gestaofrota.proc.cartao.IGeradorCartao
 
 /**
  * Created by hyago on 06/10/17.

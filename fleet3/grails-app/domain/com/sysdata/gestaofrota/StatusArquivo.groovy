@@ -4,8 +4,9 @@ enum StatusArquivo {
 	
 	PROCESSANDO("Processando"),
 	GERADO("Gerado"),
-	PROCESSADO("Processado")
-	
+	PROCESSADO("Processado"),
+	REGERADO("Regerado")
+
 	String name
 	
 	StatusArquivo(name){

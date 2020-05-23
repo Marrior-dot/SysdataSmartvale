@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.processamento
+package com.sysdata.gestaofrota.proc.cartao
 
 import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.Portador

@@ -47,14 +47,16 @@ class Cartao {
 
     private String splitCartao(String num) {
         def corte = (num.length() >= 4) ? 4 : num.length()
-        if (corte == 4)
-            splitCartao(num[corte..(num.length() - 1)])
-        return num[0..corte - 1] + " "
+        def parte
+        if (corte == 4 && num.length() > 4)
+            parte = splitCartao(num[corte..(num.length() - 1)])
+
+        return parte ? num[0..(corte - 1)] + " " + parte : num[0..(corte - 1)]
     }
 
     String getNumeroFormatado() {
         String formatado = splitCartao(this.numero)
-        formatado[0..(formatado.length() - 2)]
+        formatado[0..(formatado.length() - 1)]
     }
 
     @Override

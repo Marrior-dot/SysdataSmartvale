@@ -3,16 +3,49 @@ import com.sysdata.gestaofrota.exception.ArquivoException
 import com.sysdata.gestaofrota.processamento.embossadoras.Embossadora
 import com.sysdata.gestaofrota.processamento.embossadoras.IntelCav
 import com.sysdata.gestaofrota.processamento.embossadoras.PaySmart
+import grails.gorm.transactions.Transactional
 
+@Transactional
 class GeracaoArquivoEmbossingService {
 
-    static transactional = true
+    def regerarArquivo(Arquivo arquivo) {
+        log.info "Iniciando Regeração do Arquivo Embossing #$arquivo.id ..."
+
+        def crtIdsList = Cartao.withCriteria {
+            projections {
+                property "id"
+            }
+            eq("arquivo", arquivo)
+            eq("status", StatusCartao.EMBOSSING)
+        }
+        def ret
+
+        if (crtIdsList) {
+            Cartao cartao = Cartao.get(crtIdsList[0])
+            if (cartao.portador.unidade.rh.cartaoComChip) {
+                log.info "Qtde Cartões Com Chip: ${crtIdsList.size()}"
+                Embossadora embossadora = new PaySmart(crtIdsList)
+                ret = embossadora.regerar(arquivo)
+            } else {
+                log.info "Qtde Cartões Sem Chip: ${crtIdsList.size()}"
+                Embossadora embossadora = new IntelCav(crtIdsList)
+                ret = embossadora.regerar(arquivo)
+            }
+        } else {
+            ret = [success: false, message: "Arquivo não pode ser regerado. Cartões não mais em embossing."]
+        }
+        log.info "Regeração finalizada!"
+        ret
+    }
 
     boolean gerarArquivo() {
 
         log.info "Iniciando Geração Embossing..."
         boolean cartaoComChip = true
         Closure criteria = {
+            projections {
+                property "id"
+            }
             eq('status', StatusCartao.CRIADO)
             portador {
                 unidade {
@@ -23,9 +56,9 @@ class GeracaoArquivoEmbossingService {
             }
         }
 
-        List<Cartao> cartoesComChip = Cartao.createCriteria().list(criteria);
+        List<Long> cartoesComChip = Cartao.createCriteria().list(criteria);
         cartaoComChip = false
-        List<Cartao> cartoesSemChip = Cartao.createCriteria().list(criteria)
+        List<Long> cartoesSemChip = Cartao.createCriteria().list(criteria)
         Embossadora embossadora = null
 
       if (cartoesComChip.size() > 0) {

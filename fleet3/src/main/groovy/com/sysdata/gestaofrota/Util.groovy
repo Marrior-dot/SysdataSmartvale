@@ -17,7 +17,8 @@ class Util {
 
     static final Locale LOCALE = new Locale("pt", "BR");
 
-    static final int DIGITOS_SENHA = 4;
+    static final int DIGITOS_SENHA  = 4
+    static final int DIGITOS_CVV    = 3
 
     static def getStringMes(int mes) {
         switch (mes) {

@@ -4,6 +4,7 @@
 	<div class="list">
 		<table id="arqTable" class="table table-striped table-bordered table-hover table-condensed table-default">
 			<thead>
+			<th>ID</th>
 			<th>Data/Hora</th>
 			<th>Tipo</th>
 			<th>Nome</th>
@@ -26,12 +27,14 @@
 				"dataSrc":"results"
 			},
 			"columns":[
+				{"data":"id"},
 				{"data":"data"},
 				{"data":"tipo"},
 				{"data":"nome"},
 				{"data":"status"},
 				{"data":"acao"}
-			]
+			],
+			"order": [[ 0, "desc" ]]
 		});
 	});
 </script>
