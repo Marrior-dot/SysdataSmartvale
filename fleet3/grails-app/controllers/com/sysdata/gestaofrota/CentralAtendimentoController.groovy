@@ -48,11 +48,11 @@ class CentralAtendimentoController {
 
     def index = {}
 
-    def searchCard = {
+    def searchCard() {
         [act: params.act, goTo: params.goTo]
     }
 
-    def findFuncionario = {
+    def findFuncionario() {
         flash.errors = []
         String numero = params['cartao']
         if (numero.length() > 0) {
@@ -84,7 +84,7 @@ class CentralAtendimentoController {
         }
     }
 
-    def unlockNewCard = {
+    def unlockNewCard() {
         flash.errors = []
         Cartao cartaoInstance = Cartao.get(params.long('id'))
         if (cartaoInstance) {
@@ -105,7 +105,7 @@ class CentralAtendimentoController {
         }
     }
 
-    def cancelCard = {
+    def cancelCard() {
         flash.errors = []
         Cartao cartaoInstance = Cartao.get(params.long('id'))
         MotivoCancelamento motivo = MotivoCancelamento.valueOf(params['motivo'])
@@ -131,7 +131,7 @@ class CentralAtendimentoController {
     def settingPriceTransaction = {}
     def fuelTransaction = {}
 
-    def doSettingPriceTransaction = {
+    def doSettingPriceTransaction() {
         flash.errors = []
         if (params.estabelecimento) {
             if (params.preco) {
@@ -153,7 +153,7 @@ class CentralAtendimentoController {
         render(view: "settingPriceTransaction")
     }
 
-    def doFuelTransaction = { FuelTransactionCommand cmd ->
+    def doFuelTransaction(FuelTransactionCommand cmd) {
         flash.errors = []
         def resp
         try {
@@ -172,9 +172,8 @@ class CentralAtendimentoController {
     }
 
 
-    def buscarFuncionarios = {
+    def buscarFuncionarios() {
         flash.errors = []
-        println "params: ${params}"
         def numero = params.cartao
         def cartaoDebito = params.cartaoParaTransferir
         def cartaoCredito = params.cartaoParaReceber
@@ -209,8 +208,7 @@ class CentralAtendimentoController {
             render(view: 'searchCards', model: [act: 'buscarFuncionarios', goTo: params.goTo])
         }
     }
-    def transfSaldo = {
-        println "params : $params"
+    def transfSaldo() {
         flash.errors = []
         def cartaoInstanceDebito = Cartao.get(params.cartaoInstanceDebitoId)
         def cartaoInstanceCredito = Cartao.get(params.cartaoInstanceCreditoId)

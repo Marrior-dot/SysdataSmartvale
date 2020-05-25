@@ -12,7 +12,7 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "BahiaVale"
+        nome = "SmartVale"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -21,7 +21,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/bahiavale_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/smartvale_development"
 
         username = "postgres"
         password = "postgres"
@@ -31,16 +31,16 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "bahiavale"
+        pasta = "smartvale"
         //geradorCartao = NewGeradorCartaoService
         corPrimaria = "#BEBEBE"
         corSecundaria = "#696969"
 
-        context = "/bahiavale-frota"
+        context = "/smartvale-frota"
     }
 
     homologation {
-        nome = "BahiaVale"
+        nome = "SmartVale"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -48,29 +48,26 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/bahiavale_homologation"
+        url = "jdbc:postgresql://192.168.250.41/smartvale_homologation"
         username = "postgres"
         password = "postgres"
-
-
-        // ** DATABASE **
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "bahiavale"
+        pasta = "smartvale"
         //geradorCartao = NewGeradorCartaoService
         corPrimaria = "#BEBEBE"
         corSecundaria = "#696969"
 
-        context = "/bahiavale-hom"
+        context = "/smartvale-hom"
     }
 }
 
 administradora {
-    nome = "BAHIA VALE"
-    bin = "605482"
+    nome = "SMART VALE"
+    bin = "609095"
     anosValidadeCartao = 2
 
 }
@@ -78,8 +75,8 @@ administradora {
 cartao {
     gerador = GeradorCartaoPadrao
     embossing {
-        produto = "BAHIA VALE"
-        idCliente = "BVALE"
+        produto = "SMART VALE"
+        idCliente = "SVALE"
     }
 }
 
@@ -94,4 +91,4 @@ faturamento {
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
 
-projectId = "bahiavale"
+projectId = "smartvale"

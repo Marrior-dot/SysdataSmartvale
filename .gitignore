@@ -14,3 +14,5 @@ Thumbs.db
 grails-app/conf/FrotaConfig\.groovy
 
 fleet3/gradle/wrapper/
+
+fleet3/logs/

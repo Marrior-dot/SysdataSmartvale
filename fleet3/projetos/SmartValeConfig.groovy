@@ -1,5 +1,6 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
+import com.sysdata.gestaofrota.proc.cartao.GeradorCartaoPadrao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaManutencao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
@@ -71,11 +72,13 @@ administradora {
 
 }
 
-embossing {
-    produto = "SMART VALE"
-    idCliente = "SVALE"
+cartao {
+    gerador = GeradorCartaoPadrao
+    embossing {
+        produto = "SMART VALE"
+        idCliente = "SVALE"
+    }
 }
-
 
 processamentos = [
         "faturamentoService",

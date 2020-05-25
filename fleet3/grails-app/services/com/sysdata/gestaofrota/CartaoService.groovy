@@ -1,5 +1,8 @@
 package com.sysdata.gestaofrota
 
+import grails.gorm.transactions.Transactional
+
+@Transactional
 class CartaoService {
     def processamentoService
     def geradorCartao
@@ -26,8 +29,9 @@ class CartaoService {
 
     Cartao desbloquear(Cartao cartao) {
        cartao.status = StatusCartao.ATIVO
-       cartao.save()
+       cartao.save(flush: true)
     }
+
     Cartao cancelar(Cartao cartao, MotivoCancelamento motivo) {
 
         cartao.status = StatusCartao.CANCELADO
@@ -43,6 +47,6 @@ class CartaoService {
 //            cartao.portador.conta.status = ...
         }
 
-        cartao.save()
+        cartao.save(flush: true)
     }
 }
