@@ -20,6 +20,8 @@ apply plugin:"org.grails.grails-web"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 
+
+
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
@@ -94,9 +96,6 @@ dependencies {
         exclude group: 'com.sun.jdmk', module:'jmxtools'
         exclude group: 'com.sun.jmx', module:'jmxri'
     }
-
-
-
 }
 
 bootRun {
