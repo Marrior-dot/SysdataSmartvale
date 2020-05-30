@@ -12,7 +12,7 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
 
 environments {
     development {
-        nome = "SmartVale"
+        nome = "ShowRoom"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -21,7 +21,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/smartvale_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/showroom_development"
 
         username = "postgres"
         password = "postgres"
@@ -31,16 +31,16 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "smartvale"
+        pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#0F9682"
+        corSecundaria = "#000000"
 
-        context = "/smartvale-frota"
+        context = "/showroom-frota"
     }
 
     homologation {
-        nome = "SmartVale"
+        nome = "ShowRoom"
         tipoPrograma = 7
         parceiro = 2
         tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
@@ -48,7 +48,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/smartvale_homologation"
+        url = "jdbc:postgresql://192.168.250.41/showroom"
         username = "postgres"
         password = "postgres"
 
@@ -56,18 +56,19 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "smartvale"
+        pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#0F9682"
+        corSecundaria = "#000000"
 
-        context = "/smartvale-hom"
+        context = "/showroom-hom"
     }
+
 }
 
 administradora {
-    nome = "SMART VALE"
-    bin = "609095"
+    nome = "Sysdata Sistemas Integrados"
+    bin = "605009"
     anosValidadeCartao = 2
 
 }
@@ -75,8 +76,8 @@ administradora {
 cartao {
     gerador = GeradorCartaoPadrao
     embossing {
-        produto = "SMART VALE"
-        idCliente = "SVALE"
+        produto = "SYSDATA FROTA"
+        idCliente = "SYSDT"
     }
 }
 
@@ -91,4 +92,4 @@ faturamento {
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
 
-projectId = "smartvale"
+projectId = "showroom"

@@ -27,6 +27,7 @@ class Transacao {
     BigDecimal taxaAdm
     BigDecimal valorReembolso
     BigDecimal qtd_litros
+    OrigemTransacao origem
 
     static belongsTo = [participante: Participante]
 
@@ -57,6 +58,7 @@ class Transacao {
         taxaAdm nullable: true
         valorReembolso nullable: true
         qtd_litros nullable: true
+        origem nullable: true
     }
 
 

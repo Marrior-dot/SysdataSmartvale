@@ -1,5 +1,6 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
+import com.sysdata.gestaofrota.proc.cartao.GeradorCartaoPadrao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaManutencao
 import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
@@ -72,11 +73,13 @@ administradora {
 
 }
 
-embossing {
-    produto = "SYSDATA FROTA"
-    idCliente = "SYSDT"
+cartao {
+    gerador = GeradorCartaoPadrao
+    embossing {
+        produto = "SYSDATA FROTA"
+        idCliente = "SYSDT"
+    }
 }
-
 
 processamentos = [
         "faturamentoService",

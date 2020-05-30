@@ -14,7 +14,7 @@ class Cartao {
 
     static belongsTo = [portador: Portador]
 
-    static transients = ['numeroMascarado', 'numeroFormatado']
+    static transients = ['numeroMascarado', 'numeroFormatado', "saldoTotal"]
 
     static constraints = {
         numero(unique: true)
@@ -64,7 +64,11 @@ class Cartao {
         return "${numeroMascarado} [${status.nome}]"
     }
 
-    Portador getPortador(boolean has) {
-
+    BigDecimal getSaldoTotal() {
+        if (this.portador.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO)
+            return this.portador.saldoTotal
+        else
+            return 0
     }
+
 }

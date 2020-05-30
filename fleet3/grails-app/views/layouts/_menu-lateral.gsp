@@ -106,6 +106,7 @@
                         <li>
                             <g:link class="submenu-logado" controller="console" target="Console">Console</g:link>
                             <g:link class="submenu-logado" controller="processamento" >Processamentos</g:link>
+                            <g:link class="submenu-logado" controller="mockTransacao" >Gerador Transações</g:link>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
