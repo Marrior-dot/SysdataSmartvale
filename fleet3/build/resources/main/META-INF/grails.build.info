@@ -1,6 +1,0 @@
-#Sat, 30 May 2020 13:52:38 -0300
-
-info.app.version=0.1
-info.app.name=fleet3
-grails.env=production
-info.app.grailsVersion=3.3.6
