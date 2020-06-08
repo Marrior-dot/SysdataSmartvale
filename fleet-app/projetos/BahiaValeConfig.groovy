@@ -32,7 +32,6 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        //geradorCartao = NewGeradorCartaoService
         corPrimaria = "#3E0090"
         corSecundaria = "#00993E"
 
@@ -60,9 +59,8 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#3E0090"
+        corSecundaria = "#00993E"
 
         context = "/bahiavale-hom"
     }
