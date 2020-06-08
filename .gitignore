@@ -2,3 +2,5 @@ build/
 .idea/
 .gradle/
 .settings/
+
+fleet-app/logs/

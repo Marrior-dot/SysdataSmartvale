@@ -33,8 +33,8 @@ environments {
          */
         pasta = "bahiavale"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#3E0090"
+        corSecundaria = "#00993E"
 
         context = "/bahiavale-frota"
     }
