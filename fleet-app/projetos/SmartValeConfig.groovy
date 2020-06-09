@@ -33,7 +33,7 @@ environments {
          */
         pasta = "smartvale"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
+        corPrimaria = "#07A75A"
         corSecundaria = "#696969"
 
         context = "/smartvale-frota"
@@ -58,7 +58,7 @@ environments {
          */
         pasta = "smartvale"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
+        corPrimaria = "#07A75A"
         corSecundaria = "#696969"
 
         context = "/smartvale-hom"

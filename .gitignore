@@ -4,3 +4,5 @@ build/
 .settings/
 
 fleet-app/logs/
+
+fleet-app/grails-app/conf/frotaApp.groovy
