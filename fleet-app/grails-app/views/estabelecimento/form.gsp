@@ -53,7 +53,7 @@
     $("#btnEditProd").click(function() {
         $.ajax({
             url: "${createLink(controller: 'produtoEstabelecimento', action: 'edit')}",
-            data: {estId: "${estabelecimentoInstance.id}"},
+            data: {estId: "${estabelecimentoInstance?.id}"},
             dataType: "html"
 
         }).done(function(data){
