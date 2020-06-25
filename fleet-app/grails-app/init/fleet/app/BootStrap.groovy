@@ -51,10 +51,10 @@ class BootStrap {
 
 
     def criarAutenticacaoInicial() {
-        Role startRole = Role.findOrCreateWhere(authority: "ROLE_PROC", owner: Processadora.first()).save()
+        Role startRole = Role.findOrCreateWhere(authority: "ROLE_PROC").save()
         User startUser
         if (!User.findByUsername("sys.start")) {
-            startUser = new User(username: "sys.start", password: "jmml72", owner: Processadora.first()).save()
+            startUser = new User(username: "sys.start", password: "jmml72").save()
             UserRole.create startUser, startRole
             UserRole.withSession {
                 it.flush()

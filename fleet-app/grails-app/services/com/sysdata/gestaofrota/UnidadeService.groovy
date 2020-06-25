@@ -21,7 +21,6 @@ class UnidadeService {
         if (! cannotDelete) {
             cannotDelete = unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA && MaquinaMotorizada.countMaquinasUnidade(unidade).get() > 0
             if (! cannotDelete) {
-
                 Rh rh = unidade.rh
                 rh.removeFromUnidades(unidade)
                 unidade.delete(flush: true)
@@ -39,8 +38,10 @@ class UnidadeService {
                     ret.message = "Unidade #$unidade já inativada. Não pode ser removida, pois já possui Funcionários/Máquinas"
                 }
             }
+        } else {
+            ret.success = false
+            ret.message = "Unidade não pode ser removida, pois já possui funcionários vinculados"
         }
-        log.info ret.message
         ret
     }
 }

@@ -49,26 +49,24 @@
 
 </div>
 
-<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-	<div id="divIntervalo" >
+<div id="divIntervalo" >
 
 
-        <div class="list">
-            <table id="rbIntervaloTable" class="table table-striped table-bordered table-hover table-condensed table-default">
-                <thead>
-                <th>Inicio Intervalo</th>
-                <th>Fim Intervalo</th>
-                <th>Dia Efetivaçao</th>
-                <th>Meses</th>
-                <th>Açoes</th>
-                </thead>
-            </table>
-        </div>
-
-
-
+	<div class="list">
+		<table id="rbIntervaloTable" class="table table-striped table-bordered table-hover table-condensed table-default">
+			<thead>
+			<th>Inicio Intervalo</th>
+			<th>Fim Intervalo</th>
+			<th>Dia Efetivaçao</th>
+			<th>Meses</th>
+			<th>Açoes</th>
+			</thead>
+		</table>
 	</div>
-</sec:ifAnyGranted>
+
+
+
+</div>
 
 
 
@@ -76,42 +74,39 @@
 
     var rbSemanalTable,rbIntervaloTable
 
-    $(document).ready(function(){
-
-        rbSemanalTable=$("#rbSemanalTable").DataTable({
-            "ajax":{
-                "url":"${createLink(controller:'postoCombustivel',action:'getReembolsoSemanal')}",
-                "data":{"id":${postoCombustivelInstance?.id}},
-                "dataSrc":"results"
-            },
-            "columns":[
-                {"data":"diaSemana"},
-                {"data":"intervaloDias"},
-                {"data":"acao"}
-            ]
-        });
-
-
-        rbIntervaloTable=$("#rbIntervaloTable").DataTable({
-            "ajax":{
-                "url":"${createLink(controller:'postoCombustivel',action:'getIntervalosReembolso')}",
-                "data":{"id":${postoCombustivelInstance?.id}},
-                "dataSrc":"results"
-            },
-            "columns":[
-                {"data":"inicio"},
-                {"data":"fim"},
-                {"data":"diaEfetivacao"},
-                {"data":"meses"},
-                {"data":"acao"}
-            ]
-        });
-    });
-
-
 	var checked=null;
 
 	$(function(){
+
+		rbSemanalTable=$("#rbSemanalTable").DataTable({
+			"ajax":{
+				"url":"${createLink(controller:'postoCombustivel',action:'getReembolsoSemanal')}",
+				"data":{"id":${postoCombustivelInstance?.id}},
+				"dataSrc":"results"
+			},
+			"columns":[
+				{"data":"diaSemana"},
+				{"data":"intervaloDias"},
+				{"data":"acao"}
+			]
+		});
+
+
+		rbIntervaloTable=$("#rbIntervaloTable").DataTable({
+			"ajax":{
+				"url":"${createLink(controller:'postoCombustivel',action:'getIntervalosReembolso')}",
+				"data":{"id":${postoCombustivelInstance?.id}},
+				"dataSrc":"results"
+			},
+			"columns":[
+				{"data":"inicio"},
+				{"data":"fim"},
+				{"data":"diaEfetivacao"},
+				{"data":"meses"},
+				{"data":"acao"}
+			]
+		});
+
 
 		checked=$("input[name='tipoReembolso']:checked");
 

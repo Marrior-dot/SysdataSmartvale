@@ -27,6 +27,8 @@ class PostoCombustivelController {
 
     def postoCombustivelService
 
+    def springSecurityService
+
     def index() {
         redirect(action: "list", params: params)
     }
@@ -53,31 +55,9 @@ class PostoCombustivelController {
         } else {
             render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: Util.ACTION_NEW])
         }
-
-
-/*
-        def postoCombustivelInstance = new PostoCombustivel(params)
-        int postosCadastrados = PostoCombustivel.countByCnpj(postoCombustivelInstance.cnpj)
-        if (postosCadastrados > 0) {
-            postoCombustivelInstance.errors.rejectValue('cnpj', "Já existe uma Empresa cadastrada com o CNPJ ${postoCombustivelInstance.cnpj}")
-            render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'novo'])
-            return
-        }
-
-        postoCombustivelInstance.endereco = params['endereco']
-        postoCombustivelInstance.telefone = params['telefone']
-        postoCombustivelInstance.dadoBancario = params['dadoBancario']
-
-        if (postoCombustivelService.save(postoCombustivelInstance)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
-            redirect(action: "show", id: postoCombustivelInstance.id)
-        } else {
-            render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'novo'])
-        }
-*/
     }
 
-    def show = {
+    def show() {
         def postoCombustivelInstance = PostoCombustivel.get(params.long('id'))
         if (!postoCombustivelInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
@@ -87,7 +67,7 @@ class PostoCombustivelController {
         }
     }
 
-    def edit = {
+    def edit() {
         def postoCombustivelInstance = PostoCombustivel.get(params.long('id'))
         if (!postoCombustivelInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
@@ -97,39 +77,12 @@ class PostoCombustivelController {
         }
     }
 
-    def update = {
-        def postoCombustivelInstance = PostoCombustivel.get(params.long('id'))
-        if (postoCombustivelInstance) {
-            if (params.version) {
-                Long version = params.long('version')
-                if (postoCombustivelInstance.version > version) {
-                    postoCombustivelInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'postoCombustivel.label', default: 'PostoCombustivel')] as Object[], "Another user has updated this PostoCombustivel while you were editing")
-                    render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'editando'])
-                    return
-                }
-            }
-
-            PostoCombustivel postoCadastrado = PostoCombustivel.findByCnpj(postoCombustivelInstance.cnpj)
-            if (postoCadastrado && postoCadastrado.id != postoCombustivelInstance.id) {
-                postoCombustivelInstance.errors.rejectValue('cnpj', "Já existe um Estabelecimento cadastrado com o CNPJ ${postoCombustivelInstance.cnpj}")
-                render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'editando'])
-                return
-            }
-
-            postoCombustivelInstance.properties = params
-            postoCombustivelInstance.endereco = params['endereco']
-            postoCombustivelInstance.telefone = params['telefone']
-            postoCombustivelInstance.dadoBancario = params['dadoBancario']
-
-            if (postoCombustivelService.save(postoCombustivelInstance)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
-                redirect(action: "show", id: postoCombustivelInstance.id)
-            } else {
-                render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'editando'])
-            }
+    def update(PostoCombustivel postoCombustivelInstance) {
+        if (postoCombustivelInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
+            redirect(action: "show", id: postoCombustivelInstance.id)
         } else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
-            redirect(action: "list")
+            render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'editando'])
         }
     }
 
@@ -225,13 +178,24 @@ class PostoCombustivelController {
         def jsonData
         if (postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS) {
 
+            def user = springSecurityService.currentUser
+            def hasPerm = user.authorities.find { it.authority in ['ROLE_PROC', 'ROLE_ADMIN'] }
+
             def fields = postoCombustivelInstance.reembolsos.collect { r ->
-                [inicio       : r.inicioIntervalo,
-                 fim          : r.fimIntervalo,
-                 diaEfetivacao: r.diaEfetivacao,
-                 meses        : r.meses,
-                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
-                ]
+
+                def map = [
+                            inicio       : r.inicioIntervalo,
+                            fim          : r.fimIntervalo,
+                            diaEfetivacao: r.diaEfetivacao,
+                            meses        : r.meses
+                        ]
+
+                if (hasPerm)
+                    map['acao'] = "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
+                else
+                    map['acao'] = ""
+
+                return map
             }
 
             jsonData = [totalRecords: postoCombustivelInstance.reembolsos.size(), results: fields]
@@ -264,11 +228,19 @@ class PostoCombustivelController {
 
         if (postoCombustivelInstance.tipoReembolso == TipoReembolso.SEMANAL) {
 
+            def user = springSecurityService.currentUser
+            def hasPerm = user.authorities.find { it.authority in ['ROLE_PROC', 'ROLE_ADMIN'] }
+
             def fields = postoCombustivelInstance.reembolsos.collect { r ->
-                [diaSemana    : r.diaSemana.nome,
-                 intervaloDias: r.intervaloDias,
-                 acao         : "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-trash'/></a>"
-                ]
+                def map = [
+                            diaSemana    : r.diaSemana.nome,
+                            intervaloDias: r.intervaloDias
+                        ]
+                if (hasPerm)
+                    map['acao'] = "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-trash'/></a>"
+                else
+                    map['acao'] = ""
+                return map
             }
 
             jsonData = [totalRecords: postoCombustivelInstance.reembolsos.size(), results: fields]

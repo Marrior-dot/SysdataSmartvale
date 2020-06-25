@@ -31,10 +31,6 @@
                         <th>Nome</th>
                         <td>${this.role.authority}</td>
                     </tr>
-                    <tr>
-                        <th>Organização</th>
-                        <td>${this.role.owner?.nome}</td>
-                    </tr>
                 </tbody>
                 </table>
 
@@ -43,8 +39,6 @@
                         <g:link class="btn btn-default" action="edit" resource="${this.role}"><span class="glyphicon glyphicon-edit"></span>&nbsp;<g:message code="default.button.edit.label" default="Edit" /></g:link>
                         <button class="btn btn-default" type="submit" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <span class="glyphicon glyphicon-remove"></span><g:message code="default.button.delete.label" default="Delete" /></button>
-
-
                     </fieldset>
                 </g:form>
             </div>

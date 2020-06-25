@@ -20,13 +20,11 @@
                 <table class="table table-bordered table-list">
                 <thead>
                     <th>Role</th>
-                    <th>Organização</th>
                 </thead>
                     <tbody>
                         <g:each in="${roleList}" var="role">
                             <tr>
                                 <td><g:link action="show" id="${role.id}">${role.authority}</g:link> </td>
-                                <td>${role.owner?.nome}</td>
                             </tr>
                         </g:each>
                     </tbody>

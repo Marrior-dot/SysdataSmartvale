@@ -28,7 +28,7 @@ class UserService {
 		if (params.password == params.confirmPassword) {
 			params.findAll { it.key.contains("ROLE_") && it.value == "on" }.each { k, v ->
 				userInstance.save()
-				Role role = Role.findByAuthorityAndOwner(k, userInstance.owner)
+				Role role = Role.findByAuthority(k)
 				UserRole.create userInstance, role
 			}
 			ret.message = "Usuário $userInstance.username criado"

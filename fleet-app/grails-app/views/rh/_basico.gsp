@@ -238,6 +238,7 @@
 					</div>
 				</div>
 
+%{--
 				<div class="form-group col-md-3">
 					<label class="control-label" for="diasInatividade">Inatividade *</label>
 					<div class="input-group">
@@ -246,6 +247,7 @@
 						<span class="input-group-addon">dias</span>
 					</div>
 				</div>
+--}%
 			</div>
 		</div>
 	</div>

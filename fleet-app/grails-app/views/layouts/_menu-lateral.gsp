@@ -9,7 +9,7 @@
                 <a href="${createLink(uri: '/')}" class="menu-logado"><i class="fa fa-dashboard fa-fw"></i> Início</a>
             </li>
 
-            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH, ROLE_ESTAB">
+            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-archive"></i> Cadastros<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -27,10 +27,6 @@
                             <li class="controller"><g:link class="submenu-logado"  controller="marcaVeiculo" action="list">Marcas de Veículos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado"  controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
 
-                        </sec:ifAnyGranted>
-
-                        <sec:ifAnyGranted roles="ROLE_ESTAB">
-                            <li class="controller"><g:link class="submenu-logado" controller="postoCombustivel" action="list">Estabelecimentos</g:link></li>
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_PROC">

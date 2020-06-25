@@ -110,13 +110,5 @@ class RoleController {
         }
     }
 
-    def getRolesByOwner(long ownerId) {
-        def rolesList = Role.withCriteria {
-            owner {
-                eq("id", ownerId)
-            }
-        }
-        render rolesList as JSON
-    }
 
 }

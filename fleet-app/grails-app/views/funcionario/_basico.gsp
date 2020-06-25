@@ -152,7 +152,7 @@
               model="[enderecoInstance: funcionarioInstance?.endereco, endereco: 'endereco', legend: 'Endereço Residencial']"/>
 
     <g:render template="/telefone/form"
-              model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Residencial']"/>
+              model="[telefoneInstance: funcionarioInstance?.telefone, telefone: 'telefone', legend: 'Telefone Pessoal']"/>
     <g:render template="/telefone/form"
               model="[telefoneInstance: funcionarioInstance?.telefoneComercial, telefone: 'telefoneComercial', legend: 'Telefone Comercial', required: true]"/>
     <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">

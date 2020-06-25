@@ -107,8 +107,14 @@ class UnidadeController {
         def unidadeInstance = Unidade.get(params.id)
         if (unidadeInstance) {
             def ret = unidadeService.delete(unidadeInstance)
-             flash.message = ret.message
-             redirect(controller: 'rh', action: 'show', params: [id: unidadeInstance.rh.id])
+            if (ret.success) {
+                log.info ret.message
+                flash.message = ret.message
+            } else {
+                log.error ret.message
+                flash.error = ret.message
+            }
+            redirect(controller: 'rh', action: 'show', params: [id: unidadeInstance.rh.id])
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'unidade.label', default: 'Unidade')])}"
             redirect(action: "list")

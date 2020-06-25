@@ -83,10 +83,6 @@
 						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
 					</div>
 
-					<div class="form-group col-md-6">
-						<label for="owner.codigo">Taxa Reembolso</label>
-						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.taxaReembolso}"/>
-					</div>
 				</div>
 			</g:elseif>
 
@@ -107,13 +103,6 @@
 						</div>
 					</g:else>
 
-				</g:if>
-				<g:if test="${action in [Util.ACTION_VIEW]}">
-					<div class="form-group col-md-6">
-						<label for="role">Papel</label>
-						<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}" value="${role?.authority}"
-								  optionKey="id" optionValue="authority" class="form-control"/>
-					</div>
 				</g:if>
 			</div>
 
@@ -156,19 +145,16 @@
 					<div class="row">
 						<div class="form-group col-md-4">
 
-							<g:if test="${ action == Util.ACTION_NEW }">
-								<span id="roles"></span>
-							</g:if>
-							<g:else>
+							<%
+								def userAuths = []
+							    if (action in [Util.ACTION_VIEW, Util.ACTION_EDIT])
+									userAuths = userInstance.authorities as List
+							%>
 
-								<%
-								    def userAuths = userInstance.authorities as List
-								%>
+							<g:each in="${Role.list()}" var="r" >
+								<g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
+							</g:each>
 
-								 <g:each in="${Role.findAllByOwner(userInstance.owner)}" var="r" >
-									 <g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
-								 </g:each>
-							</g:else>
 
 						</div>
 					</div>
@@ -197,42 +183,16 @@
 			</div>
 		</g:form>
 
+%{--
 		<sec:ifAnyGranted roles='ROLE_PROC'>
 			<form action='${request.contextPath}/j_spring_security_switch_user' method='POST'>
 				<input class="btn btn-primary" type='submit' value='Logar'/>
 				<input type='hidden' name='j_username' value="${userInstance?.username}"/> <br/>
 			</form>
 		</sec:ifAnyGranted>
+--}%
 	</div>
 </div>
-
-<script>
-
-	$(document).ready(function() {
-		loadPerfis($("select#owner").val())
-	})
-
-
-	$("select#owner").change(function() {
-		loadPerfis($(this).val())
-	})
-
-
-	function loadPerfis(ownerId) {
-		$("span#roles").html("")
-
-		$.getJSON("${createLink(controller: 'role', action: 'getRolesByOwner')}", { ownerId: ownerId },  function(data) {
-
-			let roles = []
-			$.each(data, function(k, v) {
-				roles.push("<input type='checkbox' name="+ v.authority + ">" + v.authority + "</input>")
-			})
-
-			$("span#roles").html(roles.join("<br/>"))
-		})
-	}
-
-</script>
 
 
 
