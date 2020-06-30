@@ -9,6 +9,8 @@ class Participante {
     Date dateCreated = new Date()
     DadoBancario dadoBancario
 
+    static hasMany = [propriedades: Propriedade]
+
     static auditable = true
 
     static embedded = ['endereco', 'telefone', 'dadoBancario']
