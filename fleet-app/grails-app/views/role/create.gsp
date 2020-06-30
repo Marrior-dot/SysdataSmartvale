@@ -34,13 +34,6 @@
                                 <label>Nome</label>
                                 <g:textField name="authority" class="form-control" value="${this.role.authority}"></g:textField>
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label>Participante</label>
-
-                                <g:select name="owner" class="form-control" from="${ownerList}" optionKey="id" optionValue="nome" value="${this.role.owner}"></g:select>
-
-
-                            </div>
                         </div>
                     </div>
                     <div class="panel-footer">
