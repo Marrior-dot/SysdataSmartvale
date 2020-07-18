@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.CategoriaFuncionario" %>
+<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.CategoriaFuncionario" %>
 <%@ page import="com.sysdata.gestaofrota.Status" %>
 <%@ page import="com.sysdata.gestaofrota.CategoriaCnh" %>
 
@@ -98,13 +98,17 @@
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
 
-                <div class="form-group col-md-3">
-                    <label for="categoria.id">Categoria *</label>
-                    <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance)?.list()}"
-                              value="${funcionarioInstance?.categoria?.id}" required="required"
-                              noSelection="${['null': 'Selecione a categoria...']}"
-                              optionKey="id" class="form-control" optionValue="nome"/>
-                </div>
+                <g:if test="${unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
+                    <div class="form-group col-md-3">
+                        <label for="categoria.id">Perfil de Recarga *</label>
+                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance)?.list()}"
+                                  value="${funcionarioInstance?.categoria?.id}" required="required"
+                                  noSelection="${['null': 'Selecione a categoria...']}"
+                                  optionKey="id" class="form-control" optionValue="nome"/>
+                    </div>
+
+                </g:if>
+
 
                 <div class="form-group col-md-3">
                     <label for="status">Status *</label>

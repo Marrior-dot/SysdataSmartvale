@@ -1,7 +1,8 @@
 package com.sysdata.gestaofrota
 
-class ConfiguracaoParametro {
+class ConfiguracaoPropriedade {
 
+    String nome
     TipoParticipante tipoParticipante
     String dsl
     boolean ativo = true

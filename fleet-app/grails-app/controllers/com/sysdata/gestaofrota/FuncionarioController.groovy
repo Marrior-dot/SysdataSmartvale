@@ -52,8 +52,11 @@ class FuncionarioController extends BaseOwnerController {
     def create() {
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (unidadeInstance) {
-            if (CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
-                flash.error = "Não existe nenhuma Categoria de Funcionário. É necessário cadastrar uma primeiro."
+
+            if (unidadeInstance.rh.modeloCobranca == TipoCobranca.PRE_PAGO &&
+                    unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO &&
+                    CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
+                flash.error = "Não existe nenhum Perfil de Recarga definido. É necessário cadastrar um primeiro."
                 redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
                 return
             }

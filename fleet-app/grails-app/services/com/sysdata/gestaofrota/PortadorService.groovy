@@ -46,20 +46,23 @@ class PortadorService {
         portadorMaquina.unidade = maquina.unidade
         portadorMaquina.maquina = maquina
 
-        portadorMaquina.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
-        portadorMaquina.saldoTotal = portadorMaquina.limiteTotal
+        if (maquina.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO) {
 
+            portadorMaquina.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
+            portadorMaquina.saldoTotal = portadorMaquina.limiteTotal
 
-        if (params.portador.limiteDiario != null || params.portador.limiteDiario != '') {
-            portadorMaquina.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
-            portadorMaquina.saldoDiario = portadorMaquina.limiteDiario
+            if (params.portador.limiteDiario != null || params.portador.limiteDiario != '') {
+                portadorMaquina.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
+                portadorMaquina.saldoDiario = portadorMaquina.limiteDiario
+            }
+            if (params.portador.limiteMensal != null || params.portador.limiteMensal != '') {
+                portadorMaquina.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
+                portadorMaquina.saldoMensal = portadorMaquina.limiteMensal
+            }
         }
-        if (params.portador.limiteMensal != null || params.portador.limiteMensal != '') {
-            portadorMaquina.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
-            portadorMaquina.saldoMensal = portadorMaquina.limiteMensal
-        }
 
-        if (!portadorMaquina.save()) throw new RuntimeException(portadorMaquina.showErrors())
+        if (!portadorMaquina.save())
+            throw new RuntimeException(portadorMaquina.showErrors())
         maquina.unidade.addToPortadores(portadorMaquina)
         maquina.unidade.save()
 

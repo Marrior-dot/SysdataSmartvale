@@ -57,4 +57,34 @@ class CategoriaFuncionarioService {
         categoria.valorCarga = valor
         categoria.save()
     }
+
+    def listCategoriasByUnidade(Unidade unidade) {
+
+        def categList = []
+
+        if (unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
+            categList = Funcionario.withCriteria {
+                                        projections {
+                                            distinct "categoria"
+                                        }
+                                        eq("unidade", unidade)
+            }
+
+        } else if (unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+            categList = MaquinaMotorizada.withCriteria {
+                                            projections {
+                                                distinct "categoria"
+                                            }
+                                            eq("unidade", unidade)
+                                        }
+
+        }
+
+        if (! categList.isEmpty())
+            return categList.collect { [ id: it.id, nome: it.nome, valorCarga: Util.formatCurrency(it.valorCarga) ] }
+        else
+            return categList
+
+    }
+
 }

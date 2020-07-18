@@ -17,8 +17,6 @@ class Transacao {
     TipoTransacao tipo
     Cartao cartao
     Estabelecimento estabelecimento
-    Boolean autorizada
-    TipoCombustivel combustivel
     Long quilometragem
     BigDecimal precoUnitario
     MotivoNegacao motivoNegacao
@@ -28,6 +26,7 @@ class Transacao {
     BigDecimal valorReembolso
     BigDecimal qtd_litros
     OrigemTransacao origem
+    Long autonomia
 
     static belongsTo = [participante: Participante]
 
@@ -47,8 +46,6 @@ class Transacao {
         estabelecimento(nullable: true)
         cartao(nullable: true)
         terminal(nullable: true)
-        autorizada(nullable: true)
-        combustivel(nullable: true)
         quilometragem(nullable: true)
         precoUnitario(nullable: true)
         statusControle(nullable: true)
@@ -59,6 +56,7 @@ class Transacao {
         valorReembolso nullable: true
         qtd_litros nullable: true
         origem nullable: true
+        autonomia nullable: true
     }
 
 

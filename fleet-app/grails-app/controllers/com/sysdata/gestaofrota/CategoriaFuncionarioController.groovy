@@ -38,18 +38,10 @@ class CategoriaFuncionarioController {
 
     def getAllByUnidade() {
         def unidId = params.unidId ? params.long('unidId') : 0 as long
-        def categList = Funcionario.withCriteria {
-                            projections {
-                                distinct "categoria"
-                            }
-                            unidade {
-                                idEq(unidId)
-                            }
-                        }
-        if (categList)
-            render categList.collect { [ id: it.id, nome: it.nome, valorCarga: Util.formatCurrency(it.valorCarga) ] } as JSON
+        Unidade unidade = Unidade.get(unidId)
+        if (unidade)
+            render categoriaFuncionarioService.listCategoriasByUnidade(unidade) as JSON
         else
-            render categList as JSON
-
+            render status: 404, text: "Unidade com ID $unidId não encontrada"
     }
 }

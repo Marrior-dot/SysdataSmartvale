@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ConfiguracaoParametroSpec extends Specification implements DomainUnitTest<ConfiguracaoParametro> {
+class ConfiguracaoPropriedadeSpec extends Specification implements DomainUnitTest<ConfiguracaoPropriedade> {
 
     def setup() {
     }

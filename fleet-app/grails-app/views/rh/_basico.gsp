@@ -68,7 +68,7 @@
 		</div>
 	</div>
 
-%{--	<div class="panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-heading">Cartão</div>
 
 		<div class="panel-body">
@@ -90,12 +90,12 @@
 							<input type="checkbox" name="cartaoComChip" id="cartaoComChip" ${rhInstance.cartaoComChip || action == Util.ACTION_NEW ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
 							<strong>Cartão com chip</strong>
 						</span>
-						--}%%{--
+						%{--
                                                 <span class="input-group-addon">
                                                     <input type="checkbox" id="renovarLimite" name="renovarLimite" ${rhInstance?.renovarLimite ? 'checked' : ''} ${bloquearModCob ? 'disabled': ''}>
                                                     <strong>Renovar Limite</strong>
                                                 </span>
-                        --}%%{--
+                        --}%
 					</div>
 					<g:if test="${bloquearModCob}">
 						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
@@ -103,7 +103,8 @@
 				</div>
 			</div>
 		</div>
-	</div>--}%
+	</div>
+
 
 	<div class="panel panel-default" id="pedido-carga">
 		<div class="panel-heading">
@@ -138,7 +139,7 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
 					<div class="input-group">
-						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" action == Util.ACTION_VIEWclass="form-control"
+						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
 							   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
 						<span class="input-group-addon">dias</span>
 					</div>
@@ -222,6 +223,10 @@
 		</div>
 	</g:if>
 
+
+	<dyn:props tipoParticipante="EMPRESA_RH" participante="${rhInstance}"></dyn:props>
+
+%{--
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			Parâmetros do Autorizador
@@ -238,7 +243,6 @@
 					</div>
 				</div>
 
-%{--
 				<div class="form-group col-md-3">
 					<label class="control-label" for="diasInatividade">Inatividade *</label>
 					<div class="input-group">
@@ -247,10 +251,10 @@
 						<span class="input-group-addon">dias</span>
 					</div>
 				</div>
---}%
 			</div>
 		</div>
 	</div>
+--}%
 
 
 	<div class="panel-footer">

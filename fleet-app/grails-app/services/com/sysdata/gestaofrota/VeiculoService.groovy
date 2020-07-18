@@ -23,7 +23,7 @@ class VeiculoService {
         veiculo
     }
 
-    def save(Veiculo veiculo) {
+    def save(Veiculo veiculo, Map params) {
 
         def ret = [success: true]
 

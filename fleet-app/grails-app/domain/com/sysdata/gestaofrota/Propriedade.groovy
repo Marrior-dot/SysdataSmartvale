@@ -1,9 +1,16 @@
 package com.sysdata.gestaofrota
 
+import grails.databinding.BindUsing
+
 class Propriedade {
 
-    String name
+    String nome
+
+    @BindUsing({obj, source ->
+        TipoDado.valueOf(source['tipoDado'])
+    })
     TipoDado tipoDado
+
     String valor
 
     static belongsTo = [participante: Participante]
@@ -16,33 +23,38 @@ class Propriedade {
 
     static mapping = {
         id generator: 'sequence', params: [ sequence: 'prop_seq']
+        table 'propriedade_dinamica'
     }
 
     def getValorConvertido() {
 
-        if (! this.valor && this.tipoDado ==! TipoDado.STRING)
-            return null
+        if (! this.valor && this.tipoDado != TipoDado.STRING)
+            return ""
+
+        def val
 
         switch (this.tipoDado) {
             case TipoDado.INTEGER:
-                if (this.valor ==~ /d+/)
-                    return this.valor as int
+                if (this.valor ==~ /\d+/)
+                    val = this.valor as int
                 break
             case TipoDado.LONG:
-                if (this.valor ==~ /d+/)
-                    return this.valor as long
+                if (this.valor ==~ /\d+/)
+                    val = this.valor as long
                 break
             case TipoDado.FLOAT:
-                if (this.valor ==~ /d+/)
-                    return this.valor as float
+                if (this.valor ==~ /\d+/)
+                    val = this.valor as float
                 break
             case TipoDado.DOUBLE:
-                if (this.valor ==~ /d+/)
-                    return this.valor as double
+                if (this.valor ==~ /\d+/)
+                    val = this.valor as double
                 break
             default:
-                return this.valor
+                val = this.valor
         }
+
+        return val
     }
 
 }

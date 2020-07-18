@@ -6,6 +6,7 @@ abstract class MaquinaMotorizada {
     Date dateCreated
     String complementoEmbossing
     Status status = Status.ATIVO
+    CategoriaFuncionario categoria
 
     static auditable = true
 
@@ -17,7 +18,8 @@ abstract class MaquinaMotorizada {
         dateCreated nullable: true
         portador nullable: true
         complementoEmbossing nullable: true
-        status nullable:true
+        status nullable: true
+        categoria nullable: true
     }
 
     static mapping = {

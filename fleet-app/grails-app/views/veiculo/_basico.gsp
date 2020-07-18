@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.ModeloMaquina; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Veiculo; com.sysdata.gestaofrota.TipoVinculoCartao" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.CategoriaFuncionario; com.sysdata.gestaofrota.ModeloMaquina; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Veiculo; com.sysdata.gestaofrota.TipoVinculoCartao" %>
 <%@ page import="com.sysdata.gestaofrota.MarcaVeiculo" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
@@ -117,11 +117,19 @@
                         </span>
                     </div>
 
+                    <div class="form-group col-md-3">
+                        <label for="categoria.id">Perfil de Recarga *</label>
+                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(veiculoInstance?.unidade)?.list()}"
+                                  value="${veiculoInstance?.categoria?.id}" required="required"
+                                  noSelection="${['null': 'Selecione a categoria...']}"
+                                  optionKey="id" class="form-control" optionValue="nome"/>
+                    </div>
+
                 </g:if>
             </div>
 
-
-            <g:if test="${veiculoInstance?.unidade?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+            <g:if test="${veiculoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
+                            veiculoInstance?.unidade?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                 <div class="row">
 
                     <div class="form-group col-md-2">

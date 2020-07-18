@@ -37,6 +37,15 @@ class Rh extends Empresa {
 
     static transients = ['portadoresCount', "corteAberto", "funcionariosCount", "veiculosCount"]
 
+    static namedQueries = {
+        ativos {
+            eq("status", Status.ATIVO)
+            order("nome")
+        }
+    }
+
+
+
     String toString() {
         "${this.cnpj} - ${this.nome}"
     }

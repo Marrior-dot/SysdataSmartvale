@@ -36,6 +36,18 @@ class VeiculoController extends BaseOwnerController {
     def create() {
         if (params.unidade_id) {
             def unidadeInstance = Unidade.get(params.unidade_id)
+
+
+            if (unidadeInstance.rh.modeloCobranca == TipoCobranca.PRE_PAGO &&
+                    unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.MAQUINA &&
+                    CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
+
+                flash.error = "Não existe nenhum Perfil de Recarga definido. É necessário cadastrar um primeiro."
+                redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
+                return
+
+            }
+
             int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
             Veiculo veiculo = new Veiculo(params)
             veiculo.unidade = unidadeInstance
@@ -50,7 +62,7 @@ class VeiculoController extends BaseOwnerController {
 
         if (veiculoInstance) {
             try {
-                def ret = veiculoService.save(veiculoInstance)
+                def ret = veiculoService.save(veiculoInstance, params)
                 if (ret.success) {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                     redirect(controller: 'unidade', action: "show", id: veiculoInstance.unidade.id)
@@ -60,8 +72,8 @@ class VeiculoController extends BaseOwnerController {
                 }
             }
             catch (Exception e) {
+                flash.error = "Veículo não pode ser salvo. Contate suporte."
                 e.printStackTrace()
-                flash.error = "Erro Interno. Contatar suporte"
                 int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
                 render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
             }

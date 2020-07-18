@@ -26,12 +26,11 @@
                             <li class="controller"><g:link class="submenu-logado"  controller="arquivo" action="list">Arquivos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado"  controller="marcaVeiculo" action="list">Marcas de Veículos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado"  controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
-
+                            <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_PROC">
                             <li class="controller"><g:link class="submenu-logado" controller="motivoNegacao" action="list">Motivos Negação</g:link></li>
-                            <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="auditLogEvent" action="list">Audit Log</g:link></li>
                         </sec:ifAnyGranted>
                     </ul>
@@ -103,6 +102,7 @@
                             <g:link class="submenu-logado" controller="console" target="Console">Console</g:link>
                             <g:link class="submenu-logado" controller="processamento" >Processamentos</g:link>
                             <g:link class="submenu-logado" controller="mockTransacao" >Gerador Transações</g:link>
+                            <g:link class="submenu-logado" controller="configuracaoPropriedade" >Configurador de Propriedades</g:link>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

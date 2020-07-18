@@ -28,6 +28,7 @@ class Funcionario extends Participante {
         portador nullable: true
         nomeEmbossing nullable: true
         telefoneComercial nullable: true
+        categoria nullable: true
     }
 
     static namedQueries = {

@@ -42,7 +42,7 @@ function configInputMasks() {
 	$('.decimal').mask('#.##0,00', {reverse: true});
 	$('.percentual').mask('00,00', {reverse: true});
 	$('.money').maskMoney({prefix: 'R$ ', decimal: ',', thousands: '.', affixesStay: false});
-	$(".placa").mask("AAA-9999", {placeholder: "___-____"});
+	$(".placa").mask("AAA-9A99", {placeholder: "___-____"});
 	$(".anoFabricacao").mask("9999");
 	$(".maxValor").mask("99999");
 	$(".hodometro").mask("999999999");
