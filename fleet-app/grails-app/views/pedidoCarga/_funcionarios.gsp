@@ -50,8 +50,7 @@
 
         <div class="panel-top">
             <div id="funcionario-list">
-                %{--<g:render template="funcionarioList"--}%
-                %{--model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>--}%
+                <g:render template="funcionarioList"  model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
             </div>
         </div>
     </div>

@@ -86,7 +86,7 @@
 </div>
 
 <g:render template="/categoriaFuncionario/list"
-          model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.categoriasFuncionario]}"/>
+          model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
 
 
 <div id="pedidoFuncionarios" style="display: none">

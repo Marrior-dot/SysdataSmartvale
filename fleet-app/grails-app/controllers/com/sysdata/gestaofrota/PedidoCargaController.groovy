@@ -2,10 +2,6 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-
-
 //@Secured(['IS_AUTHENTICATED_FULLY'])
 class PedidoCargaController extends BaseOwnerController {
     def exportService
@@ -301,7 +297,50 @@ class PedidoCargaController extends BaseOwnerController {
         }
     }
 
-    def filterFuncionarios() {
+
+    def listVeiculos() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
+        if (! pedidoCargaInstance)
+            pedidoCargaInstance = new PedidoCarga()
+        CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
+
+        def criteria = {
+
+            if (! categoriaInstance) {
+                def unidId = params.unidade ? params.long('unidade') : null
+                unidade {
+                    idEq(unidId)
+                }
+            }
+
+            if (params?.searchPlaca && params?.searchPlaca.length() > 0) {
+                eq('placa', params.searchPlaca)
+            }
+
+            if (categoriaInstance) {
+                eq('categoria', categoriaInstance)
+            }
+
+            if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
+                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
+            }
+        }
+
+
+        params.sort = 'placa'
+
+        render(template: '/pedidoCarga/veiculoList',
+                model: [pedidoCargaInstance     : pedidoCargaInstance,
+                        veiculoInstanceList     : Veiculo.createCriteria().list(params, criteria),
+                        veiculoInstanceCount    : Veiculo.createCriteria().count(criteria),
+                        categoriaInstance       : categoriaInstance,
+                        action                  : params.actionView])
+
+    }
+
+
+    def listFuncionarios() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
@@ -367,7 +406,7 @@ class PedidoCargaController extends BaseOwnerController {
             }
         }
 
-        def model = [idsFuncionarios: funcionarioInstanceList, valorCategoria: Util.toBigDecial(categoriaInstance?.valorCarga).toString()]
+        def model = [idsFuncionarios: funcionarioInstanceList, valorCategoria: Util.toBigDecimal(categoriaInstance?.valorCarga).toString()]
         render model as JSON
     }
 

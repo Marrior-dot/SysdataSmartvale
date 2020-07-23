@@ -23,29 +23,52 @@ class PedidoCargaService {
             return ret
         }
 
-        def funcIds = params.findAll { it.key ==~ /func_\d+/ && it.value == 'on' }.collect { it.key.split('_')[1] as long }
-        if (! funcIds) {
-            ret.success = false
-            ret.message = "O pedido não pode criado sem funcionário(s) vinculados!"
-            return ret
-        }
-
-
         Unidade unidade = pedidoCarga.unidade
         pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
         pedidoCarga.validade = unidade.rh.validadeCarga
         pedidoCarga.taxa = unidade.rh.taxaPedido
         pedidoCarga.total = 0D
 
-        funcIds.each { fid ->
-            Funcionario funcionario = Funcionario.get(fid)
-            ItemPedido itemPedido = new ItemPedido()
-            itemPedido.participante = funcionario
-            def valorCarga = params.find { it.key == "valorCarga_${fid}" }
-            itemPedido.valor = valorCarga ? BigDecimal.valueOf(valorCarga) : funcionario?.categoria?.valorCarga
-            itemPedido.tipo = TipoItemPedido.CARGA
-            pedidoCarga.addToItens(itemPedido)
-            pedidoCarga.total += itemPedido.valor
+        if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
+
+            def funcIds = params.findAll { it.key ==~ /func_\d+/ && it.value == 'on' }.collect { it.key.split('_')[1] as long }
+            if (! funcIds) {
+                ret.success = false
+                ret.message = "O pedido não pode criado sem funcionário(s) vinculados!"
+                return ret
+            }
+
+            funcIds.each { fid ->
+                Funcionario funcionario = Funcionario.get(fid)
+                ItemPedidoParticipante itemPedido = new ItemPedidoParticipante()
+                itemPedido.participante = funcionario
+                def valorCarga = params.find { it.key == "valorCarga_${fid}" }
+                itemPedido.valor = valorCarga ? BigDecimal.valueOf(valorCarga) : funcionario?.categoria?.valorCarga
+                itemPedido.tipo = TipoItemPedido.CARGA
+                pedidoCarga.addToItens(itemPedido)
+                pedidoCarga.total += itemPedido.valor
+            }
+
+        } else if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+
+            def veicIds = params.findAll { it.key ==~ /veic_\d+/ && it.value == 'on' }.collect { it.key.split('_')[1] as long }
+            if (! veicIds) {
+                ret.success = false
+                ret.message = "O pedido não pode criado sem veículo(s) vinculados!"
+                return ret
+            }
+
+            veicIds.each { fid ->
+                Veiculo veiculo = Veiculo.get(fid)
+                ItemPedidoMaquina itemPedido = new ItemPedidoMaquina()
+                itemPedido.maquina = veiculo
+                def valorCarga = params.find { it.key == "valorCarga_${fid}" }
+                itemPedido.valor = valorCarga ? BigDecimal.valueOf(valorCarga) : veiculo?.categoria?.valorCarga
+                itemPedido.tipo = TipoItemPedido.CARGA
+                pedidoCarga.addToItens(itemPedido)
+                pedidoCarga.total += itemPedido.valor
+            }
+
         }
 
         // Calcular Taxa Pedido

@@ -79,7 +79,7 @@
             defaultForm.submit(function (e) {
                 waitingDialog.show();
                 //remove os inputs desnecessários
-                $("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_']),[type=text]:not([name='dataCarga'])", $(this)).remove();
+                $("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_'], [name*='veic_']), [type=text]:not([name='dataCarga'])", $(this)).remove();
                 var esse = $(this);
 
                 itensPedidos.forEach(function (item) {
@@ -123,7 +123,33 @@
             $("div#pedidoFuncionarios").hide();
             $("div#pedidoVeiculos").show();
 
-            console.log("Carregar Veículos da Unidade!!!");
+
+            var output = {
+                id: $("input#id").val(),
+                categoria: $('input[name=categoriaSelecionada]:checked').val(),
+                actionView: $("input#action").val(),
+                unidade: unidId
+            };
+
+            waitingDialog.show("Aguarde...");
+            $.ajax({
+                url: "${g.createLink(controller:'pedidoCarga', action:'listVeiculos')}",
+                data: output,
+                dataType: 'html',
+
+                success: function (data) {
+                    $("div#veiculos-list").html(data);
+
+                    var submitButton = $("input#submitButton");
+                    if (submitButton.is(":disabled")) submitButton.attr('disabled', false);
+                },
+
+                complete: function () {
+                    onFuncionarioListLoadComplete();
+                }
+            });
+
+
         }
 
 
@@ -268,18 +294,18 @@
             });
         }
 
-        function setItemPedido(funcionarioId) {
+        function setItemPedido(itemId) {
             //formata valor da carga
-            var valorItem = $("input#valorCarga-" + funcionarioId).val();
+            var valorItem = $("input#valorCarga-" + itemId).val();
             if (typeof valorItem == 'undefined') valorItem = valorCategoria.toString();
             valorItem = valorItem.replace(/,/g, '').replace(/\./g, '');
             valorItem = valorItem.slice(0, valorItem.length - 2) + '.' + valorItem.slice(valorItem.length - 2, valorItem.length);
 
-            var checkbox = $("input[type='checkbox'][name='funcionariosAtivos'][value=" + funcionarioId + "]");
+            var checkbox = $("input[type='checkbox'][name='itensAtivos'][value=" + itemId + "]");
             if (checkbox.length == 0) checkbox = $("input[type='checkbox'][name='selectAll']");
 
             var itemPedido = {
-                id: funcionarioId,
+                id: itemId,
                 valor: valorItem,
                 ativo: checkbox.is(":checked")
             };
@@ -310,7 +336,7 @@
 
             waitingDialog.show("Aguarde...");
             $.ajax({
-                url: "${g.createLink(controller:'pedidoCarga', action:'filterFuncionarios')}",
+                url: "${g.createLink(controller:'pedidoCarga', action:'listFuncionarios')}",
                 data: output,
                 dataType: 'html',
 

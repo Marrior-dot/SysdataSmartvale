@@ -37,7 +37,7 @@
         </tbody>
     </table>
 
-    <util:remotePaginate controller="pedidoCarga" action="filterFuncionarios"
+    <util:remotePaginate controller="pedidoCarga" action="listFuncionarios"
                          total="${funcionarioInstanceCount}"
                          params="${[actionView: action, categoria: categoriaInstance?.id]}"
                          update="funcionario-list" max="10" id="${pedidoCargaInstance?.id}"

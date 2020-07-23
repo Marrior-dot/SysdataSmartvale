@@ -38,12 +38,20 @@ class CargaPedidoService implements ExecutableProcessing {
                 origem = OrigemTransacao.PORTAL
                 dataHora = new Date().clearTime()
                 valor = i.valor
-                //cartao = i.funcionario.portador.cartaoAtual
-                participante = i.funcionario
             }
+            Portador portador
+            if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
+                tr.participante = i.funcionario
+                portador = i.funcionario.portador
+            }
+            else if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+                tr.maquina = i.maquina
+                portador = i.maquina.portador
+            }
+
             tr.save(flush: true)
             log.info "\tTR CRG #$tr.id criada"
-            Portador portador = i.funcionario.portador
+
             def oldSaldo = portador.saldoTotal
             portador.saldoTotal += tr.valor
             portador.save(flush: true)

@@ -2,7 +2,6 @@ package com.sysdata.gestaofrota
 
 class ItemPedido {
 
-    Participante participante
     BigDecimal valor
     BigDecimal sobra = 0
     boolean ativo
@@ -11,14 +10,14 @@ class ItemPedido {
 
     static belongsTo = [pedido: PedidoCarga]
 
-    static transients = ['funcionario']
 
     static constraints = {
         lancamento nullable: true
         tipo nullable: true
     }
 
-    Funcionario getFuncionario(){
-        Funcionario.get(participante.id)
+
+    static mapping = {
+        id generator: 'sequence', params: [sequence: "itempedido_seq"]
     }
 }

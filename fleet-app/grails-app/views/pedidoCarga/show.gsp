@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hyago
-  Date: 08/07/16
-  Time: 17:39
---%>
-
 <%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.StatusPedidoCarga" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -69,5 +62,18 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function(){
+        const vinculoCartao = "${pedidoCargaInstance.unidade.rh.vinculoCartao}";
+        if (vinculoCartao === 'Funcionário') {
+            $("div#pedidoFuncionarios").show();
+            $("div#pedidoVeiculos").hide();
+        }
+        else if (vinculoCartao === 'Máquina') {
+            $("div#pedidoFuncionarios").hide();
+            $("div#pedidoVeiculos").show();
+        }
+    });
+</script>
 </body>
 </html>

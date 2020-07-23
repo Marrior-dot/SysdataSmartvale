@@ -12,7 +12,7 @@
         <g:each in="${taxasList}" var="tx">
             <tr>
                 <td>${tx?.descricao}</td>
-                <td>R$ ${Util.toBigDecial(tx?.valor)}</td>
+                <td>R$ ${Util.toBigDecimal(tx?.valor)}</td>
             </tr>
         </g:each>
         </tbody>

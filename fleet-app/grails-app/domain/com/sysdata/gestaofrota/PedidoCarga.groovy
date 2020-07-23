@@ -15,7 +15,7 @@ class PedidoCarga {
     Date dataCancelamento
 
     static hasMany = [itens: ItemPedido]
-    static transients = ['categoriasFuncionario','dataCargaClear']
+    static transients = ['perfisRecarga','dataCargaClear']
 
     static constraints = {
         usuario(nullable: true)
@@ -60,11 +60,34 @@ class PedidoCarga {
         itensInstance[0..max].collect { it.participante as Funcionario }
     }
 
-    public def getCategoriasFuncionario(){
-        unidade?.rh?.categoriasFuncionario
+    public def getPerfisRecarga(){
+        return this.itens*.maquina*.categoria as Set
     }
 
     public def getDataCargaClear(){
         Date.parse('dd/MM/yyyy', dataCarga)
     }
+
+    boolean isVeiculoInPedido(Veiculo veiculo) {
+        ItemPedido item = this.itens.find { it.maquina == veiculo && it.tipo == TipoItemPedido.CARGA }
+        return item
+    }
+
+    boolean isFuncionarioInPedido(Funcionario funcionario) {
+        ItemPedido item = this.itens.find { it.participante == funcionario && it.tipo == TipoItemPedido.CARGA }
+        return item
+    }
+
+    public BigDecimal valorInPedido(objeto, int decimalPlace = 2) {
+        ItemPedido item
+        if (objeto instanceof Funcionario)
+            item = this.itens.find { it.participante == objeto && it.tipo == TipoItemPedido.CARGA }
+        else if (objeto instanceof Veiculo)
+            item = this.itens.find { it.maquina == objeto && it.tipo == TipoItemPedido.CARGA }
+
+        Double valor = item?.valor ?: objeto.categoria.valorCarga
+        Util.toBigDecimal(valor, decimalPlace)
+    }
+
+
 }

@@ -33,6 +33,17 @@
                 </button>
             </div>
         </div>
+
+        <div class="panel-top">
+            <div id="veiculos-list">
+                <g:render template="veiculoList"  model="${[pedidoCargaInstance: pedidoCargaInstance,
+                                                            veiculoInstanceCount: pedidoCargaInstance.itens.size(),
+                                                            veiculoInstanceList: pedidoCargaInstance.itens*.maquina,
+                                                            action: action]}"/>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
