@@ -1,0 +1,41 @@
+<CBRSPBMSG>
+	<CBRSPBREPMSG>
+		<CBRSPBHEADERMSG>
+			<CBRSPBCodEmp>1</CBRSPBCodEmp>
+			<CBRSPBCodSis>COMPE</CBRSPBCodSis>
+			<CBRSPBCodPro>TransfFinanc</CBRSPBCodPro>
+			<CBRSPBCodOpe>STR0007</CBRSPBCodOpe>
+			<CBRSPBTipLiq>STR</CBRSPBTipLiq>
+			<CBRSPBNumComOpe>1</CBRSPBNumComOpe>
+			<CBRSPBChvIdeLeg>01100006009530001098</CBRSPBChvIdeLeg>
+			<CBRSPBChvIdeSPB>01100006009530001098</CBRSPBChvIdeSPB>
+			<CBRSPBDatRefPro>20170831112532</CBRSPBDatRefPro>
+			<CBRSPBFlgPerAlt>N</CBRSPBFlgPerAlt>
+			<CBRSPBDatMovto>20170831112532</CBRSPBDatMovto>
+		</CBRSPBHEADERMSG>
+		<CBRSPBOPEMSG>
+			<CodMsg>STR0007</CodMsg>
+			<NumCtrlIF>01100006009530001098</NumCtrlIF>
+			<ISPBIFDebtd>04913711</ISPBIFDebtd>
+			<TpPessoaRemet>J</TpPessoaRemet>
+			<CNPJ_CPFRemet>4913711000108</CNPJ_CPFRemet>
+			<NomRemet>BANPARA SA</NomRemet>
+			<ISPBIFCredtd>60606060</ISPBIFCredtd>
+			<AgCredtd>3535</AgCredtd>
+			<TpCtCredtd>CC</TpCtCredtd>
+			<CtCredtd>000000001010</CtCredtd>
+			<TpPessoaCredtd>J</TpPessoaCredtd>
+			<CNPJ_CPFCliCredtd>100000000104</CNPJ_CPFCliCredtd>
+			<NomCliCredtd>Empresa SA</NomCliCredtd>
+			<VlrLanc>1000.00</VlrLanc>
+			<FinlddIF>10</FinlddIF>
+			<CodIdentdTransf>Empresa SA</CodIdentdTransf>
+			<Hist> </Hist>
+			<NivelPref>D</NivelPref>
+			<DtMovto>2017-08-31</DtMovto>
+		</CBRSPBOPEMSG>
+	</CBRSPBREPMSG>
+	<CBRSPBTRAILLERMSG>
+	<CBRSPBQtdOpe>1</CBRSPBQtdOpe>
+	</CBRSPBTRAILLERMSG>
+</CBRSPBMSG>
