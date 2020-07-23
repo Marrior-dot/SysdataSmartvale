@@ -19,8 +19,8 @@ CREATE OR REPLACE FUNCTION public."inserirTransacaoCompra"(
 	prcunit numeric, 
 	codigoequip text, 
 	qtd_litros numeric,
-	prods text 
-
+	prods text, 
+	tipoTrn text
 )
 
 
@@ -42,9 +42,7 @@ begin
 	insert into Transacao(
 		id,
 		date_created,
-		tipo,
 		status,
-		
 		participante_id,
 		valor,
 		codigo_estabelecimento,
@@ -63,12 +61,12 @@ begin
 		motivo_negacao_id,
 		preco_unitario,
 		codigo_equipamento,
-		qtd_litros
+		qtd_litros,
+		tipo
 	)
 	values(
 		trnId,
 		current_timestamp,
-		'COMBUSTIVEL',  
 		'NAO_AGENDAR',
 		$1, 
 		$2,   
@@ -88,7 +86,8 @@ begin
 		mngId, 
 		$17, 
 		$18, 
-		$19  
+		$19,
+		$20  
 	);
 
 
