@@ -1,32 +1,6 @@
-CREATE OR REPLACE FUNCTION public."inserirTransacaoCompra"(
-	
-	prtid bigint, 
-	valor numeric, 
-	"codEst" text, 
-	"estId" bigint, 
-	terminal text, 
-	placa text, 
-	maqid bigint, 
-	numcartao text, 
-	crtid bigint, 
-	"codResp" text, 
-	"nsuHost" integer, 
-	"nsuTerm" integer, 
-	"stsCtrl" text, 
-	km bigint, 
-	"dataHora" timestamp with time zone, 
-	motneg text, 
-	prcunit numeric, 
-	codigoequip text, 
-	qtd_litros numeric,
-	prods text, 
-	tipoTrn text
-)
-
-
+CREATE OR REPLACE FUNCTION public."inserirTransacaoCompra"(prtid bigint, valor numeric, "codEst" text, "estId" bigint, terminal text, placa text, maqid bigint, numcartao text, crtid bigint, "codResp" text, "nsuHost" integer, "nsuTerm" integer, "stsCtrl" text, km bigint, "dataHora" timestamp with time zone, motneg text, prcunit numeric, codigoequip text, qtd_litros numeric, prods text, tipotrn text)
  RETURNS void
  LANGUAGE plpgsql
-
 AS $function$
 
 declare trnId integer;
@@ -87,7 +61,7 @@ begin
 		$17, 
 		$18, 
 		$19,
-		$20  
+		$21  
 	);
 
 
