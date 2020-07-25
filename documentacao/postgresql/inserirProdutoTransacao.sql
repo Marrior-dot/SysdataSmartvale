@@ -8,7 +8,6 @@ declare ind int;
 declare codProd text;
 declare startPos int;
 declare prdId bigint;
-declare price numeric(19,2);
 
 begin
 
@@ -24,15 +23,16 @@ if (prods is not null) then
       startPos := startPos + 2;
     
 
-      select p.id,pe.valor 
-      into prdId,price 
+      select p.id 
+      into prdId 
       from PRODUTO p, PRODUTO_ESTABELECIMENTO pe 
       where codigo = codProd
       and pe.estabelecimento_id = $3
       and p.id = pe.produto_id;
 
       if( prdId is not null ) then
-    	 insert into TRANSACAO_PRODUTO values(nextval('transacaoprod_seq'), price, prdId, trnId);
+       insert into TRANSACAO_PRODUTO(id, produto_id, transacao_id ) 
+       values(nextval('transacaoprod_seq'), prdId, trnId);
       end if;
     
 

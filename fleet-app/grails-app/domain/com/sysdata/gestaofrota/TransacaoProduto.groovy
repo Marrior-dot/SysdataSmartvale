@@ -7,6 +7,7 @@ class TransacaoProduto {
 	static belongsTo=[transacao:Transacao,produto:Produto]
 	
     static constraints = {
+		precoUnitario nullable: true
     }
 	
 	static mapping={
