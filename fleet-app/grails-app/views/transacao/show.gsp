@@ -1,5 +1,5 @@
 
-<%@ page import="com.sysdata.gestaofrota.Transacao" %>
+<%@ page import="com.sysdata.gestaofrota.TipoTransacao; com.sysdata.gestaofrota.Transacao" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -97,17 +97,18 @@
                         <th>Veículo</th>
                         <td>${transacaoInstance.maquina?.placa}</td>
                     </tr>
+
                     <tr>
-                        <th>Combustível</th>
-                        <td>${transacaoInstance.combustivel?.nome}</td>
-                    </tr>
-                    <tr>
-                        <th>Hodômetro</th>
-                        <td>${transacaoInstance.quilometragem}</td>
+                        <th>${transacaoInstance.tipo.nome}</th>
+                        <td>${transacaoInstance.produtos*.produto?.nome}</td>
                     </tr>
 
-
-
+                    <g:if test="${transacaoInstance.quilometragem}">
+                        <tr>
+                            <th>Hodômetro</th>
+                            <td>${transacaoInstance.quilometragem}</td>
+                        </tr>
+                    </g:if>
                     </tbody>
                 </table>
 
