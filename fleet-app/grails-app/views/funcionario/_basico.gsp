@@ -7,7 +7,8 @@
 <g:form method="post">
     <g:hiddenField name="id" value="${funcionarioInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
-    <g:hiddenField name="unidId" value="${unidadeInstance?.id}"/>
+    <g:hiddenField name="unidade.id" value="${funcionarioInstance?.unidade?.id}"/>
+    <g:hiddenField name="portador.unidade.id" value="${funcionarioInstance?.portador?.unidade?.id}"/>
     <g:hiddenField name="action" value="${action}"/>
 
 
@@ -41,13 +42,13 @@
                 <div class="form-group col-md-6">
                     <label for="nome">Nome *</label>
 
-                    <div class="input-group">
                         <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50"
                                      class="form-control" required="required"/>
+%{--
                         <span class="input-group-addon">
                             <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
                         </span>
-                    </div>
+--}%
                 </div>
 
                 <div class="form-group col-md-3">
@@ -64,7 +65,7 @@
                 </div>
             </div>
 
-            <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
+            <g:if test="${funcionarioInstance.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
@@ -98,10 +99,11 @@
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
 
-                <g:if test="${unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
+                <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO &&
+                        funcionarioInstance.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO }">
                     <div class="form-group col-md-3">
                         <label for="categoria.id">Perfil de Recarga *</label>
-                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(unidadeInstance)?.list()}"
+                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(funcionarioInstance.unidade)?.list()}"
                                   value="${funcionarioInstance?.categoria?.id}" required="required"
                                   noSelection="${['null': 'Selecione a categoria...']}"
                                   optionKey="id" class="form-control" optionValue="nome"/>
@@ -110,18 +112,20 @@
                 </g:if>
 
 
+%{--
                 <div class="form-group col-md-3">
                     <label for="status">Status *</label>
                     <g:select name="status" from="${Status.asBloqueado()}" class="form-control" required="required"
                               value="${funcionarioInstance?.status}" optionKey="key"/>
                 </div>
+--}%
             </div>
         </div>
     </div>
 
 
-    <g:if test="${unidadeInstance?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
-            unidadeInstance?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
+    <g:if test="${funcionarioInstance.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
+            funcionarioInstance.unidade?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
 
         <div class="panel panel-default">
             <div class="panel-heading">Limites</div>
@@ -130,10 +134,12 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="portador.limiteTotal">Limite Total *</label>
-                        <input class="form-control money" id="portador.limiteTotal" name="portador.limiteTotal"
-                               value="${funcionarioInstance?.portador?.limiteTotal}" required/>
+                        <g:textField name="portador.limiteTotal" class="form-control money"
+                                     value="${Util.formatCurrency(funcionarioInstance?.portador?.limiteTotal)}" required="true"></g:textField>
+
                     </div>
 
+%{--
                     <div class="form-group col-md-3">
                         <label for="portador.limiteDiario">Limite Diário *</label>
                         <input class="form-control money" id="portador.limiteDiario" name="portador.limiteDiario"
@@ -145,6 +151,7 @@
                         <input class="form-control money" id="portador.limiteMensal" name="portador.limiteMensal"
                                value="${funcionarioInstance?.portador?.limiteMensal}"/>
                     </div>
+--}%
                 </div>
             </div>
         </div>
@@ -173,7 +180,7 @@
 
                 <button type="submit" class="btn btn-default" name="_action_edit">
                     <span class="glyphicon glyphicon-edit"></span>&nbsp;<g:message
-                        code="default.button.edit.label.label" default="Edit"></g:message>
+                        code="default.button.edit.label.label" default="Editar"></g:message>
                 </button>
 
                 <button type="submit" class="btn btn-danger" name="_action_delete"

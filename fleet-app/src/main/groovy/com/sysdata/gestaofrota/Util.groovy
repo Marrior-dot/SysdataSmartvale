@@ -143,10 +143,12 @@ class Util {
     }
 
     static def parseCurrency(val) {
-        if (! val) val = "0,00"
-        NumberFormat nf = NumberFormat.getCurrencyInstance(LOCALE);
+        if (! val)
+            val = "0,00"
+        NumberFormat nf = val.contains("R\$") ? NumberFormat.getCurrencyInstance(LOCALE) : NumberFormat.getNumberInstance(LOCALE)
         nf.parse(val) as Double
     }
+
 
     static def formatPercentage(val) {
         if (! val) val = 0

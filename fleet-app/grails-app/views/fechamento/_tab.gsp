@@ -61,8 +61,8 @@
 </script>
 
 <div class="row">
-    <g:hiddenField name="fechamento-index-url" value="${g.createLink(controller: 'fechamento', action: 'index')}"/>
-    <g:hiddenField name="fechamento-delete-url" value="${g.createLink(controller: 'fechamento', action: 'delete')}"/>
+    <g:hiddenField name="fechamento-index-url" value="${createLink(controller: 'fechamento', action: 'index')}"/>
+    <g:hiddenField name="fechamento-delete-url" value="${createLink(controller: 'fechamento', action: 'delete')}"/>
 
     <g:form name="fechamento" controller="fechamento" action="save">
         <g:hiddenField name="programa.id" value="${rhInstance.id}"/>

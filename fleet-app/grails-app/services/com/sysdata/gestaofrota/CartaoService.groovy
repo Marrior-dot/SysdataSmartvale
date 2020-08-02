@@ -10,16 +10,13 @@ class CartaoService {
     synchronized Cartao gerar(Portador portador, comChip = true) {
         Administradora administradora = processamentoService.getAdministradoraProjeto()
         Cartao cartaoInstance = new Cartao()
-        cartaoInstance.portador = portador
         cartaoInstance.numero = geradorCartao.gerarNumero(administradora, portador)
         cartaoInstance.senha = geradorCartao.gerarSenha()
         cartaoInstance.validade = geradorCartao.gerarDataValidade()
         cartaoInstance.cvv = geradorCartao.gerarCVV()
 
-        if (!cartaoInstance.save()) throw new RuntimeException(cartaoInstance.showErrors())
-
         portador.addToCartoes(cartaoInstance)
-        portador.save()
+        portador.save(flush: true)
 
         administradora.qtdCartoes++
         administradora.save(flush: true)

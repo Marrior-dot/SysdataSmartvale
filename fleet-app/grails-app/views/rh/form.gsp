@@ -39,7 +39,9 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#empresas" data-toggle="tab">Empresa</a></li>
                         <li><a href="#centroDeCusto" data-toggle="tab">Unidades</a></li>
-                        <li><a href="#perfis" data-toggle="tab">Perfis de Recarga</a></li>
+                        <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.PRE_PAGO}">
+                            <li><a href="#perfis" data-toggle="tab">Perfis de Recarga</a></li>
+                        </g:if>
                         <li><a href="#estabelecimentos" data-toggle="tab">Estabelecimentos</a></li>
                         <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
                             <li><a href="#fechamentos" data-toggle="tab">Fechamentos</a></li>
@@ -57,10 +59,13 @@
                                           model="[controller: 'unidade', rhId: rhInstance?.id]"/>
                             </div>
 
-                            <div class="tab-pane" id="perfis">
-                                <g:render template="/categoriaFuncionario/tab"
-                                          model="[controller: 'categoriaFuncionario', rhInstance: rhInstance]"/>
-                            </div>
+                            <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.PRE_PAGO}">
+                                <div class="tab-pane" id="perfis">
+                                    <g:render template="/categoriaFuncionario/tab"
+                                              model="[controller: 'categoriaFuncionario', rhInstance: rhInstance]"/>
+                                </div>
+                            </g:if>
+
 
                             <div class="tab-pane" id="estabelecimentos">
                                 <g:render template="newEstabelecimentos" bean="${rhInstance}"/>
@@ -81,6 +86,39 @@
         </div>
     </div>
 </div>
+
+<script type="application/javascript">
+    $(document).ready(function () {
+        alterarModeloCobranca();
+    });
+
+    function alterarModeloCobranca() {
+        var duration = 500;
+        var modeloCobranca = $("select#modeloCobranca").val();
+        //var modeloCobranca = "PRE_PAGO"
+        var pedidoCargaPanel = $("div.panel#pedido-carga");
+        var faturaPanel = $("div#fatura");
+
+        console.log("Modelo de Cobrança: " + modeloCobranca);
+
+
+        if (modeloCobranca === "POS_PAGO") {
+            pedidoCargaPanel.find("input").each(function (index, element) {
+                element.value = '0';
+            });
+            pedidoCargaPanel.hide(duration);
+            faturaPanel.show(duration);
+        }
+        else if (modeloCobranca === "PRE_PAGO") {
+            pedidoCargaPanel.show(duration);
+            faturaPanel.find("input").each(function (index, element) {
+                element.value = '0';
+            });
+            faturaPanel.hide(duration);
+        }
+    }
+</script>
+
 
 </body>
 </html>

@@ -12,8 +12,6 @@ class CartaoController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [cartaoInstanceList: Cartao.list(params), cartaoInstanceTotal: Cartao.count()]
     }
 
     def create() {
@@ -103,7 +101,13 @@ class CartaoController {
     }
 
     def listAllJSON() {
-        def cartaoList = Cartao.list()
+
+        def criteria = {
+            ne("status", StatusCartao.CANCELADO)
+        }
+
+        def cartaoList = Cartao.createCriteria().list(criteria)
+        def cartaoCount = Cartao.createCriteria().count(criteria)
 
         def fields = cartaoList.collect { c ->
             [
@@ -113,7 +117,7 @@ class CartaoController {
                 status   : c.status.nome
             ]
         }
-        def data = [totalRecords: Cartao.count(), results: fields]
+        def data = [totalRecords: cartaoCount, results: fields]
         render data as JSON
     }
 

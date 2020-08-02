@@ -323,7 +323,7 @@ class PedidoCargaController extends BaseOwnerController {
             }
 
             if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {
-                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante.id)
+                'in'('id', pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.maquina.id)
             }
         }
 
@@ -343,7 +343,12 @@ class PedidoCargaController extends BaseOwnerController {
     def listFuncionarios() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
+        if (! pedidoCargaInstance)
+            pedidoCargaInstance = new PedidoCarga()
+
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
+
+        println "Categoria: $categoriaInstance"
 
         def criteria = {
 

@@ -7,21 +7,24 @@ import org.springframework.transaction.annotation.Transactional
 
 class FaturamentoService implements Processamento {
 
+    CorteService corteService
+
     @Transactional
     @Override
     def executar(Date dataProc) {
         log.info "Recuperando cortes abertos e liberados para Faturamento..."
 
-        def cortes=Corte.withCriteria {
-            eq("liberado",true)
-            eq("status",StatusCorte.ABERTO)
-            le("dataPrevista",dataProc)
-        }
-
-        if(cortes.isEmpty()) log.info "Nao ha cortes para faturar"
-
-        cortes.each{cr->
-            cr.faturar(dataProc)
+        def cortes = Corte.withCriteria {
+                                eq("liberado", true)
+                                eq("status", StatusCorte.ABERTO)
+                                le("dataPrevista", dataProc)
+                            }
+        if (cortes.isEmpty())
+            log.info "Não há cortes a faturar"
+        else {
+            cortes.each { cr ->
+                corteService.faturar(cr, dataProc)
+            }
         }
     }
 }

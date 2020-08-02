@@ -1,32 +1,4 @@
 <%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
-<script type="application/javascript">
-	$(document).ready(function () {
-		alterarModeloCobranca();
-	});
-
-	function alterarModeloCobranca() {
-		var duration = 500;
-		/*var modeloCobranca = $("select#modeloCobranca").val();*/
-		var modeloCobranca = "PRE_PAGO"
-		var pedidoCargaPanel = $("div.panel#pedido-carga");
-		var faturaPanel = $("div.panel#fatura");
-
-		if (modeloCobranca === "POS_PAGO") {
-			pedidoCargaPanel.find("input").each(function (index, element) {
-				element.value = '0';
-			});
-			pedidoCargaPanel.hide(duration);
-			faturaPanel.show(duration);
-		}
-		else if (modeloCobranca === "PRE_PAGO") {
-			pedidoCargaPanel.show(duration);
-			faturaPanel.find("input").each(function (index, element) {
-				element.value = '0';
-			});
-			faturaPanel.hide(duration);
-		}
-	}
-</script>
 
 <g:form method="post" >
     <g:hiddenField name="id" value="${rhInstance?.id}" />
@@ -44,17 +16,15 @@
 				</div>
 
 				<g:set var="bloquearModCob" value="${action == Util.ACTION_EDIT && (rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0)}"/>
-%{--
 				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
 					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
-					<g:select name="modeloCobranca" from="${com.sysdata.gestaofrota.TipoCobranca.list()}" class="form-control"
+					<g:select name="modeloCobranca" from="${TipoCobranca.values()}" class="form-control"
 							  optionValue="nome" value="${rhInstance?.modeloCobranca}" onchange="alterarModeloCobranca()"
 							  aria-describedby="modelo-cobranca" disabled="${bloquearModCob}" required="required"/>
 				<g:if test="${bloquearModCob}">
 					<span id="modelo-cobranca" class="help-block">Não é possível alterar o Modelo Cobrança. Você já possui funcionários/veiculos cadastrados.</span>
 				</g:if>
 				</div>
---}%
 			</div>
 			<div class="row">
 				<div class="col-md-6">
@@ -101,6 +71,19 @@
 						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
 					</g:if>
 				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="limiteTotal">LimiteTotal *</label>
+					<div class="input-group">
+						<g:textField name="limiteTotal" class="form-control money" value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label">Limite Comprometido</label>
+					<h5>${Util.formatCurrency(rhInstance?.limiteComprometido.list()[0])}</h5>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -132,55 +115,53 @@
 		</div>
 	</div>
 
-	<div class="panel panel-default" id="fatura">
-		<div class="panel-heading">Fatura</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
-					<div class="input-group">
-						<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
-							   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
-						<span class="input-group-addon">dias</span>
-					</div>
-				</div>
+	<div id="fatura">
 
-				<div class="form-group col-md-3">
-					<label class="control-label" for="multaAtraso">Multa por Atraso *</label>
-					<div class="input-group">
-						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="multaAtraso" id="multaAtraso"
-							   value="${rhInstance?.multaAtraso}" min="0" step="0.01" required/>
-					</div>
-				</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Fatura</div>
+			<div class="panel-body">
+				<div class="row">
 
-				<div class="form-group col-md-3">
-
-					<label class="control-label" for="jurosProRata">Juros Pró-Rata por Atraso *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="jurosProRata" id="jurosProRata"
-							   value="${rhInstance?.jurosProRata}" min="0" step="0.01" max="100.00" required/>
-						<span class="input-group-addon">%</span>
+					<div class="form-group col-md-3">
+						<label class="control-label" for="prazoPgtFatura">Dias p/ Vencimento após Corte *</label>
+						<div class="input-group">
+							<input type="number" class="form-control" name="prazoPgtFatura" id="prazoPgtFatura"
+								   value="${rhInstance?.prazoPgtFatura}" min="0" required/>
+							<span class="input-group-addon">dias</span>
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group col-md-3">
-					<label class="control-label" for="prazoPgtFatura">Prazo Pagamento Fatura *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="prazoPgtFatura" id="prazoPgtFatura"
-							   value="${rhInstance?.prazoPgtFatura}" min="0" required/>
-						<span class="input-group-addon">dias</span>
+					<div class="form-group col-md-3">
+						<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
+						<div class="input-group">
+							<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
+								   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
+							<span class="input-group-addon">dias</span>
+						</div>
 					</div>
+
+					<div class="form-group col-md-3">
+						<label class="control-label" for="multaAtraso">Multa por Atraso *</label>
+						<div class="input-group">
+							<input type="text" class="form-control money" name="multaAtraso" id="multaAtraso"
+								   value="${Util.formatCurrency(rhInstance?.multaAtraso)}" required/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-3">
+
+						<label class="control-label" for="jurosProRata">Juros Pró-Rata por Atraso *</label>
+						<div class="input-group">
+							<input type="text" class="form-control percentual" name="jurosProRata" id="jurosProRata"
+								   value="${Util.formatPercentage(rhInstance?.jurosProRata)}" min="0"  required/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
-
-	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
-
-	<g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Taxas do Cartão
@@ -221,7 +202,14 @@
 				</div>
 			</div>
 		</div>
-	</g:if>
+
+	</div>
+
+
+	<g:render template="/endereco/form" model="[enderecoInstance: rhInstance?.endereco, endereco:'endereco', legend:'Endereço']"/>
+
+	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
+
 
 
 	<dyn:props tipoParticipante="EMPRESA_RH" participante="${rhInstance}"></dyn:props>

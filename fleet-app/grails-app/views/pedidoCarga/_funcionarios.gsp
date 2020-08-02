@@ -50,7 +50,13 @@
 
         <div class="panel-top">
             <div id="funcionario-list">
-                <g:render template="funcionarioList"  model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
+
+                <g:render template="funcionarioList"  model="${[
+                                                                pedidoCargaInstance: pedidoCargaInstance,
+                                                                funcionarioInstanceCount: pedidoCargaInstance.itens ? pedidoCargaInstance.itens.size() : 0,
+                                                                funcionarioInstanceList: pedidoCargaInstance.itens*.participante,
+                                                                action: action
+                                                            ]}"/>
             </div>
         </div>
     </div>

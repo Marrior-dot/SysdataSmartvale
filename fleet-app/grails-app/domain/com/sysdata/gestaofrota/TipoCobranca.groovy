@@ -15,7 +15,4 @@ enum TipoCobranca {
         name()
     }
 
-    static def list() {
-        [TipoCobranca.PRE_PAGO]
-    }
 }

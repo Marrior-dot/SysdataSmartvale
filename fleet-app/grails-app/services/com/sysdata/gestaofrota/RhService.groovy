@@ -37,7 +37,7 @@ class RhService {
         msg
     }
 
-    def update(Rh rh) {
+    def save(Rh rh) {
         def ret = [:]
         ret.success = true
         ret.message = ""
@@ -56,6 +56,14 @@ class RhService {
             ret.success = false
             ret.message = "Vínculo de Cartão a Funcionário ou Veículo/Máquina não pode ser mais alterado. Empresa já possui funcionários cadastrados"
         }
+
+        // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
+
+        if (rh.limiteTotal < rh.limiteComprometido.list()[0]) {
+            ret.success = false
+            ret.message = "Limite comprometido com cartões vinculados não pode ser superior ao limite total informado para a Empresa"
+        }
+        return ret
     }
 
 }

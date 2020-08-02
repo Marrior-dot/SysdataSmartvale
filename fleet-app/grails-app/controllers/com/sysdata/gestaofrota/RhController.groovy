@@ -47,9 +47,14 @@ class RhController extends BaseOwnerController {
 
     def save(Rh rhInstance) {
         try {
-            rhInstance.save(flush: true)
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-            redirect(action: 'show', id: rhInstance.id)
+            def ret = rhService.save(rhInstance)
+            if (ret.sucess) {
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
+                redirect(action: 'show', id: rhInstance.id)
+            } else {
+                flash.error = ret.message
+                render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+            }
         }
         catch (e) {
             e.printStackTrace()
@@ -73,14 +78,19 @@ class RhController extends BaseOwnerController {
         if (rhInstance) {
             rhInstance.properties = params
             try {
-                rhService.update(rhInstance)
+                def ret = rhService.save(rhInstance)
+                if (ret.success) {
+                    flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
+                    redirect(action: 'show', id: rhInstance.id)
+                } else {
+                    flash.error = ret.message
+                    render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+                }
             } catch (e) {
                 e.printStackTrace()
                 flash.error = e.message
                 render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
             }
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
-            redirect(action: 'show', id: rhInstance.id)
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Programa'), params.id])}"
             redirect(action: "list")
@@ -373,7 +383,6 @@ class RhController extends BaseOwnerController {
         def taxas = [:]
         Rh rh = Rh.get(params.long('rhId'))
         if (rh) {
-            println "Taxa Pedido: $rh.taxaPedido"
             taxas.taxaPedido = Util.formatPercentage(rh.taxaPedido)
         }
         render taxas as JSON

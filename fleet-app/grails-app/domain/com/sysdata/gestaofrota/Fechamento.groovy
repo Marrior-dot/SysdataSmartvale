@@ -1,11 +1,12 @@
 package com.sysdata.gestaofrota
 
 class Fechamento {
+
     boolean ativo = true
+    Date dateCreated
     Integer diaCorte
     Integer diasAteVencimento
-    Date dateCreated
-    Date lastUpdated
+
 
     static belongsTo = [programa: Rh]
 

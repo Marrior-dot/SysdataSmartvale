@@ -4,6 +4,7 @@ class PortadorService {
 
     PortadorFuncionario save(params, Funcionario funcionario) {
 
+/*
         PortadorFuncionario portadorFuncionario
 
         if (funcionario.portador) portadorFuncionario = funcionario.portador
@@ -26,11 +27,15 @@ class PortadorService {
                 portadorFuncionario.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
                 portadorFuncionario.saldoMensal = portadorFuncionario.limiteMensal
             }
-            /*if (funcionario.portador.limiteCredito != null || funcionario.portador.limiteCredito != '') {
+            */
+/*if (funcionario.portador.limiteCredito != null || funcionario.portador.limiteCredito != '') {
                 portadorFuncionario.limiteCredito = Util.convertToCurrency(params.portador.limiteCredito)
                 println "params limite credito"
-            }*/
-        }/**/
+            }*//*
+
+        }*/
+/**//*
+
 
 
         if (!portadorFuncionario.save()) throw new RuntimeException(portadorFuncionario.showErrors());
@@ -38,6 +43,7 @@ class PortadorService {
         funcionario.unidade.save()
 
         portadorFuncionario
+*/
     }
 
     PortadorMaquina save(MaquinaMotorizada maquina, params) {

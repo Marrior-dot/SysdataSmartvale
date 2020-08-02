@@ -37,7 +37,7 @@
         <div class="panel-top">
             <div id="veiculos-list">
                 <g:render template="veiculoList"  model="${[pedidoCargaInstance: pedidoCargaInstance,
-                                                            veiculoInstanceCount: pedidoCargaInstance.itens.size(),
+                                                            veiculoInstanceCount: pedidoCargaInstance.itens ? pedidoCargaInstance.itens.size() : 0,
                                                             veiculoInstanceList: pedidoCargaInstance.itens*.maquina,
                                                             action: action]}"/>
             </div>

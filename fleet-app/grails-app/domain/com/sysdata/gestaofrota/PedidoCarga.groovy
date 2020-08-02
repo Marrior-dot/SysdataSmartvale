@@ -61,7 +61,10 @@ class PedidoCarga {
     }
 
     public def getPerfisRecarga(){
-        return this.itens*.maquina*.categoria as Set
+        if (this.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA)
+            return this.itens*.maquina*.categoria as Set
+        else if (this.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO)
+            return this.itens*.participante*.categoria as Set
     }
 
     public def getDataCargaClear(){
@@ -86,6 +89,8 @@ class PedidoCarga {
             item = this.itens.find { it.maquina == objeto && it.tipo == TipoItemPedido.CARGA }
 
         Double valor = item?.valor ?: objeto.categoria.valorCarga
+
+        println "Valor Carga: $valor"
         Util.toBigDecimal(valor, decimalPlace)
     }
 

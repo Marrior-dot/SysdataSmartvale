@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh; java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
+<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh; java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
@@ -88,14 +88,19 @@
 <g:render template="/categoriaFuncionario/list"
           model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
 
+<g:if test="${pedidoCargaInstance?.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
+    <div id="pedidoFuncionarios" style="display: none">
+        <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
+    </div>
+</g:if>
 
-<div id="pedidoFuncionarios" style="display: none">
-    <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
-</div>
+<g:if test="${pedidoCargaInstance?.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+    <div id="pedidoVeiculos" style="display: none">
+        <g:render template="veiculos" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
+    </div>
+</g:if>
 
-<div id="pedidoVeiculos" style="display: none">
-    <g:render template="veiculos" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
-</div>
+
 
 %{--<g:render template="taxasCartao" />--}%
 

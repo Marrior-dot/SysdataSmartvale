@@ -5,7 +5,8 @@ grails {
 
     gorm {
         reactor.events = false
-        failOnError = true
+        failOnError = false
+
     }
 
     mime {
@@ -114,6 +115,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/logout/**',                             access: ['permitAll']],
         [pattern: '/dashboard/**',                          access: ['IS_AUTHENTICATED_FULLY']],
         [pattern: '/rh/**',                                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/fechamento/**',                                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/unidade/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/funcionario/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/veiculo/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],

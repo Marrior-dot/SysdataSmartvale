@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hyago
-  Date: 08/07/16
-  Time: 17:27
---%>
-
 <%@ page import="com.sysdata.gestaofrota.Util" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -46,7 +39,7 @@
 
             <g:form method="POST" controller="pedidoCarga" name="defaultForm">
                 <g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
-                <g:hiddenField name="valorCargaCategoria" value="${pedidoCargaInstance?.categoriasFuncionario?.valorCarga}"/>
+                <g:hiddenField name="valorCargaCategoria" value="${pedidoCargaInstance?.perfisRecarga?.valorCarga}"/>
                 <g:hiddenField name="version" value="${pedidoCargaInstance?.version}"/>
                 <g:hiddenField name="action" value="${action}"/>
 
@@ -93,11 +86,11 @@
             //Carrega taxas de cartão a serem cobradas, caso existam
             //carregarTaxasCartao();
 
-            const action = $("input[name=action]").val();
+/*            const action = $("input[name=action]").val();
             if (action === 'novo') {
                 carregarPerfisRecarga("${pedidoCargaInstance?.unidade?.id}");
                 carregarFuncionarios("${pedidoCargaInstance?.unidade?.id}");
-            }
+            }*/
 
             $("select[name=empresa]").change(function() {
                 carregarTaxasRh($(this).val());
@@ -158,12 +151,7 @@
             $("div#pedidoFuncionarios").show();
             $("div#pedidoVeiculos").hide();
 
-
             filtrarFuncionarios(unidId);
-
-            //seleciona a primeira categoria
-            $('input:radio[name=categoriaSelecionada]:first').attr('checked', true);
-
         }
 
         function carregarPerfisRecarga(unidId) {
@@ -173,20 +161,25 @@
                         $("#tabCateg > tbody").html("")
 
                         if (status === 'success') {
-                            data.forEach(function(categ) {
-                                $("#tabCateg > tbody:last-child").append("<tr><td><input type='radio' name='categoriaSelecionada' value='" + categ.id + "'"  +
-                                        "onchange='filtrarFuncionarios()' class='enable'/></td>" +
-                                        "<td>" + categ.nome + "</td>" +
-                                        "<td>" + categ.valorCarga + "</td></tr>")
+                            data.forEach(function(categ, idx, arr) {
+                                let checked = "";
+
+                                if (idx === 0)
+                                    checked = "checked=true";
+
+                                $("#tabCateg > tbody:last-child")
+                                        .append("<tr><td><input type='radio' name='categoriaSelecionada' value='" + categ.id + "'"  +
+                                                "onchange='filtrarFuncionarios()' class='enable'" + checked + "/></td>" +
+                                                "<td>" + categ.nome + "</td>" +
+                                                "<td>" + categ.valorCarga + "</td></tr>")
                             })
+
                         }
                     })
 
         }
 
         function carregarUnidades(rhId) {
-
-
 
             $.getJSON("${createLink(controller: 'unidade', action: 'getAllByRh')}", { rhId: rhId },
                     function(data, status) {

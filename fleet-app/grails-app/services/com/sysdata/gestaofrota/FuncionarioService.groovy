@@ -5,25 +5,31 @@ class FuncionarioService {
     def cartaoService
     def portadorService
 
-    Funcionario save(params, Funcionario funcionarioInstance, boolean gerarCartao = false) {
-        if (!funcionarioInstance.unidade)
-            throw new RuntimeException("Funcionario não possui unidade.")
+    def save(params, Funcionario funcionarioInstance, boolean gerarCartao = false) {
+
+        def ret = [success: true]
 
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
-            if (! funcionarioInstance.save())
-                throw new RuntimeException(funcionarioInstance.showErrors())
-            PortadorFuncionario portadorFuncionario = portadorService.save(params, funcionarioInstance)
+            if (! funcionarioInstance.save(flush: true)) {
+                ret.success = false
+                return ret
+            }
+
+            PortadorFuncionario portadorFuncionario = funcionarioInstance.portador
+            portadorFuncionario.save(flush: true)
+
             if (gerarCartao){
                 if (portadorFuncionario.funcionario.unidade.rh.cartaoComChip)
                     cartaoService.gerar(portadorFuncionario)
                 else
-                    cartaoService.gerar(portadorFuncionario,false)
+                    cartaoService.gerar(portadorFuncionario, false)
             }
         }
         //participanteService.saveCidade(funcionarioInstance.endereco)
         if (! funcionarioInstance.save(flush: true))
-            throw new RuntimeException("Erro de regra de negocio.")
-        funcionarioInstance
+            ret.success = false
+
+        return ret
     }
 
 

@@ -60,14 +60,18 @@ class FuncionarioController extends BaseOwnerController {
                 redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
                 return
             }
-            Funcionario funcionario = new Funcionario()
-            funcionario.portador = new PortadorFuncionario()
+
+            Funcionario funcionario
+            if (unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
+                funcionario = new Funcionario(unidade: unidadeInstance)
+                funcionario.portador = new PortadorFuncionario()
+                funcionario.portador.unidade = unidadeInstance
+            }
 
             // TODO: Refatorar Embossing
-            render(view: "form", model: [funcionario    : funcionario,
-                                         unidadeInstance: unidadeInstance,
-                                         action         : Util.ACTION_NEW,
-                                         tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: "form", model: [funcionarioInstance: funcionario,
+                                         action             : Util.ACTION_NEW,
+                                         tamMaxEmbossing    : processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -75,24 +79,34 @@ class FuncionarioController extends BaseOwnerController {
     }
 
     def save(Funcionario funcionarioInstance) {
+/*
         Unidade unidadeInstance = Unidade.get(params.long('unidId'))
         if (unidadeInstance) {
+*/
             try {
-                funcionarioInstance.unidade = unidadeInstance
-                funcionarioInstance = funcionarioService.save(params,funcionarioInstance, true)
+                def ret = funcionarioService.save(params,funcionarioInstance, true)
 
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
-                redirect(action: "show", id: funcionarioInstance.id)
+                if (ret.success) {
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
+                    redirect(action: "show", id: funcionarioInstance.id)
+                } else {
+                    if (ret.message)
+                        flash.error = ret.message
+                    render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                }
+
             }
             catch (Exception e) {
                 e.printStackTrace()
                 flash.error = "Erro Interno. Contatar suporte"
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
             }
+/*
         } else {
             flash.message = "Funcionário não relacionado a uma Unidade específica."
             render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
+*/
     }
 
     def show() {
@@ -120,10 +134,17 @@ class FuncionarioController extends BaseOwnerController {
         if (funcionarioInstance) {
             try {
                 funcionarioInstance.properties = params
-                funcionarioInstance = funcionarioService.save(params, funcionarioInstance)
+                def ret = funcionarioService.save(params, funcionarioInstance)
+                if (ret.success) {
+                    flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
+                    redirect(action: "show", id: funcionarioInstance.id)
+                } else {
+                    if (ret.message)
+                        flash.error = ret.message
 
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
-                redirect(action: "show", id: funcionarioInstance.id)
+                    render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                }
+
             }
             catch (Exception e) {
                 e.printStackTrace()

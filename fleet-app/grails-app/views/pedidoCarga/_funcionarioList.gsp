@@ -16,19 +16,19 @@
             <tr>
                 <td>
                     <input type="checkbox" class="checkbox" name="func_${funcionario.id}"
-                           onchange="setItemPedido(${funcionario.id})" ${funcionario?.isAtivoInPedido(pedidoCargaInstance) || action == Util.ACTION_NEW ? 'checked' : ''} />
+                           onchange="setItemPedido(${funcionario.id})" ${pedidoCargaInstance?.isFuncionarioInPedido(funcionario) || action == Util.ACTION_NEW ? 'checked' : ''} />
                 </td>
                 <td>${funcionario?.matricula}</td>
                 <td>${funcionario?.nome}</td>
                 <td>${funcionario?.cpf}</td>
 
                 <g:if test="${action == Util.ACTION_VIEW}">
-                    <td>R$ ${funcionario?.valorInPedido(pedidoCargaInstance)}</td>
+                    <td>R$ ${pedidoCargaInstance?.valorInPedido(funcionario)}</td>
                 </g:if>
                 <g:else>
                     <td>
                         <input type="text" class="form-control money" id="valorCarga_${funcionario.id}"
-                               value="${funcionario?.valorInPedido(pedidoCargaInstance)}"
+                               value="${pedidoCargaInstance?.valorInPedido(funcionario)}"
                                onchange="setItemPedido(${funcionario?.id})"/>
                     </td>
                 </g:else>

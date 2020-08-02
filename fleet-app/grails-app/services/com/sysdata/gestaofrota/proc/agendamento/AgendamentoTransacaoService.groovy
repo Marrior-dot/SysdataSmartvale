@@ -14,6 +14,7 @@ import com.sysdata.gestaofrota.TipoCobranca
 import com.sysdata.gestaofrota.TipoLancamento
 import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.proc.faturamento.CorteService
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -21,6 +22,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
 
 
     ReembolsoService reembolsoService
+    CorteService corteService
 
     @Override
     def execute(Date date) {
@@ -53,12 +55,12 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         }
     }
 
-    private def agendarCarga(trCarga, Date dataRef) {
+    private def agendarCarga(Transacao trCarga, Date dataRef) {
         def lancamentoInstance = new Lancamento(tipo: TipoLancamento.CARGA,
                                                 status: StatusLancamento.EFETIVADO,
                                                 valor: trCarga.valor,
                                                 dataEfetivacao: dataRef,
-                                                conta: trCarga.participante.conta)
+                                                conta: trCarga.cartao.portador.conta)
         trCarga.addToLancamentos(lancamentoInstance)
         [success: true]
     }
@@ -82,7 +84,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         Rh rh = abastInstance.cartao.portador.unidade.rh
 
         if (rh.modeloCobranca == TipoCobranca.POS_PAGO) {
-            Corte corteAberto = abastInstance.cartao.portador.unidade.rh.corteAberto
+            Corte corteAberto = corteService.getCorteAberto(abastInstance.cartao.portador.unidade.rh)
             if (corteAberto) {
                 lctoCompra = new LancamentoPortador()
                 lctoCompra.with {
@@ -103,7 +105,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
                     status: StatusLancamento.EFETIVADO,
                     valor: abastInstance.valor,
                     dataEfetivacao: dataRef,
-                    conta: abastInstance.participante.conta,
+                    conta: abastInstance.cartao.portador.conta,
                     statusFaturamento: StatusFaturamento.NAO_FATURADO
             )
         }

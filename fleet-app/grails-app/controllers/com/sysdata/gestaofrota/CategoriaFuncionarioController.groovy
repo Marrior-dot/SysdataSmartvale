@@ -1,9 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
-import grails.gorm.DetachedCriteria
 import org.springframework.http.HttpStatus
-
 
 //@Secured(['IS_AUTHENTICATED_FULLY'])
 class CategoriaFuncionarioController {

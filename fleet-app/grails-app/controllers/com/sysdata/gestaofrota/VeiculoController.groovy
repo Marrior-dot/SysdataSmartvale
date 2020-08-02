@@ -8,10 +8,8 @@ class VeiculoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def veiculoService
-    def portadorService
-    def cartaoService
-    def processamentoService
+    VeiculoService veiculoService
+    ProcessamentoService processamentoService
     def springSecurityService
 
     def index() {
