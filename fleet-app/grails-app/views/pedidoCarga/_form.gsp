@@ -13,7 +13,7 @@
             <div class="col-xs-4 input-group-sm">
                 <label class="control-label" for="empresa">Empresa</label>
                 <g:select name="empresa"
-                          from="${Rh.ativos.list()}" class="form-control"
+                          from="${Rh.ativosPrepago.list()}" class="form-control"
                           value="${pedidoCargaInstance?.unidade?.rh?.id}"
                           optionKey="id"
                           optionValue="nome" noSelection="['': '--Selecione uma Empresa--']"
@@ -21,7 +21,7 @@
             </div>
             <div class="col-xs-4 input-group-sm">
                 <label class="control-label" for="unidade">Unidade</label>
-                <g:select name="unidade" from="${Unidade.list(order: 'nome')}" class="form-control" value="${pedidoCargaInstance?.unidade?.id}"
+                <g:select name="unidade" from="[]" class="form-control" value="${pedidoCargaInstance?.unidade?.id}"
                     optionKey="id" optionValue="nome" noSelection="['': '--Selecione uma Unidade--']"/>
             </div>
         </div>
@@ -88,13 +88,13 @@
 <g:render template="/categoriaFuncionario/list"
           model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
 
-<g:if test="${pedidoCargaInstance?.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
+<g:if test="${pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
     <div id="pedidoFuncionarios" style="display: none">
         <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
     </div>
 </g:if>
 
-<g:if test="${pedidoCargaInstance?.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+<g:if test="${pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA}">
     <div id="pedidoVeiculos" style="display: none">
         <g:render template="veiculos" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
     </div>

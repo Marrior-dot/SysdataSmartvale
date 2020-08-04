@@ -142,6 +142,7 @@ class BootStrap {
 
         Processing.findOrCreateWhere([name: "Carga de Pedidos", order: 1 as byte, service: "cargaPedidoService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Agendamento de Transações", order: 2 as byte, service: "agendamentoTransacaoService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 3 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
     }
 
 }

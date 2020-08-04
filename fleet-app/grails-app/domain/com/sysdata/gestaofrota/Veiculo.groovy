@@ -20,6 +20,7 @@ class Veiculo extends MaquinaMotorizada {
         marca blank: false
         autonomia blank: false
         modelo blank: false
+        autonomia nullable: true
     }
 
     static mapping = {

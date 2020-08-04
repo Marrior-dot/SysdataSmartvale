@@ -3,7 +3,6 @@ package com.sysdata.gestaofrota
 
 class VeiculoService {
 
-    PortadorService portadorService
     CartaoService cartaoService
 
     Veiculo alteraHodometro(Veiculo veiculo, long valor, User usuario) {
@@ -23,12 +22,14 @@ class VeiculoService {
         veiculo
     }
 
-    def save(Veiculo veiculo, Map params) {
+    def save(Veiculo veiculo) {
 
         def ret = [success: true]
 
         if (veiculo.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-            PortadorMaquina portadorMaquina = portadorService.save(veiculo, params)
+            PortadorMaquina portadorMaquina = veiculo.portador
+            portadorMaquina.save(flush: true)
+
             if (portadorMaquina.unidade.rh.cartaoComChip)
                 cartaoService.gerar(portadorMaquina)
             else
@@ -37,24 +38,10 @@ class VeiculoService {
 
         if (! veiculo.save(flush: true)) {
             ret.success = false
-            ret.message = veiculo.errors
             return ret
         }
 
         ret
-    }
-
-    def update(Veiculo veiculoInstance, params) {
-        if (veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-            veiculoInstance.portador.limiteTotal = Util.convertToCurrency(params.portador.limiteTotal)
-
-            if (params.portador.limiteDiario)
-                veiculoInstance.portador.limiteDiario = Util.convertToCurrency(params.portador.limiteDiario)
-
-            if (params.portador.limiteMensal)
-                veiculoInstance.portador.limiteMensal = Util.convertToCurrency(params.portador.limiteMensal)
-        }
-        veiculo.save(flush: true)
     }
 
     def delete(Veiculo veiculo) {

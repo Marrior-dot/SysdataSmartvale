@@ -45,22 +45,21 @@ class Rh extends Empresa {
         unidades lazy: false
     }
 
-    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount"]
+    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel"]
 
     static namedQueries = {
+
         ativos {
             eq("status", Status.ATIVO)
             order("nome")
         }
 
-        limiteComprometido {
-            projections {
-                sum("port.limiteTotal")
-            }
-            createAlias("unidades", "unid")
-            createAlias("unid.portadores", "port")
-            ne("port.status", Status.CANCELADO)
+        ativosPrepago {
+            eq("status", Status.ATIVO)
+            eq("modeloCobranca", TipoCobranca.PRE_PAGO)
+            order("nome")
         }
+
     }
 
 
@@ -75,6 +74,37 @@ class Rh extends Empresa {
 
     int getVeiculosCount() {
         MaquinaMotorizada.countMaquinasRh(this).get()
+    }
+
+    BigDecimal getLimiteComprometido() {
+
+        def comprometido = Rh.withCriteria {
+                                projections {
+                                    sum("port.limiteTotal")
+                                }
+                                createAlias("unidades", "unid")
+                                createAlias("unid.portadores", "port")
+                                ne("port.status", Status.CANCELADO)
+                                eq("id", this.id)
+                            }[0]
+
+        comprometido ?: 0
+
+    }
+
+    BigDecimal getLimiteDisponivel() {
+
+        def disponivel = Rh.withCriteria {
+                                projections {
+                                    sum("port.saldoTotal")
+                                }
+                                createAlias("unidades", "unid")
+                                createAlias("unid.portadores", "port")
+                                ne("port.status", Status.CANCELADO)
+                                eq("id", this.id)
+                            }[0]
+        return disponivel ?: 0
+
     }
 
 

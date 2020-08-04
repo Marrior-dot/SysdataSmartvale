@@ -36,7 +36,8 @@ abstract class Portador {
             // INSERT
             if (! obj.id) {
                 def rhLimite = obj.unidade.rh.limiteTotal
-                def rhLimiteComprometido = obj.unidade.rh.limiteComprometido.list()[0] ?: 0
+                def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
+
                 if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
                     return ["valorSuperiorAoComprometido"]
             // UPDATE

@@ -35,7 +35,6 @@ class VeiculoController extends BaseOwnerController {
         if (params.unidade_id) {
             def unidadeInstance = Unidade.get(params.unidade_id)
 
-
             if (unidadeInstance.rh.modeloCobranca == TipoCobranca.PRE_PAGO &&
                     unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.MAQUINA &&
                     CategoriaFuncionario.porUnidade(unidadeInstance).count() == 0) {
@@ -43,12 +42,17 @@ class VeiculoController extends BaseOwnerController {
                 flash.error = "Não existe nenhum Perfil de Recarga definido. É necessário cadastrar um primeiro."
                 redirect(controller: 'rh', action: 'show', id: unidadeInstance?.rh?.id)
                 return
+            }
 
+            Veiculo veiculo = new Veiculo(params)
+            veiculo.unidade = unidadeInstance
+
+            if (unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+                veiculo.portador = new PortadorMaquina()
+                veiculo.portador.unidade = unidadeInstance
             }
 
             int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            Veiculo veiculo = new Veiculo(params)
-            veiculo.unidade = unidadeInstance
             render(view: "form", model: [veiculoInstance: veiculo, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
@@ -60,13 +64,15 @@ class VeiculoController extends BaseOwnerController {
 
         if (veiculoInstance) {
             try {
-                def ret = veiculoService.save(veiculoInstance, params)
+                def ret = veiculoService.save(veiculoInstance)
+
                 if (ret.success) {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
-                    redirect(controller: 'unidade', action: "show", id: veiculoInstance.unidade.id)
+                    redirect(action: "show", id: veiculoInstance.id)
                 } else {
-                    flash.error = ret.message
-                    redirect(action: 'create', params: [unidade_id: veiculoInstance.unidade.id])
+                    if (ret.message)
+                        flash.error = ret.message
+                    render(view: "form", model: [veiculoInstance: veiculoInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
                 }
             }
             catch (Exception e) {
@@ -108,7 +114,7 @@ class VeiculoController extends BaseOwnerController {
         if (veiculoInstance) {
             veiculoInstance.properties = params
             try {
-                veiculoService.update(veiculoInstance)
+                veiculoService.save(veiculoInstance, params)
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)
             } catch (e) {

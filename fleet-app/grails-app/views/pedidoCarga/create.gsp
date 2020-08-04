@@ -39,7 +39,6 @@
 
             <g:form method="POST" controller="pedidoCarga" name="defaultForm">
                 <g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
-                <g:hiddenField name="valorCargaCategoria" value="${pedidoCargaInstance?.perfisRecarga?.valorCarga}"/>
                 <g:hiddenField name="version" value="${pedidoCargaInstance?.version}"/>
                 <g:hiddenField name="action" value="${action}"/>
 

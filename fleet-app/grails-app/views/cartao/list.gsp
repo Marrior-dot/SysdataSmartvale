@@ -21,7 +21,6 @@
 				<a class="btn btn-default" href="${createLink(uri: '/')}"><span
 						class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
 
-
 				<div class="panel-top">
 					<g:render template="search" model="[controller: 'cartao']"/>
 				</div>

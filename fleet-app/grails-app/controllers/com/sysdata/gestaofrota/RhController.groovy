@@ -48,7 +48,7 @@ class RhController extends BaseOwnerController {
     def save(Rh rhInstance) {
         try {
             def ret = rhService.save(rhInstance)
-            if (ret.sucess) {
+            if (ret.success) {
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                 redirect(action: 'show', id: rhInstance.id)
             } else {
@@ -78,7 +78,7 @@ class RhController extends BaseOwnerController {
         if (rhInstance) {
             rhInstance.properties = params
             try {
-                def ret = rhService.save(rhInstance)
+                def ret = rhService.update(rhInstance)
                 if (ret.success) {
                     flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                     redirect(action: 'show', id: rhInstance.id)

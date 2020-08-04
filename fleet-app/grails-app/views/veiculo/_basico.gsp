@@ -9,6 +9,11 @@
     <g:hiddenField name="id" value="${veiculoInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
     <g:hiddenField name="unidade.id" value="${veiculoInstance?.unidade?.id}"/>
+
+    <g:if test="${veiculoInstance?.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.MAQUINA}">
+        <g:hiddenField name="portador.unidade.id" value="${veiculoInstance?.portador?.unidade?.id}"/>
+    </g:if>
+
     <g:hiddenField name="action" value="${action}"/>
     <g:hiddenField name="tam-max-embossing" value="${tamMaxEmbossing}"/>
 
@@ -69,6 +74,7 @@
                     </div>
                 </div>
 
+%{--
                 <div class="form-group col-md-3">
                     <label class="control-label" for="autonomia">Autonomia *</label>
 
@@ -79,6 +85,7 @@
                     </div>
 
                 </div>
+--}%
 
                 <div class="form-group col-md-3">
                     <label for="tipoAbastecimento">Tipo de Combustível</label>
@@ -91,11 +98,13 @@
 
             <div class="row">
 
+%{--
                 <div class="col-md-3">
                     <label for="validadeExtintor">Validade Extintor</label>
                     <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"
                            value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}"/>
                 </div>
+--}%
 
                 <g:if test="${programaMaquina}">
                     <div class="form-group col-md-5">
@@ -117,13 +126,15 @@
                         </span>
                     </div>
 
-                    <div class="form-group col-md-3">
-                        <label for="categoria.id">Perfil de Recarga *</label>
-                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(veiculoInstance?.unidade)?.list()}"
-                                  value="${veiculoInstance?.categoria?.id}" required="required"
-                                  noSelection="${['null': 'Selecione a categoria...']}"
-                                  optionKey="id" class="form-control" optionValue="nome"/>
-                    </div>
+                    <g:if test="${veiculoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.PRE_PAGO}" >
+                        <div class="form-group col-md-3">
+                            <label for="categoria.id">Perfil de Recarga *</label>
+                            <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(veiculoInstance?.unidade)?.list()}"
+                                      value="${veiculoInstance?.categoria?.id}" required="required"
+                                      noSelection="${['null': 'Selecione a categoria...']}"
+                                      optionKey="id" class="form-control" optionValue="nome"/>
+                        </div>
+                    </g:if>
 
                 </g:if>
             </div>
@@ -142,6 +153,7 @@
                         </div>
                     </div>
 
+%{--
                     <div class="form-group col-md-2">
                         <label for="portador.limiteDiario">Limite Diário *</label>
 
@@ -161,6 +173,7 @@
                                    value="${veiculoInstance?.portador?.limiteMensal}"/>
                         </div>
                     </div>
+--}%
 
                 </div>
 

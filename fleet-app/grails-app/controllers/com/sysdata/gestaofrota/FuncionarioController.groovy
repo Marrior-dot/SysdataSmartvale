@@ -61,9 +61,8 @@ class FuncionarioController extends BaseOwnerController {
                 return
             }
 
-            Funcionario funcionario
+            Funcionario funcionario = new Funcionario(unidade: unidadeInstance)
             if (unidadeInstance.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
-                funcionario = new Funcionario(unidade: unidadeInstance)
                 funcionario.portador = new PortadorFuncionario()
                 funcionario.portador.unidade = unidadeInstance
             }
@@ -84,7 +83,7 @@ class FuncionarioController extends BaseOwnerController {
         if (unidadeInstance) {
 */
             try {
-                def ret = funcionarioService.save(params,funcionarioInstance, true)
+                def ret = funcionarioService.save(funcionarioInstance, true)
 
                 if (ret.success) {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"

@@ -31,7 +31,7 @@
             </g:hasErrors>
 
             <a class="btn btn-default"
-               href="${g.createLink(controller: 'unidade', action: 'show', id: "${funcionarioInstance?.unidade.id}")}">
+               href="${g.createLink(controller: 'unidade', action: 'show', id: "${funcionarioInstance?.unidade?.id}")}">
                 <span class="glyphicon glyphicon-triangle-left"></span>
                 Unidade
             </a>
@@ -49,7 +49,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <h4><strong>Empresa</strong></h4>
-                        <h5><g:link controller="rh" action="show" id="${funcionarioInstance?.unidade?.rh.id}">${funcionarioInstance?.unidade?.rh.nome}</g:link></h5>
+                        <h5><g:link controller="rh" action="show" id="${funcionarioInstance?.unidade?.rh?.id}">${funcionarioInstance?.unidade?.rh?.nome}</g:link></h5>
                     </div>
                     <div class="col-md-3">
                         <h4><strong>Unidade</strong></h4>
@@ -72,7 +72,7 @@
                         </div>
                         <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
                             <div class="tab-pane" id="cartoes">
-                                <g:render template="cartao" model="[portador: funcionarioInstance.portador]"/>
+                                <g:render template="/cartao/cartoes" model="[portador: funcionarioInstance.portador]"/>
                             </div>
                         </g:if>
                     </div>

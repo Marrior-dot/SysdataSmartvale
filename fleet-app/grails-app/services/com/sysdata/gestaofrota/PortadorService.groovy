@@ -47,6 +47,7 @@ class PortadorService {
     }
 
     PortadorMaquina save(MaquinaMotorizada maquina, params) {
+/*
         maquina.save()
         PortadorMaquina portadorMaquina = new PortadorMaquina()
         portadorMaquina.unidade = maquina.unidade
@@ -73,5 +74,6 @@ class PortadorService {
         maquina.unidade.save()
 
         portadorMaquina
+*/
     }
 }

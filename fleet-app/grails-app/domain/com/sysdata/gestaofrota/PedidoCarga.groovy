@@ -61,9 +61,11 @@ class PedidoCarga {
     }
 
     public def getPerfisRecarga(){
-        if (this.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA)
+        if (! this.unidade)
+            return null
+        else if (this.unidade.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA)
             return this.itens*.maquina*.categoria as Set
-        else if (this.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO)
+        else if (this.unidade.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO)
             return this.itens*.participante*.categoria as Set
     }
 

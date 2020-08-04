@@ -8,7 +8,11 @@
     <g:hiddenField name="id" value="${funcionarioInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
     <g:hiddenField name="unidade.id" value="${funcionarioInstance?.unidade?.id}"/>
-    <g:hiddenField name="portador.unidade.id" value="${funcionarioInstance?.portador?.unidade?.id}"/>
+
+    <g:if test="${funcionarioInstance?.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
+        <g:hiddenField name="portador.unidade.id" value="${funcionarioInstance?.portador?.unidade?.id}"/>
+    </g:if>
+
     <g:hiddenField name="action" value="${action}"/>
 
 
@@ -65,7 +69,7 @@
                 </div>
             </div>
 
-            <g:if test="${funcionarioInstance.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
+            <g:if test="${funcionarioInstance?.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO}">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
@@ -99,11 +103,11 @@
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
 
-                <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO &&
-                        funcionarioInstance.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO }">
+                <g:if test="${funcionarioInstance?.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO &&
+                        funcionarioInstance?.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO }">
                     <div class="form-group col-md-3">
                         <label for="categoria.id">Perfil de Recarga *</label>
-                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(funcionarioInstance.unidade)?.list()}"
+                        <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(funcionarioInstance?.unidade)?.list()}"
                                   value="${funcionarioInstance?.categoria?.id}" required="required"
                                   noSelection="${['null': 'Selecione a categoria...']}"
                                   optionKey="id" class="form-control" optionValue="nome"/>
@@ -124,8 +128,8 @@
     </div>
 
 
-    <g:if test="${funcionarioInstance.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
-            funcionarioInstance.unidade?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
+    <g:if test="${funcionarioInstance?.unidade?.rh?.vinculoCartao == com.sysdata.gestaofrota.TipoVinculoCartao.FUNCIONARIO &&
+            funcionarioInstance?.unidade?.rh?.modeloCobranca == TipoCobranca.POS_PAGO}">
 
         <div class="panel panel-default">
             <div class="panel-heading">Limites</div>

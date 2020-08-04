@@ -88,59 +88,6 @@ class PedidoCargaController extends BaseOwnerController {
         [pedidoCargaInstance: new PedidoCarga()]
     }
 
-    def synchServer() {
-
-        def funcId = params.int("funcId")
-        def check = (params.check == "true")
-
-        def funcList = session.funcionariosList
-
-        def funcData = funcList.find { it.id == funcId }
-
-        if (funcData) {
-
-            funcData['selecao'] = check
-
-            render "SUCESSO"
-            response.status = response.SC_OK
-        } else {
-            render "ERRO INTERNO: Funcionário não localizado na lista!"
-            response.status = response.SC_INTERNAL_SERVER_ERROR
-        }
-    }
-
-    def synchCheckAll() {
-
-        def categ = params.categ
-        def check = (params.check == "true")
-
-        if (categ == 'all') {
-            synchHttpSessionWithDB(session.funcionariosList, check)
-
-            render "SUCESSO"
-            response.status = response.SC_OK
-
-        } else {
-            def catId = params.categ as long
-
-            def funcList = session.funcionariosList
-
-            def foundList = funcList.findAll { it.categoria == catId }
-
-            if (foundList) {
-                foundList.each { i ->
-                    i['selecao'] = check
-                }
-                render "SUCESSO"
-                response.status = response.SC_OK
-
-            } else {
-                render "ERRO INTERNO: Categoria não localizado na lista!"
-                response.status = response.SC_INTERNAL_SERVER_ERROR
-            }
-        }
-    }
-
     def save(PedidoCarga pedidoCarga) {
         def ret = pedidoCargaService.save(pedidoCarga, params)
         if (ret.success) {

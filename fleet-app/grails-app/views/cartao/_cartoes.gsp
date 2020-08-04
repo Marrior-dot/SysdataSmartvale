@@ -9,7 +9,6 @@
 				%{--data:"id=${funcionarioInstance?.cartaoAtual()?.id}",--}%
 				%{--success:function(data){--}%
 					%{--$("#password").html(data.newPsw);--}%
-				%{--}--}%
 			%{--})--}%
 		%{--}		--}%
 	%{--}--}%
@@ -21,10 +20,12 @@
 		<th>Cartão</th>
 		<th>Saldo Total</th>
 
+%{--
 		<g:if test="${portador.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
 			<th>Saldo Mensal</th>
 			<th>Saldo Diário</th>
 		</g:if>
+--}%
 
 	</tr>
 	</thead>
@@ -32,10 +33,12 @@
 	<tr>
 		<td>${portador?.cartaoAtual}</td>
 		<td>${Util.formatCurrency(portador?.saldoTotal)}</td>
+%{--
 		<g:if test="${portador.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
 			<td>${Util.formatCurrency(portador?.saldoMensal)}</td>
 			<td>${Util.formatCurrency(portador?.saldoDiario)}</td>
 		</g:if>
+--}%
 	</tr>
 	</tbody>
 </table>

@@ -64,6 +64,33 @@ environments {
 
         context = "/bahiavale-hom"
     }
+
+    production {
+        nome = "BahiaVale"
+        tipoPrograma = 7
+        parceiro = 2
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
+        tipoEmbossadora = TipoEmbossadora.PAYSMART
+
+        // ** DATABASE **
+        dbCreate = "update" // one of 'create', 'create-drop','update'
+        url = "jdbc:postgresql://172.16.100.12:5432/bvalefrota_production"
+        username = "bvalefrota_production"
+        password = "E934X8uIo68Fw5d"
+
+
+        // ** DATABASE **
+
+        /**
+         * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
+         * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
+         */
+        pasta = "bahiavale"
+        corPrimaria = "#3E0090"
+        corSecundaria = "#00993E"
+
+        context = "/bahiavale-hom"
+    }
 }
 
 administradora {

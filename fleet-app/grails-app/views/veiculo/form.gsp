@@ -8,7 +8,7 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-top">
             <div class="panel-heading">
                 <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
             </div>
@@ -57,8 +57,12 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
                             <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
-                            <li><a href="#tab2" data-toggle="tab">Funcionários</a></li>
-                            <li><a href="#tab3" data-toggle="tab">Hodômetro</a></li>
+
+                            <g:if test="${veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+                                <li><a href="#tab2" data-toggle="tab">Cartões</a></li>
+                            </g:if>
+                            <li><a href="#tab3" data-toggle="tab">Funcionários</a></li>
+                            <li><a href="#tab4" data-toggle="tab">Hodômetro</a></li>
 
 %{--                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>--}%
 
@@ -68,10 +72,18 @@
                             <div class="tab-pane active" id="tab1">
                                 <g:render template="basico" model="[veiculoInstance: veiculoInstance, unidadeInstance: unidadeInstance, tamMaxEmbossing: tamMaxEmbossing]"/>
                             </div>
-                            <div class="tab-pane" id="tab2">
+
+                            <g:if test="${veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+                                <div class="tab-pane" id="tab2">
+                                    <g:render template="/cartao/cartoes" model="[portador: veiculoInstance.portador]"/>
+                                </div>
+
+                            </g:if>
+
+                            <div class="tab-pane" id="tab3">
                                 <g:render template="/maquinaMotorizada/funcionarios" model="${[instance: veiculoInstance, instanceName: "Veiculo"]}"/>
                             </div>
-                            <div class="tab-pane" id="tab3">
+                            <div class="tab-pane" id="tab4">
                                 <g:render template="hodometro"/>
                             </div>
 

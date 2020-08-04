@@ -1,13 +1,7 @@
 package com.sysdata.gestaofrota.proc
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.Rh
-import com.sysdata.gestaofrota.Status
-import com.sysdata.gestaofrota.StatusControleAutorizacao
-import com.sysdata.gestaofrota.TipoCobranca
-import com.sysdata.gestaofrota.TipoTransacao
-import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.*
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -25,7 +19,7 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
 
             empresasCredito.each { Rh rh ->
 
-                log.info "Processando Empresa $rh ..."
+                log.info "Processando Empresa $rh.nomeFantasia ..."
 
                 def portadorIds = Portador.withCriteria {
                                                 projections {
@@ -35,12 +29,24 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
                                                     eq("rh", rh)
                                                 }
                                                 eq("status", Status.ATIVO)
+                                                order("id")
                                             }
 
                 portadorIds.eachWithIndex { pid, i ->
                     Portador portador = Portador.get(pid)
                     def limite = portador.limiteTotal
-                    def totalTransacoes = Transacao.withCriteria {
+                    Conta conta = portador.conta
+
+                    def totalAFaturar = Lancamento.withCriteria(uniqueResult: true) {
+                                            projections {
+                                                sum("valor")
+                                            }
+                                            eq("conta", conta)
+                                            eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                        } ?: 0
+
+
+                    def totalTransacoes = Transacao.withCriteria(uniqueResult: true) {
                                                 projections {
                                                     sum("valor")
                                                 }
@@ -49,16 +55,21 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
                                                 cartao {
                                                     eq("portador", portador)
                                                 }
-                                            }
-                    def novoSaldo = limite - totalTransacoes
-                    if (novoSaldo != portador.saldoTotal) {
-                        portador.saldoTotal = novoSaldo
+                                            } ?: 0
+
+                    def saldoNovo = limite - (totalTransacoes + totalAFaturar)
+                    def saldoAtual = portador.saldoTotal
+                    if (saldoNovo != saldoAtual) {
+                        portador.saldoTotal = saldoNovo
                         portador.save(flush: true)
+                        log.info "PRT #${portador.id} -> SA: ${saldoAtual} NS: ${saldoNovo} (dif: ${saldoNovo - saldoAtual})"
                     }
 
-
                     if ((i + 1) % 50 == 0) {
-
+                        Conta.withSession {
+                            it.flush()
+                            it.clear()
+                        }
                     }
                 }
             }

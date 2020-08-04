@@ -11,8 +11,6 @@ import com.sysdata.gestaofrota.Util
 
 class GeracaoCartaSenhaService {
 
-	static transactional=true
-	
 	private String FILE_TEMPLATE=
 	"""<%
 		out<<String.format('CS10603%s%sAMAZONCARD%-50s\\n',date,lote,"")

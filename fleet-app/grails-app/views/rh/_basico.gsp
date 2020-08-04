@@ -72,22 +72,11 @@
 					</g:if>
 				</div>
 
-				<div class="form-group col-md-3">
-					<label class="control-label" for="limiteTotal">LimiteTotal *</label>
-					<div class="input-group">
-						<g:textField name="limiteTotal" class="form-control money" value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
-					</div>
-				</div>
 
-				<div class="form-group col-md-3">
-					<label class="control-label">Limite Comprometido</label>
-					<h5>${Util.formatCurrency(rhInstance?.limiteComprometido.list()[0])}</h5>
-				</div>
 
 			</div>
 		</div>
 	</div>
-
 
 	<div class="panel panel-default" id="pedido-carga">
 		<div class="panel-heading">
@@ -116,12 +105,34 @@
 	</div>
 
 	<div id="fatura">
+		<div class="panel panel-default" id="limites">
+			<div class="panel-heading">Limites</div>
+
+			<div class="panel-body">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="limiteTotal">LimiteTotal *</label>
+					<div class="input-group">
+						<g:textField name="limiteTotal" class="form-control money" value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label">Comprometido c/ Cartões</label>
+					<h5>${Util.formatCurrency(rhInstance?.limiteComprometido)}</h5>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label">Limite Disponível</label>
+					<h5>${Util.formatCurrency(rhInstance?.limiteDisponivel)}</h5>
+				</div>
+			</div>
+		</div>
+
 
 		<div class="panel panel-default">
 			<div class="panel-heading">Fatura</div>
 			<div class="panel-body">
 				<div class="row">
-
 					<div class="form-group col-md-3">
 						<label class="control-label" for="prazoPgtFatura">Dias p/ Vencimento após Corte *</label>
 						<div class="input-group">

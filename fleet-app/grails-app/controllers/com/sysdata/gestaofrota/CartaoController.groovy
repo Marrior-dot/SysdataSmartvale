@@ -12,21 +12,27 @@ class CartaoController {
     }
 
     def list() {
-    }
+        params.max = params.max ? params.max as int: 10
 
-    def create() {
-        [cartaoInstance: new Cartao(params)]
-    }
+        def criteria = {
+            if (params.unidade) {
+                portador {
+                    unidade {
+                        eq("id", params.unidade.toLong())
+                    }
+                }
+            }
+            if (params.status) {
+                eq("status", StatusCartao.valueOf(params.status))
+            }
 
-    def save() {
-        def cartaoInstance = new Cartao(params)
-        if (!cartaoInstance.save(flush: true)) {
-            render(view: "create", model: [cartaoInstance: cartaoInstance])
-            return
+            ne("status", StatusCartao.CANCELADO)
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'cartao.label', default: 'Cartao'), cartaoInstance.id])
-        redirect(action: "show", id: cartaoInstance.id)
+        def cartaoList = Cartao.createCriteria().list(criteria)
+        def cartaoCount = Cartao.createCriteria().count(criteria)
+
+        [cartaoList: cartaoList, cartaoCount: cartaoCount, params: params]
     }
 
     def show() {
@@ -38,66 +44,6 @@ class CartaoController {
         }
 
         [cartaoInstance: cartaoInstance]
-    }
-
-    def edit() {
-        def cartaoInstance = Cartao.get(params.id)
-        if (!cartaoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartao.label', default: 'Cartao'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        [cartaoInstance: cartaoInstance]
-    }
-
-    def update() {
-        def cartaoInstance = Cartao.get(params.id)
-        if (!cartaoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartao.label', default: 'Cartao'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        if (params.version) {
-            def version = params.version.toLong()
-            if (cartaoInstance.version > version) {
-                cartaoInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                        [message(code: 'cartao.label', default: 'Cartao')] as Object[],
-                        "Another user has updated this Cartao while you were editing")
-                render(view: "edit", model: [cartaoInstance: cartaoInstance])
-                return
-            }
-        }
-
-        cartaoInstance.properties = params
-
-        if (!cartaoInstance.save(flush: true)) {
-            render(view: "edit", model: [cartaoInstance: cartaoInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'cartao.label', default: 'Cartao'), cartaoInstance.id])
-        redirect(action: "show", id: cartaoInstance.id)
-    }
-
-    def delete() {
-        def cartaoInstance = Cartao.get(params.id)
-        if (!cartaoInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartao.label', default: 'Cartao'), params.id])
-            redirect(action: "list")
-            return
-        }
-
-        try {
-            cartaoInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'cartao.label', default: 'Cartao'), params.id])
-            redirect(action: "list")
-        }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'cartao.label', default: 'Cartao'), params.id])
-            redirect(action: "show", id: params.id)
-        }
     }
 
     def listAllJSON() {

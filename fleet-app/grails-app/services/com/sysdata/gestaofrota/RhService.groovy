@@ -38,15 +38,34 @@ class RhService {
     }
 
     def save(Rh rh) {
-        def ret = [:]
-        ret.success = true
-        ret.message = ""
+        def ret = [success: true]
+
+        // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
+        if (rh.limiteTotal < rh.limiteComprometido) {
+            ret.success = false
+            ret.message = "Limite comprometido com cartões vinculados não pode ser superior ao limite total informado para a Empresa"
+        }
+
+        if (! rh.save(flush: true))
+            ret.success = false
+
+        return ret
+    }
+
+    def update(Rh rh) {
+        def ret = save(rh)
+
         def hasFuncionarios = Funcionario.countFuncionariosRh(rh).get() > 0
         def cannotUpdate = rh.isDirty("vinculoCartao") && rh.vinculoCartao != rh.getPersistentValue("vinculoCartao") && hasFuncionarios
         if (! cannotUpdate) {
             cannotUpdate = rh.isDirty("cartaoComChip") && rh.cartaoComChip != rh.getPersistentValue("cartaoComChip") && hasFuncionarios
             if (! cannotUpdate) {
-                rh.save(flush: true)
+
+                if (! rh.save(flush: true)) {
+                    ret.success = false
+                    return ret
+                }
+
                 log.info "EMP #$rh.id atualizada"
             } else {
                 ret.success = false
@@ -57,13 +76,8 @@ class RhService {
             ret.message = "Vínculo de Cartão a Funcionário ou Veículo/Máquina não pode ser mais alterado. Empresa já possui funcionários cadastrados"
         }
 
-        // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
-
-        if (rh.limiteTotal < rh.limiteComprometido.list()[0]) {
-            ret.success = false
-            ret.message = "Limite comprometido com cartões vinculados não pode ser superior ao limite total informado para a Empresa"
-        }
         return ret
+
     }
 
 }

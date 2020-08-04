@@ -1,11 +1,9 @@
 package com.sysdata.gestaofrota
 
 class FuncionarioService {
-    def participanteService
     def cartaoService
-    def portadorService
 
-    def save(params, Funcionario funcionarioInstance, boolean gerarCartao = false) {
+    def save(Funcionario funcionarioInstance, boolean gerarCartao = false) {
 
         def ret = [success: true]
 
