@@ -18,6 +18,7 @@ class TransacaoService {
         Unidade unidade
         Estabelecimento estabelecimento
 
+/*
         if (SpringSecurityUtils.ifAllGranted("ROLE_ESTAB") && participante?.instanceOf(PostoCombustivel)) {
             PostoCombustivel postoCombustivel = PostoCombustivel.get(participante.id)
             estabelecimento = Estabelecimento.findByEmpresa(postoCombustivel)
@@ -25,6 +26,9 @@ class TransacaoService {
             Rh rh = Rh.get(participante.id)
             unidade = Unidade.findByRh(rh)
         }
+*/
+
+
 
         return Transacao.createCriteria().list(paginacao) {
             if (filtro.dataInicial) gt('dateCreated', filtro.dataInicial)
@@ -40,14 +44,16 @@ class TransacaoService {
                 else eq('statusControle', StatusControleAutorizacao.valueOf(filtro.statusControle.toString()))
             }
 
+/*
             if (unidade) {
-                'participante' {
+                participante {
                     eq('unidade', unidade)
                 }
             }
             if (estabelecimento?.codigo?.length() > 0) {
                 eq("codigoEstabelecimento", estabelecimento.codigo)
             }
+*/
         }
     }
 

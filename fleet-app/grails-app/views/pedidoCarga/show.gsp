@@ -47,33 +47,23 @@
             <div class="alert alert-danger">${flash.errors}</div>
         </g:if>
 
-        <g:render template="form" model="${[pedidoCargaInstance: pedidoCargaInstance, action: Util.ACTION_VIEW]}"/>
 
-        <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.NOVO}">
-            <g:form controller="pedidoCarga" action="edit" id="${pedidoCargaInstance.id}">
-%{--                <g:actionSubmit action="edit" class="btn btn-default" value="${message(code: 'default.button.edit.label', default: 'Editar')}"/>--}%
+        <g:form action="edit" id="${pedidoCargaInstance.id}" method="POST">
 
-%{--
+            <g:render template="form" model="${[pedidoCargaInstance: pedidoCargaInstance, action: Util.ACTION_VIEW]}"/>
+
+            <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.NOVO}">
+                <g:actionSubmit action="edit" class="btn btn-default" value="${message(code: 'default.button.edit.label', default: 'Editar')}"/>
+
                 <g:actionSubmit action="delete" formmethod="post" class="btn btn-default" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
                                 onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');"/>
---}%
-            </g:form>
-        </g:if>
+
+            </g:if>
+        </g:form>
+
     </div>
 </div>
 
-<script>
-    $(document).ready(function(){
-        const vinculoCartao = "${pedidoCargaInstance.unidade.rh.vinculoCartao}";
-        if (vinculoCartao === 'Funcionário') {
-            $("div#pedidoFuncionarios").show();
-            $("div#pedidoVeiculos").hide();
-        }
-        else if (vinculoCartao === 'Máquina') {
-            $("div#pedidoFuncionarios").hide();
-            $("div#pedidoVeiculos").show();
-        }
-    });
-</script>
+    <asset:javascript src="pedidoCarga.js"></asset:javascript>
 </body>
 </html>

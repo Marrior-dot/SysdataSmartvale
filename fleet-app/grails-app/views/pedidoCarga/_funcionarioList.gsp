@@ -29,7 +29,7 @@
                     <td>
                         <input type="text" class="form-control money" id="valorCarga_${funcionario.id}"
                                value="${pedidoCargaInstance?.valorInPedido(funcionario)}"
-                               onchange="setItemPedido(${funcionario?.id})"/>
+                               onblur="setItemPedido(${funcionario?.id}, this)"/>
                     </td>
                 </g:else>
             </tr>
@@ -37,12 +37,14 @@
         </tbody>
     </table>
 
+%{--
     <util:remotePaginate controller="pedidoCarga" action="listFuncionarios"
                          total="${funcionarioInstanceCount}"
                          params="${[actionView: action, categoria: categoriaInstance?.id]}"
                          update="funcionario-list" max="10" id="${pedidoCargaInstance?.id}"
                          onLoading="waitingDialog.show('Aguarde...')"
                          onComplete="onFuncionarioListLoadComplete()"/>
+--}%
 </g:if>
 <g:else>
     <div class="well well-lg text-center"><b>SEM DADOS</b></div>

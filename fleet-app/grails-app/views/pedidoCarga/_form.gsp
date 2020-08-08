@@ -3,6 +3,11 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 
+<g:hiddenField name="id" value="${pedidoCargaInstance?.id}"/>
+<g:hiddenField name="action" value="${action}"/>
+<g:hiddenField name="vinculoCartao" value="${pedidoCargaInstance?.unidade?.rh?.vinculoCartao}"/>
+
+
 <div class="panel panel-default panel-top">
     <div class="panel-heading">
         <h3 class="panel-title">Empresa / Unidade</h3>
@@ -13,16 +18,23 @@
             <div class="col-xs-4 input-group-sm">
                 <label class="control-label" for="empresa">Empresa</label>
                 <g:select name="empresa"
-                          from="${Rh.ativosPrepago.list()}" class="form-control"
+                          from="${Rh.ativosPrepago.list()}"
+                          class="form-control"
                           value="${pedidoCargaInstance?.unidade?.rh?.id}"
                           optionKey="id"
-                          optionValue="nome" noSelection="['': '--Selecione uma Empresa--']"
+                          optionValue="nome"
+                          noSelection="['': '--Selecione uma Empresa--']"
                           dataAttrs="[vinculoCartao: 'vinculoCartao']"/>
             </div>
             <div class="col-xs-4 input-group-sm">
                 <label class="control-label" for="unidade">Unidade</label>
-                <g:select name="unidade" from="[]" class="form-control" value="${pedidoCargaInstance?.unidade?.id}"
-                    optionKey="id" optionValue="nome" noSelection="['': '--Selecione uma Unidade--']"/>
+                <g:select name="unidade"
+                          from="${Unidade.findAllByRh(pedidoCargaInstance?.unidade?.rh)}"
+                          class="form-control"
+                          value="${pedidoCargaInstance?.unidade?.id}"
+                            optionKey="id"
+                          optionValue="nome"
+                          noSelection="['': '--Selecione uma Unidade--']"/>
             </div>
         </div>
     </div>
@@ -88,13 +100,13 @@
 <g:render template="/categoriaFuncionario/list"
           model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
 
-<g:if test="${pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
+<g:if test="${! pedidoCargaInstance?.unidade || pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
     <div id="pedidoFuncionarios" style="display: none">
         <g:render template="funcionarios" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
     </div>
 </g:if>
 
-<g:if test="${pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+<g:if test="${! pedidoCargaInstance?.unidade || pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA}">
     <div id="pedidoVeiculos" style="display: none">
         <g:render template="veiculos" model="${[pedidoCargaInstance: pedidoCargaInstance, action: action]}"/>
     </div>

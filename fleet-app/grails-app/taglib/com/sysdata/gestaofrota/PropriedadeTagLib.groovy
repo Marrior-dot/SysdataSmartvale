@@ -1,9 +1,8 @@
 package com.sysdata.gestaofrota
 
-import com.sysdata.gestaofrota.propriedades.Prop
 import com.sysdata.gestaofrota.propriedades.Configuration
+import com.sysdata.gestaofrota.propriedades.Prop
 import com.sysdata.gestaofrota.propriedades.PropertyGroup
-
 
 class PropriedadeTagLib {
 
@@ -65,7 +64,9 @@ class PropriedadeTagLib {
                             sb.append("${g.hiddenField(name: "propriedades[$prop.order].id", value: propriedade?.id)}\n")
                             sb.append("${g.hiddenField(name: "propriedades[$prop.order].nome", value: "${prop.name}")}\n")
                             sb.append("${g.hiddenField(name: "propriedades[$prop.order].tipoDado", value: "${prop.dataType}")}\n")
-                            sb.append("${g.textField(name: "propriedades[$prop.order].valor", class: 'form-control', value: "${propriedade ? propriedade.valorConvertido : ''}")}\n")
+
+                            sb.append(prop.render(propriedade, g)+"\n")
+
                             sb.append("</div>\n")
 
                             currRow = prop.row

@@ -25,6 +25,9 @@
                         <a class="btn btn-default" href="${createLink(uri: '/')}">
                             <span class="glyphicon glyphicon-home"></span>
                             <g:message code="default.home.label"/></a>
+
+                        <g:link action="editPassword" class="btn btn-default"><span class="glyphicon glyphicon-user"></span>&nbsp;Alterar Senha</g:link>
+
                     </div>
 
                     <g:render template="basico" model="${[action: action]}"/>

@@ -19,26 +19,31 @@
                 </div>
             </g:hasErrors>
             <div class="panel panel-default">
-                <div class="panel-heading"><h4><g:message code="default.show.label" args="[entityName]" /></h4></div>
+                <div class="panel-heading">
+                    <h4><g:message code="default.show.label" args="[entityName]" /></h4>
+                </div>
                 <div class="panel-body">
+
                     <div class="buttons">
-                        <a class="btn btn-default" href="${createLink(uri: '/')}">
-                            <span class="glyphicon glyphicon-home"></span>
-                            <g:message code="default.home.label"/></a>
-                        <g:link class="btn btn-default" action="list">
-                            <span class="glyphicon glyphicon-list"></span>
-                            <g:message code="default.list.label" args="[entityName]" />
+                        <sec:ifAnyGranted roles="ROLE_PROC, ROLE_ADMIN">
+                            <g:link class="btn btn-default" action="list">
+                                <span class="glyphicon glyphicon-list"></span>
+                                <g:message code="default.list.label" args="[entityName]" />
+                            </g:link>
+
+                            <g:if test="${action == Util.ACTION_VIEW}">
+                                <g:link class="btn btn-default" action="create">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <g:message code="default.new.label" args="[entityName]" />
+                                </g:link>
+                            </g:if>
+                        </sec:ifAnyGranted>
+
+                        <g:link action="editPassword" class="btn btn-default">
+                            <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar Senha
                         </g:link>
 
-                        <g:if test="${action == Util.ACTION_VIEW}">
-                            <g:link class="btn btn-default" action="create">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                <g:message code="default.new.label" args="[entityName]" />
-                            </g:link>
-                        </g:if>
-
                     </div>
-
                     <g:render template="basico" model="${[action: action]}"/>
                 </div>
             </div>

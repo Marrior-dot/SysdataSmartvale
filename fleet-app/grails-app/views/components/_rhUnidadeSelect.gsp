@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Rh" %>
+<%@ page import="com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh" %>
 <div class="row">
     <div class="col-md-3">
         <label class="control-label" for="empresa">Empresa</label>
@@ -11,8 +11,9 @@
     </div>
     <div class="col-md-3">
         <label class="control-label" for="unidade">Unidade</label>
-        <g:select name="unidade" from="[]" class="form-control"
+        <g:select name="unidade" from="${Unidade.findAllByRh(Rh.get(params.empresa))}" class="form-control"
                   optionKey="id" optionValue="nome"
+                  value="${params.unidade}"
                   noSelection="['': '--Selecione uma Unidade--']"/>
     </div>
 </div>

@@ -28,6 +28,10 @@ class PedidoCarga {
         id generator: 'sequence', params: [sequence: 'pedidocarga_seq']
     }
 
+    static hibernateFilters = {
+        pedidoPorRh(condition: 'unidade_id in (select id from Unidade u where u.rh_id = :rh_id)', types: 'long')
+    }
+
 
     def calcularTotal() {
         this.total = 0D
@@ -92,7 +96,6 @@ class PedidoCarga {
 
         Double valor = item?.valor ?: objeto.categoria.valorCarga
 
-        println "Valor Carga: $valor"
         Util.toBigDecimal(valor, decimalPlace)
     }
 

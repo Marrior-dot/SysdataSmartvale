@@ -141,13 +141,14 @@ class RhController extends BaseOwnerController {
 
         def rhInstanceList
 
-        withSecurity { ownerList ->
-            rhInstanceList = Rh
-                    .createCriteria()
-                    .list() {
+        //withSecurity { ownerList ->
+            rhInstanceList = Rh.createCriteria().list() {
                 eq('status', Status.ATIVO)
+
+/*
                 if (ownerList.size > 0)
                     'in'('id', ownerList)
+*/
 
                 if (params.opcao && params.filtro) {
                     opcao = params.opcao.toInteger()
@@ -164,7 +165,7 @@ class RhController extends BaseOwnerController {
                 }
             }
 
-        }
+        //}
 
         def rhInstanceTotal
 

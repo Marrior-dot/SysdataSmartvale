@@ -8,6 +8,8 @@ class UserController extends BaseOwnerController {
 
     UserService userService
 
+    def passwordEncoder
+
 
     def index = {
         redirect(action: "list", params: params)
@@ -184,49 +186,52 @@ class UserController extends BaseOwnerController {
         def newPassword = params.newPassword
         def confirmPassword = params.confirmPassword
 
-        if (userInstance.password == springSecurityService.encodePassword(currentPassword)) {
+        if (passwordEncoder.isPasswordValid(userInstance.password, currentPassword, null)) {
             if (newPassword == confirmPassword) {
                 userInstance.password = newPassword
+                userInstance.save(flush: true)
                 flash.message = "Senha alterada com sucesso"
                 render(view: 'editPassword', model: [userInstance: userInstance])
             } else {
-                flash.message = "Confirmação não corresponde a nova senha informada"
+                flash.error = "Confirmação não corresponde a nova senha informada"
                 render(view: 'editPassword', model: [userInstance: userInstance])
             }
         } else {
-            flash.message = "Senha atual informada não corresponde a do referido usuário"
+            flash.error = "Senha atual informada não é válida!"
             render(view: 'editPassword', model: [userInstance: userInstance])
         }
     }
+
+    def meuUsuario(User user) {
+        redirect(action: 'show', id: user.id)
+    }
+
 
     def meusDados() {
         User userInstance = User.get(params.long('id'))
         if (!userInstance?.owner) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'participante.label', default: 'Participante'), params.id])}"
             redirect(action: "list")
-            return;
+            return
         }
 
         if(userInstance.owner.instanceOf(Rh)){
-            Rh rhInstance = Rh.get(userInstance.owner.id)
-            def userRole = UserRole.findByUser(userInstance)
-            render(view: 'meusDados', model: [userInstance: userInstance,  role: userRole?.role,action: Util.ACTION_VIEW, ownerList: listOwners()])
-            return ;
+            redirect(controller: 'rh', action: 'show', id: userInstance.owner.id)
+            return
         }
         else if(userInstance.owner.instanceOf(PostoCombustivel)){
             redirect(controller: 'postoCombustivel', action: 'show', id: userInstance.owner.id)
-            return ;
+            return
         }
         else if(userInstance.owner.instanceOf(Estabelecimento)){
             redirect(controller: 'estabelecimento', action: 'show', id: userInstance.owner.id)
-            return ;
+            return
         }
         else if(userInstance.owner.instanceOf(Funcionario)){
             redirect(controller: 'funcionario', action: 'show', id: userInstance.owner.id)
-            return ;
+            return
         }
 
-        redirect(action: 'show', id: userInstance.id)
     }
 
     def enableUser() {

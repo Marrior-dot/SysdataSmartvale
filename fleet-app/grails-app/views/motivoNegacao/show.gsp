@@ -18,11 +18,12 @@
 				<div class="alert alert-info" role="status">${flash.message}</div>
 			</g:if>
 
-
 			<a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span><g:message code="default.home.label"/></a>
 			<g:link class="btn btn-default" action="list"><span class="glyphicon glyphicon-list"></span><g:message code="default.list.label" args="[entityName]" /></g:link>
-			<g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span><g:message code="default.new.label" args="[entityName]" /></g:link>
 
+			<sec:ifAnyGranted roles="ROLE_PROC">
+				<g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span><g:message code="default.new.label" args="[entityName]" /></g:link>
+			</sec:ifAnyGranted>
 
 			<div class="panel-top">
 
@@ -47,8 +48,10 @@
 				<g:form>
 					<fieldset class="buttons">
 						<g:hiddenField name="id" value="${motivoNegacaoInstance?.id}" />
-						<g:link class="btn btn-default" action="edit" id="${motivoNegacaoInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-						<g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+						<sec:ifAnyGranted roles="ROLE_PROC">
+							<g:link class="btn btn-default" action="edit" id="${motivoNegacaoInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+							<g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+						</sec:ifAnyGranted>
 					</fieldset>
 				</g:form>
 			</div>

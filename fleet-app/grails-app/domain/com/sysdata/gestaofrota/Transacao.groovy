@@ -76,7 +76,7 @@ class Transacao {
 
         transacaoPorParticipante(condition: 'participante_id=:participante_id', types: 'long')
 
-        transacaoPorRH(condition: 'participante_id in (select f.id from Participante f where f.unidade_id in (select u.id from Unidade u where u.rh_id=:rh_id))', types: 'long')
+        transacaoPorRH(condition: 'participante_id in (select f.id from Participante f, Unidade u where f.unidade_id = u.id and u.rh_id = :rh_id)', types: 'long')
 
         transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id=:posto_id)', types: 'long')
     }

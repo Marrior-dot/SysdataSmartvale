@@ -1,6 +1,6 @@
 package com.sysdata.gestaofrota.propriedades
 
-import com.sysdata.gestaofrota.TipoDado
+import com.sysdata.gestaofrota.Propriedade
 
 /**
  *
@@ -30,19 +30,51 @@ class Configuration {
 
 class PropertyGroup {
     String name
-    List props = []
+    List textProps = []
+    List selectProps = []
 
     byte countPropsInline(byte numRow) {
-        return props.count{ it.row == numRow }
+        return textProps.count{ it.row == numRow } + selectProps.count{ it.row == numRow }
+    }
+
+    List getProps() {
+        return textProps + selectProps
     }
 }
 
-
-class Prop {
+abstract class Prop {
     byte order
     String name
     boolean mandatory
     String label
     def dataType
     byte row
+
+    abstract String render(Propriedade propriedade, g)
+}
+
+class TextProp extends Prop {
+
+    @Override
+    String render(Propriedade propriedade, g) {
+        return  "${g.textField(name: "propriedades[${this.order}].valor", class: 'form-control', value: "${propriedade ? propriedade.valorConvertido : ''}")}"
+    }
+}
+
+
+class SelectProp extends Prop {
+    Map options
+
+    @Override
+    String render(Propriedade propriedade, g) {
+        return  """${
+            g.select(
+                name: "propriedades[${this.order}].valor",
+                class: 'form-control',
+                value: "${propriedade ? propriedade.valorConvertido : ''}",
+                from: this.options,
+                optionKey: 'key',
+                optionValue: 'value'
+            )}"""
+    }
 }

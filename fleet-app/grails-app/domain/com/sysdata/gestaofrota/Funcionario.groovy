@@ -31,6 +31,10 @@ class Funcionario extends Participante {
         categoria nullable: true
     }
 
+    static hibernateFilters = {
+        funcionariosPorUnidade(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id = :rh_id)', types: 'long')
+    }
+
     static namedQueries = {
 
         countFuncionariosRh { Rh rh ->

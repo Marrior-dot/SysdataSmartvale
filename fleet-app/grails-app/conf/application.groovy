@@ -115,7 +115,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/logout/**',                             access: ['permitAll']],
         [pattern: '/dashboard/**',                          access: ['IS_AUTHENTICATED_FULLY']],
         [pattern: '/rh/**',                                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/fechamento/**',                                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/fechamento/**',                         access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/unidade/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/funcionario/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/veiculo/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
@@ -159,7 +159,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/marcaVeiculo/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/tipoEquipamento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/motivoNegacao/**',                      access: ['ROLE_PROC']],
-        [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB']],
+        [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH']],
         [pattern: '/role/**',                               access: ['ROLE_PROC']],
         [pattern: '/processamento/**',                      access: ['ROLE_PROC']],
         [pattern: '/centralAtendimento/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN']],
@@ -171,7 +171,13 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
         [pattern: "/report/**",                             access: ['ROLE_PROC']],
         [pattern: '/fieldReport/**',                        access: ['ROLE_PROC']],
-        [pattern: '/parameterReport/**',                    access: ['ROLE_PROC']]
+        [pattern: '/parameterReport/**',                    access: ['ROLE_PROC']],
+
+
+                // Relatórios
+        [pattern: '/consumoProdutos/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/demonstrativoDesempenho/**',            access: ['ROLE_PROC', 'ROLE_ADMIN']]
+
 
 ]
 

@@ -189,17 +189,19 @@ class FuncionarioController extends BaseOwnerController {
         def funcionarioInstanceList
         def funcionarioInstanceTotal
 
-        withSecurity { ownerList ->
+        //withSecurity { ownerList ->
 
             def criteria = {
 
                 eq('status', Status.ATIVO)
 
+/*
                 if (unidId)
                     unidade { eq('id', unidId) }
 
                 else if (ownerList.size() > 0)
                     unidade { rh { 'in'('id', ownerList) } }
+*/
 
 
                 if (categId)
@@ -226,7 +228,7 @@ class FuncionarioController extends BaseOwnerController {
 
             funcionarioInstanceList = Funcionario.createCriteria().list([order: 'nome', max: params.max, offset: offset], criteria)
             funcionarioInstanceTotal = Funcionario.createCriteria().count(criteria)
-        }
+        //}
 
 
         def fields = funcionarioInstanceList.collect { f ->

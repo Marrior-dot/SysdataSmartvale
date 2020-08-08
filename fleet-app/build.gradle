@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "1.0.0"
 group "fleet-app"
 
 apply plugin:"eclipse"
@@ -99,6 +99,13 @@ dependencies {
         exclude group: 'com.sun.jmx', module:'jmxri'
     }
 
+// JAX-B dependencies for JDK 9+
+    runtime "javax.xml.bind:jaxb-api:2.2.11"
+    runtime "com.sun.xml.bind:jaxb-core:2.2.11"
+    runtime "com.sun.xml.bind:jaxb-impl:2.2.11"
+    runtime "javax.activation:activation:1.1.1"
+
+    compile "org.grails.plugins:hibernate-filter-plugin:0.5.5"
 
 }
 

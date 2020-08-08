@@ -118,24 +118,20 @@ class PedidoCargaController extends BaseOwnerController {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
             redirect(action: "list")
         }
-
         [pedidoCargaInstance: pedidoCargaInstance]
     }
 
     def update() {
-
         def pedidoCarga = PedidoCarga.get(params.long('id'))
         if (!pedidoCarga) {
             flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'Pedido de Carga'), params.id])}"
             redirect(action: "list")
         }
-
         if (pedidoCarga.version > params.long('version')) {
             flash.errors = "Outro usuário modificou esse pedido de carga enquanto você estava o editando."
             redirect(action: 'edit', id: pedidoCarga.id)
             return;
         }
-
         Unidade unidadeInstance = Unidade.get(params.long('unidade_id'))
         if (!unidadeInstance) {
             flash.errors = "Unidade não selecionada"
@@ -295,8 +291,6 @@ class PedidoCargaController extends BaseOwnerController {
 
         CategoriaFuncionario categoriaInstance = CategoriaFuncionario.get(params.long('categoria'))
 
-        println "Categoria: $categoriaInstance"
-
         def criteria = {
 
             if (! categoriaInstance) {
@@ -327,13 +321,15 @@ class PedidoCargaController extends BaseOwnerController {
             }
         }
 
-
         params.sort = 'nome'
+
+        def funcList = Funcionario.createCriteria().list(params, criteria)
+        def funcCount = Funcionario.createCriteria().count(criteria)
 
         render(template: '/pedidoCarga/funcionarioList',
                 model: [pedidoCargaInstance     : pedidoCargaInstance,
-                        funcionarioInstanceList : Funcionario.createCriteria().list(params, criteria),
-                        funcionarioInstanceCount: Funcionario.createCriteria().count(criteria),
+                        funcionarioInstanceList : funcList,
+                        funcionarioInstanceCount: funcCount,
                         categoriaInstance       : categoriaInstance,
                         action                  : params.actionView])
     }

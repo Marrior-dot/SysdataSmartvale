@@ -30,6 +30,7 @@
 				}
 			} %>
 
+
 			<div class="row">
                 <g:if test="${userInstance?.owner?.instanceOf(Rh)}">
                     <div class="form-group col-md-6">
@@ -48,63 +49,45 @@
 
 			</div>
 
-			<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
-				<div class="row">
-					<div class="form-group col-md-6">
-						<label for="owner.nome">Nome RH</label>
-						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner.nome}"/>
-					</div>
+		%{--
+        <g:if test="${userInstance?.owner?.instanceOf(Rh)}">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="owner.nome">Nome RH</label>
+                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner.nome}"/>
+                </div>
 
-					<div class="form-group col-md-6">
-						<label for="owner.codigo">Código RH</label>
-						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner.codigo}"/>
-					</div>
-				</div>
-			</g:if>
+                <div class="form-group col-md-6">
+                    <label for="owner.codigo">Código RH</label>
+                    <input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner.codigo}"/>
+                </div>
+            </div>
+        </g:if>
 
-			<g:elseif test="${userInstance?.owner?.instanceOf(Estabelecimento)}">
-				<div class="row">
-					<div class="form-group col-md-6">
-						<label for="owner.nome">Nome Estabelecimento</label>
-						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
-					</div>
+        <g:elseif test="${userInstance?.owner?.instanceOf(Estabelecimento)}">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="owner.nome">Nome Estabelecimento</label>
+                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
+                </div>
 
-					<div class="form-group col-md-6">
-						<label for="owner.codigo">Código Estabelecimento</label>
-						<input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.codigo}"/>
-					</div>
-				</div>
-			</g:elseif>
+                <div class="form-group col-md-6">
+                    <label for="owner.codigo">Código Estabelecimento</label>
+                    <input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.codigo}"/>
+                </div>
+            </div>
+        </g:elseif>
 
-			<g:elseif test="${userInstance?.owner?.instanceOf(PostoCombustivel)}">
-				<div class="row">
-					<div class="form-group col-md-6">
-						<label for="owner.nome">Nome Posto Combustível</label>
-						<input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
-					</div>
+        <g:elseif test="${userInstance?.owner?.instanceOf(PostoCombustivel)}">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="owner.nome">Nome Posto Combustível</label>
+                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
+                </div>
 
-				</div>
-			</g:elseif>
-
-			<div class="row">
-				<g:if test="${action in [Util.ACTION_EDIT]}">
-					<g:if test="${userInstance?.owner?.instanceOf(Rh)}">
-						<div class="form-group col-md-6">
-							<label for="role">Papel</label>
-							<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
-									  value="" optionKey="id" optionValue="authority" disabled="disableb" class="form-control"/>
-						</div>
-					</g:if>
-					<g:else>
-						<div class="form-group col-md-6">
-							<label for="role">Papel</label>
-							<g:select name="role" from="${Role.withCriteria{eq("authority",role?.authority)}}"
-									  value="${userInstance}" optionKey="id" optionValue="authority" class="form-control"/>
-						</div>
-					</g:else>
-
-				</g:if>
-			</div>
+            </div>
+        </g:elseif>
+--}%
 
 			<div class="row">
 				<div class="col-md-6">
@@ -166,8 +149,8 @@
 					<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</g:if>
 				<g:if test="${action in [Util.ACTION_VIEW]}">
-					<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
-					<sec:ifAnyGranted roles='ROLE_ADMIN,ROLE_MASTER'>
+					<sec:ifAnyGranted roles='ROLE_ADMIN, ROLE_MASTER'>
+						<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
 						<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 					</sec:ifAnyGranted>
 				</g:if>

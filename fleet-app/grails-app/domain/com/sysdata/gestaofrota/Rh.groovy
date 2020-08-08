@@ -1,7 +1,5 @@
 package com.sysdata.gestaofrota
 
-import grails.databinding.BindUsing
-
 class Rh extends Empresa {
     Integer validadeCarga = 0
     Integer maximoTrnPorDia = 0
@@ -47,6 +45,11 @@ class Rh extends Empresa {
 
     static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel"]
 
+    static hibernateFilters = {
+        empresaPorUser(condition: 'id=:owner_id', types: 'long')
+    }
+
+
     static namedQueries = {
 
         ativos {
@@ -79,14 +82,14 @@ class Rh extends Empresa {
     BigDecimal getLimiteComprometido() {
 
         def comprometido = Rh.withCriteria {
-                                projections {
-                                    sum("port.limiteTotal")
-                                }
-                                createAlias("unidades", "unid")
-                                createAlias("unid.portadores", "port")
-                                ne("port.status", Status.CANCELADO)
-                                eq("id", this.id)
-                            }[0]
+            projections {
+                sum("port.limiteTotal")
+            }
+            createAlias("unidades", "unid")
+            createAlias("unid.portadores", "port")
+            ne("port.status", Status.CANCELADO)
+            eq("id", this.id)
+        }[0]
 
         comprometido ?: 0
 
@@ -95,17 +98,19 @@ class Rh extends Empresa {
     BigDecimal getLimiteDisponivel() {
 
         def disponivel = Rh.withCriteria {
-                                projections {
-                                    sum("port.saldoTotal")
-                                }
-                                createAlias("unidades", "unid")
-                                createAlias("unid.portadores", "port")
-                                ne("port.status", Status.CANCELADO)
-                                eq("id", this.id)
-                            }[0]
+            projections {
+                sum("port.saldoTotal")
+            }
+            createAlias("unidades", "unid")
+            createAlias("unid.portadores", "port")
+            ne("port.status", Status.CANCELADO)
+            eq("id", this.id)
+        }[0]
         return disponivel ?: 0
 
     }
 
 
 }
+
+import grails.databinding.BindUsing
