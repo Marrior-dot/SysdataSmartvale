@@ -1,3 +1,4 @@
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Rh" %>
 <div id="#side-menu" class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
@@ -131,7 +132,12 @@
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-cogs"></i>&nbsp;Financeiro<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="index">Solicitação de Carga</g:link></li>
+
+                        <sys:propertyOwner ownerType="${Rh}"  property="modeloCobranca" value="${TipoCobranca.PRE_PAGO}">
+                            <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="index">Solicitação de Carga</g:link></li>
+                        </sys:propertyOwner>
+
+
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                     </ul>
                 </li>

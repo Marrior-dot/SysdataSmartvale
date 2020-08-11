@@ -109,6 +109,13 @@
                             <td>${transacaoInstance.quilometragem}</td>
                         </tr>
                     </g:if>
+                    <g:if test="${transacaoInstance.qtd_litros}">
+                        <tr>
+                            <th>Qtde abastecida (lts)</th>
+                            <td>${transacaoInstance.qtd_litros}</td>
+                        </tr>
+                    </g:if>
+
                     </tbody>
                 </table>
 

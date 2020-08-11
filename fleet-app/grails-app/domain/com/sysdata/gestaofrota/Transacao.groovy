@@ -78,7 +78,7 @@ class Transacao {
 
         transacaoPorRH(condition: 'participante_id in (select f.id from Participante f, Unidade u where f.unidade_id = u.id and u.rh_id = :rh_id)', types: 'long')
 
-        transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id=:posto_id)', types: 'long')
+        transacaoPorPosto(condition: 'estabelecimento_id in (select e.id from Participante e where e.empresa_id = :emp_id)', types: 'long')
     }
 
     static def valorMensal(Map map, String tipoValorMensal) {

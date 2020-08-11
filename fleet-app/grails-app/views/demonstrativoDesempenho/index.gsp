@@ -50,22 +50,22 @@
             <thead>
             <th>Placa</th>
             <th>Marca/Modelo</th>
+            <th>Funcionário</th>
             <th>Empresa</th>
             <th>Unidade</th>
             <th>Km Rodados</th>
-            <th>Consumo (lts)</th>
-%{--            <th>Desempenho (km/l)</th>--}%
+            <th>Desempenho (km/l)</th>
             </thead>
             <tbody>
             <g:each in="${desempenhoList}" var="csm">
                 <tr>
                     <td>${csm[0]}</td>
                     <td>${csm[1]} / ${csm[2]}</td>
-                    <td>${csm[3]}</td>
-                    <td>${csm[4]}</td>
+                    <td>(${csm[3]}) ${csm[4]}</td>
                     <td>${csm[5]}</td>
                     <td>${csm[6]}</td>
-%{--                    <td>${csm[7]}</td>--}%
+                    <td>${csm[7]}</td>
+                    <td>${csm[8].round(2)}</td>
                 </tr>
             </g:each>
             </tbody>

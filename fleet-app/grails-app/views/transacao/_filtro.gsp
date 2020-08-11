@@ -19,7 +19,7 @@
 
                 <div class="form-group col-md-4">
                     <label for="numeroCartao">Cartão</label>
-                    <input type="text" class="form-control cartao" name="numeroCartao" id="numeroCartao" value="${numeroCartao}">
+                    <input type="text" class="form-control" name="numeroCartao" id="numeroCartao" value="${numeroCartao}">
                 </div>
 
                 <div class="form-group col-md-2">
