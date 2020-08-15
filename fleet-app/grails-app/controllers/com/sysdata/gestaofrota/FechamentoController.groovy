@@ -76,8 +76,23 @@ and p.id=:id
             response.outputStream<<pdf
             response.outputStream.flush()
         }
-
-
     }
+
+    def findFaturaByCorte() {
+        if (params.id) {
+            Corte corte = Corte.get(params.id.toLong())
+            if (corte) {
+                def fat = fechamentoService.findFaturaByCorte(corte)
+                if (fat) {
+                    render template: "/portadorCorte/fatura", model: [fatura: fat]
+                    return
+                } else
+                    render status: 404, text: "Não há fatura para o corte #${corte.id}"
+            } else
+                render status: 404, text: "Corte #${corte.id} não encontrado"
+        } else
+            render status: 500, text: "Corte ID não informado"
+    }
+
 
 }

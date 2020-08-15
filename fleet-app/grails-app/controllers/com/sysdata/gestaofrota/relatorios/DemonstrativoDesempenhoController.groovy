@@ -6,12 +6,12 @@ class DemonstrativoDesempenhoController {
 
     DemonstrativoDesempenhoService demonstrativoDesempenhoService
 
-    TestesService testesService
+    //TestesService testesService
 
     def index() {
 
 
-        testesService.list()
+        //testesService.list()
 
         if (params.f && params.f != 'html') {
 

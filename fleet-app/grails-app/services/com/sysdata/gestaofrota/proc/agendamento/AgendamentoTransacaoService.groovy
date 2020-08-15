@@ -20,14 +20,13 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class AgendamentoTransacaoService implements ExecutableProcessing {
 
-
     ReembolsoService reembolsoService
     CorteService corteService
 
     @Override
     def execute(Date date) {
 
-        def agendarList = Transacao.findAllWhere(status: StatusTransacao.AGENDAR)
+        def agendarList = Transacao.where { status == StatusTransacao.AGENDAR }.list(sort: 'id')
 
         if (agendarList) {
             agendarList.each { tr ->
@@ -40,10 +39,17 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
     private def agendarTransacao(Transacao tr, Date dataRef) {
 
         def ret
-        if (tr.tipo == TipoTransacao.CARGA_SALDO)
-            ret = agendarCarga(tr, dataRef)
-        if (tr.tipo == TipoTransacao.COMBUSTIVEL)
-            ret = agendarAbastecimento(tr, dataRef)
+
+        switch (tr.tipo) {
+            case TipoTransacao.CARGA_SALDO:
+                ret = agendarCarga(tr, dataRef)
+                break
+            case [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS]:
+                ret = agendarCompra(tr, dataRef)
+                break
+            default:
+                throw new RuntimeException("Tipo de Transação não tratada: ${tr.tipo}")
+        }
 
         if (ret.success) {
             tr.status = StatusTransacao.AGENDADA
@@ -75,7 +81,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
      *
      * - Agendamento Portador é apenas informativo
      */
-    private def agendarAbastecimento(Transacao abastInstance, Date dataRef) {
+    private def agendarCompra(Transacao abastInstance, Date dataRef) {
 
         def ret = [success: true]
 
@@ -94,7 +100,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
                     valor = abastInstance.valor
                     conta = abastInstance.cartao.portador.conta
                     statusFaturamento = StatusFaturamento.NAO_FATURADO
-                    dataEfetivacao = dataRef
+                    dataEfetivacao = dataRef.clearTime()
                 }
                 lctoCompra.save flush: true
             }
@@ -104,7 +110,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
             lctoCompra = new LancamentoPortador(tipo: TipoLancamento.COMPRA,
                     status: StatusLancamento.EFETIVADO,
                     valor: abastInstance.valor,
-                    dataEfetivacao: dataRef,
+                    dataEfetivacao: dataRef.clearTime(),
                     conta: abastInstance.cartao.portador.conta,
                     statusFaturamento: StatusFaturamento.NAO_FATURADO
             )
@@ -137,7 +143,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
             ret.success = false
             ret.message = "Reembolso não definido para o CNPJ: ${estabelecimentoInstance.empresa.cnpj}"
         }
-        ret
+        return ret
     }
 
 

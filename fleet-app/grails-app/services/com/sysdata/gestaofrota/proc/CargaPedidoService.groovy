@@ -49,6 +49,10 @@ class CargaPedidoService implements ExecutableProcessing {
                 portador = i.maquina.portador
             }
 
+            // Associa à transação o cartão ativo do portador
+            tr.cartao = portador.cartaoAtivo
+            tr.numeroCartao = tr.cartao.numero
+
             tr.save(flush: true)
             log.info "\tTR CRG #$tr.id criada"
 

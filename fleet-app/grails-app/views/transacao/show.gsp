@@ -119,6 +119,18 @@
                     </tbody>
                 </table>
 
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab">Lançamentos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            <g:render template="lancamentos" model="[transacao: transacaoInstance]"></g:render>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>

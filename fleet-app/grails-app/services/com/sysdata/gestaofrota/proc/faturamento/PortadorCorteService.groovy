@@ -1,14 +1,6 @@
 package com.sysdata.gestaofrota.proc.faturamento
 
-import com.sysdata.gestaofrota.Corte
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoCartao
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.StatusFatura
-import com.sysdata.gestaofrota.StatusFaturamento
-import com.sysdata.gestaofrota.StatusLancamento
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.gorm.transactions.Transactional
@@ -16,6 +8,8 @@ import grails.util.Holders
 
 @Transactional
 class PortadorCorteService {
+
+    CorteService corteService
 
     private ItemFatura faturarLancamento(LancamentoCartao lcto) {
         ItemFatura item = new ItemFatura()
@@ -103,6 +97,50 @@ class PortadorCorteService {
             ctx.novosSaldos[tpSld]+=val
         }*/
         ctx
+    }
+
+    Map findFaturaAberta(Portador portador) {
+
+        def fatura = [:]
+
+        Corte corteAberto = corteService.getCorteAberto(portador.unidade.rh)
+
+        def aFaturarList = LancamentoPortador.withCriteria {
+                                eq("conta", portador.conta)
+                                eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                eq("corte", corteAberto)
+                                order("dataEfetivacao")
+                            }
+
+        def totalFatura = 0.0
+        fatura.itens = []
+        aFaturarList.each { lcto ->
+            totalFatura += lcto.valor
+            fatura.itens << [
+                                "data": lcto.dataEfetivacao,
+                                "descricao": lcto.extrato,
+                                "valor": lcto.valor
+                            ]
+        }
+
+        fatura.data = corteAberto.dataPrevista
+        fatura.dataVencimento = corteAberto.dataPrevista + corteAberto.fechamento.diasAteVencimento
+        fatura.valorTotal = totalFatura
+
+        return fatura
+
+    }
+
+    Fatura findUltimaFatura(Portador portador) {
+        return Fatura.findByContaAndStatus(portador.conta, StatusFatura.ABERTA)
+    }
+
+    List<Fatura> listarFaturasAnteriores(Portador portador) {
+        return Fatura.where {
+                        conta == portador.conta &&
+                        status == StatusFatura.FECHADA
+                }.list([sort: 'dataVencimento'])
+
     }
 
 }

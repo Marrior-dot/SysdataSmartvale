@@ -31,7 +31,6 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
             dataReembolso.set([dayOfMonth: diaReemb, month: mesReemb, year: anoReemb])
             dataReembolso = dataUtil(dataReembolso)
         }
-        dataReembolso
-
+        return dataReembolso.clearTime()
     }
 }

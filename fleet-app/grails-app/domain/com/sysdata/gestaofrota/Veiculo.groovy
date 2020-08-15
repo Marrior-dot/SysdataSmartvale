@@ -26,21 +26,24 @@ class Veiculo extends MaquinaMotorizada {
     static mapping = {
     }
 
+    static hibernateFilters = {
+        veiculosPorRh(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id = :rh_id)', types: 'long')
+    }
+
+
     Long getHodometroAtualizado() {
 
         def hodometroAntigo = this.hodometro?:0
         if (!this.hodometro ) {
-            def ultTr = Transacao
-            .executeQuery("select max(t) from Transacao t where t.maquina.id =:maq and t.statusControle in (:sts)",
-            [maq: this.id, sts: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
+            def ultTr = Transacao.executeQuery("select max(t) from Transacao t where t.maquina.id =:maq and t.statusControle in (:sts)",
+                                                [maq: this.id,
+                                                 sts: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
 
             if (ultTr[0]){
                 this.hodometro = ultTr[0].quilometragem
                 HistoricoHodometro historicoHodometro = new HistoricoHodometro(veiculo: this,hodometroAntigo: hodometroAntigo, hodometroNovo: this.hodometro)
                 historicoHodometro.save()
                 this.save()
-                println "Veiculo: ${this.placa} - Hodometro antigo: ${hodometroAntigo} - "
-                println "Hodometro Novo: ${this.hodometro}"
             }
             else {
                 this.hodometro = 0

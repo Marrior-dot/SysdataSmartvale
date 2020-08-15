@@ -64,15 +64,20 @@
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>
+                        %{--<li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>--}%
+
+                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolso">Projeção de Reembolso</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutos">Consumo de Combustíveis</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenho">Demonstrativo Desempenho</g:link></li>
 
+
+%{--
                         <sec:ifAnyGranted roles="ROLE_PROC">
                             <li class="controller"><g:link class="submenu-logado" controller="report">Configuração Relatório</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="fieldReport">Campos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="parameterReport">Parâmetros</g:link></li>
                         </sec:ifAnyGranted>
+--}%
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
@@ -124,7 +129,14 @@
             <sec:ifAnyGranted roles="ROLE_ESTAB">
                 <li class="controller"><g:link class="submenu-logado" controller="user" action="meusDados" id="${sec.loggedInUserInfo(field: 'id')}">&nbsp;Meus Dados</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="transacao" action="index">&nbsp;Transações</g:link></li>
-                <li class="controller"><g:link class="submenu-logado" controller="reportViewer">&nbsp;Relatórios</g:link></li>
+
+                <li>
+                    <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolso">Projeção de Reembolso</g:link></li>
+                    </ul>
+                </li>
+
             </sec:ifAnyGranted>
 
             <sec:ifAnyGranted roles="ROLE_RH">

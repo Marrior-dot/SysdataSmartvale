@@ -115,15 +115,17 @@
 						<g:textField name="limiteTotal" class="form-control money" value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
 					</div>
 				</div>
-
 				<div class="form-group col-md-3">
 					<label class="control-label">Comprometido c/ Cartões</label>
 					<h5>${Util.formatCurrency(rhInstance?.limiteComprometido)}</h5>
 				</div>
-
 				<div class="form-group col-md-3">
 					<label class="control-label">Limite Disponível</label>
 					<h5>${Util.formatCurrency(rhInstance?.limiteDisponivel)}</h5>
+				</div>
+				<div class="form-group col-md-3">
+					<label class="control-label">Saldo Cartões Disponível</label>
+					<h5>${Util.formatCurrency(rhInstance?.saldoDisponivel)}</h5>
 				</div>
 			</div>
 		</div>

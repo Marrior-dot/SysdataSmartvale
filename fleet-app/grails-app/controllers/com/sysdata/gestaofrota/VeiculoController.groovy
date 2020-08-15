@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 import java.text.SimpleDateFormat
 
-class VeiculoController extends BaseOwnerController {
+class VeiculoController  {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -158,7 +158,7 @@ class VeiculoController extends BaseOwnerController {
         def veiculoInstanceList
         def veiculoInstanceTotal
 
-        withSecurity { ownerList ->
+//        withSecurity { ownerList ->
 
             def criteria = {
                 eq("status", Status.ATIVO)
@@ -166,8 +166,10 @@ class VeiculoController extends BaseOwnerController {
                 if (unidId) {
                     unidade { eq('id', unidId) }
                 }
+/*
                 else if (ownerList.size() > 0)
                     unidade { rh { 'in'('id', ownerList) } }
+*/
 
                 if (params.opcao && params.filtro) {
                     opcao = params.opcao.toInteger()
@@ -183,7 +185,7 @@ class VeiculoController extends BaseOwnerController {
 
             veiculoInstanceList = Veiculo.createCriteria().list(params: params, criteria)
             veiculoInstanceTotal = Veiculo.createCriteria().count(criteria)
-        }
+//        }
 
         def fields = veiculoInstanceList.collect { v ->
             [id    : v.id,

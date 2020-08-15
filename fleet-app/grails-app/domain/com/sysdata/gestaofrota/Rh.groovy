@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota
 
+import grails.databinding.BindUsing
+
 class Rh extends Empresa {
     Integer validadeCarga = 0
     Integer maximoTrnPorDia = 0
@@ -43,7 +45,7 @@ class Rh extends Empresa {
         unidades lazy: false
     }
 
-    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel"]
+    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel", "saldoDisponivel"]
 
     static hibernateFilters = {
         empresaPorUser(condition: 'id=:owner_id', types: 'long')
@@ -96,7 +98,10 @@ class Rh extends Empresa {
     }
 
     BigDecimal getLimiteDisponivel() {
+        return this.limiteTotal - this.limiteComprometido
+    }
 
+    BigDecimal getSaldoDisponivel() {
         def disponivel = Rh.withCriteria {
             projections {
                 sum("port.saldoTotal")
@@ -107,10 +112,9 @@ class Rh extends Empresa {
             eq("id", this.id)
         }[0]
         return disponivel ?: 0
-
     }
 
 
 }
 
-import grails.databinding.BindUsing
+

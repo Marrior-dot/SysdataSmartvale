@@ -45,11 +45,12 @@ class TransacaoController extends BaseOwnerController {
                 nsu                  : params.int('nsu'),
                 tipo                 : params.tipo ? TipoTransacao.valueOf(params.tipo.toString()) : null,
                 tipos                : [
-                        TipoTransacao.COMBUSTIVEL,
-                        TipoTransacao.SERVICOS,
-                        TipoTransacao.CANCELAMENTO,
-                        TipoTransacao.CANCELAMENTO_COMBUSTIVEL
-                ]
+                                            TipoTransacao.COMBUSTIVEL,
+                                            TipoTransacao.SERVICOS,
+                                            TipoTransacao.CANCELAMENTO,
+                                            TipoTransacao.CANCELAMENTO_COMBUSTIVEL
+                                        ],
+                statusRede           : params.statusRede
         ]
 
         final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)

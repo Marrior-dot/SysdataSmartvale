@@ -25,20 +25,22 @@ apply plugin:"org.grails.grails-gsp"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+/*
     maven {
-        url "https://artifactory.acceptiondev.com.br/plugins-release-local"
+        url "https://artifactory.acceptiondev.com.br/artifactory/plugins-release-local"
         credentials {
             username = "team_dev"
             password = "LjBMDteJTMfS9Lv7WeAC"
         }
     }
     maven {
-        url "https://artifactory.acceptiondev.com.br/libs-release-local/"
+        url "https://artifactory.acceptiondev.com.br/artifactory/libs-release-local"
         credentials {
             username = "team_dev"
             password = "LjBMDteJTMfS9Lv7WeAC"
         }
     }
+*/
     maven { url "http://jrimum.org/maven/content/groups/public/"}
 }
 

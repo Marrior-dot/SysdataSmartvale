@@ -14,22 +14,20 @@
                         <th>Código</th>
                         <th>Nome</th>
                         <th>Tipo</th>
-                        <th>Valor (R$)</th>
-                        <th>Valor Anterior(R$)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <g:each in="${produtoList}" var="produto">
+                    <g:each in="${produtoList}" var="produto" status="i">
                         <g:set var="prodEst" value="${produtoEstabelecimentoList.find {it.produto.id == produto.id}}"/>
+                        <g:hiddenField name="produto[${i}].id" value="${prodEst?.id}"></g:hiddenField>
+                        <g:hiddenField name="produto[${i}].produto.id" value="${produto?.id}"></g:hiddenField>
                         <tr>
                             <td class="text-center">
-                                <input type="checkbox" name="produtosSelecionados" value="${produto.id}" ${prodEst?.ativo ? 'checked' : ''} />
+                                <g:checkBox name="produto[${i}].ativo" value="${prodEst?.ativo}" />
                             </td>
                             <td>${fieldValue(bean: produto, field: "codigo")}</td>
                             <td>${fieldValue(bean: produto, field: "nome")}</td>
                             <td>${produto.tipo?.nome}</td>
-                            <td><input type="text" class="form-control money" name="valor[${produto.id}]" value="${Util.formatCurrency(prodEst?.valor)}"/></td>
-                            <td><input type="text" class="form-control money" name="valorAnterior" value="${Util.formatCurrency(prodEst?.valorAnterior)}" disabled /></td>
                         </tr>
                     </g:each>
                 </tbody>
@@ -40,15 +38,12 @@
         </g:else>
     </div>
 
-
     <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
         <g:if test="${action in [Util.ACTION_EDIT, Util.ACTION_NEW]}">
-            <button type="submit" class="btn btn-default">Salvar Produtos</button>
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span>&nbsp;Salvar Produtos</button>
         </g:if>
         <g:elseif test="${action == Util.ACTION_VIEW}">
-
-            <button id="btnEditProd" type="button" class="btn btn-default">Editar</button>
-
+            <button id="btnEditProd" type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span>&nbsp;Editar Produtos</button>
         </g:elseif>
     </sec:ifAnyGranted>
 </g:form>

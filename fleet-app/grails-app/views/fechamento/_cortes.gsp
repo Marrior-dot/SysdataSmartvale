@@ -3,12 +3,8 @@
 <div class="panel panel-default">
 
     <div class="panel-body">
-
-
         <g:if test="${cortes}">
-
             <table class="table table-striped table-hover table-condensed">
-
                 <thead>
                 <tr>
                     <th>Data Prevista</th>
@@ -22,6 +18,7 @@
                 <tbody>
                 <g:each in="${cortes}" var="corte">
                     <tr>
+                        <td><a href="#" onclick="abrirFatura(${corte.id})">${corte.dataPrevista.format('dd/MM/yyyy')}</a></td>
                         <td>${corte.dataPrevista.format('dd/MM/yyyy')}</td>
                         <td>${corte.dataFechamento?.format('dd/MM/yyyy')}</td>
                         <td>${corte.dataCobranca?.format('dd/MM/yyyy')}</td>
@@ -34,8 +31,6 @@
                         <g:else>
                             <td>----</td>
                         </g:else>
-
-
                     </tr>
                 </g:each>
                 </tbody>

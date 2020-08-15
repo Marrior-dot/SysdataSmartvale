@@ -58,6 +58,19 @@
         })
     }
 
+    function abrirFatura(corteId) {
+        $.get("${createLink(controller: 'fechamento', action: 'findFaturaByCorte')}",{id: corteId},
+            function(data){
+                $("#fechamento-index").html(data);
+            }
+        )
+        .fail(function(err) {
+            console.log("Erro: " + err)
+            alert("Erro: " + err);
+        })
+
+    }
+
 </script>
 
 <div class="row">

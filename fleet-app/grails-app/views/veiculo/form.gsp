@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Util" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -57,14 +57,16 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
                             <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
-
                             <g:if test="${veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                                 <li><a href="#tab2" data-toggle="tab">Cartões</a></li>
                             </g:if>
                             <li><a href="#tab3" data-toggle="tab">Funcionários</a></li>
                             <li><a href="#tab4" data-toggle="tab">Hodômetro</a></li>
 
-%{--                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>--}%
+                            <g:if test="${veiculoInstance.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
+                                    veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+                                <li><a href="#tab5" data-toggle="tab">Faturas</a></li>
+                            </g:if>
 
                         </ul>
                         <div class="tab-content">
@@ -87,11 +89,13 @@
                                 <g:render template="hodometro"/>
                             </div>
 
-%{--
-                            <div class="tab-pane" id="cartoes">
-                                <g:render template="/funcionario/cartao" model="[portador: veiculoInstance.portador]"/>
-                            </div>
---}%
+                            <g:if test="${veiculoInstance.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
+                                    veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
+                                <div class="tab-pane" id="tab5">
+                                    <g:render template="/portadorCorte/faturas" model="${[portador: veiculoInstance.portador]}"/>
+                                </div>
+                            </g:if>
+
 
                         </div>
                     </div>

@@ -1,3 +1,4 @@
+<%@ page import="com.sysdata.gestaofrota.StatusControleAutorizacao" %>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4>Pesquisa</h4>
@@ -34,9 +35,14 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-2">
-                    <label for="tipo">Tipo</label>
+                <div class="form-group col-md-3">
+                    <label for="tipo">Tipo de Transação</label>
                     <g:select name="tipo" class="form-control" from="${tipos}" value="${tipo}"
+                              optionValue="nome" noSelection="['': 'Todos']"/>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="statusRede">Status Rede</label>
+                    <g:select name="statusRede" class="form-control" from="${StatusControleAutorizacao.values()}" value="${statusRede}"
                               optionValue="nome" noSelection="['': 'Todos']"/>
                 </div>
             </div>

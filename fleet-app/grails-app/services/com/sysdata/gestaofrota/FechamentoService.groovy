@@ -19,4 +19,33 @@ class FechamentoService {
         if (fechamento.cortes.size() > 0) fechamento.ativo = false
         else fechamento.delete()
     }
+
+    def findFaturaByCorte(Corte corte) {
+
+        if (corte.status == StatusCorte.ABERTO) {
+            def fatura = [:]
+            def totalFatura = LancamentoPortador.withCriteria(uniqueResult: true) {
+                                                        projections {
+                                                            sum("valor")
+                                                        }
+                                                        eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                                        eq("corte", corte)
+                                                    }
+            if (totalFatura) {
+                fatura.data = corte.dataPrevista
+                fatura.dataVencimento = corte.dataPrevista + corte.fechamento.diasAteVencimento
+                fatura.valorTotal = totalFatura
+                fatura.itens = []
+                fatura.itens << [
+                                    "data": corte.dataPrevista,
+                                    "descricao": "CONSOLIDAÇÂO DE FATURAS",
+                                    "valor": totalFatura
+                                ]
+                return fatura
+            }
+
+        } else
+            return Fatura.findByCorte(corte)
+    }
+
 }

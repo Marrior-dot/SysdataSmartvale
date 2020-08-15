@@ -8,7 +8,6 @@ class EstabelecimentoController {
 
     EstabelecimentoService estabelecimentoService
 
-
     def index() {
         redirect(action: "list", params: params)
     }
@@ -38,41 +37,6 @@ class EstabelecimentoController {
             render(view: "form", model: [estabelecimentoInstance: estabelecimento, empresaInstance: estabelecimento.empresa, action: Util.ACTION_NEW])
         }
 
-/*
-        flash.errors = []
-        Estabelecimento estabelecimentoInstance = new Estabelecimento(params)
-        int estabelecimentoCadastrados = Estabelecimento.countByCnpj(estabelecimentoInstance.cnpj)
-        if (estabelecimentoCadastrados > 0) {
-            estabelecimentoInstance.errors.rejectValue('cnpj', "Já existe um Estabelecimento cadastrado com o CNPJ ${estabelecimentoInstance.cnpj}")
-            render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'novo'])
-            return
-        }
-
-        estabelecimentoInstance.endereco = params['endereco']
-        estabelecimentoInstance.telefone = params['telefone']
-
-        try {
-            Estabelecimento.withTransaction {
-                if (params.empId) {
-                    def empresaInstance = PostoCombustivel.get(params.empId)
-                    estabelecimentoInstance.empresa = empresaInstance
-                    if (estabelecimentoService.gerarCodigo(estabelecimentoInstance) && estabelecimentoService.save(estabelecimentoInstance)) {
-                        flash.message = "${message(code: 'default.created.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), estabelecimentoInstance.nome])}"
-                        redirect(action: "show", id: estabelecimentoInstance.id)
-                    } else {
-                        render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, empresaInstance: estabelecimentoInstance.empresa, action: Util.ACTION_NEW])
-                    }
-                } else {
-                    flash.message = "Estabelecimento não relacionado a uma Empresa específica"
-                    render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, empresaInstance: estabelecimentoInstance.empresa, action: Util.ACTION_NEW])
-                }
-            }
-
-        } catch (Exception e) {
-            flash.errors = e.message
-            render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, empresaInstance: estabelecimentoInstance.empresa, action: Util.ACTION_NEW])
-        }
-*/
     }
 
     def show() {
@@ -82,8 +46,8 @@ class EstabelecimentoController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
             redirect(action: "list")
         } else {
-            List<Produto> produtoList = Produto.list()
-            List<ProdutoEstabelecimento> produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimentoInstance)
+            List<Produto> produtoList = Produto.list(sort: 'codigo')
+            List<ProdutoEstabelecimento> produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimentoInstance).sort{ it.produto.codigo }
             render(view: 'form', model: [estabelecimentoInstance   : estabelecimentoInstance,
                                          produtoList               : produtoList,
                                          produtoEstabelecimentoList: produtoEstabelecimentoList,
@@ -99,8 +63,8 @@ class EstabelecimentoController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
             redirect(action: "list")
         } else {
-            List<Produto> produtoList = Produto.list()
-            List<ProdutoEstabelecimento> produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimentoInstance)
+            List<Produto> produtoList = Produto.list(sort: 'codigo')
+            List<ProdutoEstabelecimento> produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimentoInstance).sort { it.produto.codigo }
             render view: 'form', model: [estabelecimentoInstance   : estabelecimentoInstance,
                                          produtoList               : produtoList,
                                          produtoEstabelecimentoList: produtoEstabelecimentoList,

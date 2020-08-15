@@ -29,6 +29,6 @@ class ReembolsoSemanalService implements CalculoDiasUteis {
         Date dataReembolso = dataCorte + reembolsoSemanal.intervaloDias
         dataReembolso = dataUtil(dataReembolso)
 
-        return dataReembolso
+        return dataReembolso.clearTime()
     }
 }

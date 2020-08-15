@@ -38,11 +38,16 @@ class TransacaoService {
             if (filtro.nsu) eq("nsu", filtro.nsu)
             if (filtro.tipo) eq('tipo', filtro.tipo)
             if (filtro.tipos) 'in'('tipo', filtro.tipos)
+            if (filtro.statusRede)
+                eq("statusControle", StatusControleAutorizacao.valueOf(filtro.statusRede))
+
+/*
             if (filtro.statusControle) {
                 if (filtro.statusControle instanceof StatusControleAutorizacao)
                     eq('statusControle', filtro.statusControle)
                 else eq('statusControle', StatusControleAutorizacao.valueOf(filtro.statusControle.toString()))
             }
+*/
 
 /*
             if (unidade) {

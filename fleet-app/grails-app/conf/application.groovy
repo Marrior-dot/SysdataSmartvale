@@ -88,19 +88,6 @@ grails.plugin.springsecurity.authority.className = 'com.sysdata.gestaofrota.Role
 
 grails.plugin.springsecurity.logout.postOnly = false
 
-grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
-
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	[pattern: '/',               access: ['permitAll']],
-	[pattern: '/error',          access: ['permitAll']],
-	[pattern: '/shutdown',       access: ['permitAll']],
-	[pattern: '/assets/**',      access: ['permitAll']],
-	[pattern: '/**/js/**',       access: ['permitAll']],
-	[pattern: '/**/css/**',      access: ['permitAll']],
-	[pattern: '/**/images/**',   access: ['permitAll']],
-	[pattern: '/**/favicon.ico', access: ['permitAll']]
-]
-
 grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/',               access: ['permitAll']],
         [pattern: '/error',          access: ['permitAll']],
@@ -111,18 +98,18 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/**/images/**',   access: ['permitAll']],
         [pattern: '/**/favicon.ico', access: ['permitAll']],
 
-        [pattern: '/login/**',                              access: ['permitAll']],
-        [pattern: '/logout/**',                             access: ['permitAll']],
-        [pattern: '/dashboard/**',                          access: ['IS_AUTHENTICATED_FULLY']],
-        [pattern: '/rh/**',                                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/fechamento/**',                         access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/unidade/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/funcionario/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/veiculo/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/equipamento/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/maquinaMotorizada/**',                  access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/categoriaFuncionario/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/arquivo/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/login/**',                                     access: ['permitAll']],
+        [pattern: '/logout/**',                                    access: ['permitAll']],
+        [pattern: '/dashboard/**',                                 access: ['IS_AUTHENTICATED_FULLY']],
+        [pattern: '/rh/**',                                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/fechamento/**',                                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/unidade/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/funcionario/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/veiculo/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/equipamento/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/maquinaMotorizada/**',                         access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/categoriaFuncionario/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/arquivo/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
 
@@ -134,7 +121,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/postoCombustivel/getIntervalosReembolso',      access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
         [pattern: '/postoCombustivel/**',                          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-
 
 
         [pattern: '/estabelecimento/index',                 access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
@@ -158,11 +144,20 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/produto/**',                            access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/marcaVeiculo/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/tipoEquipamento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/centralAtendimento/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/portadorCorte/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
+
+        // Relatórios
+        [pattern: '/consumoProdutos/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/demonstrativoDesempenho/**',            access: ['ROLE_PROC', 'ROLE_ADMIN']],
+
+
+
         [pattern: '/motivoNegacao/**',                      access: ['ROLE_PROC']],
         [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH']],
         [pattern: '/role/**',                               access: ['ROLE_PROC']],
         [pattern: '/processamento/**',                      access: ['ROLE_PROC']],
-        [pattern: '/centralAtendimento/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN']],
+
 
         [pattern: '/console/**',                            access: ['ROLE_PROC']],
         [pattern: "/static/console/**",                     access: ['ROLE_PROC']],
@@ -174,12 +169,23 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/parameterReport/**',                    access: ['ROLE_PROC']],
 
 
-                // Relatórios
-        [pattern: '/consumoProdutos/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/demonstrativoDesempenho/**',            access: ['ROLE_PROC', 'ROLE_ADMIN']]
-
+        // Relatórios
+        [pattern: '/projecaoReembolso/**',                  access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB']],
 
 ]
+grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
+
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	[pattern: '/',               access: ['permitAll']],
+	[pattern: '/error',          access: ['permitAll']],
+	[pattern: '/shutdown',       access: ['permitAll']],
+	[pattern: '/assets/**',      access: ['permitAll']],
+	[pattern: '/**/js/**',       access: ['permitAll']],
+	[pattern: '/**/css/**',      access: ['permitAll']],
+	[pattern: '/**/images/**',   access: ['permitAll']],
+	[pattern: '/**/favicon.ico', access: ['permitAll']]
+]
+
 
 grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/assets/**',      filters: 'none'],
