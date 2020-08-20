@@ -10,6 +10,8 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
  * Cada projeto terá suas proprias variaveis
  */
 
+projectId = "bahiavale"
+
 environments {
     development {
         nome = "BahiaVale"
@@ -119,4 +121,62 @@ faturamento {
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
 
-projectId = "bahiavale"
+
+environments {
+
+    development {
+
+        sftp {
+            host = "localhost"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+        }
+
+        arquivos {
+            baseDir = "/home/luiz/tmp/frota/bahiavale/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    homologation {
+        arquivos {
+            baseDir = "/usr/local/frota/bahiavale"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "/home/luiz/tmp/paysmart/ftp/entrada"
+                }
+            }
+        }
+    }
+
+    production {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/bahiavale"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_prod/input"
+                }
+            }
+        }
+    }
+
+}

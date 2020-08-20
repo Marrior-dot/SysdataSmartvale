@@ -142,11 +142,14 @@ class Util {
         nf.format(val)
     }
 
-    static def parseCurrency(val) {
+    static def parseCurrency(String val) {
         if (! val)
             val = "0,00"
+
+
+
         NumberFormat nf = val.contains("R\$") ? NumberFormat.getCurrencyInstance(LOCALE) : NumberFormat.getNumberInstance(LOCALE)
-        nf.parse(val) as Double
+        return BigDecimal.valueOf(nf.parse(val))
     }
 
 

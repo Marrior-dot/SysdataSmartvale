@@ -22,14 +22,18 @@ $(document).ready(function () {
     defaultForm.submit(function (e) {
         waitingDialog.show();
         //remove os inputs desnecessários
-        $("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_'], [name*='veic_']), [type=text]:not([name='dataCarga'])", $(this)).remove();
+        //$("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_'], [name*='veic_'], [name*='valorCarga_']), [type=text]:not([name='dataCarga'])", $(this)).remove();
+/*
         var esse = $(this);
 
         itensPedidos.forEach(function (item) {
-            if (item.ativo === true) esse.append("<input type='hidden' name='funcionariosAtivos' value='" + item.id + "'/>");
-            else esse.append("<input type='hidden' name='funcionariosInativos' value='" + item.id + "'/>");
+            if (item.ativo === true)
+                esse.append("<input type='hidden' name='funcionariosAtivos' value='" + item.id + "'/>");
+            else
+                esse.append("<input type='hidden' name='funcionariosInativos' value='" + item.id + "'/>");
             esse.append("<input type='hidden' name='valorCarga[" + item.id + "]' value='" + item.valor + "'/>");
         });
+*/
     });
 
 
@@ -73,6 +77,10 @@ function carregarVeiculos(unidId) {
     $("div#pedidoFuncionarios").hide();
     $("div#pedidoVeiculos").show();
 
+    filtrarVeiculos(unidId);
+}
+
+function filtrarVeiculos(unidId) {
 
     var output = {
         id: $("input#id").val(),
@@ -99,9 +107,7 @@ function carregarVeiculos(unidId) {
         }
     });
 
-
 }
-
 
 function carregarFuncionarios(unidId) {
 
@@ -110,6 +116,35 @@ function carregarFuncionarios(unidId) {
 
     filtrarFuncionarios(unidId);
 }
+
+function filtrarFuncionarios(unidId) {
+    var output = {
+        id: $("input#id").val(),
+        categoria: $('input[name=categoriaSelecionada]:checked').val(),
+        actionView: $("input#action").val(),
+        unidade: unidId
+    };
+
+    waitingDialog.show("Aguarde...");
+    $.ajax({
+        url: "listFuncionarios",
+        data: output,
+        dataType: 'html',
+
+        success: function (data) {
+            $("div#funcionario-list").html(data);
+
+            var submitButton = $("input#submitButton");
+            if (submitButton.is(":disabled")) submitButton.attr('disabled', false);
+        },
+
+        complete: function () {
+            onFuncionarioListLoadComplete();
+        }
+    });
+}
+
+
 
 function carregarPerfisRecarga(unidId) {
 
@@ -121,14 +156,17 @@ function carregarPerfisRecarga(unidId) {
                 data.forEach(function(categ, idx, arr) {
                     var checked = "";
 
-/*
-                    if (idx === 0)
-                        checked = "checked=true";
-*/
+                    var vinculoCartao = $("select[name=empresa]").find(':selected').data('vinculocartao');
+                    var changeListener = "";
+                    if (vinculoCartao === 'Funcionário')
+                        changeListener = "filtrarFuncionarios(" + unidId + ")";
+                    else if (vinculoCartao === 'Máquina')
+                        changeListener = "filtrarVeiculos(" + unidId + ")";
+
 
                     $("#tabCateg > tbody:last-child")
                         .append("<tr><td><input type='radio' name='categoriaSelecionada' value='" + categ.id + "'"  +
-                        "onchange='filtrarFuncionarios()' class='enable'" + checked + "/></td>" +
+                        "onchange='" + changeListener + "' class='enable'" + checked + "/></td>" +
                         "<td>" + categ.nome + "</td>" +
                         "<td>" + categ.valorCarga + "</td></tr>");
                 })
@@ -259,73 +297,57 @@ function selecinaTodosFuncionarios() {
     });
 }
 
-function setItemPedido(itemId, elm) {
+function setItemPedido(itemId) {
     //formata valor da carga
-    var valorItem = $("input#valorCarga_" + itemId).val();
+
+    var elemValor = $("input#valorCarga_" + itemId);
+
+    var valorItem = elemValor.val();
 
     var chkItem = $("input[type='checkbox'][name='func_" + itemId + "']");
 
     if ((typeof valorItem === 'undefined' || valorItem === '' || valorItem === 'R$ 0,00') && chkItem.is(":checked")) {
-        alert("Valor da Carga não pode ser nula!");
+
+        $("div#msg_"+itemId).show();
+        $("div#msg_"+itemId).html("Valor não pode ser nulo");
+
+        $("input#valorCarga_" + itemId).focus();
         return;
+    } else {
+
+        var oldValue = elemValor.data('oldvalue');
+        oldValue = parseCurrency(oldValue);
+        valorItem = parseCurrency(valorItem);
+
+        if (valorItem <= oldValue) {
+            $("div#msg_"+itemId).hide();
+            $("div#msg_"+itemId).html("");
+            var itemPedido = {
+                id: itemId,
+                valor: valorItem,
+                ativo: chkItem.is(":checked")
+            };
+
+            var it = itensPedidos.filter(function (item) {
+                return item.id === itemPedido.id
+            });
+
+            if (Array.isArray(it) && it.length === 0)
+                itensPedidos.push(itemPedido);
+            else
+                it = itemPedido;
+
+        } else {
+            $("div#msg_"+itemId).show();
+            $("div#msg_"+itemId).html("Valor maior que perfil recarga");
+            $("input#valorCarga_" + itemId).focus();
+        }
+
+
     }
 
- /*   valorItem = valorItem.replace(/,/g, '').replace(/\./g, '');
-    valorItem = valorItem.slice(0, valorItem.length - 2) + '.' + valorItem.slice(valorItem.length - 2, valorItem.length);
-*/
-
-
-
-/*
-    var checkbox = $("input[type='checkbox'][name='itensAtivos'][value=" + itemId + "]");
-    if (checkbox.length == 0) checkbox = $("input[type='checkbox'][name='selectAll']");
-*/
-
-    var itemPedido = {
-        id: itemId,
-        valor: valorItem,
-        ativo: chkItem.is(":checked")
-    };
-
-    var it = itensPedidos.filter(function (item) {
-        return item.id === itemPedido.id
-    });
-
-    console.log("Item: " + it);
-
-    if (Array.isArray(it) && it.length === 0)
-        itensPedidos.push(itemPedido);
-    else
-        it = itemPedido;
-    console.log(itensPedidos);
 }
 
-function filtrarFuncionarios(unidId) {
-    var output = {
-        id: $("input#id").val(),
-        categoria: $('input[name=categoriaSelecionada]:checked').val(),
-        actionView: $("input#action").val(),
-        unidade: unidId
-    };
-
-    waitingDialog.show("Aguarde...");
-    $.ajax({
-        url: "listFuncionarios",
-        data: output,
-        dataType: 'html',
-
-        success: function (data) {
-            $("div#funcionario-list").html(data);
-
-            var submitButton = $("input#submitButton");
-            if (submitButton.is(":disabled")) submitButton.attr('disabled', false);
-        },
-
-        complete: function () {
-            onFuncionarioListLoadComplete();
-        }
-    });
-}
 
 /*
 function carregarTaxasCartao() {

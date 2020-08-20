@@ -49,6 +49,7 @@
 
 
     <asset:javascript src="pedidoCarga.js"></asset:javascript>
+    <asset:javascript src="util.js"></asset:javascript>
 
 
     </body>

@@ -8,6 +8,22 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class GeracaoArquivoEmbossingService {
 
+    def grailsApplication
+
+    private void gerarArquivoEmFileSystem(Arquivo arquivo) {
+
+        def fileDir = grailsApplication.config.projeto.arquivos.baseDir +
+                grailsApplication.config.projeto.arquivos.paysmart.dir.saida
+
+        def file = new File("${fileDir}/${arquivo.nome}")
+        file.withWriter { w ->
+            w.write(arquivo.conteudoText)
+        }
+        log.info "Arquivo Gerado em ${file.name}"
+
+    }
+
+
     def regerarArquivo(Arquivo arquivo) {
         log.info "Iniciando Regeração do Arquivo Embossing #$arquivo.id ..."
 
@@ -26,6 +42,8 @@ class GeracaoArquivoEmbossingService {
                 log.info "Qtde Cartões Com Chip: ${crtIdsList.size()}"
                 Embossadora embossadora = new PaySmart(crtIdsList)
                 ret = embossadora.regerar(arquivo)
+                if (ret.success)
+                    gerarArquivoEmFileSystem(arquivo)
             } else {
                 log.info "Qtde Cartões Sem Chip: ${crtIdsList.size()}"
                 Embossadora embossadora = new IntelCav(crtIdsList)
@@ -67,12 +85,11 @@ class GeracaoArquivoEmbossingService {
             Arquivo arquivo = embossadora.gerar()
 
             if (arquivo.save(flush: true, failOnError: true)) {
-                //File file = new File("/home/diego/${arquivo.nome}")
-                //file.withWriter {w ->
-                //    w.write(aa)
-                //}
+
+                gerarArquivoEmFileSystem(arquivo)
                 return true
-            }else{
+
+            } else {
                 arquivo.errors.allErrors.each {
                     log.error "Atributo: ${it.field} Valor Rejeitado: ${it.rejectedValue}"
                     return false

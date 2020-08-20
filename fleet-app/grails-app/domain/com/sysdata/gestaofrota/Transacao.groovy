@@ -118,4 +118,5 @@ class Transacao {
                 tipo in [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS] &&
                 statusControle == StatusControleAutorizacao.CONFIRMADA
     }
+
 }

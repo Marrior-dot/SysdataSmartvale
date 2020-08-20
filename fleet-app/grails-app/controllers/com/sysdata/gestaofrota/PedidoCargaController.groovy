@@ -88,7 +88,8 @@ class PedidoCargaController extends BaseOwnerController {
         [pedidoCargaInstance: new PedidoCarga()]
     }
 
-    def save(PedidoCarga pedidoCarga) {
+    def save() {
+        PedidoCarga pedidoCarga = new PedidoCarga(params)
         def ret = pedidoCargaService.save(pedidoCarga, params)
         if (ret.success) {
             flash.message = ret.message
@@ -99,7 +100,10 @@ class PedidoCargaController extends BaseOwnerController {
         }
     }
 
-    def show(PedidoCarga pedidoCarga) {
+    def show() {
+
+        PedidoCarga pedidoCarga = PedidoCarga.get(params.id as long)
+
         def totalPedido = 0
         pedidoCarga?.itens.each {
             totalPedido += it.valor

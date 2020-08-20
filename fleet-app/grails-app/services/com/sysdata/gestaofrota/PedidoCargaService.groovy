@@ -38,16 +38,29 @@ class PedidoCargaService {
                 return ret
             }
 
-            funcIds.each { fid ->
+            funcIds.findAll { fid ->
                 Funcionario funcionario = Funcionario.get(fid)
                 ItemPedidoParticipante itemPedido = new ItemPedidoParticipante()
                 itemPedido.participante = funcionario
-                def valorCarga = params.find { it.key == "valorCarga_${fid}" }
-                itemPedido.valor = valorCarga ? BigDecimal.valueOf(valorCarga) : funcionario?.categoria?.valorCarga
-                itemPedido.tipo = TipoItemPedido.CARGA
-                pedidoCarga.addToItens(itemPedido)
-                pedidoCarga.total += itemPedido.valor
+                def map = params.find { it.key == "valorCarga_${fid}" }
+                if (map) {
+                    def valorCarga = Util.parseCurrency(map.value)
+                    if (valorCarga <= funcionario.categoria.valorCarga) {
+                        itemPedido.valor = valorCarga
+                        itemPedido.tipo = TipoItemPedido.CARGA
+                        pedidoCarga.addToItens(itemPedido)
+                        pedidoCarga.total += itemPedido.valor
+                    } else {
+                        ret.success = false
+                        ret.message = "Valor ($valorCarga) não pode ser maior que perfil de recarga (${funcionario.categoria.valorCarga})"
+                        return true
+                    }
+                }
             }
+
+            if (!ret.success)
+                return ret
+
 
         } else if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
 
@@ -62,13 +75,25 @@ class PedidoCargaService {
                 Veiculo veiculo = Veiculo.get(fid)
                 ItemPedidoMaquina itemPedido = new ItemPedidoMaquina()
                 itemPedido.maquina = veiculo
-                def valorCarga = params.find { it.key == "valorCarga_${fid}" }
-                itemPedido.valor = valorCarga ? BigDecimal.valueOf(valorCarga) : veiculo?.categoria?.valorCarga
-                itemPedido.tipo = TipoItemPedido.CARGA
-                pedidoCarga.addToItens(itemPedido)
-                pedidoCarga.total += itemPedido.valor
+                def map = params.find { it.key == "valorCarga_${fid}" }
+
+                if (map) {
+                    def valorCarga = Util.parseCurrency(map.value)
+                    if (valorCarga <= veiculo.categoria.valorCarga) {
+                        itemPedido.valor = valorCarga
+                        itemPedido.tipo = TipoItemPedido.CARGA
+                        pedidoCarga.addToItens(itemPedido)
+                        pedidoCarga.total += itemPedido.valor
+                    } else {
+                        ret.success = false
+                        ret.message = "Valor ($valorCarga) não pode ser maior que perfil de recarga (${veiculo.categoria.valorCarga})"
+                        return true
+                    }
+                }
             }
 
+            if (!ret.success)
+                return ret
         }
 
         // Calcular Taxa Pedido
@@ -107,7 +132,7 @@ class PedidoCargaService {
             ret.message = pedidoCarga.errors
             return
         } else
-            ret.message = "Pedido de Carga #${pedidoCarga.id} criado com sucesso"
+            ret.message = "Pedido #${pedidoCarga.id} criado com sucesso"
         ret
     }
 

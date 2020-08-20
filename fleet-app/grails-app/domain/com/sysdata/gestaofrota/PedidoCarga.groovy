@@ -87,16 +87,17 @@ class PedidoCarga {
         return item
     }
 
-    public BigDecimal valorInPedido(objeto, int decimalPlace = 2) {
+    public String valorInPedido(objeto, int decimalPlace = 2) {
         ItemPedido item
         if (objeto instanceof Funcionario)
             item = this.itens.find { it.participante == objeto && it.tipo == TipoItemPedido.CARGA }
         else if (objeto instanceof Veiculo)
             item = this.itens.find { it.maquina == objeto && it.tipo == TipoItemPedido.CARGA }
 
-        Double valor = item?.valor ?: objeto.categoria.valorCarga
+        def valor = item?.valor ?: objeto.categoria.valorCarga
 
-        Util.toBigDecimal(valor, decimalPlace)
+        return Util.formatCurrency(valor)
+
     }
 
 

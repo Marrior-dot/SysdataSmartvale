@@ -81,7 +81,7 @@
                                     <td>${transacao.nsu}</td>
                                     <td><g:formatDate date="${transacao.dateCreated}" format="dd/MM/yyyy HH:mm:ss" /></td>
                                     <td>${transacao.codigoEstabelecimento}</td>
-                                    <td>${Util.maskCard(transacao.numeroCartao)}</td>
+                                    <td>${transacao.cartao ? transacao.cartao.numeroMascarado : '---'}</td>
                                     <td>${transacao.participante?.nome}</td>
                                     <g:if test="${transacao.tipo.nome == "Cancelamento"}">
                                         <td>${transacao.tipo.nome}¹</td>

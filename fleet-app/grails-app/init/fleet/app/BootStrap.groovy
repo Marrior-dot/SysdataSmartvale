@@ -5,11 +5,14 @@ import com.fourLions.processingControl.DailySchedule
 import com.fourLions.processingControl.ExecutionFrequency
 import com.fourLions.processingControl.Processing
 import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.camel.FleetRoutesService
 import grails.core.GrailsApplication
 
 class BootStrap {
 
     GrailsApplication grailsApplication
+
+    FleetRoutesService fleetRoutesService
 
     def init = { servletContext ->
 
@@ -31,6 +34,8 @@ class BootStrap {
         criarEstadosCapitais()
         criarBancos()
         criarProcessamentos()
+
+        fleetRoutesService.init()
     }
 
     def destroy = {

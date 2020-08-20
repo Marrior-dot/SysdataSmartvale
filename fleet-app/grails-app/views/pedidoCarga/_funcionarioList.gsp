@@ -1,5 +1,16 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
+<style>
+    .alert.message {
+        display: none;
+        height: 1em;
+        text-align: center;
+        padding-top: 5px;
+        border: 1px solid;
+    }
+</style>
+
+
 <g:if test="${funcionarioInstanceCount > 0}">
     <table class="table table-bordered table-striped">
         <thead>
@@ -9,6 +20,7 @@
             <th>Nome</th>
             <th>CPF</th>
             <th>Valor Carga</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -23,14 +35,17 @@
                 <td>${funcionario?.cpf}</td>
 
                 <g:if test="${action == Util.ACTION_VIEW}">
-                    <td>R$ ${pedidoCargaInstance?.valorInPedido(funcionario)}</td>
+                    <td>${pedidoCargaInstance?.valorInPedido(funcionario)}</td>
                 </g:if>
                 <g:else>
                     <td>
-                        <input type="text" class="form-control money" id="valorCarga_${funcionario.id}"
-                               value="${pedidoCargaInstance?.valorInPedido(funcionario)}"
-                               onblur="setItemPedido(${funcionario?.id}, this)"/>
+                        <g:textField name="valorCarga_${funcionario.id}" class="form-control money"
+                                    value="${pedidoCargaInstance?.valorInPedido(funcionario)}"
+                                    data-oldvalue="${pedidoCargaInstance?.valorInPedido(funcionario)}"
+                                    onblur="setItemPedido(${funcionario?.id})" />
                     </td>
+
+                    <td><div id="msg_${funcionario.id}" class="alert alert-danger message" role="alert" ></div></td>
                 </g:else>
             </tr>
         </g:each>
