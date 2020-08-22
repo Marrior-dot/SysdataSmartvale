@@ -21,51 +21,58 @@
 
         waitingDialog.show();
 
-        $.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
-            if (!("erro" in dados)) {
-                fields.logradouro.val(dados.logradouro);
-                fields.complemento.val(dados.complemento);
-                fields.bairro.val(dados.bairro);
+        $.getJSON("${createLink(controller: 'endereco', action: 'findEnderecoByCep')}",
 
-                var estado = dados.uf;
-                var cidade = dados.localidade;
+                    {cep: cep},
 
-                filtrarCidadesPorEstado(endereco, estado, cidade);
-            }
-            else {
-                waitingDialog.hide();
-            }
+                    function (dados) {
+
+                        if (!("erro" in dados)) {
+
+                            fields.logradouro.val(dados.logradouro);
+                            fields.complemento.val(dados.complemento);
+                            fields.bairro.val(dados.bairro);
+                            filtrarCidadesPorEstado(endereco, dados.estadoId, dados.cidadeId);
+                        }
+                        else
+                            waitingDialog.hide();
         });
     }
 
-    function filtrarCidadesPorEstado(endereco, estadoSelecionado, cidadeSelecionada){
-        var output = {
-            estado: typeof estadoSelecionado !== 'undefined' ? estadoSelecionado : $("select#" + endereco + "\\.cidade\\.estado\\.id").val(),
-            cidade: cidadeSelecionada
-        };
+    function filtrarCidadesPorEstado(endereco, estadoId, cidadeId){
+
+        var estId, cidId;
+
+        var estSel = $("select[name='"+ endereco + "\\.cidade\\.estado\\.id']");
+
+        if (typeof estadoId === 'undefined')
+            estId = estSel.val();
+        else
+            estId = estadoId;
+
+        if (typeof cidadeId !== 'undefined')
+            cidId = cidadeId;
 
         waitingDialog.show();
         $.ajax({
             url: "${g.createLink(controller:'endereco', action:'filtrarCidadesPorEstado')}",
-            data: output,
+            data: { estId: estId },
             dataType: 'json',
 
             success: function (data) {
-                var cidadesSelectBox = $("select#" + endereco + "\\.cidade\\.id");
-                cidadesSelectBox.empty();
-                $.each(data.cidadesDisponiveis, function(i, cidade){
-                    cidadesSelectBox.append($('<option>').text(cidade.nome).attr('value', cidade.id));
-                });
 
-                //se for para selecionar um estado
-                if(typeof estadoSelecionado !== 'undefined'){
-                    $("select#" + endereco + "\\.cidade\\.estado\\.id option[value='" + data.estadoSelecionado.id + "']").attr('selected','selected');
+                estSel.val(estId);
+
+                var options = "<option value=''>-- Selecione uma Cidade --</option>"
+                $.each(data, function (i, cid) {
+                    options += "<option value='" + cid.id + "'>" + cid.nome + "</option>"
+                })
+                var cidadeSelect = estSel.parent().parent().find('select[name$=\\.cidade\\.id]');
+                cidadeSelect.html(options);
+                if(cidId != null) {
+                    cidadeSelect.val(cidId);
                 }
 
-                //se for para selecionar uma cidade apos o carregamento da lista de estados
-                if(typeof cidadeSelecionada !== 'undefined'){
-                    $("select#" + endereco + "\\.cidade\\.id option[value='" + data.cidadeSelecionado.id + "']").attr('selected','selected');
-                }
             },
             complete: function(){
                 waitingDialog.hide();
@@ -123,7 +130,7 @@
                 </label>
                 <g:select class="form-control " name="${endereco}.cidade.estado.id" from="${Estado.list(sort: 'nome')}"
                           optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.estado?.id}"
-                          onchange="filtrarCidadesPorEstado('${endereco}')" noSelection="['':'-- Selecione Estado  --']"/>
+                          onchange="filtrarCidadesPorEstado(${endereco})" noSelection="['':'-- Selecione Estado  --']"/>
             </div>
 
             <div class="col-xs-4">

@@ -24,6 +24,7 @@
                             <li class="controller"><g:link class="submenu-logado" controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="motivoNegacao" action="list">Motivos Negação</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="cidade" action="list">Cidades</g:link></li>
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_PROC">

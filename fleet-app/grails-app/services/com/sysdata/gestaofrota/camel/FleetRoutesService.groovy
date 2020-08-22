@@ -44,7 +44,7 @@ class FleetRoutesService {
                 def indentPath = grailsApplication.config.projeto.arquivos.baseDir + "routes"
 
 
-                def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{8}_01"
+                def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{6}_01"
 
                 def fromFile="file://$srcDir?delay=$delay&initialDelay=$initDelay&include=$filenamePattern&move=${sentDir}/ENV_\${file:name}"
 

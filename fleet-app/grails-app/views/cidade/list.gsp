@@ -1,52 +1,68 @@
-
-<%@ page import="com.sysdata.gestaofrota.Cidade" %>
+<%@ page import="com.sysdata.gestaofrota.Estado; com.sysdata.gestaofrota.Cidade" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
+        <meta name="layout" content="layout-restrito" />
         <g:set var="entityName" value="${message(code: 'cidade.label', default: 'Cidade')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
-        <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
-        </div>
-        <div class="body">
-            <h1><g:message code="default.list.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <div class="list">
-                <table>
+        <div class="panel panel-default panel-top">
+            <div class="panel panel-heading">
+                <h4>Lista de Cidades</h4>
+            </div>
+            <div class="panel-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Pesquisa
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="row">
+
+                            <g:form action="index">
+                                <div class="col-md-3">
+                                    <label>Estado</label>
+                                    <g:select name="estado" class="form-control" from="${Estado.list(sort: 'uf')}"
+                                              optionKey="id"
+                                              optionValue="nome"
+                                              value="${params.estado}"
+                                              noSelection="['': '-- Todos --']"
+                                    >
+                                    </g:select>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-default" style="margin-top: 20px;"><i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar</button>
+                                </div>
+
+                            </g:form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-stripped">
                     <thead>
-                        <tr>
-                        
-                            <g:sortableColumn property="id" title="${message(code: 'cidade.id.label', default: 'Id')}" />
-                        
-                            <th><g:message code="cidade.estado.label" default="Estado" /></th>
-                        
-                            <g:sortableColumn property="nome" title="${message(code: 'cidade.nome.label', default: 'Nome')}" />
-                        
-                        </tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>UF</th>
                     </thead>
                     <tbody>
-                    <g:each in="${cidadeInstanceList}" status="i" var="cidadeInstance">
-                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
-                            <td><g:link action="show" id="${cidadeInstance.id}">${fieldValue(bean: cidadeInstance, field: "id")}</g:link></td>
-                        
-                            <td>${cidadeInstance.estado?.uf}</td>
-                        
-                            <td>${fieldValue(bean: cidadeInstance, field: "nome")}</td>
-                        
+                    <g:each in="${cidadeInstanceList}" var="cid" >
+                        <tr>
+                            <td><g:link action="show" id="${cid.id}">${cid.id}</g:link></td>
+                            <td>${cid.nome}</td>
+                            <td>${cid.estado.uf}</td>
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
-            </div>
-            <div class="paginateButtons">
-                <g:paginate total="${cidadeInstanceTotal}" />
+
+                <g:paginate total="${cidadeInstanceTotal}"></g:paginate>
+
             </div>
         </div>
     </body>

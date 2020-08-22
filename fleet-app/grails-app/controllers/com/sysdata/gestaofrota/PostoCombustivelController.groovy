@@ -47,7 +47,9 @@ class PostoCombustivelController {
         render(view: "form", model: [action: 'novo'])
     }
 
-    def save(PostoCombustivel postoCombustivelInstance) {
+    def save() {
+
+        PostoCombustivel postoCombustivelInstance = new PostoCombustivel(params)
 
         if (postoCombustivelInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"

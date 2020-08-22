@@ -99,9 +99,6 @@
         var pedidoCargaPanel = $("div.panel#pedido-carga");
         var faturaPanel = $("div#fatura");
 
-        console.log("Modelo de Cobrança: " + modeloCobranca);
-
-
         if (modeloCobranca === "POS_PAGO") {
             pedidoCargaPanel.find("input").each(function (index, element) {
                 element.value = '0';

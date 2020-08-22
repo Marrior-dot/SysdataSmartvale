@@ -77,35 +77,27 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def save(Funcionario funcionarioInstance) {
-/*
-        Unidade unidadeInstance = Unidade.get(params.long('unidId'))
-        if (unidadeInstance) {
-*/
-            try {
-                def ret = funcionarioService.save(funcionarioInstance, true)
+    def save() {
+        Funcionario funcionarioInstance = new Funcionario(params)
+        try {
+            def ret = funcionarioService.save(funcionarioInstance, true)
 
-                if (ret.success) {
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
-                    redirect(action: "show", id: funcionarioInstance.id)
-                } else {
-                    if (ret.message)
-                        flash.error = ret.message
-                    render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
-                }
+            if (ret.success) {
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
+                redirect(action: "show", id: funcionarioInstance.id)
+            } else {
+                if (ret.message)
+                    flash.error = ret.message
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            }
 
-            }
-            catch (Exception e) {
-                e.printStackTrace()
-                flash.error = "Erro Interno. Contatar suporte"
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
-            }
-/*
-        } else {
-            flash.message = "Funcionário não relacionado a uma Unidade específica."
-            render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
         }
-*/
+        catch (Exception e) {
+            e.printStackTrace()
+            flash.error = "Erro Interno. Contatar suporte"
+            render(view: "form", model: [funcionarioInstance: funcionarioInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+        }
+
     }
 
     def show() {

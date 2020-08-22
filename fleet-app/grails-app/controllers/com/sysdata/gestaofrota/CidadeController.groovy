@@ -6,22 +6,34 @@ class CidadeController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index = {
+    def index() {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [cidadeInstanceList: Cidade.list(params), cidadeInstanceTotal: Cidade.count()]
+
+        def criteria = {
+            if (params.estado) {
+                estado {
+                    eq("id", params.estado as long)
+                }
+            }
+        }
+        params.sort = "estado"
+        def cidadeList = Cidade.createCriteria().list(params, criteria)
+        def cidadeCount = Cidade.createCriteria().count(criteria)
+
+        [cidadeInstanceList: cidadeList, cidadeInstanceTotal: cidadeCount, params: params]
     }
 
-    def create = {
+    def create() {
         def cidadeInstance = new Cidade()
         cidadeInstance.properties = params
         return [cidadeInstance: cidadeInstance]
     }
 
-    def save = {
+    def save() {
         def cidadeInstance = new Cidade(params)
         if (cidadeInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'cidade.label', default: 'Cidade'), cidadeInstance.id])}"
@@ -32,7 +44,7 @@ class CidadeController {
         }
     }
 
-    def show = {
+    def show() {
         def cidadeInstance = Cidade.get(params.id)
         if (!cidadeInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'cidade.label', default: 'Cidade'), params.id])}"
@@ -43,7 +55,7 @@ class CidadeController {
         }
     }
 
-    def edit = {
+    def edit() {
         def cidadeInstance = Cidade.get(params.id)
         if (!cidadeInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'cidade.label', default: 'Cidade'), params.id])}"
@@ -54,7 +66,7 @@ class CidadeController {
         }
     }
 
-    def update = {
+    def update() {
         def cidadeInstance = Cidade.get(params.id)
         if (cidadeInstance) {
             if (params.version) {
@@ -81,7 +93,7 @@ class CidadeController {
         }
     }
 
-    def delete = {
+    def delete() {
         def cidadeInstance = Cidade.get(params.id)
         if (cidadeInstance) {
             try {

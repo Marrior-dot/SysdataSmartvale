@@ -39,9 +39,11 @@
                             </g:if>
                         </sec:ifAnyGranted>
 
-                        <g:link action="editPassword" class="btn btn-default">
-                            <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar Senha
-                        </g:link>
+                        <g:if test="${action == Util.ACTION_VIEW}">
+                            <g:link action="editPassword" class="btn btn-default">
+                                <span class="glyphicon glyphicon-edit"></span>&nbsp;Alterar Senha
+                            </g:link>
+                        </g:if>
 
                     </div>
                     <g:render template="basico" model="${[action: action]}"/>

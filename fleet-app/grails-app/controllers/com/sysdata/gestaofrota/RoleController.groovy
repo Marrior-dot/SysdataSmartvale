@@ -29,7 +29,8 @@ class RoleController {
         respond new Role(params), model: [ownerList: ownerList]
     }
 
-    def save(Role role) {
+    def save() {
+        Role role = new Role(params)
         if (role == null) {
             notFound()
             return

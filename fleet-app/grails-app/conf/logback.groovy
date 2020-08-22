@@ -43,6 +43,8 @@ logger("fleet3", ALL, appenderList, false)
 logger("com.sysdata.gestaofrota", ALL, appenderList, false)
 logger("com.fourLions.processingControl", ALL, appenderList, false)
 logger("groovyx.net.http", ALL, appenderList, false)
+logger("org.apache.camel", INFO, appenderList, false)
+
 
 /*
 logger 'org.hibernate.type.descriptor.sql.BasicBinder', TRACE, appenderList

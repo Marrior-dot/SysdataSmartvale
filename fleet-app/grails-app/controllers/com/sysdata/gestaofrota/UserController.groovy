@@ -90,7 +90,8 @@ class UserController extends BaseOwnerController {
         render(view: 'form', model: [userInstance: userInstance, action: Util.ACTION_NEW, ownerList: listOwners()])
     }
 
-    def save(User userInstance) {
+    def save() {
+        User userInstance = new User(params)
 
         def ret = userService.saveNew(userInstance, params)
         if (ret.success) {
@@ -202,7 +203,8 @@ class UserController extends BaseOwnerController {
         }
     }
 
-    def meuUsuario(User user) {
+    def meuUsuario() {
+        User user = User.get(params.id as long)
         redirect(action: 'show', id: user.id)
     }
 

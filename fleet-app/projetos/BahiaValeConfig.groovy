@@ -146,13 +146,21 @@ environments {
     }
 
     homologation {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+        }
+
         arquivos {
-            baseDir = "/usr/local/frota/bahiavale"
+            baseDir = "/usr/local/frota/bahiavale/"
             paysmart {
                 dir {
                     saida   = "paysmart/saida/"
                     enviado = "paysmart/enviado/"
-                    enviar  = "/home/luiz/tmp/paysmart/ftp/entrada"
+                    enviar  = "paysmart_test/input"
                 }
             }
         }
@@ -168,7 +176,7 @@ environments {
         }
 
         arquivos {
-            baseDir = "/usr/local/frota/bahiavale"
+            baseDir = "/usr/local/frota/bahiavale/"
             paysmart {
                 dir {
                     saida   = "paysmart/saida/"

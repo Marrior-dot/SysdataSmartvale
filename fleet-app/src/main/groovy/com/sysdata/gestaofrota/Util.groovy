@@ -145,9 +145,6 @@ class Util {
     static def parseCurrency(String val) {
         if (! val)
             val = "0,00"
-
-
-
         NumberFormat nf = val.contains("R\$") ? NumberFormat.getCurrencyInstance(LOCALE) : NumberFormat.getNumberInstance(LOCALE)
         return BigDecimal.valueOf(nf.parse(val))
     }
@@ -259,6 +256,14 @@ class Util {
     static String normalize(str) {
         str = Normalizer.normalize(str, Normalizer.Form.NFD)
         str = str.replaceAll("[^\\p{ASCII}]", "")
-        str
+        return str
     }
+
+    static String stackTraceToString(t) {
+        StringWriter sw = new StringWriter()
+        PrintWriter pw = new PrintWriter(sw)
+        t.printStackTrace(pw)
+        return sw.toString()
+    }
+
 }

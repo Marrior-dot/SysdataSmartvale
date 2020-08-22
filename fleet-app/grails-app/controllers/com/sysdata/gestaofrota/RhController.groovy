@@ -45,7 +45,9 @@ class RhController extends BaseOwnerController {
         }
     }
 
-    def save(Rh rhInstance) {
+    def save() {
+        Rh rhInstance = new Rh(params)
+
         try {
             def ret = rhService.save(rhInstance)
             if (ret.success) {
@@ -139,59 +141,42 @@ class RhController extends BaseOwnerController {
         def opcao
         def filtro
 
-        def rhInstanceList
+        def rhInstanceList = Rh.createCriteria().list() {
+                                eq('status', Status.ATIVO)
 
-        //withSecurity { ownerList ->
-            rhInstanceList = Rh.createCriteria().list() {
-                eq('status', Status.ATIVO)
+                                if (params.opcao && params.filtro) {
+                                    opcao = params.opcao.toInteger()
+                                    filtro = params.filtro
+                                    //Código
+                                    if (opcao == 1)
+                                        eq('codigo', filtro)
+                                    //Nome Fantasia
+                                    else if (opcao == 2)
+                                        like('nomeFantasia', filtro + '%')
+                                    //CNPJ
+                                    else if (opcao == 3)
+                                        like('cnpj', filtro + '%')
+                                }
+                            }
 
-/*
-                if (ownerList.size > 0)
-                    'in'('id', ownerList)
-*/
 
-                if (params.opcao && params.filtro) {
-                    opcao = params.opcao.toInteger()
-                    filtro = params.filtro
-                    //Código
-                    if (opcao == 1)
-                        eq('codigo', filtro)
-                    //Nome Fantasia
-                    else if (opcao == 2)
-                        like('nomeFantasia', filtro + '%')
-                    //CNPJ
-                    else if (opcao == 3)
-                        like('cnpj', filtro + '%')
-                }
-            }
+        def rhInstanceTotal = Rh.createCriteria().list() {
+                                    eq('status', Status.ATIVO)
+                                    if (params.opcao && params.filtro) {
 
-        //}
 
-        def rhInstanceTotal
-
-        withSecurity { ownerList ->
-            rhInstanceTotal = Rh
-                    .createCriteria()
-                    .list() {
-                eq('status', Status.ATIVO)
-                if (params.opcao && params.filtro) {
-
-                    if (ownerList.size > 0)
-                        'in'('id', ownerList)
-
-                    //Código
-                    if (opcao == 1)
-                        eq('codigo', filtro)
-                    //Nome Fantasia
-                    else if (opcao == 2)
-                        like('nomeFantasia', filtro + '%')
-                    //CNPJ
-                    else if (opcao == 3)
-                        like('cnpj', filtro + '%')
-                }
-                projections { rowCount() }
-            }
-        }
+                                        //Código
+                                        if (opcao == 1)
+                                            eq('codigo', filtro)
+                                        //Nome Fantasia
+                                        else if (opcao == 2)
+                                            like('nomeFantasia', filtro + '%')
+                                        //CNPJ
+                                        else if (opcao == 3)
+                                            like('cnpj', filtro + '%')
+                                    }
+                                    projections { rowCount() }
+                                }
 
         def fields = rhInstanceList.collect { r ->
             [   id      : r.id,

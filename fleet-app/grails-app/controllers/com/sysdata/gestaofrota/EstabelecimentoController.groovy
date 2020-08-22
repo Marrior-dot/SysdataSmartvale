@@ -28,8 +28,8 @@ class EstabelecimentoController {
         }
     }
 
-    def save(Estabelecimento estabelecimento) {
-
+    def save() {
+        Estabelecimento estabelecimento = new Estabelecimento(params)
         if (estabelecimentoService.gerarCodigo(estabelecimento) && estabelecimento.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), estabelecimento.nome])}"
             redirect(action: "show", id: estabelecimento.id)

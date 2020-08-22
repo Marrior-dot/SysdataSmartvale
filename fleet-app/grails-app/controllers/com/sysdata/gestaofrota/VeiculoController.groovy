@@ -60,7 +60,9 @@ class VeiculoController  {
         }
     }
 
-    def save(Veiculo veiculoInstance) {
+    def save() {
+
+        Veiculo veiculoInstance = new Veiculo(params)
 
         if (veiculoInstance) {
             try {
@@ -110,7 +112,8 @@ class VeiculoController  {
         }
     }
 
-    def update(Veiculo veiculoInstance) {
+    def update() {
+        Veiculo veiculoInstance = Veiculo.get(params.id as long)
         if (veiculoInstance) {
             veiculoInstance.properties = params
             try {
