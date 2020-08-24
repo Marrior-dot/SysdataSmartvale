@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="layout-restrito"/>
-    <g:set var="entityName" value="Empresa"/>
+    <g:set var="entityName" value="Cliente"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 <body>
@@ -14,14 +14,6 @@
 
     <div class="panel-body">
 
-        <g:if test="${flash.message}">
-            <div class="alert alert-info">${flash.message}</div>
-        </g:if>
-        <g:if test="${flash.error}">
-            <div class="alert alert-danger">${flash.error}</div>
-        </g:if>
-
-
         <a class="btn btn-default" href="${createLink(uri: '/')}">
             <span class="glyphicon glyphicon-home"></span>
             <g:message code="default.home.label"/>
@@ -31,8 +23,21 @@
             <g:message code="default.list.label" args="[entityName]"/>
         </g:link>
 
-
         <div class="panel panel-default panel-top">
+
+            <g:if test="${flash.message}">
+                <div class="alert alert-info">${flash.message}</div>
+            </g:if>
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger">${flash.error}</div>
+            </g:if>
+
+            <g:eachError bean="${rhInstance}">
+                <div class="alert alert-danger">
+                    <g:message error="${it}"/>
+                </div>
+            </g:eachError>
+
 
             <g:if test="${action == Util.ACTION_VIEW}">
                 <div class="tabbable"><!-- Only required for left/right tabs -->

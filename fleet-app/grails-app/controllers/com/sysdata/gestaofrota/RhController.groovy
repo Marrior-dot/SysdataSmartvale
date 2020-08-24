@@ -56,12 +56,14 @@ class RhController extends BaseOwnerController {
             } else {
                 flash.error = ret.message
                 render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+                return
             }
         }
         catch (e) {
             e.printStackTrace()
             flash.error = e.message
             render(view: "form", model: [rhInstance: rhInstance, action: Util.ACTION_NEW])
+            return
         }
     }
 

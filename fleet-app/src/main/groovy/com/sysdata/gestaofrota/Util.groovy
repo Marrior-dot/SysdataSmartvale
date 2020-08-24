@@ -266,4 +266,80 @@ class Util {
         return sw.toString()
     }
 
+
+    static boolean validarCnpj( String strCnpj, formated = false) {
+        def f= (!formated) || (strCnpj==~ /^[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}-[0-9]{2}$/) || (strCnpj ==~ /^[0-9]{14}$/)
+        if (f) {
+            if (! strCnpj.substring(0,1).equals("")){
+                try{
+                    strCnpj=strCnpj.replace('.',' ');
+                    strCnpj=strCnpj.replace('/',' ');
+                    strCnpj=strCnpj.replace('-',' ');
+                    strCnpj=strCnpj.replaceAll(" ","");
+                    int soma = 0, aux, dig;
+                    String cnpj_calc = strCnpj.substring(0,12);
+
+                    if ( strCnpj.length() != 14 ) return false;
+                    char[] chr_cnpj = strCnpj.toCharArray();
+                    for( int i = 0; i < 4; i++ )
+                        if ( chr_cnpj[i]-48 >=0 && chr_cnpj[i]-48 <=9 ) soma += (chr_cnpj[i] - 48 ) * (6 - (i + 1)) ;
+                    for( int i = 0; i < 8; i++ )
+                        if ( chr_cnpj[i+4]-48 >=0 && chr_cnpj[i+4]-48 <=9 ) soma += (chr_cnpj[i+4] - 48 ) * (10 - (i + 1)) ;
+                    dig = 11 - (soma % 11);
+                    cnpj_calc += ( dig == 10 || dig == 11 ) ? "0" : Integer.toString(dig);
+                    soma = 0;
+                    for ( int i = 0; i < 5; i++ )
+                        if ( chr_cnpj[i]-48 >=0 && chr_cnpj[i]-48 <=9 ) soma += (chr_cnpj[i] - 48 ) * (7 - (i + 1)) ;
+                    for ( int i = 0; i < 8; i++ )
+                        if ( chr_cnpj[i+5]-48 >=0 && chr_cnpj[i+5]-48 <=9 ) soma += (chr_cnpj[i+5] - 48 ) * (10 - (i + 1)) ;
+                    dig = 11 - (soma % 11);
+                    cnpj_calc += ( dig == 10 || dig == 11 ) ? "0" : Integer.toString(dig);
+                    return strCnpj.equals(cnpj_calc);
+                }catch (Exception e){
+                    return false;
+                }
+            }else return false;
+        } else false
+
+    }
+
+    static boolean validarCpf(String strCpf,formated=false){
+        def f= (!formated) || (strCpf==~ /^([0-9]{3}\.){2}[0-9]{3}-[0-9]{2}$/)
+        if (f) {
+            if (! strCpf.substring(0,1).equals("")){
+                try{
+                    boolean validado=true;
+                    int     d1, d2;
+                    int     dg1, dg2, resto;
+                    int     dgCPF;
+                    String  nDigResult;
+                    strCpf=strCpf.replace('.',' ');
+                    strCpf=strCpf.replace('-',' ');
+                    strCpf=strCpf.replaceAll(" ","");
+                    d1 = d2 = 0;
+                    dg1 = dg2 = resto = 0;
+                    for (int nCount = 1; nCount < strCpf.length() -1; nCount++) {
+                        dgCPF = Integer.valueOf(strCpf.substring(nCount -1, nCount)).intValue();
+                        d1 = d1 + ( 11 - nCount ) * dgCPF;
+                        d2 = d2 + ( 12 - nCount ) * dgCPF;
+                    };
+                    resto = (d1 % 11);
+                    if (resto < 2) dg1 = 0;
+                    else dg1 = 11 - resto;
+                    d2 += 2 * dg1;
+                    resto = (d2 % 11);
+                    if (resto < 2) dg2 = 0;
+                    else dg2 = 11 - resto;
+                    String nDigVerific = strCpf.substring(strCpf.length()-2, strCpf.length());
+                    nDigResult = String.valueOf(dg1) + String.valueOf(dg2);
+                    return nDigVerific.equals(nDigResult);
+                }catch (Exception e){
+                    return false;
+                }
+            }else return false;
+        } else false
+    }
+
+
+
 }

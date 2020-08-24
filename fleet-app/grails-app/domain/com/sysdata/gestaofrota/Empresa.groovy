@@ -7,7 +7,14 @@ class Empresa extends Participante {
     String inscricaoMunicipal
 
     static constraints = {
-        cnpj(blank: false)
+        cnpj blank: false , validator: { val, obj ->
+                                if (! Util.validarCnpj(val))
+                                    return "cnpj.invalido"
+
+                                else if (obj.class.findByCnpjAndStatus(val, Status.ATIVO))
+                                    return "cnpj.existente"
+                            }
+
         nomeFantasia(blank: false)
         inscricaoEstadual(nullable: true)
         inscricaoMunicipal(nullable: true)
