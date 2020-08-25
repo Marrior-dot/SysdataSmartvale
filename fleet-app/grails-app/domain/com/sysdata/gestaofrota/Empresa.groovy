@@ -8,10 +8,16 @@ class Empresa extends Participante {
 
     static constraints = {
         cnpj blank: false , validator: { val, obj ->
+
                                 if (! Util.validarCnpj(val))
                                     return "cnpj.invalido"
 
-                                else if (obj.class.findByCnpjAndStatus(val, Status.ATIVO))
+                                def mesmoCnpj = obj.class.withCriteria {
+                                                    eq('cnpj', val)
+                                                    'in'('status', [Status.ATIVO, Status.BLOQUEADO])
+                                                }
+
+                                if (mesmoCnpj)
                                     return "cnpj.existente"
                             }
 

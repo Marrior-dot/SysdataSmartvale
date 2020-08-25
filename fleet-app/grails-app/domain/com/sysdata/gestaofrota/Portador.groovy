@@ -39,17 +39,18 @@ abstract class Portador {
                 def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
 
                 if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
-                    return ["valorSuperiorAoComprometido"]
+                    return ["portador.limiteTotal.superiorAoComprometido"]
             // UPDATE
             } else {
                 def oldValue = obj.getPersistentValue('limiteTotal')
                 def newValue = val
-                if (newValue > oldValue) {
+
+                if (oldValue && newValue > oldValue) {
                     def dif = newValue - oldValue
                     def rhLimite = obj.unidade.rh.limiteTotal
                     def rhLimiteComprometido = obj.unidade.rh.limiteComprometido.list()[0]
                     if (rhLimiteComprometido + dif > rhLimite)
-                        return ["valorSuperiorAoComprometido"]
+                        return ["portador.limiteTotal.superiorAoComprometido"]
                 }
             }
 
