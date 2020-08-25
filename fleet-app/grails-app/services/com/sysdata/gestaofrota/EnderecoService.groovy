@@ -17,8 +17,11 @@ class EnderecoService {
             def end = [:]
             if (jsonEnd) {
                 Estado estado = Estado.findByUf(jsonEnd.uf)
-                if (!estado)
-                    throw new RuntimeException("Estado $jsonEnd.uf não localizado no banco de dados")
+                if (! estado) {
+                    log.warn ("Estado $jsonEnd.uf não localizado no banco de dados")
+                    return end as JSON
+
+                }
 
                 Cidade cidade = Cidade.withCriteria(uniqueResult: true) {
                                     eq("estado", estado)
