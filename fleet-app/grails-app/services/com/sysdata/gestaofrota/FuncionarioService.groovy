@@ -70,18 +70,23 @@ class FuncionarioService {
 
         } else if (funcionario.portador) {
             Portador portador = funcionario.portador
-            Cartao cartao = portador.cartaoAtual
+
             def funcId = funcionario.id
-            def crtId = cartao.id
+
             def prtId = portador.id
-/*
-            cartao.delete()
-            log.info "CRT #$crtId del"
-*/
+
+            Cartao cartao = portador.cartaoAtual
+            if (cartao) {
+                def crtId = cartao.id
+                cartao.delete()
+                log.info "CRT #$crtId del"
+            }
+
             portador.delete()
             log.info "PRT #$prtId del"
             funcionario.delete(flush: true)
             log.info "FUNC #$funcId del"
+
 
         } else if (funcionario.veiculos) {
             funcionario.status = Status.INATIVO
