@@ -16,7 +16,7 @@
                     <ul class="nav nav-second-level">
 
                         <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
-                            <li class="controller"><g:link class="submenu-logado" controller="rh" action="list">Empresas</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="rh" action="list">Clientes</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="postoCombustivel" action="list">Credenciados</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="produto" action="list">Produtos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="arquivo" action="list">Arquivos</g:link></li>
