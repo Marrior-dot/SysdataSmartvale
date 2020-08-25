@@ -34,6 +34,7 @@ class BootStrap {
         criarEstadosCapitais()
         criarBancos()
         criarProcessamentos()
+        criarMarcasVeiculos()
 
         fleetRoutesService.init()
     }
@@ -146,4 +147,18 @@ class BootStrap {
         Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 3 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
     }
 
+    def criarMarcasVeiculos() {
+
+        MarcaVeiculo.findOrCreateWhere([nome: "Chevrolet", abreviacao: 'Chevy']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Volkswagem", abreviacao: 'VW']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Fiat", abreviacao: 'Fiat']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Ford", abreviacao: 'Ford']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Renault", abreviacao: 'Ren']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Toyota", abreviacao: 'Tyo']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Honda", abreviacao: 'Hon']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Hyundai", abreviacao: 'Hyu']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Nissan", abreviacao: 'Nis']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Peugeot", abreviacao: 'Pgt']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "Citroën", abreviacao: 'Cit']).save(flush: true)
+    }
 }
