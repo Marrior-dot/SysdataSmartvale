@@ -19,7 +19,9 @@ class FechamentoController {
         render(template: 'index', model: [fechamentoList: fechamentoList, usuario:usuario])
     }
 
-    def save(Fechamento fechamentoInstance) {
+    def save() {
+
+        Fechamento fechamentoInstance = new Fechamento(params)
         try {
             fechamentoService.save(fechamentoInstance)
             response.status = HttpStatus.OK.value()

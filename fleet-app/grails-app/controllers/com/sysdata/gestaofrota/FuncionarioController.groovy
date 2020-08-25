@@ -149,7 +149,8 @@ class FuncionarioController extends BaseOwnerController {
         }
     }
 
-    def delete(Funcionario funcionarioInstance) {
+    def delete() {
+        Funcionario funcionarioInstance = Funcionario.get(params.id as long)
         if (funcionarioInstance) {
             try {
                 def unidId = funcionarioInstance.unidade.id
