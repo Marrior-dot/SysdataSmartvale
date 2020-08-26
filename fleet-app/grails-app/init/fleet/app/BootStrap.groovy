@@ -149,16 +149,16 @@ class BootStrap {
 
     def criarMarcasVeiculos() {
 
-        MarcaVeiculo.findOrCreateWhere([nome: "Chevrolet", abreviacao: 'Chevy']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Volkswagem", abreviacao: 'VW']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Fiat", abreviacao: 'Fiat']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Ford", abreviacao: 'Ford']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Renault", abreviacao: 'Ren']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Toyota", abreviacao: 'Tyo']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Honda", abreviacao: 'Hon']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Hyundai", abreviacao: 'Hyu']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Nissan", abreviacao: 'Nis']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Peugeot", abreviacao: 'Pgt']).save(flush: true)
-        MarcaVeiculo.findOrCreateWhere([nome: "Citroën", abreviacao: 'Cit']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "CHEVROLET", abreviacao: 'CHEVY']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "VOLKSWAGEM", abreviacao: 'VW']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "FIAT", abreviacao: 'FIAT']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "FORD", abreviacao: 'FORD']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "RENAULT", abreviacao: 'REN']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "TOYOTA", abreviacao: 'TYO']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "HONDA", abreviacao: 'HON']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "HYUNDAI", abreviacao: 'HYU']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "NISSAN", abreviacao: 'NIS']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "PEUGEOT", abreviacao: 'PGT']).save(flush: true)
+        MarcaVeiculo.findOrCreateWhere([nome: "CITROËN", abreviacao: 'CIT']).save(flush: true)
     }
 }

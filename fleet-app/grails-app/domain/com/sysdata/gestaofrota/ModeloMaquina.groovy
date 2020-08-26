@@ -9,12 +9,12 @@ abstract class ModeloMaquina {
         abreviacao nullable: false, blank: false, maxSize: 6
     }
 
-    void setNome(String nome) {
+/*    void setNome(String nome) {
         this.nome = nome.toUpperCase()
     }
     void setAbreviacao(String abreviacao) {
         this.abreviacao = abreviacao.toUpperCase()
-    }
+    }*/
 
     @Override
     String toString() {
