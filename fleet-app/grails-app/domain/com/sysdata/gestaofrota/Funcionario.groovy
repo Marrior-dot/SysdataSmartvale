@@ -27,9 +27,9 @@ class Funcionario extends Participante {
                                             def mesmoCpf = Funcionario.withCriteria {
                                                                 eq('cpf', val)
                                                                 'in'('status', [Status.ATIVO, Status.BLOQUEADO])
-                                                            }[0]
+                                                            }
 
-                                            if (mesmoCpf && mesmoCpf.id != obj.id)
+                                            if (mesmoCpf && mesmoCpf[0].id != obj.id)
                                                 return "funcionario.cpf.existente"
                                     }
 

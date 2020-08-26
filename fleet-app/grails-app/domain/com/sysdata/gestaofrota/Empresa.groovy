@@ -10,15 +10,15 @@ class Empresa extends Participante {
         cnpj blank: false , validator: { val, obj ->
 
                                 if (! Util.validarCnpj(val))
-                                    return "cnpj.invalido"
+                                    return "empresa.cnpj.invalido"
 
                                 def mesmoCnpj = obj.class.withCriteria {
                                                     eq('cnpj', val)
                                                     'in'('status', [Status.ATIVO, Status.BLOQUEADO])
                                                 }
 
-                                if (mesmoCnpj)
-                                    return "cnpj.existente"
+                                if (mesmoCnpj && mesmoCnpj[0].id != obj.id)
+                                    return "empresa.cnpj.existente"
                             }
 
         nomeFantasia(blank: false)
