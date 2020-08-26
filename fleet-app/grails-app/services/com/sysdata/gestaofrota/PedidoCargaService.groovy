@@ -26,7 +26,11 @@ class PedidoCargaService {
         Unidade unidade = pedidoCarga.unidade
         pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
         pedidoCarga.validade = unidade.rh.validadeCarga
-        pedidoCarga.taxa = unidade.rh.taxaPedido
+
+        if (params.tipoTaxa == '1')
+            pedidoCarga.taxa = unidade.rh.taxaAdministracao
+        else if (params.tipoTaxa == '2')
+            pedidoCarga.taxaDesconto = unidade.rh.taxaDesconto
         pedidoCarga.total = 0D
 
         if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
@@ -96,11 +100,18 @@ class PedidoCargaService {
                 return ret
         }
 
-        // Calcular Taxa Pedido
+        // Calcular Taxa Administração
         if (pedidoCarga.taxa > 0) {
             def totalSemTaxa = pedidoCarga.total
             def valorTaxa = (totalSemTaxa * pedidoCarga.taxa / 100)
             def totalPedido = (totalSemTaxa + valorTaxa).round(2)
+            pedidoCarga.total = totalPedido
+
+        // Calcular Taxa Desconto
+        } else if (pedidoCarga.taxaDesconto > 0) {
+            def totalSemTaxa = pedidoCarga.total
+            def valorTaxa = (totalSemTaxa * pedidoCarga.taxaDesconto / 100)
+            def totalPedido = (totalSemTaxa - valorTaxa).round(2)
             pedidoCarga.total = totalPedido
         }
 

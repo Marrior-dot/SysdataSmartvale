@@ -85,21 +85,91 @@
 
 		<div class="panel-body">
 			<div class="row">
+%{--
 				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaPedido">Taxa Pedido *</label>
 					<div class="input-group">
-						<bs:formField name="taxaPedido" label="Taxa Pedido" class="form-control percentual" value="${rhInstance?.taxaPedido}"
-									  required="true"></bs:formField>
+						<input type="text" class="form-control percentual" name="taxaPedido" id="taxaPedido"
+							   value="${Util.formatPercentage(rhInstance?.taxaPedido)}" min="0"  required/>
+						<span class="input-group-addon">%</span>
 					</div>
 				</div>
+--}%
 
 				<div class="form-group col-md-3">
-					<label class="control-label" for="taxaAdministracao">Validade Carga *</label>
+					<label class="control-label" for="validadeCarga">Validade Carga *</label>
 					<div class="input-group">
 						<input type="number" class="form-control" name="validadeCarga" id="validadeCarga" value="${rhInstance?.validadeCarga}"
 							   min="0" required/>
 						<span class="input-group-addon">dias</span>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Taxas de Cartão
+		</div>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
+					<div class="input-group">
+
+						<g:textField name="taxaAdministracao" class="form-control percentual"
+									 value="${Util.formatPercentage(rhInstance?.taxaAdministracao)}">
+							required
+						</g:textField>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaDesconto">Taxa de Desconto *</label>
+					<div class="input-group">
+						<g:textField name="taxaDesconto" class="form-control percentual"
+									 value="${Util.formatPercentage(rhInstance?.taxaDesconto)}">
+							required
+						</g:textField>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Outras Taxas
+		</div>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
+					<div class="input-group">
+						<span class="input-group-addon">R$</span>
+						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
+							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
+					</div>
+				</div>
+
+
+				<div class="form-group col-md-3">
+					<label class="control-label" for="taxaManutencao">Taxa de Manutenção *</label>
+					<div class="input-group">
+						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
+							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
+						<span class="input-group-addon">%</span>
+					</div>
+				</div>
+
+				<input type="hidden" name="taxaMensalidade" id="taxaMensalidade" value="0">
+				<input type="hidden" name="taxaEmissaoCartao" id="taxaEmissaoCartao" value="0">
+				<input type="hidden" name="taxaReemissaoCartao" id="taxaReemissaoCartao" value="0">
 			</div>
 		</div>
 	</div>
@@ -156,8 +226,9 @@
 					<div class="form-group col-md-3">
 						<label class="control-label" for="multaAtraso">Multa por Atraso *</label>
 						<div class="input-group">
-							<input type="text" class="form-control money" name="multaAtraso" id="multaAtraso"
-								   value="${Util.formatCurrency(rhInstance?.multaAtraso)}" required/>
+							<input type="text" class="form-control percentual" name="multaAtraso" id="multaAtraso"
+								   value="${Util.formatPercentage(rhInstance?.multaAtraso)}" required/>
+							<span class="input-group-addon">%</span>
 						</div>
 					</div>
 
@@ -175,46 +246,7 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Taxas do Cartão
-			</div>
 
-			<div class="panel-body">
-				<div class="row">
-					<div class="form-group col-md-3">
-						<label class="control-label" for="taxaUtilizacao">Utilização *</label>
-						<div class="input-group">
-							<span class="input-group-addon">R$</span>
-							<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
-								   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
-						</div>
-					</div>
-
-					<div class="form-group col-md-3">
-						<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
-						<div class="input-group">
-							<input type="number" class="form-control" name="taxaAdministracao" id="taxaAdministracao"
-								   value="${rhInstance?.taxaAdministracao}" min="0" max="100" step="0.01" required/>
-							<span class="input-group-addon">%</span>
-						</div>
-					</div>
-
-					<div class="form-group col-md-3">
-						<label class="control-label" for="taxaAdministracao">Taxa de Manutenção *</label>
-						<div class="input-group">
-							<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
-								   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
-							<span class="input-group-addon">%</span>
-						</div>
-					</div>
-
-					<input type="hidden" name="taxaMensalidade" id="taxaMensalidade" value="0">
-					<input type="hidden" name="taxaEmissaoCartao" id="taxaEmissaoCartao" value="0">
-					<input type="hidden" name="taxaReemissaoCartao" id="taxaReemissaoCartao" value="0">
-				</div>
-			</div>
-		</div>
 
 	</div>
 

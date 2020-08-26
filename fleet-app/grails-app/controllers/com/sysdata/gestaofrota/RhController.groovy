@@ -371,7 +371,8 @@ class RhController extends BaseOwnerController {
         def taxas = [:]
         Rh rh = Rh.get(params.long('rhId'))
         if (rh) {
-            taxas.taxaPedido = Util.formatPercentage(rh.taxaPedido)
+            taxas.admin = Util.formatPercentage(rh.taxaAdministracao)
+            taxas.desc = Util.formatPercentage(rh.taxaDesconto)
         }
         render taxas as JSON
 

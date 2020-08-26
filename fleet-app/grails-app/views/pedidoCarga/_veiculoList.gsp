@@ -27,10 +27,14 @@
                 </g:if>
                 <g:else>
                     <td>
-                        <input type="text" class="form-control decimal" id="valorCarga_${veiculo.id}"
-                               value="${pedidoCargaInstance?.valorInPedido(veiculo)}"
-                               onchange="setItemPedido(${veiculo?.id})"/>
+                        <g:textField name="valorCarga_${veiculo.id}" class="form-control money"
+                                     value="${pedidoCargaInstance?.valorInPedido(veiculo)}"
+                                     data-oldvalue="${pedidoCargaInstance?.valorInPedido(veiculo)}"
+                                     onblur="setItemPedido(${veiculo?.id})" />
                     </td>
+
+                    <td><div id="msg_${veiculo.id}" class="alert alert-danger message" role="alert" ></div></td>
+
                 </g:else>
             </tr>
         </g:each>

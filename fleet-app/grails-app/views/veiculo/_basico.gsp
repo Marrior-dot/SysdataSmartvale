@@ -37,7 +37,7 @@
                     <label for="marca.id">Marca</label>
                     <g:set var="marcas" value="${MarcaVeiculo.list(sort: 'nome')}"/>
                     <g:select name="marca.id" from="${marcas}" optionKey="id"
-                              optionValue="abreviacao" class="form-control"
+                              optionValue="nome" class="form-control"
                               onchange="updateNomeEmbossing('placa', 'marca.id')"
                               noSelection="${['': 'Selecione uma marca...']}" value="${veiculoInstance?.marca?.id}"/>
 

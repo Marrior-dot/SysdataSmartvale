@@ -3,6 +3,11 @@ var loc = $(location).attr('href');
 
 var relative = "";
 
+var taxas = {
+    admin: 0,
+    desc: 0
+}
+
 if (loc.includes("\/create"))
     relative = "../";
 else if (loc.includes("\/show\/"))
@@ -52,11 +57,10 @@ $(document).ready(function () {
         }
     }
 
-
     $("select[name=empresa]").change(function() {
         carregarTaxasRh($(this).val());
         carregarUnidades($(this).val());
-    })
+    });
 
     $("select[name=unidade]").change(function() {
         carregarPerfisRecarga($(this).val());
@@ -68,10 +72,31 @@ $(document).ready(function () {
         else if (vinculoCartao === 'Máquina') {
             carregarVeiculos($(this).val());
         }
-    })
+    });
 
+    $("input[name=tipoTaxa]").change(function() {
+
+        mostrarTaxa($(this));
+    });
 
 });
+
+function mostrarTaxa(elem) {
+    var tipoTaxa = elem.val();
+
+    var taxaElem = $("p#taxaPedido");
+    var taxaLabel = taxaElem.parent().find('label');
+
+    if (tipoTaxa === '1') {
+        taxaLabel.html("Taxa Administração");
+        taxaElem.html(taxas.admin);
+    } else if (tipoTaxa === '2') {
+        taxaLabel.html("Taxa Desconto");
+        taxaElem.html(taxas.desc);
+    }
+
+}
+
 
 function carregarVeiculos(unidId) {
     $("div#pedidoFuncionarios").hide();
@@ -201,7 +226,8 @@ function carregarTaxasRh(rhId) {
     $.getJSON(relative + "rh/getTaxas", { rhId: rhId },
         function (data, status) {
             if (status === 'success') {
-                $("p#taxaPedido").html(data.taxaPedido)
+                taxas = data;
+                mostrarTaxa($("input[name=tipoTaxa]"));
             }
         })
 }

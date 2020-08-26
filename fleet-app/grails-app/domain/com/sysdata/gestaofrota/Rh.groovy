@@ -9,12 +9,13 @@ class Rh extends Empresa {
     Integer diasToleranciaAtraso = 0
     Integer qtdeContas = 0
     Integer prazoPgtFatura = 0
-    BigDecimal taxaPedido = 0
+    BigDecimal taxaPedido = 0D
     BigDecimal taxaUtilizacao = 0D
     BigDecimal taxaMensalidade = 0D
     BigDecimal taxaEmissaoCartao = 0D
     BigDecimal taxaReemissaoCartao = 0D
     BigDecimal jurosProRata = 0D
+    BigDecimal taxaDesconto = 0D
 
     @BindUsing({obj, source ->
         Util.parseCurrency(source['multaAtraso'])

@@ -182,46 +182,38 @@ class FuncionarioController extends BaseOwnerController {
         def funcionarioInstanceList
         def funcionarioInstanceTotal
 
-        //withSecurity { ownerList ->
 
-            def criteria = {
+        def criteria = {
 
-                eq('status', Status.ATIVO)
+            eq('status', Status.ATIVO)
 
-/*
-                if (unidId)
-                    unidade { eq('id', unidId) }
+            if (unidId)
+                unidade { eq('id', unidId) }
 
-                else if (ownerList.size() > 0)
-                    unidade { rh { 'in'('id', ownerList) } }
-*/
+            if (categId)
+                categoria { eq('id', categId) }
 
+            if (gestor && gestor != "null")
+                eq("gestor", true)
 
-                if (categId)
-                    categoria { eq('id', categId) }
-
-                if (gestor && gestor != "null")
-                    eq("gestor", true)
-
-                if (params.opcao && params.filtro) {
-                    opcao = params.opcao.toInteger()
-                    filtro = params.filtro
-                    //Matricula
-                    if (opcao == 1)
-                        like('matricula', filtro + '%')
-                    //Nome
-                    else if (opcao == 2)
-                        like('nome', filtro + '%')
-                    //CPF
-                    else if (opcao == 3)
-                        like('cpf', filtro + '%')
-                }
-
+            if (params.opcao && params.filtro) {
+                opcao = params.opcao.toInteger()
+                filtro = params.filtro
+                //Matricula
+                if (opcao == 1)
+                    like('matricula', filtro + '%')
+                //Nome
+                else if (opcao == 2)
+                    like('nome', filtro + '%')
+                //CPF
+                else if (opcao == 3)
+                    like('cpf', filtro + '%')
             }
 
-            funcionarioInstanceList = Funcionario.createCriteria().list([order: 'nome', max: params.max, offset: offset], criteria)
-            funcionarioInstanceTotal = Funcionario.createCriteria().count(criteria)
-        //}
+        }
+
+        funcionarioInstanceList = Funcionario.createCriteria().list([order: 'nome', max: params.max, offset: offset], criteria)
+        funcionarioInstanceTotal = Funcionario.createCriteria().count(criteria)
 
 
         def fields = funcionarioInstanceList.collect { f ->

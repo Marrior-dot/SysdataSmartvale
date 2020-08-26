@@ -11,6 +11,7 @@ class PedidoCarga {
     Integer validade
     User usuario
     Double taxa = 0D
+    Double taxaDesconto = 0D
     Double total = 0D
     Date dataCancelamento
 
@@ -20,6 +21,7 @@ class PedidoCarga {
     static constraints = {
         usuario(nullable: true)
         taxa nullable: true
+        taxaDesconto nullable: true
         total nullable: true
         dataCancelamento nullable: true
     }

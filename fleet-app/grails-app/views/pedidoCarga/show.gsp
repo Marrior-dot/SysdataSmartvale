@@ -48,15 +48,20 @@
         </g:if>
 
 
-        <g:form action="edit" id="${pedidoCargaInstance.id}" method="POST">
+        <g:form id="${pedidoCargaInstance.id}" method="POST">
 
             <g:render template="form" model="${[pedidoCargaInstance: pedidoCargaInstance, action: Util.ACTION_VIEW]}"/>
 
             <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.NOVO}">
-                <g:actionSubmit action="edit" class="btn btn-default" value="${message(code: 'default.button.edit.label', default: 'Editar')}"/>
+%{--                <g:actionSubmit action="edit" class="btn btn-default" value="${message(code: 'default.button.edit.label', default: 'Editar')}"/>--}%
 
-                <g:actionSubmit action="delete" formmethod="post" class="btn btn-default" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');"/>
+                <button type="submit" class="btn btn-danger"
+                        name="_action_delete"
+                        onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Você tem certeza?')}');">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <g:message code="default.button.delete.label" ></g:message>
+                </button>
+
 
             </g:if>
         </g:form>

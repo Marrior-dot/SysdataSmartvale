@@ -21,19 +21,6 @@ class PedidoCargaController extends BaseOwnerController {
 
         def authorities = getCurrentUser().authorities*.authority
 
-//        if (!unidadeInstance && !(authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_PROC"))) {
-//
-//            [pedidoCargaInstanceList : null,
-//             pedidoCargaInstanceCount: 0,
-//             unidadeInstance         : unidadeInstance,
-//             statusPedidoCarga       : StatusPedidoCarga.asList(),
-//             searchDataPedido        : params?.searchDataPedido,
-//             searchDataCarga         : params?.searchDataCarga,
-//             searchUnidade           : params?.searchUnidade,
-//             searchStatus            : params?.searchStatus]
-//            return;
-//        }
-
         def criteria = {
             if (params.searchDataCarga) {
                 Date beginDay = params.date('searchDataCarga','dd/MM/yyyy').clearTime()
@@ -41,7 +28,6 @@ class PedidoCargaController extends BaseOwnerController {
                 eq('dataCarga', beginDay)
 
             }
-
 
             if (params.searchDataPedido) {
                 Date beginDay = params.date('searchDataPedido','dd/MM/yyyy').clearTime()
