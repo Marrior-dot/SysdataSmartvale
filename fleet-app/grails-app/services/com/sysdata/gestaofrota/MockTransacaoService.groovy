@@ -7,7 +7,6 @@ class MockTransacaoService {
 
     private Random random = new Random()
 
-
     private List<Date> todasDatasDoIntervalo(Date di, Date df) {
         List<Date> datas = []
         Date dataReferencia = di.clone()
@@ -17,7 +16,6 @@ class MockTransacaoService {
         }
         datas
     }
-
 
     def gerarTransacoes(Map params) {
 
@@ -49,20 +47,18 @@ class MockTransacaoService {
             return ret
         }
 
-
-
         def datas = todasDatasDoIntervalo(dataInicio, dataFim)
 
         def cartoesIds = Cartao.withCriteria {
-                            projections {
-                                property "id"
-                            }
-                            portador {
-                                gt("saldoTotal", 0.0)
-                            }
-                            'in'("status", [StatusCartao.EMBOSSING, StatusCartao.ATIVO])
-                            maxResults(qtde)
-                        }
+                                        projections {
+                                            property "id"
+                                        }
+                                        portador {
+                                            gt("saldoTotal", 0.0)
+                                        }
+                                        'in'("status", [StatusCartao.EMBOSSING, StatusCartao.ATIVO])
+                                        maxResults(qtde)
+                                    }
 
         if (! cartoesIds) {
             ret.success = false
@@ -78,7 +74,11 @@ class MockTransacaoService {
                             maxResults(qtde)
                         }
 
-
+        if (! estabsIds) {
+            ret.success = false
+            ret.messages << "Não há ECs ativos"
+            return ret
+        }
 
         qtde.times { i ->
             def cid = cartoesIds[Math.abs(random.nextInt() % cartoesIds.size())]
@@ -123,9 +123,11 @@ class MockTransacaoService {
                     break
             }
 
-            ProdutoEstabelecimento produtoEstabelecimento = ProdutoEstabelecimento.findAllByEstabelecimento(estab).find { it.produto.nome == tipoComb.nome }
-            if (! produtoEstabelecimento)
-                throw new RuntimeException("EC #$estab.id - Combustível ($tipoComb) sem preço definido!")
+            ProdutoEstabelecimento produtoEstab = ProdutoEstabelecimento
+                                                                .findAllByEstabelecimento(estab)
+                                                                .find { it.produto.nome == tipoComb.nome }
+            if (! produtoEstab)
+                throw new RuntimeException("EC #$estab.id - Combustível ($tipoComb) não vinculado")
 
             Date dataTransacao = datas[Math.abs(random.nextInt() % datas.size())]
 
@@ -153,10 +155,9 @@ class MockTransacaoService {
                 }
                 else if (maquinaMotorizada.instanceOf(Equipamento))
                     codigoEquipamento = (maquinaMotorizada as Equipamento).codigo
-                combustivel =  tipoComb
-                precoUnitario = BigDecimal.valueOf(produtoEstabelecimento.valor)
-
             }
+
+            transacao.addToProdutos(new TransacaoProduto(produto: produtoEstab.produto, precoUnitario: BigDecimal.valueOf(produtoEstab.valor)))
 
             if (! transacao.save(flush: true)) {
                 throw new RuntimeException("Erro: " + transacao.errors)

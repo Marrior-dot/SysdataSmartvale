@@ -1,18 +1,23 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <%@ page import="com.sysdata.gestaofrota.PostoCombustivel" %>
 
+<div class="panel panel-default panel-top">
+
+	<div class="panel-body">
 		<g:form controller="${controller}">
-			<div class="list">
-				<table id="funcTable"
-					   class="table table-striped table-bordered table-hover table-condensed table-default">
-					<thead>
-						<th>CNPJ</th>
-						<th>Razão Social</th>
-						<th>Nome Fantasia</th>
-					</thead>
-				</table>
-			</div>
+			<table id="funcTable"
+				   class="table table-striped table-bordered table-hover table-condensed table-default">
+				<thead>
+				<th>CNPJ</th>
+				<th>Razão Social</th>
+				<th>Nome Fantasia</th>
+				</thead>
+			</table>
 		</g:form>
+	</div>
+
+
+</div>
 
 
 <script type="text/javascript">

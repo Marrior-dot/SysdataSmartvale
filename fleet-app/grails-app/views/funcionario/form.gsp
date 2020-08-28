@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Funcionario; com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Funcionario; com.sysdata.gestaofrota.Util" %>
 
 <html>
 <head>
@@ -64,7 +64,11 @@
                         <li class="active"><a href="#funcionarios" data-toggle="tab">Funcionários</a></li>
                         <g:if test="${funcionarioInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
                             <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+                            <g:if test="${funcionarioInstance.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+                                <li><a href="#faturas" data-toggle="tab">Faturas</a></li>
+                            </g:if>
                         </g:if>
+
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="funcionarios">
@@ -74,6 +78,11 @@
                             <div class="tab-pane" id="cartoes">
                                 <g:render template="/cartao/cartoes" model="[portador: funcionarioInstance.portador]"/>
                             </div>
+                            <g:if test="${funcionarioInstance.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+                                <div class="tab-pane" id="faturas">
+                                    <g:render template="/portadorCorte/faturas" model="[portador: funcionarioInstance.portador]"/>
+                                </div>
+                            </g:if>
                         </g:if>
                     </div>
                 </div>
