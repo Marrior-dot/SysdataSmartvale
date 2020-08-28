@@ -27,28 +27,21 @@
                         </div>
                     </g:hasErrors>
 
-                    <div class="buttons">
-                        <a type="button" class="btn btn-default" href="${createLink(uri: '/')}">
-                            <i class="glyphicon glyphicon-home"></i>
-                            <g:message code="default.home.label"/>
-                        </a>
 
-                        <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'list')}">
-                            <i class="glyphicon glyphicon-th-list"></i>
-                            <g:message code="default.list.label" args="[entityName]" />
-                        </a>
+                    <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'list')}">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                        <g:message code="default.list.label" args="[entityName]" />
+                    </a>
 
-                        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                            <g:if test="${action == Util.ACTION_VIEW}">
-                                <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
-                                    <i class="glyphicon glyphicon-plus"></i>
-                                    <g:message code="default.new.label" args="[entityName]" />
-                                </a>
-                            </g:if>
+                    <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                        <g:if test="${action == Util.ACTION_VIEW}">
+                            <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <g:message code="default.new.label" args="[entityName]" />
+                            </a>
+                        </g:if>
 
-                        </sec:ifAnyGranted>
-                    </div>
-                    <br>
+                    </sec:ifAnyGranted>
 
                     <g:if test="${action==Util.ACTION_VIEW}">
                         <ul class="nav nav-tabs" role="tablist">

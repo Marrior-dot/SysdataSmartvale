@@ -131,6 +131,7 @@ environments {
             port = 22
             user = 'sysdata'
             pswd = 'ldAFWzWLA85i3XWP'
+
         }
 
         arquivos {
@@ -152,6 +153,7 @@ environments {
             port = 22
             user = 'sysdata'
             pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
         }
 
         arquivos {
@@ -173,6 +175,7 @@ environments {
             port = 22
             user = 'sysdata'
             pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
         }
 
         arquivos {

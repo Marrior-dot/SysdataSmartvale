@@ -65,10 +65,7 @@ class Cartao {
     }
 
     BigDecimal getSaldoTotal() {
-        if (this.portador.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO)
-            return this.portador.saldoTotal
-        else
-            return 0
+        return this.portador.saldoTotal
     }
 
 }
