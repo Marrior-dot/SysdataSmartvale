@@ -38,24 +38,24 @@ class FleetRoutesService {
                 def port = grailsApplication.config.projeto.sftp.port
                 def user = grailsApplication.config.projeto.sftp.user
                 def pswd = grailsApplication.config.projeto.sftp.pswd
+                def privKeyFile = grailsApplication.config.projeto.sftp.privateKeyFile
 
                 def initDelay = 60000+(new Random().nextInt(120000))
                 def delay = "10m"
                 def indentPath = grailsApplication.config.projeto.arquivos.baseDir + "routes"
 
-
                 def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{6}_01"
 
                 def fromFile="file://$srcDir?delay=$delay&initialDelay=$initDelay&include=$filenamePattern&move=${sentDir}/ENV_\${file:name}"
 
-                def toFtp = "sftp:$host:$port/$tgtDir?username=$user&password=$pswd"
+                def toFtp = "sftp:$host:$port/$tgtDir?preferredAuthentications=publickey&privateKeyFile=$privKeyFile&username=$user&password=$pswd&passiveMode=true&disconnect=true"
 
                 from(fromFile)
                         .idempotentConsumer(header("CamelFileName"), FileIdempotentRepository.fileIdempotentRepository(new File("$indentPath/envia.embossing.paysmart.connect")))
                         .log(LoggingLevel.DEBUG, "com.sysdata.gestaofrota.camel.FleetRoutesService", 'Movendo arquivo embossing cartões ${header.CamelFileName} ...')
                         .to(toFtp)
                         .log(LoggingLevel.DEBUG, "com.sysdata.gestaofrota.camel.FleetRoutesService", 'Marcando arquivo ${header.CamelFileName} como enviado ...')
-                        .to("bean:processaRetornoRemessaTedVeroService?method=switchToEnviado")
+                        .to("bean:geracaoArquivoEmbossingService?method=marcarEnviado")
                         .routeId(ENV_EMBOSS_PAYSMART_ID)
 
             }

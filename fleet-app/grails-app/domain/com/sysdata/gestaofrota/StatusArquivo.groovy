@@ -5,7 +5,8 @@ enum StatusArquivo {
 	PROCESSANDO("Processando"),
 	GERADO("Gerado"),
 	PROCESSADO("Processado"),
-	REGERADO("Regerado")
+	REGERADO("Regerado"),
+	ENVIADO("Enviado")
 
 	String name
 	

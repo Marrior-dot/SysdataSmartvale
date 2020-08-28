@@ -5,7 +5,7 @@ import com.sysdata.gestaofrota.processamento.embossadoras.IntelCav
 import com.sysdata.gestaofrota.processamento.embossadoras.PaySmart
 import grails.gorm.transactions.Transactional
 
-@Transactional
+
 class GeracaoArquivoEmbossingService {
 
     def grailsApplication
@@ -13,17 +13,17 @@ class GeracaoArquivoEmbossingService {
     private void gerarArquivoEmFileSystem(Arquivo arquivo) {
 
         def fileDir = grailsApplication.config.projeto.arquivos.baseDir +
-                grailsApplication.config.projeto.arquivos.paysmart.dir.saida
+                        grailsApplication.config.projeto.arquivos.paysmart.dir.saida
 
-        def file = new File("${fileDir}/${arquivo.nome}")
+        File file = new File("${fileDir}/${arquivo.nome}")
         file.withWriter { w ->
             w.write(arquivo.conteudoText)
         }
-        log.info "Arquivo Gerado em ${file.name}"
+        log.info "Arquivo Gerado em ${file.absoluteFile}"
 
     }
 
-
+    @Transactional
     def regerarArquivo(Arquivo arquivo) {
         log.info "Iniciando Regeração do Arquivo Embossing #$arquivo.id ..."
 
@@ -56,6 +56,7 @@ class GeracaoArquivoEmbossingService {
         ret
     }
 
+    @Transactional
     boolean gerarArquivo() {
 
         log.info "Iniciando Geração Embossing..."
@@ -118,4 +119,18 @@ class GeracaoArquivoEmbossingService {
            }
         }
     }
+
+    @Transactional
+    def marcarEnviado(file) {
+        Arquivo arqEmbossing = Arquivo.findByNome(file.fileName)
+        if (arqEmbossing) {
+            arqEmbossing.status = StatusArquivo.ENVIADO
+            arqEmbossing.save(flush: true)
+            log.info "Status arquivo #$arqEmbossing.id alterado para ENVIADO"
+        } else
+            log.error "Arquivo ($file.fileName) não encontrado na base"
+
+    }
+
+
 }
