@@ -29,10 +29,12 @@ class Rh extends Empresa {
     boolean cartaoComChip = true
     boolean renovarLimite = false
 
-    @BindUsing({obj, source ->
+    @BindUsing({ obj, source ->
         Util.parseCurrency(source['limiteTotal'])
     })
     BigDecimal limiteTotal = 0D
+
+    BigDecimal saldoDisponivel = 0D
 
     static hasMany = [
             unidades             : Unidade,
@@ -46,7 +48,7 @@ class Rh extends Empresa {
         unidades lazy: false
     }
 
-    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel", "saldoDisponivel"]
+    static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel", "saldoDisponivelCartoes"]
 
     static hibernateFilters = {
         empresaPorUser(condition: 'id=:owner_id', types: 'long')
@@ -68,8 +70,6 @@ class Rh extends Empresa {
 
     }
 
-
-
     String toString() {
         "${this.cnpj} - ${this.nome}"
     }
@@ -83,35 +83,32 @@ class Rh extends Empresa {
     }
 
     BigDecimal getLimiteComprometido() {
-
         def comprometido = Rh.withCriteria {
-            projections {
-                sum("port.limiteTotal")
-            }
-            createAlias("unidades", "unid")
-            createAlias("unid.portadores", "port")
-            ne("port.status", Status.CANCELADO)
-            eq("id", this.id)
-        }[0]
-
+                                    projections {
+                                        sum("port.limiteTotal")
+                                    }
+                                    createAlias("unidades", "unid")
+                                    createAlias("unid.portadores", "port")
+                                    ne("port.status", Status.CANCELADO)
+                                    eq("id", this.id)
+                                }[0]
         comprometido ?: 0
-
     }
 
     BigDecimal getLimiteDisponivel() {
         return this.limiteTotal - this.limiteComprometido
     }
 
-    BigDecimal getSaldoDisponivel() {
+    BigDecimal getSaldoDisponivelCartoes() {
         def disponivel = Rh.withCriteria {
-            projections {
-                sum("port.saldoTotal")
-            }
-            createAlias("unidades", "unid")
-            createAlias("unid.portadores", "port")
-            ne("port.status", Status.CANCELADO)
-            eq("id", this.id)
-        }[0]
+                                projections {
+                                    sum("port.saldoTotal")
+                                }
+                                createAlias("unidades", "unid")
+                                createAlias("unid.portadores", "port")
+                                ne("port.status", Status.CANCELADO)
+                                eq("id", this.id)
+                        }[0]
         return disponivel ?: 0
     }
 
