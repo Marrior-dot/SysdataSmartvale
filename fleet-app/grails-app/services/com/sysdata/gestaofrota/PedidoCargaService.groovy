@@ -8,6 +8,10 @@ class PedidoCargaService {
     def springSecurityService
 
     def save(PedidoCarga pedidoCarga, Map params) {
+
+        Rh rh = pedidoCarga.unidade.rh
+        rh.lock() // Pessimistic Locking
+
         def ret = [:]
         ret.success = true
 
@@ -31,6 +35,7 @@ class PedidoCargaService {
             pedidoCarga.taxa = unidade.rh.taxaAdministracao
         else if (params.tipoTaxa == '2')
             pedidoCarga.taxaDesconto = unidade.rh.taxaDesconto
+
         pedidoCarga.total = 0D
 
         if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
@@ -115,6 +120,15 @@ class PedidoCargaService {
             pedidoCarga.total = totalPedido
         }
 
+
+        if (pedidoCarga.total > rh.saldoDisponivel) {
+            ret.success = false
+            ret.message = "Total do Pedido é Superior ao Limite Disponível para o Cliente"
+            return ret
+        } else
+            rh.saldoDisponivel -= pedidoCarga.total
+
+
 /*
 
         //Vincula taxas de cartão a efetivar ao pedido, caso existam
@@ -139,6 +153,9 @@ class PedidoCargaService {
 */
 
         if (! pedidoCarga.save(flush: true)) {
+
+            rh.save(flush: true)
+
             ret.success = false
             ret.message = pedidoCarga.errors
             return

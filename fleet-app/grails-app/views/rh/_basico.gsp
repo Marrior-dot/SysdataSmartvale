@@ -78,6 +78,34 @@
 		</div>
 	</div>
 
+	<div class="panel panel-default" id="limites">
+		<div class="panel-heading">Limites</div>
+
+		<div class="panel-body">
+			<div class="form-group col-md-3">
+				<label class="control-label" for="limiteTotal">LimiteTotal *</label>
+				<div class="input-group">
+					<g:textField name="limiteTotal" class="form-control money"
+								 value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label class="control-label">Comprometido c/ Cartões</label>
+				<h5>${Util.formatCurrency(rhInstance?.limiteComprometido)}</h5>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label class="control-label">Limite Disponível</label>
+				<h5>${Util.formatCurrency((rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO) ? rhInstance?.limiteDisponivel : rhInstance?.saldoDisponivel)}</h5>
+			</div>
+			<div class="form-group col-md-3">
+				<label class="control-label">Saldo Cartões Disponível</label>
+				<h5>${Util.formatCurrency(rhInstance?.saldoDisponivelCartoes)}</h5>
+			</div>
+		</div>
+	</div>
+
 	<div class="panel panel-default" id="pedido-carga">
 		<div class="panel-heading">
 			Pedido de Carga
@@ -174,32 +202,10 @@
 		</div>
 	</div>
 
+
+
+
 	<div id="fatura">
-		<div class="panel panel-default" id="limites">
-			<div class="panel-heading">Limites</div>
-
-			<div class="panel-body">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="limiteTotal">LimiteTotal *</label>
-					<div class="input-group">
-						<g:textField name="limiteTotal" class="form-control money" value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
-					</div>
-				</div>
-				<div class="form-group col-md-3">
-					<label class="control-label">Comprometido c/ Cartões</label>
-					<h5>${Util.formatCurrency(rhInstance?.limiteComprometido)}</h5>
-				</div>
-				<div class="form-group col-md-3">
-					<label class="control-label">Limite Disponível</label>
-					<h5>${Util.formatCurrency(rhInstance?.limiteDisponivel)}</h5>
-				</div>
-				<div class="form-group col-md-3">
-					<label class="control-label">Saldo Cartões Disponível</label>
-					<h5>${Util.formatCurrency(rhInstance?.saldoDisponivel)}</h5>
-				</div>
-			</div>
-		</div>
-
 
 		<div class="panel panel-default">
 			<div class="panel-heading">Fatura</div>

@@ -40,8 +40,24 @@ class RhService {
     def save(Rh rh) {
         def ret = [success: true]
 
+        if (rh.modeloCobranca == TipoCobranca.PRE_PAGO ) {
+
+            if (!rh.id)
+                rh.saldoDisponivel = rh.limiteTotal
+
+            def delta = rh.limiteTotal - rh.getPersistentValue('limiteTotal')
+            if (delta > 0) {
+                rh.saldoDisponivel += delta
+            } else if (delta < 0) {
+                def novoSaldo = rh.saldoDisponivel + delta
+                rh.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
+
+            }
+        }
+
+
         // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
-        if (rh.limiteTotal < rh.limiteComprometido) {
+        if (rh.modeloCobranca == TipoCobranca.POS_PAGO && rh.limiteTotal < rh.limiteComprometido) {
             ret.success = false
             ret.message = "Limite comprometido com cartões vinculados não pode ser superior ao limite total informado para a Empresa"
         }
