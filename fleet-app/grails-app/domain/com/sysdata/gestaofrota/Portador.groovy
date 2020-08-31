@@ -19,8 +19,8 @@ abstract class Portador {
 
     Status status = Status.ATIVO
 
-
     static hasMany = [cartoes: Cartao]
+
     static belongsTo = [unidade: Unidade]
 
     static constraints = {
