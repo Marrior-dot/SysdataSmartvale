@@ -32,7 +32,7 @@ class PaySmart extends Embossadora {
         final String data = new SimpleDateFormat("ddMMyy").format(new Date())
         final String idPerfilEletronico = "01"
 
-        "${idCliente}_${getBin()}_${idAplicacao}_${data}_${idPerfilEletronico}"
+        return "${idCliente}_${getBin()}_${idAplicacao}_${data}_${idPerfilEletronico}.txt"
     }
 
     @Override
