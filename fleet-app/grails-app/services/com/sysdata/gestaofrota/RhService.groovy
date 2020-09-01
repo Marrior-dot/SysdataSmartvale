@@ -40,18 +40,19 @@ class RhService {
     def save(Rh rh) {
         def ret = [success: true]
 
+        // Controle de Limite para Cliente Pré-Pago
         if (rh.modeloCobranca == TipoCobranca.PRE_PAGO ) {
-
             if (!rh.id)
                 rh.saldoDisponivel = rh.limiteTotal
+            else {
+                def delta = rh.limiteTotal - rh.getPersistentValue('limiteTotal')
+                if (delta > 0) {
+                    rh.saldoDisponivel += delta
+                } else if (delta < 0) {
+                    def novoSaldo = rh.saldoDisponivel + delta
+                    rh.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
 
-            def delta = rh.limiteTotal - rh.getPersistentValue('limiteTotal')
-            if (delta > 0) {
-                rh.saldoDisponivel += delta
-            } else if (delta < 0) {
-                def novoSaldo = rh.saldoDisponivel + delta
-                rh.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
-
+                }
             }
         }
 
