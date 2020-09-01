@@ -184,6 +184,7 @@ class RhController extends BaseOwnerController {
             [   id      : r.id,
                 razao   : r.nome,
                 fantasia: r.nomeFantasia,
+                modelo  : r.modeloCobranca.nome,
                 cnpj    : """<a href='${createLink(action: 'show', id: r.id)}'>${r.cnpj}</a>"""
             ]
         }

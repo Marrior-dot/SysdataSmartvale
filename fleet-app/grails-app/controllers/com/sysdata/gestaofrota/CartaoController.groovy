@@ -15,6 +15,11 @@ class CartaoController {
         params.max = params.max ? params.max as int: 10
 
         def criteria = {
+
+            if (params.numero) {
+                eq("numero", params.numero.trim())
+            }
+
             if (params.unidade) {
                 portador {
                     unidade {

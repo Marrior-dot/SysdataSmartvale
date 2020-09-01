@@ -5,6 +5,7 @@
 			<th>CNPJ</th>
 			<th>Razão Social</th>
 			<th>Nome Fantasia</th>
+			<th>Modelo Cobrança</th>
 			</thead>
 		</table>
 	</div>
@@ -26,7 +27,8 @@
 			"columns": [
 				{"data": "cnpj"},
 				{"data": "razao"},
-				{"data": "fantasia"}
+				{"data": "fantasia"},
+				{"data": "modelo"}
 			]
 		});
 
