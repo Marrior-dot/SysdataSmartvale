@@ -9,9 +9,15 @@
 
             <div class="row">
                 <div class="col-md-3">
+                    <label class="control-label" for="numero">Número</label>
+                    <g:textField name="numero" class="form-control" value="${params.numero}"></g:textField>
+                </div>
+                <div class="col-md-3">
                     <label class="control-label" for="status">Status</label>
-                    <g:select name="status" class="form-control" from="${StatusCartao.values()}" optionValue="nome"
-                    value="${params.status}"></g:select>
+                    <g:select name="status" class="form-control"
+                                from="${StatusCartao.values()}" optionValue="nome"
+                                noSelection="['': '-- Todos --']"
+                                value="${params.status}"></g:select>
                 </div>
             </div>
         </div>
