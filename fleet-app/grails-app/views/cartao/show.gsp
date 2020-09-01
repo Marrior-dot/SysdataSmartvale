@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Cartao" %>
+<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
 <!doctype html>
 <html>
 	<head>
@@ -35,8 +35,16 @@
 							<td>${cartaoInstance?.numero}</td>
 						</tr>
 						<tr>
+							<th>Cliente</th>
+							<td>${cartaoInstance?.portador?.unidade?.rh?.nomeFantasia}</td>
+						</tr>
+						<tr>
+							<th>Unidade</th>
+							<td>${cartaoInstance?.portador?.unidade?.nome}</td>
+						</tr>
+						<tr>
 							<th>Portador</th>
-							<td>${cartaoInstance?.portador.nomeEmbossing}</td>
+							<td><g:link controller="portadorCorte" action="showPortador" params="[prtId: cartaoInstance?.portador?.id]">${cartaoInstance?.portador.nomeEmbossing}</g:link></td>
 						</tr>
 						<tr>
 							<th>Status</th>
@@ -58,6 +66,24 @@
 							</tr>
 
 						</g:if>
+
+						<g:if test="${cartaoInstance?.portador?.limiteTotal}">
+							<tr>
+								<th>Limite de Crédito</th>
+								<td>${ Util.formatCurrency(cartaoInstance?.portador?.limiteTotal)}</td>
+							</tr>
+
+						</g:if>
+
+						<g:if test="${cartaoInstance?.portador?.saldoTotal}">
+							<tr>
+								<th>Saldo Disponível</th>
+								<td>${Util.formatCurrency(cartaoInstance?.portador?.saldoTotal)}</td>
+							</tr>
+
+						</g:if>
+
+
 					</table>
 				</div>
 
