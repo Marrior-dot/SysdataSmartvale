@@ -15,6 +15,7 @@
 //= require bootstrap-waitingfor
 //= require jquery.mask.min
 //= require jquery.maskMoney.min
+//= require plugins/bootstrap-select
 //= require_tree .
 //= require_self
 
