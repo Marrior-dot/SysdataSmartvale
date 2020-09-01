@@ -5,6 +5,8 @@
     <meta name="layout" content="layout-restrito"/>
     <g:set var="entityName" value="Cliente"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
+
+    <asset:stylesheet src="plugins/bootstrap-select.css"/>
 </head>
 <body>
 <div class="panel panel-default panel-top">
