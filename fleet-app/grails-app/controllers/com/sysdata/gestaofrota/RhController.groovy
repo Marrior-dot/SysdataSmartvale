@@ -218,69 +218,6 @@ class RhController extends BaseOwnerController {
         render jsonList as JSON
     }
 
-    def syncOne() {
-        def oid = params.oid as long
-        def chk = params.chk
-
-        fillEstMapOnDemand(oid, chk)
-
-        render "ok"
-    }
-
-    def syncAll() {
-        session.selAllEst = params.chk ?: null
-        render "ok"
-
-    }
-
-    def saveEstabs() {
-        def progInstance = Rh.get(params.prgId)
-        log.debug("session:" + session)
-        if (progInstance) {
-
-            /* Marca todas as empresas no HTTP Session */
-            if (session.selAllEst) {
-
-                PostoCombustivel.all.each {
-                    fillEstMapOnDemand(it.id, true)
-                }
-
-                session.selAllEst = null
-            }
-
-
-            def mIds = session.mEstIds
-
-            if (mIds) {
-                mIds.each { k, v ->
-                    def estInstance = progInstance.empresas.find { it.id == k }
-
-                    if (estInstance) {
-                        if (v == "false") {
-                            progInstance.removeFromEmpresas estInstance
-                            println "Removeu Empresa ${estInstance?.id} da relação"
-                        }
-
-                    } else {
-                        estInstance = PostoCombustivel.get(k)
-                        if (v == "true")
-                            progInstance.addToEmpresas estInstance
-                    }
-                }
-
-                if (progInstance.save(flush: true)) {
-                    render "ok"
-                } else {
-                    def data = [type: "error", message: "Erro ao Salvar Programa"]
-                    render data as JSON
-                }
-            } else {
-                def data = [type: "error", message: "Não há dados para salvar"]
-                render data as JSON
-            }
-        }
-    }
-
     def listMarkedEstab() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def offset = params.offset ?: 10
