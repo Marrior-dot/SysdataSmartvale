@@ -45,9 +45,9 @@ class RhService {
             if (!rh.id)
                 rh.saldoDisponivel = rh.limiteTotal
             else {
-                def delta = rh.limiteTotal - rh.getPersistentValue('limiteTotal')
+                def delta = rh.limiteTotal ?: 0 - rh.getPersistentValue('limiteTotal') ?: 0
                 if (delta > 0) {
-                    rh.saldoDisponivel += delta
+                    rh.saldoDisponivel = rh.saldoDisponivel ?: 0 + delta
                 } else if (delta < 0) {
                     def novoSaldo = rh.saldoDisponivel + delta
                     rh.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
