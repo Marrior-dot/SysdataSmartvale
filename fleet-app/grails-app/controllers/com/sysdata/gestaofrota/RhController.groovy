@@ -336,4 +336,41 @@ class RhController extends BaseOwnerController {
 
         if (mIds) session.mEstIds = mIds
     }
+
+
+    def listEstabsVinculados() {
+        if (params.rhId) {
+
+            params.max = params.max ? params.max as int : 10
+            params.offset = params.offset ? params.offset as int : 0
+
+            Rh rh = Rh.get(params.rhId.toLong())
+            def ret = rhService.findEstabsVinculados(rh, params)
+
+            render template: 'estabsTable', model: [
+                                                        action: 'show',
+                                                        estabList: ret.estabList,
+                                                        estabCount: ret.estabCount
+                                                    ]
+        } else
+            render status: 500, text: "ID RH não enviado na requisição"
+
+    }
+
+    def editEstabsVinculados() {
+
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
+
+        Rh rh = Rh.get(params.rhId.toLong())
+        def ret = rhService.editEstabsVinculados(params)
+
+        render template: 'estabsTable', model: [
+                                                    rhInstance: rh,
+                                                    action: 'edit',
+                                                    estabList: ret.estabList,
+                                                    estabCount: ret.estabCount
+                                                ]
+    }
+
 }

@@ -124,4 +124,31 @@ class CidadeController {
 			render result as JSON
 		}
 	}
+
+    def listAllByEstabelecimento() {
+
+        if (params['ufs[]']) {
+
+            def ufs = params['ufs[]'].collect { it as long }
+
+            def cidList = Estabelecimento.withCriteria {
+                                projections {
+                                    distinct "endereco.cidade"
+                                }
+                                endereco {
+                                    cidade {
+                                        estado {
+                                            'in'("id", ufs)
+                                        }
+                                    }
+                                }
+                            }
+
+            render template: "cidadesSelect", model: [cidadeInstanceList: cidList]
+
+        } else
+            render status: 500, text: "ID de Estabelecimento não informado!"
+
+
+    }
 }

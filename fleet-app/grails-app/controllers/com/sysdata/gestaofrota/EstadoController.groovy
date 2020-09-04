@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
+import org.hibernate.Criteria
 
 class EstadoController {
 
@@ -109,4 +110,16 @@ class EstadoController {
 		def result=[result:jsonList]
 		render result as JSON
 	}
+
+    def listAllByEstabelecimento() {
+
+        def estList = Estabelecimento.withCriteria {
+                        projections {
+                            distinct "cid.estado"
+                        }
+                        createAlias("endereco.cidade", "cid")
+                    }
+        render estList as JSON
+    }
+
 }

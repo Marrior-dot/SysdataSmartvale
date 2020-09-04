@@ -40,23 +40,6 @@ class RhService {
     def save(Rh rh) {
         def ret = [success: true]
 
-        // Controle de Limite para Cliente Pré-Pago
-        if (rh.modeloCobranca == TipoCobranca.PRE_PAGO ) {
-            if (!rh.id)
-                rh.saldoDisponivel = rh.limiteTotal
-            else {
-                def delta = rh.limiteTotal ?: 0 - rh.getPersistentValue('limiteTotal') ?: 0
-                if (delta > 0) {
-                    rh.saldoDisponivel = rh.saldoDisponivel ?: 0 + delta
-                } else if (delta < 0) {
-                    def novoSaldo = rh.saldoDisponivel + delta
-                    rh.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
-
-                }
-            }
-        }
-
-
         // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
         if (rh.modeloCobranca == TipoCobranca.POS_PAGO && rh.limiteTotal < rh.limiteComprometido) {
             ret.success = false
@@ -94,6 +77,69 @@ class RhService {
         }
 
         return ret
+
+    }
+
+    Map findEstabsVinculados(Rh rh, params) {
+
+        def criteria = {
+
+            programas {
+                eq("id", rh.id)
+            }
+
+            if (params.fantasia)
+
+                ilike("nomeFantasia", params.fantasia + '%')
+
+            if (params['ufs[]']) {
+                def ufs = params['ufs[]'].collect { it as long }
+
+                endereco {
+                    cidade {
+                        estado {
+                            'in'("id", ufs)
+                        }
+                    }
+                }
+            }
+        }
+
+        def estabList = PostoCombustivel.createCriteria().list(params, criteria)
+        def estabCount = PostoCombustivel.createCriteria().count(criteria)
+
+        return [estabList: estabList, estabCount: estabCount]
+    }
+
+    Map editEstabsVinculados(params) {
+
+        def criteria = {
+            if (params.fantasia)
+
+                ilike("nomeFantasia", params.fantasia + '%')
+
+            if (params['ufs[]']) {
+                def ufs = params['ufs[]'].collect { it as long }
+
+                endereco {
+                    cidade {
+                        estado {
+                            'in'("id", ufs)
+                        }
+                    }
+                }
+            }
+        }
+
+        def estabList = PostoCombustivel.createCriteria().list(params, criteria)
+        def estabCount = PostoCombustivel.createCriteria().count(criteria)
+
+        return [estabList: estabList, estabCount: estabCount]
+    }
+
+    boolean findEstab(Rh rh, PostoCombustivel estab) {
+
+        return rh.empresas.find {ìt == estab}
 
     }
 

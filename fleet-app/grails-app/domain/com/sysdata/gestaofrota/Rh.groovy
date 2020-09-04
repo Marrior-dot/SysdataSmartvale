@@ -113,6 +113,33 @@ class Rh extends Empresa {
     }
 
 
+    def beforeInsert() {
+        if (this.modeloCobranca == TipoCobranca.PRE_PAGO )
+            this.saldoDisponivel = this.limiteTotal
+    }
+
+    def beforeUpdate() {
+
+        println "Before Update: ${this.modeloCobranca}"
+
+        // Controle de Limite para Cliente Pré-Pago
+        if (this.modeloCobranca == TipoCobranca.PRE_PAGO ) {
+            def delta = this.limiteTotal ?: 0 - this.getPersistentValue('limiteTotal') ?: 0
+
+            println "Delta: $delta"
+
+            if (delta > 0) {
+                this.saldoDisponivel = this.saldoDisponivel ?: 0 + delta
+            } else if (delta < 0) {
+                def novoSaldo = this.saldoDisponivel + delta
+                this.saldoDisponivel = novoSaldo > 0 ? novoSaldo : 0
+            }
+        }
+
+    }
+
+
+
 }
 
 
