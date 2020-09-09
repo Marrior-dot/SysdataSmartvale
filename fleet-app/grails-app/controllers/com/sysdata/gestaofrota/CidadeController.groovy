@@ -147,7 +147,7 @@ class CidadeController {
             render template: "cidadesSelect", model: [cidadeInstanceList: cidList]
 
         } else
-            render status: 500, text: "ID de Estabelecimento não informado!"
+            render template: "cidadesSelect", model: [cidadeInstanceList: []]
 
 
     }

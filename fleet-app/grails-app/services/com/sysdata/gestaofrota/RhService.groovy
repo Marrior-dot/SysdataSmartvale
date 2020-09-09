@@ -37,8 +37,14 @@ class RhService {
         msg
     }
 
-    def save(Rh rh) {
+    def save(Rh rh, Map params) {
         def ret = [success: true]
+
+        rh.limiteTotal = Util.parseCurrency(params['limiteTotal'])
+
+        if (! rh.id && rh.modeloCobranca == TipoCobranca.PRE_PAGO )
+            rh.saldoDisponivel = rh.limiteTotal
+
 
         // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
         if (rh.modeloCobranca == TipoCobranca.POS_PAGO && rh.limiteTotal < rh.limiteComprometido) {
@@ -52,8 +58,22 @@ class RhService {
         return ret
     }
 
-    def update(Rh rh) {
-        def ret = save(rh)
+    def update(Rh rh, Map params) {
+
+        // Controle de Limite para Cliente Pré-Pago
+        if (rh.modeloCobranca == TipoCobranca.PRE_PAGO ) {
+
+            def oldLimite = rh.limiteTotal ?: 0
+            def newLimite = Util.parseCurrency(params['limiteTotal'])
+            def currSaldo = rh.saldoDisponivel ?: 0
+
+            def delta = newLimite - oldLimite
+            def newSaldo = currSaldo + delta
+            rh.saldoDisponivel = newSaldo > 0 ? newSaldo : 0
+        }
+
+        rh.properties = params
+        def ret = save(rh, params)
 
         def hasFuncionarios = Funcionario.countFuncionariosRh(rh).get() > 0
         def cannotUpdate = rh.isDirty("vinculoCartao") && rh.vinculoCartao != rh.getPersistentValue("vinculoCartao") && hasFuncionarios
@@ -80,7 +100,11 @@ class RhService {
 
     }
 
-    Map findEstabsVinculados(Rh rh, params) {
+    /**
+     *  Recupera todos os ECs vinculados ao RH que satisfazem os critérios
+     */
+
+    Map listEstabsVinculados(Rh rh, params) {
 
         def criteria = {
 
@@ -89,27 +113,41 @@ class RhService {
             }
 
             if (params.fantasia)
-
                 ilike("nomeFantasia", params.fantasia + '%')
 
-            if (params['ufs[]']) {
-                def ufs = params['ufs[]'].collect { it as long }
+            if (params['cids[]']) {
+                def cids = params['cids[]'].collect { it as long }
 
                 endereco {
                     cidade {
-                        estado {
-                            'in'("id", ufs)
+                        'in'("id", cids)
+                    }
+                }
+            } else {
+                if (params['ufs[]']) {
+                    def ufs = params['ufs[]'].collect { it as long }
+
+                    endereco {
+                        cidade {
+                            estado {
+                                'in'("id", ufs)
+                            }
                         }
                     }
                 }
             }
         }
 
+        params.sort = "nomeFantasia"
         def estabList = PostoCombustivel.createCriteria().list(params, criteria)
         def estabCount = PostoCombustivel.createCriteria().count(criteria)
 
         return [estabList: estabList, estabCount: estabCount]
     }
+
+    /**
+     *  Recupera todos os ECs na base que satisfazem os critérios
+     */
 
     Map editEstabsVinculados(params) {
 
@@ -118,29 +156,55 @@ class RhService {
 
                 ilike("nomeFantasia", params.fantasia + '%')
 
-            if (params['ufs[]']) {
-                def ufs = params['ufs[]'].collect { it as long }
+            if (params['cids[]']) {
+                def cids = params['cids[]'].collect { it as long }
 
                 endereco {
                     cidade {
-                        estado {
-                            'in'("id", ufs)
+                        'in'("id", cids)
+                    }
+                }
+            } else {
+                if (params['ufs[]']) {
+                    def ufs = params['ufs[]'].collect { it as long }
+
+                    endereco {
+                        cidade {
+                            estado {
+                                'in'("id", ufs)
+                            }
                         }
                     }
                 }
             }
         }
 
+        params.sort = "nomeFantasia"
         def estabList = PostoCombustivel.createCriteria().list(params, criteria)
         def estabCount = PostoCombustivel.createCriteria().count(criteria)
 
         return [estabList: estabList, estabCount: estabCount]
     }
 
-    boolean findEstab(Rh rh, PostoCombustivel estab) {
+    def saveEstabsVinculados(Rh rh, params) {
 
-        return rh.empresas.find {ìt == estab}
+        def estList = rh.empresas.asList().clone()
 
+        params.ecs.each { est ->
+
+            PostoCombustivel estab = estList.find { it.id == est.id as long }
+            if (estab && !est.checked) {
+                rh.removeFromEmpresas(estab)
+                rh.save(flush: true, failOnError: true)
+                log.info "\t(-) EC #$estab.id a RH #$rh.id"
+            } else if (!estab && est.checked){
+                estab = PostoCombustivel.get(est.id)
+                rh.addToEmpresas(estab)
+                rh.save(flush: true, failOnError: true)
+                log.info "\t(+) EC #$estab.id a RH #$rh.id"
+            }
+
+        }
     }
 
 }
