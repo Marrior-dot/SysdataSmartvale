@@ -29,9 +29,6 @@ class Rh extends Empresa {
     boolean cartaoComChip = true
     boolean renovarLimite = false
 
-    @BindUsing({ obj, source ->
-        Util.parseCurrency(source['limiteTotal'])
-    })
     BigDecimal limiteTotal = 0D
 
     BigDecimal saldoDisponivel = 0D
@@ -111,6 +108,8 @@ class Rh extends Empresa {
                         }[0]
         return disponivel ?: 0
     }
+
+
 
 
 }

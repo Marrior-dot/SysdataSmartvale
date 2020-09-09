@@ -25,7 +25,7 @@
             <g:message code="default.list.label" args="[entityName]"/>
         </g:link>
 
-        <div class="panel panel-default panel-top">
+        <div class="panel panel-top">
 
             <g:if test="${flash.message}">
                 <div class="alert alert-info">${flash.message}</div>
@@ -73,9 +73,8 @@
                                 </div>
                             </g:if>
 
-
                             <div class="tab-pane" id="estabelecimentos">
-                                <g:render template="newEstabelecimentos" bean="${rhInstance}"/>
+                                <g:render template="estabs" bean="${rhInstance}"/>
                             </div>
 
                             <g:if test="${rhInstance?.modeloCobranca == TipoCobranca.POS_PAGO}">
