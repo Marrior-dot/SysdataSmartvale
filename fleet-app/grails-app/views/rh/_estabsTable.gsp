@@ -5,18 +5,16 @@
             Estabelecimentos Vinculados
         </g:if>
         <g:else>
-            Vincular Estabelecimentos
-
-            <g:set var="rhService" bean="rhService"/>
+            Vincular/Desvincular Estabelecimentos
         </g:else>
     </div>
 
     <div class="panel-body">
         <g:if test="${action == 'edit'}">
-            <g:checkBox name="selectAll" value="${params.selectAll}" />
+            %{--<g:checkBox name="selectAll" value="${params.selectAll}"/> Selecionar Todos da Página--}%
         </g:if>
 
-        <table class="table table-stripped">
+        <table id="estabTable" class="table table-stripped" data-offset="${params.offset}">
             <thead>
             <g:if test="${action == 'add'}">
                 <th></th>
@@ -31,7 +29,9 @@
             <g:each in="${estabList}" var="est">
                 <tr>
                     <g:if test="${action == 'edit'}">
-                        <td><g:checkBox name="est_${est.id}" value="${rhInstance.empresas.find { it == est }}" /></td>
+                        <td><g:checkBox name="est_${est.id}"
+                                        value="${rhInstance.empresas.find { it == est } ? true : false}"
+                                        onclick="updateState()"/></td>
                     </g:if>
                     <td>${est.cnpj}</td>
                     <td>${est.nomeFantasia}</td>
@@ -43,7 +43,7 @@
             </tbody>
         </table>
 
-        <g:paginate total="${estabCount}"></g:paginate>
+        <g:paginate total="${estabCount}" params="${params}"></g:paginate>
     </div>
 
 </div>

@@ -39,17 +39,16 @@ class RhController extends BaseOwnerController {
         if (!rhInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.rhId])}"
             redirect(action: "list")
-        } else {
-            clearSession()
+        } else
             render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_VIEW, roleRh:roleRh, usuario:usuario])
-        }
+
     }
 
     def save() {
         Rh rhInstance = new Rh(params)
 
         try {
-            def ret = rhService.save(rhInstance)
+            def ret = rhService.save(rhInstance, params)
             if (ret.success) {
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                 redirect(action: 'show', id: rhInstance.id)
@@ -80,9 +79,8 @@ class RhController extends BaseOwnerController {
     def update() {
         Rh rhInstance = Rh.get(params.long('id'))
         if (rhInstance) {
-            rhInstance.properties = params
             try {
-                def ret = rhService.update(rhInstance)
+                def ret = rhService.update(rhInstance, params)
                 if (ret.success) {
                     flash.message = "${message(code: 'default.updated.message', args: [message(code: 'rh.label', default: 'Programa'), rhInstance.id])}"
                     redirect(action: 'show', id: rhInstance.id)
@@ -269,40 +267,9 @@ class RhController extends BaseOwnerController {
         render estabsFiltered.collect { e -> [id: e.id, nome: e.nomeFantasia + " (" + e.cnpj + ")"] } as JSON
     }
 
-    def salvarEstabelecimentosVinculados() {
-        def retorno = [:]
-        def estab = PostoCombustivel.get(params.long('selEstId'))
-        if (! estab) {
-            render status: HttpStatus.NOT_FOUND, text: "Estabelecimento não localizado!"
-            return
-        }
-
-        def prg = Rh.get(params.prgId as Long)
-        prg.addToEmpresas(estab)
-        if (prg.save(flush: true, failOnError: true)) {
-            retorno.mensagem = "Estabelecimento Adicionado"
-        } else {
-            retorno.mensagem = "Erro ao Salvar Estabelecimento"
-        }
-        render retorno as JSON
-    }
-
     def listEstabVinculados() {
         def estabs = Rh.get(params.prgId as Long).empresas
         render template: 'tabelaEstabVinculados', model: [estabelecimentoInstanceList: estabs]
-    }
-
-    def desvincularEstab() {
-        def retorno = [:]
-        def estab = PostoCombustivel.get(params.selectedEstabId as Long)
-        def prg = Rh.get(params.prgId as Long)
-        prg.removeFromEmpresas(estab)
-        if (prg.save(flush: true, failOnError: true)) {
-            retorno.mensagem = "Estabelecimento Desvinculado"
-        } else {
-            retorno.mensagem = "Erro ao desvincular"
-        }
-        render retorno as JSON
     }
 
     def getTaxas() {
@@ -316,42 +283,22 @@ class RhController extends BaseOwnerController {
 
     }
 
-    private void clearSession() {
-        if (session.mEstIds) {
-            session.mEstIds = null
-            println "Limpou Est IDS da HTTP Session"
-        }
-    }
-
-    /* Preenche map de estabelecimentos selecionados na HTTP Session conforme demanda
-     */
-
-    private void fillEstMapOnDemand(oid, chk) {
-        def mIds = session.mEstIds
-        if (!mIds) mIds = [:]
-
-        def eid = mIds.find { k, v -> k == oid }
-        if (eid) eid.value = chk
-        else mIds[oid] = chk
-
-        if (mIds) session.mEstIds = mIds
-    }
-
-
     def listEstabsVinculados() {
         if (params.rhId) {
 
-            params.max = params.max ? params.max as int : 10
+            params.max = params.max ? params.max as int : 5
             params.offset = params.offset ? params.offset as int : 0
 
             Rh rh = Rh.get(params.rhId.toLong())
-            def ret = rhService.findEstabsVinculados(rh, params)
+            def ret = rhService.listEstabsVinculados(rh, params)
 
-            render template: 'estabsTable', model: [
-                                                        action: 'show',
-                                                        estabList: ret.estabList,
-                                                        estabCount: ret.estabCount
-                                                    ]
+            render template: 'estabsTable',
+                    model: [
+                                action: 'show',
+                                estabList: ret.estabList,
+                                estabCount: ret.estabCount
+                            ],
+                    params: params
         } else
             render status: 500, text: "ID RH não enviado na requisição"
 
@@ -359,18 +306,49 @@ class RhController extends BaseOwnerController {
 
     def editEstabsVinculados() {
 
-        params.max = params.max ? params.max as int : 10
+        params.max = params.max ? params.max as int : 5
         params.offset = params.offset ? params.offset as int : 0
 
         Rh rh = Rh.get(params.rhId.toLong())
         def ret = rhService.editEstabsVinculados(params)
 
-        render template: 'estabsTable', model: [
-                                                    rhInstance: rh,
-                                                    action: 'edit',
+        render template: 'estabsTable',
+                model: [
+                        rhInstance: rh,
+                        action: 'edit',
+                        estabList: ret.estabList,
+                        estabCount: ret.estabCount
+                    ],
+                params: params
+    }
+
+    def saveEstabsVinculados() {
+
+        def pars = request.JSON
+
+        if (pars.rhId) {
+
+            pars.max =  5
+            pars.offset = 0
+
+            Rh rh = Rh.get(pars.rhId as long)
+            rhService.saveEstabsVinculados(rh, pars)
+            flash.message = "Estabelecimentos Vinculados"
+
+            def ret = rhService.listEstabsVinculados(rh, pars)
+
+            render template: 'estabsTable', model: [
+                                                    action: 'show',
                                                     estabList: ret.estabList,
                                                     estabCount: ret.estabCount
-                                                ]
+                                            ],
+                    params: pars
+
+
+        } else
+            flash.error = "ID RH não informado na requisição"
+
+
     }
 
 }
