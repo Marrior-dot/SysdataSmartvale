@@ -77,7 +77,7 @@
         });
 
         // Disparado na seleção de um novo UF
-        $("select[name=estados]").change(function() {
+        $("#divEstados").on('change', 'select[name=estados]', function() {
             carregarCidadesEstabelecimentos($(this).val());
         });
 
@@ -101,12 +101,6 @@
                     carregarEstabsEdicao();
             }
         });
-
-
-        $("input[name=fantasia]").change(function() {
-
-        });
-
 
         // Edita para marcar/desmarcar ECs
         $("button[name=editEstabs]").click(function() {
@@ -173,19 +167,15 @@
         // Na inicialização, carrega somente UFs que possuem ECs
         function carregarEstadosEstabelecimentos() {
 
-            $.getJSON("${createLink(controller: 'estado', action: 'listAllByEstabelecimento')}",
+            $.get("${createLink(controller: 'estado', action: 'listAllByEstabelecimento')}"
+            )
+            .done(function (gsp) {
+                $("div#divEstados").html(gsp);
+                $("select[name=estados]").selectpicker();
+            });
 
-                function(estabs) {
-                    var estabSelect = $("select[name=estados]");
-                    var options = "";
-                    estabs.forEach(function(est) {
-                        options += "<option value='" +est.id+ "'>" + est.nome + "</option>"
-                    });
-                    estabSelect.html(options);
-                    estabSelect.selectpicker();
-                }
-            );
         }
+
 
         // Carrega Cidades relacionadas ao UF selecionado e carrega ECs por UF
         function carregarCidadesEstabelecimentos(arrIds) {
@@ -294,9 +284,9 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="estados">Estado</label>
-                    <select name="estados" class="form-control selectpicker enable" multiple>
-                    </select>
+                    <div id="divEstados">
+                        <g:render template="/estado/estadosSelect"></g:render>
+                    </div>
                 </div>
 
                 <div class="col-md-6">

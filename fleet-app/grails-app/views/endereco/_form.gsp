@@ -130,7 +130,7 @@
                 </label>
                 <g:select class="form-control " name="${endereco}.cidade.estado.id" from="${Estado.list(sort: 'nome')}"
                           optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.estado?.id}"
-                          onchange="filtrarCidadesPorEstado(${endereco})" noSelection="['':'-- Selecione Estado  --']"/>
+                          onchange="filtrarCidadesPorEstado('${endereco}')" noSelection="['':'-- Selecione Estado  --']"/>
             </div>
 
             <div class="col-xs-4">
