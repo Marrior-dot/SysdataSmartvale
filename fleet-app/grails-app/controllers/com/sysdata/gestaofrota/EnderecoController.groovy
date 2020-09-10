@@ -7,10 +7,13 @@ class EnderecoController {
     EnderecoService enderecoService
 
     def filtrarCidadesPorEstado() {
-        def estId = params.estId as long
-        List<Cidade> cidades = Cidade.withCriteria {
-            estado {
-                eq("id", estId)
+        List<Cidade> cidades = []
+        if (params.estId) {
+            def estId = params.estId as long
+            cidades = Cidade.withCriteria {
+                estado {
+                    eq("id", estId)
+                }
             }
         }
         render cidades as JSON

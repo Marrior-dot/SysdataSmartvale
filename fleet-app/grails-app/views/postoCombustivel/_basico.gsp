@@ -6,7 +6,7 @@
 	<g:hiddenField name="version" value="${postoCombustivelInstance?.version}" />
 	<g:hiddenField name="action" value="${action}"/>
 
-	<div class="panel panel-default">
+	<div class="panel panel-default panel-top">
 		<div class="panel-heading">
 			Dados Básicos
 		</div>
