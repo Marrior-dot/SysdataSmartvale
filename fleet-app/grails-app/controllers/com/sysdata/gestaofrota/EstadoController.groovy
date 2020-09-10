@@ -119,7 +119,8 @@ class EstadoController {
                         }
                         createAlias("endereco.cidade", "cid")
                     }
-        render estList as JSON
+
+        render template: 'estadosSelect', model: [estadoInstanceList: estList]
     }
 
 }
