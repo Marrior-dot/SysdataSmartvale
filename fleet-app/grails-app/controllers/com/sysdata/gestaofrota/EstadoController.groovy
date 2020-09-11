@@ -120,7 +120,7 @@ class EstadoController {
                         createAlias("endereco.cidade", "cid")
                     }
 
-        render template: 'estadosSelect', model: [estadoInstanceList: estList]
+        render template: 'estadosSelect', model: [estadoInstanceList: estList.sort{it.nome}]
     }
 
 }

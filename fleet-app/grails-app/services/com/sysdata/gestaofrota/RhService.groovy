@@ -2,6 +2,8 @@ package com.sysdata.gestaofrota
 
 import grails.gorm.transactions.Transactional
 
+import java.lang.reflect.Array
+
 @Transactional
 class RhService {
 
@@ -157,7 +159,8 @@ class RhService {
                 ilike("nomeFantasia", params.fantasia + '%')
 
             if (params['cids[]']) {
-                def cids = params['cids[]'].collect { it as long }
+
+                def cids = params['cids[]'] instanceof String[] ? params['cids[]'].collect { it as long } : params['cids[]'] as long
 
                 endereco {
                     cidade {
@@ -166,7 +169,8 @@ class RhService {
                 }
             } else {
                 if (params['ufs[]']) {
-                    def ufs = params['ufs[]'].collect { it as long }
+
+                    def ufs = params['ufs[]'] instanceof String[] ? params['ufs[]'].collect { it as long } : params['ufs[]'].toLong()
 
                     endereco {
                         cidade {
