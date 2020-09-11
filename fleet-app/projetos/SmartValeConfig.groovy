@@ -10,6 +10,9 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
  * Cada projeto terá suas proprias variaveis
  */
 
+
+projectId = "smartvale"
+
 environments {
     development {
         nome = "SmartVale"
@@ -91,4 +94,74 @@ faturamento {
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
 
-projectId = "smartvale"
+
+
+environments {
+
+    development {
+
+        sftp {
+            host = "localhost"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+
+        }
+
+        arquivos {
+            baseDir = "/home/luiz/tmp/frota/smartvale/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    homologation {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/smartvale/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    production {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/smartvale/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_prod/input"
+                }
+            }
+        }
+    }
+
+}
