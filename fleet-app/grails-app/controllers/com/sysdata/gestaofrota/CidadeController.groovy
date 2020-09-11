@@ -129,7 +129,7 @@ class CidadeController {
 
         if (params['ufs[]']) {
 
-            def ufs = params['ufs[]'].collect { it as long }
+            def ufs = params['ufs[]'] instanceof String[] ? params['ufs[]'].collect { it as long } : params['ufs[]'].toLong()
 
             def cidList = Estabelecimento.withCriteria {
                                 projections {
@@ -144,7 +144,7 @@ class CidadeController {
                                 }
                             }
 
-            render template: "cidadesSelect", model: [cidadeInstanceList: cidList]
+            render template: "cidadesSelect", model: [cidadeInstanceList: cidList.sort {it.nome}]
 
         } else
             render template: "cidadesSelect", model: [cidadeInstanceList: []]

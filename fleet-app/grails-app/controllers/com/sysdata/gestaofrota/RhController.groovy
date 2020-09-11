@@ -286,7 +286,7 @@ class RhController extends BaseOwnerController {
     def listEstabsVinculados() {
         if (params.rhId) {
 
-            params.max = params.max ? params.max as int : 5
+            params.max = params.max ? params.max as int : 10
             params.offset = params.offset ? params.offset as int : 0
 
             Rh rh = Rh.get(params.rhId.toLong())
@@ -306,7 +306,7 @@ class RhController extends BaseOwnerController {
 
     def editEstabsVinculados() {
 
-        params.max = params.max ? params.max as int : 5
+        params.max = params.max ? params.max as int : 10
         params.offset = params.offset ? params.offset as int : 0
 
         Rh rh = Rh.get(params.rhId.toLong())
@@ -328,7 +328,7 @@ class RhController extends BaseOwnerController {
 
         if (pars.rhId) {
 
-            pars.max =  5
+            pars.max =  10
             pars.offset = 0
 
             Rh rh = Rh.get(pars.rhId as long)
