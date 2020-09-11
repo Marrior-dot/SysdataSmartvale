@@ -7,6 +7,160 @@
         setState();
     }
 
+
+    function init() {
+        initState();
+        updateSelectAll();
+        carregarEstadosEstabelecimentos();
+        carregarEstabsVinculados();
+    }
+
+    // Marca ou Desmarca 'selectAll' quando todos os checked estão marcardos ou desmarca quando apenas um checkbox é desmarcado
+    function updateSelectAll() {
+
+        if (state.action == 'edit') {
+            var estabTable = $("table#estabTable");
+            var trCount = estabTable.find("tbody > tr").length;
+            var checkedCount = estabTable.find("td > :checkbox:checked").length;
+            $('input[name=selectAll]').prop("checked", (trCount === checkedCount));
+        }
+
+    }
+
+    function initState(action) {
+        state.action = typeof action !== 'undefined' ? action : 'show';
+        state.estabs = [];
+    }
+
+    // Na inicialização, carrega somente UFs que possuem ECs
+    function carregarEstadosEstabelecimentos() {
+
+        $.get("${createLink(controller: 'estado', action: 'listAllByEstabelecimento')}"
+        )
+                .done(function (gsp) {
+                    $("div#divEstados").html(gsp);
+                    $("select[name=estados]").selectpicker();
+                });
+
+    }
+
+
+    // Carrega Cidades relacionadas ao UF selecionado e carrega ECs por UF
+    function carregarCidadesEstabelecimentos(arrIds) {
+
+        $.get("${createLink(controller: 'cidade', action: 'listAllByEstabelecimento')}",
+                {ufs: arrIds}
+        )
+                .done(function(gsp) {
+                    $("div#divCidades").html(gsp);
+                    $("select[name=cidades]").selectpicker();
+                })
+                .always(function() {
+                    if (state.action === "show")
+                        carregarEstabsVinculados();
+                    else if (state.action === "edit")
+                        carregarEstabsEdicao();
+                });
+    }
+
+    // Carrega ECs vinculados por UFs && Cidades && Nome Fantasia
+    function carregarEstabsVinculados(offset){
+
+        var nome = $("input[name=fantasia]").val();
+        var ufsIds = $("select[name=estados]").val();
+        var cidIds = $("select[name=cidades]").val();
+        var rhId = $("#rhId").val();
+
+        $.ajax({
+            url: "${g.createLink(controller:'rh', action:'listEstabsVinculados')}",
+            data: { rhId: rhId, fantasia: nome, ufs: ufsIds, cids: cidIds, offset: offset},
+            dataType: 'html',
+            success: function (data) {
+                document.getElementById("divEstabs").innerHTML = data;
+            }
+        });
+    }
+
+    /**
+     *   Sincroniza os ECs carregados na páginação com os ECs armazenados no 'state'
+     *   para refletir as marcações/demarcações realizadas.
+     *   Percorre a lista de tr>td, encontra o ID do EC no nome do elem checkbox,
+     *   encontra na lista de ECs da página selecionada (offset) e seta o estado do checkbox
+     */
+
+    function synchPage() {
+
+        if (state.action === 'edit') {
+            var estabTable = $("table#estabTable");
+            estabTable.find("tbody > tr").each(function(){
+
+                $(this).find("td > :checkbox").each(function(){
+
+                    var eid = $(this).attr("id").split('_')[1];
+
+                    var estab = state.estabs.filter(function(est) {
+                        return est.id == eid
+                    });
+                    if (estab.length > 0) {
+                        estab = estab[0];
+                        $(this).prop('checked', estab.checked);
+                    }
+                })
+            });
+        }
+    }
+
+    function carregarEstabsEdicao(offset){
+
+        var rhId = $("#rhId").val();
+        var nome = $("input[name=fantasia]").val();
+        var ufsIds = $("select[name=estados]").val();
+        var cidIds = $("select[name=cidades]").val();
+
+        $.ajax({
+            url: "${g.createLink(controller:'rh', action:'editEstabsVinculados')}",
+            data: { rhId: rhId, fantasia: nome, ufs: ufsIds, cids: cidIds, offset: offset},
+            dataType: 'html',
+            success: function (data) {
+                document.getElementById("divEstabs").innerHTML = data;
+            },
+            complete: function() {
+                synchPage();
+                updateSelectAll();
+            }
+        });
+    }
+
+    function selectAll(checked) {
+
+        var estabTable = $("table#estabTable");
+        estabTable.find("tbody > tr").each(function(){
+
+            $(this).find("td > :checkbox").each(function(){
+
+                $(this).prop('checked', checked);
+
+                var eid = $(this).attr("id").split('_')[1];
+
+                var estab = state.estabs.filter(function(est) {
+                    return est.id == eid
+                });
+                if (estab.length > 0) {
+                    estab = estab[0];
+                    estab.checked = checked;
+
+
+                } else if (checked) {
+                    estab = {};
+                    estab.id = eid;
+                    estab.checked = checked;
+                    state.estabs.push(estab);
+                }
+            })
+        });
+
+    }
+
     /**
     *   Controla o estado (state) das páginas contendo os ECs marcados/desmarcados:
      *   Considera como verdade o que está armazenado na variável 'state' e não os itens da tabela.
@@ -18,19 +172,6 @@
     function setState() {
 
         var estabTable = $("table#estabTable");
-        var offset = estabTable.data('offset');
-
-        var matchPage = state.pages.filter(function(pg) {
-                                                return pg.offset == offset;
-                                            });
-
-        if (matchPage.length === 0) {
-            matchPage = {};
-            matchPage.offset = offset;
-            matchPage.estabList = [];
-            state.pages.push(matchPage);
-        } else
-            matchPage = matchPage[0];
 
         // Itera pelas linhas da tabela que representam os ECs vindos
         estabTable.find("tbody > tr").each(function(){
@@ -40,25 +181,29 @@
                 var eid = $(this).attr("id").split('_')[1];
                 var value = $(this).is(":checked");
 
-                var estab = matchPage.estabList.filter(function(est) {
+                var estab = state.estabs.filter(function(est) {
                                                             return est.id == eid;
                                                         });
                 if (estab.length === 0) {
                     estab = {};
                     estab.id = eid;
-                    matchPage.estabList.push(estab);
+                    state.estabs.push(estab);
                 } else
                     estab = estab[0];
                 estab.checked = value;
             });
         });
+
+        updateSelectAll();
     }
 
     $(function () {
 
-        initState();
-        carregarEstadosEstabelecimentos();
-        carregarEstabsVinculados();
+        init();
+
+        $("#divEstabs").on('click', 'input[name=selectAll]', function(){
+            selectAll($(this).is(":checked"));
+        });
 
         // Pega evento de click nos links de paginação
         $("#divEstabs").on('click', 'a', function(){
@@ -87,7 +232,6 @@
                 carregarEstabsVinculados();
             else if (state.action === "edit")
                 carregarEstabsEdicao();
-
         })
 
 
@@ -117,25 +261,16 @@
         // Salva vinculando/desvinculando ECs ao RH
         $("button[name=saveEstabs]").click(function() {
 
-            if (state.pages.length > 0) {
+            if (state.estabs.length > 0) {
 
                 var sent = confirm("Confirma a vinculação/desvinculação dos ECs ao Cliente?");
                 if (sent) {
                     var rhId = $("#rhId").val();
 
-                    var estToSave = []
-                    state.pages.forEach(function (page) {
-                        var sendEstabs = page.estabList.map(function (est) {
-                                                                return {id: est.id, checked: est.checked}
-
-                                                        });
-                        estToSave = estToSave.concat(sendEstabs);
-                    });
-
                     $.ajax({
                         url: "${createLink(controller:'rh', action:'saveEstabsVinculados')}",
                         type: "POST",
-                        data: JSON.stringify({rhId: rhId, ecs: estToSave}),
+                        data: JSON.stringify({rhId: rhId, ecs: state.estabs}),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
@@ -159,115 +294,8 @@
             initState("show");
         });
 
-        function initState(action) {
-            state.action = typeof action !== 'undefined' ? action : 'show';
-            state.pages = [];
-        }
-
-        // Na inicialização, carrega somente UFs que possuem ECs
-        function carregarEstadosEstabelecimentos() {
-
-            $.get("${createLink(controller: 'estado', action: 'listAllByEstabelecimento')}"
-            )
-            .done(function (gsp) {
-                $("div#divEstados").html(gsp);
-                $("select[name=estados]").selectpicker();
-            });
-
-        }
 
 
-        // Carrega Cidades relacionadas ao UF selecionado e carrega ECs por UF
-        function carregarCidadesEstabelecimentos(arrIds) {
-
-            $.get("${createLink(controller: 'cidade', action: 'listAllByEstabelecimento')}",
-                    {ufs: arrIds}
-            )
-            .done(function(gsp) {
-                $("div#divCidades").html(gsp);
-                $("select[name=cidades]").selectpicker();
-            })
-            .always(function() {
-                if (state.action === "show")
-                    carregarEstabsVinculados();
-                else if (state.action === "edit")
-                    carregarEstabsEdicao();
-            });
-        }
-
-        // Carrega ECs vinculados por UFs && Cidades && Nome Fantasia
-        function carregarEstabsVinculados(offset){
-
-            var nome = $("input[name=fantasia]").val();
-            var ufsIds = $("select[name=estados]").val();
-            var cidIds = $("select[name=cidades]").val();
-            var rhId = $("#rhId").val();
-
-            $.ajax({
-                url: "${g.createLink(controller:'rh', action:'listEstabsVinculados')}",
-                data: { rhId: rhId, fantasia: nome, ufs: ufsIds, cids: cidIds, offset: offset},
-                dataType: 'html',
-                success: function (data) {
-                    document.getElementById("divEstabs").innerHTML = data;
-                }
-            });
-        }
-
-        /**
-        *   Sincroniza os ECs carregados na páginação com os ECs armazenados no 'state'
-         *   para refletir as marcações/demarcações realizadas.
-         *   Percorre a lista de tr>td, encontra o ID do EC no nome do elem checkbox,
-         *   encontra na lista de ECs da página selecionada (offset) e seta o estado do checkbox
-         */
-
-        function synchPage(offset) {
-
-            if (state.action === 'edit') {
-                var page = state.pages.filter(function(pg) {
-                                                    return pg.offset == offset
-                                                });
-                if (page.length > 0) {
-                    page = page[0];
-
-                    var estabTable = $("table#estabTable");
-                    estabTable.find("tbody > tr").each(function(){
-
-                        $(this).find("td > :checkbox").each(function(){
-
-                            var eid = $(this).attr("id").split('_')[1];
-
-                            var estab = page.estabList.filter(function(est) {
-                                                            return est.id == eid
-                                                        });
-                            if (estab.length > 0) {
-                                estab = estab[0];
-                                $(this).attr('checked', estab.checked);
-                            }
-                        })
-                    });
-                }
-            }
-        }
-
-        function carregarEstabsEdicao(offset){
-
-            var rhId = $("#rhId").val();
-            var nome = $("input[name=fantasia]").val();
-            var ufsIds = $("select[name=estados]").val();
-            var cidIds = $("select[name=cidades]").val();
-
-            $.ajax({
-                url: "${g.createLink(controller:'rh', action:'editEstabsVinculados')}",
-                data: { rhId: rhId, fantasia: nome, ufs: ufsIds, cids: cidIds, offset: offset},
-                dataType: 'html',
-                success: function (data) {
-                    document.getElementById("divEstabs").innerHTML = data;
-                },
-                complete: function() {
-                    synchPage(offset);
-                }
-            });
-        }
     });
 </script>
 
