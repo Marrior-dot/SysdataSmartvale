@@ -4,9 +4,16 @@ class LancamentoEstabelecimento extends Lancamento {
 
     Date dataPrevista
     BigDecimal valorTaxa
+    PagamentoEstabelecimento pagamento
+
 
     static constraints = {
         dataPrevista nullable: true
         valorTaxa nullable: true, scale: 6
+        pagamento nullable: true
+    }
+
+    static mapping = {
+        dataPrevista type: 'date'
     }
 }
