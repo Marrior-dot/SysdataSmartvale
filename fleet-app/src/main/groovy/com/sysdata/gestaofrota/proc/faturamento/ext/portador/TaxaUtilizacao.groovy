@@ -1,6 +1,7 @@
-package com.sysdata.gestaofrota.proc.faturamento.ext
+package com.sysdata.gestaofrota.proc.faturamento.ext.portador
 
 import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 
 /**
  * Created by acception on 20/03/18.

@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.faturamento.ext
+package com.sysdata.gestaofrota.proc.faturamento.ext.portador
 
 import com.sysdata.gestaofrota.Cartao
 import com.sysdata.gestaofrota.Conta
@@ -11,6 +11,7 @@ import com.sysdata.gestaofrota.StatusCartao
 import com.sysdata.gestaofrota.StatusFaturamento
 import com.sysdata.gestaofrota.StatusLancamento
 import com.sysdata.gestaofrota.TipoLancamento
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import groovy.util.logging.Log4j
 
 /**

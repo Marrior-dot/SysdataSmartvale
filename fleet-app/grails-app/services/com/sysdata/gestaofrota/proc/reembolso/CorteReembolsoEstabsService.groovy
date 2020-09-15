@@ -7,6 +7,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CorteReembolsoEstabsService implements ExecutableProcessing {
 
+    def grailsApplication
+
     @Override
     def execute(Date date) {
 
@@ -77,10 +79,21 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             lc.save()
             log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
         }
+        processarExtensoes(conta.participante, dataRef)
         pagamento.valor = totalLiquido
         pagamento.save(flush: true)
         corte.save(flush: true)
         log.info "PG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
+    }
+
+    private void processarExtensoes(PostoCombustivel estab, dataRef) {
+
+        def ctx = [:]
+        ctx.estabelecimento = estab
+        ctx.dataCorte = dataRef
+
+
+
     }
 
 

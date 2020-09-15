@@ -5,11 +5,11 @@ package com.sysdata.gestaofrota.proc.faturamento.ext
  */
 class ExtensaoFactory {
 
-    private static def instances=[:]
+    private static def instances = [:]
 
-    static ExtensaoFaturamento getInstance(Class clazz){
-        if(!instances.containsValue(clazz)){
-            instances[clazz]=clazz.newInstance()
+    static ExtensaoFaturamento getInstance(Class clazz) {
+        if (!instances.containsValue(clazz)) {
+            instances[clazz] = clazz.newInstance()
         }
         instances[clazz]
 
