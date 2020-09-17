@@ -42,11 +42,8 @@ class RhService {
     def save(Rh rh, Map params) {
         def ret = [success: true]
 
-        rh.limiteTotal = Util.parseCurrency(params['limiteTotal'])
-
         if (! rh.id && rh.modeloCobranca == TipoCobranca.PRE_PAGO )
             rh.saldoDisponivel = rh.limiteTotal
-
 
         // Verifica se novo valor do limite interfere nos limites de cartões vinculados cadastrados
         if (rh.modeloCobranca == TipoCobranca.POS_PAGO && rh.limiteTotal < rh.limiteComprometido) {
@@ -62,11 +59,13 @@ class RhService {
 
     def update(Rh rh, Map params) {
 
+        rh.properties = params
+
         // Controle de Limite para Cliente Pré-Pago
         if (rh.modeloCobranca == TipoCobranca.PRE_PAGO ) {
 
-            def oldLimite = rh.limiteTotal ?: 0
-            def newLimite = Util.parseCurrency(params['limiteTotal'])
+            def oldLimite = rh.getPersistentValue("limiteTotal") ?: 0
+            def newLimite = rh.limiteTotal
             def currSaldo = rh.saldoDisponivel ?: 0
 
             def delta = newLimite - oldLimite
@@ -74,8 +73,9 @@ class RhService {
             rh.saldoDisponivel = newSaldo > 0 ? newSaldo : 0
         }
 
-        rh.properties = params
         def ret = save(rh, params)
+        if (! ret.success)
+            return ret
 
         def hasFuncionarios = Funcionario.countFuncionariosRh(rh).get() > 0
         def cannotUpdate = rh.isDirty("vinculoCartao") && rh.vinculoCartao != rh.getPersistentValue("vinculoCartao") && hasFuncionarios
