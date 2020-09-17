@@ -1,9 +1,9 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.cartao.GeradorCartaoPadrao
-import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaAdministracao
-import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaManutencao
-import com.sysdata.gestaofrota.proc.faturamento.ext.TaxaUtilizacao
+import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaAdministracao
+import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaManutencao
+import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
 
 /**
  * ESSE ARQUIVO DEVE SER IGNORADO PELO GIT
@@ -120,6 +120,11 @@ faturamento {
     controlaSaldo = true
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
+
+
+
+
+
 
 
 environments {
