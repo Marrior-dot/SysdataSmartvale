@@ -10,6 +10,9 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
  * Cada projeto terá suas proprias variaveis
  */
 
+
+projectId = "banpara"
+
 environments {
     development {
         nome = "Banpara"
@@ -106,15 +109,78 @@ cartao {
 }
 
 
-processamentos = [
-        "faturamentoService",
-        "geracaoArquivoCobrancaService"
-]
-
-
 faturamento {
     controlaSaldo = true
     extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 }
 
-projectId = "banpara"
+
+environments {
+
+    development {
+
+        sftp {
+            host = "localhost"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+
+        }
+
+        arquivos {
+            baseDir = "/home/luiz/tmp/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    homologation {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    production {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_prod/input"
+                }
+            }
+        }
+    }
+
+}
