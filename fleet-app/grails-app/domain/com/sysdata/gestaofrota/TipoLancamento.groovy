@@ -15,7 +15,13 @@ enum TipoLancamento {
     MULTA("Multa"),
     MORA("Juros Moratórios"),
 	FECHAMENTO_FATURA("Fechamento"),
-	SALDO_ANTERIOR("Saldo Anterior")
+	SALDO_ANTERIOR("Saldo Anterior"),
+
+	//Taxas/Tarifas para EC
+	TAXA_ADESAO_EC("Taxa de Adesão"),
+	TAXA_VISIBILIDADE_EC("Taxa de Visibilidade"),
+	ANUIDADE_EC("Anuidade"),
+	TARIFA_BANCARIA_EC("Anuidade")
 
 	String nome
 	

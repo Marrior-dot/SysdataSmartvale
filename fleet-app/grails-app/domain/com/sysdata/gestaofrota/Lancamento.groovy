@@ -7,7 +7,6 @@ class Lancamento {
     Date dataEfetivacao
     TipoLancamento tipo
     StatusLancamento status
-    StatusFaturamento statusFaturamento = StatusFaturamento.NAO_FATURADO
 
     static transients = ['descricao']
 
@@ -20,6 +19,7 @@ class Lancamento {
 
     static mapping = {
         dataEfetivacao type: 'date'
+        id generator: 'sequence', params: ['sequence': 'lancamento_seq']
     }
 
 

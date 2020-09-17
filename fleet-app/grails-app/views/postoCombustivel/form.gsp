@@ -43,29 +43,34 @@
 
                     </sec:ifAnyGranted>
 
-                    <g:if test="${action==Util.ACTION_VIEW}">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Credenciado</a></li>
-                            <li role="presentation"><a href="#calendario" aria-controls="calendario" role="tab" data-toggle="tab">Calendário Reembolso</a></li>
-                            <li role="presentation"><a href="#estabelecimento" aria-controls="estabelecimento" role="tab" data-toggle="tab">Estabelecimentos</a></li>
-                        </ul>
+                    <div class="panel-top">
+                        <g:if test="${action==Util.ACTION_VIEW}">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Credenciado</a></li>
+                                <li role="presentation"><a href="#calendario" aria-controls="calendario" role="tab" data-toggle="tab">Calendário Reembolso</a></li>
+                                <li role="presentation"><a href="#estabelecimento" aria-controls="estabelecimento" role="tab" data-toggle="tab">Estabelecimentos</a></li>
+                            </ul>
 
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="basico">
-                                <g:render template="basico"/>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="basico">
+                                    <g:render template="basico"/>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="calendario">
+                                    <g:render template="listReembolso"/>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="estabelecimento">
+                                    <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
+                                </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="calendario">
-                                <g:render template="listReembolso"/>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="estabelecimento">
-                                <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
-                            </div>
-                        </div>
-                    </g:if>
-                    <g:else>
-                        <g:render template="basico"/>
-                    </g:else>
+                        </g:if>
+                        <g:else>
+                            <g:render template="basico"/>
+                        </g:else>
+                    </div>
+
+
+
 
                 </div>
             </div>
