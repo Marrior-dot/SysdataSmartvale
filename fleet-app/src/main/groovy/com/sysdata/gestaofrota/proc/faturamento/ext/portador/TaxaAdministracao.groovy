@@ -20,46 +20,46 @@ class TaxaAdministracao implements ExtensaoFaturamento {
 
     @Override
     void tratar(ctx) {
-        Conta cnt=ctx.fatura.conta
-        Portador portador=ctx.portador
-        def taxAdm=portador.unidade.rh.taxaAdministracao
-        if(taxAdm>0){
+        Conta cnt = ctx.fatura.conta
+        Portador portador = ctx.portador
+        def taxAdm = portador.unidade.rh.taxaAdministracao
+        if (taxAdm > 0) {
 
-            Corte corteAtual=ctx.fatura.corte
-            def totalAprov=Transacao.withCriteria(uniqueResult:true) {
-                                projections {
-                                    sum("valor")
-                                }
-                                cartao{
-                                    eq("portador",portador)
-                                }
-                                'in'("statusControle",[StatusControleAutorizacao.CONFIRMADA,
-                                                       StatusControleAutorizacao.PENDENTE])
-                                ge("dataHora",corteAtual.dataInicioCiclo)
-                                le("dataHora",corteAtual.dataFechamento)
-                            }
-            if(totalAprov>0){
-
-                Fatura fatura=ctx.fatura
-                def valTaxAdm=(totalAprov*taxAdm/100.00).round(2)
-                LancamentoPortador lcnTaxaAdm=new LancamentoPortador()
-                lcnTaxaAdm.with {
-                    corte=corteAtual
-                    conta=cnt
-                    tipo=TipoLancamento.TAXA_ADM
-                    dataEfetivacao=ctx.dataProcessamento
-                    valor=valTaxAdm
-                    status=StatusLancamento.EFETIVADO
-                    statusFaturamento=StatusFaturamento.FATURADO
+            Corte corteAtual = ctx.fatura.corte
+            def totalAprov = Transacao.withCriteria(uniqueResult: true) {
+                projections {
+                    sum("valor")
                 }
-                lcnTaxaAdm.save(failOnError:true)
+                cartao {
+                    eq("portador", portador)
+                }
+                'in'("statusControle", [StatusControleAutorizacao.CONFIRMADA,
+                                        StatusControleAutorizacao.PENDENTE])
+                ge("dataHora", corteAtual.dataInicioCiclo)
+                le("dataHora", corteAtual.dataFechamento)
+            }
+            if (totalAprov > 0) {
 
-                ItemFatura itTxAdm=new ItemFatura()
-                itTxAdm.with{
-                    data=lcnTaxaAdm.dataEfetivacao
-                    descricao=lcnTaxaAdm.tipo.nome
-                    valor=lcnTaxaAdm.valor
-                    lancamento=lcnTaxaAdm
+                Fatura fatura = ctx.fatura
+                def valTaxAdm = (totalAprov * taxAdm / 100.00).round(2)
+                LancamentoPortador lcnTaxaAdm = new LancamentoPortador()
+                lcnTaxaAdm.with {
+                    corte = corteAtual
+                    conta = cnt
+                    tipo = TipoLancamento.TAXA_ADM
+                    dataEfetivacao = ctx.dataProcessamento
+                    valor = valTaxAdm
+                    status = StatusLancamento.EFETIVADO
+                    statusFaturamento = StatusFaturamento.FATURADO
+                }
+                lcnTaxaAdm.save(failOnError: true)
+
+                ItemFatura itTxAdm = new ItemFatura()
+                itTxAdm.with {
+                    data = lcnTaxaAdm.dataEfetivacao
+                    descricao = lcnTaxaAdm.tipo.nome
+                    valor = lcnTaxaAdm.valor
+                    lancamento = lcnTaxaAdm
                 }
                 fatura.addToItens itTxAdm
                 fatura.save()

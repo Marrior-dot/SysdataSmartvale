@@ -31,34 +31,34 @@ class TaxaManutencao implements ExtensaoFaturamento {
     @Override
     void tratar(ctx) {
 
-        Conta cnt=ctx.fatura.conta
-        Portador portador=ctx.portador
+        Conta cnt = ctx.fatura.conta
+        Portador portador = ctx.portador
 
-        def taxManut=portador.unidade.rh.taxaManutencao
+        def taxManut = portador.unidade.rh.taxaManutencao
 
-        if(taxManut>0){
+        if (taxManut > 0) {
 
-            Fatura fatura=ctx.fatura
-            if(portador.ativo || fatura.itens.find{it.lancamento.tipo==TipoLancamento.TAXA_UTILIZACAO}){
-                LancamentoPortador lcnTaxManut=new LancamentoPortador()
-                lcnTaxManut.with{
-                    corte=fatura.corte
-                    conta=cnt
-                    tipo=TipoLancamento.TAXA_MANUTENCAO
-                    dataEfetivacao=ctx.dataProcessamento
-                    valor=taxManut
-                    status=StatusLancamento.EFETIVADO
-                    statusFaturamento=StatusFaturamento.FATURADO
+            Fatura fatura = ctx.fatura
+            if (portador.ativo || fatura.itens.find { it.lancamento.tipo == TipoLancamento.TAXA_UTILIZACAO }) {
+                LancamentoPortador lcnTaxManut = new LancamentoPortador()
+                lcnTaxManut.with {
+                    corte = fatura.corte
+                    conta = cnt
+                    tipo = TipoLancamento.TAXA_MANUTENCAO
+                    dataEfetivacao = ctx.dataProcessamento
+                    valor = taxManut
+                    status = StatusLancamento.EFETIVADO
+                    statusFaturamento = StatusFaturamento.FATURADO
                 }
-                lcnTaxManut.save(failOnError:true)
+                lcnTaxManut.save(failOnError: true)
 
 
-                ItemFatura itTxMan=new ItemFatura()
-                itTxMan.with{
-                    data=lcnTaxManut.dataEfetivacao
-                    descricao=lcnTaxManut.tipo.nome
-                    valor=lcnTaxManut.valor
-                    lancamento=lcnTaxManut
+                ItemFatura itTxMan = new ItemFatura()
+                itTxMan.with {
+                    data = lcnTaxManut.dataEfetivacao
+                    descricao = lcnTaxManut.tipo.nome
+                    valor = lcnTaxManut.valor
+                    lancamento = lcnTaxManut
                 }
                 fatura.addToItens itTxMan
                 fatura.save()
