@@ -2,6 +2,8 @@ package com.sysdata.gestaofrota.proc.reembolso
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
+import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -24,9 +26,19 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
         if (datasCorte) {
             CorteEstabelecimento corteEstab = new CorteEstabelecimento()
+            corteEstab.with {
+                tipoCorte = TipoCorteEstabelecimento.REEMBOLSO
+                status = StatusCorte.ABERTO
+                dataPrevista = date
+                dataFechamento = date
+                dataCobranca = date + 1
+            }
             corteEstab.save(flush: true)
             log.info "Corte EC #$corteEstab.id criado"
             corteEstab.datasCortadas = []
+
+            LotePagamento lotePagamento = new LotePagamento()
+
             datasCorte.each { dt ->
 
                 corteEstab.datasCortadas << dt
@@ -42,14 +54,14 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 if (contasIds) {
                     contasIds.eachWithIndex { cid, i ->
                         Conta contaEstab = Conta.get(cid)
-                        cortarConta(corte, contaEstab, dt)
+                        cortarConta(corteEstab, contaEstab, dt)
                         if ((i + 1) % 50 == 0)
                             clearSession()
                     }
                 } else
                     log.warn "Não há contas de estabelecimento para corte!"
             }
-            corteEstab.status = StatusCorte.EXECUTADO
+            corteEstab.status = StatusCorte.FECHADO
             corteEstab.save(flush: true)
 
         } else
@@ -79,6 +91,9 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             lc.save()
             log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
         }
+
+
+
         processarExtensoes(conta.participante, dataRef)
         pagamento.valor = totalLiquido
         pagamento.save(flush: true)
@@ -92,7 +107,10 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
         ctx.estabelecimento = estab
         ctx.dataCorte = dataRef
 
-
+        grailsApplication.config.project.faturamento.estabelecimento.extensoes.each { e ->
+            ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e)
+            ext.tratar(ctx)
+        }
 
     }
 
