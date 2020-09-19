@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Relatório de Demonstrativo de Desempenho"/>
+    <g:set var="relatorio" value="Relatório de Base de Funcionarios"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -48,25 +48,20 @@
 
         <table class="table table-bordered table-stripped">
             <thead>
-            <th>Placa</th>
-            <th>Marca/Modelo</th>
-            <th>Funcionário</th>
+            <th>Matricula</th>
+            <th>Nome</th>
+            <th>CPF</th>
             <th>Empresa</th>
             <th>Unidade</th>
-            <th>Km Rodados</th>
-            <th>Desempenho (km/l)</th>
             </thead>
-
             <tbody>
-            <g:each in="${desempenhoList}" var="csm">
+            <g:each in="${baseFuncionariosList}" var="func">
                 <tr>
-                    <td>${csm[0]}</td>
-                    <td>${csm[1]} / ${csm[2]}</td>
-                    <td>(${csm[3]}) ${csm[4]}</td>
-                    <td>${csm[5]}</td>
-                    <td>${csm[6]}</td>
-                    <td>${csm[7]}</td>
-                    <td>${csm[8].round(2)}</td>
+                    <td>${func[0]}</td>
+                    <td>${func[1]}</td>
+                    <td>${func[2]}</td>
+                    <td>${func[3]}</td>
+                    <td>${func[5]}</td>
                 </tr>
             </g:each>
             </tbody>
@@ -75,7 +70,7 @@
             </tfoot>
         </table>
 
-        <g:paginate total="${desempenhoCount}" />
+        <g:paginate total="${baseFuncionariosCount}" />
 
         <export:formats formats="['csv', 'excel', 'pdf']" />
     </div>
