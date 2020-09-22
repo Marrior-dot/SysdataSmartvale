@@ -37,7 +37,13 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             log.info "Corte EC #$corteEstab.id criado"
             corteEstab.datasCortadas = []
 
-            LotePagamento lotePagamento = new LotePagamento()
+            LotePagamento loteAberto = LotePagamento.aberto
+            if (!loteAberto) {
+                loteAberto = new LotePagamento()
+                loteAberto.save()
+            }
+            loteAberto.addToCortes(corteEstab)
+            loteAberto.save()
 
             datasCorte.each { dt ->
 
@@ -69,48 +75,82 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
     }
 
     private def cortarConta(Corte corte, Conta conta, Date dataRef) {
-        log.info "\tEC: $conta.participante"
-        def List<LancamentoEstabelecimento> lctoList = LancamentoEstabelecimento.withCriteria {
+
+        def global = [:]
+
+        PostoCombustivel estabelecimento = conta.participante
+
+        log.info "\tEC: $estabelecimento"
+        def List<LancamentoEstabelecimento> parcelaList = LancamentoEstabelecimento.withCriteria {
                                                             eq("tipoLancamento", TipoLancamento.REEMBOLSO)
                                                             eq("statusLancamento", StatusLancamento.A_EFETIVAR)
                                                             eq("dataEfetivacao", dataRef)
                                                             eq("conta", conta)
                                                         }
-        def totalLiquido = 0
-        PagamentoEstabelecimento pagamento = new PagamentoEstabelecimento()
-        pagamento.with {
-            dataProgramada = dataRef
-            estabelecimento = conta.participante
+
+        def totalTransacoes = parcelaList.sum { it.valor }
+        def totalCobrancas = calcularTotalCobrancas(estabelecimento, totalTransacoes, global)
+
+        if (totalTransacoes - totalCobrancas > 0.0) {
+            def totalLiquido = 0
+            PagamentoEstabelecimento pagamento = new PagamentoEstabelecimento()
+            pagamento.with {
+                dataProgramada = dataRef
+                estabelecimento = conta.participante
+            }
+            pagamento.corte = corte
+            pagamento.save()
+            parcelaList.each { lc ->
+                totalLiquido += lc.valor
+                lc.status = StatusLancamento.FATURADO
+                lc.pagamento = pagamento
+                lc.save()
+                log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
+            }
+            pagamento.valor = totalLiquido
+
+            gerarLancamentosExtensoes(global)
+
+            pagamento.save(flush: true)
+            corte.save(flush: true)
+            log.info "PG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
+
+        } else {
+
+
+            parcelaList.each {
+
+            }
+
         }
-        pagamento.corte = corte
-        pagamento.save()
-        lctoList.each { lc ->
-            totalLiquido += lc.valor
-            lc.status = StatusLancamento.FATURADO
-            lc.pagamento = pagamento
-            lc.save()
-            log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
-        }
 
-
-
-        processarExtensoes(conta.participante, dataRef)
-        pagamento.valor = totalLiquido
-        pagamento.save(flush: true)
-        corte.save(flush: true)
-        log.info "PG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
     }
 
-    private void processarExtensoes(PostoCombustivel estab, dataRef) {
+    def gerarLancamentosExtensoes(global) {
 
-        def ctx = [:]
-        ctx.estabelecimento = estab
-        ctx.dataCorte = dataRef
+        global.extensoes.each { e ->
+            ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e.handler)
+            ext.gerarLancamento(global)
+        }
+
+    }
+
+    private def calcularTotalCobrancas(PostoCombustivel postoCombustivel, totalParcelas, global) {
+
+        global.estabelecimento = postoCombustivel
 
         grailsApplication.config.project.faturamento.estabelecimento.extensoes.each { e ->
             ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e)
-            ext.tratar(ctx)
+            ext.calcularValor(global)
         }
+
+        return global.extensoes.sum { it.valor }
+
+
+    }
+
+    private void processarExtensoes(PagamentoEstabelecimento pagamento, Conta contaEstab) {
+
 
     }
 

@@ -10,4 +10,8 @@ class ReembolsoIntervalo extends Reembolso {
 	
     static constraints = {
     }
+
+	static mapping = {
+		sort "inicioIntervalo"
+	}
 }
