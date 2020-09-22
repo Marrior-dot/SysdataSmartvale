@@ -76,7 +76,6 @@ class CorteReembolsoEstabsServiceSpec extends Specification {
         expect:"Cobrar Taxa de Adesão"
             true == false
 
-        expect: ""
     }
 
 
