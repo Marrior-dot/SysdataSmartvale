@@ -114,12 +114,6 @@ cartao {
     }
 }
 
-processamentos = [
-        "faturamentoService",
-        "geracaoArquivoCobrancaService"
-]
-
-
 faturamento {
 
     portador {
@@ -131,11 +125,8 @@ faturamento {
     estabelecimento {
         extensoes = [TaxaAdesao, TaxaVisibilidade, Anuidade, TarifaBancaria]
     }
+
 }
-
-
-
-
 
 environments {
 
