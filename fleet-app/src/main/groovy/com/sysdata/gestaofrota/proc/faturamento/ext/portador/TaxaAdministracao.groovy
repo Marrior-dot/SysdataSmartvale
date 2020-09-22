@@ -1,16 +1,6 @@
 package com.sysdata.gestaofrota.proc.faturamento.ext.portador
 
-import com.sysdata.gestaofrota.Conta
-import com.sysdata.gestaofrota.Corte
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.StatusControleAutorizacao
-import com.sysdata.gestaofrota.StatusFaturamento
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.TipoLancamento
-import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 
 /**
@@ -18,7 +8,6 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
  */
 class TaxaAdministracao implements ExtensaoFaturamento {
 
-    @Override
     void tratar(ctx) {
         Conta cnt = ctx.fatura.conta
         Portador portador = ctx.portador
@@ -65,6 +54,16 @@ class TaxaAdministracao implements ExtensaoFaturamento {
                 fatura.save()
             }
         }
+
+    }
+
+    @Override
+    void gerarLancamento(Map ctx) {
+
+    }
+
+    @Override
+    void calcularValor(Map ctx) {
 
     }
 }

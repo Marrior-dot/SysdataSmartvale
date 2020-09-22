@@ -13,7 +13,6 @@ class TaxaUtilizacao implements ExtensaoFaturamento {
      * Cobra tarifa de utilização se cartão transacionou no período
      */
 
-    @Override
     void tratar(ctx) {
         Conta cnt=ctx.fatura.conta
         Portador portador=ctx.portador
@@ -67,5 +66,15 @@ class TaxaUtilizacao implements ExtensaoFaturamento {
                 fatura.save()
             }
         }
+    }
+
+    @Override
+    void gerarLancamento(Map ctx) {
+
+    }
+
+    @Override
+    void calcularValor(Map ctx) {
+
     }
 }

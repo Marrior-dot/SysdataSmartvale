@@ -5,5 +5,6 @@ package com.sysdata.gestaofrota.proc.faturamento.ext
  */
 interface ExtensaoFaturamento {
 
-    void tratar(ctx)
+    void gerarLancamento(Map ctx)
+    void calcularValor(Map ctx)
 }

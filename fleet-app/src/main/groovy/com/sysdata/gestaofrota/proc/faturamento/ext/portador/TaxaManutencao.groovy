@@ -1,24 +1,12 @@
 package com.sysdata.gestaofrota.proc.faturamento.ext.portador
 
-import com.sysdata.gestaofrota.Cartao
-import com.sysdata.gestaofrota.Conta
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.PortadorFuncionario
-import com.sysdata.gestaofrota.StatusCartao
-import com.sysdata.gestaofrota.StatusFaturamento
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.TipoLancamento
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
-import groovy.util.logging.Log4j
 
 /**
  * Created by acception on 20/03/18.
  */
 
-@Log4j
 class TaxaManutencao implements ExtensaoFaturamento {
 
     /**
@@ -28,7 +16,6 @@ class TaxaManutencao implements ExtensaoFaturamento {
      * 2. Se taxa de utilização já tiver sido cobrada
      */
 
-    @Override
     void tratar(ctx) {
 
         Conta cnt = ctx.fatura.conta
@@ -66,5 +53,15 @@ class TaxaManutencao implements ExtensaoFaturamento {
             }
 
         }
+    }
+
+    @Override
+    void gerarLancamento(Map ctx) {
+
+    }
+
+    @Override
+    void calcularValor(Map ctx) {
+
     }
 }
