@@ -1,19 +1,38 @@
 package com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento
 
-import com.sysdata.gestaofrota.Conta
-import com.sysdata.gestaofrota.LancamentoEstabelecimento
-import com.sysdata.gestaofrota.PostoCombustivel
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.TipoLancamento
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class TaxaAdesao implements ExtensaoFaturamento {
 
     @Override
-    void tratar(def ctx) {
+    void gerarLancamento(Map ctx) {
+
+        PagamentoEstabelecimento pagamentoEstab = ctx.pagamento
+        PostoCombustivel estab = pagamentoEstab.estabelecimento
+
+        LancamentoEstabelecimento lctoAdesao = new LancamentoEstabelecimento()
+        lctoAdesao.with {
+            dataEfetivacao = pagamentoEstab.dataProgramada
+            dataPrevista = pagamentoEstab.dataProgramada
+            valor = -estab.taxaAdesao
+            tipo = TipoLancamento.TAXA_ADESAO_EC
+            status = StatusLancamento.FATURADO
+            conta = estab.conta
+            pagamento = pagamentoEstab
+        }
+        lctoAdesao.save(flush: true)
+        log.debug "\t\tADESAO #${lctoAdesao.id} val:${Util.formatCurrency(lctoAdesao.valor)}"
+        pagamentoEstab.valor += lctoAdesao.valor.abs()
+
+   }
+
+    @Override
+    void calcularValor(Map ctx) {
 
         PostoCombustivel estab = ctx.estabelecimento
-
         if (estab.taxaAdesao > 0.0) {
             Conta contaEstab = ctx.conta
 
@@ -24,18 +43,9 @@ class TaxaAdesao implements ExtensaoFaturamento {
                             } > 0
 
             if (!jaCobrada) {
-                LancamentoEstabelecimento lctoAdesao = new LancamentoEstabelecimento()
-                lctoAdesao.with {
-                    dataEfetivacao = ctx.dataCorte
-                    dataPrevista = ctx.dataCorte
-                    valor = -estab.taxaAdesao
-                    tipo = TipoLancamento.TAXA_ADESAO_EC
-                    status = StatusLancamento.FATURADO
-                    conta = contaEstab
-                    pagamento = ctx.pagamento
-                }
-                lctoAdesao.save(flush: true)
+                def aux = [handler: TaxaAdesao, valor: estab.taxaAdesao]
+                ctx.extensoes = !ctx.extensoes ? [] << aux : ctx.extensoes << aux
             }
         }
-   }
+    }
 }

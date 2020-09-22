@@ -27,8 +27,8 @@ function configInputMasks() {
 	$('.cpf').mask("999.999.999-99", {placeholder: '___.___.___-__'});
 	$('.cartao').mask("9999.9999.9999.9999", {placeholder: '____.____.____.____'});
 	$('.cep').mask("99999-999", {placeholder: '_____-___'});
-	$('.phone-number').mask("99999-9999");
-	$('.home-number').mask("9999-9999");
+	$('.cell-phone').mask("99999-9999");
+	$('.home-phone').mask("9999-9999");
 	$('.ddd').mask("99");
 	$('.phone').mask("(99) 99999-9999", {placeholder: '(__) _____-____'});
 	$(".cnpj").mask("99.999.999/9999-99", {placeholder: '__.___.___/____-__'});

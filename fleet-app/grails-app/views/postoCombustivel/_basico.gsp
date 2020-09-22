@@ -21,8 +21,11 @@
 			</div>
 
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-md-6">
 					<bs:formField id="nomeFantasia" name="nomeFantasia" label="Nome Fantasia" value="${postoCombustivelInstance?.nomeFantasia}"/>
+				</div>
+				<div class="col-md-6">
+					<bs:formField id="email" name="email" label="E-Mail" value="${postoCombustivelInstance?.email}"/>
 				</div>
 			</div>
 
