@@ -33,4 +33,22 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
         }
         return dataReembolso.clearTime()
     }
+
+    Date calcularProximaDataReembolso(PostoCombustivel empresa, Date dataReferencia) {
+
+        def diaRef = dataReferencia[Calendar.DAY_OF_MONTH]
+        def mesRef = dataReferencia[Calendar.MONTH] + 1
+        def anoRef = dataReferencia[Calendar.YEAR]
+
+        def proximasDatas = empresa.reembolsos.collect {
+                                def dataReemb = new Date().clearTime()
+                                if (it.diaEfetivacao >= diaRef)
+                                    dataReemb.set([dayOfMonth: it.diaEfetivacao, month: dataReferencia[Calendar.MONTH], year: anoRef])
+                                else
+                                    dataReemb.set([dayOfMonth: it.diaEfetivacao, month: mesRef, year: anoRef])
+                                return dataReemb
+                            }
+        return proximasDatas.sort().find { it > dataReferencia }
+
+    }
 }

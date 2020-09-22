@@ -26,7 +26,7 @@ class VeiculoService {
 
         def ret = [success: true]
 
-        if (veiculo.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+        if (!veiculo.id && veiculo.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
             PortadorMaquina portadorMaquina = veiculo.portador
             portadorMaquina.save(flush: true)
 

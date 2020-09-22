@@ -10,9 +10,12 @@ class UserTagLib {
         def user = springSecurityService.currentUser
 
         if (user.owner.instanceOf(attrs.ownerType)) {
-            def assertion = user.owner."${attrs.property}" == "${attrs.value}"
-            if (assertion)
-                body()
+
+            def assertion = (user.owner."${attrs.property}" == attrs.value)
+            if (assertion) {
+                out << body()
+            }
+
         }
 
     }

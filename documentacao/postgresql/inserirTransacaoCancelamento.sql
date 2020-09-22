@@ -1,21 +1,4 @@
-CREATE OR REPLACE FUNCTION public."inserirTransacaoCancelamento"
-
-(
-	dataHora timestamp with time zone,
-	stsCtrl text,
-	nsuHost integer,
-	nsuTerm integer,
-	valor numeric,
-	codEst text,
-	estId bigint,
-	terminal text,
-	fcnId bigint, 
-	maqId bigint, 
-	numcartao text, 
-	crtId bigint, 
-	codResp text 
-	 
-)
+CREATE OR REPLACE FUNCTION public."inserirTransacaoCancelamento"(datahora timestamp with time zone, stsctrl text, nsuhost integer, nsuterm integer, valor numeric, codest text, estid bigint, terminal text, fcnid bigint, maqid bigint, numcartao text, crtid bigint, codresp text)
  RETURNS void
  LANGUAGE plpgsql
 AS $function$

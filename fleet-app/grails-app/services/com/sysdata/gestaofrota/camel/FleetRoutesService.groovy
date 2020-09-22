@@ -6,6 +6,7 @@ import grails.gorm.transactions.Transactional
 import org.apache.camel.LoggingLevel
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.processor.idempotent.FileIdempotentRepository
+import grails.util.Environment
 
 
 @Transactional
@@ -18,8 +19,12 @@ class FleetRoutesService {
     GrailsApplication grailsApplication
 
     def init() {
-        initDepositaArquivoPaysmart()
-        initRecuperaArquivoPaysmart()
+
+        if (Environment.current == Environment.PRODUCTION) {
+            initDepositaArquivoPaysmart()
+            initRecuperaArquivoPaysmart()
+        }
+
     }
 
     private void initDepositaArquivoPaysmart() {

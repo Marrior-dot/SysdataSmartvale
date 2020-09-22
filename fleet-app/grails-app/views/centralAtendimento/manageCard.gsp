@@ -34,9 +34,6 @@
 				<h4>${title}</h4>
 			</div>
 			<div class="panel-body">
-				<div class="buttons">
-					<a type="button" class="btn btn-default" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-				</div>
 				<br/>
 
                 <div class="row">

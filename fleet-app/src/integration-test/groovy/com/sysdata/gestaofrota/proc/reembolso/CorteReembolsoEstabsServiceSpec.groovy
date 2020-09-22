@@ -67,17 +67,15 @@ class CorteReembolsoEstabsServiceSpec extends Specification {
 
 
     def setup() {
-
-
-
     }
 
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
+    void "Testar Primeiro Reembolso"() {
+        expect:"Cobrar Taxa de Adesão"
             true == false
+
     }
 
 
