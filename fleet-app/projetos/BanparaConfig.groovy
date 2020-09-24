@@ -40,8 +40,9 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-frota"
     }
@@ -65,8 +66,8 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-hom"
     }
@@ -90,8 +91,8 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-hom"
     }
