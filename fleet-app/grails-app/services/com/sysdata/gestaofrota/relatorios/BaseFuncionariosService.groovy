@@ -3,7 +3,9 @@ import com.sysdata.gestaofrota.Funcionario
 import grails.core.GrailsApplication
 
 
+
 class BaseFuncionariosService {
+
 
     def list(params) {
 
@@ -13,9 +15,15 @@ class BaseFuncionariosService {
             f.nome,
             f.cpf,
             f.unidade.rh.nome,
-            f.unidade.nome
+            f.unidade.nome,
+            f.categoriaCnh,
+            f.validadeCnh,
+            f.veiculos.size
+
 
             from Funcionario f
+
+
 
         """, [
         ], [max: params.max ? params.max as int : 10, offset: params.offset ? params.offset as int : 0])
@@ -29,7 +37,8 @@ class BaseFuncionariosService {
             count(f.id)
         from
 
-            Funcionario f
+            Funcionario f,
+
 
 
         """, [
@@ -38,56 +47,43 @@ class BaseFuncionariosService {
 
         return baseFuncionariosCount
 
+        }
+
 /*
-        def teste() {
+    def list = {
+        if(!params.max) params.max = 10
 
-            /////
-
-            def exportService
-
-            GrailsApplication grailsApplication
-
+        if(params?.format && params.format != "html"){
+            response.contentType = grailsApplication.config.grails.mime.types[params.format]
+            response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
 
 
-            StringBuilder sb = new StringBuilder()
+            List fields = ["matricula", "nome", "cpf", "rh", "unidade"]
+            Map labels = ["Matricula": "matricula", "Nome": "nome", "Nome": "nome", "CPF": "nome","Empresa": "rh","Unidade": "unidade"]
 
-            sb.append("""
-select
-    f.matricula,
-    f.nome,
-    f.cpf,
-    f.unidade.rh.nome,
-    f.unidade.nome
-
-from
-
-    Funcionario f
+            /* Formatter closure in previous releases
+			def upperCase = { value ->
+				return value.toUpperCase()
+			}
 
 
-""")
-
-
-            if (params.unidade) {
-                sb.append(" and f.unidade.id = ${params.unidade as long}")
+            // Formatter closure
+            def upperCase = { domain, value ->
+                return value.toUpperCase()
             }
 
+          //  Map formatters = [author: upperCase]
+            Map parameters = [title: "Base de Funcionarios", "column.widths": [0.2, 0.3, 0.5]]
 
-            sb.append("""
-group by
-    f.matricula,
-    f.nome,
-    f.cpf,
-    f.unidade.rh.nome,
-    f.unidade.nome
-
-order by
-   f.matricula
-""")
-
-            [consumoList: consumoList, consumoCount: consumoCount, params: params]
-
-            ///////
-*/
+            exportService.export(params.format, response.outputStream, baseFuncionariosList.list(params), fields, labels, formatters, parameters)
         }
+
+        [ baseFuncionariosList: baseFuncionariosList.list( params ) ]
+    }
+
+*/
+
+
+
 
     }

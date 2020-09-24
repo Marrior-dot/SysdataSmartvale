@@ -4,6 +4,7 @@
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
     <g:set var="relatorio" value="Relatório de Base de Funcionarios"/>
     <title>${relatorio}</title>
+
     <export:resource />
 </head>
 <body>
@@ -25,20 +26,6 @@
 
                     <g:render template="/components/rhUnidadeSelect"></g:render>
 
-                    <div class="row">
-                       <!--<div class="col-md-3">
-                            <label class="control-label" for="placa">Placa</label>
-                            <g:textField name="placa" class="form-control placa" value="${params.placa}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="dataInicio">Data Inicial</label>
-                            <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="dataFim">Data Final</label>
-                            <g:textField name="dataFim" class="form-control datepicker" value="${params.dataFim}"></g:textField>
-                        </div> -->
-                    </div>
                 </div>
 
                 <div class="panel-footer">
@@ -47,6 +34,8 @@
             </div>
         </g:form>
 
+
+
         <table class="table table-bordered table-stripped">
             <thead>
             <th>Matricula</th>
@@ -54,6 +43,9 @@
             <th>CPF</th>
             <th>Empresa</th>
             <th>Unidade</th>
+            <th>CNH Categoria</th>
+            <th>CNH Valid</th>
+            <th>Veiculos Qtd</th>
             </thead>
             <tbody>
             <g:each in="${baseFuncionariosList}" var="func">
@@ -63,6 +55,10 @@
                     <td>${func[2]}</td>
                     <td>${func[3]}</td>
                     <td>${func[4]}</td>
+                    <td>${func[5]}</td>
+                    <td><g:formatDate date="${func[6]}" format="dd/MM/yy"/></td>
+                    <td>${func[7]}</td>
+
                 </tr>
             </g:each>
             </tbody>

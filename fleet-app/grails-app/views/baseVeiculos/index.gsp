@@ -4,7 +4,9 @@
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
     <g:set var="relatorio" value="Relatório de Base de Veículos"/>
     <title>${relatorio}</title>
-    <export:resource />
+
+    <r:require module="export"/>
+
 </head>
 <body>
 <div class="panel panel-default panel-top">
@@ -52,8 +54,13 @@
             <th>Marca/Modelo</th>
             <th>Empresa</th>
             <th>Unidade</th>
-            <th>Ano Fabricação</th>
+            <th>Cap do Tanque</th>
+            <th>Chassi</th>
+            <th>Categoria</th>
             <th>Hodômetro</th>
+            <th>Val Extintor</th>
+            <th>Qtd Motoristas</th>
+
             </thead>
             <tbody>
             <g:each in="${baseVeiculosList}" var="veic">
@@ -64,6 +71,9 @@
                     <td>${veic[4]}</td>
                     <td>${veic[5]}</td>
                     <td>${veic[6] ?: 0}</td>
+                    <td>${veic[7]}</td>
+                    <td><g:formatDate date="${veic[8]}" format="dd/MM/yy"/></td>
+                    <td>${veic[9]}</td>
                 </tr>
             </g:each>
             </tbody>
