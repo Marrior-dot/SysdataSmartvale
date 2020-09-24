@@ -50,14 +50,14 @@
             <tbody>
             <g:each in="${baseFuncionariosList}" var="func">
                 <tr>
-                    <td>${func[0]}</td>
-                    <td>${func[1]}</td>
-                    <td>${func[2]}</td>
-                    <td>${func[3]}</td>
-                    <td>${func[4]}</td>
-                    <td>${func[5]}</td>
-                    <td><g:formatDate date="${func[6]}" format="dd/MM/yy"/></td>
-                    <td>${func[7]}</td>
+                    <td>${func.matricula}</td>
+                    <td>${func.nome}</td>
+                    <td>${func.cpf}</td>
+                    <td>${func.unidade.rh.nomeFantasia}</td>
+                    <td>${func.unidade.nome}</td>
+                    <td>${func.categoriaCnh.nome}</td>
+                    <td><g:formatDate date="${func.validadeCnh}" format="dd/MM/yy"/></td>
+                    <td>${func.veiculos.size()}</td>
 
                 </tr>
             </g:each>
@@ -72,6 +72,8 @@
         <export:formats formats="['csv', 'excel', 'pdf']" />
     </div>
 </div>
+
+
 
 
 </body>

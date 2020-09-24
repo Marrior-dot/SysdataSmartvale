@@ -15,52 +15,34 @@ class BaseFuncionariosController {
 
     def index() {
 
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
 
 
-
-        if (params.f && params.f != 'html') {
-
-
-
-            def list = {
-                if (!params.max) params.max = 10
-
-                if (params?.format && params.format != "html") {
-                    response.contentType = grailsApplication.config.grails.mime.types[params.format]
-                    response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
+        if (params?.f && params.f != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.f]
+            response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
 
 
-                    List fields = ["matricula", "nome", "cpf", "rh", "unidade"]
-                    Map labels = ["Matricula": "matricula", "Nome": "nome", "Nome": "nome", "CPF": "nome", "Empresa": "rh", "Unidade": "unidade"]
+            List fields = ["matricula", "nome", "cpf", "unidade.rh.nomeFantasia"]
 
-                    /* Formatter closure in previous releases
-                def upperCase = { value ->
-                    return value.toUpperCase()
-                }
+            Map labels = ["matricula": "Matrícula", "nome": "Nome", "cpf": "CPF", "unidade.rh.nomeFantasia": "Empresa Cliente"]
 
 
-                // Formatter closure
-                def upperCase = { domain, value ->
-                    return value.toUpperCase()
-                }*/
+            //  Map formatters = [author: upperCase]
+            Map parameters = [title: "Base de Funcionarios", "column.widths": [0.2, 0.3, 0.5]]
 
-                    //  Map formatters = [author: upperCase]
-                    Map parameters = [title: "Base de Funcionarios", "column.widths": [0.2, 0.3, 0.5]]
+            exportService.export(params.f,
+                                response.outputStream,
+                                baseFuncionariosService.list(params, false),
+                                fields,
+                                labels, [:], [:])
 
-                    exportService.export(params.format, response.outputStream, baseFuncionariosList(params), fields, labels, formatters, parameters)
-
-
-                }
-
-
-
-
-            }
-
+            return
 
         }
 
-        [baseFuncionariosList: baseFuncionariosService.list(params), baseFuncionariosCount: baseFuncionariosService.count()]
+        [baseFuncionariosList: baseFuncionariosService.list(params), baseFuncionariosCount: baseFuncionariosService.count(params)]
     }
 
 

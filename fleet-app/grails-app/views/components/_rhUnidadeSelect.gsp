@@ -1,7 +1,7 @@
 <%@ page import="com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh" %>
 <div class="row">
     <div class="col-md-3">
-        <label class="control-label" for="empresa">Empresa</label>
+        <label class="control-label" for="empresa">Empresa Cliente</label>
         <g:select name="empresa"
                   from="${Rh.ativos.list()}" class="form-control"
                   optionKey="id"
