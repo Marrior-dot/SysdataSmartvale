@@ -15,6 +15,7 @@ class BaseFuncionariosController {
 
     def index() {
 
+<<<<<<< Updated upstream
         params.max = params.max ? params.max as int : 10
         params.offset = params.offset ? params.offset as int : 0
 
@@ -22,6 +23,9 @@ class BaseFuncionariosController {
         if (params?.f && params.f != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
+=======
+        
+>>>>>>> Stashed changes
 
 
             List fields = ["matricula", "nome", "cpf", "unidade.rh.nomeFantasia"]
