@@ -21,6 +21,13 @@
 		</style>
 	</head>
     <body>
+
+	<div style="position: absolute; opacity: 0.1; top: 50%; left: 40%; width: 500px;">
+		<div style="filter: grayscale(100%); width: 500px" alt="">
+			<asset:image src="projetos/${grailsApplication.config.projeto.pasta}/logo.png"/>
+		</div>
+	</div>
+
 	<br><br>
 	<div class="panel panel-default">
 		<div class="panel-heading">

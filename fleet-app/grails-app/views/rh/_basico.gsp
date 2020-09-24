@@ -35,6 +35,11 @@
 					<bs:formField class="form-control" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<bs:formField class="form-control" id="email" label="Email" value="${rhInstance?.email}" />
+				</div>
+			</div>
 		</div>
 	</div>
 

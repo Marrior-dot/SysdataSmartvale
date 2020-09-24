@@ -1,15 +1,8 @@
 package com.sysdata.gestaofrota
-
-
-import java.text.SimpleDateFormat
-
 //import org.jpos.iso.ISOChannel
 //import org.jpos.iso.ISOMsg
 //import org.jpos.iso.channel.ASCIIChannel
 //import org.jpos.iso.packager.ISO87APackager;
-
-import com.sysdata.gestaofrota.ca.NsuTermFile;
-
 class FuelTransactionCommand {
 
     String cartao
@@ -60,13 +53,10 @@ class CentralAtendimentoController {
             //BEGIN
             // verifica se é usuario o cartão pertence ao usuario rh
             User usuario = springSecurityService.getCurrentUser()
-            println "usuario:${usuario}"
             def dono = cartaoInstance.portador.unidade.rh
-            println "dono:${dono}"
             if(usuario.authorities.authority.contains('ROLE_RH')){
-                println "contem a role rh"
                 if(usuario.owner != dono){
-                    flash.errors << "O cartão ${cartaoInstance.numero} não pertence ao Centro de Custo ${usuario.owner}."
+                    flash.errors << "O cartão ${cartaoInstance.numero} não pertence ao Cliente ${usuario.owner}."
                     //render(view: 'searchCard', model: [act: 'findFuncionario', goTo: params.goTo])
                     redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: params.goTo])
                 }
@@ -220,7 +210,6 @@ class CentralAtendimentoController {
         if (cartaoInstanceCredito && cartaoInstanceDebito) {
             valorTransf = cartaoInstanceDebito.funcionario.conta.saldo
             saldoPortador = cartaoInstanceCredito.funcionario.conta.saldo
-            println "saldo portador debito: $valorTransf - saldo portador credito: $saldoPortador"
             if (centralAtendimentoService.tranferenciaSaldo(cartaoInstanceCredito, cartaoInstanceDebito, valorTransf)) {
                 log.info "User:${springSecurityService.currentUser?.name}-Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero}"
                 flash.message = "Saldo do cartão ${cartaoInstanceDebito.numero} transferido para o cartão ${cartaoInstanceCredito.numero} com sucesso."

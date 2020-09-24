@@ -1,9 +1,9 @@
-#nav-top.navbar-static-top, .footer {
-    background-color: var(--cor-primaria) !important;
+#nav-top.navbar-static-top {
+    background: var(--cor-primaria) !important;
 }
 
 .panel-primary > .panel-heading, .panel-default > .panel-heading {
-    background-color: var(--cor-primaria) !important;
+    background: var(--cor-secundaria) !important;
     border-color: var(--cor-secundaria) !important;
     color: white !important;
 }
@@ -11,10 +11,6 @@
 .btn-primary {
     background-color: var(--cor-primaria) !important;
     border-color: var(--cor-secundaria) !important;
-}
-
-.panel-primary, .panel-default {
-    border-color: var(--cor-primaria) !important;
 }
 
 table tbody tr.selected {

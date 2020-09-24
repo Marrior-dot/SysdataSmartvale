@@ -99,7 +99,6 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
                     corte = corteAberto
                     valor = abastInstance.valor
                     conta = abastInstance.cartao.portador.conta
-                    statusFaturamento = StatusFaturamento.NAO_FATURADO
                     dataEfetivacao = dataRef.clearTime()
                 }
                 lctoCompra.save flush: true

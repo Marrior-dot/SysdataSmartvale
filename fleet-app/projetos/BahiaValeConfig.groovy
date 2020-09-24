@@ -1,6 +1,10 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.cartao.GeradorCartaoPadrao
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.Anuidade
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TarifaBancaria
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TaxaAdesao
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TaxaVisibilidade
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaAdministracao
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaManutencao
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
@@ -110,22 +114,19 @@ cartao {
     }
 }
 
-processamentos = [
-        "faturamentoService",
-        "geracaoArquivoCobrancaService"
-]
-
-
 faturamento {
-    controlaSaldo = true
-    extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+
+    portador {
+        controlaSaldo = true
+        extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+
+    }
+
+    estabelecimento {
+        extensoes = [TaxaAdesao, TaxaVisibilidade, Anuidade, TarifaBancaria]
+    }
+
 }
-
-
-
-
-
-
 
 environments {
 

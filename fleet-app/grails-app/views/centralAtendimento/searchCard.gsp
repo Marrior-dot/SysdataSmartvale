@@ -8,17 +8,7 @@
 
     <div class="body">
         <br/>
-        <g:if test="${flash.message}">
-            <div class="alert alert-info" role="alert">${flash.message}</div>
-        </g:if>
-        <g:if test="${flash.errors}">
-            <div class="alert alert-danger" role="alert">
-                <g:each var="err" in="${flash.errors}">
-                    <strong>${err}</strong>
-                </g:each>
-            </div>
-        </g:if>
-        <div class="panel panel-default" style="width: 40%">
+        <div class="panel panel-default" style="width: 60%">
             <div class="panel-heading">
 
                 <g:if test="${goTo == 'unlockNewCard'}">
@@ -31,12 +21,19 @@
 
             </div>
             <div class="panel-body">
-                <div class="buttons">
-                    <a type="button" class="btn btn-default" href="${createLink(uri: '/')}">
-                        <i class="glyphicon glyphicon-home"></i>
-                        <g:message code="default.home.label"/>
-                    </a>
-                </div>
+
+                <g:if test="${flash.message}">
+                    <div class="alert alert-info" role="alert">${flash.message}</div>
+                </g:if>
+                <g:if test="${flash.errors}">
+                    <div class="alert alert-danger" role="alert">
+                        <g:each var="err" in="${flash.errors}">
+                            <strong>${err}</strong>
+                        </g:each>
+                    </div>
+                </g:if>
+
+
                 <br/>
 
                 <g:form method="post" action="${act}">

@@ -79,7 +79,11 @@ class PostoCombustivelController {
         }
     }
 
-    def update(PostoCombustivel postoCombustivelInstance) {
+    def update() {
+
+        PostoCombustivel postoCombustivelInstance = PostoCombustivel.get(params.id as long)
+        postoCombustivelInstance.properties = params
+
         if (postoCombustivelInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
             redirect(action: "show", id: postoCombustivelInstance.id)

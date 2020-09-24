@@ -7,7 +7,6 @@ class Corte {
     Date dataPrevista
     Date dataFechamento
     Date dataCobranca
-    Date dataInicioCiclo
     StatusCorte status
     Boolean liberado=false
 

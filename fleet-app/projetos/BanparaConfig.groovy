@@ -1,6 +1,10 @@
 import com.sysdata.gestaofrota.TipoAdministradoraCartao
 import com.sysdata.gestaofrota.TipoEmbossadora
 import com.sysdata.gestaofrota.proc.cartao.GeradorCartaoPadrao
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.Anuidade
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TarifaBancaria
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TaxaAdesao
+import com.sysdata.gestaofrota.proc.faturamento.ext.estabelecimento.TaxaVisibilidade
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaAdministracao
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaManutencao
 import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
@@ -9,6 +13,9 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
  * ESSE ARQUIVO DEVE SER IGNORADO PELO GIT
  * Cada projeto terá suas proprias variaveis
  */
+
+
+projectId = "banpara"
 
 environments {
     development {
@@ -33,8 +40,9 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-frota"
     }
@@ -58,8 +66,8 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-hom"
     }
@@ -83,8 +91,8 @@ environments {
          */
         pasta = "banpara"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#BEBEBE"
-        corSecundaria = "#696969"
+        corPrimaria = "#D9241B"
+        corSecundaria = "#28156C"
 
         context = "/banpara-hom"
     }
@@ -105,16 +113,86 @@ cartao {
     }
 }
 
-
-processamentos = [
-        "faturamentoService",
-        "geracaoArquivoCobrancaService"
-]
-
-
 faturamento {
-    controlaSaldo = true
-    extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+
+    portador {
+        controlaSaldo = true
+        extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+
+    }
+
+    estabelecimento {
+        extensoes = [TaxaAdesao, TaxaVisibilidade, Anuidade, TarifaBancaria]
+    }
+
 }
 
-projectId = "banpara"
+environments {
+
+    development {
+
+        sftp {
+            host = "localhost"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+
+        }
+
+        arquivos {
+            baseDir = "/home/luiz/tmp/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    homologation {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_test/input"
+                }
+            }
+        }
+    }
+
+    production {
+
+        sftp {
+            host = "172.17.17.2"
+            port = 22
+            user = 'sysdata'
+            pswd = 'ldAFWzWLA85i3XWP'
+            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+        }
+
+        arquivos {
+            baseDir = "/usr/local/frota/banpara/"
+            paysmart {
+                dir {
+                    saida   = "paysmart/saida/"
+                    enviado = "paysmart/enviado/"
+                    enviar  = "paysmart_prod/input"
+                }
+            }
+        }
+    }
+
+}

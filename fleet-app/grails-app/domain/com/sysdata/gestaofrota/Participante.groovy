@@ -8,6 +8,7 @@ class Participante {
     Status status = Status.ATIVO
     Date dateCreated = new Date()
     DadoBancario dadoBancario
+    String email
 
     static hasMany = [propriedades: Propriedade]
 
@@ -19,6 +20,7 @@ class Participante {
         endereco(nullable: true)
         telefone(nullable: true)
         dadoBancario(nullable: true)
+        email nullable: true, email: true
     }
 
     static mapping = {

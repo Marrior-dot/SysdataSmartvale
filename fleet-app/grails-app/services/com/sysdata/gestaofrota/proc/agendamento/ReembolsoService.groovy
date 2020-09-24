@@ -21,4 +21,8 @@ class ReembolsoService {
         } else
             throw new RuntimeException("Tipo de Reembolso indefinido!!!")
     }
+
+    Date calcularProximaDataReembolso(PostoCombustivel empresa, Date dataReferencia) {
+
+    }
 }

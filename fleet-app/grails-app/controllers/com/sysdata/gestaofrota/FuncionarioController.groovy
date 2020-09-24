@@ -80,7 +80,19 @@ class FuncionarioController extends BaseOwnerController {
     def save() {
         Funcionario funcionarioInstance = new Funcionario(params)
         try {
-            def ret = funcionarioService.save(funcionarioInstance, true)
+            def ret
+            try {
+                 ret = funcionarioService.save(funcionarioInstance, true)
+            } catch(e) {
+                flash.error = "Erro ao Salvar ao Funcionário. Contate suporte."
+                log.error "Erro ao Salvar ao Funcionário"
+                log.error e.message
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance,
+                                             unidadeInstance: funcionarioInstance.unidade,
+                                             action: Util.ACTION_NEW,
+                                             tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                return
+            }
 
             if (ret.success) {
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), funcionarioInstance.id])}"
@@ -125,7 +137,7 @@ class FuncionarioController extends BaseOwnerController {
         if (funcionarioInstance) {
             try {
                 funcionarioInstance.properties = params
-                def ret = funcionarioService.save(params, funcionarioInstance)
+                def ret = funcionarioService.save(funcionarioInstance)
                 if (ret.success) {
                     flash.message = "${message(code: 'default.updated.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), funcionarioInstance.id])}"
                     redirect(action: "show", id: funcionarioInstance.id)

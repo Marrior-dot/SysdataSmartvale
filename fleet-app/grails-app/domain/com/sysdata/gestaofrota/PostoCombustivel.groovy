@@ -12,7 +12,8 @@ class PostoCombustivel extends Empresa {
 
     static belongsTo = Rh
 
-    static hasMany = [estabelecimentos: Estabelecimento, reembolsos: Reembolso, programas: Rh, role: Role]
+    static hasMany = [estabelecimentos: Estabelecimento, reembolsos: Reembolso, programas: Rh]
+    //, role: Role
 
     static constraints = {
         tipoReembolso(nullable: true)

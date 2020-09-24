@@ -117,7 +117,7 @@ class VeiculoController  {
         if (veiculoInstance) {
             veiculoInstance.properties = params
             try {
-                veiculoService.save(veiculoInstance, params)
+                veiculoService.save(veiculoInstance)
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"
                 redirect(action: "show", id: veiculoInstance.id)
             } catch (e) {

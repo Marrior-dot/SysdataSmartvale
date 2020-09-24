@@ -37,11 +37,26 @@ class CategoriaFuncionarioService {
         [categoriaInstanceList: categoriaInstanceList, categoriaInstanceCount: categoriaInstanceCount]
     }
 
-    void save(Rh rh, String nome, Double valorCarga) {
+    def save(Rh rh, String nome, Double valorCarga) {
         CategoriaFuncionario categoria = new CategoriaFuncionario(nome: nome, valorCarga: valorCarga)
         rh.addToCategoriasFuncionario(categoria)
         //categoria.save(failOnError: true)
-        rh.save(flush: true)
+
+        def ret = [:]
+
+        if (!rh.save(flush: true)) {
+            log.error "Erro ao Salvar RH:"
+            rh.errors.allErrors.each {
+                log.error it.toString()
+            }
+
+            ret.success = false
+            ret.message = "Erro ao Salvar dados de Cliente"
+        } else
+            ret.success = true
+
+        return ret
+
     }
 
     void delete(CategoriaFuncionario categoriaFuncionario) {
@@ -55,7 +70,7 @@ class CategoriaFuncionarioService {
         if (categoria == null) return
         categoria.nome = nome
         categoria.valorCarga = valor
-        categoria.save()
+        categoria.save(flush: true)
     }
 
     def listCategoriasByUnidade(Unidade unidade) {

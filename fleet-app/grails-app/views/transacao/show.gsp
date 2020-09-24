@@ -1,5 +1,5 @@
 
-<%@ page import="com.sysdata.gestaofrota.TipoTransacao; com.sysdata.gestaofrota.Transacao" %>
+<%@ page import="com.sysdata.gestaofrota.Veiculo; com.sysdata.gestaofrota.Equipamento; com.sysdata.gestaofrota.TipoTransacao; com.sysdata.gestaofrota.Transacao" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -93,10 +93,20 @@
                         <th>Motivo Negação</th>
                         <td>${transacaoInstance.motivoNegacao}</td>
                     </tr>
-                    <tr>
-                        <th>Veículo</th>
-                        <td>${transacaoInstance.maquina?.placa}</td>
-                    </tr>
+
+                    <g:if test="${transacaoInstance.maquina.instanceOf(Veiculo) && transacaoInstance.maquina?.placa}">
+                        <tr>
+                            <th>Veículo</th>
+                            <td>${transacaoInstance.maquina?.placa}</td>
+                        </tr>
+                    </g:if>
+
+                    <g:if test="${transacaoInstance.maquina.instanceOf(Equipamento) && transacaoInstance.maquina?.codigo}">
+                        <tr>
+                            <th>Equipamento</th>
+                            <td>${transacaoInstance.maquina?.codigo}</td>
+                        </tr>
+                    </g:if>
 
                     <tr>
                         <th>${transacaoInstance.tipo.nome}</th>
