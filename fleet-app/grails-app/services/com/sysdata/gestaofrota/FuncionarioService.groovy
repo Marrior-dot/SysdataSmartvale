@@ -1,13 +1,17 @@
 package com.sysdata.gestaofrota
 
+import grails.gorm.transactions.Transactional
+
 class FuncionarioService {
     def cartaoService
 
+    @Transactional
     def save(Funcionario funcionarioInstance, boolean gerarCartao = false) {
 
         def ret = [success: true]
 
         if (funcionarioInstance.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
+
             if (! funcionarioInstance.save(flush: true)) {
                 ret.success = false
                 return ret
@@ -16,6 +20,7 @@ class FuncionarioService {
             PortadorFuncionario portadorFuncionario = funcionarioInstance.portador
             portadorFuncionario.save(flush: true)
 
+            //Gera cartão somente se por cadastro (insert)
             if (gerarCartao){
                 if (portadorFuncionario.funcionario.unidade.rh.cartaoComChip)
                     cartaoService.gerar(portadorFuncionario)
@@ -57,6 +62,7 @@ class FuncionarioService {
         return sugestoes
     }
 
+    @Transactional
     def delete(Funcionario funcionario) {
         if (funcionario.portador && funcionario.portador.cartaoAtivo) {
             Cartao cartao = funcionario.portador.cartaoAtivo

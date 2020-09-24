@@ -20,7 +20,7 @@ class Participante {
         endereco(nullable: true)
         telefone(nullable: true)
         dadoBancario(nullable: true)
-        email blank: true, email: true
+        email nullable: true, email: true
     }
 
     static mapping = {

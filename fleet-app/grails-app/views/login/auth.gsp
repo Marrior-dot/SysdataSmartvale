@@ -8,23 +8,20 @@
 	<body>
 			<div class="col-md-4 col-md-offset-4">
 				<br/>
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Login</h3>
-					</div>
+				<div class="panel panel-primary" style="background: none; border: none; box-shadow: none; -webkit-box-shadow: none;">
 					<br/>
 					<div class="text-center">
 						<asset:image src="projetos/${grailsApplication.config.projeto.pasta}/logo-small.png"/>
 					</div>
 
-					<div class="panel-body">
+					<div class="panel-body" style="background: none; border: none; ">
 						<g:if test='${flash.message}'>
 							<div class="alert alert-danger" role="alert">${flash.message}</div>
 						</g:if>
 
 						<form action='authenticate' method='POST' id='loginForm' autocomplete='off' class="form-signin">
 
-							<div class="input-group margin-bottom-sm">
+							<div class="input-group margin-bottom-sm" style="margin-bottom: 10px;">
 								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 								<input class="form-control" placeholder="Nome" name='username' id='username' type="text"/>
 							</div>
@@ -38,12 +35,12 @@
 								<label>
 									<input type="checkbox" name='${rememberMeParameter}'
 										   id='${rememberMeParameter}' ${hasCookie ? 'checked' : ''}>
-									Permanecer conectado
+									<div style="line-height: 20px;">Permanecer conectado</div>
 								</label>
 							</div>
 							<hr/>
 
-							<button type="submit" class="btn btn-lg btn-primary btn-block" id="submit">
+							<button type="submit" class="btn btn-danger btn-lg btn-block login border" id="submit">
 								${message(code: "springSecurity.login.button")} »
 							</button>
 						</form>
