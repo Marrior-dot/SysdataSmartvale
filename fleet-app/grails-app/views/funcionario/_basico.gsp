@@ -57,7 +57,7 @@
 
                 <div class="form-group col-md-6">
                     <label for="email">E-Mail *</label>
-                    <g:textField name="email" value="${funcionarioInstance?.email}" maxlength="50" class="form-control" required="required"/>
+                    <g:textField name="email" value="${funcionarioInstance?.email}" maxlength="50" class="form-control" />
 
                 </div>
 
