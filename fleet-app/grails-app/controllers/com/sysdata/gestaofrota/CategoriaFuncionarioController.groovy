@@ -14,9 +14,12 @@ class CategoriaFuncionarioController {
         String nome = params.nome
         Double valorCarga = Util.convertToDouble(params['valorCarga'] ?: "0")
         Rh rh = Rh.get(params.long('rh'))
-        categoriaFuncionarioService.save(rh, nome, valorCarga)
-        response.status = HttpStatus.OK.value()
-        render(template: 'tabela', model: [rhInstance: Rh.get(params.long('rh'))])
+        def ret = categoriaFuncionarioService.save(rh, nome, valorCarga)
+        if (ret.success)
+            render(template: 'tabela', model: [rhInstance: Rh.get(params.long('rh'))])
+        else
+            render status: HttpStatus.INTERNAL_SERVER_ERROR.value(), text: ret.message
+
     }
 
     def update() {

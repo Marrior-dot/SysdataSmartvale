@@ -3,7 +3,7 @@
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
             <li class="text-center">
-                <a href="${createLink(uri: '/')}"><img alt="logo" src="${assetPath(src:'projetos/' + projeto?.pasta + '/logo-small.png') }"></a>
+                <a href="${createLink(uri: '/')}"><img alt="logo" width=220 src="${assetPath(src:'projetos/' + projeto?.pasta + '/logo-small.png') }"></a>
             </li>
 
             <li>

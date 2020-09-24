@@ -16,10 +16,11 @@ class CartaoService {
         cartaoInstance.cvv = geradorCartao.gerarCVV()
 
         portador.addToCartoes(cartaoInstance)
-        portador.save(flush: true)
+        portador.save(flush: true, failOnError: true)
 
         administradora.qtdCartoes++
         administradora.save(flush: true)
+        println "Administradora Qtde Cartões: ${administradora.qtdCartoes}"
 
         return cartaoInstance
     }
