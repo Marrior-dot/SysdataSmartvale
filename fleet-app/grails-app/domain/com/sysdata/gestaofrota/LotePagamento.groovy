@@ -8,6 +8,7 @@ class LotePagamento {
 
     Date dateCreated
     StatusLotePagamento status = StatusLotePagamento.ABERTO
+    StatusEmissaoPagamento statusEmissao = StatusEmissaoPagamento.NAO_ENVIAR
 
     static hasMany = [pagamentos: PagamentoLote, cortes: CorteEstabelecimento]
     
