@@ -8,6 +8,8 @@ class PagamentoLote {
     Date dateCreated
     Date dataPrevista
     Date dataPagamento
+    BigDecimal valor
+    PostoCombustivel estabelecimento
     DadoBancario dadoBancario
 
     static belongsTo = [lotePagamento: LotePagamento]

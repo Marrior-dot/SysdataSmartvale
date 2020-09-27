@@ -22,6 +22,17 @@ class RESTClientHelper {
 
     private static final byte RETRIES = 3
 
+    private static RESTClientHelper instance
+
+    static RESTClientHelper getInstance() {
+        if (!instance)
+            instance = new RESTClientHelper()
+
+        return instance
+    }
+
+
+
     private withRetries = { clo ->
         def retries = RETRIES
         while (retries > 0) {
@@ -56,6 +67,30 @@ class RESTClientHelper {
         }
         return responseData
     }
+
+    ResponseData postJSON(suri, spath, data, headers = null) {
+        HTTPBuilder http = new HTTPBuilder(suri)
+        if (headers) http.setHeaders(headers)
+        ResponseData responseData
+        withRetries { retries ->
+            http.request(Method.POST, ContentType.JSON) { req ->
+                body = data
+                response.success = { resp, json ->
+                    log.debug "POST OK"
+                    retries = 0
+                    responseData = new ResponseData(statusCode: resp.statusLine.statusCode, body: json, json: json)
+                }
+                response.failure = { resp, json ->
+                    log.debug "POST ERR -> ${resp.status}"
+                    retries = 0
+                    responseData = new ResponseData(statusCode: resp.status, body: json, json: json )
+                }
+            }
+            return retries
+        }
+        responseData
+    }
+
 
 
 }

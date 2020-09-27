@@ -1,14 +1,15 @@
 package com.sysdata.gestaofrota
 
-enum StatusEmissaoPagamento {
+enum StatusEmissao {
 
     NAO_ENVIAR("Não Enviar"),
     ENVIAR("Enviar"),
-    ENVIADO("Enviado")
+    ENVIADO("Enviado"),
+    REENVIAR("Reenviar")
 
     String nome
 
-    StatusEmissaoPagamento(nome) {
+    StatusEmissao(nome) {
         this.nome = nome
     }
 
