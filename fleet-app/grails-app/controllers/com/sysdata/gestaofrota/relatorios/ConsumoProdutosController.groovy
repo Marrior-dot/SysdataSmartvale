@@ -22,7 +22,9 @@ select
     v.unidade.rh.nome,
     v.unidade.nome,
     p.nome,
-    sum(t.qtd_litros)
+    sum(t.qtd_litros),
+    sum(t.quilometragem)
+
 
 from
     Transacao as t,
@@ -58,7 +60,9 @@ group by
     v.unidade.nome,
     p.nome
 having
-    sum(t.qtd_litros) > 0
+    sum(t.qtd_litros) > 0 and
+    sum(t.quilometragem) > 0
+
 
 order by
     v.placa
@@ -82,10 +86,11 @@ order by
                                     "unidade": it[4],
                                     "produto": it[5],
                                     "consumo": it[6],
+                                    "quilometragem": it[7],
                                 ]
                             }
 
-            def fields = ["placa", "marca", "modelo", "rh", "unidade", "produto", "consumo"]
+            def fields = ["placa", "marca", "modelo", "rh", "unidade", "produto", "consumo", "Km Percorida "]
 
             def labels = [
                             "placa"   : "Placa",
@@ -94,7 +99,8 @@ order by
                             "rh"      : "Empresa",
                             "unidade" : "Unidade",
                             "produto" : "Produto",
-                            "consumo" : "Consumo(lts)"
+                            "consumo" : "Consumo(lts)",
+                            "quilometragem" : "KM Percorrida"
                         ]
 
             exportService.export(params.f, response.outputStream, consumoReport, fields, labels, [:], [:])

@@ -1,9 +1,8 @@
-
 package com.sysdata.gestaofrota.relatorios
-import com.sysdata.gestaofrota.Veiculo
-import grails.core.GrailsApplication
 
-class BaseVeiculosService {
+import com.sysdata.gestaofrota.Estabelecimento
+
+class BaseEstabelecimentosService {
 
 
     def list(params, paginate = true) {
@@ -16,34 +15,21 @@ class BaseVeiculosService {
                         eq("id", params.empresa.toLong())
                     }
                 }
-          if (params.unidade) {
+            if (params.unidade) {
 
-             unidade {
+                unidade {
                     eq("id", params.unidade.toLong())
                 }
             }
-
-            if (params.placa)
-
-                    placa {
-                        property("placa")
-
-                       // eq("placa", params.placa.toString())
-
-                       // println("A placa é : " + placa)
-                    }
-
-
 
 
         }
 
 
         if (paginate)
-            return Veiculo.createCriteria().list([max: params.max, offset: params.offset], criteria)
+            return Estabelecimento.createCriteria().list([max: params.max, offset: params.offset], criteria)
         else
-            return Veiculo.createCriteria().list(criteria)
-
+            return Estabelecimento.createCriteria().list(criteria)
 
     }
 
@@ -66,13 +52,9 @@ class BaseVeiculosService {
 
         }
 
-        return Veiculo.createCriteria().count(criteria)
+        return Estabelecimento.createCriteria().count(criteria)
 
     }
 
 
-
-
-
-
-}
+    }
