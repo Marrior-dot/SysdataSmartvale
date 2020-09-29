@@ -26,9 +26,14 @@ class BaseFuncionariosController {
 
 
 
-            List fields = ["matricula", "nome", "cpf", "unidade.rh.nomeFantasia"]
+            List fields = ["matricula", "nome", "cpf","portador.cartoes.numero", "unidade.rh.nomeFantasia", "unidade.nome",
+                           "cnh", "categoriaCnh.nome", "validadeCnh", "email", "telefone", "portador.endereco.logradouro",
+                           "portador.endereco.cidade"]
 
-            Map labels = ["matricula": "Matrícula", "nome": "Nome", "cpf": "CPF", "unidade.rh.nomeFantasia": "Empresa Cliente"]
+            Map labels = ["matricula": "Matrícula", "nome": "Nome", "cpf": "CPF","portador.cartoes.numero": "Cartão",
+                          "unidade.rh.nomeFantasia": "Empresa Cliente", "unidade.nome": "Unidade", "cnh": "CNH",
+                          "categoriaCnh.nome": "CNH Categoria", "validadeCnh": "CNH Validade", "email": "Email", "telefone": "Telefone,",
+                          "portador.endereco.logradouro": "Logradouro","portador.endereco.cidade": "Cidade-UF"]
 
 
             //  Map formatters = [author: upperCase]

@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 import com.sysdata.gestaofrota.Estabelecimento
+import com.sysdata.gestaofrota.Empresa
 
 import grails.core.GrailsApplication
 
@@ -25,9 +26,11 @@ class BaseEstabelecimentosController {
 
 
 
-            List fields = ["empresa.cnpj", "codigo", "unidade.rh.nomeFantasia","nome", "cpf",]
+            List fields = ["codigo", "cnpj", "nome","nomeFantasia", "endereco.logradouro","endereco.cidade","telefone","email","empresa.taxaReembolso"]
 
-            Map labels = ["matricula": "Matrícula", "nome": "Nome", "cpf": "CPF", "unidade.rh.nomeFantasia": "Empresa Cliente"]
+            Map labels = ["codigo": "Estab.Codigo", "cnpj": "CNPJ", "nome": "Razão Social", "nomeFantasia": "Fantasia",
+                          "endereco.logradouro": "Logradouro","endereco.cidade": "Cidade-UF",
+                          "telefone": "Telefone","email": "Email", "empresa.taxaReembolso": "Taxa Reembolso"]
 
 
             //  Map formatters = [author: upperCase]

@@ -9,17 +9,18 @@ class BaseEstabelecimentosService {
 
         def criteria = {
 
-            if (params.empresa)
-                unidade {
-                    rh {
-                        eq("id", params.empresa.toLong())
-                    }
-                }
-            if (params.unidade) {
 
-                unidade {
-                    eq("id", params.unidade.toLong())
-                }
+            if (params.cnpj) {
+
+                eq("cnpj", params.cnpj)
+            }
+
+            if (params.dataInicial) {
+                gt('dateCreated', params.dataInicial)
+            }
+            if (params.dataFinal) {
+
+                lt('dateCreated', params.dataFinal)
             }
 
 
@@ -37,17 +38,17 @@ class BaseEstabelecimentosService {
 
         def criteria = {
 
-            if (pars.empresa)
-                unidade {
-                    rh {
-                        eq("id", pars.empresa.toLong())
-                    }
-                }
-            if (pars.unidade) {
+            if (pars.cnpj) {
 
-                unidade {
-                    eq("id", pars.unidade.toLong())
-                }
+                eq("cnpj", pars.cnpj)
+            }
+
+            if (pars.dataInicial) {
+                gt('dateCreated', pars.dataInicial)
+            }
+            if (pars.dataFinal) {
+
+                lt('dateCreated', pars.dataFinal)
             }
 
         }

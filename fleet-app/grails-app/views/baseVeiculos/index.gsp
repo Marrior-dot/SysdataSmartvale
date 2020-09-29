@@ -49,19 +49,21 @@
             </div>
         </g:form>
 
-
-
+        <div class="table-responsive">
 
         <table class="table table-bordered table-stripped">
             <thead>
             <th>Placa</th>
             <th>Marca/Modelo</th>
+            <th>Cartão</th>
             <th>Empresa</th>
             <th>Unidade</th>
-            <th>Valid Extintor</th>
+            <th>Valide Extintor</th>
             <th>Chassi</th>
-            <th>Hodômetro</th>
+            <th>Ult Hodôm.(kms)</th>
             <th>Ano Fabricação</th>
+            <th>Cap Tanque(lts)</th>
+            <th>Tipo Comb</th>
 
             </thead>
             <tbody>
@@ -71,13 +73,15 @@
                 <tr>
                     <td>${veic.placa}</td>
                     <td>${veic.marca} / ${veic.modelo} </td>
+                    <td>${veic?.portador?.cartoes?.numero}</td>
                     <td>${veic.unidade.rh.nomeFantasia}</td>
                     <td>${veic.unidade.nome}</td>
                     <td><g:formatDate date="${veic.validadeExtintor}" format="dd/MM/yy"/></td>
                     <td>${veic.chassi}</td>
                     <td>${veic.hodometro}</td>
                     <td>${veic.anoFabricacao}</td>
-
+                    <td>${veic?.capacidadeTanque}</td>
+                    <td>${veic?.tipoAbastecimento}</td>
 
                 </tr>
             </g:each>
@@ -87,6 +91,7 @@
 
             </tfoot>
         </table>
+        </div>
 
         <g:paginate total="${baseVeiculosCount}" />
 

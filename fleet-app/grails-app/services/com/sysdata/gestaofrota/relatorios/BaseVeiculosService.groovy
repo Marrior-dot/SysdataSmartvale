@@ -23,16 +23,10 @@ class BaseVeiculosService {
                 }
             }
 
-            if (params.placa)
+            if (params.placa) {
 
-                    placa {
-                        property("placa")
-
-                       // eq("placa", params.placa.toString())
-
-                       // println("A placa é : " + placa)
-                    }
-
+                eq("placa", params.placa)
+            }
 
 
 
@@ -57,11 +51,18 @@ class BaseVeiculosService {
                         eq("id", pars.empresa.toLong())
                     }
                 }
+
             if (pars.unidade) {
 
                 unidade {
                     eq("id", pars.unidade.toLong())
                 }
+            }
+
+
+            if (pars.placa) {
+
+                eq("placa", pars.placa)
             }
 
         }

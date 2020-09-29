@@ -1,3 +1,6 @@
+<%@ page import="com.sysdata.gestaofrota.StatusCartao" %>
+<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,20 +35,29 @@
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;Pesquisar</button>
                 </div>
             </div>
+
+
+
         </g:form>
 
+        <div class="table-responsive">
 
-
-        <table class="table table-bordered table-stripped">
+        <table class="table table-bordered table-stripped table-responsive ">
             <thead>
-            <th>Matricula</th>
+            <th>Matrícula</th>
             <th>Nome</th>
             <th>CPF</th>
+            <th>Cartão</th>
             <th>Empresa</th>
             <th>Unidade</th>
+            <th>CNH</th>
             <th>CNH Categoria</th>
-            <th>CNH Valid</th>
-            <th>Veiculos Qtd</th>
+            <th>CNH Validade</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
+            <th>Cidade-UF</th>
+
             </thead>
             <tbody>
             <g:each in="${baseFuncionariosList}" var="func">
@@ -53,12 +65,17 @@
                     <td>${func.matricula}</td>
                     <td>${func.nome}</td>
                     <td>${func.cpf}</td>
+                    <td>${func?.portador?.cartoes?.numero}</td>
+
                     <td>${func.unidade.rh.nomeFantasia}</td>
                     <td>${func.unidade.nome}</td>
+                    <td>${func.cnh}</td>
                     <td>${func.categoriaCnh.nome}</td>
                     <td><g:formatDate date="${func.validadeCnh}" format="dd/MM/yy"/></td>
-                    <td>${func.veiculos.size()}</td>
-
+                    <td>${func?.email}</td>
+                    <td>${func?.telefone}</td>
+                    <td>${func?.portador?.endereco?.logradouro}</td>
+                    <td>${func?.portador?.endereco?.cidade}</td>
                 </tr>
             </g:each>
             </tbody>
@@ -66,14 +83,13 @@
 
             </tfoot>
         </table>
+        </div>
 
         <g:paginate total="${baseFuncionariosCount}" />
 
         <export:formats formats="['csv', 'excel', 'pdf']" />
     </div>
 </div>
-
-
 
 
 </body>

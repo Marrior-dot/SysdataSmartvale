@@ -28,12 +28,14 @@ def index() {
 
 
 
-        List fields = ["placa", "marca", "modelo", "unidade.rh.nomeFantasia", "validadeExtintor","hodometro"]
+        List fields = ["placa", "marca", "modelo", "portador.cartoes.numero", "unidade.rh.nomeFantasia","unidade.nome",
+                       "validadeExtintor","chassi","hodometro","anoFabricacao","capacidadeTanque","tipoAbastecimento"]
 
-        Map labels = ["placa": "Placa","marca": "Marca", "modelo": "Modelo",
-                      "unidade.rh.nomeFantasia": "Empresa Cliente",
-                      "validadeExtintor": "Validade Extintor", "hodometro": "Ult. Hodometro",
-                        ]
+        Map labels = ["placa": "Placa","marca": "Marca", "modelo": "Modelo","portador.cartoes.numero": "Cartao",
+                      "unidade.rh.nomeFantasia": "Empresa Cliente","unidade.nome": "Unidade",
+                      "validadeExtintor": "Validade Extintor", "chassi": "Chassi", "hodometro": "Ult. Hodometro (Kms)",
+                      "anoFabricacao": "Ano Fabricação","capacidadeTanque": "Cap Tanque (lts)",
+                      "tipoAbastecimento": "Tipo Combustivel" ]
 
         //  Map formatters = [author: upperCase]
         Map parameters = [title: "Base de Veiculos", "column.widths": [0.2, 0.3, 0.5]]
