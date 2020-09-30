@@ -19,8 +19,8 @@ class Fatura {
     Date dataVencimento
     StatusFatura status
     StatusEmissao statusEmissao = StatusEmissao.NAO_ENVIAR
+    StatusGeracaoBoleto statusGeracaoBoleto = StatusGeracaoBoleto.NAO_GERAR
 
-    def grailsApplication
 
     static hasMany = [itens:ItemFatura, boletos:Boleto]
 

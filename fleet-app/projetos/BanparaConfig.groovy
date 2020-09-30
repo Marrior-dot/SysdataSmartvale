@@ -44,6 +44,8 @@ environments {
         corPrimaria = "#D9241B"
         corSecundaria = "#28156C"
 
+        loginTransparente = true
+
         context = "/banpara-frota"
     }
 
