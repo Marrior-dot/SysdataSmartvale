@@ -4,13 +4,38 @@
 		<meta name='layout' content='layout-publico' />
 		%{--<link rel="stylesheet" type="text/css" href="/GestaoFrota/css/login.css">--}%
 		<title>Login</title>
+
+		<style>
+			.panel-login {
+				background: none;
+				border: none;
+				box-shadow: none;
+				-webkit-box-shadow: none;
+			}
+
+			#titulo p {
+				font-size: 60px;
+				color: white;
+			}
+
+		</style>
+
 	</head>
 	<body>
-			<div class="col-md-4 col-md-offset-4">
+			<div id="titulo" class="col-md-6">
+				<p class="text-center"><strong>Economia para sua FROTA</strong></p>
+			</div>
+
+
+			<div class="col-md-4 col-md-offset-2">
 				<br/>
-				<div class="panel panel-primary" style="background: none; border: none; box-shadow: none; -webkit-box-shadow: none;">
-					<br/>
-					<div class="text-center">
+				<div class="panel panel-primary ${grailsApplication.config.projeto.loginTransparente ? 'panel-login' : ''}" >
+
+					<div class="panel-heading">
+						<h3 class="panel-title">Login</h3>
+					</div>
+
+					<div style="display: flex; justify-content: center;">
 						<asset:image src="projetos/${grailsApplication.config.projeto.pasta}/logo-small.png"/>
 					</div>
 

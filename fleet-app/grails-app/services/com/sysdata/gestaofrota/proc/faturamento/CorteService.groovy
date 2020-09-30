@@ -2,12 +2,16 @@ package com.sysdata.gestaofrota.proc.faturamento
 
 import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
+import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoleto
+import grails.boot.GrailsApp
+import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class CorteService {
 
     PortadorCorteService portadorCorteService
+    GrailsApplication grailsApplication
 
     /**
      *  Recupera todas as contas de portadores que possuem lançamentos a faturar no ciclo atual
@@ -85,6 +89,26 @@ class CorteService {
                 fatRh.addToItens itemFatura
                 fatRh.save()
             }
+
+
+            if (grailsApplication.config.project.faturamento.portador.boleto.gerar) {
+
+                fatRh.statusGeracaoBoleto = StatusGeracaoBoleto.GERAR
+                fatRh.save()
+
+                Boleto boleto = new Boleto(fatura: fatRh)
+                boleto.save()
+
+                GeradorBoleto geradorBoleto = GeradorBoleto.getGerador(grailsApplication)
+                geradorBoleto.gerarBoleto(boleto)
+            }
+
+
+
+
+
+
+
 
             //Gera boleto
             //fatRh.gerarBoleto()

@@ -6,6 +6,7 @@ class Administradora extends Participante {
     Integer qtdCartoes = 0
 
     static hasMany = [role: Role]
+
     static constraints = {
         bin nullable: true
         qtdCartoes nullable: false, min: 0

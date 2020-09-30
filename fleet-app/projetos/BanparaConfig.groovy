@@ -44,6 +44,8 @@ environments {
         corPrimaria = "#D9241B"
         corSecundaria = "#28156C"
 
+        loginTransparente = true
+
         context = "/banpara-frota"
     }
 
@@ -131,6 +133,34 @@ environments {
 
     development {
 
+
+        reembolso {
+            banpara {
+                contaDebito {
+                    agencia = "15"
+                    conta = "213456"
+                }
+
+                api {
+
+                    autenticar {
+                        baseUrl = "http://localhost:8080/"
+                    }
+
+                    transferencia {
+                        baseUrl = "http://localhost:8080/"
+
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
+
         sftp {
             host = "localhost"
             port = 22
@@ -152,6 +182,38 @@ environments {
     }
 
     homologation {
+
+
+        reembolso {
+            banpara {
+                contaDebito {
+                    agencia = "15"
+                    conta = "213456"
+                }
+
+                api {
+
+                    autenticar {
+                        baseUrl = "https://desenv-wspa02/controlecanal"
+                        usuario = ""
+                        chave = ""
+
+                    }
+
+                    transferencia {
+                        baseUrl = "https://desenv-wspa02/transferencia"
+
+                        operador = "3157"
+                    }
+
+                }
+            }
+        }
+
+
+        api {
+            baseUrl = ""
+        }
 
         sftp {
             host = "172.17.17.2"

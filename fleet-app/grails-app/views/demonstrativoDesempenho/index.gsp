@@ -56,6 +56,7 @@
             <th>Km Rodados</th>
             <th>Desempenho (km/l)</th>
             </thead>
+
             <tbody>
             <g:each in="${desempenhoList}" var="csm">
                 <tr>

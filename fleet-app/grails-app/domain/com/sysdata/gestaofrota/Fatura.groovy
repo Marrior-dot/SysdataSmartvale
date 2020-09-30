@@ -18,12 +18,13 @@ class Fatura {
     Date data
     Date dataVencimento
     StatusFatura status
+    StatusEmissao statusEmissao = StatusEmissao.NAO_ENVIAR
+    StatusGeracaoBoleto statusGeracaoBoleto = StatusGeracaoBoleto.NAO_GERAR
 
-    def grailsApplication
 
-    static hasMany = [itens:ItemFatura,boletos:Boleto]
+    static hasMany = [itens:ItemFatura, boletos:Boleto]
 
-    static transients = ['valorTotal','grailsApplication']
+    static transients = ['valorTotal']
 
     static constraints = {
     }
