@@ -31,14 +31,7 @@
                             <label class="control-label" for="placa">Placa</label>
                             <g:textField name="placa" class="form-control placa" value="${params.placa}"></g:textField>
                         </div>
-                    <!--     <div class="col-md-3">
-                            <label class="control-label" for="dataInicio">Data Inicial</label>
-                            <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="dataFim">Data Final</label>
-                            <g:textField name="dataFim" class="form-control datepicker" value="${params.dataFim}"></g:textField>
-                        </div> -->
+
                     </div>
 
                 </div>
@@ -53,14 +46,11 @@
 
         <table class="table table-bordered table-stripped">
             <thead>
+            <th>Cliente</th>
+            <th>Unidade</th>
             <th>Placa</th>
             <th>Marca/Modelo</th>
-            <th>Cartão</th>
-            <th>Empresa</th>
-            <th>Unidade</th>
-            <th>Valide Extintor</th>
             <th>Chassi</th>
-            <th>Ult Hodôm.(kms)</th>
             <th>Ano Fabricação</th>
             <th>Cap Tanque(lts)</th>
             <th>Tipo Comb</th>
@@ -71,14 +61,11 @@
 
             <g:each in="${baseVeiculosList}" var="veic">
                 <tr>
-                    <td>${veic.placa}</td>
-                    <td>${veic.marca} / ${veic.modelo} </td>
-                    <td>${veic?.portador?.cartoes?.numero}</td>
                     <td>${veic.unidade.rh.nomeFantasia}</td>
                     <td>${veic.unidade.nome}</td>
-                    <td><g:formatDate date="${veic.validadeExtintor}" format="dd/MM/yy"/></td>
+                    <td>${veic.placa}</td>
+                    <td>${veic.marca} / ${veic.modelo} </td>
                     <td>${veic.chassi}</td>
-                    <td>${veic.hodometro}</td>
                     <td>${veic.anoFabricacao}</td>
                     <td>${veic?.capacidadeTanque}</td>
                     <td>${veic?.tipoAbastecimento}</td>
