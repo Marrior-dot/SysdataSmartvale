@@ -372,16 +372,24 @@ class PedidoCargaController extends BaseOwnerController {
                 "cpf",
                 "matricula",
                 "nome",
+              //  "cartao",
+                "dateCreated",
+                "dataCarga",
+                "status",
                 "descricao",
                 "valor"
         ]
 
         Map labels = [
-                "cpf"      : "CPF",
-                "matricula": "Matrícula",
-                "nome"     : "Nome",
-                "descricao": "Lançamento",
-                "valor"    : "Valor"
+                "cpf"        : "CPF",
+                "matricula"  : "Matrícula",
+                "nome"       : "Nome",
+              //  "cartao"     : "Cartao",
+                "dateCreated": "Data Pedido",
+                "dataCarga"  : "Data Carga",
+                "status"     : "Status Pedido",
+                "descricao"  : "Lançamento",
+                "valor"      : "Valor"
         ]
 
         Map formatters = [
@@ -395,8 +403,15 @@ class PedidoCargaController extends BaseOwnerController {
                     "cpf"      : it.participante.cpf,
                     "matricula": it.participante.matricula,
                     "nome"     : it.participante.nome,
+                   // "cartao"   :  portador?.cartaoAtual?.numero,
+                    "dateCreated"     : it.pedido.dateCreated,
+                    "dataCarga"     : it.pedido.dataCarga,
+                    "status"     : it.pedido.status,
                     "descricao": it.lancamento ? it.lancamento.tipo.nome : "CARGA",
                     "valor"    : it.valor
+
+
+
             ]
         }.sort { it.tipo?.nome }
 
