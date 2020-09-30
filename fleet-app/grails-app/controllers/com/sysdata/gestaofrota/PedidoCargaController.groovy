@@ -16,8 +16,10 @@ class PedidoCargaController extends BaseOwnerController {
     }
 
     def list() {
+/*
         Participante participante = getCurrentUser()?.owner
         Unidade unidadeInstance = participante.instanceOf(Rh) ? Unidade.findByRh(participante) : null
+*/
 
         def authorities = getCurrentUser().authorities*.authority
 
@@ -35,7 +37,9 @@ class PedidoCargaController extends BaseOwnerController {
                 lt('dateCreated', beginDay+1)
             }
 
+/*
             unidade {
+
                 if (params?.searchUnidade) {
                     ilike('nome', "%${params.searchUnidade}%")
                 }
@@ -48,6 +52,7 @@ class PedidoCargaController extends BaseOwnerController {
                     eq('modeloCobranca', TipoCobranca.PRE_PAGO)
                 }
             }
+*/
 
             if (params?.searchStatus) {
                 eq('status', StatusPedidoCarga.valueOf(params.searchStatus.toString().toUpperCase()))
@@ -62,7 +67,7 @@ class PedidoCargaController extends BaseOwnerController {
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
-         unidadeInstance         : unidadeInstance,
+         //unidadeInstance         : unidadeInstance,
          statusPedidoCarga       : StatusPedidoCarga.asList(),
          searchDataPedido        : params?.searchDataPedido,
          searchDataCarga         : params?.searchDataCarga,

@@ -74,8 +74,8 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        corPrimaria = "#3E0090"
-        corSecundaria = "#00993E"
+        corPrimaria = "#210E7F"
+        corSecundaria = "#E8022C"
 
         context = "/bahiavale-hom"
     }
@@ -101,8 +101,8 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        corPrimaria = "#3E0090"
-        corSecundaria = "#00993E"
+        corPrimaria = "#210E7F"
+        corSecundaria = "#E8022C"
 
         context = "/bahiavale-hom"
     }
