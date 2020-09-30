@@ -31,7 +31,7 @@ class PedidoCarga {
     }
 
     static hibernateFilters = {
-        pedidoPorRh(condition: 'unidade_id in (select id from Unidade u where u.rh_id = :rh_id)', types: 'long')
+        pedidoPorRh(condition: 'unidade_id in (select id from Unidade u where u.rh_id =:rh_id)', types: 'long')
     }
 
 

@@ -20,7 +20,6 @@ class CartaoService {
 
         administradora.qtdCartoes++
         administradora.save(flush: true)
-        println "Administradora Qtde Cartões: ${administradora.qtdCartoes}"
 
         return cartaoInstance
     }

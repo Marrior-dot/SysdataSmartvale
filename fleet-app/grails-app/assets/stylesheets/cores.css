@@ -3,7 +3,7 @@
 }
 
 .panel-primary > .panel-heading, .panel-default > .panel-heading {
-    background: var(--cor-secundaria) !important;
+    background-image: linear-gradient(to right, var(--cor-primaria), var(--cor-secundaria));
     border-color: var(--cor-secundaria) !important;
     color: white !important;
 }

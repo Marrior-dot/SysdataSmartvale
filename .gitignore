@@ -8,3 +8,5 @@ fleet-app/logs/
 fleet-app/grails-app/conf/frotaApp.groovy
 
 *.log
+
+*.iml

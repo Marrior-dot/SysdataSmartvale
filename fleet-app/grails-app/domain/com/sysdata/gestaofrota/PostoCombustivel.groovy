@@ -4,7 +4,6 @@ class PostoCombustivel extends Empresa {
 
     BigDecimal taxaReembolso = 0.0
     TipoReembolso tipoReembolso
-
     BigDecimal taxaAdesao = 0.0
     BigDecimal taxaVisibilidade = 0.0
     BigDecimal anuidade = 0.0

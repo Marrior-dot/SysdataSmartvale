@@ -17,6 +17,14 @@ import com.sysdata.gestaofrota.proc.faturamento.ext.portador.TaxaUtilizacao
 projectId = "bahiavale"
 
 environments {
+
+    test {
+        dbCreate = "update"
+        url = "jdbc:postgresql://172.17.0.2/bahiavale_development"
+        username = "postgres"
+        password = "postgres"
+    }
+
     development {
         nome = "BahiaVale"
         tipoPrograma = 7
@@ -38,10 +46,11 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        corPrimaria = "#3E0090"
-        corSecundaria = "#00993E"
+        corPrimaria = "#210E7F"
+        corSecundaria = "#E8022C"
 
         context = "/bahiavale-frota"
+
     }
 
     homologation {
@@ -65,8 +74,8 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        corPrimaria = "#3E0090"
-        corSecundaria = "#00993E"
+        corPrimaria = "#210E7F"
+        corSecundaria = "#E8022C"
 
         context = "/bahiavale-hom"
     }
@@ -92,8 +101,8 @@ environments {
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
         pasta = "bahiavale"
-        corPrimaria = "#3E0090"
-        corSecundaria = "#00993E"
+        corPrimaria = "#210E7F"
+        corSecundaria = "#E8022C"
 
         context = "/bahiavale-hom"
     }
@@ -103,6 +112,16 @@ administradora {
     nome = "BAHIA VALE"
     bin = "605482"
     anosValidadeCartao = 2
+
+    endereco {
+        cep = "41820-020"
+        logradouro = "Avenida Tancredo Neves"
+        numero = "1632"
+        complemento = "Salvador Trade Center, torre norte sala 801"
+        bairro = "Caminho das Árvores"
+        cidade = "Salvador"
+        estado = "BA"
+    }
 
 }
 
@@ -120,6 +139,19 @@ faturamento {
         controlaSaldo = true
         extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 
+        boleto {
+            gerar = true
+            gerador = "geradorBoletoBancoBrasilService"
+
+            agencia = "3454"
+            dvAgencia = "1"
+            conta =  "38577"
+            dvConta = "8"
+
+            carteira = "17"
+            convenio = "3215085"
+            contrato = "19997095"
+        }
     }
 
     estabelecimento {
