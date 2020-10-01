@@ -1,5 +1,11 @@
 package com.sysdata.gestaofrota
 
+import javax.crypto.Cipher
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.DESedeKeySpec
+import javax.crypto.spec.IvParameterSpec
+import java.security.spec.KeySpec
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.Normalizer
@@ -339,7 +345,5 @@ class Util {
             }else return false;
         } else false
     }
-
-
 
 }
