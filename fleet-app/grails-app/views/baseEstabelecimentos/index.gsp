@@ -59,11 +59,21 @@
             <th>CNPJ</th>
             <th>Razão Social</th>
             <th>Fantasia</th>
-            <th>Endereço</th>
-            <th>Cidade - UF</th>
             <th>Telefone</th>
+            <th>Endereço</th>
+            <th>Complemento</th>
+            <th>Bairro</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Cep</th>
             <th>Email</th>
-            <th>Reembolso</th>
+            <th>Reembolso(%)</th>
+            <th>Banco</th>
+            <th>Agência</th>
+            <th>Conta</th>
+            <th>Tipo Titular</th>
+            <th>Nome Titular</th>
+            <th>Documento</th>
 
 
             </thead>
@@ -74,11 +84,22 @@
                     <td>${est?.cnpj}</td>
                     <td>${est.nome}</td>
                     <td>${est?.nomeFantasia}</td>
-                    <td>${est?.endereco?.logradouro}</td>
-                    <td>${est?.endereco?.cidade}</td>
                     <td>${est?.telefone}</td>
+                    <td>${est?.empresa?.endereco?.logradouro} ${est?.empresa?.endereco?.numero}</td>
+                    <td>${est?.empresa?.endereco?.complemento}</td>
+                    <td>${est?.empresa?.endereco?.bairro}</td>
+                    <td>${est?.empresa?.endereco?.cidade?.nome}</td>
+                    <td>${est?.empresa?.endereco?.cidade?.estado}</td>
+                    <td>${est?.empresa?.endereco?.cep}</td>
                     <td>${est?.email}</td>
                     <td>${est?.empresa?.taxaReembolso}</td>
+                    <td>${est?.empresa?.dadoBancario?.banco.nome}</td>
+                    <td>${est?.empresa?.dadoBancario?.agencia}</td>
+                    <td>${est?.empresa?.dadoBancario?.conta}</td>
+                    <td>${est?.empresa?.dadoBancario?.tipoTitular}</td>
+                    <td>${est?.empresa?.dadoBancario?.nomeTitular}</td>
+                    <td>${est?.empresa?.dadoBancario?.documentoTitular}</td>
+
 
                 </tr>
             </g:each>

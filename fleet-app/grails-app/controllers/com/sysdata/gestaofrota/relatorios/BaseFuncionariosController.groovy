@@ -10,7 +10,8 @@ class BaseFuncionariosController {
 
     GrailsApplication grailsApplication
 
-    BaseFuncionariosService  baseFuncionariosService
+
+    BaseFuncionariosService baseFuncionariosService
 
 
     def index() {
@@ -25,15 +26,17 @@ class BaseFuncionariosController {
             response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
 
 
-
-            List fields = ["matricula", "nome", "cpf","portador.cartoes.numero", "unidade.rh.nomeFantasia", "unidade.nome",
+            List fields = ["unidade.rh.nomeFantasia", "unidade.nome","matricula", "nome", "cpf","portador.cartaoAtual.numero",
                            "cnh", "categoriaCnh.nome", "validadeCnh", "email", "telefone", "portador.endereco.logradouro",
-                           "portador.endereco.cidade"]
+                           "portador.endereco.numero","portador.endereco.complemento", "portador.endereco.bairro",
+                           "portador.endereco.cidade.nome", "portador.endereco.cidade.estado", "portador.endereco.cep"]
 
-            Map labels = ["matricula": "Matrícula", "nome": "Nome", "cpf": "CPF","portador.cartoes.numero": "Cartão",
-                          "unidade.rh.nomeFantasia": "Empresa Cliente", "unidade.nome": "Unidade", "cnh": "CNH",
+            Map labels = ["unidade.rh.nomeFantasia": "Cliente", "unidade.nome": "Unidade","matricula": "Matrícula",
+                          "nome": "Nome", "cpf": "CPF","portador.cartaoAtual.numero": "Cartão","cnh": "CNH",
                           "categoriaCnh.nome": "CNH Categoria", "validadeCnh": "CNH Validade", "email": "Email", "telefone": "Telefone,",
-                          "portador.endereco.logradouro": "Logradouro","portador.endereco.cidade": "Cidade-UF"]
+                          "portador.endereco.logradouro": "Logradouro","portador.endereco.numero": "Numero",
+                          "portador.endereco.complemento": "Complemento", "portador.endereco.bairro": "Bairro",
+                          "portador.endereco.cidade.nome": "Cidade","portador.endereco.cidade.estado": "Estado","portador.endereco.cep": "Cep" ]
 
 
             //  Map formatters = [author: upperCase]
@@ -42,11 +45,10 @@ class BaseFuncionariosController {
             exportService.export(params.f,
                                 response.outputStream,
                                 baseFuncionariosService.list(params, false),
+
                                 fields,
                                 labels, [:], [:])
-
-            return
-
+            return 
         }
 
         [baseFuncionariosList: baseFuncionariosService.list(params), baseFuncionariosCount: baseFuncionariosService.count(params)]
