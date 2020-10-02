@@ -28,7 +28,7 @@ class FechamentoService {
                                                         projections {
                                                             sum("valor")
                                                         }
-                                                        eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                                        eq("status", StatusLancamento.A_FATURAR)
                                                         eq("corte", corte)
                                                     }
             if (totalFatura) {

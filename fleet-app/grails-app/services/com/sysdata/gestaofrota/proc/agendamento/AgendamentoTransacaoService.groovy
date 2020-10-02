@@ -1,19 +1,7 @@
 package com.sysdata.gestaofrota.proc.agendamento
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.Corte
-import com.sysdata.gestaofrota.Estabelecimento
-import com.sysdata.gestaofrota.Lancamento
-import com.sysdata.gestaofrota.LancamentoEstabelecimento
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.Rh
-import com.sysdata.gestaofrota.StatusFaturamento
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.StatusTransacao
-import com.sysdata.gestaofrota.TipoCobranca
-import com.sysdata.gestaofrota.TipoLancamento
-import com.sysdata.gestaofrota.TipoTransacao
-import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.CorteService
 import grails.gorm.transactions.Transactional
 
@@ -90,12 +78,12 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         Rh rh = abastInstance.cartao.portador.unidade.rh
 
         if (rh.modeloCobranca == TipoCobranca.POS_PAGO) {
-            Corte corteAberto = corteService.getCorteAberto(abastInstance.cartao.portador.unidade.rh)
+            CortePortador corteAberto = corteService.getCorteAberto(abastInstance.cartao.portador.unidade.rh)
             if (corteAberto) {
                 lctoCompra = new LancamentoPortador()
                 lctoCompra.with {
                     tipo = TipoLancamento.COMPRA
-                    status = StatusLancamento.EFETIVADO
+                    status = StatusLancamento.A_FATURAR
                     corte = corteAberto
                     valor = abastInstance.valor
                     conta = abastInstance.cartao.portador.conta
@@ -111,7 +99,6 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
                     valor: abastInstance.valor,
                     dataEfetivacao: dataRef.clearTime(),
                     conta: abastInstance.cartao.portador.conta,
-                    statusFaturamento: StatusFaturamento.NAO_FATURADO
             )
         }
 
@@ -131,12 +118,11 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         if (dataReembolso) {
             def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,
                     dataPrevista: dataReembolso,
-                    status: StatusLancamento.A_EFETIVAR,
+                    status: StatusLancamento.A_FATURAR,
                     valor: valReemb,
                     valorTaxa: valTxAdm,
                     dataEfetivacao: dataReembolso,
-                    conta: estabelecimentoInstance.empresa.conta,
-                    statusFaturamento: StatusFaturamento.NAO_FATURADO)
+                    conta: estabelecimentoInstance.empresa.conta)
             abastInstance.addToLancamentos(lancReembolso)
         } else {
             ret.success = false

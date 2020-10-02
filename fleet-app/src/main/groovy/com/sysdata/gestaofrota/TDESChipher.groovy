@@ -84,11 +84,9 @@ class TDESChipher {
 
         return bytesToHex(this.cipher.doFinal(plainText.getBytes("utf-8")))
 
-
     }
 
     String decrypt(String hexCipherText) {
-
 
         byte[] textBytes = hexToBytes(hexCipherText)
 
@@ -98,7 +96,6 @@ class TDESChipher {
             this.cipher.init(Cipher.DECRYPT_MODE, this.secretKey)
 
         return new String(this.cipher.doFinal(textBytes))
-
 
     }
 }

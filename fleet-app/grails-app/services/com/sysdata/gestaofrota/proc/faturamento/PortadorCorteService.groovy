@@ -30,7 +30,7 @@ class PortadorCorteService {
         //Lançamentos a FATURAR
         def lctosAFat = LancamentoPortador.withCriteria {
                                 eq("conta", portador.conta)
-                                eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                eq("status", StatusLancamento.A_FATURAR)
                                 eq("corte", corte)
                                 order("dataEfetivacao")
                             }
@@ -38,8 +38,7 @@ class PortadorCorteService {
         lctosAFat.each { lcto ->
             ItemFatura item = faturarLancamento(lcto)
             fatura.addToItens(item)
-            lcto.statusFaturamento = StatusFaturamento.FATURADO
-            lcto.status = StatusLancamento.EFETIVADO
+            lcto.status = StatusLancamento.FATURADO
         }
         //Roda extensoes
         fatConfig.extensoes.each { e ->
@@ -107,7 +106,7 @@ class PortadorCorteService {
 
         def aFaturarList = LancamentoPortador.withCriteria {
                                 eq("conta", portador.conta)
-                                eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                eq("status", StatusLancamento.A_FATURAR)
                                 eq("corte", corteAberto)
                                 order("dataEfetivacao")
                             }

@@ -50,7 +50,7 @@ class TestesService {
                 t.estabelecimento.empresa.nome
 """
 
-        def list = Transacao.executeQuery(hql, [tipo: TipoLancamento.REEMBOLSO, status: StatusLancamento.A_EFETIVAR])
+        def list = Transacao.executeQuery(hql, [tipo: TipoLancamento.REEMBOLSO, status: StatusLancamento.A_FATURAR])
 
         println "Lista: ${list}"
 

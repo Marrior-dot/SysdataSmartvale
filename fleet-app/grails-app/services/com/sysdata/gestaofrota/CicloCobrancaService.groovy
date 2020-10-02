@@ -11,7 +11,7 @@ class CicloCobrancaService {
 
         def lcnPend=Lancamento.withCriteria {
             eq("tipo",tl)
-            eq("status",StatusLancamento.A_EFETIVAR)
+            eq("status",StatusLancamento.A_FATURAR)
             eq("conta",f.conta)
         }
 
@@ -31,7 +31,7 @@ class CicloCobrancaService {
                     valor=tx
                     tipo=tl
                     referencia=cicloAberto.referencia
-                    status=StatusLancamento.A_EFETIVAR
+                    status=StatusLancamento.A_FATURAR
                     save(flush:true)
                 }
             }
