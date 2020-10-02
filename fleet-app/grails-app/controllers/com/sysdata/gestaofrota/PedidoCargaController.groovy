@@ -213,7 +213,7 @@ class PedidoCargaController extends BaseOwnerController {
                     it.tipo == TipoItemPedido.TAXA && it.lancamento.status == StatusLancamento.EFETIVADO
                 }.each { i ->
                     def lc = i.lancamento
-                    lc.status = StatusLancamento.A_EFETIVAR
+                    lc.status = StatusLancamento.A_FATURAR
                     lc.save(flush: true)
                 }
 
@@ -412,7 +412,7 @@ class PedidoCargaController extends BaseOwnerController {
                 [
                         unid : unidadeInstance,
                         tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
-                        sts  : StatusLancamento.A_EFETIVAR
+                        sts  : StatusLancamento.A_FATURAR
                 ]
         )
     }

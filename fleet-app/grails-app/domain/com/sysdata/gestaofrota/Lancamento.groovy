@@ -2,11 +2,11 @@ package com.sysdata.gestaofrota
 
 class Lancamento {
 
-    Double valor
     Date dateCreated
     Date dataEfetivacao
     TipoLancamento tipo
     StatusLancamento status
+    BigDecimal valor
 
     static transients = ['descricao']
 

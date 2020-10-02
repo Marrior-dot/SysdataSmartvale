@@ -1,11 +1,9 @@
 package com.sysdata.gestaofrota
 
 enum StatusLancamento {
-	A_EFETIVAR("A Efetivar"),
+	A_FATURAR("A Efetivar"),
 	EFETIVADO("Efetivado"),
 	ESTORNADO("Estornado"),
-	A_PAGAR("A Pagar"),
-	A_RECEBER("A Receber"),
 	FATURADO("Faturado")
 
 
@@ -17,7 +15,7 @@ enum StatusLancamento {
 	}
 	
 	static asList(){
-		[A_EFETIVAR,EFETIVADO,ESTORNADO]
+		[A_FATURAR,EFETIVADO,ESTORNADO]
 	}
 	
 }
