@@ -256,7 +256,7 @@ class CorteService {
 
     }
 
-    Corte getCorteAberto(Rh rh) {
+    CortePortador getCorteAberto(Rh rh) {
 
         if (! rh.fechamentos)
             throw new RuntimeException("Nao ha dias de fechamento definidos para o programa $this")
@@ -316,7 +316,7 @@ class CorteService {
             calInic.set(Calendar.DAY_OF_MONTH, cicloAnterior.diaCorte + 1)
             datInicCiclo = calInic.time
 
-            corteAberto = new Corte()
+            corteAberto = new CortePortador()
             corteAberto.with {
                 dataPrevista = dataCorte
                 dataCobranca = dataCorte + rh.prazoPgtFatura

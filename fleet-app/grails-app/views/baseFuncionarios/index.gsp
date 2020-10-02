@@ -44,38 +44,45 @@
 
         <table class="table table-bordered table-stripped table-responsive ">
             <thead>
+            <th>Cliente</th>
+            <th>Unidade</th>
             <th>Matrícula</th>
             <th>Nome</th>
             <th>CPF</th>
             <th>Cartão</th>
-            <th>Empresa</th>
-            <th>Unidade</th>
             <th>CNH</th>
             <th>CNH Categoria</th>
             <th>CNH Validade</th>
             <th>Email</th>
             <th>Telefone</th>
             <th>Endereço</th>
-            <th>Cidade-UF</th>
+            <th>Complemento</th>
+            <th>Bairro</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Cep</th>
 
             </thead>
             <tbody>
             <g:each in="${baseFuncionariosList}" var="func">
                 <tr>
+                    <td>${func.unidade.rh.nomeFantasia}</td>
+                    <td>${func.unidade.nome}</td>
                     <td>${func.matricula}</td>
                     <td>${func.nome}</td>
                     <td>${func.cpf}</td>
-                    <td>${func?.portador?.cartoes?.numero}</td>
-
-                    <td>${func.unidade.rh.nomeFantasia}</td>
-                    <td>${func.unidade.nome}</td>
+                    <td>${func?.portador?.cartaoAtual?.numero}</td>
                     <td>${func.cnh}</td>
                     <td>${func.categoriaCnh.nome}</td>
                     <td><g:formatDate date="${func.validadeCnh}" format="dd/MM/yy"/></td>
                     <td>${func?.email}</td>
                     <td>${func?.telefone}</td>
-                    <td>${func?.portador?.endereco?.logradouro}</td>
-                    <td>${func?.portador?.endereco?.cidade}</td>
+                    <td>${func?.portador?.endereco?.logradouro} ${func?.portador?.endereco?.numero}</td>
+                    <td>${func?.portador?.endereco?.complemento}</td>
+                    <td>${func?.portador?.endereco?.bairro}</td>
+                    <td>${func?.portador?.endereco?.cidade?.nome}</td>
+                    <td>${func?.portador?.endereco?.cidade?.estado}</td>
+                    <td>${func?.portador?.endereco?.cep}</td>
                 </tr>
             </g:each>
             </tbody>

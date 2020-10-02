@@ -4,6 +4,7 @@ import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Cartao
 import com.sysdata.gestaofrota.Endereco
 import com.sysdata.gestaofrota.StatusCartao
+import com.sysdata.gestaofrota.TDESChipher
 import com.sysdata.gestaofrota.Util
 import grails.util.Holders
 
@@ -14,8 +15,11 @@ import java.text.SimpleDateFormat
  */
 class PaySmart extends Embossadora {
 
+    private TDESChipher tdesChipher
+
     PaySmart(List<Cartao> cartoes) {
         super(cartoes)
+        this.tdesChipher = new TDESChipher("CBC")
     }
 
     @Override
@@ -80,8 +84,6 @@ class PaySmart extends Embossadora {
         final String campoCel = String.format("%19s", " ")
         final String dataEfetivacao = new SimpleDateFormat("yyMMdd").format(new Date())
         final String aplicacoes = String.format("%10s", " ")
-        final String pinBlock = String.format("%16s", " ")
-
 
         StringBuilder builder = new StringBuilder()
         int sequencial = 2
@@ -100,6 +102,8 @@ class PaySmart extends Embossadora {
             String cnpj = c.portador.cnpj
             String campoCpf = cpf.length() > 0 ? "CPF=${cpf}" : String.format("%18s", " ")
             String campoCnpj = cnpj.length() > 0 ? "CNPJ${cnpj}" : String.format("%19s", " ")
+
+            def pinBlock = this.tdesChipher.encrypt(c.senha)
 
             builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${produto}${agencia}${posto}${numeroConta}" +
                     "\$${c.numeroFormatado.padRight(20, " ")}" +            // primeira linha de embossing (número do cartão formatado)

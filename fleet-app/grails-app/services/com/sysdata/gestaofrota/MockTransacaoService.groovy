@@ -66,6 +66,7 @@ class MockTransacaoService {
             return ret
         }
 
+/*
         def estabsIds = Estabelecimento.withCriteria {
                             projections {
                                 property "id"
@@ -79,10 +80,14 @@ class MockTransacaoService {
             ret.messages << "Não há ECs ativos"
             return ret
         }
+*/
 
         qtde.times { i ->
             def cid = cartoesIds[Math.abs(random.nextInt() % cartoesIds.size())]
             Cartao crt = Cartao.get(cid)
+
+            def estabsIds = crt.portador.unidade.rh.empresas.estabelecimentos*.id
+
 
             def saldoDisp = crt.saldoTotal
             def intValor = (int) saldoDisp - 1

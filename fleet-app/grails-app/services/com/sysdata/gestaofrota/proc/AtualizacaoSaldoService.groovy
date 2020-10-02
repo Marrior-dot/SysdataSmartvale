@@ -37,12 +37,12 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
                     def limite = portador.limiteTotal
                     Conta conta = portador.conta
 
-                    def totalAFaturar = Lancamento.withCriteria(uniqueResult: true) {
+                    def totalAFaturar = LancamentoPortador.withCriteria(uniqueResult: true) {
                                             projections {
                                                 sum("valor")
                                             }
                                             eq("conta", conta)
-                                            eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                            eq("status", StatusLancamento.A_FATURAR)
                                         } ?: 0
 
 
