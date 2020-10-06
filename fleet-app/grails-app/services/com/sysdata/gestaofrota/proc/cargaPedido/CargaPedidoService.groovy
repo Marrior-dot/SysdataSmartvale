@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc
+package com.sysdata.gestaofrota.proc.cargaPedido
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
@@ -13,7 +13,7 @@ class CargaPedidoService implements ExecutableProcessing {
                                             projections {
                                                 property "id"
                                             }
-                                            eq("status", StatusPedidoCarga.LIBERADO)
+                                            eq("status", StatusPedidoCarga.NOVO)
                             }
 
         if (pedidosList) {
@@ -54,14 +54,20 @@ class CargaPedidoService implements ExecutableProcessing {
             tr.numeroCartao = tr.cartao.numero
 
             tr.save(flush: true)
+
+            i.transacao = tr
+            i.save(flush: true)
+
             log.info "\tTR CRG #$tr.id criada"
 
+/*
             def oldSaldo = portador.saldoTotal
             portador.saldoTotal += tr.valor
             portador.save(flush: true)
             log.info "\tPRT #$portador.id - (SA: $oldSaldo NS: $portador.saldoTotal)"
+*/
         }
-        pedidoCarga.status = StatusPedidoCarga.FINALIZADO
+        pedidoCarga.status = StatusPedidoCarga.AGENDADO
         pedidoCarga.save(flush: true)
 
     }

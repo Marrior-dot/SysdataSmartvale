@@ -3,6 +3,7 @@ package com.sysdata.gestaofrota.proc.faturamento
 import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.ReferenceDateProcessing
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoleto
+import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoletoFactory
 import grails.boot.GrailsApp
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
@@ -26,12 +27,14 @@ class CorteService {
                             projections {
                                 groupProperty("conta.id")
                             }
-                            eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                            eq("status", StatusLancamento.A_FATURAR)
                             conta {
                                 portador {
                                     unidade {
-                                        fechamentos {
-                                            eq("id", corte.fechamento.id)
+                                        rh {
+                                            fechamentos {
+                                                eq("id", corte.fechamento.id)
+                                            }
                                         }
                                     }
                                 }
@@ -54,17 +57,24 @@ class CorteService {
                 status = StatusFatura.ABERTA
             }
             fatRh.corte = corte
+
             tratarAtraso(fatRh, dataCorte)
+
             def itensFatRh = [:]
+
+            // Fatura cada conta de portador individualmente
             contasId.each {
                 Conta conta = Conta.get(it)
                 Fatura fatPort = portadorCorteService.faturar(conta.portador, corte, dataCorte)
+
+
                 fatPort.itens.each { itf ->
                     if (!itensFatRh.containsKey(itf.lancamento.tipo))
                         itensFatRh[itf.lancamento.tipo] = 0.0
                     itensFatRh[itf.lancamento.tipo] += itf.valor
                 }
             }
+
             //Gera lançamentos e itens da fatura Convênio
             itensFatRh.each { k, v ->
                 LancamentoConvenio lcto = new LancamentoConvenio()
@@ -73,8 +83,7 @@ class CorteService {
                     tipo = k
                     dataEfetivacao = dataCorte
                     valor = v
-                    status = StatusLancamento.EFETIVADO
-                    statusFaturamento = StatusFaturamento.FATURADO
+                    status = StatusLancamento.FATURADO
                     corte = fatRh.corte
                 }
                 lcto.save()
@@ -91,31 +100,27 @@ class CorteService {
             }
 
 
-            if (grailsApplication.config.project.faturamento.portador.boleto.gerar) {
+            if (grailsApplication.config.projeto.faturamento.portador.boleto.gerar) {
 
                 fatRh.statusGeracaoBoleto = StatusGeracaoBoleto.GERAR
                 fatRh.save()
 
-                Boleto boleto = new Boleto(fatura: fatRh)
-                boleto.save()
+                Boleto boleto = new Boleto()
+                boleto.with {
+                    fatura = fatRh
+                    dataVencimento = fatRh.dataVencimento
+                    valor = fatRh.valorTotal
+                }
+                boleto.save(flush: true, failOnError: true)
 
-                GeradorBoleto geradorBoleto = GeradorBoleto.getGerador(grailsApplication)
+                GeradorBoleto geradorBoleto = GeradorBoletoFactory.getGerador()
                 geradorBoleto.gerarBoleto(boleto)
             }
 
 
-
-
-
-
-
-
-            //Gera boleto
-            //fatRh.gerarBoleto()
-
             //Fecha última fatura e transfere saldo
 
-            Corte proxCorte = fechar(dataCorte)
+            CortePortador proxCorte = fechar(corte, dataCorte)
 
             //Gerar próximo corte
             def totalFatura = fatRh.valorTotal
@@ -127,7 +132,7 @@ class CorteService {
                 tipo = TipoLancamento.FECHAMENTO_FATURA
                 dataEfetivacao = dataCorte
                 corte = fatRh.corte
-                statusFaturamento = StatusFaturamento.FATURADO
+                status = StatusLancamento.FATURADO
             }
             fechamento.save()
             LancamentoConvenio saldoAnterior = new LancamentoConvenio()
@@ -137,7 +142,7 @@ class CorteService {
                 tipo = TipoLancamento.SALDO_ANTERIOR
                 dataEfetivacao = dataCorte
                 corte = proxCorte
-                statusFaturamento = StatusFaturamento.NAO_FATURADO
+                status = StatusLancamento.A_FATURAR
             }
             saldoAnterior.save()
         }
@@ -177,8 +182,7 @@ class CorteService {
                     tipo = TipoLancamento.MULTA
                     dataEfetivacao = dataProc
                     valor = multa
-                    status = StatusLancamento.EFETIVADO
-                    statusFaturamento = StatusFaturamento.FATURADO
+                    status = StatusLancamento.FATURADO
                 }
                 lcnMulta.save()
                 ItemFatura itemMulta = new ItemFatura()
@@ -198,8 +202,7 @@ class CorteService {
                     tipo = TipoLancamento.MORA
                     dataEfetivacao = dataProc
                     valor = multa
-                    status = StatusLancamento.EFETIVADO
-                    statusFaturamento = StatusFaturamento.FATURADO
+                    status = StatusLancamento.FATURADO
                 }
                 lcnMora.save()
                 ItemFatura itemMora = new ItemFatura()
@@ -215,7 +218,7 @@ class CorteService {
         }
     }
 
-    private Corte fechar(Corte corte, Date dataCorte) {
+    private CortePortador fechar(Corte corte, Date dataCorte) {
         //Define data de fechamento (corte) para a data de processamento
 
         corte.status = StatusCorte.FECHADO
@@ -242,7 +245,7 @@ class CorteService {
             cal.add(Calendar.MONTH, 1)
         }
 
-        Corte corteProx = new Corte()
+        CortePortador corteProx = new CortePortador()
         corteProx.with {
             fechamento = fechProx
             dataPrevista = cal.time.clearTime()
@@ -261,7 +264,7 @@ class CorteService {
         if (! rh.fechamentos)
             throw new RuntimeException("Nao ha dias de fechamento definidos para o programa $this")
 
-        Corte corteAberto = Corte.withCriteria(uniqueResult: true) {
+        CortePortador corteAberto = Corte.withCriteria(uniqueResult: true) {
                                 'in'("fechamento", rh.fechamentos)
                                 eq("status", StatusCorte.ABERTO)
                             }

@@ -93,7 +93,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
     @Override
     def execute(Date date) {
         def pars = [sort: "dateCreated"]
-        List<LotePagamento> lotePagtoList = LotePagamento.findAllByStatusEmissao(StatusEmissao.ENVIAR, pars)
+        List<LotePagamento> lotePagtoList = LotePagamento.findAllByStatusEmissao(StatusEmissao.GERAR_ARQUIVO, pars)
 
         lotePagtoList.each { lote ->
 
@@ -159,7 +159,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
                 msgEnviaLote.resposta = responseData.body
 
-                lote.statusEmissao = StatusEmissao.ENVIADO
+                lote.statusEmissao = StatusEmissao.ARQUIVO_GERADO
                 if (responseData.statusCode == 200) {
                     lote.status = StatusLotePagamento.ACEITO
                 } else if (responseData.statusCode == 400) {

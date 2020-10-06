@@ -2,10 +2,10 @@ package com.sysdata.gestaofrota
 
 enum StatusEmissao {
 
-    NAO_ENVIAR("Não Enviar"),
-    ENVIAR("Enviar"),
-    ENVIADO("Enviado"),
-    REENVIAR("Reenviar")
+    NAO_GERAR("Não Enviar"),
+    GERAR_ARQUIVO("Enviar"),
+    ARQUIVO_GERADO("Enviado"),
+    REGERAR_ARQUIVO("Reenviar")
 
     String nome
 

@@ -50,11 +50,11 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
     }
 
     private def agendarCarga(Transacao trCarga, Date dataRef) {
-        def lancamentoInstance = new Lancamento(tipo: TipoLancamento.CARGA,
-                                                status: StatusLancamento.EFETIVADO,
-                                                valor: trCarga.valor,
-                                                dataEfetivacao: dataRef,
-                                                conta: trCarga.cartao.portador.conta)
+        def lancamentoInstance = new LancamentoPortador(tipo: TipoLancamento.CARGA,
+                                                        status: StatusLancamento.A_FATURAR,
+                                                        valor: trCarga.valor,
+                                                        dataEfetivacao: dataRef,
+                                                        conta: trCarga.cartao.portador.conta)
         trCarga.addToLancamentos(lancamentoInstance)
         [success: true]
     }
