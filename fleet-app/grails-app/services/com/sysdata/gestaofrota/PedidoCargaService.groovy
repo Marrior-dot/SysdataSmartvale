@@ -166,12 +166,31 @@ class PedidoCargaService {
 
     def cancelPedido(PedidoCarga pedidoCarga) {
         def ret = [success: true]
-        if (pedidoCarga.status == StatusPedidoCarga.NOVO) {
+        if (pedidoCarga.status in [StatusPedidoCarga.NOVO, StatusPedidoCarga.AGENDADO]) {
             pedidoCarga.dataCancelamento = new Date()
             pedidoCarga.status = StatusPedidoCarga.CANCELADO
             pedidoCarga.save(flush: true)
             ret.message = "Pedido Carga #$pedidoCarga.id cancelado com sucesso"
             log.info "Pedido Carga #$pedidoCarga.id CANCELADO"
+
+            // Cancela transações e lançamentos relacionadoos
+            if (pedidoCarga.status == StatusPedidoCarga.AGENDADO) {
+
+                pedidoCarga.itens.each { item ->
+
+                    Transacao transacaoCarga = item.transacao
+                    transacaoCarga.status = StatusTransacao.CANCELADA
+                    transacaoCarga.save()
+                    log.info "\tTR #${transacaoCarga} CANCELADA"
+
+                    transacaoCarga.lancamentos.each { lcto ->
+                        lcto.status = StatusLancamento.ESTORNADO
+                        lcto.save(flush: true)
+                        log.info "\t\tLC #${cto.id} ESTORNADO"
+                    }
+                }
+            }
+
         } else {
             log.info "Pedido Carga #$pedidoCarga.id não pode ser cancelado. Status: $pedidoCarga.status"
             ret.success = false
@@ -179,4 +198,37 @@ class PedidoCargaService {
         }
         ret
     }
+
+    def releasePedido(PedidoCarga pedidoCarga) {
+
+        def ret = [:]
+        if (pedidoCarga.status == StatusPedidoCarga.COBRANCA) {
+
+            pedidoCarga.status = StatusPedidoCarga.LIBERADO
+            //Registra o usuário que realizou a liberação
+            pedidoCarga.usuario = springSecurityService.currentUser
+
+            log.info "Liberando saldo nos cartões ..."
+            pedidoCarga.itens.each { item ->
+
+                Portador portador = item.portador
+
+                def oldSaldo = portador.saldoTotal
+                portador.saldoTotal += item.valor
+                portador.save(flush: true)
+                log.info "\tPRT #$portador.id - (SA: $oldSaldo NS: $portador.saldoTotal)"
+
+            }
+
+            ret.success = true
+            ret.message = "Pedido Carga #${pedidoCarga.id} LIBERADO"
+            log.info ret.message
+        } else {
+            ret.success = false
+            ret.message = "Pedido Carga #${pedidoCarga.id} não pode ser liberado. Status inválido: ${pedidoCarga.status.nome}"
+            log.warn ret.message
+        }
+        return ret
+    }
+
 }

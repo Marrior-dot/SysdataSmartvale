@@ -69,13 +69,19 @@ class VeiculoService {
             log.info "Veiculo #$vecId del"
 
         } else if (veiculo.funcionarios) {
-            veiculo.status = Status.INATIVO
-            veiculo.save(flush: true)
-            log.info "Veiculo #$veiculo.id inativado"
+            def funcIds = veiculo.funcionarios*.id
+            def vecId = veiculo.id
+            funcIds.each { fid ->
+                MaquinaFuncionario maquinaFuncionario = MaquinaFuncionario.get(fid)
+                veiculo.removeFromFuncionarios(maquinaFuncionario)
+                maquinaFuncionario.delete(flush: true)
+            }
+            veiculo.delete(flush: true)
+            log.info "Veiculo #$vecId DEL"
         } else {
             def vecId = veiculo.id
             veiculo.delete(flush: true)
-            log.info "Veiculo #$vecId del"
+            log.info "Veiculo #$vecId DEL"
         }
     }
 

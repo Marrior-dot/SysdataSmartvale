@@ -1,10 +1,9 @@
-package com.sysdata.gestaofrota.proc
+package com.sysdata.gestaofrota.proc.faturamento.cobranca
 
-import com.sysdata.gestaofrota.proc.cargaPedido.CargaPedidoService
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class CargaPedidoServiceSpec extends Specification implements ServiceUnitTest<CargaPedidoService>{
+class GeradorRemessaBancoBrasilServiceSpec extends Specification implements ServiceUnitTest<GeradorRemessaBancoBrasilService>{
 
     def setup() {
     }

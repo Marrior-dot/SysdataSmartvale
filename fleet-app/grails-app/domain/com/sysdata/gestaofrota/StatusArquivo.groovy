@@ -1,7 +1,8 @@
 package com.sysdata.gestaofrota
 
 enum StatusArquivo {
-	
+
+	GERANDO("Gerando"),
 	PROCESSANDO("Processando"),
 	GERADO("Gerado"),
 	PROCESSADO("Processado"),

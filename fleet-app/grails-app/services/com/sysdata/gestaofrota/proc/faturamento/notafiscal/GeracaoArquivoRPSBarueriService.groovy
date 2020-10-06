@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.notafiscal.barueri
+package com.sysdata.gestaofrota.proc.faturamento.notafiscal
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.Fatura
@@ -11,13 +11,13 @@ class GeracaoArquivoRPSBarueriService implements ExecutableProcessing {
     @Override
     def execute(Date date) {
 
-        def faturaEnviarList = Fatura.findAllByStatusEmissao(StatusEmissao.ENVIAR, [sort: 'data'])
+        def faturaEnviarList = Fatura.findAllByStatusEmissao(StatusEmissao.GERAR_ARQUIVO, [sort: 'data'])
 
         faturaEnviarList.each { fat ->
 
 
 
-            fat.statusEmissao = StatusEmissao.ENVIADO
+            fat.statusEmissao = StatusEmissao.ARQUIVO_GERADO
             fat.save()
         }
 

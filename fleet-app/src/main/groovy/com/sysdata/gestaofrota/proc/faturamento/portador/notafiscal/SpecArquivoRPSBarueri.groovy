@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.notafiscal.barueri
+package com.sysdata.gestaofrota.proc.faturamento.portador.notafiscal
 
 import com.sysdata.xfiles.FieldDataType
 import com.sysdata.xfiles.SpecRecord
