@@ -14,6 +14,7 @@ class PedidoCarga {
     Double taxaDesconto = 0D
     Double total = 0D
     Date dataCancelamento
+    Fatura fatura
 
     static hasMany = [itens: ItemPedido]
     static transients = ['perfisRecarga','dataCargaClear']
@@ -24,6 +25,7 @@ class PedidoCarga {
         taxaDesconto nullable: true
         total nullable: true
         dataCancelamento nullable: true
+        fatura nullable: true
     }
 
     static mapping = {
@@ -31,7 +33,7 @@ class PedidoCarga {
     }
 
     static hibernateFilters = {
-        pedidoPorRh(condition: 'unidade_id in (select id from Unidade u where u.rh_id =:rh_id)', types: 'long')
+        pedidoPorRh(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id =:rh_id)', types: 'long')
     }
 
 

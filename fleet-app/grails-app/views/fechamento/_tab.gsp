@@ -1,5 +1,7 @@
 <%@ page import="com.sysdata.gestaofrota.Rh" %>
+
 <script type="application/javascript">
+
     $(document).ready(function () {
         atualizarTabelaFechamentos();
         var fechamentoForm = $("form#fechamento");

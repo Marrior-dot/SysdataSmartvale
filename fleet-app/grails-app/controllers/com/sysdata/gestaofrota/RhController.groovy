@@ -3,11 +3,13 @@ package com.sysdata.gestaofrota
 import grails.converters.JSON
 import org.springframework.http.HttpStatus
 
-class RhController extends BaseOwnerController {
+class RhController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def rhService
+
+    def springSecurityService
 
     def index() {
         redirect(action: "list", params: params)
@@ -113,20 +115,12 @@ class RhController extends BaseOwnerController {
 
     def autoCompleteJSON() {
 
-        def list
-        withSecurity { ownerList ->
+        def list = Rh.withCriteria {
+                        eq('status', Status.ATIVO)
 
-            list = Rh.withCriteria {
-                eq('status', Status.ATIVO)
-                if (ownerList.size > 0)
-                    'in'('id', ownerList)
-
-                if (params.query)
-                    like("nomeFantasia", params.query + "%")
-            }
-
-        }
-
+                        if (params.query)
+                            like("nomeFantasia", params.query + "%")
+                    }
 
         def jsonList = list.collect { [id: it.id, name: it.nomeFantasia] }
         def jsonResult = [

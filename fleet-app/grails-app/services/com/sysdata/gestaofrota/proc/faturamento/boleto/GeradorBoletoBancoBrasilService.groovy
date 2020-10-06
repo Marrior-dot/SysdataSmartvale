@@ -9,16 +9,24 @@ import br.com.caelum.stella.boleto.Pagador
 import br.com.caelum.stella.boleto.bancos.BancoDoBrasil
 import br.com.caelum.stella.boleto.transformer.GeradorDeBoleto
 import com.sysdata.gestaofrota.Administradora
+import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Boleto
 import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.StatusArquivo
+import com.sysdata.gestaofrota.TipoArquivo
+import com.sysdata.gestaofrota.TipoFatura
+import com.sysdata.gestaofrota.Util
 import grails.core.GrailsApplication
 
 class GeradorBoletoBancoBrasilService implements GeradorBoleto {
 
     GrailsApplication grailsApplication
 
+
     @Override
     void gerarBoleto(Boleto boleto) {
+
+        log.info "Gerando boleto da fatura ${boleto.fatura.id} ..."
 
         def boletoConfig = grailsApplication.config.projeto.faturamento.portador.boleto
         def adminConfig = grailsApplication.config.projeto.administradora
@@ -28,8 +36,6 @@ class GeradorBoletoBancoBrasilService implements GeradorBoleto {
         def anoVcto = boleto.dataVencimento[Calendar.YEAR]
 
         Datas datas = Datas.novasDatas()
-                            .comDocumento(diaVcto, mesVcto, anoVcto)
-                            .comProcessamento(diaVcto, mesVcto, anoVcto)
                             .comVencimento(diaVcto, mesVcto, anoVcto)
 
         Administradora admin = Administradora.first()
@@ -49,9 +55,9 @@ class GeradorBoletoBancoBrasilService implements GeradorBoleto {
                 .comCodigoBeneficiario(boletoConfig.conta)
                 .comDigitoCodigoBeneficiario(boletoConfig.dvConta)
                 .comNumeroConvenio(boletoConfig.convenio)
-                .comCarteira(boletoConfig.carteira)
+                .comCarteira(boletoConfig.carteira.numero)
                 .comEndereco(enderecoBeneficiario)
-                //.comNossoNumero("9000206");
+                .comNossoNumero(boletoConfig.convenio)
 
 
         Rh empresa = boleto.fatura.conta.participante
@@ -77,16 +83,57 @@ class GeradorBoletoBancoBrasilService implements GeradorBoleto {
                                         .comBeneficiario(beneficiario)
                                         .comPagador(pagador)
                                         .comValorBoleto(boleto.valor)
-                                        .comNumeroDoDocumento(boleto.id)
+                                        .comNumeroDoDocumento(boleto.id.toString())
+                                        .comLocaisDePagamento("Pagável em qualquer banco até a data de vencimento")
 /*
                 .comInstrucoes("instrucao 1", "instrucao 2", "instrucao 3", "instrucao 4", "instrucao 5")
                 .comLocaisDePagamento("local 1", "local 2");
 */
 
-        GeradorDeBoleto gerador = new GeradorDeBoleto(boletoStella);
+        boleto.linhaDigitavel = boletoStella.linhaDigitavel
+        boleto.titulo = boletoStella.numeroDoDocumento
+        boleto.nossoNumero = boletoStella.nossoNumeroECodDocumento
+        boleto.save()
+
+        println "Nosso Num & Cod Doc: ${boletoStella.nossoNumeroECodDocumento}"
+        println "Num Doc: ${boletoStella.numeroDoDocumento}"
+        println "Num Doc Formatado: ${boletoStella.numeroDoDocumentoFormatado}"
+
+        GeradorDeBoleto gerador = new GeradorDeBoleto(boletoStella)
+
+        String baseDir = grailsApplication.config.projeto.arquivos.baseDir
+
+        String boletoDir
+        if (boleto.fatura.tipo == TipoFatura.CONVENIO_PREPAGO)
+            boletoDir = grailsApplication.config.projeto.arquivos.boleto.dir.prepago
+        else if (boleto.fatura.tipo == TipoFatura.CONVENIO_POSPAGO)
+            boletoDir = grailsApplication.config.projeto.arquivos.boleto.dir.pospago
+
+        baseDir = !baseDir.endsWith("/") ? baseDir + "/" : baseDir
+        boletoDir = !boletoDir.endsWith("/") ? boletoDir + "/" : boletoDir
+
+        def filenameBoleto = sprintf("%s%s%s_%s.pdf",
+                                                baseDir,
+                                                boletoDir,
+                                                Util.cnpjToRaw(empresa.cnpj),
+                                                boleto.dateCreated.format('yyMMdd'))
 
         // Para gerar um boleto em PDF
-        gerador.geraPDF("/home/luiz/frota/bahiavale/BancoDoBrasil.pdf");
+        gerador.geraPDF(filenameBoleto)
+
+        Arquivo arquivoBoleto = new Arquivo()
+        arquivoBoleto.with {
+            nome = filenameBoleto
+            tipo = TipoArquivo.BOLETO
+            status = StatusArquivo.GERADO
+            nsa = Arquivo.nextNsa(TipoArquivo.BOLETO)
+        }
+        arquivoBoleto.save()
+
+        boleto.arquivo = arquivoBoleto
+        boleto.save(flush: true)
+
+        log.info "Boleto gerado com sucesso: $filenameBoleto"
 
 /*
         // Para gerar um boleto em PNG

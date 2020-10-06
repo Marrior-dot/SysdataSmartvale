@@ -19,7 +19,6 @@
                 <g:each in="${cortes}" var="corte">
                     <tr>
                         <td><a href="#" onclick="abrirFatura(${corte.id})">${corte.dataPrevista.format('dd/MM/yyyy')}</a></td>
-                        <td>${corte.dataPrevista.format('dd/MM/yyyy')}</td>
                         <td>${corte.dataFechamento?.format('dd/MM/yyyy')}</td>
                         <td>${corte.dataCobranca?.format('dd/MM/yyyy')}</td>
                         <td>${corte.status.nome}</td>

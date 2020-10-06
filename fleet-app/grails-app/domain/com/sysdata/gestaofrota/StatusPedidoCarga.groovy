@@ -2,7 +2,8 @@ package com.sysdata.gestaofrota
 
 enum StatusPedidoCarga {
 	NOVO("Novo"),
-	BOLETO_EMITIDO("Boleto Emitido"),
+	AGENDADO("Agendado"),
+	COBRANCA("Cobrança"),
 	PAGO("PAGO"),
 	LIBERADO("Liberado"),
 	CANCELADO("Cancelado"),
@@ -14,8 +15,5 @@ enum StatusPedidoCarga {
 		this.nome=nome
 	}
 	
-	static asList(){
-		[NOVO,BOLETO_EMITIDO,PAGO,LIBERADO,CANCELADO,FINALIZADO]
-	}
-	
+
 }

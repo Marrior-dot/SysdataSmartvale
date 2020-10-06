@@ -110,6 +110,7 @@ environments {
 
 administradora {
     nome = "BAHIA VALE"
+    cnpj = "30379128000179"
     bin = "605482"
     anosValidadeCartao = 2
 
@@ -141,16 +142,24 @@ faturamento {
 
         boleto {
             gerar = true
-            gerador = "geradorBoletoBancoBrasilService"
+            //gerador = "geradorBoletoBancoBrasilService"
+            gerador = "bopepoGeradorBoletoBancoBrasilService"
 
             agencia = "3454"
             dvAgencia = "1"
             conta =  "38577"
             dvConta = "8"
 
-            carteira = "17"
+            carteira {
+                numero = "17"
+                variacao = "019"
+            }
+
             convenio = "3215085"
             contrato = "19997095"
+
+            instrucao1 = ""
+            instrucao2 = ""
         }
     }
 
@@ -181,6 +190,17 @@ environments {
                     enviar  = "paysmart_test/input"
                 }
             }
+
+            boleto {
+                dir {
+                    prepago = "boletos/prepago/"
+                    pospago = "boletos/pospago/"
+                }
+            }
+
+            cobranca {
+                dir = "cobranca/"
+            }
         }
     }
 
@@ -203,6 +223,14 @@ environments {
                     enviar  = "paysmart_test/input"
                 }
             }
+
+            boleto {
+                dir {
+                    prepago = "boletos/prepago/"
+                    pospago = "boletos/pospago/"
+                }
+            }
+
         }
     }
 
@@ -225,6 +253,14 @@ environments {
                     enviar  = "paysmart_prod/input"
                 }
             }
+
+            boleto {
+                dir {
+                    prepago = "boletos/prepago/"
+                    pospago = "boletos/pospago/"
+                }
+            }
+
         }
     }
 

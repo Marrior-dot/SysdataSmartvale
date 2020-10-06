@@ -14,9 +14,9 @@ class PedidoCargaInterceptor {
 
     boolean before() {
         def user = springSecurityService.currentUser
-        if (user.owner.instanceOf(Rh)) {
-            Rh.enableHibernateFilter('empresaPorUser').setParameter('owner_id', user.owner.id)
+        if (user?.owner?.instanceOf(Rh)) {
             PedidoCarga.enableHibernateFilter('pedidoPorRh').setParameter('rh_id', user.owner.id)
+            Rh.enableHibernateFilter('empresaPorUser').setParameter('owner_id', user.owner.id)
         }
 
         return true

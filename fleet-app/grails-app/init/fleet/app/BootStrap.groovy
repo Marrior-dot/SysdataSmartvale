@@ -6,6 +6,7 @@ import com.fourLions.processingControl.ExecutionFrequency
 import com.fourLions.processingControl.Processing
 import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.camel.FleetRoutesService
+import com.sysdata.xfiles.FileProcessor
 import grails.core.GrailsApplication
 
 class BootStrap {
@@ -15,6 +16,8 @@ class BootStrap {
     FleetRoutesService fleetRoutesService
 
     def init = { servletContext ->
+
+        FileProcessor.init()
 
         /* Adição do método ** round ** a classe BigDecimal: arredondamento para baixo. P.ex: 1.5 -> 1.0 (padrão -> halfUp = false) */
         BigDecimal.metaClass.round = { precision, halfUp = true ->
@@ -144,7 +147,10 @@ class BootStrap {
 
         Processing.findOrCreateWhere([name: "Carga de Pedidos", order: 1 as byte, service: "cargaPedidoService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Agendamento de Transações", order: 2 as byte, service: "agendamentoTransacaoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 3 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Faturamento Pedidos de Carga", order: 3 as byte, service: "faturamentoCargaPedidoService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Faturamento Portador", order: 4 as byte, service: "faturamentoService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Geração Remessa Cobrança Banco do Brasil", order: 5 as byte, service: "geradorRemessaBancoBrasilService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 6 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
     }
 
     def criarMarcasVeiculos() {
