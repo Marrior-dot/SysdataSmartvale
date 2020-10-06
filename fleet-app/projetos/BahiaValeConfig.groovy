@@ -231,6 +231,10 @@ environments {
                 }
             }
 
+            cobranca {
+                dir = "cobranca/"
+            }
+
         }
     }
 
@@ -259,6 +263,10 @@ environments {
                     prepago = "boletos/prepago/"
                     pospago = "boletos/pospago/"
                 }
+            }
+
+            cobranca {
+                dir = "cobranca/"
             }
 
         }
