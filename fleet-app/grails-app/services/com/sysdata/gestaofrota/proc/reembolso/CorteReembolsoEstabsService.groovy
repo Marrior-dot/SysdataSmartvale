@@ -19,7 +19,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                                 groupProperty("dataEfetivacao")
                             }
                             'in'("tipo", [TipoLancamento.REEMBOLSO])
-                            eq("status", StatusLancamento.A_PAGAR)
+                            eq("status", StatusLancamento.A_FATURAR)
                             le("dataEfetivacao", date)
                             order("dataEfetivacao")
                         }
@@ -54,7 +54,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                                             groupProperty("conta.id")
                                         }
                                         eq("tipoLancamento", TipoLancamento.REEMBOLSO)
-                                        eq("statusLancamento", StatusLancamento.A_EFETIVAR)
+                                        eq("statusLancamento", StatusLancamento.A_FATURAR)
                                         eq("dataEfetivacao", dt)
                                 }
                 if (contasIds) {
@@ -83,7 +83,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
         log.info "\tEC: $estabelecimento"
         def List<LancamentoEstabelecimento> parcelaList = LancamentoEstabelecimento.withCriteria {
                                                             eq("tipoLancamento", TipoLancamento.REEMBOLSO)
-                                                            eq("statusLancamento", StatusLancamento.A_EFETIVAR)
+                                                            eq("statusLancamento", StatusLancamento.A_FATURAR)
                                                             eq("dataEfetivacao", dataRef)
                                                             eq("conta", conta)
                                                         }

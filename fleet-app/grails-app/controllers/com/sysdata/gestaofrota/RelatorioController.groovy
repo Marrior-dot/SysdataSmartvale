@@ -36,7 +36,7 @@ class RelatorioController {
 		
 		def criteria=new DetachedCriteria(Lancamento).build{
 			eq "tipo",TipoLancamento.REEMBOLSO
-			eq "status",StatusLancamento.A_EFETIVAR
+			eq "status",StatusLancamento.A_FATURAR
 			if(beginDate && endDate)
 				between "dataEfetivacao",beginDate,endDate
 		}

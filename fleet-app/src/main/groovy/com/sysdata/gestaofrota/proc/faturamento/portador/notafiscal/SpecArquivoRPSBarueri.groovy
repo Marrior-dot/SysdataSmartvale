@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.notafiscal.barueri
+package com.sysdata.gestaofrota.proc.faturamento.portador.notafiscal
 
 import com.sysdata.xfiles.FieldDataType
 import com.sysdata.xfiles.SpecRecord
@@ -16,17 +16,17 @@ class SpecArquivoRPSBarueri {
         ]
     )
 
-    static SpecRecord regDetalhe= new SpecRecord(id: "2", nome: "Registro Detalhe",
+    static SpecRecord regDetalhe = new SpecRecord(id: "2", nome: "Registro Detalhe",
         fieldsId: ["tipoRegistro"],
         fields: [
             [name: "tipoRegistro", size: 1, value: "2"],
             [name: "tipoRPS", size: 5, value: "RPS"],
             [name: "serieRPS", size: 4, value: ""],
             [name: "serieNFe", size: 5, value: ""],
-            [name: "numeroRPS", size: 5, datatype: FieldDataType.INTEGER],
-            [name: "dataHoraRPS", datatype: FieldDataType.DATE_TIME, format: "yyyyMMddHHmmss"],
+            [name: "numeroRPS", size: 10],
+            [name: "dataHoraRPS", size: 14, datatype: FieldDataType.DATE_TIME, format: "yyyyMMddHHmmss"],
             [name: "codigoMotivoCancelamento", size: 2, value: ""],
-            [name: "numeroNFeCancelada", size: 7, datatype: FieldDataType.INTEGER, value: "0"],
+            [name: "numeroNFeCancelada", size: 7, datatype: FieldDataType.INTEGER, value: 0],
             [name: "serieNFeCancelada", size: 5, value: ""],
             [name: "dataEmissaoNFeCancelada", size: 8, value: ""],
             [name: "descricaoCancelamento", size: 180, value: ""],

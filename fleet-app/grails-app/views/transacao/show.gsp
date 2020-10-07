@@ -94,14 +94,14 @@
                         <td>${transacaoInstance.motivoNegacao}</td>
                     </tr>
 
-                    <g:if test="${transacaoInstance.maquina.instanceOf(Veiculo) && transacaoInstance.maquina?.placa}">
+                    <g:if test="${transacaoInstance.maquina?.instanceOf(Veiculo) && transacaoInstance.maquina?.placa}">
                         <tr>
                             <th>Veículo</th>
                             <td>${transacaoInstance.maquina?.placa}</td>
                         </tr>
                     </g:if>
 
-                    <g:if test="${transacaoInstance.maquina.instanceOf(Equipamento) && transacaoInstance.maquina?.codigo}">
+                    <g:if test="${transacaoInstance.maquina?.instanceOf(Equipamento) && transacaoInstance.maquina?.codigo}">
                         <tr>
                             <th>Equipamento</th>
                             <td>${transacaoInstance.maquina?.codigo}</td>

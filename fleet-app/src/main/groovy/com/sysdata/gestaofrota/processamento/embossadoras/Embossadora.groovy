@@ -36,7 +36,7 @@ abstract class Embossadora implements IGeradorArquivo {
             return ret
         } else if (arquivoOriginal.status != StatusArquivo.GERADO) {
             ret.success = false
-            ret.message = "Operação inválida! Arquivo #$arquivoOriginal.id com status $arquivoOriginal.status.nome não pode ser Regerado"
+            ret.message = "Operação inválida! Arquivo #$arquivoOriginal.id com status $arquivoOriginal.status.name não pode ser Regerado"
             return ret
         }
 

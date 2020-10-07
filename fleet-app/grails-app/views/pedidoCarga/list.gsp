@@ -14,13 +14,7 @@
             </div>
             <div class="panel-body">
 
-                <g:if test="${flash.message}">
-                    <div class="alert alert-info">${flash.message}</div>
-                </g:if>
-
-                <g:if test="${flash.errors}">
-                    <div class="alert alert-danger">${flash.errors}</div>
-                </g:if>
+                <alert:all/>
 
                 <a class="btn btn-default" href="${createLink(uri: '/')}">
                     <span class="glyphicon glyphicon-home"></span>
@@ -63,14 +57,17 @@
                                     <td>${pedido.status.nome}</td>
                                     <td class="text-center">
                                         <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
-                                            <g:if test="${pedido.status == StatusPedidoCarga.NOVO}">
+
+                                            <g:if test="${pedido.status == StatusPedidoCarga.COBRANCA}">
                                                 <g:link class="btn btn-primary" action="liberarPedido" id="${pedido.id}" title="Liberar">
                                                     <i class="glyphicon glyphicon-share"></i>
                                                 </g:link>
+                                            </g:if>
+
+                                            <g:if test="${pedido.status in [StatusPedidoCarga.NOVO, StatusPedidoCarga.AGENDADO]}">
                                                 <g:link class="btn btn-danger" action="cancelarPedido" id="${pedido.id}" title="Cancelar">
                                                     <i class="glyphicon glyphicon-remove"></i>
                                                 </g:link>
-
                                             </g:if>
                                         </sec:ifAnyGranted>
                                     </td>

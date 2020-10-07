@@ -18,7 +18,7 @@ class Corte {
     }
 
     String toString(){
-        "#${this.id} dt.prev:${this.dataPrevista.format('dd/MM/yyyy')} dt.cob:${this.dataCobranca.format('dd/MM/yyyy')}"
+        "#${this.id} dt.prev:${this.dataPrevista?.format('dd/MM/yyyy')} dt.cob:${this.dataCobranca?.format('dd/MM/yyyy')}"
     }
 
 

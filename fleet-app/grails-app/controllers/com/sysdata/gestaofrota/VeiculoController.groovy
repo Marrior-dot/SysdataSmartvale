@@ -132,7 +132,10 @@ class VeiculoController  {
         }
     }
 
-    def delete(Veiculo veiculoInstance) {
+    def delete() {
+
+        Veiculo veiculoInstance = Veiculo.get(params.id as long)
+
         if (veiculoInstance) {
             try {
                 def unidId = veiculoInstance.unidade.id

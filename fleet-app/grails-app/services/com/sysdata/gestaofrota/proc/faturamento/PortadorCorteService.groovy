@@ -1,6 +1,13 @@
 package com.sysdata.gestaofrota.proc.faturamento
 
-import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.CortePortador
+import com.sysdata.gestaofrota.Fatura
+import com.sysdata.gestaofrota.ItemFatura
+import com.sysdata.gestaofrota.LancamentoCartao
+import com.sysdata.gestaofrota.LancamentoPortador
+import com.sysdata.gestaofrota.Portador
+import com.sysdata.gestaofrota.StatusFatura
+import com.sysdata.gestaofrota.StatusLancamento
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.gorm.transactions.Transactional
@@ -22,15 +29,15 @@ class PortadorCorteService {
         return item
     }
 
-    Fatura faturar(Portador portador, Corte corte, Date dataCorte) {
-        def fatConfig = Holders.grailsApplication.config.project.faturamento
+    Fatura faturar(Portador portador, CortePortador corte, Date dataCorte) {
+        def fatConfig = Holders.grailsApplication.config.projeto.faturamento
 
-        def ctx = initContext(corte, dataCorte)
+        def ctx = initContext(portador, corte, dataCorte)
 
         //Lançamentos a FATURAR
         def lctosAFat = LancamentoPortador.withCriteria {
                                 eq("conta", portador.conta)
-                                eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                eq("status", StatusLancamento.A_FATURAR)
                                 eq("corte", corte)
                                 order("dataEfetivacao")
                             }
@@ -38,8 +45,7 @@ class PortadorCorteService {
         lctosAFat.each { lcto ->
             ItemFatura item = faturarLancamento(lcto)
             fatura.addToItens(item)
-            lcto.statusFaturamento = StatusFaturamento.FATURADO
-            lcto.status = StatusLancamento.EFETIVADO
+            lcto.status = StatusLancamento.FATURADO
         }
         //Roda extensoes
         fatConfig.extensoes.each { e ->
@@ -56,18 +62,18 @@ class PortadorCorteService {
                 ultFat.save()
             }
             //Log fatura
-            log.debug fatura
-            fatura.itens.sort { it.data }.each { log.debug it }
+            log.info "$fatura"
+            fatura.itens.sort { it.data }.each { log.info "\t${it}" }
 
         } else {
             fatura.discard()
-            log.debug "CNT => #${fatura.conta.id} sem faturamento"
+            log.info "CNT => #${fatura.conta.id} sem faturamento"
         }
         fatura
     }
 
 
-    private def initContext(Portador portador, Corte corteAberto, Date dataProc) {
+    private def initContext(Portador portador, CortePortador corteAberto, Date dataProc) {
         def ctx = new Expando()
 
         ctx.dataProcessamento = dataProc
@@ -103,11 +109,11 @@ class PortadorCorteService {
 
         def fatura = [:]
 
-        Corte corteAberto = corteService.getCorteAberto(portador.unidade.rh)
+        CortePortador corteAberto = corteService.getCorteAberto(portador.unidade.rh)
 
         def aFaturarList = LancamentoPortador.withCriteria {
                                 eq("conta", portador.conta)
-                                eq("statusFaturamento", StatusFaturamento.NAO_FATURADO)
+                                eq("status", StatusLancamento.A_FATURAR)
                                 eq("corte", corteAberto)
                                 order("dataEfetivacao")
                             }

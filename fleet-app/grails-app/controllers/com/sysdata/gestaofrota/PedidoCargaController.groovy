@@ -2,10 +2,8 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 
-//@Secured(['IS_AUTHENTICATED_FULLY'])
-class PedidoCargaController extends BaseOwnerController {
+class PedidoCargaController {
     def exportService
-    def authenticateService
 
     PedidoCargaService pedidoCargaService
 
@@ -16,12 +14,6 @@ class PedidoCargaController extends BaseOwnerController {
     }
 
     def list() {
-/*
-        Participante participante = getCurrentUser()?.owner
-        Unidade unidadeInstance = participante.instanceOf(Rh) ? Unidade.findByRh(participante) : null
-*/
-
-        def authorities = getCurrentUser().authorities*.authority
 
         def criteria = {
             if (params.searchDataCarga) {
@@ -37,22 +29,6 @@ class PedidoCargaController extends BaseOwnerController {
                 lt('dateCreated', beginDay+1)
             }
 
-/*
-            unidade {
-
-                if (params?.searchUnidade) {
-                    ilike('nome', "%${params.searchUnidade}%")
-                }
-
-                if (unidadeInstance) {
-                    idEq(unidadeInstance.id)
-                }
-
-                rh {
-                    eq('modeloCobranca', TipoCobranca.PRE_PAGO)
-                }
-            }
-*/
 
             if (params?.searchStatus) {
                 eq('status', StatusPedidoCarga.valueOf(params.searchStatus.toString().toUpperCase()))
@@ -62,13 +38,14 @@ class PedidoCargaController extends BaseOwnerController {
         params.max = Math.min(params?.int('max') ?: 10, 100)
         params.sort = "id"
         params.order = "desc"
+
         def pedidoCargaInstanceList = PedidoCarga.createCriteria().list(params, criteria)
         def pedidoCargaInstanceCount = PedidoCarga.createCriteria().count(criteria)
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
          //unidadeInstance         : unidadeInstance,
-         statusPedidoCarga       : StatusPedidoCarga.asList(),
+         statusPedidoCarga       : StatusPedidoCarga.values(),
          searchDataPedido        : params?.searchDataPedido,
          searchDataCarga         : params?.searchDataCarga,
          searchUnidade           : params?.searchUnidade,
@@ -213,7 +190,7 @@ class PedidoCargaController extends BaseOwnerController {
                     it.tipo == TipoItemPedido.TAXA && it.lancamento.status == StatusLancamento.EFETIVADO
                 }.each { i ->
                     def lc = i.lancamento
-                    lc.status = StatusLancamento.A_EFETIVAR
+                    lc.status = StatusLancamento.A_FATURAR
                     lc.save(flush: true)
                 }
 
@@ -427,7 +404,7 @@ class PedidoCargaController extends BaseOwnerController {
                 [
                         unid : unidadeInstance,
                         tipos: [TipoLancamento.TAXA_UTILIZACAO, TipoLancamento.MENSALIDADE, TipoLancamento.EMISSAO_CARTAO, TipoLancamento.REEMISSAO_CARTAO],
-                        sts  : StatusLancamento.A_EFETIVAR
+                        sts  : StatusLancamento.A_FATURAR
                 ]
         )
     }
@@ -466,38 +443,16 @@ and i.pedido=:ped
         }
     }
 
-/*
-	 * Altera status do pedido para LIBERADO
-	 * Insere transação de CARGA para cada item do pedido
-	 *
-	 */
-
-//    @Secured(["ROLE_ADMIN", "ROLE_PROC"])
     def liberarPedido() {
-        def pedidoCargaInstance = PedidoCarga.get(params.id)
-
-        if (pedidoCargaInstance.status == StatusPedidoCarga.NOVO) {
-            pedidoCargaInstance.status = StatusPedidoCarga.LIBERADO
-            //Registra o usuário que realizou a liberação
-            pedidoCargaInstance.usuario = springSecurityService.currentUser
-
-            //Registra Transação de Carga para posterior Agendamento
-            pedidoCargaInstance.itens.findAll { it.tipo == TipoItemPedido.TAXA }.each { item ->
-
-                new Transacao(participante: item.participante,
-                        valor: item.valor,
-                        status: StatusTransacao.AGENDAR,
-                        tipo: TipoTransacao.CARGA_SALDO).
-                        save(flush: true)
-
-            }
-
-            if (pedidoCargaInstance.save(flush: true))
-                flash.message = "Pedido ${pedidoCargaInstance.id} LIBERADO"
+        def pedidoCargaInstance = PedidoCarga.get(params.id.toLong())
+        if (pedidoCargaInstance) {
+            def ret = pedidoCargaService.releasePedido(pedidoCargaInstance)
+            if (ret.success)
+                flash.success = ret.message
             else
-                flash.message = "ERRO ao Salvar. Pedido ${pedidoCargaInstance.id} não liberado"
+                flash.error = ret.messagem
         } else
-            flash.message = "Pedido ${pedidoCargaInstance.id} não pode ser LIBERADO. Status Inválido"
+            flash.error = "Pedido não encontrado com ID: ${params.id}"
 
         redirect(action: 'list')
     }
@@ -506,10 +461,13 @@ and i.pedido=:ped
         def pedidoCarga = PedidoCarga.get(params.id as long)
         if (pedidoCarga) {
             def ret = pedidoCargaService.cancelPedido(pedidoCarga)
-            flash.message = ret.message
-        } else {
-            flash.message = "Pedido não encontrado com ID: $params.id"
-        }
+            if (ret.success)
+                flash.success = ret.message
+            else
+                flash.error = ret.message
+        } else
+            flash.error = "Pedido não encontrado com ID: $params.id"
+
         redirect(action: 'list')
     }
 }
