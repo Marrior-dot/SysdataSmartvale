@@ -349,7 +349,7 @@ class PedidoCargaController {
                 "cpf",
                 "matricula",
                 "nome",
-              //  "cartao",
+                "cartao",
                 "dateCreated",
                 "dataCarga",
                 "status",
@@ -361,7 +361,7 @@ class PedidoCargaController {
                 "cpf"        : "CPF",
                 "matricula"  : "Matrícula",
                 "nome"       : "Nome",
-              //  "cartao"     : "Cartao",
+                "cartao"     : "Cartao",
                 "dateCreated": "Data Pedido",
                 "dataCarga"  : "Data Carga",
                 "status"     : "Status Pedido",
@@ -377,15 +377,16 @@ class PedidoCargaController {
 
         def itemPedidoList = pedidoCarga.itens.collect {
             [
-                    "cpf"      : it.participante.cpf,
-                    "matricula": it.participante.matricula,
-                    "nome"     : it.participante.nome,
-                   // "cartao"   :  portador?.cartaoAtual?.numero,
-                    "dateCreated"     : it.pedido.dateCreated,
-                    "dataCarga"     : it.pedido.dataCarga,
+                    "cpf"        : it.participante.cpf,
+                    "matricula"  : it.participante.matricula,
+                    "nome"       : it.participante.nome,
+                    "cartao"     : it.participante.portador.cartaoAtual.numero,
+                    "dateCreated": it.pedido.dateCreated,
+                    "dataCarga"  : it.pedido.dataCarga,
                     "status"     : it.pedido.status,
-                    "descricao": it.lancamento ? it.lancamento.tipo.nome : "CARGA",
-                    "valor"    : it.valor
+                   // "descricao": it.lancamento ? it.lancamento.tipo.nome : "CARGA",
+                    "descricao"    : it.tipo.nome,
+                    "valor"      : it.valor
 
 
 
