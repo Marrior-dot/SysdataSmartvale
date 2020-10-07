@@ -16,14 +16,14 @@ class GeradorRemessaBancoBrasilService implements ExecutableProcessing {
         def vars = [:]
         vars.with {
             identificacaoTipoOperacao = "REMESSA"
-            agenciaBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.agencia
+            agenciaBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.agencia as int
             dvAgencia = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.dvAgencia
-            contaCorrenteBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.conta
+            contaCorrenteBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.conta as int
             dvContaCorrente = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.dvConta
             nomeBeneficiario = Holders.grailsApplication.config.projeto.administradora.nome
             dataGravacao = new Date().clearTime()
             sequencialRemessa = novoNsa
-            convenio = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.convenio
+            convenio = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.convenio as int
         }
 
         writer.writeRecord("0", vars)
@@ -40,27 +40,37 @@ class GeradorRemessaBancoBrasilService implements ExecutableProcessing {
 
             def vars = [:]
             vars.with {
-                tipoInscricao = "02" //CNPJ
-                cpfCnpj = Holders.grailsApplication.config.projeto.administradora.cnpj
-                prefixoAgencia = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.agencia
+                cpfCnpj = Holders.grailsApplication.config.projeto.administradora.cnpj as long
+                prefixoAgencia = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.agencia as int
                 dvPrefixoAgencia = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.dvAgencia
-                contaCorrenteBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.conta
+                contaCorrenteBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.conta as int
                 dvContaCorrente = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.dvConta
-                convenioBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.convenio
-                nossoNumero = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira.numero in ["12", "15", "17"] ? bol.nossoNumero : "0"
-                variacaoCarteira = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira
-                carteiraCobranca = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira.numero
-                comando = "01"
+                convenioBeneficiario = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.convenio as int
+                nossoNumero = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira.numero in ["12", "15", "17"] ? bol.nossoNumero as long: 0
+                variacaoCarteira = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira.variacao as int
+                carteiraCobranca = Holders.grailsApplication.config.projeto.faturamento.portador.boleto.carteira.numero as int
                 seuNumeroNumeroTitulo = bol.titulo
                 dataVencimento = bol.dataVencimento
                 valorTitulo = (bol.valor * 100 as long)
                 especieTitulo = 1
                 aceiteTitulo = "N"
                 dataEmissao = bol.dateCreated
+                jurosDeMora = 0
+                dataLimiteDesconto = 0
+                valorDesconto = 0
+                valorIOF = 0
+                valorAbatimento = 0
+                cpfCnpjPagador = Util.cnpjToRaw(empresa.cnpj) as long
+                nomePagador = Util.normalize(empresa.nome)
+                enderecoPagador = Util.normalize(empresa.endereco.logradouro)
+                bairroPagador = Util.normalize(empresa.endereco.bairro)
+                cepPagador = empresa.endereco.cep.replace("-", "")
+                cidadePagador = Util.normalize(empresa.endereco.cidade.nome)
+                ufPagador = empresa.endereco.cidade.estado.uf
+
 
             }
-            vars.sequencialRegistro = counter++
-
+            vars.sequencialRegistro = ++counter
             writer.writeRecord("7", vars)
 
             bol.status = StatusBoleto.REMESSA
@@ -101,32 +111,42 @@ class GeradorRemessaBancoBrasilService implements ExecutableProcessing {
             def fileName = prepareFilename(novoNsa)
             File file = new File(fileName)
 
-            List<SpecRecord> specs = [
-                                        SpecArquivoRemessaBancoBrasil.regHeader,
-                                        SpecArquivoRemessaBancoBrasil.regDetalhe,
-                                        SpecArquivoRemessaBancoBrasil.regTrailer
-                                    ]
+            try {
+                List<SpecRecord> specs = [
+                        SpecArquivoRemessaBancoBrasil.regHeader,
+                        SpecArquivoRemessaBancoBrasil.regDetalhe,
+                        SpecArquivoRemessaBancoBrasil.regTrailer
+                ]
 
-            file.withFixedSizeWriter(LineFeed.WIN, specs) { writer ->
+                file.withFixedSizeWriter(LineFeed.WIN, specs) { writer ->
 
-                writeHeader(writer, novoNsa)
-                def counter = writeDetalhe(writer, boletoList)
+                    writeHeader(writer, novoNsa)
+                    def counter = writeDetalhe(writer, boletoList)
 
-                writer.writeRecord("9", [sequencialRegistro: ++counter])
+                    writer.writeRecord("9", [sequencialRegistro: ++counter])
 
+                }
+
+                Arquivo arquivoRemessa = new Arquivo()
+                arquivoRemessa.with {
+                    tipo = TipoArquivo.REMESSA_COBRANCA
+                    nsa = novoNsa
+                    status = StatusArquivo.GERADO
+                    nome = fileName
+                }
+
+                arquivoRemessa.save(flush: true)
+
+                log.info "Arquivo Remessa gerado com sucesso: ${fileName}"
+
+            } catch (e) {
+                if (file.exists()) {
+                    file.delete()
+                    log.info "Erro ao gerar arquivo remessa. Arquivo apagado"
+                }
+                throw new RuntimeException(e)
             }
 
-            Arquivo arquivoRemessa = new Arquivo()
-            arquivoRemessa.with {
-                tipo = TipoArquivo.REMESSA_COBRANCA
-                nsa = novoNsa
-                status = StatusArquivo.GERADO
-                nome = fileName
-            }
-
-            arquivoRemessa.save(flush: true)
-
-            log.info "Arquivo Remessa gerado com sucesso: ${fileName}"
 
 
         } else

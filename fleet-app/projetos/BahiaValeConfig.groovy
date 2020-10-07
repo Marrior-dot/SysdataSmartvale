@@ -112,6 +112,7 @@ administradora {
     nome = "BAHIA VALE"
     cnpj = "30379128000179"
     bin = "605482"
+    inscricaoMunicipal = "1234567"
     anosValidadeCartao = 2
 
     endereco {
