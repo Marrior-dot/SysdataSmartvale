@@ -1,12 +1,7 @@
 package com.sysdata.gestaofrota.proc.faturamento.notafiscal
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.Arquivo
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.StatusEmissao
-import com.sysdata.gestaofrota.TipoArquivo
-import com.sysdata.gestaofrota.Util
-import com.sysdata.gestaofrota.proc.faturamento.cobranca.SpecArquivoRemessaBancoBrasil
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.portador.notafiscal.SpecArquivoRPSBarueri
 import com.sysdata.xfiles.LineFeed
 import com.sysdata.xfiles.SpecRecord
@@ -30,12 +25,48 @@ class GeracaoArquivoRPSBarueriService implements ExecutableProcessing {
 
     private void writeDetalhe(writer, faturaList) {
 
-        faturaList.each { fat ->
+        faturaList.each { Fatura fat ->
+
+            Rh empresa = fat.conta.participante as Rh
 
             def vars = [:]
 
             vars.with {
                 numeroRPS = sprintf("000%07d", fat.id)
+                dataHoraRPS = new Date()
+                situacaoRPS = "E"
+                codigoServicoPrestado = Holders.grailsApplication.config.projeto.administradora.cnae
+                enderecoServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.logradouro
+                numeroLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.numero
+                complementoLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.complemento
+                bairroLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.bairro
+                cidadeLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.cidade
+                ufLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.estado
+                cepLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.cep.replace("-", "")
+                valorServico = (fat.valorTotal * 100) as long
+                valorTotalRetencoes = 0L
+                indicadorCPFCNPJ = 2
+                CPFCNPJTomador = Util.cnpjToRaw(empresa.cnpj)
+                razaoSocialTomador = Util.normalize(empresa.nome)
+                razaoSocialTomador = Util.normalize(empresa.nome)
+                enderecoTomador = Util.normalize(empresa.endereco.logradouro)
+                numeroLogradouroTomador = Util.normalize(empresa.endereco.numero)
+                complementoLogradouroTomador = Util.normalize(empresa.endereco.complemento)
+                bairroLogradouroTomador = Util.normalize(empresa.endereco.bairro)
+                cidadeLogradouroTomador = Util.normalize(empresa.endereco.cidade.nome)
+                ufLogradouroTomador = empresa.endereco.cidade.estado.uf
+                cepLogradouroTomador = empresa.endereco.cidade.estado.cep.replace("-", "")
+                emailTomador = empresa.email
+                numeroFatura = 0
+                valorFatura = 0L
+
+                def descServ = Holders.grailsApplication.config.projeto.faturamento.portador.notaFiscal.descriminacaoServicos
+
+                
+
+                def binding = [valor: fat.totalBruto]
+
+                descricaoServico = ""
             }
 
             fat.statusEmissao = StatusEmissao.ARQUIVO_GERADO

@@ -10,22 +10,21 @@ class PedidoCarga {
     Unidade unidade
     Integer validade
     User usuario
-    Double taxa = 0D
-    Double taxaDesconto = 0D
-    Double total = 0D
     Date dataCancelamento
     Fatura fatura
+    BigDecimal taxa
+    BigDecimal taxaDesconto
 
     static hasMany = [itens: ItemPedido]
-    static transients = ['perfisRecarga','dataCargaClear']
+
+    static transients = ['perfisRecarga', 'dataCargaClear', "totalBruto", "total", "itensCarga"]
 
     static constraints = {
         usuario(nullable: true)
-        taxa nullable: true
-        taxaDesconto nullable: true
-        total nullable: true
         dataCancelamento nullable: true
         fatura nullable: true
+        taxa nullable: true
+        taxaDesconto nullable: true
     }
 
     static mapping = {
@@ -36,20 +35,15 @@ class PedidoCarga {
         pedidoPorRh(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id =:rh_id)', types: 'long')
     }
 
+    BigDecimal getTotal() {
+        this.itens.sum { it.valor }
+    }
 
-    def calcularTotal() {
-        this.total = 0D
-        //Calcular Total pelos itens
-        this.itens.each { item ->
-            this.total += item.valor
-        }
-
-        this.taxa = this.unidade.rh.taxaPedido
-        BigDecimal tx = BigDecimal.valueOf(this.taxa ?: 0D)
-        BigDecimal tot = BigDecimal.valueOf(this.total)
-        BigDecimal calc = tot * tx / 100D
-        calc.setScale(2, RoundingMode.HALF_UP)
-        this.total += calc
+    BigDecimal getTotalBruto() {
+        return this.itens.sum {
+                                if (it.instanceOf(ItemPedidoMaquina) || it.instanceOf(ItemPedidoParticipante))
+                                    return it.valor
+                                }
     }
 
     public List<Funcionario> funcionarioList(int max) {
@@ -68,13 +62,18 @@ class PedidoCarga {
         itensInstance[0..max].collect { it.participante as Funcionario }
     }
 
+    public def getItensCarga() {
+        return this.itens.findAll { it.tipo == TipoItemPedido.CARGA }
+    }
+
+
     public def getPerfisRecarga(){
         if (! this.unidade)
             return null
         else if (this.unidade.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA)
-            return this.itens*.maquina*.categoria as Set
+            return this.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.maquina*.categoria as Set
         else if (this.unidade.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO)
-            return this.itens*.participante*.categoria as Set
+            return this.itens.findAll { it.tipo == TipoItemPedido.CARGA }*.participante*.categoria as Set
     }
 
     public def getDataCargaClear(){
@@ -82,21 +81,21 @@ class PedidoCarga {
     }
 
     boolean isVeiculoInPedido(Veiculo veiculo) {
-        ItemPedido item = this.itens.find { it.maquina == veiculo && it.tipo == TipoItemPedido.CARGA }
+        ItemPedido item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.maquina == veiculo }
         return item
     }
 
     boolean isFuncionarioInPedido(Funcionario funcionario) {
-        ItemPedido item = this.itens.find { it.participante == funcionario && it.tipo == TipoItemPedido.CARGA }
+        ItemPedido item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.participante == funcionario }
         return item
     }
 
     public String valorInPedido(objeto, int decimalPlace = 2) {
         ItemPedido item
         if (objeto instanceof Funcionario)
-            item = this.itens.find { it.participante == objeto && it.tipo == TipoItemPedido.CARGA }
+            item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.participante == objeto }
         else if (objeto instanceof Veiculo)
-            item = this.itens.find { it.maquina == objeto && it.tipo == TipoItemPedido.CARGA }
+            item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.maquina == objeto  }
 
         def valor = item?.valor ?: objeto.categoria.valorCarga
 

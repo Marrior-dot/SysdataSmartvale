@@ -14,12 +14,13 @@ class CargaPedidoService implements ExecutableProcessing {
                                                 property "id"
                                             }
                                             eq("status", StatusPedidoCarga.NOVO)
+                                            le("dataCarga", date)
                             }
 
         if (pedidosList) {
             log.info "${pedidosList.size()} pedido(s) de Carga para processar"
             pedidosList.each { pid ->
-                processPedido(pid)
+                processPedido(pid, date)
             }
         } else {
             log.warn "Não há Pedidos finalizados para processar!"
@@ -27,45 +28,72 @@ class CargaPedidoService implements ExecutableProcessing {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    def processPedido(long id) {
+    def processPedido(long id, Date dataRef) {
         PedidoCarga pedidoCarga = PedidoCarga.get(id)
         log.info "Processando pedido $pedidoCarga.id ..."
-        pedidoCarga.itens.each { ItemPedido i ->
-            Transacao tr = new Transacao()
-            tr.with {
-                tipo = TipoTransacao.CARGA_SALDO
-                status = StatusTransacao.AGENDAR
-                origem = OrigemTransacao.PORTAL
-                dataHora = new Date().clearTime()
-                valor = i.valor
+        pedidoCarga.itens.each { ItemPedido item ->
+
+            // Cria apenas transação de carga para portador (funcionário/máquina)
+
+            if (item.instanceOf(ItemPedidoParticipante) || item.instanceOf(ItemPedidoMaquina)) {
+
+                Transacao tr = new Transacao()
+                tr.with {
+                    tipo = TipoTransacao.CARGA_SALDO
+                    status = StatusTransacao.AGENDAR
+                    origem = OrigemTransacao.PORTAL
+                    dataHora = dataRef
+                    valor = item.valor
+                }
+
+                Portador portador = item.portador
+
+                // Associa à transação o cartão ativo do portador
+
+                if (item.instanceOf(ItemPedidoParticipante))
+                    tr.participante = (item as ItemPedidoParticipante).funcionario
+                if (item.instanceOf(ItemPedidoMaquina))
+                    tr.maquina = (item as ItemPedidoMaquina).maquina
+
+                tr.cartao = portador.cartaoAtivo
+                tr.numeroCartao = tr.cartao.numero
+
+                tr.save(flush: true)
+
+                item.transacao = tr
+                item.save()
+
+                log.info "\tTR CRG #$tr.id criada"
+
+                LancamentoPortador lctoCarga = new LancamentoPortador()
+                lctoCarga.with {
+                    tipo = TipoLancamento.CARGA
+                    status = StatusLancamento.A_FATURAR
+                    valor = tr.valor
+                    dataEfetivacao = tr.dataHora
+                    conta = portador.conta
+                }
+                tr.addToLancamentos(lctoCarga)
+                tr.save(flush: true)
+
+                log.info "\tTR CRG #$tr.id AG"
+
+            // Cria apenas lançamento de taxas
+            } else if (item.instanceOf(ItemPedidoTaxa)) {
+
+                TipoLancamento tipoLancamento = item.valor > 0  ? TipoLancamento.TAXA_ADM : TipoLancamento.TAXA_DESCONTO
+
+                LancamentoConvenio lctoTaxa = new LancamentoConvenio()
+                lctoTaxa.with {
+                    tipo = tipoLancamento
+                    status = StatusLancamento.A_FATURAR
+                    valor = item.valor
+                    dataEfetivacao = dataRef
+                    conta = item.pedido.unidade.rh.conta
+                }
+                lctoTaxa.save(flush: true)
+                log.info "\t LC TX #$lctoTaxa.id criado"
             }
-            Portador portador
-            if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
-                tr.participante = i.funcionario
-                portador = i.funcionario.portador
-            }
-            else if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-                tr.maquina = i.maquina
-                portador = i.maquina.portador
-            }
-
-            // Associa à transação o cartão ativo do portador
-            tr.cartao = portador.cartaoAtivo
-            tr.numeroCartao = tr.cartao.numero
-
-            tr.save(flush: true)
-
-            i.transacao = tr
-            i.save(flush: true)
-
-            log.info "\tTR CRG #$tr.id criada"
-
-/*
-            def oldSaldo = portador.saldoTotal
-            portador.saldoTotal += tr.valor
-            portador.save(flush: true)
-            log.info "\tPRT #$portador.id - (SA: $oldSaldo NS: $portador.saldoTotal)"
-*/
         }
         pedidoCarga.status = StatusPedidoCarga.AGENDADO
         pedidoCarga.save(flush: true)
