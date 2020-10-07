@@ -60,7 +60,7 @@
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentos">Base de Estabelecimentos</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionarios">Base de Funcionários</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculos">Base de Veículos</g:link></li>
-
+                        <li class="controller"><g:link  class="submenu-logado"  controller="consultaVeiculo">Veículos</g:link></li>
 
 %{--
                         <sec:ifAnyGranted roles="ROLE_PROC">
