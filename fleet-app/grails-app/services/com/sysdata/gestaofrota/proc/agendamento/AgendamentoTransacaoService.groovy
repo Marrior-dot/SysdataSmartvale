@@ -14,7 +14,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
     @Override
     def execute(Date date) {
 
-        def agendarList = Transacao.where { status == StatusTransacao.AGENDAR }.list(sort: 'id')
+        def agendarList = Transacao.where { status == StatusTransacao.AGENDAR && tipo != TipoTransacao.CARGA_SALDO }.list(sort: 'id')
 
         if (agendarList) {
             agendarList.each { tr ->

@@ -29,8 +29,11 @@ class CargaPedidoService implements ExecutableProcessing {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     def processPedido(long id, Date dataRef) {
+
         PedidoCarga pedidoCarga = PedidoCarga.get(id)
+
         log.info "Processando pedido $pedidoCarga.id ..."
+
         pedidoCarga.itens.each { ItemPedido item ->
 
             // Cria apenas transação de carga para portador (funcionário/máquina)
@@ -60,9 +63,6 @@ class CargaPedidoService implements ExecutableProcessing {
 
                 tr.save(flush: true)
 
-                item.transacao = tr
-                item.save()
-
                 log.info "\tTR CRG #$tr.id criada"
 
                 LancamentoPortador lctoCarga = new LancamentoPortador()
@@ -75,6 +75,9 @@ class CargaPedidoService implements ExecutableProcessing {
                 }
                 tr.addToLancamentos(lctoCarga)
                 tr.save(flush: true)
+
+                item.lancamento = lctoCarga
+                item.save(flush: true)
 
                 log.info "\tTR CRG #$tr.id AG"
 
@@ -92,6 +95,10 @@ class CargaPedidoService implements ExecutableProcessing {
                     conta = item.pedido.unidade.rh.conta
                 }
                 lctoTaxa.save(flush: true)
+
+                item.lancamento = lctoTaxa
+                item.save(flush: true)
+
                 log.info "\t LC TX #$lctoTaxa.id criado"
             }
         }

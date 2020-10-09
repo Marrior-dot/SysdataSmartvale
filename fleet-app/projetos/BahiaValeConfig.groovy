@@ -126,14 +126,14 @@ administradora {
         estado = "BA"
     }
 
-    endereco_notafiscal {
-        cep = "41820-020"
-        logradouro = "Avenida Tancredo Neves"
-        numero = "1632"
-        complemento = "Salvador Trade Center, torre norte sala 801"
-        bairro = "Caminho das Árvores"
-        cidade = "Salvador"
-        estado = "BA"
+    enderecoNotaFiscal {
+        cep = "06402-030"
+        logradouro = "Rua Vitória"
+        numero = "999"
+        complemento = ""
+        bairro = "Vila São Jorge"
+        cidade = "Barueri"
+        estado = "SP"
     }
 
 
@@ -178,10 +178,8 @@ faturamento {
         }
 
         notaFiscal {
-
-            descriminacaoServicos = """SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valor}||TAXA DE ADMINISTRAÇÃO: ${taxa}||VALOR FINAL: ${total}|"""
+            descriminacaoServicos = 'SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valorConsumido}||${taxas}||VALOR FINAL: ${valorTotal}|'
         }
-
 
     }
 
@@ -223,6 +221,10 @@ environments {
             cobranca {
                 dir = "cobranca/"
             }
+
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
         }
     }
 
@@ -257,6 +259,11 @@ environments {
                 dir = "cobranca/"
             }
 
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
+
+
         }
     }
 
@@ -290,6 +297,11 @@ environments {
             cobranca {
                 dir = "cobranca/"
             }
+
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
+
 
         }
     }

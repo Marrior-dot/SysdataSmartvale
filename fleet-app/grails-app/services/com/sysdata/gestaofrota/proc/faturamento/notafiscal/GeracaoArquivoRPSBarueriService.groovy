@@ -11,43 +11,66 @@ import grails.util.Holders
 @Transactional
 class GeracaoArquivoRPSBarueriService implements ExecutableProcessing {
 
-    private void writeHeader(writer, int novoNsa) {
+    private void writeHeader(writer, int novoNsa, Map vars) {
 
-        def vars = [:]
         vars.with {
-            inscricaoContribuinte = Holders.grailsApplication.config.administradora.inscricaoMunicipal
+            inscricaoContribuinte = Holders.grailsApplication.config.projeto.administradora.inscricaoMunicipal
             idRemessa = novoNsa
         }
 
-        writer.writeRecord("0", vars)
+        writer.writeRecord("1", vars)
+        vars.numeroTotalLinhasArquivo = 1
+        vars.valorTotalServicos = 0
 
     }
 
-    private void writeDetalhe(writer, faturaList) {
+    private String writeDescServicos(Fatura fat) {
+        def taxas = []
+        Lancamento taxaAdm = fat.itens.find { it.lancamento.tipo == TipoLancamento.TAXA_ADM }
+        if (taxaAdm)
+            taxas << taxaAdm
+
+        Lancamento taxaDesc = fat.itens.find { it.lancamento.tipo == TipoLancamento.TAXA_DESCONTO }
+        if (taxaDesc)
+            taxas << taxaDesc
+
+        def descServ = Holders.grailsApplication.config.projeto.faturamento.portador.notaFiscal.descriminacaoServicos
+
+        def binding = [
+                        valorTotal: fat.valorTotal,
+                        valorConsumido: fat.itens.sum { it.lancamento.tipo == TipoLancamento.CARGA ? it.valor : 0 },
+                        taxas: taxas.size() > 0 ? taxas.sum { it.tipo.nome + "	" + it.valor + '|' } : ''
+                    ]
+
+        def engine = new groovy.text.SimpleTemplateEngine()
+        def template = engine.createTemplate(descServ).make(binding)
+
+        return template.toString()
+    }
+
+
+    private void writeDetalhe(writer, List<Fatura> faturaList, Map vars) {
 
         faturaList.each { Fatura fat ->
 
             Rh empresa = fat.conta.participante as Rh
 
-            def vars = [:]
-
             vars.with {
                 numeroRPS = sprintf("000%07d", fat.id)
                 dataHoraRPS = new Date()
                 situacaoRPS = "E"
-                codigoServicoPrestado = Holders.grailsApplication.config.projeto.administradora.cnae
-                enderecoServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.logradouro
-                numeroLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.numero
-                complementoLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.complemento
-                bairroLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.bairro
-                cidadeLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.cidade
-                ufLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.estado
-                cepLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.endereco_notafiscal.cep.replace("-", "")
+                codigoServicoPrestado = Holders.grailsApplication.config.projeto.administradora.cnae as int
+                enderecoServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.logradouro)
+                numeroLogradouroServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.numero)
+                complementoLogradouroServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.complemento)
+                bairroLogradouroServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.bairro)
+                cidadeLogradouroServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.cidade)
+                ufLogradouroServicoPrestado = Util.normalize(Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.estado)
+                cepLogradouroServicoPrestado = Holders.grailsApplication.config.projeto.administradora.enderecoNotaFiscal.cep.replace("-", "")
                 valorServico = (fat.valorTotal * 100) as long
                 valorTotalRetencoes = 0L
                 indicadorCPFCNPJ = 2
-                CPFCNPJTomador = Util.cnpjToRaw(empresa.cnpj)
-                razaoSocialTomador = Util.normalize(empresa.nome)
+                CPFCNPJTomador = Util.cnpjToRaw(empresa.cnpj) as long
                 razaoSocialTomador = Util.normalize(empresa.nome)
                 enderecoTomador = Util.normalize(empresa.endereco.logradouro)
                 numeroLogradouroTomador = Util.normalize(empresa.endereco.numero)
@@ -55,39 +78,46 @@ class GeracaoArquivoRPSBarueriService implements ExecutableProcessing {
                 bairroLogradouroTomador = Util.normalize(empresa.endereco.bairro)
                 cidadeLogradouroTomador = Util.normalize(empresa.endereco.cidade.nome)
                 ufLogradouroTomador = empresa.endereco.cidade.estado.uf
-                cepLogradouroTomador = empresa.endereco.cidade.estado.cep.replace("-", "")
+                cepLogradouroTomador = empresa.endereco.cep.replace("-", "")
                 emailTomador = empresa.email
                 numeroFatura = 0
                 valorFatura = 0L
+                descricaoServico = writeDescServicos(fat)
 
-                def descServ = Holders.grailsApplication.config.projeto.faturamento.portador.notaFiscal.descriminacaoServicos
-
-                
-
-                def binding = [valor: fat.totalBruto]
-
-                descricaoServico = ""
             }
 
             fat.statusEmissao = StatusEmissao.ARQUIVO_GERADO
             fat.save()
+
+            writer.writeRecord("2", vars)
+
+            vars.numeroTotalLinhasArquivo++
+            vars.valorTotalServicos += vars.valorServico
         }
+    }
+
+    private void writeTrailer(writer, vars) {
+
+        vars.numeroTotalLinhasArquivo++
+        vars.valorTotalRetencao = 0
+
+        writer.writeRecord("9", vars)
+
     }
 
     private String prepareFilename(int nsa) {
         String baseDir = Holders.grailsApplication.config.projeto.arquivos.baseDir
-        String cobrancaDir = Holders.grailsApplication.config.projeto.arquivos.cobranca.dir
+        String nfeDir = Holders.grailsApplication.config.projeto.arquivos.notaFiscal.dir
 
         baseDir = !baseDir.endsWith("/") ? baseDir + "/" : baseDir
-        cobrancaDir = !cobrancaDir.endsWith("/") ? cobrancaDir + "/" : cobrancaDir
+        nfeDir = !nfeDir.endsWith("/") ? nfeDir + "/" : nfeDir
 
-        def fileName = sprintf("%sREM_%s_%07d.txt",
-                baseDir + cobrancaDir,
-                Util.cnpjToRaw(Holders.grailsApplication.config.projeto.administradora.cnpj),
-                nsa)
+        def fileName = sprintf("%sRPS_%s_%07d.txt",
+                                    baseDir + nfeDir,
+                                    Util.cnpjToRaw(Holders.grailsApplication.config.projeto.administradora.cnpj),
+                                    nsa)
 
         return fileName
-
     }
 
     @Override
@@ -110,9 +140,11 @@ class GeracaoArquivoRPSBarueriService implements ExecutableProcessing {
                                         ]
 
                 file.withFixedSizeWriter(LineFeed.WIN, specs) { writer ->
-                    writeHeader(writer, novoNsa)
 
-                    writeDetalhe(writer, faturaList)
+                    def vars = [:]
+                    writeHeader(writer, novoNsa, vars)
+                    writeDetalhe(writer, faturaList, vars)
+                    writeTrailer(writer, vars)
                 }
 
             } catch(e) {

@@ -165,15 +165,16 @@ class PedidoCargaService {
 
                 pedidoCarga.itens.each { item ->
 
-                    Transacao transacaoCarga = item.transacao
-                    transacaoCarga.status = StatusTransacao.CANCELADA
-                    transacaoCarga.save()
-                    log.info "\tTR #${transacaoCarga} CANCELADA"
+                    Lancamento lancamento = item.lancamento
+                    lancamento.status = StatusLancamento.ESTORNADO
+                    lancamento.save(flush: true)
+                    log.info "\tLC #${lancamento.id} ESTORNADO"
 
-                    transacaoCarga.lancamentos.each { lcto ->
-                        lcto.status = StatusLancamento.ESTORNADO
-                        lcto.save(flush: true)
-                        log.info "\t\tLC #${cto.id} ESTORNADO"
+                    if (lancamento.transacao) {
+                        Transacao tr = lancamento.transacao
+                        tr.status = StatusTransacao.CANCELADA
+                        tr.save(flush: true)
+                        log.info "\tTR #${tr.id} CANCELADA"
                     }
                 }
             }

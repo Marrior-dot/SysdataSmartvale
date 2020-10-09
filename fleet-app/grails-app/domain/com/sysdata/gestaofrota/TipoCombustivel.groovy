@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 enum TipoCombustivel {
 	GASOLINA("GASOLINA"),
-	ALCOOL("ÁLCOOL"),
+	ALCOOL("ALCOOL"),
 	DIESEL("DIESEL"),
 	BIODIESEL("BIODIESEL")
 	

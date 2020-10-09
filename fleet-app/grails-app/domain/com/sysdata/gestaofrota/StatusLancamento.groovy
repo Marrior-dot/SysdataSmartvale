@@ -1,12 +1,11 @@
 package com.sysdata.gestaofrota
 
 enum StatusLancamento {
-	A_FATURAR("A Efetivar"),
+
+	A_FATURAR("A Faturar"),
 	EFETIVADO("Efetivado"),
 	ESTORNADO("Estornado"),
 	FATURADO("Faturado")
-
-
 
 	String nome
 	
