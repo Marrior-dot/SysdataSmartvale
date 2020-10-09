@@ -1,17 +1,22 @@
 package com.sysdata.gestaofrota.proc.reembolso.emissor
 
 import com.fourLions.processingControl.ExecutableProcessing
+import com.sysdata.gestaofrota.ChaveAcessoApi
 import com.sysdata.gestaofrota.LotePagamento
 import com.sysdata.gestaofrota.MensagemIntegracao
 import com.sysdata.gestaofrota.PagamentoLote
+import com.sysdata.gestaofrota.StatusChaveAcesso
 import com.sysdata.gestaofrota.StatusEmissao
 import com.sysdata.gestaofrota.StatusLotePagamento
+import com.sysdata.gestaofrota.TipoAplicacao
 import com.sysdata.gestaofrota.TipoMensagem
 import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+
+import java.text.SimpleDateFormat
 
 @Transactional
 class BanparaReembolsoAPIService implements ExecutableProcessing {
@@ -57,38 +62,75 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
     GrailsApplication grailsApplication
 
-    private Closure withToken = { clos ->
 
-        def baseUrl = grailsApplication.config.project.reembolso.banpara.api.autenticar.baseUrl
-        def endpoint = baseUrl + "/v1/autenticar"
-        def credencial = [usuario: grailsApplication.config.project.reembolso.banpara.api.autenticar.usuario]
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
-        MensagemIntegracao msgAutentica = new MensagemIntegracao(tipo: TipoMensagem.BANPARA_AUTENTICACAO)
-        msgAutentica.corpo = (credencial as JSON).toString(true)
 
-        ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, "/", credencial)
+    private def withToken = { clos ->
+        
+        ChaveAcessoApi key = ChaveAcessoApi.findByStatusAndTipoAplicacao(StatusChaveAcesso.VALIDA,
+                                                                        TipoAplicacao.CLIENTE_API_BANPARA)
 
-        msgAutentica.codigoResposta = responseData.statusCode
+        // Se não existe chave válida ou chave já expirou pelo tempo
+        if (!key || key.dataHoraExpiracao < new Date() ) {
 
-        if (responseData.statusCode == 200)
-            clos()
-        else if (responseData.statusCode == 400) {
-            log.error "Falha na autenticação: Erro de Negócio"
+            def baseUrl = grailsApplication.config.projeto.reembolso.banpara.api.autenticar.baseUrl
+            def endpoint = baseUrl + "/v1/autenticar"
+            def credencial = [
+                    usuario: grailsApplication.config.projeto.reembolso.banpara.api.autenticar.usuario,
+                    chave: grailsApplication.config.projeto.reembolso.banpara.api.autenticar.chave
+            ]
 
+            MensagemIntegracao msgAutentica = new MensagemIntegracao(tipo: TipoMensagem.BANPARA_AUTENTICACAO)
+            msgAutentica.corpo = (credencial as JSON).toString(true)
+
+            ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, "/", credencial)
+
+            msgAutentica.codigoResposta = responseData.statusCode
             msgAutentica.resposta = responseData.body
+            msgAutentica.jsonResponse = responseData.json
 
-            responseData.json.each {
-                log.error "${it.key} = ${it.value}"
+            if (responseData.statusCode == 200) {
+
+                def receivedToken = responseData.json.token
+                String receivedDateCreated = responseData.json.dataCriacao
+                String receivedDateExpiration = responseData.json.dataExpiracao
+
+                if (key) {
+                    key.status = StatusChaveAcesso.EXPIRADA
+                    key.save(flush: true)
+                }
+
+                // Persiste novo token recuperado
+                ChaveAcessoApi newKey = new ChaveAcessoApi()
+                newKey.with {
+                    token = receivedToken
+                    dataHoraCriacao = dateFormat.parse(receivedDateCreated.replace("T", " "))
+                    dataHoraExpiracao = dateFormat.parse(receivedDateExpiration.replace("T", " "))
+                }
+                newKey.save(flush: true)
+
+                clos(newKey.token)
             }
 
-        } else if (responseData.statusCode == 500)
-            log.error "Falha na autenticação: Erro de Sistema"
+            else if (responseData.statusCode == 400) {
 
-        msgAutentica.save()
+                log.error "Falha na autenticação: Erro de Negócio"
 
+                responseData.json.each {
+                    log.error "${it.key} = ${it.value}"
+                }
+
+            } else if (responseData.statusCode == 500)
+
+                log.error "Falha na autenticação: Erro de Sistema"
+
+            msgAutentica.save(flush: true)
+
+        // Utiliza a chave previamente recuperada e armazenada
+        } else
+            clos(key.token)
     }
-
-
 
     @Override
     def execute(Date date) {
@@ -101,7 +143,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
             def loteJson = [:]
 
-            loteJson.Operador = grailsApplication.config.project.reembolso.api.transferencia.operador
+            loteJson.Operador = grailsApplication.config.projeto.reembolso.api.transferencia.operador
             loteJson.dataContabil = lote.dateCreated.format('yyyy-MM-dd')
             loteJson.NSL = lote.id
 
@@ -111,8 +153,8 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
                             [
                                 NSR: pgtoLote.id,
-                                AgenciaContaOrig: grailsApplication.config.project.reembolso.banpara.contaDebito.agencia,
-                                ContaOrig: grailsApplication.config.project.reembolso.banpara.contaDebito.conta,
+                                AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
+                                ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
                                 BancoDest: pgtoLote.dadoBancario.banco.codigo,
                                 AgenciaContaDest: pgtoLote.dadoBancario.agencia,
                                 ContaDest: pgtoLote.dadoBancario.conta,
@@ -134,8 +176,8 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
             def tefList = pgtoBanparaList.collect { PagamentoLote pgtoLote ->
                             [
                                 NSR: pgtoLote.id,
-                                AgenciaContaOrig: grailsApplication.config.project.reembolso.banpara.contaDebito.agencia,
-                                ContaOrig: grailsApplication.config.project.reembolso.banpara.contaDebito.conta,
+                                AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
+                                ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
                                 ProdutoDest: 1,
                                 AgenciaContaDest: pgtoLote.dadoBancario.agencia,
                                 ContaDest: pgtoLote.dadoBancario.conta,
@@ -145,34 +187,44 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
             loteJson.TEF = tefList
 
-            withToken {
+            withToken { token ->
                 MensagemIntegracao msgEnviaLote = new MensagemIntegracao()
                 msgEnviaLote.with {
                     tipo = TipoMensagem.BANPARA_ENVIO_LOTEPAGAMENTO
                     corpo = (loteJson as JSON).toString(true)
                 }
-                msgEnviaLote.save()
+                msgEnviaLote.save(flush: true)
 
-                def baseUrl = grailsApplication.config.project.reembolso.api.transferencia.baseUrl
-                def endpoint = baseUrl + "//contacorrente/v1/lote"
-                ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, loteJson)
+                def baseUrl = grailsApplication.config.projeto.reembolso.api.transferencia.baseUrl
+                def endpoint = baseUrl + "/contacorrente/v1/lote"
 
+                def header = [:]
+                if (token)
+                    header.Authorization = "Bearer $token"
+
+                ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, loteJson, header)
+
+                msgEnviaLote.codigoResposta = responseData.statusCode
                 msgEnviaLote.resposta = responseData.body
+                msgEnviaLote.jsonResponse = responseData.json
 
                 lote.statusEmissao = StatusEmissao.ARQUIVO_GERADO
+
                 if (responseData.statusCode == 200) {
                     lote.status = StatusLotePagamento.ACEITO
+
                 } else if (responseData.statusCode == 400) {
                     lote.status = StatusLotePagamento.REJEITADO
 
-                    responseData.json
-
+                    responseData.json.each {
+                        log.error "${it.key} = ${it.value}"
+                    }
 
                 } else if (responseData.statusCode == 500) {
                     lote.status = StatusLotePagamento.REJEITADO
 
                 }
-                lote.save()
+                lote.save(flush: true)
             }
 
 
