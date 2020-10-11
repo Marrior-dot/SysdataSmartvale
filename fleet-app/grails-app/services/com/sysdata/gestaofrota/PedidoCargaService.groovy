@@ -31,12 +31,6 @@ class PedidoCargaService {
         pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
         pedidoCarga.validade = unidade.rh.validadeCarga
 
-        if (params.tipoTaxa == '1')
-            pedidoCarga.taxa = unidade.rh.taxaAdministracao
-        else if (params.tipoTaxa == '2')
-            pedidoCarga.taxaDesconto = unidade.rh.taxaDesconto
-
-        pedidoCarga.total = 0D
 
         if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
 
@@ -58,7 +52,6 @@ class PedidoCargaService {
                         itemPedido.valor = valorCarga
                         itemPedido.tipo = TipoItemPedido.CARGA
                         pedidoCarga.addToItens(itemPedido)
-                        pedidoCarga.total += itemPedido.valor
                     } else {
                         ret.success = false
                         ret.message = "Valor ($valorCarga) não pode ser maior que perfil de recarga (${funcionario.categoria.valorCarga})"
@@ -92,7 +85,6 @@ class PedidoCargaService {
                         itemPedido.valor = valorCarga
                         itemPedido.tipo = TipoItemPedido.CARGA
                         pedidoCarga.addToItens(itemPedido)
-                        pedidoCarga.total += itemPedido.valor
                     } else {
                         ret.success = false
                         ret.message = "Valor ($valorCarga) não pode ser maior que perfil de recarga (${veiculo.categoria.valorCarga})"
@@ -105,19 +97,37 @@ class PedidoCargaService {
                 return ret
         }
 
-        // Calcular Taxa Administração
-        if (pedidoCarga.taxa > 0) {
-            def totalSemTaxa = pedidoCarga.total
-            def valorTaxa = (totalSemTaxa * pedidoCarga.taxa / 100)
-            def totalPedido = (totalSemTaxa + valorTaxa).round(2)
-            pedidoCarga.total = totalPedido
+        // Calcular com Taxa de Administração
+        if (params.tipoTaxa == '1') {
 
-        // Calcular Taxa Desconto
-        } else if (pedidoCarga.taxaDesconto > 0) {
-            def totalSemTaxa = pedidoCarga.total
-            def valorTaxa = (totalSemTaxa * pedidoCarga.taxaDesconto / 100)
-            def totalPedido = (totalSemTaxa - valorTaxa).round(2)
-            pedidoCarga.total = totalPedido
+            pedidoCarga.taxa = unidade.rh.taxaAdministracao
+
+            if (pedidoCarga.taxa > 0) {
+                def valorTaxaAdm = (pedidoCarga.totalBruto * pedidoCarga.taxa / 100).round(2)
+
+                ItemPedidoTaxa itemPedidoTaxa = new ItemPedidoTaxa()
+                itemPedidoTaxa.with {
+                    tipo = TipoItemPedido.TAXA
+                    valor = valorTaxaAdm
+                }
+                pedidoCarga.addToItens(itemPedidoTaxa)
+            }
+
+        // Calcular com Taxa de Desconto
+        } else if (params.tipoTaxa == '2') {
+
+            pedidoCarga.taxaDesconto = unidade.rh.taxaDesconto
+
+            if (pedidoCarga.taxaDesconto > 0 ) {
+                def valorTaxaDesc = (pedidoCarga.totalBruto * pedidoCarga.taxaDesconto / 100).round(2)
+
+                ItemPedidoTaxa itemPedidoTaxa = new ItemPedidoTaxa()
+                itemPedidoTaxa.with {
+                    tipo = TipoItemPedido.TAXA
+                    valor = -valorTaxaDesc
+                }
+                pedidoCarga.addToItens(itemPedidoTaxa)
+            }
         }
 
 
@@ -129,39 +139,16 @@ class PedidoCargaService {
             rh.saldoDisponivel -= pedidoCarga.total
 
 
-/*
-
-        //Vincula taxas de cartão a efetivar ao pedido, caso existam
-        def taxasList = getTaxasACobrar(unidadeInstance)
-        taxasList.each { tx ->
-            def item = new ItemPedido()
-            item.with {
-                participante = tx.conta.participante
-                valor = tx.valor
-                lancamento = tx
-                tipo = TipoItemPedido.TAXA
-                sobra = 0
-                ativo = true
-                save(flush: true)
-            }
-            pedidoCarga.addToItens(item)
-            pedidoCarga.total += item.valor
-            //Marca lançamento como EFETIVADO
-            tx.status = StatusLancamento.EFETIVADO
-            tx.save(flush: true);
-        }
-*/
-
         if (! pedidoCarga.save(flush: true)) {
 
             rh.save(flush: true)
 
             ret.success = false
             ret.message = pedidoCarga.errors
-            return
         } else
             ret.message = "Pedido #${pedidoCarga.id} criado com sucesso"
-        ret
+
+        return ret
     }
 
     def cancelPedido(PedidoCarga pedidoCarga) {
@@ -178,15 +165,16 @@ class PedidoCargaService {
 
                 pedidoCarga.itens.each { item ->
 
-                    Transacao transacaoCarga = item.transacao
-                    transacaoCarga.status = StatusTransacao.CANCELADA
-                    transacaoCarga.save()
-                    log.info "\tTR #${transacaoCarga} CANCELADA"
+                    Lancamento lancamento = item.lancamento
+                    lancamento.status = StatusLancamento.ESTORNADO
+                    lancamento.save(flush: true)
+                    log.info "\tLC #${lancamento.id} ESTORNADO"
 
-                    transacaoCarga.lancamentos.each { lcto ->
-                        lcto.status = StatusLancamento.ESTORNADO
-                        lcto.save(flush: true)
-                        log.info "\t\tLC #${cto.id} ESTORNADO"
+                    if (lancamento.transacao) {
+                        Transacao tr = lancamento.transacao
+                        tr.status = StatusTransacao.CANCELADA
+                        tr.save(flush: true)
+                        log.info "\tTR #${tr.id} CANCELADA"
                     }
                 }
             }
@@ -231,4 +219,35 @@ class PedidoCargaService {
         return ret
     }
 
+    def deletePedido(PedidoCarga pedidoCarga) {
+
+        def ret = [:]
+
+        if (pedidoCarga.status == StatusPedidoCarga.NOVO) {
+
+            def pedId = pedidoCarga.id
+
+            def itemIds = pedidoCarga.itens*.id
+            itemIds.each { iid ->
+                ItemPedido item = ItemPedido.get(iid)
+                pedidoCarga.removeFromItens(item)
+                item.delete(flush: true)
+            }
+            pedidoCarga.delete(flush: true)
+
+            ret.success = true
+            ret.message = "Pedido de Carga #${pedId} excluído com sucesso"
+            log.info ret.message
+
+            return ret
+        } else {
+            ret.success = false
+            ret.message = "Pedido de Carga #${pedidoCarga.id} não pode ser excluído. Status: ${pedidoCarga.status.nome}"
+            log.warn ret.message
+
+            return ret
+        }
+
+
+    }
 }

@@ -5,16 +5,16 @@ class ItemPedido {
     BigDecimal valor
     BigDecimal sobra = 0
     boolean ativo
-    Transacao transacao
     TipoItemPedido tipo
+    Lancamento lancamento
 
     static belongsTo = [pedido: PedidoCarga]
 
     static transients = ['portador']
 
     static constraints = {
-        transacao nullable: true
         tipo nullable: true
+        lancamento nullable: true
     }
 
     static mapping = {

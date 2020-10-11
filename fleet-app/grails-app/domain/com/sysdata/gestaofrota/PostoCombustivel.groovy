@@ -25,4 +25,9 @@ class PostoCombustivel extends Empresa {
     def vinculado(Rh programa) {
         return this.programas && this.programas.contains(programa)
     }
+
+    String toString() {
+        return "EC: #${this.id} (${this.cnpj}) ${this.nomeFantasia}"
+    }
+
 }

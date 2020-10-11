@@ -70,7 +70,8 @@ class RESTClientHelper {
 
     ResponseData postJSON(suri, spath, data, headers = null) {
         HTTPBuilder http = new HTTPBuilder(suri)
-        if (headers) http.setHeaders(headers)
+        if (headers)
+            http.setHeaders(headers)
         ResponseData responseData
         withRetries { retries ->
             http.request(Method.POST, ContentType.JSON) { req ->

@@ -9,7 +9,7 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
     def calcularDataReembolso(PostoCombustivel empresa, Date dataReferencia) {
 
         def dia = dataReferencia[Calendar.DAY_OF_MONTH]
-        def mes = dataReferencia[Calendar.MONTH] + 1
+        def mes = dataReferencia[Calendar.MONTH]
         def ano = dataReferencia[Calendar.YEAR]
 
         // Encontra em que intervalo a data se encaixa
@@ -22,7 +22,7 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
             def mesReemb = mes + reembInstance.meses
             def anoReemb = ano
 
-            if (mesReemb > 12) {
+            if (++mesReemb > 12) {
                 mesReemb = 1
                 anoReemb = ano + 1
             }

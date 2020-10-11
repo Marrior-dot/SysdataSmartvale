@@ -5,8 +5,7 @@ grails {
 
     gorm {
         reactor.events = false
-        failOnError = false
-
+        failOnError = true
     }
 
     mime {

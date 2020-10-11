@@ -13,8 +13,13 @@ class PagamentoEstabelecimento {
     PostoCombustivel estabelecimento
     CorteEstabelecimento corte
     BigDecimal valor
+    StatusReenvioPagamento statusReenvio
+    StatusPagamento status = StatusPagamento.AGENDADO
 
     static constraints = {
+        dataEfetivada nullable: true
+        valor nullable: true
+        statusReenvio nullable: true
     }
 
     static mapping = {
@@ -22,4 +27,9 @@ class PagamentoEstabelecimento {
         dataProgramada type: 'date'
         dataEfetivada type: 'date'
     }
+
+    String toString() {
+        return "#${this.id} ${this.dataProgramada.format('dd/MM/yy')} ${this.valor}"
+    }
+
 }

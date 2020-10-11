@@ -144,11 +144,13 @@ environments {
                 api {
 
                     autenticar {
-                        baseUrl = "http://localhost:8080/"
+                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
+                        usuario = "teste"
+                        chave = "teste"
                     }
 
                     transferencia {
-                        baseUrl = "http://localhost:8080/"
+                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
 
                     }
 
@@ -183,7 +185,6 @@ environments {
 
     homologation {
 
-
         reembolso {
             banpara {
                 contaDebito {
@@ -194,15 +195,15 @@ environments {
                 api {
 
                     autenticar {
-                        baseUrl = "https://desenv-wspa02/controlecanal"
-                        usuario = ""
-                        chave = ""
+
+                        baseUrl = "https://172.35.21.19/controlecanais"
+                        usuario = "GSMB"
+                        chave = "a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"
 
                     }
 
                     transferencia {
-                        baseUrl = "https://desenv-wspa02/transferencia"
-
+                        baseUrl = "https://172.35.21.19/transferencia"
                         operador = "3157"
                     }
 
