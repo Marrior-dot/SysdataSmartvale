@@ -35,13 +35,30 @@ class Veiculo extends MaquinaMotorizada {
 
         def hodometroAntigo = this.hodometro?:0
         if (!this.hodometro ) {
-            def ultTr = Transacao.executeQuery("select max(t) from Transacao t where t.maquina.id =:maq and t.statusControle in (:sts)",
-                                                [maq: this.id,
-                                                 sts: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
+            def ultTr = Transacao.executeQuery("""
+select max(t)
+from Transacao t
+where t.maquina.id =:maq and
+t.statusControle in (:sts) and
+t.tipo = :tipo""",
+                                                [   maq: this.id,
+                                                    sts: [
+                                                             StatusControleAutorizacao.PENDENTE,
+                                                             StatusControleAutorizacao.CONFIRMADA
+                                                         ],
+                                                    tipo: TipoTransacao.COMBUSTIVEL
+                                                ])
 
             if (ultTr[0]){
+                if (ultTr[0].quilometragem == null)
+                    throw new RuntimeException("VEI #${this.placa} - Hodômetro não informado na última transação válida!")
+
                 this.hodometro = ultTr[0].quilometragem
-                HistoricoHodometro historicoHodometro = new HistoricoHodometro(veiculo: this,hodometroAntigo: hodometroAntigo, hodometroNovo: this.hodometro)
+                HistoricoHodometro historicoHodometro = new HistoricoHodometro(veiculo: this,
+                                                                hodometroAntigo: hodometroAntigo,
+                                                                hodometroNovo: this.hodometro)
+
+
                 historicoHodometro.save()
                 this.save()
             }

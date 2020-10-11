@@ -150,7 +150,18 @@ class BootStrap {
         Processing.findOrCreateWhere([name: "Faturamento Pedidos de Carga", order: 3 as byte, service: "faturamentoCargaPedidoService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Faturamento Portador", order: 4 as byte, service: "faturamentoService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Geração Remessa Cobrança Banco do Brasil", order: 5 as byte, service: "geradorRemessaBancoBrasilService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 6 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
+
+        if (grailsApplication.config.projeto.projectId == "bahiavale")
+            Processing.findOrCreateWhere([name: "Geração Arquivo NFe - RPS Barueri", order: 6 as byte, service: "geracaoArquivoRPSBarueriService", active: true, batch: batch]).save(flush: true)
+
+        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 7 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Faturamento Estabelecimento", order: 8 as byte, service: "corteReembolsoEstabsService", active: true, batch: batch]).save(flush: true)
+        Processing.findOrCreateWhere([name: "Fechamento de Lote Pagamento", order: 9 as byte, service: "fechamentoLotePagamentoService", active: true, batch: batch]).save(flush: true)
+
+        if (grailsApplication.config.projeto.projectId == "banpara")
+            Processing.findOrCreateWhere([name: "API Reembolso Banpará", order: 10 as byte, service: "banparaReembolsoAPIService", active: true, batch: batch]).save(flush: true)
+
+
     }
 
     def criarMarcasVeiculos() {

@@ -179,37 +179,24 @@ class PedidoCargaController {
         redirect(action: 'show', id: pedidoCarga.id)
     }
 
-    def delete = {
+    def delete() {
         def pedidoCargaInstance = PedidoCarga.get(params.long('id'))
 
         if (pedidoCargaInstance) {
-            try {
 
-                //Altera status de lançamentos de taxas para a efetivar
-                pedidoCargaInstance.itens.findAll {
-                    it.tipo == TipoItemPedido.TAXA && it.lancamento.status == StatusLancamento.EFETIVADO
-                }.each { i ->
-                    def lc = i.lancamento
-                    lc.status = StatusLancamento.A_FATURAR
-                    lc.save(flush: true)
-                }
+                def ret = pedidoCargaService.deletePedido(pedidoCargaInstance)
+                if (ret.success)
+                    flash.success = ret.message
+                else
+                    flash.error = ret.message
 
-
-                pedidoCargaInstance.delete(flush: true)
-
-                log.debug "Pedido ${pedidoCargaInstance.id} removido"
-
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
                 redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.errors = "${message(code: 'default.not.deleted.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
+
         } else {
-            flash.errors = "${message(code: 'default.not.found.message', args: [message(code: 'pedidoCarga.label', default: 'PedidoCarga'), params.id])}"
+            flash.error = "Pedido não encontrado com ID: ${params.id}"
             redirect(action: "list")
         }
+
     }
 
 

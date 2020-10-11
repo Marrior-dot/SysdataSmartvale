@@ -112,7 +112,8 @@ administradora {
     nome = "BAHIA VALE"
     cnpj = "30379128000179"
     bin = "605482"
-    inscricaoMunicipal = "1234567"
+    inscricaoMunicipal = "4944886"
+    cnae = "6499904"
     anosValidadeCartao = 2
 
     endereco {
@@ -124,6 +125,17 @@ administradora {
         cidade = "Salvador"
         estado = "BA"
     }
+
+    enderecoNotaFiscal {
+        cep = "06402-030"
+        logradouro = "Rua Vitória"
+        numero = "999"
+        complemento = ""
+        bairro = "Vila São Jorge"
+        cidade = "Barueri"
+        estado = "SP"
+    }
+
 
 }
 
@@ -138,7 +150,9 @@ cartao {
 faturamento {
 
     portador {
+
         controlaSaldo = true
+
         extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 
         boleto {
@@ -159,9 +173,14 @@ faturamento {
             convenio = "3215085"
             contrato = "19997095"
 
-            instrucao1 = ""
+            instrucao1 = "Referente ao serviço de fornecimento de vale combustível para o abastecimento da frota"
             instrucao2 = ""
         }
+
+        notaFiscal {
+            descriminacaoServicos = 'SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valorConsumido}||${taxas}||VALOR FINAL: ${valorTotal}|'
+        }
+
     }
 
     estabelecimento {
@@ -202,6 +221,10 @@ environments {
             cobranca {
                 dir = "cobranca/"
             }
+
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
         }
     }
 
@@ -236,6 +259,11 @@ environments {
                 dir = "cobranca/"
             }
 
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
+
+
         }
     }
 
@@ -269,6 +297,11 @@ environments {
             cobranca {
                 dir = "cobranca/"
             }
+
+            notaFiscal {
+                dir = "notaFiscal/"
+            }
+
 
         }
     }
