@@ -8,6 +8,9 @@ import com.sysdata.gestaofrota.PagamentoLote
 import com.sysdata.gestaofrota.StatusChaveAcesso
 import com.sysdata.gestaofrota.StatusEmissao
 import com.sysdata.gestaofrota.StatusLotePagamento
+import com.sysdata.gestaofrota.StatusPagamentoLote
+import com.sysdata.gestaofrota.StatusRetornoPagamento
+import com.sysdata.gestaofrota.TipoAbastecimento
 import com.sysdata.gestaofrota.TipoAplicacao
 import com.sysdata.gestaofrota.TipoMensagem
 import com.sysdata.gestaofrota.http.RESTClientHelper
@@ -107,6 +110,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
                     token = receivedToken
                     dataHoraCriacao = dateFormat.parse(receivedDateCreated.replace("T", " "))
                     dataHoraExpiracao = dateFormat.parse(receivedDateExpiration.replace("T", " "))
+                    tipoAplicacao = TipoAplicacao.CLIENTE_API_BANPARA
                 }
                 newKey.save(flush: true)
 
@@ -131,6 +135,42 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
         } else
             clos(key.token)
     }
+
+    private void aceitarLotePagamento(LotePagamento lotePagamento) {
+        lotePagamento.status = StatusLotePagamento.ACEITO
+        lotePagamento.pagamentos.each { PagamentoLote pgLt ->
+            pgLt.status = StatusPagamentoLote.ACEITO
+            pgLt.save(flush: true)
+        }
+    }
+
+    private void rejeitarLotePagamento(LotePagamento lotePagamento, ResponseData responseData) {
+
+        if (responseData.json) {
+
+            StatusRetornoPagamento statusRetorno = StatusRetornoPagamento.findByCodigo(responseData.json.codErro)
+            if (!statusRetorno) {
+                statusRetorno = new StatusRetornoPagamento(codigo: responseData.json.codErro, descricao: responseData.json.msgErro)
+                statusRetorno.save(flush: true)
+            } else if (statusRetorno && statusRetorno.descricao != responseData.json.msgErro ) {
+                statusRetorno.descricao = responseData.json.msgErro
+                statusRetorno.save(flush: true)
+            }
+
+            lotePagamento.statusRetorno = statusRetorno
+        }
+
+        lotePagamento.status = StatusLotePagamento.REJEITADO
+        lotePagamento.save(flush: true)
+
+        lotePagamento.pagamentos.each { PagamentoLote pgLt ->
+            pgLt.status = StatusPagamentoLote.REJEITADO
+            pgLt.save(flush: true)
+        }
+
+    }
+
+
 
     @Override
     def execute(Date date) {
@@ -195,7 +235,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
                 }
                 msgEnviaLote.save(flush: true)
 
-                def baseUrl = grailsApplication.config.projeto.reembolso.api.transferencia.baseUrl
+                def baseUrl = grailsApplication.config.projeto.reembolso.banpara.api.transferencia.baseUrl
                 def endpoint = baseUrl + "/contacorrente/v1/lote"
 
                 def header = [:]
@@ -210,24 +250,24 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
                 lote.statusEmissao = StatusEmissao.ARQUIVO_GERADO
 
-                if (responseData.statusCode == 200) {
-                    lote.status = StatusLotePagamento.ACEITO
+                switch (responseData.statusCode) {
 
-                } else if (responseData.statusCode == 400) {
-                    lote.status = StatusLotePagamento.REJEITADO
+                    case 200:
+                        aceitarLotePagamento(lote)
+                        break
 
-                    responseData.json.each {
-                        log.error "${it.key} = ${it.value}"
-                    }
+                    case 400:
+                        rejeitarLotePagamento(lote, responseData)
+                        break
 
-                } else if (responseData.statusCode == 500) {
-                    lote.status = StatusLotePagamento.REJEITADO
+                    case 500:
+                        rejeitarLotePagamento(lote, responseData)
+                        break
 
+                    default:
+                        throw new RuntimeException("Codigo Retorno (responseData.statusCode) não tratado")
                 }
-                lote.save(flush: true)
             }
-
-
         }
     }
 }

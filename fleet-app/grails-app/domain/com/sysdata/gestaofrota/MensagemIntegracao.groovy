@@ -19,5 +19,7 @@ class MensagemIntegracao {
 
     static mapping = {
         id generator: "sequence", params: [sequence: 'msginteg_seq']
+        corpo type: 'text'
+        resposta type: 'text'
     }
 }

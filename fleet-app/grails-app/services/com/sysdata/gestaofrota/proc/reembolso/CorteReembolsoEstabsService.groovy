@@ -40,10 +40,10 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             LotePagamento loteAberto = LotePagamento.aberto
             if (!loteAberto) {
                 loteAberto = new LotePagamento()
-                loteAberto.save()
+                loteAberto.save(flush: true)
             }
             loteAberto.addToCortes(corteEstab)
-            loteAberto.save()
+            loteAberto.save(flush: true)
 
             datasCorte.each { dt ->
 
@@ -53,8 +53,8 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                                         projections {
                                             groupProperty("conta.id")
                                         }
-                                        eq("tipoLancamento", TipoLancamento.REEMBOLSO)
-                                        eq("statusLancamento", StatusLancamento.A_FATURAR)
+                                        eq("tipo", TipoLancamento.REEMBOLSO)
+                                        eq("status", StatusLancamento.A_FATURAR)
                                         eq("dataEfetivacao", dt)
                                 }
                 if (contasIds) {
@@ -78,28 +78,30 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
         def global = [:]
 
-        PostoCombustivel estabelecimento = conta.participante
+        PostoCombustivel estab = conta.participante
 
-        log.info "\tEC: $estabelecimento"
+        log.info "\t$estab"
         def List<LancamentoEstabelecimento> parcelaList = LancamentoEstabelecimento.withCriteria {
-                                                            eq("tipoLancamento", TipoLancamento.REEMBOLSO)
-                                                            eq("statusLancamento", StatusLancamento.A_FATURAR)
+                                                            eq("tipo", TipoLancamento.REEMBOLSO)
+                                                            eq("status", StatusLancamento.A_FATURAR)
                                                             eq("dataEfetivacao", dataRef)
                                                             eq("conta", conta)
                                                         }
 
         def totalTransacoes = parcelaList.sum { it.valor }
-        def totalCobrancas = calcularTotalCobrancas(estabelecimento, totalTransacoes, global)
+        def totalCobrancas = calcularTotalCobrancas(estab, totalTransacoes, global)
 
+        // Fatura somente se o saldo da diferença entre os lançamentos e as cobranças for positiva
         if (totalTransacoes - totalCobrancas > 0.0) {
             def totalLiquido = 0
             PagamentoEstabelecimento pagamento = new PagamentoEstabelecimento()
             pagamento.with {
                 dataProgramada = dataRef
-                estabelecimento = conta.participante
+                estabelecimento = estab
             }
             pagamento.corte = corte
-            pagamento.save()
+            pagamento.save(flush: true)
+
             parcelaList.each { lc ->
                 totalLiquido += lc.valor
                 lc.status = StatusLancamento.FATURADO
@@ -109,12 +111,13 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             }
             pagamento.valor = totalLiquido
 
-            gerarLancamentosExtensoes(global)
+            //gerarLancamentosExtensoes(global)
 
             pagamento.save(flush: true)
             corte.save(flush: true)
-            log.info "PG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
+            log.info "\tPG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
 
+        // Caso contrário, empurra os lançamentos para a próxima data possível de reembolso, conforme calendário
         } else {
 
 
@@ -137,6 +140,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
     private def calcularTotalCobrancas(PostoCombustivel postoCombustivel, totalParcelas, global) {
 
+/*
         global.estabelecimento = postoCombustivel
 
         grailsApplication.config.project.faturamento.estabelecimento.extensoes.each { e ->
@@ -145,7 +149,8 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
         }
 
         return global.extensoes.sum { it.valor }
-
+*/
+        return 0.0
 
     }
 

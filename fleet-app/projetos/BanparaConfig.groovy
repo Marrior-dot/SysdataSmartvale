@@ -144,13 +144,13 @@ environments {
                 api {
 
                     autenticar {
-                        baseUrl = "http://localhost:8080/"
+                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
                         usuario = "teste"
                         chave = "teste"
                     }
 
                     transferencia {
-                        baseUrl = "http://localhost:8080/"
+                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
 
                     }
 
