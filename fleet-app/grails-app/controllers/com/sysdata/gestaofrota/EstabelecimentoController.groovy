@@ -46,6 +46,7 @@ class EstabelecimentoController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), params.id])}"
             redirect(action: "list")
         } else {
+
             List<Produto> produtoList = Produto.list(sort: 'codigo')
             List<ProdutoEstabelecimento> produtoEstabelecimentoList = ProdutoEstabelecimento.findAllByEstabelecimento(estabelecimentoInstance).sort{ it.produto.codigo }
             render(view: 'form', model: [estabelecimentoInstance   : estabelecimentoInstance,
@@ -68,6 +69,7 @@ class EstabelecimentoController {
             render view: 'form', model: [estabelecimentoInstance   : estabelecimentoInstance,
                                          produtoList               : produtoList,
                                          produtoEstabelecimentoList: produtoEstabelecimentoList,
+                                         empresaInstance           : estabelecimentoInstance.empresa,
                                          action                    : Util.ACTION_EDIT]
         }
     }
@@ -75,15 +77,6 @@ class EstabelecimentoController {
     def update() {
         def estabelecimentoInstance = Estabelecimento.get(params.long('id'))
         if (estabelecimentoInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (estabelecimentoInstance.version > version) {
-                    estabelecimentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'estabelecimento.label', default: 'Estabelecimento')] as Object[], "Another user has updated this Estabelecimento while you were editing")
-                    render(view: "form", model: [estabelecimentoInstance: estabelecimentoInstance, action: 'editando'])
-                    return
-                }
-            }
-
             Estabelecimento estabelecimentoCadastrado = Estabelecimento.findByCnpj(estabelecimentoInstance.cnpj)
             if (estabelecimentoCadastrado && estabelecimentoCadastrado.id != estabelecimentoInstance.id) {
                 estabelecimentoInstance.errors.rejectValue('cnpj', "Já existe um Estabelecimento cadastrado com o CNPJ ${estabelecimentoInstance.cnpj}")
@@ -91,12 +84,9 @@ class EstabelecimentoController {
                 return
             }
 
-
             estabelecimentoInstance.properties = params
-            estabelecimentoInstance.endereco = params['endereco']
-            estabelecimentoInstance.telefone = params['telefone']
 
-            if (estabelecimentoService.save(estabelecimentoInstance)) {
+            if (estabelecimentoInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'estabelecimento.label', default: 'Estabelecimento'), estabelecimentoInstance.id])}"
                 redirect(action: "show", id: estabelecimentoInstance.id)
             } else {

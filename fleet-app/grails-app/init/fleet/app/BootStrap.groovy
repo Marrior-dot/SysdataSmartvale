@@ -8,6 +8,7 @@ import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.camel.FleetRoutesService
 import com.sysdata.xfiles.FileProcessor
 import grails.core.GrailsApplication
+import grails.util.Holders
 
 class BootStrap {
 
@@ -16,6 +17,13 @@ class BootStrap {
     FleetRoutesService fleetRoutesService
 
     def init = { servletContext ->
+
+
+        if (grailsApplication.config.projeto.projectId == "banpara" && grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
+            System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
+            System.setProperty("javax.net.ssl.trustStorePassword", "sysdata")
+
+        }
 
         FileProcessor.init()
 

@@ -158,11 +158,6 @@ environments {
             }
         }
 
-
-
-
-
-
         sftp {
             host = "localhost"
             port = 22
@@ -193,6 +188,8 @@ environments {
                 }
 
                 api {
+
+                    jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
 
                     autenticar {
 

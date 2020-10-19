@@ -16,3 +16,7 @@
 table tbody tr.selected {
     background-color: var(--cor-primaria) !important;
 }
+
+.btn-login {
+    background-color: var(--cor-secundaria) !important;
+}
