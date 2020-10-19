@@ -1,29 +1,18 @@
 package com.sysdata.gestaofrota.proc.reembolso.emissor
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.ChaveAcessoApi
-import com.sysdata.gestaofrota.LotePagamento
-import com.sysdata.gestaofrota.MensagemIntegracao
-import com.sysdata.gestaofrota.PagamentoLote
-import com.sysdata.gestaofrota.StatusChaveAcesso
-import com.sysdata.gestaofrota.StatusEmissao
-import com.sysdata.gestaofrota.StatusLotePagamento
-import com.sysdata.gestaofrota.StatusPagamentoLote
-import com.sysdata.gestaofrota.StatusRetornoPagamento
-import com.sysdata.gestaofrota.TipoAbastecimento
-import com.sysdata.gestaofrota.TipoAplicacao
-import com.sysdata.gestaofrota.TipoMensagem
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
-import java.text.SimpleDateFormat
 
 @Transactional
 class BanparaReembolsoAPIService implements ExecutableProcessing {
 
+    GrailsApplication grailsApplication
 
 /*
     {
@@ -63,16 +52,13 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
 */
 
-    GrailsApplication grailsApplication
-
-
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
 
     private def withToken = { clos ->
-        
+
         ChaveAcessoApi key = ChaveAcessoApi.findByStatusAndTipoAplicacao(StatusChaveAcesso.VALIDA,
-                                                                        TipoAplicacao.CLIENTE_API_BANPARA)
+                TipoAplicacao.CLIENTE_API_BANPARA)
 
         // Se não existe chave válida ou chave já expirou pelo tempo
         if (!key || key.dataHoraExpiracao < new Date() ) {
@@ -131,7 +117,7 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
             msgAutentica.save(flush: true)
 
-        // Utiliza a chave previamente recuperada e armazenada
+            // Utiliza a chave previamente recuperada e armazenada
         } else
             clos(key.token)
     }
@@ -191,22 +177,22 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
 
             def tedList = pgtoOutrosBancosList.collect { PagamentoLote pgtoLote ->
 
-                            [
-                                NSR: pgtoLote.id,
-                                AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
-                                ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
-                                BancoDest: pgtoLote.dadoBancario.banco.codigo,
-                                AgenciaContaDest: pgtoLote.dadoBancario.agencia,
-                                ContaDest: pgtoLote.dadoBancario.conta,
-                                ProdutoDest: 1,
-                                NomeDest: pgtoLote.estabelecimento.nomeFantasia,
-                                CPFCNPJDest: pgtoLote.estabelecimento.cnpj,
-                                TipoPessoaDest: "J",
-                                Finalidade: 10,
-                                Historico: "",
-                                IdTransf: "",
-                                Valor: pgtoLote.valor
-                            ]
+                [
+                        NSR: pgtoLote.id,
+                        AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
+                        ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
+                        BancoDest: pgtoLote.dadoBancario.banco.codigo,
+                        AgenciaContaDest: pgtoLote.dadoBancario.agencia,
+                        ContaDest: pgtoLote.dadoBancario.conta,
+                        ProdutoDest: 1,
+                        NomeDest: pgtoLote.estabelecimento.nomeFantasia,
+                        CPFCNPJDest: pgtoLote.estabelecimento.cnpj,
+                        TipoPessoaDest: "J",
+                        Finalidade: 10,
+                        Historico: "",
+                        IdTransf: "",
+                        Valor: pgtoLote.valor
+                ]
             }
 
             loteJson.TED = tedList
@@ -214,15 +200,15 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
             def pgtoBanparaList = lote.pagamentos.findAll { it.dadoBancario.banco.codigo == "037" }
 
             def tefList = pgtoBanparaList.collect { PagamentoLote pgtoLote ->
-                            [
-                                NSR: pgtoLote.id,
-                                AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
-                                ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
-                                ProdutoDest: 1,
-                                AgenciaContaDest: pgtoLote.dadoBancario.agencia,
-                                ContaDest: pgtoLote.dadoBancario.conta,
-                                Valor: pgtoLote.valor
-                            ]
+                [
+                        NSR: pgtoLote.id,
+                        AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
+                        ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
+                        ProdutoDest: 1,
+                        AgenciaContaDest: pgtoLote.dadoBancario.agencia,
+                        ContaDest: pgtoLote.dadoBancario.conta,
+                        Valor: pgtoLote.valor
+                ]
             }
 
             loteJson.TEF = tefList
@@ -272,5 +258,6 @@ class BanparaReembolsoAPIService implements ExecutableProcessing {
     }
 }
 
+import grails.util.Holders
 
-
+import java.text.SimpleDateFormat
