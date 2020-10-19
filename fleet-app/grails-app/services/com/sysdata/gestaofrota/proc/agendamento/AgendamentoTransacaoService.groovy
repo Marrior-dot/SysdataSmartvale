@@ -14,7 +14,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
     @Override
     def execute(Date date) {
 
-        def agendarList = Transacao.where { status == StatusTransacao.AGENDAR }.list(sort: 'id')
+        def agendarList = Transacao.where { status == StatusTransacao.AGENDAR && tipo != TipoTransacao.CARGA_SALDO }.list(sort: 'id')
 
         if (agendarList) {
             agendarList.each { tr ->
@@ -29,9 +29,6 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         def ret
 
         switch (tr.tipo) {
-            case TipoTransacao.CARGA_SALDO:
-                ret = agendarCarga(tr, dataRef)
-                break
             case [TipoTransacao.COMBUSTIVEL, TipoTransacao.SERVICOS]:
                 ret = agendarCompra(tr, dataRef)
                 break
@@ -47,16 +44,6 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
             tr.discard()
             log.error "TR #${tr.id} NAO AGENDADA: " + ret.message
         }
-    }
-
-    private def agendarCarga(Transacao trCarga, Date dataRef) {
-        def lancamentoInstance = new LancamentoPortador(tipo: TipoLancamento.CARGA,
-                                                        status: StatusLancamento.A_FATURAR,
-                                                        valor: trCarga.valor,
-                                                        dataEfetivacao: dataRef,
-                                                        conta: trCarga.cartao.portador.conta)
-        trCarga.addToLancamentos(lancamentoInstance)
-        [success: true]
     }
 
     /**

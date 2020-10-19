@@ -10,7 +10,7 @@ class Fechamento {
 
     static belongsTo = [programa: Rh]
 
-    static hasMany = [cortes: Corte]
+    static hasMany = [cortes: CortePortador]
 
     static constraints = {
         ativo nullable: false

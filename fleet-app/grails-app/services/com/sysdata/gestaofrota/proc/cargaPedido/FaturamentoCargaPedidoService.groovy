@@ -5,6 +5,7 @@ import com.sysdata.gestaofrota.Boleto
 import com.sysdata.gestaofrota.Conta
 import com.sysdata.gestaofrota.Fatura
 import com.sysdata.gestaofrota.ItemFatura
+import com.sysdata.gestaofrota.LancamentoConvenio
 import com.sysdata.gestaofrota.LancamentoPortador
 import com.sysdata.gestaofrota.PedidoCarga
 import com.sysdata.gestaofrota.Rh
@@ -14,6 +15,7 @@ import com.sysdata.gestaofrota.StatusGeracaoBoleto
 import com.sysdata.gestaofrota.StatusLancamento
 import com.sysdata.gestaofrota.StatusPedidoCarga
 import com.sysdata.gestaofrota.TipoFatura
+import com.sysdata.gestaofrota.TipoItemPedido
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoleto
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoletoFactory
 import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeracaoArquivoRPSBarueriService
@@ -50,18 +52,35 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
                 pedido.itens.each { item ->
 
-                    LancamentoPortador lancamentoPortador = (item.transacao.lancamentos as List)[0]
-
                     ItemFatura itemFatura = new ItemFatura()
-                    itemFatura.with {
-                        data = lancamentoPortador.dataEfetivacao
-                        descricao = "CARGA CRT ${lancamentoPortador.transacao.cartao.numeroMascarado}"
-                        valor = lancamentoPortador.valor
-                        lancamento = lancamentoPortador
-                    }
 
-                    lancamentoPortador.status = StatusLancamento.FATURADO
-                    lancamentoPortador.save()
+                    if (item.tipo == TipoItemPedido.CARGA) {
+                        LancamentoPortador lancamentoPortador = item.lancamento
+
+                        itemFatura.with {
+                            data = lancamentoPortador.dataEfetivacao
+                            descricao = "CARGA CRT ${lancamentoPortador.transacao.cartao.numeroMascarado}"
+                            valor = lancamentoPortador.valor
+                            lancamento = lancamentoPortador
+                        }
+
+                        lancamentoPortador.status = StatusLancamento.FATURADO
+                        lancamentoPortador.save()
+
+                    } else if (item.tipo == TipoItemPedido.TAXA) {
+
+                        LancamentoConvenio lancamentoConvenio = item.lancamento
+                        itemFatura.with {
+                            data = lancamentoConvenio.dataEfetivacao
+                            descricao = lancamentoConvenio.tipo.nome
+                            valor = lancamentoConvenio.valor
+                            lancamento = lancamentoConvenio
+                        }
+
+                        lancamentoConvenio.status = StatusLancamento.FATURADO
+                        lancamentoConvenio.save()
+
+                    }
 
                     faturaEmpresa.addToItens(itemFatura)
                     faturaEmpresa.save(flush: true)

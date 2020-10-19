@@ -5,6 +5,11 @@ import groovy.util.logging.Slf4j
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
+import org.apache.http.conn.scheme.Scheme
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier
+
+import javax.net.ssl.SSLSocketFactory
+import java.security.KeyStore
 
 class ResponseData {
     Integer statusCode
@@ -70,7 +75,8 @@ class RESTClientHelper {
 
     ResponseData postJSON(suri, spath, data, headers = null) {
         HTTPBuilder http = new HTTPBuilder(suri)
-        if (headers) http.setHeaders(headers)
+        if (headers)
+            http.setHeaders(headers)
         ResponseData responseData
         withRetries { retries ->
             http.request(Method.POST, ContentType.JSON) { req ->

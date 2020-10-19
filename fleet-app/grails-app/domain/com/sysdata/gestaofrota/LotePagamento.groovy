@@ -9,10 +9,12 @@ class LotePagamento {
     Date dateCreated
     StatusLotePagamento status = StatusLotePagamento.ABERTO
     StatusEmissao statusEmissao = StatusEmissao.NAO_GERAR
+    StatusRetornoPagamento statusRetorno
 
     static hasMany = [pagamentos: PagamentoLote, cortes: CorteEstabelecimento]
     
     static constraints = {
+        statusRetorno nullable: true
     }
 
     static mapping = {
