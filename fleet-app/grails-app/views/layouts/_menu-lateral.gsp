@@ -57,10 +57,13 @@
                         <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolso">Projeção de Reembolso</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutos">Consumo de Combustíveis</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenho">Demonstrativo Desempenho</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="controleMensalCargas">Controle Mensal de Cargas</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentos">Base de Estabelecimentos</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionarios">Base de Funcionários</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentos">Base de Equipamentos</g:link></li>
                         <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculos">Base de Veículos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="consultaVeiculo">Veículos</g:link></li>
+
+
 
 %{--
                         <sec:ifAnyGranted roles="ROLE_PROC">
