@@ -49,6 +49,8 @@ environments {
         corPrimaria = "#210E7F"
         corSecundaria = "#E8022C"
 
+        fraseLogin = "Economia para sua FROTA"
+
         context = "/bahiavale-frota"
 
     }

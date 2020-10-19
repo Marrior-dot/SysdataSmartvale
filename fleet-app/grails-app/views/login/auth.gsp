@@ -23,7 +23,7 @@
 	</head>
 	<body>
 			<div id="titulo" class="col-md-6">
-				<p class="text-center"><strong>Economia para sua FROTA</strong></p>
+				<p class="text-center"><strong>${grailsApplication.config.projeto.fraseLogin}</strong></p>
 			</div>
 
 
@@ -65,7 +65,7 @@
 							</div>
 							<hr/>
 
-							<button type="submit" class="btn btn-danger btn-lg btn-block login border" id="submit">
+							<button type="submit" class="btn btn-lg btn-block btn-login border" id="submit">
 								${message(code: "springSecurity.login.button")} »
 							</button>
 						</form>
