@@ -33,10 +33,11 @@ environments {
          */
         pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
+        corSecundaria = "#8CC63F"
+        corPrimaria = "#016A37"
 
         context = "/showroom-frota"
+
     }
 
     homologation {
@@ -58,8 +59,8 @@ environments {
          */
         pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
-        corPrimaria = "#0F9682"
-        corSecundaria = "#000000"
+        corSecundaria = "#8CC63F"
+        corPrimaria = "#016A37"
 
         context = "/showroom-hom"
     }

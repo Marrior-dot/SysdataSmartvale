@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.proc.reembolso.emissor
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class BanparaReembolsoAPIServiceSpec extends Specification implements ServiceUnitTest<BanparaReembolsoAPIService>{
+class ConsultarLoteAPIBanparaServiceSpec extends Specification implements ServiceUnitTest<ConsultarLoteAPIBanparaService>{
 
     def setup() {
     }

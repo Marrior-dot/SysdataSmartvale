@@ -18,11 +18,9 @@ class BootStrap {
 
     def init = { servletContext ->
 
-
         if (grailsApplication.config.projeto.projectId == "banpara" && grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
             System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
             System.setProperty("javax.net.ssl.trustStorePassword", "sysdata")
-
         }
 
         FileProcessor.init()
@@ -141,6 +139,7 @@ class BootStrap {
         Banco.findOrCreateWhere([codigo: "33", nome: "BANCO SANTANDER BRASIL S.A."]).save(flush: true)
         Banco.findOrCreateWhere([codigo: "237", nome: "BANCO BRADESCO S.A."]).save(flush: true)
         Banco.findOrCreateWhere([codigo: "341", nome: "BANCO ITAU S.A."]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "37", nome: "BANCO DO ESTADO DO PARÁ S.A."]).save(flush: true)
     }
 
     def criarProcessamentos() {
@@ -166,9 +165,10 @@ class BootStrap {
         Processing.findOrCreateWhere([name: "Faturamento Estabelecimento", order: 8 as byte, service: "corteReembolsoEstabsService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Fechamento de Lote Pagamento", order: 9 as byte, service: "fechamentoLotePagamentoService", active: true, batch: batch]).save(flush: true)
 
-        if (grailsApplication.config.projeto.projectId == "banpara")
-            Processing.findOrCreateWhere([name: "API Reembolso Banpará", order: 10 as byte, service: "banparaReembolsoAPIService", active: true, batch: batch]).save(flush: true)
-
+        if (grailsApplication.config.projeto.projectId == "banpara") {
+            Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 10 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 11 as byte, service: "consultarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+        }
 
     }
 

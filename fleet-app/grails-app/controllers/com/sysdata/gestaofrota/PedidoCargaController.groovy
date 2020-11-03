@@ -57,7 +57,10 @@ class PedidoCargaController {
     }
 
     def save() {
-        PedidoCarga pedidoCarga = new PedidoCarga(params)
+
+        PedidoCarga pedidoCarga
+        pedidoCarga = params.pedidoProgramado ? new PedidoCargaProgramado(params) : new PedidoCargaInstancia(params)
+
         def ret = pedidoCargaService.save(pedidoCarga, params)
         if (ret.success) {
             flash.message = ret.message
@@ -458,4 +461,31 @@ and i.pedido=:ped
 
         redirect(action: 'list')
     }
+
+    def loadPedidoInstancia() {
+        PedidoCargaInstancia pedidoCargaInstancia
+        if (params.id)
+            pedidoCargaInstancia = PedidoCargaInstancia.get(params.id as long)
+
+        render template: "instancia", model: [pedidoCargaInstance: pedidoCargaInstancia]
+    }
+
+    def loadPedidoProgramado() {
+        PedidoCargaProgramado pedidoCargaProgramado
+        if (params.id)
+            pedidoCargaProgramado = PedidoCargaProgramado.get(params.id as long)
+
+        render template: "programado", model: [pedidoCargaInstance: pedidoCargaProgramado]
+    }
+
+    def addNovaAgenda() {
+
+        PedidoCargaProgramado pedidoCargaProgramado
+        if (params.id)
+            pedidoCargaProgramado = PedidoCargaProgramado.get(params.id as long)
+
+        render template: "agendaTemplate", model: [pedidoCargaInstance: pedidoCargaProgramado, totalAgendas: params.idx as int]
+
+    }
+
 }

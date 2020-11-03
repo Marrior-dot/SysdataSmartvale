@@ -46,6 +46,7 @@ function configInputMasks() {
 	$(".anoFabricacao").mask("9999");
 	$(".maxValor").mask("99999");
 	$(".hodometro").mask("999999999");
+	$(".mesAno").mask("99/9999", {placeholder: "__/____"});
 
 	$('.only-numbers').keyup(function () {
 		var n = this.value.replace(/[^0-9\.]/g, '');

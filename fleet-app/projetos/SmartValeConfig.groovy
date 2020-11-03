@@ -43,8 +43,6 @@ environments {
         corPrimaria = "#04A34D"
         corSecundaria = "#A4DB05"
 
-        fraseLogin = "Gestão de Frota"
-
         context = "/smartvale-frota"
     }
 

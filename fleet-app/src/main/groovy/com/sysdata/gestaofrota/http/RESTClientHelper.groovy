@@ -5,11 +5,6 @@ import groovy.util.logging.Slf4j
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
-import org.apache.http.conn.scheme.Scheme
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier
-
-import javax.net.ssl.SSLSocketFactory
-import java.security.KeyStore
 
 class ResponseData {
     Integer statusCode
@@ -36,8 +31,6 @@ class RESTClientHelper {
         return instance
     }
 
-
-
     private withRetries = { clo ->
         def retries = RETRIES
         while (retries > 0) {
@@ -54,14 +47,22 @@ class RESTClientHelper {
         }
     }
 
-    ResponseData getJSON(urlBase, spath, squery = null) {
+    ResponseData get(urlBase, squery = null, headers = null) {
         def http = new HTTPBuilder(urlBase)
+
+        if (headers)
+            http.setHeaders(headers)
+
         ResponseData responseData
         withRetries { retries ->
+
             http.request(Method.GET, ContentType.JSON) { req ->
+
+                uri.query = squery
+
                 response.success = { resp, json ->
                     retries = 0
-                    responseData = new ResponseData(statusCode: resp.statusLine.statusCode, json: json)
+                    responseData = new ResponseData(statusCode: resp.statusLine.statusCode, body: json, json: json)
                 }
                 response.failure = { resp ->
                     retries = 0
@@ -73,7 +74,7 @@ class RESTClientHelper {
         return responseData
     }
 
-    ResponseData postJSON(suri, spath, data, headers = null) {
+    ResponseData postJSON(suri, data, headers = null) {
         HTTPBuilder http = new HTTPBuilder(suri)
         if (headers)
             http.setHeaders(headers)

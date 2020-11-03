@@ -137,8 +137,8 @@ environments {
         reembolso {
             banpara {
                 contaDebito {
-                    agencia = "15"
-                    conta = "213456"
+                    agencia = "49"
+                    conta = "6491626"
                 }
 
                 api {
@@ -151,7 +151,6 @@ environments {
 
                     transferencia {
                         baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
-
                     }
 
                 }
@@ -183,8 +182,8 @@ environments {
         reembolso {
             banpara {
                 contaDebito {
-                    agencia = "15"
-                    conta = "213456"
+                    agencia = "49"
+                    conta = "6491626"
                 }
 
                 api {
@@ -192,25 +191,17 @@ environments {
                     jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
 
                     autenticar {
-
-                        baseUrl = "https://172.35.21.19/controlecanais"
+                        endpoint = "https://172.35.21.19/controlecanais/v1/autenticar"
                         usuario = "GSMB"
                         chave = "a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"
-
                     }
 
-                    transferencia {
-                        baseUrl = "https://172.35.21.19/transferencia"
+                    lote {
+                        endpoint = "https://172.35.21.19/transferencia/contacorrente/v1/lote"
                         operador = "3157"
                     }
-
                 }
             }
-        }
-
-
-        api {
-            baseUrl = ""
         }
 
         sftp {
