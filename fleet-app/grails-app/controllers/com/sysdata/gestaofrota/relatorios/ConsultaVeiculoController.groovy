@@ -6,11 +6,13 @@ import grails.core.GrailsApplication
 class ConsultaVeiculoController {
 
 
+/*
 def exportService
 
 GrailsApplication grailsApplicationS
 
     ConsultaVeiculoService  consultaVeiculoService
+*/
 
 
 def index() {
