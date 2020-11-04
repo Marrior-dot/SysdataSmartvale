@@ -10,35 +10,45 @@ class ControleMensalCargasService {
 
         def criteria = {
 
-            if (params.empresa)
 
-                unidade {
-                    rh {
-                        eq("id", params.empresa.toLong())
+            if (params.empresa){
+
+                pedido{
+                    unidade {
+                        rh {
+                            eq("id", params.empresa.toLong())
+                        }
                     }
-                }
+                }}
+
+
             if (params.unidade) {
 
-                unidade {
-                    eq("id", params.unidade.toLong())
+                pedido{
+
+                    unidade {
+                        eq("id", params.unidade.toLong())
+                    }
                 }
             }
 
-            if (params.dataInicial){
+            if (params.dataInicio){
 
-               gt('dateCreated', params.dataInicial)
+                pedido{
+                    gt('dateCreated', params.dataInicio)
+                }
             }
 
-            if (params.dataFinal) {
-
-                lt('dateCreated', params.dataFinal)
+            if (params.dataFim) {
+                pedido{
+                    lt('dateCreated', params.dataFim)
+                }
             }
         }
 
         if (paginate)
             return ItemPedido.createCriteria().list([max: params.max, offset: params.offset], criteria)
         else
-
 
             return ItemPedido.createCriteria().list(criteria)
 
@@ -48,29 +58,41 @@ class ControleMensalCargasService {
 
         def criteria = {
 
-            if (pars.empresa)
+            if (pars.empresa){
+
+            pedido{
                 unidade {
                     rh {
                         eq("id", pars.empresa.toLong())
                     }
                 }
+            }
+
+            }
             if (pars.unidade) {
 
-                unidade {
-                    eq("id", pars.unidade.toLong())
+                pedido{
+                    unidade {
+                        eq("id", pars.unidade.toLong())
+                    }
+
                 }
             }
 
-            if (pars.dataInicial){
 
-                gt('dateCreated', pars.dataInicial)
+            if (pars.dataInicio){
+
+                pedido{
+                    gt('dateCreated', pars.dataInicio)
+                }
             }
 
-            if (pars.dataFinal) {
+            if (pars.dataFim) {
 
-                lt('dateCreated', pars.dataFinal)
+                pedido{
+                    lt('dateCreated', pars.dataFim)
+                }
             }
-
         }
 
         return ItemPedido.createCriteria().count(criteria)
