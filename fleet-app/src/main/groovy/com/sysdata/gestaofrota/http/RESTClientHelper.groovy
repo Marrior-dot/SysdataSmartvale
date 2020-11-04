@@ -98,6 +98,24 @@ class RESTClientHelper {
         responseData
     }
 
+    ResponseData getJSON(urlBase, spath, squery = null) {
+        def http = new HTTPBuilder(urlBase)
+        ResponseData responseData
+        withRetries { retries ->
+            http.request(Method.GET, ContentType.JSON) { req ->
+                response.success = { resp, json ->
+                    retries = 0
+                    responseData = new ResponseData(statusCode: resp.statusLine.statusCode, json: json)
+                }
+                response.failure = { resp ->
+                    retries = 0
+                    responseData = new ResponseData(statusCode: resp.statusLine.statusCode)
+                }
+            }
+            return retries
+        }
+        responseData
+    }
 
 
 }

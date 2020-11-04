@@ -20,9 +20,14 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
                 break
 
             case 2:
-                pgtoLote.status = StatusPagamentoLote.LIQUIDADO
-                pgtoLote.save(flush: true)
-                log.info "PG #${pgtoLote.id} Liquidado"
+                // Liquidado somente quando TEF - conta destino BANPARÁ
+                if (pgtoLote.dadoBancario.banco.codigo == "37") {
+                    pgtoLote.status = StatusPagamentoLote.LIQUIDADO
+                    pgtoLote.save(flush: true)
+                    log.info "PG #${pgtoLote.id} Liquidado - (conta Banpará)"
+                } else
+                    log.info "PG #${pgtoLote.id} Confirmado - (conta não Banpará)"
+                
                 break
 
             case [3, 4]:
@@ -42,6 +47,8 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
 
         if (response.json) {
 
+            def totalPagamentos = lote.pagamentos.size()
+
             lote.pagamentos.each { pgLot ->
 
                 def ted = response.json.ted.find { it.nsr == pgLot.id }
@@ -53,6 +60,18 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
                     tratarRetorno(pgLot, tef)
 
             }
+
+
+            def totalRejeitados = lote.pagamentos.count { it.status == StatusPagamentoLote.REJEITADO }
+            def totalLiquidados = lote.pagamentos.count { it.status == StatusPagamentoLote.LIQUIDADO }
+
+            if (totalPagamentos == totalRejeitados)
+                lote.status = StatusLotePagamento.REJEITADO
+            else if (totalPagamentos == totalLiquidados)
+                lote.status = StatusLotePagamento.LIQUIDADO
+
+            lote.save(flush: true)
+
         }
 
     }
