@@ -16,7 +16,7 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
 
         switch (tefTed.status) {
             case 1:
-                log.info "PG #${pgtoLote.id} PENDENTE"
+                log.info "PG #${pgtoLote.id} Pendente"
                 break
 
             case 2:
@@ -32,6 +32,13 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
 
             case [3, 4]:
                 pgtoLote.status = StatusPagamentoLote.REJEITADO
+                StatusRetornoPagamento statusRetorno = StatusRetornoPagamento.findByDescricao(tefTed.mensagem)
+                if (! statusRetorno) {
+                    Integer novoCodigo = StatusRetornoPagamento.findNextCodigo()
+                    statusRetorno = new StatusRetornoPagamento(codigo: novoCodigo, descricao: tefTed.mensagem)
+                    statusRetorno.save(flush: true)
+                }
+                pgtoLote.statusRetorno = statusRetorno
                 pgtoLote.save(flush: true)
                 log.info "PG #${pgtoLote.id} Rejeitado. Status: ${tefTed.status}"
                 break
@@ -61,7 +68,6 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
 
             }
 
-
             def totalRejeitados = lote.pagamentos.count { it.status == StatusPagamentoLote.REJEITADO }
             def totalLiquidados = lote.pagamentos.count { it.status == StatusPagamentoLote.LIQUIDADO }
 
@@ -69,6 +75,8 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
                 lote.status = StatusLotePagamento.REJEITADO
             else if (totalPagamentos == totalLiquidados)
                 lote.status = StatusLotePagamento.LIQUIDADO
+            else if (totalPagamentos == (totalLiquidados + totalRejeitados))
+                lote.status = StatusLotePagamento.LIQUIDADO_PARCIALMENTE
 
             lote.save(flush: true)
 

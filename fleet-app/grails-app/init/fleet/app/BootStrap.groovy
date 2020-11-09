@@ -168,6 +168,7 @@ class BootStrap {
         if (grailsApplication.config.projeto.projectId == "banpara") {
             Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 10 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
             Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 11 as byte, service: "consultarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 12 as byte, service: "consultarLoteDevolucaoAPIBanparaService", active: true, batch: batch]).save(flush: true)
         }
 
     }

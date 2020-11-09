@@ -9,7 +9,7 @@ import groovyx.net.http.Method
 class ResponseData {
     Integer statusCode
     String body
-    Map json
+    def json
 
     String toString() {
         "\nStatus Code: $statusCode\nBody:\n$body"

@@ -182,8 +182,8 @@ environments {
         reembolso {
             banpara {
                 contaDebito {
-                    agencia = "15"
-                    conta = "1208055"
+                    agencia = "49"
+                    conta = "6491626"
                 }
 
                 api {
