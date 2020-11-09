@@ -1,9 +1,9 @@
-package com.sysdata.gestaofrota.proc.reembolso.emissor
+package com.sysdata.commons
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class BanparaReembolsoAPIServiceSpec extends Specification implements ServiceUnitTest<BanparaReembolsoAPIService>{
+class AccessKeyServiceSpec extends Specification implements ServiceUnitTest<AccessKeyService>{
 
     def setup() {
     }

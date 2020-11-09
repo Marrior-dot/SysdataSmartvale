@@ -12,4 +12,16 @@ class StatusRetornoPagamento {
     static mapping = {
         id generator: "sequence", params: [sequence: "stsretpgto_seq"]
     }
+
+
+    static Integer findNextCodigo() {
+        def count = StatusRetornoPagamento.count()
+
+        while (StatusRetornoPagamento.findByCodigo(count++)) {}
+
+        return count
+
+
+    }
+
 }

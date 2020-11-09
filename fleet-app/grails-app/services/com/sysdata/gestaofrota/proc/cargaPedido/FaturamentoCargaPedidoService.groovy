@@ -24,7 +24,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
-    GeracaoArquivoRPSBarueriService geracaoArquivoRPSBarueriService
+
 
     @Override
     def execute(Date date) {
@@ -95,6 +95,7 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
 
                 // Boleto
+/*
                 Boleto boleto = new Boleto()
                 boleto.with {
                     fatura = faturaEmpresa
@@ -111,6 +112,7 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
                 // Nota Fiscal
                 faturaEmpresa.statusEmissao = StatusEmissao.GERAR_ARQUIVO
                 faturaEmpresa.save()
+*/
 
             }
 

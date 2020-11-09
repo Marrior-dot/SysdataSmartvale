@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh; java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
+<%@ page import="com.sysdata.gestaofrota.PedidoCargaProgramado; com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh; java.text.SimpleDateFormat; com.sysdata.gestaofrota.PedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.StatusPedidoCarga" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
@@ -49,13 +49,11 @@
     <div class="panel-body">
         <div class="row">
 
-            <div class="col-md-3">
-                <label class="control-label" for="dataCarga">Data de Carga</label>
-                <input type="text" id="dataCarga" name="dataCarga" class="form-control datepicker"
-                       value="${Util.formattedDate(pedidoCargaInstance?.dataCarga)}"/>
-            </div>
-
             <g:if test="${action == Util.ACTION_NEW}">
+                <div class="col-md-3">
+                    <g:checkBox name="pedidoProgramado" value="${pedidoCargaInstance?.instanceOf(PedidoCargaProgramado)}" /> Pedido Programado
+                </div>
+
                 <div class="col-md-3">
                     <g:radioGroup name="tipoTaxa" labels="['Taxa Administração', 'Taxa Desconto']" values="[1, 2]" value="1" >
                         <p>${it.radio} ${it.label}</p>
@@ -73,37 +71,16 @@
                     <label class="control-label">Total Pedido ${pedidoCargaInstance?.taxa ? '(+ taxa)' : '(- taxa)'}</label>
                     <p class="form-control-static"> <g:formatNumber number="${pedidoCargaInstance?.total}" type="currency"/></p>
                 </div>
-                <div class="col-md-3">
-                    <label class="control-label">Status</label>
-
-                    <%
-                        def labelClass
-                        switch (pedidoCargaInstance?.status) {
-                            case StatusPedidoCarga.NOVO:
-                                labelClass = "label-primary"
-                                break
-                            case StatusPedidoCarga.LIBERADO:
-                                labelClass = "label-info"
-                                break
-                            case StatusPedidoCarga.FINALIZADO:
-                                labelClass = "label-success"
-                                break
-                            case StatusPedidoCarga.CANCELADO:
-                                labelClass = "label-danger"
-                                break
-                            default:
-                                labelClass = "label-default"
-                                break
-                        }
-                    %>
-
-                    <h5><span class="label ${labelClass}">${pedidoCargaInstance?.status?.nome}</span></h5>
-
-                </div>
             </g:if>
         </div>
+
+        <div id="instancia"></div>
+
     </div>
 </div>
+
+<div id="programado"></div>
+
 
 <g:render template="/categoriaFuncionario/list"
           model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>

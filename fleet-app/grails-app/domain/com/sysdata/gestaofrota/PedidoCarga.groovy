@@ -1,12 +1,8 @@
 package com.sysdata.gestaofrota
 
-import java.math.RoundingMode
-
 class PedidoCarga {
 
     Date dateCreated
-    Date dataCarga
-    StatusPedidoCarga status = StatusPedidoCarga.NOVO
     Unidade unidade
     Integer validade
     User usuario

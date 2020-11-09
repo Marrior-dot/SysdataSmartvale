@@ -1,0 +1,31 @@
+curl 
+
+-H "Content-Type: application/json" 
+
+-d '{"usuario":"GSMB","chave":"a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"}' 
+
+-k https://172.35.21.19/controlecanais/v1/autenticar
+
+Resposta:
+
+{
+	"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDYW5hbCI6IjQyIiwidW5pcXVlX25hbWUiOiJHU01CIiwibmJmIjoxNjAyMTc2MTEyLCJleHAiOjE2MDczNjAxMTIsImlhdCI6MTYwMjE3NjExMn0.0UoZ5dGTBNIy2kpgRLaFqC-efuGXpIKQNnFwHwb8QKM",
+	"dataExpiracao":"2020-12-07T13:55:12",
+	"dataCriacao":"2020-10-08T13:55:12"
+}
+
+
+
+# Obter e salvar Certificado
+echo -n | openssl s_client -connect 172.35.21.19:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /home/luiz/banpara.cer
+
+
+# Gerar chave a partir do Certificado
+keytool -import -alias banpara.cer -keystore /usr/local/frota/banpara/banparakeystore.jks -file /home/luiz/banpara.cer
+
+password: sysdata
+
+
+
+# TCP dump host Banpará
+tcpdump -i eth0 dst host 172.35.21.19 -vv

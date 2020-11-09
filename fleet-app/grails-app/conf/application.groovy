@@ -8,6 +8,7 @@ grails {
         failOnError = true
     }
 
+
     mime {
         disable.accept.header.userAgents = ['Gecko', 'WebKit', 'Presto', 'Trident']
         types {
@@ -155,9 +156,9 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/baseEstabelecimentos/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/baseFuncionarios/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/baseVeiculos/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/consultaVeiculo/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/historicoFrota/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/controleMensalCargas/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/baseEquipamentos/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/baseEquipamentos/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN']],
 
 
 
