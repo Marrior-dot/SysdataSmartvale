@@ -59,20 +59,38 @@
                         <p>${it.radio} ${it.label}</p>
                     </g:radioGroup>
                 </div>
+
+                <div class="col-md-3">
+                    <label class="control-label">${pedidoCargaInstance?.taxa ? 'Taxa Administração' : 'Taxa Desconto'}</label>
+                    <p id="taxaPedido" class="form-control-static">${pedidoCargaInstance?.taxa ?: pedidoCargaInstance.taxaDesconto}%</p>
+                </div>
+
             </g:if>
 
-            <div class="col-md-3">
-                <label class="control-label">${pedidoCargaInstance?.taxa ? 'Taxa Administração' : 'Taxa Desconto'}</label>
-                <p id="taxaPedido" class="form-control-static">${pedidoCargaInstance?.taxa ?: pedidoCargaInstance.taxaDesconto}%</p>
-            </div>
 
             <g:if test="${action != Util.ACTION_NEW && pedidoCargaInstance}">
+
                 <div class="col-md-3">
-                    <label class="control-label">Total Pedido ${pedidoCargaInstance?.taxa ? '(+ taxa)' : '(- taxa)'}</label>
-                    <p class="form-control-static"> <g:formatNumber number="${pedidoCargaInstance?.total}" type="currency"/></p>
+
+                    <div class="panel panel-green">
+
+                        <div class="panel-heading">
+                            Total Pedido ${pedidoCargaInstance?.taxa ? '(+ taxa)' : '(- taxa)'}
+                        </div>
+
+                        <div class="panel-body">
+                            <p class="form-control-static" style="font-size: large"><strong><g:formatNumber number="${pedidoCargaInstance?.total}" type="currency"/></strong> </p>
+                            <p class="form-control-static"><strong>${pedidoCargaInstance?.taxa ? 'Taxa Administração' : 'Taxa Desconto'}</strong> ${pedidoCargaInstance?.taxa ?: pedidoCargaInstance.taxaDesconto}%</p>
+                        </div>
+
+
+                    </div>
+
                 </div>
             </g:if>
         </div>
+
+        <hr/>
 
         <div id="instancia"></div>
 
@@ -81,9 +99,12 @@
 
 <div id="programado"></div>
 
+<g:if test="${action == Util.ACTION_NEW}">
+    <g:render template="/categoriaFuncionario/list"
+              model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
 
-<g:render template="/categoriaFuncionario/list"
-          model="${[categoriaFuncionarioInstanceList: pedidoCargaInstance?.perfisRecarga]}"/>
+</g:if>
+
 
 <g:if test="${! pedidoCargaInstance?.unidade || pedidoCargaInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.FUNCIONARIO}">
     <div id="pedidoFuncionarios" style="display: none">
