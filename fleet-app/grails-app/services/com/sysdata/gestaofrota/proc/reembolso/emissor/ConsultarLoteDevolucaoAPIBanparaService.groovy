@@ -4,6 +4,7 @@ import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.LotePagamento
 import com.sysdata.gestaofrota.MensagemIntegracao
 import com.sysdata.gestaofrota.PagamentoLote
+import com.sysdata.gestaofrota.StatusLotePagamento
 import com.sysdata.gestaofrota.StatusPagamentoLote
 import com.sysdata.gestaofrota.StatusRetornoPagamento
 import com.sysdata.gestaofrota.TipoMensagem
@@ -54,6 +55,45 @@ class ConsultarLoteDevolucaoAPIBanparaService implements ExecutableProcessing, T
         }
     }
 
+    private void liquidarPagamentosNaoDevolvidos(Date date) {
+        log.info "Liquidando pagamentos não devolvidos..."
+
+        List<LotePagamento> lotesPendentesList = LotePagamento.where {
+                                                    status == StatusLotePagamento.ACEITO && dateCreated < date
+                                                }.list()
+
+        if (lotesPendentesList) {
+
+            lotesPendentesList.each { lote ->
+
+                log.info "LT #${lote.id}"
+
+                lote.pagamentos.findAll { it.status == StatusPagamentoLote.ACEITO }.each { pgLt ->
+                    pgLt.status = StatusPagamentoLote.LIQUIDADO
+                    pgLt.save(flush: true)
+                    log.info "\tPG #${pgLt.id} LIQ"
+                }
+
+                def totalPagamentos = lote.pagamentos.size()
+                def totalLiquidados = lote.pagamentos.count { it.status == StatusPagamentoLote.LIQUIDADO }
+                def totalRejeitados = lote.pagamentos.count { it.status == StatusPagamentoLote.REJEITADO }
+
+                if (totalPagamentos == totalRejeitados)
+                    lote.status = StatusLotePagamento.REJEITADO
+                else if (totalPagamentos == totalLiquidados)
+                    lote.status = StatusLotePagamento.LIQUIDADO
+                else if (totalPagamentos == (totalLiquidados + totalRejeitados))
+                    lote.status = StatusLotePagamento.LIQUIDADO_PARCIALMENTE
+
+                lote.save(flush: true)
+                log.info "LT ${lote.status}"
+
+            }
+
+        } else
+            log.info "Não há Lotes de Pagamentos pendentes"
+
+    }
 
     @Override
     def execute(Date date) {
@@ -93,5 +133,7 @@ class ConsultarLoteDevolucaoAPIBanparaService implements ExecutableProcessing, T
                 log.error "Erro ao Consultar Lotes Devolvidos. HTTP Status: ${responseData.statusCode}"
 
         }
+
+        liquidarPagamentosNaoDevolvidos(date)
     }
 }
