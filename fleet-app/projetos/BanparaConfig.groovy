@@ -198,7 +198,7 @@ environments {
 
                     lote {
                         endpoint = "https://172.35.21.19/transferencia/contacorrente/v1/lote"
-                        operador = "3157"
+                        operador = "00000042"
                     }
                 }
             }
@@ -245,7 +245,7 @@ environments {
 
                     lote {
                         endpoint = "https://172.35.21.19/transferencia/contacorrente/v1/lote"
-                        operador = "3157"
+                        operador = "00000042"
                     }
                 }
             }
