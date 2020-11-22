@@ -73,7 +73,7 @@ class ArquivoController {
 		String conteudo = new String(arquivoInstance.conteudoText)
 		if(conteudo){
 			response.setContentLength(conteudo.size())
-			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}.txt")
+			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
 			response.outputStream<<conteudo
 		}else
 			response.sendError(404)

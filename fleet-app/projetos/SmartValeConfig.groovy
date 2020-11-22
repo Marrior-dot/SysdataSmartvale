@@ -83,9 +83,12 @@ administradora {
 
 cartao {
     gerador = GeradorCartaoPadrao
+
     embossing {
         produto = "SMART VALE"
         idCliente = "SVALE"
+
+
     }
 }
 
@@ -137,6 +140,8 @@ environments {
 
     development {
 
+        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+
         sftp {
             host = "localhost"
             port = 22
@@ -170,6 +175,8 @@ environments {
     }
 
     homologation {
+
+        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
 
         sftp {
             host = "172.17.17.2"

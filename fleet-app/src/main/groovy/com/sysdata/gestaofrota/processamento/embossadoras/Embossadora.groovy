@@ -5,6 +5,7 @@ import com.sysdata.gestaofrota.Arquivo
 import com.sysdata.gestaofrota.Portador
 import com.sysdata.gestaofrota.StatusArquivo
 import com.sysdata.gestaofrota.TipoArquivo
+import com.sysdata.gestaofrota.Util
 import com.sysdata.gestaofrota.processamento.IGeradorArquivo
 import groovy.util.logging.Slf4j
 
@@ -88,9 +89,7 @@ abstract class Embossadora implements IGeradorArquivo {
     }
 
     protected String getNomeTitular(Portador portador) {
-        portador.nomeEmbossing.substring(0,
-                Math.min(portador.nomeEmbossing.length(), getTamanhoMaximoNomeTitular())
-        ).toUpperCase()
+        return Util.normalize(portador.nomeEmbossing.substring(0, Math.min(portador.nomeEmbossing.length(), getTamanhoMaximoNomeTitular())).toUpperCase())
     }
     protected String getNumeroCartaoFormatado(String numero) {
         numero = numero.replaceAll(" ", "")
