@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoContrato; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
 
 <g:form method="post" >
     <g:hiddenField name="id" value="${rhInstance?.id}" />
@@ -40,7 +40,43 @@
 					<bs:formField class="form-control" id="email" label="Email" value="${rhInstance?.email}" />
 				</div>
 			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Contrato
+				</div>
+
+				<div class="panel-body">
+
+					<div class="row">
+
+						<div class="form-group col-md-6">
+							<label class="control-label" for="tipoContrato">Tipo Contrato</label>
+							<g:select name="tipoContrato" from="${TipoContrato.values()}" class="form-control"
+									  noSelection="[null: '--Selecione o Tipo de Contrato--']"
+									  optionValue="nome" value="${rhInstance?.tipoContrato}" required="required"/>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="dataInicioContrato">Data Início</label>
+							<g:textField name="dataInicioContrato" class="form-control datepicker"
+										 value="${Util.formattedDate(rhInstance?.dataInicioContrato)}"></g:textField>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="dataFimContrato">Data Início</label>
+							<g:textField name="dataFimContrato" class="form-control datepicker"
+										 value="${Util.formattedDate(rhInstance?.dataFimContrato)}"></g:textField>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
 		</div>
+
 	</div>
 
 	<div class="panel panel-default">
