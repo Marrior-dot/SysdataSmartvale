@@ -28,6 +28,11 @@ abstract class MaquinaMotorizada {
 
     static transients = ['nomeEmbossing']
 
+    static hibernateFilters = {
+        maquinasPorRh(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id = :rh_id)', types: 'long')
+    }
+
+
     static namedQueries = {
 
         countMaquinasRh { Rh rh ->

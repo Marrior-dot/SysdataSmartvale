@@ -151,14 +151,14 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
 
         // Relatórios
-        [pattern: '/consumoProdutos/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/demonstrativoDesempenho/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/baseEstabelecimentos/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/baseFuncionarios/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/baseVeiculos/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/historicoFrota/**',                     access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/controleMensalCargas/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
-        [pattern: '/baseEquipamentos/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/consumoProdutosRelatorio/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/demonstrativoDesempenhoRelatorio/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseEstabelecimentosRelatorio/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseFuncionariosRelatorio/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseVeiculosRelatorio/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/historicoFrotaRelatorio/**',                     access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/controleMensalCargasRelatorio/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseEquipamentosRelatorio/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
 

@@ -1,9 +1,8 @@
 package com.sysdata.gestaofrota.relatorios
 
-import com.sysdata.gestaofrota.Veiculo
 import grails.core.GrailsApplication
 
-class BaseVeiculosController {
+class BaseVeiculosRelatorioController {
 
 
 def exportService

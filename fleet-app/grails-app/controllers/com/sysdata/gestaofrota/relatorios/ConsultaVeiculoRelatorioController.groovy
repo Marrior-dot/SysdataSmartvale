@@ -1,9 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 
-import com.sysdata.gestaofrota.TransacaoService
-import grails.core.GrailsApplication
-
-class ConsultaVeiculoController {
+class ConsultaVeiculoRelatorioController {
 
 
 /*

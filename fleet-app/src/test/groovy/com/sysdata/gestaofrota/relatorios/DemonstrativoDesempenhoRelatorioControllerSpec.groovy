@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class DemonstrativoDesempenhoControllerSpec extends Specification implements ControllerUnitTest<DemonstrativoDesempenhoController> {
+class DemonstrativoDesempenhoRelatorioControllerSpec extends Specification implements ControllerUnitTest<DemonstrativoDesempenhoRelatorioController> {
 
     def setup() {
     }

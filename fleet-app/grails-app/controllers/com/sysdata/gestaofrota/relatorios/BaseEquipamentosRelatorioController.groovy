@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota.relatorios
 
 import grails.core.GrailsApplication
 
-class BaseEquipamentosController {
+class BaseEquipamentosRelatorioController {
 
 
 def exportService

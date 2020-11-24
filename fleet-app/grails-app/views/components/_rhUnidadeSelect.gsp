@@ -1,5 +1,5 @@
 <%@ page import="com.sysdata.gestaofrota.Unidade; com.sysdata.gestaofrota.Rh" %>
-<div class="row">
+<div class="row form-group">
     <div class="col-md-3">
         <label class="control-label" for="empresa">Empresa Cliente</label>
         <g:select name="empresa"

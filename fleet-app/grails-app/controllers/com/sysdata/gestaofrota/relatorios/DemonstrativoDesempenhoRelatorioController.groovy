@@ -1,8 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 
-import com.sysdata.gestaofrota.TestesService
-
-class DemonstrativoDesempenhoController {
+class DemonstrativoDesempenhoRelatorioController {
 
     DemonstrativoDesempenhoService demonstrativoDesempenhoService
 

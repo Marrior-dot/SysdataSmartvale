@@ -1,12 +1,8 @@
 package com.sysdata.gestaofrota.relatorios
 
-import com.sysdata.gestaofrota.TipoTransacao
-import com.sysdata.gestaofrota.Transacao
-import com.sysdata.gestaofrota.TransacaoService
-import com.sysdata.gestaofrota.Util
 import grails.core.GrailsApplication
 
-class HistoricoFrotaController {
+class HistoricoFrotaRelatorioController {
 
 
     def exportService

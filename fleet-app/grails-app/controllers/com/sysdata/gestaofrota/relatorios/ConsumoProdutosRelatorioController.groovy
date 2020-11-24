@@ -4,7 +4,7 @@ import com.sysdata.gestaofrota.StatusControleAutorizacao
 import com.sysdata.gestaofrota.Transacao
 import grails.core.GrailsApplication
 
-class ConsumoProdutosController {
+class ConsumoProdutosRelatorioController {
 
     def exportService
 
