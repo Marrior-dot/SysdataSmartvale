@@ -122,27 +122,31 @@
 				</label>
 			</div>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">Papéis</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="form-group col-md-4">
 
-							<%
-								def userAuths = []
-							    if (action in [Util.ACTION_VIEW, Util.ACTION_EDIT])
-									userAuths = userInstance.authorities as List
-							%>
+			<sec:ifAnyGranted roles="ROLE_PROC, ROLE_ADMIN">
+				<div class="panel panel-default">
+					<div class="panel-heading">Papéis</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="form-group col-md-4">
 
-							<g:each in="${Role.list()}" var="r" >
-								<g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
-							</g:each>
+								<%
+									def userAuths = []
+									if (action in [Util.ACTION_VIEW, Util.ACTION_EDIT])
+										userAuths = userInstance.authorities as List
+								%>
+
+								<g:each in="${Role.list()}" var="r" >
+									<g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
+								</g:each>
 
 
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</sec:ifAnyGranted>
+
 
 			<div class="buttons">
 				<g:if test="${action in [Util.ACTION_NEW]}">

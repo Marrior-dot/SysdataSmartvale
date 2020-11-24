@@ -24,48 +24,6 @@
 
     <asset:javascript src="application.js"/>
 
-    <!-- DataTables -->
-%{--
-    <asset:stylesheet src="'bootstrap/dataTables.bootstrap.min.css')}"/>
-    <asset:stylesheet src="'bootstrap/select.bootstrap.min.css')}"/>
-    <asset:stylesheet src="'table-javascript-style.css')}" />
---}%
-
-    <!-- Frota -->
-    %{--<link rel="stylesheet" href="${resource(dir:'css',file:'frota.css')}" />--}%
-
-%{--
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/jquery-1.11.3.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootstrap.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/sb-admin-2.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/prettify.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/tweenlite.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/raphael-min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/moment.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/metisMenu.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/bootstrap-waitingfor.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.mask.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery.maskMoney.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/jquery-ui-1.11.4/jquery-ui.min.js')}"></script>
---}%
-
-
-%{--
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery/mascaras.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js/jquery',file:'enableFields.js') }"></script>
-
-    <!-- DataTables -->
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/jquery.dataTables.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.bootstrap.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'plugins/dataTable/dataTables.select.min.js')}"></script>
-
-
-    <script type="text/javascript" src="${resource(dir:'js',file:'util.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js/plugins',file:'sweetalert.min.js') }"></script>
-    <script type="text/javascript" src="${resource(dir:'js/jquery',file:'application-common.js') }"></script>
-
-    <script type="text/javascript" src="${resource(dir:'js',file:'bootstrap-waitingfor.js') }"></script>
---}%
     <g:layoutHead />
 </head>
 
