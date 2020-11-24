@@ -6,7 +6,7 @@ import com.sysdata.gestaofrota.Funcionario
 import com.sysdata.gestaofrota.ItemPedidoParticipante
 
 
-class ControleMensalCargasController {
+class ControleMensalCargasRelatorioController {
 
     def exportService
 

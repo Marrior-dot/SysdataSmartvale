@@ -8,6 +8,7 @@ class ItemPedidoParticipante extends ItemPedido {
     static transients = ['funcionario']
 
     static constraints = {
+        participante nullable: true
     }
 
     Funcionario getFuncionario(){

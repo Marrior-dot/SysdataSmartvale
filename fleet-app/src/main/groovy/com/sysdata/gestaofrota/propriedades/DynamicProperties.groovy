@@ -57,7 +57,7 @@ class TextProp extends Prop {
 
     @Override
     String render(Propriedade propriedade, g) {
-        return  "${g.textField(name: "propriedades[${this.order}].valor", class: 'form-control', value: "${propriedade ? propriedade.valorConvertido : ''}")}"
+        return  "${g.textField(name: "propriedades[${this.order}].valor", class: 'form-control editable', value: "${propriedade ? propriedade.valorConvertido : ''}")}"
     }
 }
 
@@ -70,7 +70,7 @@ class SelectProp extends Prop {
         return  """${
             g.select(
                 name: "propriedades[${this.order}].valor",
-                class: 'form-control',
+                class: 'form-control editable',
                 value: "${propriedade ? propriedade.valorConvertido : ''}",
                 from: this.options,
                 optionKey: 'key',

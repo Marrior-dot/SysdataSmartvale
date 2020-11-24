@@ -75,23 +75,55 @@ environments {
 administradora {
     nome = "SMART VALE"
     bin = "609095"
+    cnpj = "23685734000157"
+
     anosValidadeCartao = 2
 
 }
 
 cartao {
     gerador = GeradorCartaoPadrao
+
     embossing {
         produto = "SMART VALE"
         idCliente = "SVALE"
+
+
     }
 }
 
 faturamento {
 
     portador {
+
         controlaSaldo = true
+
         extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
+
+        boleto {
+            gerar = true
+            //gerador = "geradorBoletoBancoBrasilService"
+            gerador = "bopepoGeradorBoletoBancoBrasilService"
+
+            agencia = "4494"
+            dvAgencia = "6"
+            conta =  "14905"
+            dvConta = "5"
+
+            carteira {
+                numero = "17"
+                variacao = "019"
+            }
+
+            convenio = "3324913"
+
+            instrucao1 = "Referente ao serviço de fornecimento de vale combustível para o abastecimento da frota"
+            instrucao2 = ""
+        }
+
+        notaFiscal {
+            descriminacaoServicos = 'SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valorConsumido}||${taxas}||VALOR FINAL: ${valorTotal}|'
+        }
 
     }
 
@@ -101,9 +133,14 @@ faturamento {
 
 }
 
+
+
+
 environments {
 
     development {
+
+        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
 
         sftp {
             host = "localhost"
@@ -122,10 +159,24 @@ environments {
                     enviar  = "paysmart_test/input"
                 }
             }
+
+            boleto {
+                dir {
+                    prepago = "boletos/prepago/"
+                    pospago = "boletos/pospago/"
+                }
+            }
+
+            cobranca {
+                dir = "cobranca/"
+            }
+
         }
     }
 
     homologation {
+
+        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
 
         sftp {
             host = "172.17.17.2"
@@ -144,7 +195,21 @@ environments {
                     enviar  = "paysmart_test/input"
                 }
             }
+
+            boleto {
+                dir {
+                    prepago = "boletos/prepago/"
+                    pospago = "boletos/pospago/"
+                }
+            }
+
+            cobranca {
+                dir = "cobranca/"
+            }
+
         }
+
+
     }
 
     production {

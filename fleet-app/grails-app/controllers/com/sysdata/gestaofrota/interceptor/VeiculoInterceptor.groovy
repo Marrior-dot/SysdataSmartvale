@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.interceptor
 
+import com.sysdata.gestaofrota.MaquinaMotorizada
 import com.sysdata.gestaofrota.Rh
 import com.sysdata.gestaofrota.Veiculo
 
@@ -14,7 +15,7 @@ class VeiculoInterceptor {
     boolean before() {
         def user = springSecurityService.currentUser
         if (user.owner.instanceOf(Rh))
-            Veiculo.enableHibernateFilter('veiculosPorRh').setParameter('rh_id', user.owner.id)
+            MaquinaMotorizada.enableHibernateFilter('maquinasPorRh').setParameter('rh_id', user.owner.id)
         return true
     }
 

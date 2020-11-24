@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class ConsumoProdutosControllerSpec extends Specification implements ControllerUnitTest<ConsumoProdutosController> {
+class ConsumoProdutosRelatorioControllerSpec extends Specification implements ControllerUnitTest<ConsumoProdutosRelatorioController> {
 
     def setup() {
     }

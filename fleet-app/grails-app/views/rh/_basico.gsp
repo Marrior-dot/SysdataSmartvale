@@ -1,9 +1,12 @@
-<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoContrato; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
 
 <g:form method="post" >
+
     <g:hiddenField name="id" value="${rhInstance?.id}" />
     <g:hiddenField name="version" value="${rhInstance?.version}" />
     <g:hiddenField name="action" value="${action}"/>
+    <g:hiddenField name="editable" value="${editable}"/>
+
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			Dados Básicos
@@ -12,13 +15,13 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj" required="true" value="${rhInstance?.cnpj}" />
+					<bs:formField id="cnpj" name="cnpj" label="CNPJ" class="cnpj ${editable ? 'editable': ''}" required="true" value="${rhInstance?.cnpj}" />
 				</div>
 
 				<g:set var="bloquearModCob" value="${action == Util.ACTION_EDIT && (rhInstance?.funcionariosCount > 0 || rhInstance?.veiculosCount > 0)}"/>
 				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
 					<label class="control-label" for="modeloCobranca">Modelo Cobrança *</label>
-					<g:select name="modeloCobranca" from="${TipoCobranca.values()}" class="form-control"
+					<g:select name="modeloCobranca" from="${TipoCobranca.values()}" class="form-control ${editable ? 'editable': ''}"
 							  optionValue="nome" value="${rhInstance?.modeloCobranca}" onchange="alterarModeloCobranca()"
 							  aria-describedby="modelo-cobranca" disabled="${bloquearModCob}" required="required"/>
 				<g:if test="${bloquearModCob}">
@@ -28,19 +31,55 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField class="form-control" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
+					<bs:formField class="form-control ${editable ? 'editable': ''}" id="nome" label="Razão Social" required="true" value="${rhInstance?.nome}" />
 				</div>
 
 				<div class="col-md-6">
-					<bs:formField class="form-control" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
+					<bs:formField class="form-control ${editable ? 'editable': ''}" id="nomeFantasia" label="Nome Fantasia" required="true" value="${rhInstance?.nomeFantasia}" />
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField class="form-control" id="email" label="Email" value="${rhInstance?.email}" />
+					<bs:formField class="form-control ${editable ? 'editable': ''}" id="email" label="Email" value="${rhInstance?.email}" />
 				</div>
 			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Contrato
+				</div>
+
+				<div class="panel-body">
+
+					<div class="row">
+
+						<div class="form-group col-md-6">
+							<label class="control-label" for="tipoContrato">Tipo Contrato</label>
+							<g:select name="tipoContrato" from="${TipoContrato.values()}" class="form-control ${editable ? 'editable': ''}"
+									  noSelection="[null: '--Selecione o Tipo de Contrato--']"
+									  optionValue="nome" value="${rhInstance?.tipoContrato}" required="required"/>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="dataInicioContrato">Data Início</label>
+							<g:textField name="dataInicioContrato" class="form-control datepicker ${editable ? 'editable': ''}"
+										 value="${Util.formattedDate(rhInstance?.dataInicioContrato)}"></g:textField>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="dataFimContrato">Data Início</label>
+							<g:textField name="dataFimContrato" class="form-control datepicker ${editable ? 'editable': ''}"
+										 value="${Util.formattedDate(rhInstance?.dataFimContrato)}"></g:textField>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
 		</div>
+
 	</div>
 
 	<div class="panel panel-default">
@@ -48,17 +87,17 @@
 
 		<div class="panel-body">
 			<div class="row">
-				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''}">
+				<div class="form-group col-md-6 ${bloquearModCob ? 'has-warning' : ''} ${editable ? 'editable': ''}">
 					<label class="control-label" for="vinculoCartao">Vincular Cartão a:</label>
 
 					<div class="input-group">
 						<g:if test="${action == Util.ACTION_VIEW}">
-							<input type="text" class="form-control" name="vinculoCartao" id="vinculoCartao" disabled
+							<input type="text" class="form-control ${editable ? 'editable': ''}" name="vinculoCartao" id="vinculoCartao" disabled
 								   value="${rhInstance?.vinculoCartao}" aria-describedby="vinculo-cartao"/>
 						</g:if>
 						<g:else>
 							<g:select name="vinculoCartao" from="${com.sysdata.gestaofrota.TipoVinculoCartao.values()}"
-									  disabled="${bloquearModCob}" class="form-control" aria-describedby="vinculo-cartao"
+									  disabled="${bloquearModCob}" class="form-control ${editable ? 'editable': ''}" aria-describedby="vinculo-cartao"
 									  optionKey="key" value="${rhInstance?.vinculoCartao}"/>
 						</g:else>
 						<span class="input-group-addon">
@@ -90,7 +129,7 @@
 			<div class="form-group col-md-3">
 				<label class="control-label" for="limiteTotal">LimiteTotal *</label>
 				<div class="input-group">
-					<g:textField name="limiteTotal" class="form-control money"
+					<g:textField name="limiteTotal" class="form-control money ${editable ? 'editable': ''}"
 								 value="${Util.formatCurrency(rhInstance?.limiteTotal)}" required="true"></g:textField>
 				</div>
 			</div>
@@ -132,7 +171,7 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="validadeCarga">Validade Carga *</label>
 					<div class="input-group">
-						<input type="number" class="form-control" name="validadeCarga" id="validadeCarga" value="${rhInstance?.validadeCarga}"
+						<input type="number" class="form-control ${editable ? 'editable': ''}" name="validadeCarga" id="validadeCarga" value="${rhInstance?.validadeCarga}"
 							   min="0" required/>
 						<span class="input-group-addon">dias</span>
 					</div>
@@ -152,7 +191,7 @@
 					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
 					<div class="input-group">
 
-						<g:textField name="taxaAdministracao" class="form-control percentual"
+						<g:textField name="taxaAdministracao" class="form-control percentual ${editable ? 'editable': ''}"
 									 value="${Util.formatPercentage(rhInstance?.taxaAdministracao)}">
 							required
 						</g:textField>
@@ -163,7 +202,7 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="taxaDesconto">Taxa de Desconto *</label>
 					<div class="input-group">
-						<g:textField name="taxaDesconto" class="form-control percentual"
+						<g:textField name="taxaDesconto" class="form-control percentual ${editable ? 'editable': ''}"
 									 value="${Util.formatPercentage(rhInstance?.taxaDesconto)}">
 							required
 						</g:textField>
@@ -185,7 +224,7 @@
 					<label class="control-label" for="taxaUtilizacao">Utilização *</label>
 					<div class="input-group">
 						<span class="input-group-addon">R$</span>
-						<input type="number" class="form-control" name="taxaUtilizacao" id="taxaUtilizacao"
+						<input type="number" class="form-control ${editable ? 'editable': ''}" name="taxaUtilizacao" id="taxaUtilizacao"
 							   value="${rhInstance?.taxaUtilizacao}" min="0" step="0.01" required/>
 					</div>
 				</div>
@@ -194,7 +233,7 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="taxaManutencao">Taxa de Manutenção *</label>
 					<div class="input-group">
-						<input type="number" class="form-control" name="taxaManutencao" id="taxaManutencao"
+						<input type="number" class="form-control ${editable ? 'editable': ''}" name="taxaManutencao" id="taxaManutencao"
 							   value="${rhInstance?.taxaManutencao}" min="0" max="100" step="0.01" required/>
 						<span class="input-group-addon">%</span>
 					</div>
@@ -219,7 +258,7 @@
 					<div class="form-group col-md-3">
 						<label class="control-label" for="prazoPgtFatura">Dias p/ Vencimento após Corte *</label>
 						<div class="input-group">
-							<input type="number" class="form-control" name="prazoPgtFatura" id="prazoPgtFatura"
+							<input type="number" class="form-control ${editable ? 'editable': ''}" name="prazoPgtFatura" id="prazoPgtFatura"
 								   value="${rhInstance?.prazoPgtFatura}" min="0" required/>
 							<span class="input-group-addon">dias</span>
 						</div>
@@ -228,7 +267,7 @@
 					<div class="form-group col-md-3">
 						<label class="control-label" for="diasToleranciaAtraso">Dias de Tolerância a Atraso *</label>
 						<div class="input-group">
-							<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control"
+							<input id="diasToleranciaAtraso" name="diasToleranciaAtraso" type="number" class="form-control ${editable ? 'editable': ''}"
 								   min="0" value="${rhInstance?.diasToleranciaAtraso}" required>
 							<span class="input-group-addon">dias</span>
 						</div>
@@ -237,7 +276,7 @@
 					<div class="form-group col-md-3">
 						<label class="control-label" for="multaAtraso">Multa por Atraso *</label>
 						<div class="input-group">
-							<input type="text" class="form-control percentual" name="multaAtraso" id="multaAtraso"
+							<input type="text" class="form-control percentual" name="multaAtraso ${editable ? 'editable': ''}" id="multaAtraso"
 								   value="${Util.formatPercentage(rhInstance?.multaAtraso)}" required/>
 							<span class="input-group-addon">%</span>
 						</div>
@@ -247,7 +286,7 @@
 
 						<label class="control-label" for="jurosProRata">Juros Pró-Rata por Atraso *</label>
 						<div class="input-group">
-							<input type="text" class="form-control percentual" name="jurosProRata" id="jurosProRata"
+							<input type="text" class="form-control percentual ${editable ? 'editable': ''}" name="jurosProRata" id="jurosProRata"
 								   value="${Util.formatPercentage(rhInstance?.jurosProRata)}" min="0"  required/>
 							<span class="input-group-addon">%</span>
 						</div>
@@ -267,42 +306,12 @@
 	<g:render template="/telefone/form" model="[telefoneInstance: rhInstance?.telefone,telefone:'telefone', legend:'Telefone']"/>
 
 
-
 	<dyn:props tipoParticipante="EMPRESA_RH" participante="${rhInstance}"></dyn:props>
 
-%{--
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			Parâmetros do Autorizador
-		</div>
-
-		<div class="panel-body">
-			<div class="row">
-				<div class="form-group col-md-3">
-					<label class="control-label" for="maximoTrnPorDia">Máximo Transações *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="maximoTrnPorDia" id="maximoTrnPorDia" value="${rhInstance?.maximoTrnPorDia}"
-							   min="0" required/>
-						<span class="input-group-addon">por dia</span>
-					</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label" for="diasInatividade">Inatividade *</label>
-					<div class="input-group">
-						<input type="number" class="form-control" name="diasInatividade" id="diasInatividade" value="${rhInstance?.diasInatividade}"
-							   min="0" required/>
-						<span class="input-group-addon">dias</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
---}%
 
 
 	<div class="panel-footer">
-		<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+		<sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
 			<g:if test="${action == Util.ACTION_VIEW }">
 				<g:link class="btn btn-default" action="edit" id="${rhInstance.id}"><span class="glyphicon glyphicon-edit"></span>
 					<g:message code="default.button.edit.label" default="Edit"/>

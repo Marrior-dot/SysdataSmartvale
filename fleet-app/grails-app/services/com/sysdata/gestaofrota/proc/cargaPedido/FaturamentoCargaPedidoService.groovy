@@ -1,35 +1,21 @@
 package com.sysdata.gestaofrota.proc.cargaPedido
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.Boleto
-import com.sysdata.gestaofrota.Conta
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoConvenio
-import com.sysdata.gestaofrota.LancamentoPortador
-import com.sysdata.gestaofrota.PedidoCarga
-import com.sysdata.gestaofrota.Rh
-import com.sysdata.gestaofrota.StatusEmissao
-import com.sysdata.gestaofrota.StatusFatura
-import com.sysdata.gestaofrota.StatusGeracaoBoleto
-import com.sysdata.gestaofrota.StatusLancamento
-import com.sysdata.gestaofrota.StatusPedidoCarga
-import com.sysdata.gestaofrota.TipoFatura
-import com.sysdata.gestaofrota.TipoItemPedido
+import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoleto
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoletoFactory
-import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeracaoArquivoRPSBarueriService
+import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
-
+    GrailsApplication grailsApplication
 
     @Override
     def execute(Date date) {
 
-        List<PedidoCarga> pedidoCargaList = PedidoCarga.findAllByStatus(StatusPedidoCarga.AGENDADO, [sort: "dataCarga"])
+        List<PedidoCargaInstancia> pedidoCargaList = PedidoCargaInstancia.findAllByStatus(StatusPedidoCarga.AGENDADO, [sort: "dataCarga"])
 
         if (!pedidoCargaList.isEmpty()) {
 
@@ -94,25 +80,28 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
                 pedido.save(flush: true)
 
 
-                // Boleto
-/*
-                Boleto boleto = new Boleto()
-                boleto.with {
-                    fatura = faturaEmpresa
-                    dataVencimento = faturaEmpresa.dataVencimento
-                    valor = faturaEmpresa.valorTotal
+                if (grailsApplication.config.projeto.faturamento.portador.boleto.gerar) {
+
+                    // Boleto
+                    Boleto boleto = new Boleto()
+                    boleto.with {
+                        fatura = faturaEmpresa
+                        dataVencimento = faturaEmpresa.dataVencimento
+                        valor = faturaEmpresa.valorTotal
+                    }
+                    boleto.save(flush: true)
+
+                    GeradorBoleto geradorBoleto = GeradorBoletoFactory.gerador
+                    geradorBoleto.gerarBoleto(boleto)
+
+                    faturaEmpresa.statusGeracaoBoleto = StatusGeracaoBoleto.GERADO
+
+                    // Nota Fiscal
+                    faturaEmpresa.statusEmissao = StatusEmissao.GERAR_ARQUIVO
+                    faturaEmpresa.save()
+
                 }
-                boleto.save(flush: true)
 
-                GeradorBoleto geradorBoleto = GeradorBoletoFactory.gerador
-                geradorBoleto.gerarBoleto(boleto)
-
-                faturaEmpresa.statusGeracaoBoleto = StatusGeracaoBoleto.GERADO
-
-                // Nota Fiscal
-                faturaEmpresa.statusEmissao = StatusEmissao.GERAR_ARQUIVO
-                faturaEmpresa.save()
-*/
 
             }
 

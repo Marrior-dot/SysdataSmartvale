@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios
 import com.sysdata.gestaofrota.Util
 import grails.core.GrailsApplication
 
-class ProjecaoReembolsoController {
+class ProjecaoReembolsoRelatorioController {
 
     GrailsApplication grailsApplication
     def exportService

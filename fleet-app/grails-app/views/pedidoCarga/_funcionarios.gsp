@@ -54,7 +54,7 @@
                 <g:render template="funcionarioList"  model="${[
                                                                 pedidoCargaInstance: pedidoCargaInstance,
                                                                 funcionarioInstanceCount: pedidoCargaInstance.itensCarga ? pedidoCargaInstance.itensCarga.size() : 0,
-                                                                funcionarioInstanceList: pedidoCargaInstance.itensCarga*.participante,
+                                                                funcionarioInstanceList: pedidoCargaInstance.itensCarga*.funcionario,
                                                                 action: action
                                                             ]}"/>
             </div>

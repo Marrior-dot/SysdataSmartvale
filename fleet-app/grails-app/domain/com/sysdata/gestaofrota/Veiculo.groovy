@@ -26,9 +26,6 @@ class Veiculo extends MaquinaMotorizada {
     static mapping = {
     }
 
-    static hibernateFilters = {
-        veiculosPorRh(condition: 'unidade_id in (select u.id from Unidade u where u.rh_id = :rh_id)', types: 'long')
-    }
 
 
     Long getHodometroAtualizado() {

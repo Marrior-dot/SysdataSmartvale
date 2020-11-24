@@ -1,10 +1,8 @@
 package com.sysdata.gestaofrota.relatorios
-import com.sysdata.gestaofrota.Estabelecimento
-import com.sysdata.gestaofrota.Empresa
 
 import grails.core.GrailsApplication
 
-class BaseEstabelecimentosController {
+class BaseEstabelecimentosRelatorioController {
 
     def exportService
 

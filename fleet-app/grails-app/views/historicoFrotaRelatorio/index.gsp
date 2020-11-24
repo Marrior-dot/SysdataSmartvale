@@ -26,7 +26,11 @@
 
                <div class="panel-body">
 
-                <div class="row">
+
+                   <g:render template="/components/rhUnidadeSelect"></g:render>
+
+
+                   <div class="row">
                         <div class="col-md-2">
                             <label class="control-label" for="placa">Placa</label>
                             <g:textField name="placa" class="form-control placa" value="${params.placa}"></g:textField>
@@ -48,7 +52,6 @@
 
 
 
-                    <g:render template="/components/rhUnidadeSelect"></g:render>
 
                         </div>
                 </div>

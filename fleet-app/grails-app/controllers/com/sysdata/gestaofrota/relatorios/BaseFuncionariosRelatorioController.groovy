@@ -1,10 +1,8 @@
 package com.sysdata.gestaofrota.relatorios
 
-import com.sysdata.gestaofrota.Funcionario
-
 import grails.core.GrailsApplication
 
-class BaseFuncionariosController {
+class BaseFuncionariosRelatorioController {
 
     def exportService
 

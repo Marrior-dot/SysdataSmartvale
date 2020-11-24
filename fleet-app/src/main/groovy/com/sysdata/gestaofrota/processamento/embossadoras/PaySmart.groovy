@@ -19,7 +19,7 @@ class PaySmart extends Embossadora {
 
     PaySmart(List<Cartao> cartoes) {
         super(cartoes)
-        this.tdesChipher = new TDESChipher("CBC")
+        this.tdesChipher = new TDESChipher("CBC", Holders.grailsApplication.config.projeto.cartao.embossing.cipher.combinedKey)
     }
 
     @Override
@@ -89,7 +89,8 @@ class PaySmart extends Embossadora {
         int sequencial = 2
         cartoesIds.eachWithIndex { cid, i ->
             Cartao c = Cartao.get(cid)
-            String nome = c.portador.nomeEmbossing; nome = nome.substring(0, Math.min(26, nome.length())).toUpperCase()
+            String nome = c.portador.nomeEmbossing;
+            nome = Util.normalize(nome.substring(0, Math.min(26, nome.length())).toUpperCase())
             String pan = c.numero.substring(0, 16)
             String validade = sdfAAMM.format(c.validade)
             String via = c.via.toString().padLeft(2, "0")
@@ -102,6 +103,8 @@ class PaySmart extends Embossadora {
             String cnpj = c.portador.cnpj
             String campoCpf = cpf.length() > 0 ? "CPF=${cpf}" : String.format("%18s", " ")
             String campoCnpj = cnpj.length() > 0 ? "CNPJ${cnpj}" : String.format("%19s", " ")
+
+
 
             def pinBlock = this.tdesChipher.encrypt(c.senha)
 

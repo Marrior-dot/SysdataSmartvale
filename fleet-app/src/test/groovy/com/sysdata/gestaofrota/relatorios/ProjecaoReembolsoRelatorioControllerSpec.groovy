@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class ProjecaoReembolsoControllerSpec extends Specification implements ControllerUnitTest<ProjecaoReembolsoController> {
+class ProjecaoReembolsoRelatorioControllerSpec extends Specification implements ControllerUnitTest<ProjecaoReembolsoRelatorioController> {
 
     def setup() {
     }

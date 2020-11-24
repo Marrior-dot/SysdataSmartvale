@@ -1,4 +1,4 @@
-x<%@ page import="com.sysdata.gestaofrota.Estado" %>
+<%@ page import="com.sysdata.gestaofrota.Estado" %>
 <script type="application/javascript">
 
     var state = {};
