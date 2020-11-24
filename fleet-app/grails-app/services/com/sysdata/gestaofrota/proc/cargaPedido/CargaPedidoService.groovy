@@ -9,7 +9,7 @@ class CargaPedidoService implements ExecutableProcessing {
 
     @Override
     def execute(Date date) {
-        def pedidosList = PedidoCarga.withCriteria {
+        def pedidosList = PedidoCargaInstancia.withCriteria {
                                             projections {
                                                 property "id"
                                             }
@@ -30,7 +30,7 @@ class CargaPedidoService implements ExecutableProcessing {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     def processPedido(long id, Date dataRef) {
 
-        PedidoCarga pedidoCarga = PedidoCarga.get(id)
+        PedidoCargaInstancia pedidoCarga = PedidoCargaInstancia.get(id)
 
         log.info "Processando pedido $pedidoCarga.id ..."
 

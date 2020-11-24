@@ -74,7 +74,12 @@ class RhController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'rh.label', default: 'Rh'), params.id])}"
             redirect(action: "list")
         } else {
-            return render(view: 'form', model: [rhInstance: rhInstance, action: Util.ACTION_EDIT])
+            return render(view: 'form', model: [
+                                                    rhInstance: rhInstance,
+                                                    action: Util.ACTION_EDIT,
+                                                    editable: springSecurityService.currentUser.authorities.authority.any
+                                                            { it == 'ROLE_ADMIN' || it == 'ROLE_PROC'}
+                                                ])
         }
     }
 

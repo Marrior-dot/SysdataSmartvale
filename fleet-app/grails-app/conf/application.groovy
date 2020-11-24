@@ -8,6 +8,7 @@ grails {
         failOnError = true
     }
 
+
     mime {
         disable.accept.header.userAgents = ['Gecko', 'WebKit', 'Presto', 'Trident']
         types {
@@ -150,14 +151,14 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
 
         // Relatórios
-        [pattern: '/consumoProdutos/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/demonstrativoDesempenho/**',            access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/baseEstabelecimentos/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/baseFuncionarios/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/baseVeiculos/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/consultaVeiculo/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/controleMensalCargas/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/baseEquipamentos/**',               access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/consumoProdutosRelatorio/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/demonstrativoDesempenhoRelatorio/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseEstabelecimentosRelatorio/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseFuncionariosRelatorio/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseVeiculosRelatorio/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/historicoFrotaRelatorio/**',                     access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/controleMensalCargasRelatorio/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/baseEquipamentosRelatorio/**',                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
 

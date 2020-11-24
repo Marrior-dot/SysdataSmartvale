@@ -49,32 +49,6 @@
                     <!-- /.nav-second-level -->
                 </li>
 
-                <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        %{--<li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>--}%
-
-                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolso">Projeção de Reembolso</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutos">Consumo de Combustíveis</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenho">Demonstrativo Desempenho</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="controleMensalCargas">Controle Mensal de Cargas</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentos">Base de Estabelecimentos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionarios">Base de Funcionários</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentos">Base de Equipamentos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculos">Base de Veículos</g:link></li>
-
-
-
-%{--
-                        <sec:ifAnyGranted roles="ROLE_PROC">
-                            <li class="controller"><g:link class="submenu-logado" controller="report">Configuração Relatório</g:link></li>
-                            <li class="controller"><g:link class="submenu-logado" controller="fieldReport">Campos</g:link></li>
-                            <li class="controller"><g:link class="submenu-logado" controller="parameterReport">Parâmetros</g:link></li>
-                        </sec:ifAnyGranted>
---}%
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
 
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-shield fa-fw"></i>&nbsp;Segurança<span class="fa arrow"></span></a>
@@ -94,16 +68,6 @@
                 </li>
             </sec:ifAnyGranted>
 
-            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
-                <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
-                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-            </sec:ifAnyGranted>
 
 
             <sec:ifAnyGranted roles="ROLE_PROC">
@@ -139,7 +103,7 @@
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolso">Projeção de Reembolso</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolsoRelatorio">Projeção de Reembolso</g:link></li>
                     </ul>
                 </li>
 
@@ -161,10 +125,54 @@
                 </li>
             </sec:ifAnyGranted>
 
+
+            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+
+                <li>
+                    <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        %{--<li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>--}%
+
+                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+                            <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolsoRelatorio">Projeção de Reembolso</g:link></li>
+                        </sec:ifAnyGranted>
+
+                        <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutosRelatorio">Consumo de Combustíveis</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenhoRelatorio">Demonstrativo Desempenho</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="controleMensalCargasRelatorio">Controle Mensal de Cargas</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentosRelatorio">Base de Estabelecimentos</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionariosRelatorio">Base de Funcionários</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentosRelatorio">Base de Equipamentos</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculosRelatorio">Base de Veículos</g:link></li>
+                        <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Frota</g:link></li>
+
+                        %{--
+                                                <sec:ifAnyGranted roles="ROLE_PROC">
+                                                    <li class="controller"><g:link class="submenu-logado" controller="report">Configuração Relatório</g:link></li>
+                                                    <li class="controller"><g:link class="submenu-logado" controller="fieldReport">Campos</g:link></li>
+                                                    <li class="controller"><g:link class="submenu-logado" controller="parameterReport">Parâmetros</g:link></li>
+                                                </sec:ifAnyGranted>
+                        --}%
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+
+
+                <li>
+                    <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'unlockNewCard']">Desbloqueio de Cartão</g:link></li>
+                        <li class="controller"><g:link class="submenu-logado" controller="centralAtendimento" action="searchCard" params="[act:'findFuncionario',goTo:'cancelCard']">Cancelamento de Cartão</g:link></li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </sec:ifAnyGranted>
+
             <sec:ifAnyGranted roles="ROLE_RH, ROLE_ESTAB">
                 <li class="controller"><g:link class="submenu-logado" controller="user" action="meuUsuario" id="${sec.loggedInUserInfo(field: 'id')}">&nbsp;Meu Usuário</g:link></li>
 
             </sec:ifAnyGranted>
+
 
         </ul>
     </div>

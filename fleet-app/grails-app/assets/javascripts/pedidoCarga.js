@@ -3,6 +3,8 @@ var loc = $(location).attr('href');
 
 var relative = "";
 
+var pedId
+
 var taxas = {
     admin: 0,
     desc: 0
@@ -13,8 +15,14 @@ if (loc.includes("\/create"))
 else if (loc.includes("\/show\/"))
     relative = "../../";
 
+
+var qtdeAgenda = 0;
+
 $(document).ready(function () {
     valorCategoria = $("input#valorCargaCategoria").val();
+
+    pedId = $("input#id").val();
+    carregarPedidoInstancia();
 
     var defaultForm = $("form#defaultForm");
     //desabilita o formulario de ser submetido caso o botão 'enter' seja pressionado
@@ -26,24 +34,7 @@ $(document).ready(function () {
     //substitui os dados que serão enviado para o servidor
     defaultForm.submit(function (e) {
         waitingDialog.show();
-        //remove os inputs desnecessários
-        //$("input[type=search],[type=checkbox]:not([name='selectAll'], [name*='func_'], [name*='veic_'], [name*='valorCarga_']), [type=text]:not([name='dataCarga'])", $(this)).remove();
-/*
-        var esse = $(this);
-
-        itensPedidos.forEach(function (item) {
-            if (item.ativo === true)
-                esse.append("<input type='hidden' name='funcionariosAtivos' value='" + item.id + "'/>");
-            else
-                esse.append("<input type='hidden' name='funcionariosInativos' value='" + item.id + "'/>");
-            esse.append("<input type='hidden' name='valorCarga[" + item.id + "]' value='" + item.valor + "'/>");
-        });
-*/
     });
-
-
-
-    var pedId = $("input#id").val();
 
     if (pedId !== "" && typeof pedId !== undefined) {
         var vinculoCartao = $("#vinculoCartao").val();
@@ -75,11 +66,61 @@ $(document).ready(function () {
     });
 
     $("input[name=tipoTaxa]").change(function() {
-
         mostrarTaxa($(this));
     });
 
+    $("#tipo").click(function() {
+        var checked = $(this).is(":checked");
+
+        var divInstancia = $("div#instancia");
+        var divProgramado = $("div#programado");
+
+        if (checked) {
+            divInstancia.hide();
+            divProgramado.show();
+
+            $.get(relative + "pedidoCarga/loadPedidoProgramado", {id: pedId}, function(data) {
+                divProgramado.html(data);
+
+                carregarAgenda();
+            });
+
+
+        } else
+            carregarPedidoInstancia();
+
+    });
+
+
+
+
+    $("#btnAdd").click(function() {
+        carregarAgenda();
+    });
+
 });
+
+
+function carregarAgenda() {
+    $.get(relative + "pedidoCarga/addNovaAgenda", {id: pedId, idx: qtdeAgenda++}, function(data) {
+        $("div#agenda").append(data);
+    });
+}
+
+function carregarPedidoInstancia() {
+
+    var divInstancia = $("div#instancia");
+    var divProgramado = $("div#programado");
+
+    divInstancia.show();
+    divProgramado.hide();
+
+    $.get(relative + "pedidoCarga/loadPedidoInstancia", {id: pedId}, function(data) {
+        divInstancia.html(data);
+        $('.datepicker').datepicker({language: 'pt-BR'});
+    });
+
+}
 
 function mostrarTaxa(elem) {
     var tipoTaxa = elem.val();

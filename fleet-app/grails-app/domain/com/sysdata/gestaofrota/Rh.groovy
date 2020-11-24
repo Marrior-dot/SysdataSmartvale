@@ -26,6 +26,10 @@ class Rh extends Empresa {
     BigDecimal taxaManutencao = 0D
     TipoVinculoCartao vinculoCartao = TipoVinculoCartao.FUNCIONARIO
     TipoCobranca modeloCobranca = TipoCobranca.PRE_PAGO
+    TipoContrato tipoContrato
+    Date dataInicioContrato
+    Date dataFimContrato
+
     boolean cartaoComChip = true
     boolean renovarLimite = false
 
@@ -46,6 +50,9 @@ class Rh extends Empresa {
 
     static constraints = {
         unidades lazy: false
+        tipoContrato nullable: true
+        dataInicioContrato nullable: true
+        dataFimContrato nullable: true
     }
 
     static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel", "saldoDisponivelCartoes"]

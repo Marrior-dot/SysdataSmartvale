@@ -1,7 +1,5 @@
 package com.sysdata.gestaofrota
 
-import grails.util.Holders
-
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
@@ -13,14 +11,14 @@ class TDESChipher {
     private IvParameterSpec iv
     private SecretKey secretKey
 
-    TDESChipher(String mode) {
+    TDESChipher(String mode, String combinedKey) {
 
         this.cipher = Cipher.getInstance("DESede/" + mode + "/PKCS5Padding")
 
         if (mode == "CBC")
             this.iv = new IvParameterSpec(new byte[8])
 
-        byte[] key = hexToBytes(Holders.grailsApplication.config.intelcav.combinedKey)
+        byte[] key = hexToBytes(combinedKey)
 
         // Se key com 16B, preenche para ficar com 24B
         byte[] keyBytes

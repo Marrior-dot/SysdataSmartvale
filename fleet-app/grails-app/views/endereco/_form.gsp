@@ -101,34 +101,34 @@
                 <label class="control-label" for="endereco.cep">
                     <g:message code="endereco.cep.label" default="CEP"/>
                 </label>
-                <input type="text" class="form-control cep" name="${endereco}.cep" value="${enderecoInstance?.cep}"
+                <input type="text" class="form-control cep ${editable ? 'editable': ''}" name="${endereco}.cep" value="${enderecoInstance?.cep}"
                        onblur="procurarEndereco('${endereco}')" required/>
             </div>
 
             <div class="col-xs-8">
-                <bs:formField id="${endereco}.logradouro" name="${endereco}.logradouro" label="Logradouro"  value="${enderecoInstance?.logradouro}" />
+                <bs:formField class="${editable ? 'editable': ''}" id="${endereco}.logradouro" name="${endereco}.logradouro" label="Logradouro"  value="${enderecoInstance?.logradouro}" />
             </div>
             <div class="col-xs-2">
-                <bs:formField id="${endereco}.numero" name="${endereco}.numero" label="Nº"  value="${enderecoInstance?.numero}" />
+                <bs:formField class="${editable ? 'editable': ''}" id="${endereco}.numero" name="${endereco}.numero" label="Nº"  value="${enderecoInstance?.numero}" />
             </div>
 		</div>
 
         <div class="row">
             <div class="col-xs-12">
-                <bs:formField id="${endereco}.complemento" name="${endereco}.complemento" label="Complemento"  value="${enderecoInstance?.complemento}" />
+                <bs:formField class="${editable ? 'editable': ''}" id="${endereco}.complemento" name="${endereco}.complemento" label="Complemento"  value="${enderecoInstance?.complemento}" />
             </div>
         </div>
 
         <div class="row">
 			<div class="col-xs-4">
-				<bs:formField id="${endereco}.bairro" name="${endereco}.bairro" label="Bairro"  value="${enderecoInstance?.bairro}" />
+				<bs:formField class="${editable ? 'editable': ''}" id="${endereco}.bairro" name="${endereco}.bairro" label="Bairro"  value="${enderecoInstance?.bairro}" />
 			</div>
 
             <div class="col-xs-4">
                 <label class="control-label" for="endereco.estado.id">
                     <g:message code="endereco.estado.label" default="Estado"/>
                 </label>
-                <g:select class="form-control " name="${endereco}.cidade.estado.id" from="${Estado.list(sort: 'nome')}"
+                <g:select class="form-control ${editable ? 'editable': ''}" name="${endereco}.cidade.estado.id" from="${Estado.list(sort: 'nome')}"
                           optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.estado?.id}"
                           onchange="filtrarCidadesPorEstado('${endereco}')" noSelection="['':'-- Selecione Estado  --']"/>
             </div>
@@ -137,7 +137,7 @@
                 <label class="control-label" for="endereco.cidade.id">
                     <g:message code="endereco.cidade.label" default="Cidade"/>
                 </label>
-                <g:select class="form-control " name="${endereco}.cidade.id" from="${enderecoInstance?.cidade?.estado?.cidades}"
+                <g:select class="form-control ${editable ? 'editable': ''}" name="${endereco}.cidade.id" from="${enderecoInstance?.cidade?.estado?.cidades}"
                           optionKey="id" optionValue="nome" required="" value="${enderecoInstance?.cidade?.id}" />
             </div>
 

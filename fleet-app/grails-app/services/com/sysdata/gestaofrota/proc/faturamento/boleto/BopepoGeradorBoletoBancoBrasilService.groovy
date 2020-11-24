@@ -140,7 +140,7 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         baseDir = !baseDir.endsWith("/") ? baseDir + "/" : baseDir
         boletoDir = !boletoDir.endsWith("/") ? boletoDir + "/" : boletoDir
 
-        def filenameBoleto = sprintf("%s%sBV_%s_%07d.pdf",
+        def filenameBoleto = sprintf("%s%sGFROTA_%s_%07d.pdf",
                 baseDir,
                 boletoDir,
                 Util.cnpjToRaw(empresa.cnpj),

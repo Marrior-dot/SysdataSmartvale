@@ -14,7 +14,7 @@
         div#wrapper {
 
             background: url("${assetPath(src: 'projetos/' + projeto.pasta + '/background-publico.png')}") no-repeat;
-            #height: 100vh;
+            height: 100vh;
             background-size: cover;
         }
 

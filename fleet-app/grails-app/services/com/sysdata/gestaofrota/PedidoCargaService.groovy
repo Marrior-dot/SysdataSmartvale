@@ -16,21 +16,23 @@ class PedidoCargaService {
         ret.success = true
 
         def hoje = new Date().clearTime()
-        if (! pedidoCarga.dataCarga) {
-            ret.success = false
-            ret.message = "Data de Carga não pode nula!"
-            return ret
-        }
-        if (pedidoCarga.dataCarga < hoje) {
-            ret.success = false
-            ret.message = "Data de Carga não pode ser inferior ao dia de Hoje!"
-            return ret
+
+        if (pedidoCarga.instanceOf(PedidoCargaInstancia)) {
+            if (! pedidoCarga.dataCarga) {
+                ret.success = false
+                ret.message = "Data de Carga não pode nula!"
+                return ret
+            }
+            if (pedidoCarga.dataCarga < hoje) {
+                ret.success = false
+                ret.message = "Data de Carga não pode ser inferior ao dia de Hoje!"
+                return ret
+            }
         }
 
         Unidade unidade = pedidoCarga.unidade
         pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
         pedidoCarga.validade = unidade.rh.validadeCarga
-
 
         if (pedidoCarga.unidade.rh.vinculoCartao == TipoVinculoCartao.FUNCIONARIO) {
 

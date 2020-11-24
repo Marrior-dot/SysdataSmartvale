@@ -6,7 +6,9 @@ enum StatusLotePagamento {
     ABERTO("Aberto"),
     FECHADO("Fechado"),
     REJEITADO("Rejeitado"),
-    ACEITO("Aceito")
+    ACEITO("Aceito"),
+    LIQUIDADO("Liquidado"),
+    LIQUIDADO_PARCIALMENTE("Liquidado Parcialmente")
 
     String nome
 
