@@ -4,6 +4,8 @@ import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoleto
 import com.sysdata.gestaofrota.proc.faturamento.boleto.GeradorBoletoFactory
+import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeradorNotaFiscal
+import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeradorNotaFiscalFactory
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -102,6 +104,12 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
                 }
 
+                if (grailsApplication.config.projeto.faturamento.portador.notaFiscal.gerar) {
+
+                    GeradorNotaFiscal geradorNotaFiscal = GeradorNotaFiscalFactory.gerador
+                    geradorNotaFiscal.gerarNotaFiscal(faturaEmpresa)
+
+                }
 
             }
 
