@@ -1,11 +1,11 @@
 package com.sysdata.gestaofrota.integracao.omie
 
-import com.sysdata.gestaofrota.Estabelecimento
+import com.sysdata.gestaofrota.Rh
 
 class OmieCliente {
 
     Date dateCreated
-    Estabelecimento estabelecimento
+    Rh empresaCliente
     String codigoIntegracao
 
     static constraints = {

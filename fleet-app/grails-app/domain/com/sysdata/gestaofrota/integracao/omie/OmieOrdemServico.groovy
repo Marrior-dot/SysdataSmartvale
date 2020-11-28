@@ -6,8 +6,12 @@ class OmieOrdemServico {
 
     Date dateCreated
     Fatura fatura
-    StatusOrdemServico status = StatusOrdemServico.CRIADA
+    StatusOrdemServico statusInterno = StatusOrdemServico.CRIADA
     OmieCliente cliente
+
+    Long codigoOs
+    String numeroOs
+    OmieStatusOrdemServico statusOs
 
     static constraints = {
     }

@@ -1,10 +1,14 @@
 package com.sysdata.gestaofrota.proc.faturamento.notafiscal
 
-import com.sysdata.gestaofrota.Estabelecimento
+import com.sysdata.commons.IntegrationMessengerService
 import com.sysdata.gestaofrota.Fatura
+import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.TipoMensagem
 import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import com.sysdata.gestaofrota.integracao.omie.OmieCliente
+import com.sysdata.gestaofrota.integracao.omie.OmieOrdemServico
+import com.sysdata.gestaofrota.integracao.omie.OmieStatusOrdemServico
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -14,9 +18,15 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
 
     GrailsApplication grailsApplication
 
-    private OmieCliente recuperarClienteEmOmie(Estabelecimento estabelecimento) {
+    IntegrationMessengerService integrationMessengerService
+
+    private OmieCliente recuperarClienteEmOmie(Rh empresaCliente) {
+
+        OmieCliente omieCliente
 
         def omieConfig = grailsApplication.config.projeto.faturamento.portador.notaFiscal.omie
+
+        d
 
         def filtro = [:]
         filtro.with {
@@ -25,28 +35,37 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
             app_secret = omieConfig.chavesAcesso.appSecret
         }
 
-        filtro.clientesFiltro = [:]
-        filtro.clientesFiltro.cnpj_cpf = estabelecimento.cnpj
+        filtro.param = [ [clientesFiltro: [cnpj_cpf: empresaCliente.cnpj]] ]
 
-        ResponseData responseData = RESTClientHelper.instance.postJSON(omieConfig.clientes.endpoint, filtro)
+        ResponseData responseData = integrationMessengerService.postAsJSON(omieConfig.clientes.endpoint, TipoMensagem.OMIE_CONSULTAR_CLIENTES, filtro)
+        if (responseData.statusCode == 200) {
 
+            responseData.json.clientes_cadastro_resumido.find {
+                omieCliente = OmieCliente.findByCodigoIntegracao(it.codigo_cliente)
+                if (!omieCliente) {
+                    omieCliente = new OmieCliente(empresaCliente: empresaCliente, codigoIntegracao: it.codigo_cliente)
+                    omieCliente.save()
+                }
+                return true
+            }
 
+        //TODO: Tratar resposta negativa
+        } else if (responseData.statusCode == 500) {
 
-        OmieCliente omieCliente = new OmieCliente()
+            log.debug "Erro: $responseData.json"
+/*
+            {
+                "faultstring": "ERROR: Não existem registros para a página [1]!",
+                "faultcode": "SOAP-ENV:Client-5113"
+            }
+*/
+        }
 
         return omieCliente
     }
 
 
-    @Override
-    void gerarNotaFiscal(Fatura fatura) {
-
-        Estabelecimento estabelecimento = fatura.conta.participante
-        OmieCliente omieCliente = OmieCliente.findByEstabelecimento(estabelecimento)
-
-        // Caso não se encontre o Omie Cliente relacionado ao EC, faz-se nova consulta cliente no Omie
-        if (!omieCliente)
-            omieCliente = recuperarClienteEmOmie(estabelecimento)
+    private void incluirOrdemServicoEmOmie(OmieCliente omieCliente, Fatura fatura) {
 
         // Criar Ordem de Serviço
 
@@ -115,15 +134,62 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
 
         dataMap.param = param
 
-        ResponseData responseData = RESTClientHelper.instance.postJSON(omieConfig.ordemServico.endpoint, dataMap)
+        ResponseData responseData = integrationMessengerService.postAsJSON(omieConfig.ordemServico.endpoint, TipoMensagem.OMIE_INCLUIR_OS, dataMap)
 
         if (responseData.statusCode == 200) {
 
 
+/*
+            {
+                "cCodIntOS": "1606502110",
+                "nCodOS": 488948625,
+                "cNumOS": "000000000002117",
+                "cCodStatus": "0",
+                "cDescStatus": "Ordem de Serviço cadastrado com sucesso!"
+            }
+*/
 
-        } else {
+            OmieStatusOrdemServico omieStatusOS = OmieStatusOrdemServico.findByCodigo(responseData.json.cCodStatus)
+            if (!omieStatusOS) {
+                omieStatusOS = new OmieStatusOrdemServico()
+                omieStatusOS.with {
+                    codigo = responseData.json.cCodStatus
+                    descricao = responseData.json.cCodStatus
+                }
+                omieStatusOS.save(flush: true)
+            }
+
+
+            OmieOrdemServico ordemServico = new OmieOrdemServico(fatura: fatura)
+            ordemServico.with {
+                cliente = omieCliente
+                codigoOs = responseData.json.nCodOS
+                numeroOs = responseData.json.cNumOS
+                statusOs = omieStatusOS
+            }
+
+            ordemServico.save(flush: true)
+
+            // TODO: Tratar resposta negativa
+        } else if (responseData.statusCode == 500) {
+
+            log.debug "Erro: $responseData.json"
 
         }
 
+    }
+
+    @Override
+    void gerarNotaFiscal(Fatura fatura) {
+
+        Rh empresaCliente = fatura.conta.participante
+        OmieCliente omieCliente = OmieCliente.findByEmpresaCliente(empresaCliente)
+
+        // Caso não se encontre o Omie Cliente relacionado ao EC, faz-se nova consulta cliente no Omie
+        if (!omieCliente)
+            omieCliente = recuperarClienteEmOmie(empresaCliente)
+
+        if (omieCliente)
+            incluirOrdemServicoEmOmie(omieCliente, fatura)
     }
 }
