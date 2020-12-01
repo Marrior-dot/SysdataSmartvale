@@ -171,6 +171,10 @@ class BootStrap {
             Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 12 as byte, service: "consultarLoteDevolucaoAPIBanparaService", active: true, batch: batch]).save(flush: true)
         }
 
+        if (grailsApplication.config.projeto.projectId == "smartvale") {
+            Processing.findOrCreateWhere([name: "Faturamento de Ordens de Serviços - Omie API", order: 10 as byte, service: "faturamentoOrdemServiceOmieService", active: true, batch: batch]).save(flush: true)
+        }
+
     }
 
     def criarMarcasVeiculos() {
