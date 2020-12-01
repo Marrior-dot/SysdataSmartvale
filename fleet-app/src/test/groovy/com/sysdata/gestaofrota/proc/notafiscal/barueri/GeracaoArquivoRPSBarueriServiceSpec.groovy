@@ -1,6 +1,6 @@
 package com.sysdata.gestaofrota.proc.notafiscal.barueri
 
-import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeracaoArquivoRPSBarueriService
+import com.sysdata.gestaofrota.proc.faturamento.notafiscal.integracao.barueri.GeracaoArquivoRPSBarueriService
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 

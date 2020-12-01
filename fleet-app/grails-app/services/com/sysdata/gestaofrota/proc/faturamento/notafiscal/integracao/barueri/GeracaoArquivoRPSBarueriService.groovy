@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc.faturamento.notafiscal
+package com.sysdata.gestaofrota.proc.faturamento.notafiscal.integracao.barueri
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
