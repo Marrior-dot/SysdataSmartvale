@@ -2,7 +2,6 @@ package com.sysdata.commons
 
 import com.sysdata.gestaofrota.MensagemIntegracao
 import com.sysdata.gestaofrota.TipoMensagem
-import com.sysdata.gestaofrota.User
 import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import grails.converters.JSON
@@ -10,15 +9,6 @@ import grails.gorm.transactions.Transactional
 
 @Transactional
 class IntegrationMessengerService {
-
-/*
-    User usuario
-    String corpo
-    String resposta
-    String codigoResposta
-    Map jsonResponse
-    TipoMensagem tipo
-*/
 
     def postAsJSON(String endpoint, TipoMensagem tipoMensagem, Map dados) {
 

@@ -1,23 +1,21 @@
-package com.sysdata.gestaofrota.proc.faturamento.notafiscal
+package com.sysdata.gestaofrota.proc.faturamento.notafiscal.integracao.omie
 
 import com.sysdata.commons.IntegrationMessengerService
 import com.sysdata.gestaofrota.Fatura
 import com.sysdata.gestaofrota.Rh
 import com.sysdata.gestaofrota.TipoMensagem
-import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import com.sysdata.gestaofrota.integracao.omie.OmieCliente
 import com.sysdata.gestaofrota.integracao.omie.OmieOrdemServico
 import com.sysdata.gestaofrota.integracao.omie.OmieStatusOrdemServico
+import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeradorNotaFiscal
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
 
-
     GrailsApplication grailsApplication
-
     IntegrationMessengerService integrationMessengerService
 
     private OmieCliente recuperarClienteEmOmie(Rh empresaCliente) {
@@ -25,8 +23,6 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
         OmieCliente omieCliente
 
         def omieConfig = grailsApplication.config.projeto.faturamento.portador.notaFiscal.omie
-
-        d
 
         def filtro = [:]
         filtro.with {
@@ -79,27 +75,38 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
             app_secret = omieConfig.chavesAcesso.appSecret
         }
 
-        def param = [:]
+        def osMap = [:]
 
-        param.Cabecalho = [:]
-        param.Cabecalho.with {
-            cCodIntOS = fatura.id
+
+        String cidade = omieCliente.empresaCliente.endereco.cidade.nome + " (" + omieCliente.empresaCliente.endereco.cidade.estado.uf + ")"
+
+        osMap.Cabecalho = [:]
+        osMap.Cabecalho.with {
+            cCodIntOS = fatura.id.toString()
             cEtapa = "20"
             dDtPrevisao = fatura.dataVencimento.format('dd/MM/yyyy')
             nCodCli = omieCliente.codigoIntegracao
-            nQtdeParc = 0
+            nQtdeParc = 1
 
         }
-        param.Departamentos = []
-        param.Email = [:]
-        param.Email.with {
+        osMap.Departamentos = []
+        osMap.Email = [:]
+        osMap.Email.with {
             cEnvBoleto = "N"
             cEnvLink = "S"
-            cEnviarPara = estabelecimento.email
+            cEnviarPara = omieCliente.empresaCliente.email
         }
-        param.InformacoesAdicionais = []
-        param.ServicosPrestados = [:]
-        param.ServicosPrestados.with {
+        osMap.InformacoesAdicionais = [:]
+        osMap.InformacoesAdicionais.with {
+            cCidPrestServ = cidade
+            cDadosAdicNF = "OS incluida via API"
+            cCodCateg = "1.01.02"
+            nCodCC = 441783796
+        }
+
+        def servPrest = [:]
+
+        servPrest.with {
             cCodServLC116 = "10.05"
             cCodServMun = "82.99-7-02"
             cDadosAdicItem = "Serviços prestados"
@@ -109,9 +116,10 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
             nQtde = 1
             nValUnit = fatura.valorTotal
         }
-        param.ServicosPrestados.impostos = [:]
 
-        param.ServicosPrestados.impostos {
+        servPrest.impostos = [:]
+
+        servPrest.impostos.with {
 
             cFixarCOFINS = ""
             cFixarCSLL = ""
@@ -132,7 +140,9 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
             nValorPIS = 0
         }
 
-        dataMap.param = param
+        osMap.ServicosPrestados = [ servPrest ]
+
+        dataMap.param = [ osMap ]
 
         ResponseData responseData = integrationMessengerService.postAsJSON(omieConfig.ordemServico.endpoint, TipoMensagem.OMIE_INCLUIR_OS, dataMap)
 
@@ -154,7 +164,7 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
                 omieStatusOS = new OmieStatusOrdemServico()
                 omieStatusOS.with {
                     codigo = responseData.json.cCodStatus
-                    descricao = responseData.json.cCodStatus
+                    descricao = responseData.json.cDescStatus
                 }
                 omieStatusOS.save(flush: true)
             }

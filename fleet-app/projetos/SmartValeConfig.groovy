@@ -137,8 +137,16 @@ faturamento {
                     endpoint = "https://app.omie.com.br/api/v1/geral/clientes/"
                 }
 
+                categorias {
+                    endpoint = "https://app.omie.com.br/api/v1/geral/categorias/"
+                }
+
                 ordemServico {
                     endpoint = "https://app.omie.com.br/api/v1/servicos/os/"
+                }
+
+                ordemServicoFaturamento {
+                    endpoint = "https://app.omie.com.br/api/v1/servicos/osp/"
                 }
 
             }

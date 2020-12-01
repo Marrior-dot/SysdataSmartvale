@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.proc.faturamento.notafiscal
 
+import com.sysdata.gestaofrota.proc.faturamento.notafiscal.integracao.omie.OmieIntegradorNotaFiscalService
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
