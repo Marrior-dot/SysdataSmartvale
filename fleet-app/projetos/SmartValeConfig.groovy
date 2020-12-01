@@ -122,7 +122,36 @@ faturamento {
         }
 
         notaFiscal {
-            descriminacaoServicos = 'SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valorConsumido}||${taxas}||VALOR FINAL: ${valorTotal}|'
+
+            gerar = true
+            gerador = "omieIntegradorNotaFiscalService"
+
+            omie {
+
+                chavesAcesso {
+                    appKey = "1252908413757"
+                    appSecret = "bbb0fddfb5ebb06f59aad5fc4ccc2a57"
+                }
+
+                clientes {
+                    endpoint = "https://app.omie.com.br/api/v1/geral/clientes/"
+                }
+
+                categorias {
+                    endpoint = "https://app.omie.com.br/api/v1/geral/categorias/"
+                }
+
+                ordemServico {
+                    endpoint = "https://app.omie.com.br/api/v1/servicos/os/"
+                }
+
+                ordemServicoFaturamento {
+                    endpoint = "https://app.omie.com.br/api/v1/servicos/osp/"
+                }
+
+            }
+
+            //descriminacaoServicos = 'SERVIÇO DE GERENCIAMENTO DO ABASTECIMENTO DA FROTA DE VEÍCULOS ATRAVÉS|DE CARTÃO ELETRÔNICO||VALOR CONSUMIDO: ${valorConsumido}||${taxas}||VALOR FINAL: ${valorTotal}|'
         }
 
     }
