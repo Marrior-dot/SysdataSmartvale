@@ -179,7 +179,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
 
         // Relatórios
-        [pattern: '/projecaoReembolso/**',                  access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB']],
+        [pattern: '/projecaoReembolsoRelatorio/**',                  access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB']],
 
 ]
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"

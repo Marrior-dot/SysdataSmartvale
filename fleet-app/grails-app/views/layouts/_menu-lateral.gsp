@@ -126,25 +126,27 @@
             </sec:ifAnyGranted>
 
 
-            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH, ROLE_ESTAB">
 
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         %{--<li class="controller"><g:link  class="submenu-logado"  controller="reportViewer">Relatórios</g:link></li>--}%
 
-                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
+                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_ESTAB">
                             <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolsoRelatorio">Projeção de Reembolso</g:link></li>
                         </sec:ifAnyGranted>
 
-                        <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutosRelatorio">Consumo de Combustíveis</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenhoRelatorio">Demonstrativo Desempenho</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="controleMensalCargasRelatorio">Controle Mensal de Cargas</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentosRelatorio">Base de Estabelecimentos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionariosRelatorio">Base de Funcionários</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentosRelatorio">Base de Equipamentos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculosRelatorio">Base de Veículos</g:link></li>
-                        <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Frota</g:link></li>
+                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+                            <li class="controller"><g:link  class="submenu-logado"  controller="consumoProdutosRelatorio">Consumo de Combustíveis</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="demonstrativoDesempenhoRelatorio">Demonstrativo Desempenho</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="controleMensalCargasRelatorio">Controle Mensal de Cargas</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="baseEstabelecimentosRelatorio">Base de Estabelecimentos</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionariosRelatorio">Base de Funcionários</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentosRelatorio">Base de Equipamentos</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculosRelatorio">Base de Veículos</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Frota</g:link></li>
+                        </sec:ifAnyGranted>
 
                         %{--
                                                 <sec:ifAnyGranted roles="ROLE_PROC">
