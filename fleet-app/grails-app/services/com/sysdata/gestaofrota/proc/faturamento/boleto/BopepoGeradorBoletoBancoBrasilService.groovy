@@ -55,39 +55,19 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         enderecoSac.setNumero(empresa.endereco.numero)
         sacado.addEndereco(enderecoSac)
 
-/*
-        SacadorAvalista sacadorAvalista = new SacadorAvalista("JRimum Enterprise", "00.000.000/0001-91");
-
-        // Informando o endereço do sacador avalista.
-        EnderecoBopepo enderecoSacAval = new EnderecoBopepo();
-        enderecoSacAval.setUF(UnidadeFederativa.DF);
-        enderecoSacAval.setLocalidade("Brasília");
-        enderecoSacAval.setCep(new CEP("59000-000"));
-        enderecoSacAval.setBairro("Grande Centro");
-        enderecoSacAval.setLogradouro("Rua Eternamente Principal");
-        enderecoSacAval.setNumero("001");
-        sacadorAvalista.addEndereco(enderecoSacAval);
-*/
-
         /*
          * INFORMANDO OS DADOS SOBRE O TÍTULO.
          */
 
-        // Informando dados sobre a conta bancária do título.
-        ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create())
-        contaBancaria.setNumeroDaConta(new NumeroDaConta(boletoConfig.conta.toInteger(), boletoConfig.dvConta))
-        contaBancaria.setCarteira(new Carteira(boletoConfig.carteira.numero as int))
-        contaBancaria.setAgencia(new Agencia(boletoConfig.agencia as int, boletoConfig.dvAgencia))
 
         def nossoNumero = (boletoConfig.carteira.numero in ["12", "15", "17"]) ?
                             sprintf("%07d%010d", boletoConfig.convenio as int, boleto.id) :
                             sprintf("%07d%010d", 0, 0)
 
 
-        Titulo titulo = new Titulo(contaBancaria, sacado, cedente, null)
+        Titulo titulo = new Titulo(new ContaBancaria(), sacado, cedente, null)
         titulo.setNumeroDoDocumento(boleto.id.toString())
         titulo.setNossoNumero(nossoNumero)
-        //titulo.setDigitoDoNossoNumero("")
         titulo.setValor(boleto.valor);
         titulo.setDataDoDocumento(boleto.dateCreated)
         titulo.setDataDoVencimento(boleto.dataVencimento)
@@ -99,23 +79,23 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         titulo.setAcrecimo(BigDecimal.ZERO)
         titulo.setValorCobrado(BigDecimal.ZERO)
 
+        // Informando dados sobre a conta bancária do título.
+        ContaBancaria contaBancaria = titulo.getContaBancaria()
+        contaBancaria.setBanco(BancosSuportados.BANCO_DO_BRASIL.create())
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(boletoConfig.convenio as int))
+        contaBancaria.setCarteira(new Carteira(boletoConfig.carteira.numero as int))
+        contaBancaria.setAgencia(new Agencia(boletoConfig.agencia as int, boletoConfig.dvAgencia))
+
         /*
          * INFORMANDO OS DADOS SOBRE O BOLETO.
          */
         BoletoBopepo boletoBopepo = new BoletoBopepo(titulo)
 
-        boletoBopepo.setLocalPagamento("Pagável preferencialmente em Banco do Brasil ou em qualquer Banco até o Vencimento.");
-        //boletoBopepo.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor cobrado não é o esperado, aproveite o DESCONTÃO!");
-/*
-        boletoBopepo.setInstrucao1("PARA PAGAMENTO 1 até Hoje não cobrar nada!");
-        boletoBopepo.setInstrucao2("PARA PAGAMENTO 2 até Amanhã Não cobre!");
-        boletoBopepo.setInstrucao3("PARA PAGAMENTO 3 até Depois de amanhã, OK, não cobre.");
-        boletoBopepo.setInstrucao4("PARA PAGAMENTO 4 até 04/xx/xxxx de 4 dias atrás COBRAR O VALOR DE: R$ 01,00");
-        boletoBopepo.setInstrucao5("PARA PAGAMENTO 5 até 05/xx/xxxx COBRAR O VALOR DE: R$ 02,00");
-        boletoBopepo.setInstrucao6("PARA PAGAMENTO 6 até 06/xx/xxxx COBRAR O VALOR DE: R$ 03,00");
-        boletoBopepo.setInstrucao7("PARA PAGAMENTO 7 até xx/xx/xxxx COBRAR O VALOR QUE VOCÊ QUISER!");
-        boletoBopepo.setInstrucao8("APÓS o Vencimento, Pagável Somente na Rede X.");
-*/
+        boletoBopepo.setLocalPagamento("Pagável em qualquer Banco")
+        boletoBopepo.addTextosExtras("txtRsEspecie", "R\$")
+        boletoBopepo.addTextosExtras("txtFcEspecie", "R\$")
+
+
 
         boleto.linhaDigitavel = boletoBopepo.linhaDigitavel.write()
         boleto.titulo = boletoBopepo.titulo.numeroDoDocumento
@@ -127,7 +107,9 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
          */
         // Instanciando um objeto "BoletoViewer", classe responsável pela
         // geração do boleto bancário.
-        BoletoViewer boletoViewer = new BoletoViewer(boletoBopepo)
+
+        def templateFile = new File("boletoEnhanceTemplate.pdf")
+        BoletoViewer boletoViewer = new BoletoViewer(boletoBopepo, templateFile)
 
         String baseDir = grailsApplication.config.projeto.arquivos.baseDir
 

@@ -82,7 +82,7 @@ class SpecArquivoRemessaBancoBrasil {
             [name: "ufPagador", size: 2],
             [name: "observacoesMensagensAvalista", size: 40, value: ""],
             [name: "diasProtestoNegativacao", size: 2, value: ""],
-            [name: "indicadorRecebimentoParcial", size: 1, value: "N"],
+            [name: "indicadorRecebimentoParcial", size: 1, value: ""],
             [name: "sequencialRegistro", size: 6, datatype: FieldDataType.INTEGER]
         ]
     )
