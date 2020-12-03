@@ -79,6 +79,17 @@ administradora {
 
     anosValidadeCartao = 2
 
+    endereco {
+        cep = "44051-900"
+        logradouro = "AV GOVERNADOR JOÃO DURVAL CARNEIRO"
+        numero = "3665"
+        complemento = "ED MULTIPLACE SALA 915"
+        bairro = "SÃO JOAO"
+        cidade = "Feira de Santana"
+        estado = "BA"
+    }
+
+
 }
 
 cartao {

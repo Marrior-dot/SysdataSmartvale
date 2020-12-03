@@ -95,7 +95,13 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         boletoBopepo.addTextosExtras("txtRsEspecie", "R\$")
         boletoBopepo.addTextosExtras("txtFcEspecie", "R\$")
 
+        // Endereço Beneficiário
+        def logradouro = Util.normalize(adminConfig.endereco.logradouro)
+        def numero = adminConfig.endereco.numero
+        def bairro = Util.normalize(adminConfig.endereco.bairro)
+        def cidade = Util.normalize(adminConfig.endereco.cidade)
 
+        boletoBopepo.addTextosExtras("txtRsEnderecoCedente", "${logradouro}, ${numero} - ${bairro} - ${cidade}(${adminConfig.endereco.estado})")
 
         boleto.linhaDigitavel = boletoBopepo.linhaDigitavel.write()
         boleto.titulo = boletoBopepo.titulo.numeroDoDocumento
