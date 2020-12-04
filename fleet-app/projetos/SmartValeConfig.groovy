@@ -180,7 +180,8 @@ environments {
 
     development {
 
-        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        //cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         sftp {
             host = "localhost"
@@ -216,7 +217,7 @@ environments {
 
     homologation {
 
-        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         sftp {
             host = "172.17.17.2"
