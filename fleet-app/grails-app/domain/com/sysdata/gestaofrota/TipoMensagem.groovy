@@ -10,7 +10,9 @@ enum TipoMensagem {
 
     OMIE_CONSULTAR_CLIENTES("Consulta Clientes (Omie API)"),
     OMIE_INCLUIR_OS("Incluir Ordem Serviço (Omie API)"),
-    OMIE_CONSULTAR_OS("Consultar Ordem Serviço (Omie API)"),
+    OMIE_VALIDAR_OS("Validar Ordem Serviço (Omie API)"),
+
+    OMIE_FATURAR_OS("Faturar Ordem Serviço (Omie API)"),
     OMIE_LISTAR_CATEGORIAS("Listar Categorias (Omie API)")
 
 

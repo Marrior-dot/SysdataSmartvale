@@ -104,12 +104,14 @@ class FaturamentoCargaPedidoService implements ExecutableProcessing {
 
                 }
 
+/*
                 if (grailsApplication.config.projeto.faturamento.portador.notaFiscal.gerar) {
 
                     GeradorNotaFiscal geradorNotaFiscal = GeradorNotaFiscalFactory.gerador
                     geradorNotaFiscal.gerarNotaFiscal(faturaEmpresa)
 
                 }
+*/
 
             }
 
