@@ -70,6 +70,36 @@ environments {
 
         context = "/smartvale-hom"
     }
+
+    production {
+        nome = "SmartVale"
+        tipoPrograma = 7
+        parceiro = 2
+        tipoAdministradoraCartao = TipoAdministradoraCartao.BANPARA
+        tipoEmbossadora = TipoEmbossadora.PAYSMART
+
+        // ** DATABASE **
+        dbCreate = "update" // one of 'create', 'create-drop','update'
+        url = "jdbc:postgresql://172.16.100.12:5432/smartvale_production"
+        username = "smartvale_production"
+        password = "EC5Fsu3X6hSw/nqk"
+
+
+        // ** DATABASE **
+
+        /**
+         * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
+         * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
+         */
+        pasta = "smartvale"
+        //geradorCartao = NewGeradorCartaoService
+        corPrimaria = "#07A75A"
+        corSecundaria = "#696969"
+
+        context = "/smartvale"
+    }
+
+
 }
 
 administradora {
@@ -78,6 +108,17 @@ administradora {
     cnpj = "23685734000157"
 
     anosValidadeCartao = 2
+
+    endereco {
+        cep = "44051-900"
+        logradouro = "AV GOVERNADOR JOÃO DURVAL CARNEIRO"
+        numero = "3665"
+        complemento = "ED MULTIPLACE SALA 915"
+        bairro = "SÃO JOAO"
+        cidade = "Feira de Santana"
+        estado = "BA"
+    }
+
 
 }
 
@@ -169,7 +210,8 @@ environments {
 
     development {
 
-        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        //cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         sftp {
             host = "localhost"
@@ -205,7 +247,7 @@ environments {
 
     homologation {
 
-        cartao.embossing.cipher.combinedKey = "A7DAA1324C623EF2CB70704CC4D3F249"
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         sftp {
             host = "172.17.17.2"

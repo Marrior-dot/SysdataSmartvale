@@ -7,7 +7,6 @@ import com.sysdata.gestaofrota.TipoMensagem
 import com.sysdata.gestaofrota.http.ResponseData
 import com.sysdata.gestaofrota.integracao.omie.OmieCliente
 import com.sysdata.gestaofrota.integracao.omie.OmieOrdemServico
-import com.sysdata.gestaofrota.integracao.omie.OmieStatusOrdemServico
 import com.sysdata.gestaofrota.proc.faturamento.notafiscal.GeradorNotaFiscal
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
@@ -17,6 +16,7 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
 
     GrailsApplication grailsApplication
     IntegrationMessengerService integrationMessengerService
+    OmieStatusOSService omieStatusOSService
 
     private OmieCliente recuperarClienteEmOmie(Rh empresaCliente) {
 
@@ -95,6 +95,7 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
             cEnvBoleto = "N"
             cEnvLink = "S"
             cEnviarPara = omieCliente.empresaCliente.email
+            cEnvRecibo = "S"
         }
         osMap.InformacoesAdicionais = [:]
         osMap.InformacoesAdicionais.with {
@@ -148,34 +149,12 @@ class OmieIntegradorNotaFiscalService implements GeradorNotaFiscal {
 
         if (responseData.statusCode == 200) {
 
-
-/*
-            {
-                "cCodIntOS": "1606502110",
-                "nCodOS": 488948625,
-                "cNumOS": "000000000002117",
-                "cCodStatus": "0",
-                "cDescStatus": "Ordem de Serviço cadastrado com sucesso!"
-            }
-*/
-
-            OmieStatusOrdemServico omieStatusOS = OmieStatusOrdemServico.findByCodigo(responseData.json.cCodStatus)
-            if (!omieStatusOS) {
-                omieStatusOS = new OmieStatusOrdemServico()
-                omieStatusOS.with {
-                    codigo = responseData.json.cCodStatus
-                    descricao = responseData.json.cDescStatus
-                }
-                omieStatusOS.save(flush: true)
-            }
-
-
             OmieOrdemServico ordemServico = new OmieOrdemServico(fatura: fatura)
             ordemServico.with {
                 cliente = omieCliente
                 codigoOs = responseData.json.nCodOS
                 numeroOs = responseData.json.cNumOS
-                statusOs = omieStatusOS
+                statusOs = omieStatusOSService.getStatus(responseData.json.cCodStatus, responseData.json.cDescStatus)
             }
 
             ordemServico.save(flush: true)

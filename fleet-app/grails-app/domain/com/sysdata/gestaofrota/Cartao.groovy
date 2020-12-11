@@ -11,6 +11,7 @@ class Cartao {
     Date validade
     String cvv
     Integer via = 1
+    Embossing embossing
 
     static belongsTo = [portador: Portador]
 
@@ -22,6 +23,7 @@ class Cartao {
         arquivo(nullable: true)
         cvv nullable: false, blank: false, maxSize: 3
         via nullable: false
+        embossing nullable: true
     }
 
 
