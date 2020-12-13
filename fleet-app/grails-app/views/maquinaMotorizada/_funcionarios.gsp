@@ -1,4 +1,5 @@
-<script type="text/javascript" src="${resource(dir: 'js', file: 'plugins/bootbox/bootbox.min.js')}"></script>
+<asset:javascript src="bootbox/bootbox.min.js"></asset:javascript>
+
 <script type="text/javascript">
     var tabelaFuncionariosHabilitados;
 

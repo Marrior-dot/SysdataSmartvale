@@ -66,7 +66,7 @@ class VeiculoController  {
 
         if (veiculoInstance) {
             try {
-                def ret = veiculoService.save(veiculoInstance)
+                def ret = veiculoService.save(veiculoInstance, true)
 
                 if (ret.success) {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), veiculoInstance.id])}"

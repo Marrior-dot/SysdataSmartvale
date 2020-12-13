@@ -1,4 +1,6 @@
 package com.sysdata.gestaofrota
+
+import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.exception.ArquivoException
 import com.sysdata.gestaofrota.processamento.embossadoras.Embossadora
 import com.sysdata.gestaofrota.processamento.embossadoras.IntelCav
@@ -6,7 +8,7 @@ import com.sysdata.gestaofrota.processamento.embossadoras.PaySmart
 import grails.gorm.transactions.Transactional
 
 
-class GeracaoArquivoEmbossingService {
+class GeracaoArquivoEmbossingService implements ExecutableProcessing {
 
     def grailsApplication
 
@@ -132,5 +134,21 @@ class GeracaoArquivoEmbossingService {
 
     }
 
+    @Override
+    def execute(Date date) {
+        def loteEmbossingList = LoteEmbossing.where { status == StatusLoteEmbossing.CRIADO }
+                                            .list(sort: "dateCreated")
 
+        if (loteEmbossingList) {
+
+            loteEmbossingList.each { lote ->
+
+                lote.status = StatusLoteEmbossing.CRIADO
+                lote.save(flush: true)
+                log.info "Lote Embossing #${lote.id} processado"
+            }
+        } else
+            log.info "Não há Lotes Embossing para gerar arquivo"
+
+    }
 }
