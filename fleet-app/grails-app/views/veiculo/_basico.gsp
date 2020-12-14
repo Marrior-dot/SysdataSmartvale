@@ -2,9 +2,6 @@
 <%@ page import="com.sysdata.gestaofrota.MarcaVeiculo" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<script type="text/javascript" src="${resource(dir: 'js', file: 'complementoNomeEmbossing.js')}"></script>
-
-
 <g:form method="post">
     <g:hiddenField name="id" value="${veiculoInstance?.id}"/>
     <g:hiddenField name="version" value="${funcionarioInstance?.version}"/>
@@ -29,8 +26,7 @@
             <div class="row">
                 <div class="col-xs-3">
                     <bs:formField id="placa" class="placa" name="placa" label="Placa" required="required"
-                                  value="${veiculoInstance?.placa}"
-                                  onchange="updateNomeEmbossing('placa', 'marca.id')"></bs:formField>
+                                  value="${veiculoInstance?.placa}"></bs:formField>
                 </div>
 
                 <div class="col-xs-3">
@@ -38,7 +34,6 @@
                     <g:set var="marcas" value="${MarcaVeiculo.list(sort: 'nome')}"/>
                     <g:select name="marca.id" from="${marcas}" optionKey="id"
                               optionValue="nome" class="form-control"
-                              onchange="updateNomeEmbossing('placa', 'marca.id')"
                               noSelection="${['': 'Selecione uma marca...']}" value="${veiculoInstance?.marca?.id}"/>
 
                     <g:select name="marcas.abreviacao" from="${marcas}" style="visibility: hidden;"
@@ -112,7 +107,7 @@
 
                         <div class="input-group">
                             <span class="input-group-addon"
-                                  id="placa-modelo-addon">${veiculoInstance?.placa ?: "PLACA"} ${veiculoInstance?.marca?.abreviacao ?: "MODELO"}</span>
+                                  id="placa-modelo-addon">${veiculoInstance?.placa ?: "PLACA"} ${veiculoInstance?.marca?.abreviacao ?: "MARCA"}</span>
                             <g:set var="placaMarcaLength"
                                    value="${(veiculoInstance?.placa?.length() ?: 8) + (veiculoInstance?.marca?.abreviacao?.length() ?: 6) + 2}"/>
 
@@ -204,3 +199,4 @@
         </div>
     </div>
 </g:form>
+

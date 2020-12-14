@@ -67,7 +67,7 @@
 										 value="${Util.formattedDate(rhInstance?.dataInicioContrato)}"></g:textField>
 						</div>
 						<div class="form-group col-md-3">
-							<label for="dataFimContrato">Data Início</label>
+							<label for="dataFimContrato">Data Fim</label>
 							<g:textField name="dataFimContrato" class="form-control datepicker ${editable ? 'editable': ''}"
 										 value="${Util.formattedDate(rhInstance?.dataFimContrato)}"></g:textField>
 						</div>
