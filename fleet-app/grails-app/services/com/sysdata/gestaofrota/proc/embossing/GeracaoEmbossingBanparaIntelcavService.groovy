@@ -35,10 +35,16 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
                         numeroPedido: loteEmbossing.id
                     ]
 
-        writer.writeRecord("0", vars)
+        writer.writeRecord("H", vars)
     }
 
     private void writeCartao(writer, Cartao cartao) {
+        def vars = [
+                data: new Date().clearTime(),
+                numeroPedido: loteEmbossing.id
+        ]
+
+        writer.writeRecord("D", vars)
 
     }
 }
