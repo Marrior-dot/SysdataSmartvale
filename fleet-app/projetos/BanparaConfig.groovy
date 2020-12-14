@@ -83,9 +83,9 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/banpara_production"
-        username = "banpara_production"
-        password = "postgres"
+        url = "jdbc:postgresql://192.168.250.41/banparafrota_production"
+        username = "banparafrota_production"
+        password = "7xAh4RWyLrzUDsuh"
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
@@ -96,7 +96,7 @@ environments {
         corPrimaria = "#D9241B"
         corSecundaria = "#28156C"
 
-        context = "/banpara-hom"
+        context = "/banpara-frota"
     }
 }
 
