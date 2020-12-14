@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class EmbossingSpec extends Specification implements DomainUnitTest<Embossing> {
+class LoteEmbossingSpec extends Specification implements DomainUnitTest<LoteEmbossing> {
 
     def setup() {
     }

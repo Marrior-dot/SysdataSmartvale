@@ -6,8 +6,10 @@ import com.sysdata.xfiles.SpecRecord
 
 class SpecArquivoEmbossingBanparaIntelcav {
 
-    static final SpecRecord regHeader = new SpecRecord(id: "0", name: "Header do Arquivo",
+    static final SpecRecord regHeader = new SpecRecord(id: "H", name: "Header do Arquivo",
+        fieldsId: ["tipoRegistro"],
         fields: [
+            [name: "tipoRegistro", size: 1, value: "H"],
             [name: "banco", size: 3, value: "037"],
             [name: "produto", size: 1, value: "7"],
             [name: "subProduto", size: 1, value: "4"],
@@ -16,8 +18,10 @@ class SpecArquivoEmbossingBanparaIntelcav {
         ]
     )
 
-    static final SpecRecord regCombustivel = new SpecRecord(id: "1", name: "Registro de Combustível",
+    static final SpecRecord regCombustivel = new SpecRecord(id: "D", name: "Registro de Cartão",
+        fieldsId: ["tipoRegistro"],
         fields: [
+            [name: "tipoRegistro", size: 1, value: "D"],
             [name: "sequenciaCartao", size: 6],
             [name: "indic-primeira-linha", size: 1, value: ">"],
             [name: "empresa", size: 1, value: ">"],

@@ -133,6 +133,7 @@ environments {
 
     development {
 
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         reembolso {
             banpara {

@@ -1,9 +1,11 @@
 package com.sysdata.gestaofrota
 
-class Embossing {
+class LoteEmbossing {
 
     Date dateCreated
     User usuario
+    List<Arquivo> arquivos
+    StatusLoteEmbossing status = StatusLoteEmbossing.CRIADO
 
     static hasMany = [cartoes: Cartao]
 
