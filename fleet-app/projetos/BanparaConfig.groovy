@@ -83,7 +83,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/banparafrota_production"
+        url = "jdbc:postgresql://172.16.100.12/banparafrota_production"
         username = "banparafrota_production"
         password = "7xAh4RWyLrzUDsuh"
 
