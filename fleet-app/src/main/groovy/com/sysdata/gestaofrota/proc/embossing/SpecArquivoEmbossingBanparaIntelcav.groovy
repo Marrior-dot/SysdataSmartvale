@@ -10,11 +10,23 @@ class SpecArquivoEmbossingBanparaIntelcav {
         fieldsId: ["tipoRegistro"],
         fields: [
             [name: "tipoRegistro", size: 1, value: "H"],
+            [name: "sequencial", size: 6, datatype: FieldDataType.INTEGER],
+            [name: "versao", size: 2, value: "10"],
             [name: "banco", size: 3, value: "037"],
             [name: "produto", size: 1, value: "7"],
             [name: "subProduto", size: 1, value: "4"],
             [name: "data", size: 8, datatype: FieldDataType.DATE_TIME, format: "yyyyMMdd"],
-            [name: "numeroPedido", size: 4, datatype: FieldDataType.LONG]
+            [name: "numeroPedido", size: 5, datatype: FieldDataType.LONG]
+        ]
+    )
+
+    static final SpecRecord regTrailer = new SpecRecord(id: "T", name: "Trailer do Arquivo",
+        fieldsId: ["tipoRegistro"],
+        fields: [
+            [name: "tipoRegistro", size: 1, value: "T"],
+            [name: "sequencial", size: 6, datatype: FieldDataType.INTEGER],
+            [name: "fixo", size: 6, value: "TOTAL="],
+            [name: "totalCartoes", size: 6, datatype: FieldDataType.INTEGER]
         ]
     )
 
@@ -22,42 +34,25 @@ class SpecArquivoEmbossingBanparaIntelcav {
         fieldsId: ["tipoRegistro"],
         fields: [
             [name: "tipoRegistro", size: 1, value: "D"],
-            [name: "sequenciaCartao", size: 6],
-            [name: "indic-primeira-linha", size: 1, value: ">"],
-            [name: "empresa", size: 1, value: ">"],
-            [name: "filler1", size: 1, value: ""],
+            [name: "sequencial", size: 6, datatype: FieldDataType.INTEGER],
+            [name: "fixo1", size: 1, value: "\$"],
+            [name: "cartaoFormatado", size: 20],
+            [name: "fixo2", size: 1, value: "*"],
             [name: "orgao", size: 14],
-            [name: "indic-segunda-linha", size: 1, value: ">"],
-            [name: "renavam", size: 9, datatype: FieldDataType.INTEGER, value: 0],
-            [name: "filler2", size: 2, value: ""],
             [name: "placa", size: 10],
-            [name: "indic-terceira-linha", size: 1, value: ">"],
+            [name: "fixo3", size: 1, value: "*"],
             [name: "marca", size: 10],
-            [name: "filler3", size: 1, value: ""],
             [name: "modelo", size: 10],
-            [name: "indic-quarta-linha", size: 1, value: ">"],
+            [name: "fixo4", size: 1, value: "*"],
             [name: "combustivel", size: 10],
-            [name: "filler4", size: 1, value: ""],
-            [name: "filler5", size: 3, value: "VIA"],
-            [name: "filler6", size: 1, value: ""],
-            [name: "viaCartao1", size: 1, datatype: FieldDataType.INTEGER],
-            [name: "filler7", size: 1, value: ";"],
-            [name: "filler8", size: 1, value: "53"],
-            [name: "banco", size: 3, value: "037"],
-            [name: "agencia", size: 4, datatype: FieldDataType.INTEGER, value: 0],
-            [name: "conta", size: 11, datatype: FieldDataType.INTEGER, value: 0],
-            [name: "filler9", size: 1, value: "="],
-            [name: "reservado", size: 1, value: "0"],
-            [name: "titularidade", size: 1, value: "9"],
-            [name: "filler10", size: 1, value: "8"],
-            [name: "anoValidade", size: 2, datatype: FieldDataType.INTEGER],
-            [name: "mesValidade", size: 2, datatype: FieldDataType.INTEGER],
-            [name: "produto", size: 1, value: "7"],
-            [name: "subProduto", size: 1, value: "4"],
-            [name: "versaoTrilha", size: 1, value: "1"],
-            [name: "senhaCartao", size: 16],
-            [name: "viaCartao2", size: 1, datatype: FieldDataType.INTEGER],
-            [name: "filler10", size: 3, value: "? _"],
+            [name: "fixo5", size: 1, value: "%"],
+            [name: "trilha1", size: 65],
+            [name: "fixo6", size: 1, value: "?"],
+            [name: "fixo7", size: 1, value: ";"],
+            [name: "trilha2", size: 37],
+            [name: "fixo8", size: 1, value: "?"],
+            [name: "fixo9", size: 1, value: "|"],
+            [name: "pinBlock", size: 16],
         ]
     )
 }

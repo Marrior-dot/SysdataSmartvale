@@ -2,15 +2,17 @@ package com.sysdata.gestaofrota
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.exception.ArquivoException
+import com.sysdata.gestaofrota.proc.embossing.GeradorArquivoEmbossing
 import com.sysdata.gestaofrota.processamento.embossadoras.Embossadora
 import com.sysdata.gestaofrota.processamento.embossadoras.IntelCav
 import com.sysdata.gestaofrota.processamento.embossadoras.PaySmart
+import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
 
 class GeracaoArquivoEmbossingService implements ExecutableProcessing {
 
-    def grailsApplication
+    GrailsApplication grailsApplication
 
     private void gerarArquivoEmFileSystem(Arquivo arquivo) {
 
@@ -139,11 +141,34 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
         def loteEmbossingList = LoteEmbossing.where { status == StatusLoteEmbossing.CRIADO }
                                             .list(sort: "dateCreated")
 
+        def gerador = grailsApplication.config.projeto.cartao.embossing.gerador
+
+        if (!gerador || !grailsApplication.mainContext.containsBean(gerador))
+            throw new RuntimeException("Gerador arquivo embossing inexistente: ${gerador}")
+
+        GeradorArquivoEmbossing geradorArquivoEmbossing = grailsApplication.mainContext.getBean(gerador)
+
         if (loteEmbossingList) {
 
             loteEmbossingList.each { lote ->
 
-                lote.status = StatusLoteEmbossing.CRIADO
+                def fileName = geradorArquivoEmbossing.gerarNomeArquivo(lote)
+                println "FileName: $fileName"
+
+                Arquivo arquivoEmbossing = new Arquivo(
+                        nome: fileName,
+                        tipo: TipoArquivo.EMBOSSING,
+                        status: StatusArquivo.PROCESSANDO,
+                        nsa: Arquivo.nextNsa(TipoArquivo.EMBOSSING))
+                arquivoEmbossing.save(flush: true)
+
+                lote.arquivos << arquivoEmbossing
+
+                geradorArquivoEmbossing.gerarArquivoLoteEmbossing(lote)
+
+                arquivoEmbossing.status = StatusArquivo.GERADO
+                arquivoEmbossing.save(flush: true)
+                lote.status = StatusLoteEmbossing.ARQUIVO_GERADO
                 lote.save(flush: true)
                 log.info "Lote Embossing #${lote.id} processado"
             }

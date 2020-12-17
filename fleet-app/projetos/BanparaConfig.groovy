@@ -102,16 +102,20 @@ environments {
 
 administradora {
     nome = "BANPARA"
-    bin = "637233"
+    bin = "530370"
     anosValidadeCartao = 2
-
 }
 
 cartao {
     gerador = GeradorCartaoPadrao
+
     embossing {
+
         produto = "BANPARA FROTA"
         idCliente = "BANPR"
+
+        gerador = "geracaoEmbossingBanparaIntelcavService"
+
     }
 }
 
@@ -133,7 +137,7 @@ environments {
 
     development {
 
-        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
+        cartao.embossing.cipher.combinedKey = "C2385BF4F73B7029D6A410529101D3C2"
 
         reembolso {
             banpara {
@@ -168,17 +172,18 @@ environments {
 
         arquivos {
             baseDir = "/home/luiz/tmp/frota/banpara/"
-            paysmart {
+
+            intelcav {
                 dir {
-                    saida   = "paysmart/saida/"
-                    enviado = "paysmart/enviado/"
-                    enviar  = "paysmart_test/input"
+                    embossing = "intelcav/embossing/"
                 }
             }
         }
     }
 
     homologation {
+
+        cartao.embossing.cipher.combinedKey = "C2385BF4F73B7029D6A410529101D3C2"
 
         reembolso {
             banpara {
@@ -226,6 +231,8 @@ environments {
     }
 
     production {
+
+        cartao.embossing.cipher.combinedKey = "C2385BF4F73B7029D6A410529101D3C2"
 
         reembolso {
             banpara {

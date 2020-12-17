@@ -1,11 +1,6 @@
 package com.sysdata.gestaofrota
 
-
 import grails.converters.JSON
-import grails.orm.PagedResultList
-
-import java.text.SimpleDateFormat
-
 
 class ArquivoController {
 
@@ -69,13 +64,19 @@ class ArquivoController {
 	}
 	
 	def downloadFile() {
-		Arquivo arquivoInstance=Arquivo.get(params.long('id'))
-		String conteudo = new String(arquivoInstance.conteudoText)
-		if(conteudo){
-			response.setContentLength(conteudo.size())
-			response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
-			response.outputStream<<conteudo
-		}else
+		Arquivo arquivoInstance = Arquivo.get(params.long('id'))
+
+		def conteudo
+		if (arquivoInstance.conteudoText) {
+
+			conteudo = new String(arquivoInstance.conteudoText)
+			if(conteudo){
+				response.setContentLength(conteudo.size())
+				response.setHeader("Content-Disposition","attachment;filename=${arquivoInstance.nome}")
+				response.outputStream<<conteudo
+			}else
+				response.sendError(404)
+		} else
 			response.sendError(404)
 	}
 
