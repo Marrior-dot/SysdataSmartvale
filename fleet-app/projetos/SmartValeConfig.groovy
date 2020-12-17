@@ -96,7 +96,7 @@ environments {
         corPrimaria = "#07A75A"
         corSecundaria = "#696969"
 
-        context = "/smartvale"
+        context = "/smartvale-frota"
     }
 
 
