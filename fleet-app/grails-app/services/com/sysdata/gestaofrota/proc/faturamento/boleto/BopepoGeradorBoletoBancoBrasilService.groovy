@@ -103,6 +103,11 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
 
         boletoBopepo.addTextosExtras("txtRsEnderecoCedente", "${logradouro}, ${numero} - ${bairro} - ${cidade}(${adminConfig.endereco.estado})")
 
+        def agenciaConta = "${boletoConfig.agencia}-${boletoConfig.dvAgencia} / ${boletoConfig.conta}-${boletoConfig.dvConta}"
+        boletoBopepo.addTextosExtras("txtRsAgenciaContaBeneficiario", agenciaConta)
+        boletoBopepo.addTextosExtras("txtFcAgenciaContaBeneficiario", agenciaConta)
+
+
         boleto.linhaDigitavel = boletoBopepo.linhaDigitavel.write()
         boleto.titulo = boletoBopepo.titulo.numeroDoDocumento
         boleto.nossoNumero = boletoBopepo.titulo.nossoNumero
