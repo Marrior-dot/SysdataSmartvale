@@ -102,9 +102,8 @@ environments {
 
 administradora {
     nome = "BANPARA"
-    bin = "637233"
+    bin = "530370"
     anosValidadeCartao = 2
-
 }
 
 cartao {
