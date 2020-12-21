@@ -101,13 +101,6 @@
                 <li class="controller"><g:link class="submenu-logado" controller="user" action="meusDados" id="${sec.loggedInUserInfo(field: 'id')}">&nbsp;Meus Dados</g:link></li>
                 <li class="controller"><g:link class="submenu-logado" controller="transacao" action="index">&nbsp;Transações</g:link></li>
 
-                <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-file-text"></i>  Relatório <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolsoRelatorio">Projeção de Reembolso</g:link></li>
-                    </ul>
-                </li>
-
             </sec:ifAnyGranted>
 
             <sec:ifAnyGranted roles="ROLE_RH">
@@ -161,6 +154,11 @@
                 </li>
 
 
+            </sec:ifAnyGranted>
+
+
+            <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-phone-square"></i> Central de Atendimento<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -169,6 +167,7 @@
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
+
             </sec:ifAnyGranted>
 
             <sec:ifAnyGranted roles="ROLE_RH, ROLE_ESTAB">
