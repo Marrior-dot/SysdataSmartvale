@@ -25,9 +25,6 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
 
         def fileName = sprintf("BANP_74_%05d_%s.txt", loteEmbossing.id, new Date().clearTime().format('yyyyMMdd'))
 
-        println "FileDIr: $fileDir"
-        println "FileName: $fileName"
-
         return fileDir + fileName
     }
 
@@ -86,12 +83,12 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
         def vars = [
                         sequencial: ++counter,
                         cartaoFormatado: cartao.numeroFormatado,
-                        orgao: cartao.portador.unidade.rh.nomeFantasia.toUpperCase(),
+                        orgao: Util.normalize(cartao.portador.unidade.rh.nomeFantasia.toUpperCase()),
                         placa: veiculo.placa,
-                        marca: veiculo.marca.abreviacao.toUpperCase(),
-                        modelo: veiculo.modelo.toUpperCase(),
+                        marca: Util.normalize(veiculo.marca.abreviacao.toUpperCase()),
+                        modelo: Util.normalize(veiculo.modelo.toUpperCase()),
                         combustivel: veiculo.tipoAbastecimento.nome.toUpperCase(),
-                        trilha1: "B${cartao.numero}^${sprintf('%-26s', cartao.portador.nomeEmbossing)}^${cartao.validade.format('yyMM')}5060000000000000",
+                        trilha1: "B${cartao.numero}^${sprintf('%-26s', Util.normalize(cartao.portador.nomeEmbossing))}^${cartao.validade.format('yyMM')}5060000000000000",
                         trilha2: "${cartao.numero}=${cartao.validade.format('yyMM')}5060000000000000",
                         pinBlock: this.tdesChipher.encrypt(cartao.senha)
                     ]

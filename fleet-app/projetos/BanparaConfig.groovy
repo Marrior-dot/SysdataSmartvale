@@ -220,11 +220,9 @@ environments {
 
         arquivos {
             baseDir = "/usr/local/frota/banpara/"
-            paysmart {
+            intelcav {
                 dir {
-                    saida   = "paysmart/saida/"
-                    enviado = "paysmart/enviado/"
-                    enviar  = "paysmart_test/input"
+                    embossing = "intelcav/embossing/"
                 }
             }
         }
@@ -270,11 +268,9 @@ environments {
 
         arquivos {
             baseDir = "/usr/local/frota/banpara/"
-            paysmart {
+            intelcav {
                 dir {
-                    saida   = "paysmart/saida/"
-                    enviado = "paysmart/enviado/"
-                    enviar  = "paysmart_prod/input"
+                    embossing = "intelcav/embossing/"
                 }
             }
         }
