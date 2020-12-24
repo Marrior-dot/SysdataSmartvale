@@ -69,7 +69,9 @@ $(document).ready(function () {
         mostrarTaxa($(this));
     });
 
-    $("#tipo").click(function() {
+
+    $("#pedidoProgramado").click(function(e) {
+
         var checked = $(this).is(":checked");
 
         var divInstancia = $("div#instancia");
@@ -85,14 +87,10 @@ $(document).ready(function () {
                 carregarAgenda();
             });
 
-
         } else
             carregarPedidoInstancia();
 
     });
-
-
-
 
     $("#btnAdd").click(function() {
         carregarAgenda();

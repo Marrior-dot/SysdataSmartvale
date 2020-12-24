@@ -274,6 +274,23 @@ class PostoCombustivelController {
         render(template: 'reembolso', model: [reembolsoInstance: reembolsoCommand])
     }
 
+    def manageReembolsoDias() {
+        ReembolsoDias reembolsoDias
+        if (params.id && params.id ==~ /\d+/) {
+            reembolsoDias = ReembolsoDias.get(params.id as long)
+            render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
+            return
+        } else {
+            if (params.parId && params.parId ==~ /\d+/) {
+                PostoCombustivel empresa = PostoCombustivel.get(params.parId as long)
+                reembolsoDias = new ReembolsoDias(participante: empresa)
+                render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
+            } else
+                render status: 500, text: "ID da Empresa não é um número válido (${params.parId})!"
+
+            return
+        }
+    }
 
     def manageReembolsoSemanal() {
         def reembolsoCommand
@@ -341,7 +358,10 @@ class PostoCombustivelController {
         def retorno
 
         def listReembolsos = postoCombustivelInstance.reembolsos
-        if (!postoCombustivelInstance.tipoReembolso || postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS || listReembolsos.size() == 0) {
+        if (!postoCombustivelInstance.tipoReembolso ||
+                postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS ||
+                    listReembolsos.size() == 0) {
+
             if (inicioIntervalo <= fimIntervalo) {
 
                 def reembolsos = listReembolsos.findAll {
@@ -375,6 +395,32 @@ class PostoCombustivelController {
             retorno = [type: "error", message: "Reembolso inválido! Já existe(m) reembolso(s) definido(s)"]
 
         render retorno as JSON
+
+    }
+
+    def saveReembolsoDias() {
+        ReembolsoDias reembolsoDias
+
+        def op = ""
+
+        def ret = []
+        if (params.id && params.id ==~ /\d+/) {
+            reembolsoDias = ReembolsoDias.get(params.id.toLong())
+            op = "inserido"
+        }
+        else {
+            reembolsoDias = new ReembolsoDias()
+            op = "alterado"
+        }
+
+        reembolsoDias.properties = params
+        if (reembolsoDias.save(flush: true))
+            ret = [type: "ok", message: "Reembolso Dias #${reembolsoDias.id} " + op]
+        else
+            ret = [type: "error", message: reembolsoDias.errors.allErrors*.defaultMessage.join(";")]
+
+
+        render ret as JSON
 
     }
 

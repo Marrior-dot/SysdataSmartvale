@@ -83,7 +83,6 @@
                             <p class="form-control-static"><strong>${pedidoCargaInstance?.taxa ? 'Taxa Administração' : 'Taxa Desconto'}</strong> ${pedidoCargaInstance?.taxa ?: pedidoCargaInstance.taxaDesconto}%</p>
                         </div>
 
-
                     </div>
 
                 </div>
