@@ -9,10 +9,15 @@ class TDESChipherSpec extends Specification {
 
         when:
 
-            TDESChipher tdesChipher = new TDESChipher("CBC", "9DDCF7CDC1B96725835D58AB404C62D0")
+            TDESChipher tdesChipher = new TDESChipher("CBC", "C2385BF4F73B7029D6A410529101D3C2")
 
+/*
             println "Original: 7641"
             def hexCipher = tdesChipher.encrypt("7641")
+*/
+
+            //println "Original: 7641"
+            def hexCipher = "5fc6a87fbdc21f73"
 
             println "Cifrado: $hexCipher"
 
@@ -20,7 +25,7 @@ class TDESChipherSpec extends Specification {
             println "Decifrado: $plainText"
 
         then:
-            plainText == "7641"
+            plainText == "7141"
 
 
     }
