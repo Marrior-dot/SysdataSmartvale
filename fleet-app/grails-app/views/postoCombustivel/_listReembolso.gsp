@@ -14,22 +14,32 @@
 <br/>
 
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-md-3">
         <label for="tipoReembolso">Tipo Reembolso</label>
-        <g:radioGroup class="enable" name="tipoReembolso"
-                      labels="${TipoReembolso.values()*.nome}"
-                      values="${TipoReembolso.values()}"
-                      value="${postoCombustivelInstance?.tipoReembolso}">
-            <p>${it.radio} ${it.label}</p>
-        </g:radioGroup>
+
+        <g:select name="tipoReembolso"
+                  class="form-control enable"
+                  from="${TipoReembolso.values()}"
+                  optionValue="nome"
+                  value="${postoCombustivelInstance?.tipoReembolso}"></g:select>
+
+
     </div>
+
+    <g:if test="${!postoCombustivelInstance?.reembolsos || postoCombustivelInstance?.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS}">
+        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+            <div class="col-md-3">
+                <button type="button" class="btn btn-default" onclick="openModal(0);">
+                    <i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar Reembolso
+                </button>
+            </div>
+        </sec:ifAnyGranted>
+    </g:if>
+
+
+
 </div>
 
-<sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-    <button type="button" class="btn btn-default" onclick="openModal(0);">
-        <i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar Reembolso
-    </button>
-</sec:ifAnyGranted>
 
 
 
@@ -64,14 +74,19 @@
 
 </div>
 
+<div id="divDias">
+</div>
+
 
 <asset:javascript src="plugins/bootbox/bootbox.min.js"></asset:javascript>
 
 <script type="text/javascript">
 
-    var rbSemanalTable, rbIntervaloTable, rbDiasTable
+    var rbSemanalTable, rbIntervaloTable
 
     var checked = null;
+
+    var errorList = [];
 
     $(function () {
 
@@ -103,35 +118,33 @@
             ]
         });
 
-        rbDiasTable = $("#rbDiasTable").DataTable({
-            "ajax": {
-                "url": "${createLink(controller:'postoCombustivel',action:'getDiasReembolso')}",
-                "data": {"id":${postoCombustivelInstance?.id}},
-                "dataSrc": "results"
-            },
-            "columns": [
-                {"data": "dias"},
-                {"data": "acao"}
-            ]
-        });
-
-
         checked = $("input[name='tipoReembolso']:checked");
 
-        <g:if test="${postoCombustivelInstance?.tipoReembolso==TipoReembolso.INTERVALOS_MULTIPLOS}">
-        $("#divIntervalo").show();
-        $("#divSemanal").hide();
+        <g:if test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS}">
+            $("#divIntervalo").show();
+            $("#divSemanal").hide();
+            $("#divDias").hide();
         </g:if>
 
-        <g:elseif test="${postoCombustivelInstance?.tipoReembolso==TipoReembolso.SEMANAL}">
-        $("#divIntervalo").hide();
-        $("#divSemanal").show();
+        <g:elseif test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.SEMANAL}">
+            $("#divIntervalo").hide();
+            $("#divSemanal").show();
+            $("#divDias").hide();
+        </g:elseif>
+
+        <g:elseif test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.DIAS_TRANSCORRIDOS}">
+            $("#divDias").show();
+            $("#divIntervalo").hide();
+            $("#divSemanal").hide();
+
+            loadReembDias("${postoCombustivelInstance?.id}");
         </g:elseif>
 
         <g:else>
-        $("#divIntervalo").hide();
-        $("#divSemanal").hide();
-        checked = null;
+            $("#divIntervalo").hide();
+            $("#divSemanal").hide();
+            $("#divDias").hide();
+            checked = null;
         </g:else>
 
 
@@ -216,16 +229,21 @@
         });
     }
 
-    function openReembDias(html) {
+    function openReembDiasDialog(html) {
         bootbox.dialog({
             title: "Dias Transcorridos",
             message: html,
             buttons: {
+                cancel: {
+                    label: "Cancelar",
+                    className: "btn-cancel"
+                },
+
                 success: {
                     label: "Salvar",
                     className: "btn-success",
                     callback: function () {
-                        saveReembDias();
+                        return saveReembDias();
                     }
                 }
             }
@@ -267,13 +285,13 @@
 
     }
 
-    function loadReembDias(rbId) {
+    function openReembDias(rbId) {
         $.ajax({
             type: 'POST',
             url: "${createLink(controller:'postoCombustivel', action: 'manageReembolsoDias')}",
-            data: {  parId: "${postoCombustivelInstance?.id}", id: rbId },
+            data: {parId: "${postoCombustivelInstance?.id}", id: rbId},
             success: function (data) {
-                openReembDias(data);
+                openReembDiasDialog(data);
             },
             statusCode: {
                 404: function () {
@@ -293,7 +311,7 @@
             else if (checked.val() == 'INTERVALOS_MULTIPLOS')
                 loadReembIntervalo(rbId)
             else if (checked.val() == 'DIAS_TRANSCORRIDOS')
-                loadReembDias(rbId)
+                openReembDias();
 
         } else {
             alert("Selecione primeiramente um Tipo de Reembolso!");
@@ -332,38 +350,6 @@
         }
     }
 
-    function saveReembDias() {
-
-        var hasError = false;
-        $(".required").each(function () {
-            if ($(this).val() == "") {
-                addErrorList("Campo [" + $(this).parent().get(0).childNodes[0].innerHTML + "] obrigatório");
-                hasError = true;
-            }
-        });
-
-
-        if (! hasError) {
-            $.post("${createLink(action: 'saveReembolsoDias')}", $("#reembDiasForm").serialize())
-                    .done(function(o) {
-                        if (o.type == "ok") {
-                            alert(o.message);
-                            rbDiasTable.ajax.reload();
-                        }
-                        else if (o.type == "error")
-                            alert(o.message);
-
-                    })
-                    .fail(function(jqXHR, textStatus, errorThrown) {
-                        alert(textStatus);
-                    });
-
-        } else
-            showErrorList();
-
-    }
-
-
     function saveReembSemanal() {
         hasError = false;
         $(".required").each(function () {
@@ -397,6 +383,72 @@
         } else {
             showErrorList();
         }
+    }
+
+    var saveReembDias = function () {
+
+        errorList = [];
+
+        var hasError = false;
+        $(".required").each(function () {
+            if ($(this).val() == "") {
+                addErrorList("Campo <strong>" + $(this).parent().get(0).childNodes[1].innerHTML + "</strong> obrigatório");
+                hasError = true;
+            }
+        });
+
+
+        if (!hasError) {
+            $.post("${createLink(action: 'saveReembolsoDias')}", $("#reembDiasForm").serialize())
+                    .done(function (o) {
+                        if (o.type == "ok") {
+                            alert(o.message);
+                            loadReembDias("${postoCombustivelInstance?.id}");
+                        }
+                        else if (o.type == "error")
+                            alert(o.message);
+
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus);
+                    })
+                    .always(function () {
+                        return true;
+                    });
+
+        } else {
+            showErrorList();
+            return false;
+        }
+    }
+
+    var loadReembDias = function(empId) {
+        let link = "${createLink(action: 'loadReembolsoDias')}";
+        $.get(link, {id: empId})
+            .done(function(gsp) {
+                $("#divDias").html(gsp);
+            })
+            .fail(function(err){
+                alert(err);
+            });
+    }
+
+    var addErrorList = function (err) {
+        if (typeof err != 'undefined')
+            errorList.push(err);
+    }
+
+    var showErrorList = function () {
+
+        let htmlError = "<div class='alert alert-danger' role='alert'>";
+
+        for (let i = 0; i < errorList.length; i++)
+            htmlError += "<span class='glyphicon glyphicon-exclamation-sign'></span> " + errorList[i] + "<br>";
+
+        htmlError += "</div>"
+
+        $(".error").html(htmlError);
+
     }
 
 
