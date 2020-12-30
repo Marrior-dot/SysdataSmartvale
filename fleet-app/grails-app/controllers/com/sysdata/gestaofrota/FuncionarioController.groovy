@@ -128,7 +128,13 @@ class FuncionarioController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionário'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: 'form', model: [
+                                            funcionarioInstance: funcionarioInstance,
+                                            unidadeInstance: funcionarioInstance.unidade,
+                                            action: Util.ACTION_EDIT,
+                                            tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular(),
+                                            editable: true
+                                ])
         }
     }
 

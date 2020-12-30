@@ -25,7 +25,7 @@
 
             <div class="row">
                 <div class="col-xs-3">
-                    <bs:formField id="placa" class="placa" name="placa" label="Placa" required="required"
+                    <bs:formField id="placa" class="placa editable" name="placa" label="Placa" required="required"
                                   value="${veiculoInstance?.placa}"></bs:formField>
                 </div>
 
@@ -33,20 +33,21 @@
                     <label for="marca.id">Marca</label>
                     <g:set var="marcas" value="${MarcaVeiculo.list(sort: 'nome')}"/>
                     <g:select name="marca.id" from="${marcas}" optionKey="id"
-                              optionValue="nome" class="form-control"
+                              optionValue="nome" class="form-control editable"
+                              required="required"
                               noSelection="${['': 'Selecione uma marca...']}" value="${veiculoInstance?.marca?.id}"/>
 
                     <g:select name="marcas.abreviacao" from="${marcas}" style="visibility: hidden;"
-                              optionValue="abreviacao" optionKey="id"/>
+                              optionValue="abreviacao" optionKey="id" class="editable"/>
                 </div>
 
                 <div class="col-xs-3">
-                    <bs:formField id="modelo" name="modelo" label="Modelo" required="required"
+                    <bs:formField id="modelo" name="modelo" label="Modelo" required="required" class="editable"
                                   value="${veiculoInstance?.modelo}"></bs:formField>
                 </div>
 
                 <div class="col-xs-3">
-                    <bs:formField id="anoFabricacao" type="number" class="anoFabricacao" name="anoFabricacao"
+                    <bs:formField id="anoFabricacao" type="number" class="anoFabricacao editable" name="anoFabricacao"
                                   label="Ano Fabricação" required="required" min="1950"
                                   value="${veiculoInstance?.anoFabricacao}"></bs:formField>
                 </div>
@@ -55,7 +56,7 @@
             <div class="row">
                 <div class="form-group col-md-3">
                     <label class="control-label" for="capacidadeTanque">Chassi *</label>
-                    <input type="text" class="form-control" id="chassi" name="chassi" value="${veiculoInstance?.chassi}"
+                    <input type="text" class="form-control editable" id="chassi" name="chassi" value="${veiculoInstance?.chassi}"
                            maxlength="30" required/>
                 </div>
 
@@ -63,7 +64,7 @@
                     <label class="control-label" for="capacidadeTanque">Capacidade Tanque *</label>
 
                     <div class="input-group">
-                        <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control maxValor"
+                        <input id="capacidadeTanque" name="capacidadeTanque" type="number" class="form-control maxValor editable"
                                value="${veiculoInstance?.capacidadeTanque}" min="0" maxlength="5" required>
                         <span class="input-group-addon">litros</span>
                     </div>
@@ -84,7 +85,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="tipoAbastecimento">Tipo de Combustível</label>
-                    <g:select name="tipoAbastecimento" optionValue="nome" class="form-control"
+                    <g:select name="tipoAbastecimento" optionValue="nome" class="form-control editable"
                               from="${com.sysdata.gestaofrota.TipoAbastecimento?.values()}"
                               value="${veiculoInstance?.tipoAbastecimento}"/>
                 </div>
@@ -127,7 +128,7 @@
                             <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(veiculoInstance?.unidade)?.list()}"
                                       value="${veiculoInstance?.categoria?.id}" required="required"
                                       noSelection="${['null': 'Selecione a categoria...']}"
-                                      optionKey="id" class="form-control" optionValue="nome"/>
+                                      optionKey="id" class="form-control editable" optionValue="nome"/>
                         </div>
                     </g:if>
 
@@ -142,7 +143,7 @@
                         <label for="portador.limiteTotal">Limite Total *</label>
 
                         <div class="input-group">
-                            <input class="form-control money"
+                            <input class="form-control money editable"
                                    id="portador.limiteTotal" name="portador.limiteTotal"
                                    value="${veiculoInstance?.portador?.limiteTotal}" required/>
                         </div>
