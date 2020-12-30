@@ -22,7 +22,7 @@ $(document).ready(function () {
     valorCategoria = $("input#valorCargaCategoria").val();
 
     pedId = $("input#id").val();
-    carregarPedidoInstancia();
+
 
     var defaultForm = $("form#defaultForm");
     //desabilita o formulario de ser submetido caso o botão 'enter' seja pressionado
@@ -37,6 +37,9 @@ $(document).ready(function () {
     });
 
     if (pedId !== "" && typeof pedId !== undefined) {
+
+        carregarPedidoInstancia();
+
         var vinculoCartao = $("#vinculoCartao").val();
         if (vinculoCartao === 'Funcionário') {
             $("div#pedidoFuncionarios").show();
@@ -84,7 +87,7 @@ $(document).ready(function () {
             $.get(relative + "pedidoCarga/loadPedidoProgramado", {id: pedId}, function(data) {
                 divProgramado.html(data);
 
-                carregarAgenda();
+                //carregarAgenda();
             });
 
         } else
