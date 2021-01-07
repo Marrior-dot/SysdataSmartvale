@@ -17,18 +17,7 @@ class PedidoCargaService {
 
         def hoje = new Date().clearTime()
 
-        if (pedidoCarga.instanceOf(PedidoCargaInstancia)) {
-            if (! pedidoCarga.dataCarga) {
-                ret.success = false
-                ret.message = "Data de Carga não pode nula!"
-                return ret
-            }
-            if (pedidoCarga.dataCarga < hoje) {
-                ret.success = false
-                ret.message = "Data de Carga não pode ser inferior ao dia de Hoje!"
-                return ret
-            }
-        }
+
 
         Unidade unidade = pedidoCarga.unidade
         pedidoCarga.usuario = springSecurityService.getCurrentUser() as User
@@ -140,9 +129,47 @@ class PedidoCargaService {
         } else
             rh.saldoDisponivel -= pedidoCarga.total
 
+        def saved = true
 
-        if (! pedidoCarga.save(flush: true)) {
+        if (pedidoCarga.instanceOf(PedidoCargaInstancia)) {
+            if (! pedidoCarga.dataCarga) {
+                ret.success = false
+                ret.message = "Data de Carga não pode nula!"
+                return ret
+            }
+            if (pedidoCarga.dataCarga < hoje) {
+                ret.success = false
+                ret.message = "Data de Carga não pode ser inferior ao dia de Hoje!"
+                return ret
+            }
+            saved = pedidoCarga.save(flush: true)
 
+        } else if (pedidoCarga.instanceOf(PedidoCargaProgramado)) {
+
+            PedidoCargaProgramado pedidoProgramado = (pedidoCarga as PedidoCargaProgramado)
+            pedidoProgramado.agendas = null
+
+            // Agenda Mensal
+            if (params.recorrencia == "1") {
+                params.findAll { it.key ==~ /agendas\[\d+\]/}.each { k, v ->
+                    if (v instanceof Map) {
+                        MensalAgendaPedido agendaMensal = new MensalAgendaPedido(v)
+                        pedidoProgramado.addToAgendas(agendaMensal)
+                        if (! agendaMensal.validate()) {
+                            ret.success = false
+                            ret.message = Util.formatDomainErrors(agendaMensal)
+                            return false
+                        }
+                    }
+                }
+                if (! ret.success)
+                    return ret
+
+            }
+            saved = pedidoProgramado.save(flush: true)
+        }
+
+        if (! saved) {
             rh.save(flush: true)
 
             ret.success = false
@@ -225,7 +252,9 @@ class PedidoCargaService {
 
         def ret = [:]
 
-        if (pedidoCarga.status == StatusPedidoCarga.NOVO) {
+        if ((pedidoCarga.instanceOf(PedidoCargaInstancia) && pedidoCarga.status == StatusPedidoCarga.NOVO) ||
+            (pedidoCarga.instanceOf(PedidoCargaProgramado) && pedidoCarga.statusProgramacao == StatusProgramacao.AGENDADO)
+        ) {
 
             def pedId = pedidoCarga.id
 

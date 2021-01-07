@@ -346,4 +346,21 @@ class Util {
         } else false
     }
 
+    static def formatDomainErrors(object) {
+        def errorMessages = []
+        if (object.hasErrors()) {
+            object.errors.allErrors.each {
+                def fieldError = (it.defaultMessage) =~ /\{\d+\}/
+                def error = it.defaultMessage
+                if (fieldError) {
+                    for (int i = 0; i < fieldError.size(); i++) {
+                        error = error.replace(fieldError[i], it.arguments[i].toString())
+                    }
+                }
+                errorMessages << error
+            }
+        }
+        return errorMessages
+    }
+
 }

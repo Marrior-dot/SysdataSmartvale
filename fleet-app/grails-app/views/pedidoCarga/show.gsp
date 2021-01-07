@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.StatusPedidoCarga" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.sysdata.gestaofrota.StatusProgramacao; com.sysdata.gestaofrota.PedidoCargaProgramado; com.sysdata.gestaofrota.PedidoCargaInstancia; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.StatusPedidoCarga" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -52,7 +52,9 @@
 
             <g:render template="form" model="${[pedidoCargaInstance: pedidoCargaInstance, action: Util.ACTION_VIEW]}"/>
 
-            <g:if test="${pedidoCargaInstance?.status == StatusPedidoCarga.NOVO}">
+            <g:if test="${(pedidoCargaInstance.instanceOf(PedidoCargaInstancia) && pedidoCargaInstance?.status == StatusPedidoCarga.NOVO) ||
+                    (pedidoCargaInstance.instanceOf(PedidoCargaProgramado) && pedidoCargaInstance?.statusProgramacao == StatusProgramacao.AGENDADO)
+            }">
 %{--                <g:actionSubmit action="edit" class="btn btn-default" value="${message(code: 'default.button.edit.label', default: 'Editar')}"/>--}%
 
                 <button type="submit" class="btn btn-danger"
@@ -69,6 +71,5 @@
     </div>
 </div>
 
-    <asset:javascript src="pedidoCarga.js"></asset:javascript>
 </body>
 </html>
