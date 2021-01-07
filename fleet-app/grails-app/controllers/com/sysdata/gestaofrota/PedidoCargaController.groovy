@@ -18,9 +18,7 @@ class PedidoCargaController {
         def criteria = {
             if (params.searchDataCarga) {
                 Date beginDay = params.date('searchDataCarga','dd/MM/yyyy').clearTime()
-                println beginDay
                 eq('dataCarga', beginDay)
-
             }
 
             if (params.searchDataPedido) {
@@ -28,7 +26,6 @@ class PedidoCargaController {
                 gt('dateCreated', beginDay)
                 lt('dateCreated', beginDay+1)
             }
-
 
             if (params?.searchStatus) {
                 eq('status', StatusPedidoCarga.valueOf(params.searchStatus.toString().toUpperCase()))
@@ -39,8 +36,8 @@ class PedidoCargaController {
         params.sort = "id"
         params.order = "desc"
 
-        def pedidoCargaInstanceList = PedidoCarga.createCriteria().list(params, criteria)
-        def pedidoCargaInstanceCount = PedidoCarga.createCriteria().count(criteria)
+        def pedidoCargaInstanceList = PedidoCargaInstancia.createCriteria().list(params, criteria)
+        def pedidoCargaInstanceCount = PedidoCargaInstancia.createCriteria().count(criteria)
 
         [pedidoCargaInstanceList : pedidoCargaInstanceList,
          pedidoCargaInstanceCount: pedidoCargaInstanceCount,
@@ -52,6 +49,20 @@ class PedidoCargaController {
          searchStatus            : params?.searchStatus]
     }
 
+    def listProgramados() {
+
+        def criteria = {}
+
+        def programadoList = PedidoCargaProgramado.createCriteria().list(params, criteria)
+        def programadoCount = PedidoCargaProgramado.createCriteria().count(criteria)
+
+        render template: "listProgramado",
+                model:[
+                        programadoList: programadoList,
+                        programadoCount: programadoCount,
+                    ]
+    }
+
     def create() {
         [pedidoCargaInstance: new PedidoCarga()]
     }
@@ -61,12 +72,18 @@ class PedidoCargaController {
         PedidoCarga pedidoCarga
         pedidoCarga = params.pedidoProgramado ? new PedidoCargaProgramado(params) : new PedidoCargaInstancia(params)
 
-        def ret = pedidoCargaService.save(pedidoCarga, params)
-        if (ret.success) {
-            flash.message = ret.message
-            redirect(action: "show", id: pedidoCarga.id)
-        } else {
-            flash.errors = ret.message
+        try {
+            def ret = pedidoCargaService.save(pedidoCarga, params)
+            if (ret.success) {
+                flash.message = ret.message
+                redirect(action: "show", id: pedidoCarga.id)
+            } else {
+                flash.error = ret.message
+                redirect(action: 'create')
+            }
+        } catch(e) {
+            log.error "Erro: $e"
+            flash.error = "Erro inesperado. Contatar suporte"
             redirect(action: 'create')
         }
     }

@@ -19,7 +19,10 @@ abstract class MaquinaMotorizada {
         portador nullable: true
         complementoEmbossing nullable: true
         status nullable: true
-        categoria nullable: true
+        categoria nullable: true, validator: { val, obj ->
+                                    if (obj.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA && !val)
+                                        return "maquinaMotorizada.categoria.nula"
+                                }
     }
 
     static mapping = {

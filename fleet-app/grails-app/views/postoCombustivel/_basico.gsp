@@ -13,28 +13,31 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-6">
-					<bs:formField id="cnpj" name="cnpj" label="CNPJ"  value="${postoCombustivelInstance?.cnpj}" class="cnpj"/>
+					<bs:formField id="cnpj" name="cnpj" label="CNPJ"  value="${postoCombustivelInstance?.cnpj}" class="cnpj editable"/>
 				</div>
 				<div class="col-xs-6">
-					<bs:formField id="nome" name="nome" label="Razão Social" value="${postoCombustivelInstance?.nome}"/>
+					<bs:formField id="nome" name="nome" label="Razão Social" value="${postoCombustivelInstance?.nome}" class="editable"/>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField id="nomeFantasia" name="nomeFantasia" label="Nome Fantasia" value="${postoCombustivelInstance?.nomeFantasia}"/>
+					<bs:formField id="nomeFantasia" name="nomeFantasia" label="Nome Fantasia" value="${postoCombustivelInstance?.nomeFantasia}" class="editable"/>
 				</div>
 				<div class="col-md-6">
-					<bs:formField id="email" name="email" label="E-Mail" value="${postoCombustivelInstance?.email}"/>
+					<bs:formField id="email" name="email" label="E-Mail" value="${postoCombustivelInstance?.email}" class="editable"/>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-xs-6">
-					<bs:formField id="inscricaoEstadual" name="inscricaoEstadual" label="Inscrição Estadual" value="${postoCombustivelInstance?.inscricaoEstadual}" class="only-numbers" maxlength="10"/>
+					<bs:formField id="inscricaoEstadual" name="inscricaoEstadual"
+								  label="Inscrição Estadual" value="${postoCombustivelInstance?.inscricaoEstadual}"
+								  class="only-numbers editable" maxlength="10"/>
 				</div>
 				<div class="col-xs-6">
-					<bs:formField id="inscricaoMunicipal" name="inscricaoMunicipal" label="Inscrição Municipal" value="${postoCombustivelInstance?.inscricaoMunicipal}" class="only-numbers" maxlength="10"/>
+					<bs:formField id="inscricaoMunicipal" name="inscricaoMunicipal" label="Inscrição Municipal"
+								  value="${postoCombustivelInstance?.inscricaoMunicipal}" class="only-numbers editable" maxlength="10"/>
 				</div>
 			</div>
 		</div>
@@ -54,7 +57,7 @@
 			<div class="row">
 				<div class="col-md-4">
 					<bs:formField id="taxaReembolso" required="true" name="taxaReembolso" label="Taxa"
-								  value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="form-control percentual"/>
+								  value="${Util.formatCurrency(postoCombustivelInstance?.taxaReembolso)}" class="form-control percentual editable"/>
 				</div>
 			</div>
 		</div>
