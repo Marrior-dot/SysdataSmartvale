@@ -29,62 +29,53 @@
 
                 <g:render template="search" model="${[statusPedidoCarga: statusPedidoCarga]}"/>
 
-                <g:if test="${pedidoCargaInstanceList?.size() > 0}">
-                    <table class="table table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Unidade</th>
-                            <th>Data Pedido</th>
-                            <th>Data Carga</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <g:each in="${pedidoCargaInstanceList}" var="pedido">
-                                <tr>
-                                    <td>
-                                        <g:link controller="pedidoCarga" action="show" id="${pedido.id}">
-                                            ${pedido.id}
-                                        </g:link>
-                                    </td>
-                                    <td>${pedido?.unidade?.nome}</td>
-                                    <td><g:formatDate date="${pedido?.dateCreated}" format="dd/MM/yyyy"/></td>
-                                    <td><g:formatDate date="${pedido?.dataCarga}" format="dd/MM/yyyy"/></td>
-                                    <td><g:formatNumber number="${pedido?.total}" type="currency"/></td>
-                                    <td>${pedido.status.nome}</td>
-                                    <td class="text-center">
-                                        <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#pedidoInstancia" data-toggle="tab">Pedidos Realizados</a></li>
+                        <li><a href="#pedidoProgramado" data-toggle="tab">Pedidos Programados</a></li>
+                    </ul>
 
-                                            <g:if test="${pedido.status == StatusPedidoCarga.COBRANCA}">
-                                                <g:link class="btn btn-primary" action="liberarPedido" id="${pedido.id}" title="Liberar">
-                                                    <i class="glyphicon glyphicon-share"></i>
-                                                </g:link>
-                                            </g:if>
 
-                                            <g:if test="${pedido.status in [StatusPedidoCarga.NOVO, StatusPedidoCarga.AGENDADO]}">
-                                                <g:link class="btn btn-danger" action="cancelarPedido" id="${pedido.id}" title="Cancelar">
-                                                    <i class="glyphicon glyphicon-remove"></i>
-                                                </g:link>
-                                            </g:if>
-                                        </sec:ifAnyGranted>
-                                    </td>
-                                </tr>
-                            </g:each>
-                        </tbody>
-                    </table>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="pedidoInstancia">
+                            <g:render template="listInstancia"></g:render>
+                        </div>
+                        <div class="tab-pane" id="pedidoProgramado">
 
-                    <div>
-                        <g:paginate class="pagination" total="${pedidoCargaInstanceCount ?: 0}"/>
+                        </div>
                     </div>
+                </div>
 
-                </g:if>
-                <g:else>
-                    <div class="well text-center">SEM DADOS</div>
-                </g:else>
+
             </div>
         </div>
+    <script>
+
+        $(document).ready(function() {
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+
+                if (e.target.href.includes('#pedidoProgramado')) {
+                    loadPedidosProgramados();
+                }
+            });
+        });
+
+        const loadPedidosProgramados = function() {
+
+            $.get("${createLink(action: 'listProgramados')}")
+
+                    .done(function(template) {
+                        $("#pedidoProgramado").html(template);
+                    })
+                    .fail(function(err) {
+                        alert(err);
+                    })
+
+        }
+
+    </script>
+
     </body>
+
 </html>

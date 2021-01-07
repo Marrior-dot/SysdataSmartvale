@@ -9,6 +9,7 @@ class ReembolsoService {
 
     ReembolsoIntervaloService reembolsoIntervaloService
     ReembolsoSemanalService reembolsoSemanalService
+    ReembolsoDiasService reembolsoDiasService
 
     Date calcularDataReembolso(PostoCombustivel empresa, Date dataReferencia) {
 
@@ -17,6 +18,9 @@ class ReembolsoService {
 
         } else if (empresa.tipoReembolso == TipoReembolso.SEMANAL) {
             return reembolsoSemanalService.calcularDataReembolso(empresa, dataReferencia)
+
+        } else if (empresa.tipoReembolso == TipoReembolso.DIAS_TRANSCORRIDOS) {
+            return reembolsoDiasService.calcularDataReembolso(empresa, dataReferencia)
 
         } else
             throw new RuntimeException("Tipo de Reembolso indefinido!!!")

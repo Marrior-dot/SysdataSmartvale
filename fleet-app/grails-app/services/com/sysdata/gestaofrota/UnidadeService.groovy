@@ -32,7 +32,6 @@ class UnidadeService {
                     unidade.status = Status.INATIVO
 
                     //TODO: Cancelar cartões, portadores, funcionários e máquinas
-
                     unidade.save(flush: true)
                     ret.success = false
                     ret.message = "Unidade #$unidade inativada. Não pode ser removida, pois já possui Funcionários/Máquinas"

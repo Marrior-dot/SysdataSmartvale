@@ -143,7 +143,6 @@ faturamento {
 
         boleto {
             gerar = true
-            //gerador = "geradorBoletoBancoBrasilService"
             gerador = "bopepoGeradorBoletoBancoBrasilService"
 
             agencia = "4494"
@@ -284,6 +283,8 @@ environments {
     }
 
     production {
+
+        cartao.embossing.cipher.combinedKey = "9DDCF7CDC1B96725835D58AB404C62D0"
 
         sftp {
             host = "172.17.17.2"

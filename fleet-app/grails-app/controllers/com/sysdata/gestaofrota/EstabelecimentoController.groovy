@@ -70,7 +70,8 @@ class EstabelecimentoController {
                                          produtoList               : produtoList,
                                          produtoEstabelecimentoList: produtoEstabelecimentoList,
                                          empresaInstance           : estabelecimentoInstance.empresa,
-                                         action                    : Util.ACTION_EDIT]
+                                         action                    : Util.ACTION_EDIT,
+                                         editable                  : true]
         }
     }
 

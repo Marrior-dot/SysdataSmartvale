@@ -24,21 +24,21 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="matricula">Matrícula *</label>
-                    <input type="text" minlength="10" maxlength="10" class="form-control matricula" name="matricula"
+                    <input type="text" minlength="10" maxlength="10" class="form-control matricula editable" name="matricula"
                            id="matricula"
                            value="${funcionarioInstance?.matricula}" required>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="cpf">CPF *</label>
-                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf"
+                    <g:textField name="cpf" value="${funcionarioInstance?.cpf}" class="form-control cpf editable"
                                  minlength="14" required="required"/>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="rg">RG *</label>
                     <g:textField name="rg" value="${funcionarioInstance?.rg}" maxlength="10"
-                                 class="form-control only-numbers" required="required"/>
+                                 class="form-control only-numbers editable" required="required"/>
                 </div>
             </div>
 
@@ -47,7 +47,7 @@
                     <label for="nome">Nome *</label>
 
                         <g:textField name="nome" value="${funcionarioInstance?.nome}" maxlength="50"
-                                     class="form-control" required="required"/>
+                                     class="form-control editable" required="required"/>
 %{--
                         <span class="input-group-addon">
                             <g:checkBox name="gestor" value="${funcionarioInstance?.gestor}"/> Gestor
@@ -57,7 +57,7 @@
 
                 <div class="form-group col-md-6">
                     <label for="email">E-Mail *</label>
-                    <g:textField name="email" value="${funcionarioInstance?.email}" maxlength="50" class="form-control" />
+                    <g:textField name="email" value="${funcionarioInstance?.email}" maxlength="50" class="form-control editable" />
 
                 </div>
 
@@ -69,14 +69,14 @@
 
                 <div class="form-group col-md-3">
                     <label for="dataNascimento">Data Nascimento *</label>
-                    <input type="text" class="form-control datepicker" id="dataNascimento" name="dataNascimento"
+                    <input type="text" class="form-control datepicker editable" id="dataNascimento" name="dataNascimento"
                            minlength="8" required
                            value="${Util.formattedDate(funcionarioInstance?.dataNascimento)}"/>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="cnh">CNH *</label>
-                    <g:textField name="cnh" class="form-control only-numbers" value="${funcionarioInstance?.cnh}"
+                    <g:textField name="cnh" class="form-control only-numbers editable" value="${funcionarioInstance?.cnh}"
                                  maxlength="11" required="required"/>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                     <div class="form-group col-md-6">
                         <label for="nomeEmbossing">Nome Impresso no Cartão *</label>
                         <input type="text" list="nomeEmbossing-itens" autocomplete="off"
-                               class="form-control" id="nomeEmbossing" name="nomeEmbossing"
+                               class="form-control editable" id="nomeEmbossing" name="nomeEmbossing"
                                maxlength="${tamMaxEmbossing}"
                                placeholder="Digite aqui o nome que será impresso no seu cartão."
                                value="${funcionarioInstance?.nomeEmbossing}" required>
@@ -103,14 +103,14 @@
             <div class="row">
                 <div class="form-group col-md-3">
                     <label for="validadeCnh">Validade CNH *</label>
-                    <input type="text" class="form-control datepicker" id="validadeCnh" name="validadeCnh" required
+                    <input type="text" class="form-control datepicker editable" id="validadeCnh" name="validadeCnh" required
                            value="${Util.formattedDate(funcionarioInstance?.validadeCnh)}"/>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="categoriaCnh">Categoria CNH *</label>
                     <g:select name="categoriaCnh" from="${CategoriaCnh.values()}"
-                              optionValue="nome" class="form-control" required="required"
+                              optionValue="nome" class="form-control editable" required="required"
                               noSelection="${['null': 'Selecione uma Categ. CNH...']}"
                               value="${funcionarioInstance?.categoriaCnh}"/>
                 </div>
@@ -122,6 +122,7 @@
                         <g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(funcionarioInstance?.unidade)?.list()}"
                                   value="${funcionarioInstance?.categoria?.id}" required="required"
                                   noSelection="${['null': 'Selecione a categoria...']}"
+                                  class="editable"
                                   optionKey="id" class="form-control" optionValue="nome"/>
                     </div>
 
@@ -150,7 +151,7 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="portador.limiteTotal">Limite Total *</label>
-                        <g:textField name="portador.limiteTotal" class="form-control money"
+                        <g:textField name="portador.limiteTotal" class="form-control money editable"
                                      value="${Util.formatCurrency(funcionarioInstance?.portador?.limiteTotal)}" required="true"></g:textField>
 
                     </div>

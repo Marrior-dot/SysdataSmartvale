@@ -75,7 +75,11 @@ class PostoCombustivelController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: 'editando'])
+            render(view: "form",
+                                model: [postoCombustivelInstance: postoCombustivelInstance,
+                                        action: 'editando',
+                                        editable: true
+                                    ])
         }
     }
 
@@ -341,7 +345,10 @@ class PostoCombustivelController {
         def retorno
 
         def listReembolsos = postoCombustivelInstance.reembolsos
-        if (!postoCombustivelInstance.tipoReembolso || postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS || listReembolsos.size() == 0) {
+        if (!postoCombustivelInstance.tipoReembolso ||
+                postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS ||
+                    listReembolsos.size() == 0) {
+
             if (inicioIntervalo <= fimIntervalo) {
 
                 def reembolsos = listReembolsos.findAll {
@@ -376,6 +383,76 @@ class PostoCombustivelController {
 
         render retorno as JSON
 
+    }
+
+    def manageReembolsoDias() {
+        ReembolsoDias reembolsoDias
+        if (params.id && params.id ==~ /\d+/) {
+            reembolsoDias = ReembolsoDias.get(params.id as long)
+            render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
+            return
+        } else {
+            if (params.parId && params.parId ==~ /\d+/) {
+                PostoCombustivel empresa = PostoCombustivel.get(params.parId as long)
+                if (empresa) {
+                    reembolsoDias = new ReembolsoDias(participante: empresa)
+                    render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
+                    return
+                } else {
+                    render status: 404, text: "Empresa ID #${params.parId} não encontrada!"
+                    return
+                }
+
+            } else {
+                render status: 500, text: "ID da Empresa não é um número válido (${params.parId})!"
+                return
+            }
+
+        }
+    }
+
+    def saveReembolsoDias() {
+
+        println "Params:"
+        println params
+
+        ReembolsoDias reembolsoDias
+
+        def op = ""
+
+        def ret = []
+        if (params.id && params.id ==~ /\d+/) {
+            reembolsoDias = ReembolsoDias.get(params.id.toLong())
+            op = "inserido"
+        }
+        else {
+            reembolsoDias = new ReembolsoDias()
+            op = "alterado"
+        }
+
+        reembolsoDias.properties = params
+        if (reembolsoDias.save(flush: true))
+            ret = [type: "ok", message: "Reembolso Dias #${reembolsoDias.id} " + op]
+        else
+            ret = [type: "error", message: reembolsoDias.errors.allErrors*.defaultMessage.join(";")]
+
+
+        render ret as JSON
+
+    }
+
+    def loadReembolsoDias() {
+        if (params.id && params.id ==~ /\d+/) {
+            PostoCombustivel empresa = PostoCombustivel.get(params.id as long)
+            if (empresa) {
+                render template: 'listReembolsoDias', model: [empresa: empresa]
+                return
+            } else {
+                render status: 404, text: "Reembolso Dias com id #${params.id} não encontrado!"
+                return
+            }
+        } else
+            render status: 500, text: "Reembolso Dias ID não é um número válido (${params.id})!"
     }
 
 }

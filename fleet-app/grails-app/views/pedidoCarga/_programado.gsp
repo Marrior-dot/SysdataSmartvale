@@ -10,7 +10,7 @@
         <div class="row">
 
             <div class="col-md-3">
-                <g:radioGroup name="recorrencia" labels="['Mensal', 'Datas']" values="[1, 2]" value="1" >
+                <g:radioGroup name="recorrencia" labels="['Mensal']" values="[1]" value="1" >
                     <p>${it.radio} ${it.label}</p>
                 </g:radioGroup>
             </div>
@@ -18,8 +18,7 @@
         </div>
 
         <g:if test="${pedidoCargaInstance?.agendas}">
-
-            <g:each in="pedidoCargaInstance.agendas" var="agenda" status="idx">
+            <g:each in="${pedidoCargaInstance.agendas}" var="agenda" status="idx">
                 <g:render template="agendaTemplate" model="[i: idx]"></g:render>
             </g:each>
         </g:if>

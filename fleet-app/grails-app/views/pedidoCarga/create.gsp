@@ -17,9 +17,8 @@
 
         <div class="panel-body">
 
-            <g:if test="${flash.errors}">
-                <div class="alert alert-danger">${flash.errors}</div>
-            </g:if>
+            <alert:all/>
+
             <g:hasErrors bean="${pedidoCargaInstance}">
                 <div class="alert alert-danger">
                     <b>Erro ao salvar Pedido Carga</b>
@@ -48,8 +47,6 @@
     </div>
 
 
-    <asset:javascript src="pedidoCarga.js"></asset:javascript>
-    <asset:javascript src="util.js"></asset:javascript>
 
 
     </body>
