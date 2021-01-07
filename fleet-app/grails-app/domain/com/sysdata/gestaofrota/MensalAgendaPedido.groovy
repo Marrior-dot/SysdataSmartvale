@@ -6,19 +6,21 @@ class MensalAgendaPedido extends AgendaPedido {
     String finalizaEm
 
     static constraints = {
+        dia nullable: false
 
-        finalizaEm validator: { obj, val ->
+        finalizaEm nullable: false, validator: { val, obj ->
 
             def matcher = val =~ /^(?<mes>\d{2})\/(?<ano>\d{4})$/
             if (matcher.matches()) {
                 def mes = matcher.group("mes") as int
                 def ano = matcher.group("ano") as int
+
                 if (mes < 1 || mes > 12)
-                    return "mensalagendapedido.finalizaem.mesinvalido"
+                    return ["mesInvalido"]
 
                 def anoAtual = new Date()[Calendar.YEAR]
                 if (ano < anoAtual)
-                    return "mensalagendapedido.finalizaem.anoinvalido"
+                    return ["anoInvalido"]
 
             }
 

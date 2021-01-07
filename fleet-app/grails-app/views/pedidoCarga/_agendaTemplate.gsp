@@ -2,7 +2,7 @@
     <div class="col-md-3">
         <label for="dia">Dia p/ Carga</label>
         <g:field type="number" class="form-control" name="agendas[$i].dia" min="1" max="31"
-                 value="${pedidoCargaInstance?.agendas ? pedidoCargaInstance.agendas[i].dia : null }">
+                 value="${pedidoCargaInstance?.agendas ? pedidoCargaInstance?.agendas[i]?.dia : null }">
 
         </g:field>
     </div>
@@ -10,7 +10,7 @@
     <div class="col-md-3">
         <label for="finalizaEm">Finaliza Em</label>
         <g:textField name="agendas[$i].finalizaEm" class="form-control mesAno"
-                     value="${pedidoCargaInstance?.agendas ? pedidoCargaInstance.agendas[i].finalizaEm : null}"></g:textField>
+                     value="${pedidoCargaInstance?.agendas ? pedidoCargaInstance?.agendas[i]?.finalizaEm : null}"></g:textField>
     </div>
 
 %{--
