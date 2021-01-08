@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
+import grails.core.GrailsApplication
 
 import java.text.SimpleDateFormat
 
@@ -10,7 +11,11 @@ class VeiculoController  {
 
     VeiculoService veiculoService
     ProcessamentoService processamentoService
+
+    GrailsApplication grailsApplication
     def springSecurityService
+
+
 
     def index() {
         redirect(action: "list", params: params)
@@ -52,8 +57,9 @@ class VeiculoController  {
                 veiculo.portador.unidade = unidadeInstance
             }
 
-            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            render(view: "form", model: [veiculoInstance: veiculo, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
+            render(view: "form", model: [veiculoInstance: veiculo,
+                                         action: Util.ACTION_NEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -74,14 +80,17 @@ class VeiculoController  {
                 } else {
                     if (ret.message)
                         flash.error = ret.message
-                    render(view: "form", model: [veiculoInstance: veiculoInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                    render(view: "form", model: [veiculoInstance: veiculoInstance, action: Util.ACTION_NEW,
+                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
                 }
             }
             catch (Exception e) {
                 flash.error = "Veículo não pode ser salvo. Contate suporte."
                 e.printStackTrace()
-                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-                render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: tamMaxEmbossing])
+                render(view: "form", model: [veiculoInstance: veiculoInstance,
+                                             unidadeInstance: veiculoInstance.unidade,
+                                             action: Util.ACTION_NEW,
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
 
         } else {
@@ -96,8 +105,10 @@ class VeiculoController  {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: tamMaxEmbossing])
+            render(view: "form", model: [veiculoInstance: veiculoInstance,
+                                         unidadeInstance: veiculoInstance.unidade,
+                                         action: Util.ACTION_VIEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
     }
 
@@ -107,8 +118,10 @@ class VeiculoController  {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
             redirect(action: "list")
         } else {
-            int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-            render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
+            render(view: 'form', model: [veiculoInstance: veiculoInstance,
+                                         unidadeInstance: veiculoInstance.unidade,
+                                         action: 'editando',
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
     }
 
@@ -123,8 +136,10 @@ class VeiculoController  {
             } catch (e) {
                 e.printStackTrace()
                 flash.error = "Erro Interno. Contatar suporte"
-                int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
-                render(view: 'form', model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: 'editando', tamMaxEmbossing: tamMaxEmbossing])
+                render(view: 'form', model: [veiculoInstance: veiculoInstance,
+                                             unidadeInstance: veiculoInstance.unidade,
+                                             action: 'editando',
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
@@ -274,7 +289,6 @@ class VeiculoController  {
     }
 
     def alterarHodometro() {
-        int tamMaxEmbossing = processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()
         def valor = params.hodometro as long
         User user = springSecurityService.currentUser
         def veiculoInstance = Veiculo.get(params.id)
@@ -283,7 +297,10 @@ class VeiculoController  {
         }else{
             flash.message = "Um erro ocorreu no momento de alterar o hodômetro. Tente novamente ou contate o suporte."
         }
-        render(view: "form", model: [veiculoInstance: veiculoInstance, unidadeInstance: veiculoInstance.unidade, action: Util.ACTION_VIEW,tamMaxEmbossing: tamMaxEmbossing])
+        render(view: "form", model: [veiculoInstance: veiculoInstance,
+                                     unidadeInstance: veiculoInstance.unidade,
+                                     action: Util.ACTION_VIEW,
+                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
     }
 
 }

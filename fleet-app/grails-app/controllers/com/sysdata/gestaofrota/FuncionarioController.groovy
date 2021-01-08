@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
+import grails.core.GrailsApplication
+
 import java.text.SimpleDateFormat
 
 class FuncionarioController extends BaseOwnerController {
@@ -9,6 +11,8 @@ class FuncionarioController extends BaseOwnerController {
 
     def funcionarioService
     def processamentoService
+
+    GrailsApplication grailsApplication
 
     def index() {
         redirect(action: "list", params: params)
@@ -70,7 +74,7 @@ class FuncionarioController extends BaseOwnerController {
             // TODO: Refatorar Embossing
             render(view: "form", model: [funcionarioInstance: funcionario,
                                          action             : Util.ACTION_NEW,
-                                         tamMaxEmbossing    : processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                                         tamMaxEmbossing    : grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -90,7 +94,7 @@ class FuncionarioController extends BaseOwnerController {
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                              unidadeInstance: funcionarioInstance.unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
                 return
             }
 
@@ -100,14 +104,19 @@ class FuncionarioController extends BaseOwnerController {
             } else {
                 if (ret.message)
                     flash.error = ret.message
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance,
+                                             unidadeInstance: funcionarioInstance.unidade,
+                                             action: Util.ACTION_NEW,
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
 
         }
         catch (Exception e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contatar suporte"
-            render(view: "form", model: [funcionarioInstance: funcionarioInstance, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: "form", model: [funcionarioInstance: funcionarioInstance,
+                                         action: Util.ACTION_NEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
 
     }
@@ -118,7 +127,10 @@ class FuncionarioController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'funcionario.label', default: 'Funcionario'), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: 'form', model: [funcionarioInstance: funcionarioInstance,
+                                         unidadeInstance: funcionarioInstance.unidade,
+                                         action: Util.ACTION_VIEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
     }
 
@@ -132,7 +144,7 @@ class FuncionarioController extends BaseOwnerController {
                                             funcionarioInstance: funcionarioInstance,
                                             unidadeInstance: funcionarioInstance.unidade,
                                             action: Util.ACTION_EDIT,
-                                            tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular(),
+                                            tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular,
                                             editable: true
                                 ])
         }
@@ -151,14 +163,20 @@ class FuncionarioController extends BaseOwnerController {
                     if (ret.message)
                         flash.error = ret.message
 
-                    render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                    render(view: "form", model: [funcionarioInstance: funcionarioInstance,
+                                                 unidadeInstance: funcionarioInstance.unidade,
+                                                 action: Util.ACTION_EDIT,
+                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
                 }
 
             }
             catch (Exception e) {
                 e.printStackTrace()
                 flash.error = e.message
-                render(view: "form", model: [funcionarioInstance: funcionarioInstance, unidadeInstance: funcionarioInstance.unidade, action: Util.ACTION_EDIT, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: "form", model: [funcionarioInstance: funcionarioInstance,
+                                             unidadeInstance: funcionarioInstance.unidade,
+                                             action: Util.ACTION_EDIT,
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
 
         } else {

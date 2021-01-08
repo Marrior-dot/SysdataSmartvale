@@ -153,7 +153,6 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
             loteEmbossingList.each { lote ->
 
                 def fileName = geradorArquivoEmbossing.gerarNomeArquivo(lote)
-                println "FileName: $fileName"
 
                 Arquivo arquivoEmbossing = new Arquivo(
                         nome: fileName,

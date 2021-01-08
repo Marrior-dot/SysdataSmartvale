@@ -35,6 +35,7 @@ class ArquivoController {
 	}
 
 	def generateEmbossing() {
+/*
 		try {
 			if(geracaoArquivoEmbossingService.gerarArquivo())
 				flash.message = "Arquivo de Embossing gerado"
@@ -45,6 +46,7 @@ class ArquivoController {
 			e.printStackTrace()
 			flash.message = "Erro ao gerar Arquivo de Embossing"
 		}
+*/
 		redirect(action: "list", params: params)
 	}
 
