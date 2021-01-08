@@ -96,7 +96,11 @@ class CategoriaFuncionarioService {
         }
 
         if (categList)
-            return categList.collect { [ id: it.id, nome: it.nome, valorCarga: Util.formatCurrency(it.valorCarga) ] }
+            return categList.collect { [
+                                            id: it.id,
+                                            nome: it.nome,
+                                            valorCarga: Util.formatCurrency(it.valorCarga)
+                                    ] }
         else
             return categList
 

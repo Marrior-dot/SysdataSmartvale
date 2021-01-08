@@ -38,8 +38,10 @@ class CategoriaFuncionarioController {
     }
 
     def getAllByUnidade() {
+
         def unidId = params.unidId ? params.long('unidId') : 0 as long
         Unidade unidade = Unidade.get(unidId)
+
         if (unidade)
             render categoriaFuncionarioService.listCategoriasByUnidade(unidade) as JSON
         else
