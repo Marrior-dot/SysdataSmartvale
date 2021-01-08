@@ -41,12 +41,14 @@
         </tbody>
     </table>
 
+%{--
     <util:remotePaginate controller="pedidoCarga" action="listVeiculos"
                          total="${veiculoInstanceCount}"
                          params="${[actionView: action, categoria: categoriaInstance?.id]}"
                          update="veiculo-list" max="10" id="${pedidoCargaInstance?.id}"
                          onLoading="waitingDialog.show('Aguarde...')"
                          onComplete="onFuncionarioListLoadComplete()"/>
+--}%
 </g:if>
 <g:else>
     <div class="well well-lg text-center"><b>SEM DADOS</b></div>
