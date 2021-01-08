@@ -221,7 +221,9 @@ class PedidoCargaController {
 
 
     def listVeiculos() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        //params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = 100
+
         PedidoCarga pedidoCargaInstance = PedidoCarga.get(params.long('id'))
         if (! pedidoCargaInstance)
             pedidoCargaInstance = new PedidoCarga()
