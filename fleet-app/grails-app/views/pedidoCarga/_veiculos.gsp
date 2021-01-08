@@ -5,6 +5,7 @@
 
     <div class="panel-body">
         %{--SEARCH--}%
+%{--
         <div>
             <div class="row">
                 <div class="form-group col-xs-4">
@@ -33,6 +34,7 @@
                 </button>
             </div>
         </div>
+--}%
 
         <div class="panel-top">
             <div id="veiculos-list">
