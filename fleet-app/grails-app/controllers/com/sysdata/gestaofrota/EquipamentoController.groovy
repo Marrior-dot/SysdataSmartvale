@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.converters.JSON
+import grails.core.GrailsApplication
 import org.springframework.http.HttpStatus
 
 //@Secured(['IS_AUTHENTICATED_FULLY'])
@@ -11,6 +12,8 @@ class EquipamentoController extends BaseOwnerController {
     def processamentoService
     def cartaoService
     def portadorService
+
+    GrailsApplication grailsApplication
 
     def index = {
         redirect(action: "list", params: params)
@@ -30,7 +33,9 @@ class EquipamentoController extends BaseOwnerController {
                 redirect(controller: 'tipoEquipamento', action: 'list')
                 return
             } else {
-                render(view: "form", model: [unidadeInstance: unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: "form", model: [unidadeInstance: unidade,
+                                             action: Util.ACTION_NEW,
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
         } else {
             flash.error = "Unidade não encontrada."
@@ -63,11 +68,17 @@ class EquipamentoController extends BaseOwnerController {
             catch (Exception e) {
                 e.printStackTrace()
                 flash.error = "Erros encontrados."
-                render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: "form", model: [equipamentoInstance: equipamentoInstance,
+                                             unidadeInstance: equipamentoInstance.unidade,
+                                             action: Util.ACTION_NEW,
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
         } else {
             flash.error = "Unidade não encontrada."
-            render(view: "form", model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_NEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: "form", model: [equipamentoInstance: equipamentoInstance,
+                                         unidadeInstance: equipamentoInstance.unidade,
+                                         action: Util.ACTION_NEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
     }
 
@@ -79,7 +90,10 @@ class EquipamentoController extends BaseOwnerController {
             return;
         }
 
-        render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: Util.ACTION_VIEW, tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+        render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
+                                     unidadeInstance: equipamentoInstance.unidade,
+                                     action: Util.ACTION_VIEW,
+                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
     }
 
     def edit() {
@@ -88,7 +102,10 @@ class EquipamentoController extends BaseOwnerController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: ''), params.id])}"
             redirect(action: "list")
         } else {
-            render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+            render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
+                                         unidadeInstance: equipamentoInstance.unidade,
+                                         action: 'editando',
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
         }
     }
 
@@ -98,7 +115,10 @@ class EquipamentoController extends BaseOwnerController {
             long version = params.long('version')
             if (version != null && equipamentoInstance.version > version) {
                 equipamentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", "Outro usuário estava editando esse Equipamento.")
-                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
+                                             unidadeInstance: equipamentoInstance.unidade,
+                                             action: 'editando',
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
                 return
             }
             equipamentoInstance.properties = params
@@ -108,7 +128,10 @@ class EquipamentoController extends BaseOwnerController {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'equipamento.label', default: 'Equipamento'), equipamentoInstance.id])}"
                 redirect(action: "show", id: equipamentoInstance.id)
             } else {
-                render(view: 'form', model: [equipamentoInstance: equipamentoInstance, unidadeInstance: equipamentoInstance.unidade, action: 'editando', tamMaxEmbossing: processamentoService.getEmbossadora().getTamanhoMaximoNomeTitular()])
+                render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
+                                             unidadeInstance: equipamentoInstance.unidade,
+                                             action: 'editando',
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'equipamento.label', default: ''), params.id])}"
