@@ -9,6 +9,7 @@ import com.sysdata.gestaofrota.TipoFatura
 import com.sysdata.gestaofrota.Util
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+/*
 import org.jrimum.bopepo.BancosSuportados
 import org.jrimum.bopepo.view.BoletoViewer
 import org.jrimum.domkee.comum.pessoa.endereco.CEP
@@ -24,6 +25,7 @@ import org.jrimum.domkee.financeiro.banco.febraban.SacadorAvalista
 import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo
 import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 import org.jrimum.bopepo.Boleto as BoletoBopepo
+*/
 
 
 @Transactional
@@ -34,6 +36,7 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
     @Override
     void gerarBoleto(Boleto boleto) {
 
+/*
         log.info "Gerando boleto da fatura ${boleto.fatura.id} ..."
 
         def boletoConfig = grailsApplication.config.projeto.faturamento.portador.boleto
@@ -55,9 +58,11 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         enderecoSac.setNumero(empresa.endereco.numero)
         sacado.addEndereco(enderecoSac)
 
-        /*
+        */
+/*
          * INFORMANDO OS DADOS SOBRE O TÍTULO.
-         */
+         *//*
+
 
 
         def nossoNumero = (boletoConfig.carteira.numero in ["12", "15", "17"]) ?
@@ -86,9 +91,11 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         contaBancaria.setCarteira(new Carteira(boletoConfig.carteira.numero as int))
         contaBancaria.setAgencia(new Agencia(boletoConfig.agencia as int, boletoConfig.dvAgencia))
 
-        /*
+        */
+/*
          * INFORMANDO OS DADOS SOBRE O BOLETO.
-         */
+         *//*
+
         BoletoBopepo boletoBopepo = new BoletoBopepo(titulo)
 
         boletoBopepo.setLocalPagamento("Pagável em qualquer Banco")
@@ -113,9 +120,11 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
         boleto.nossoNumero = boletoBopepo.titulo.nossoNumero
         boleto.save()
 
-        /*
+        */
+/*
          * GERANDO O BOLETO BANCÁRIO.
-         */
+         *//*
+
         // Instanciando um objeto "BoletoViewer", classe responsável pela
         // geração do boleto bancário.
 
@@ -153,6 +162,7 @@ class BopepoGeradorBoletoBancoBrasilService implements GeradorBoleto {
 
         boleto.arquivo = arquivoBoleto
         boleto.save(flush: true)
+*/
 
     }
 }
