@@ -110,7 +110,6 @@ cartao {
     gerador = GeradorCartaoPadrao
 
     embossing {
-
         produto = "BANPARA FROTA"
         idCliente = "BANPR"
 
