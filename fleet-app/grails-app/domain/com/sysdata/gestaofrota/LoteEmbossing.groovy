@@ -5,6 +5,7 @@ class LoteEmbossing {
     Date dateCreated
     User usuario
     List<Arquivo> arquivos
+    List<Arquivo> arquivosRetorno
     StatusLoteEmbossing status = StatusLoteEmbossing.CRIADO
 
     static hasMany = [cartoes: Cartao]
