@@ -245,13 +245,13 @@ environments {
                     jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
 
                     autenticar {
-                        endpoint = "https://172.35.21.19/controlecanais/v1/autenticar"
+                        endpoint = "https://172.35.21.30/controlecanais/v1/autenticar"
                         usuario = "GSMB"
                         chave = "a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"
                     }
 
                     lote {
-                        endpoint = "https://172.35.21.19/transferencia/contacorrente/v1/lote"
+                        endpoint = "https://172.35.21.30/transferencia/contacorrente/v1/lote"
                         operador = "00000042"
                     }
                 }
