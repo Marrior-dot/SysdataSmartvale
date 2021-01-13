@@ -68,10 +68,6 @@
                             <g:render template="basico"/>
                         </g:else>
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
