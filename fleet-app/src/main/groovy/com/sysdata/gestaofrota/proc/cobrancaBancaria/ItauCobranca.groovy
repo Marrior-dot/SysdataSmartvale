@@ -1,8 +1,10 @@
 package com.sysdata.gestaofrota.proc.cobrancaBancaria
 
 import grails.util.Holders
+/*
 import org.jrimum.bopepo.Boleto
 import org.jrimum.domkee.financeiro.banco.febraban.Titulo
+*/
 
 
 /**
@@ -11,8 +13,10 @@ import org.jrimum.domkee.financeiro.banco.febraban.Titulo
 class ItauCobranca extends BancoCobranca {
 
     ItauCobranca(){
+/*
         banco=BancosSuportados.BANCO_ITAU.create()
         codigoCompensacao=BancosSuportados.BANCO_ITAU.codigoDeCompensacao
+*/
         nome="BANCO ITAU SA"
     }
 
@@ -36,6 +40,7 @@ class ItauCobranca extends BancoCobranca {
         return resto>0?10-resto:0
     }
 
+/*
     @Override
     void adicionarExtensoes(Boleto boleto, Titulo titulo) {
 
@@ -47,5 +52,6 @@ class ItauCobranca extends BancoCobranca {
         boleto.addTextosExtras("txtFcNossoNumero", nossoNumeroParaExibicao);
         boleto.addTextosExtras("txtRsNossoNumero", nossoNumeroParaExibicao);
     }
+*/
 
 }
