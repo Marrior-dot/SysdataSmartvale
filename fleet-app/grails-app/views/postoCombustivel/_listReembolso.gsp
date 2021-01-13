@@ -4,161 +4,86 @@
 <%@ page import="com.sysdata.gestaofrota.TipoReembolso" %>
 
 <style>
-.modal-dialog {
-    z-index: 1500;
-}
-
+    .modal-dialog {
+        z-index: 1500;
+    }
 </style>
 
+<div class="panel panel-default panel-top">
 
-<br/>
+    <div class="panel-body">
 
-<div class="row">
-    <div class="col-md-3">
-        <label for="tipoReembolso">Tipo Reembolso</label>
-
-        <g:select name="tipoReembolso"
-                  class="form-control enable"
-                  from="${TipoReembolso.values()}"
-                  optionValue="nome"
-                  value="${postoCombustivelInstance?.tipoReembolso}"></g:select>
-
-
-    </div>
-
-    <g:if test="${!postoCombustivelInstance?.reembolsos || postoCombustivelInstance?.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS}">
-        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+        <div class="row">
             <div class="col-md-3">
-                <button type="button" class="btn btn-default" onclick="openModal(0);">
-                    <i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar Reembolso
-                </button>
+
+                <div class="form-group">
+                    <label for="tipoReembolso">Tipo Reembolso</label>
+
+                    <g:select name="tipoReembolso"
+                              class="form-control enable"
+                              from="${TipoReembolso.values()}"
+                              optionValue="nome"
+                              noSelection="${['null': '-- Escolha um --']}"
+                              value="${postoCombustivelInstance?.tipoReembolso}"></g:select>
+
+                </div>
+
             </div>
-        </sec:ifAnyGranted>
-    </g:if>
 
+            <div class="col-md-3">
 
+                <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                    <div id="btnReemb" class="col-md-3" style="padding-top: 1.5em;">
+                        <button type="button" class="btn btn-default" onclick="openModal();" >
+                            <i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar Reembolso
+                        </button>
+                    </div>
+                </sec:ifAnyGranted>
 
-</div>
+            </div>
 
+        </div>
 
-
-
-<div id="divSemanal" class="panel-top">
-
-    <div class="list">
-        <table id="rbSemanalTable" class="table table-striped table-bordered table-hover table-condensed table-default">
-            <thead>
-            <th>Dia Semana</th>
-            <th>Intervalo Dias</th>
-            <th>Açoes</th>
-            </thead>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="divIntervalo"></div>
+                <div id="divSemanal"></div>
+                <div id="divDias"></div>
+            </div>
+        </div>
     </div>
 
 </div>
 
-<div id="divIntervalo">
-
-    <div class="list">
-        <table id="rbIntervaloTable"
-               class="table table-striped table-bordered table-hover table-condensed table-default">
-            <thead>
-            <th>Inicio Intervalo</th>
-            <th>Fim Intervalo</th>
-            <th>Dia Efetivaçao</th>
-            <th>Meses</th>
-            <th>Açoes</th>
-            </thead>
-        </table>
-    </div>
-
-</div>
-
-<div id="divDias">
-</div>
 
 
 <asset:javascript src="plugins/bootbox/bootbox.min.js"></asset:javascript>
 
 <script type="text/javascript">
 
-    var rbSemanalTable, rbIntervaloTable
-
-    var checked = null;
-
     var errorList = [];
 
     $(function () {
 
-        rbSemanalTable = $("#rbSemanalTable").DataTable({
-            "ajax": {
-                "url": "${createLink(controller:'postoCombustivel',action:'getReembolsoSemanal')}",
-                "data": {"id":${postoCombustivelInstance?.id}},
-                "dataSrc": "results"
-            },
-            "columns": [
-                {"data": "diaSemana"},
-                {"data": "intervaloDias"},
-                {"data": "acao"}
-            ]
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (e.target.href.includes("#calendario")) {
+                initCalendario();
+            }
         });
-
-        rbIntervaloTable = $("#rbIntervaloTable").DataTable({
-            "ajax": {
-                "url": "${createLink(controller:'postoCombustivel',action:'getIntervalosReembolso')}",
-                "data": {"id":${postoCombustivelInstance?.id}},
-                "dataSrc": "results"
-            },
-            "columns": [
-                {"data": "inicio"},
-                {"data": "fim"},
-                {"data": "diaEfetivacao"},
-                {"data": "meses"},
-                {"data": "acao"}
-            ]
-        });
-
-        checked = $("input[name='tipoReembolso']:checked");
-
-        <g:if test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS}">
-            $("#divIntervalo").show();
-            $("#divSemanal").hide();
-            $("#divDias").hide();
-        </g:if>
-
-        <g:elseif test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.SEMANAL}">
-            $("#divIntervalo").hide();
-            $("#divSemanal").show();
-            $("#divDias").hide();
-        </g:elseif>
-
-        <g:elseif test="${postoCombustivelInstance?.tipoReembolso == TipoReembolso.DIAS_TRANSCORRIDOS}">
-            $("#divDias").show();
-            $("#divIntervalo").hide();
-            $("#divSemanal").hide();
-
-            loadReembDias("${postoCombustivelInstance?.id}");
-        </g:elseif>
-
-        <g:else>
-            $("#divIntervalo").hide();
-            $("#divSemanal").hide();
-            $("#divDias").hide();
-            checked = null;
-        </g:else>
-
 
         $("input[name='tipoReembolso']").change(function () {
-            checked = $("input[name='tipoReembolso']:checked");
-            if (checked.val() == 'INTERVALOS_MULTIPLOS') {
+
+            const tipoReemb = $("input[name='tipoReembolso']").val();
+
+            if (tipoReemb === 'INTERVALOS_MULTIPLOS') {
                 $("#divIntervalo").show();
                 $("#divSemanal").hide();
                 $("#divDias").hide();
-            } else if (checked.val() == 'SEMANAL') {
+            } else if (tipoReemb === 'SEMANAL') {
                 $("#divIntervalo").hide();
                 $("#divDias").hide();
                 $("#divSemanal").show();
-            } else if (checked.val() == 'DIAS_TRANSCORRIDOS') {
+            } else if (tipoReemb === 'DIAS_FIXOS') {
                 $("#divDias").show();
                 $("#divIntervalo").hide();
                 $("#divSemanal").hide();
@@ -177,12 +102,15 @@
                     if (o.type == "ok") {
                         alert(o.message);
 
-                        if (checked.val() == 'SEMANAL')
-                            rbSemanalTable.ajax.reload();
-                        else if (checked.val() == 'INTERVALOS_MULTIPLOS')
-                            rbIntervaloTable.ajax.reload();
-                        else if (checked.val() == 'DIAS_TRANSCORRIDOS')
-                            rbDiasTable.ajax.reload();
+                        const empId = $("#id").val();
+                        const tipoReemb = $("#tipoReembolso").val();
+
+                        if (tipoReemb === 'SEMANAL')
+                            loadReembSemanal(empId);
+                        else if (tipoReemb === 'INTERVALOS_MULTIPLOS')
+                            loadReembIntervalo(empId);
+                        else if (tipoReemb === 'DIAS_FIXOS')
+                            loadReembDias(empId);
 
                     }
                     else if (o.type == "error")
@@ -197,32 +125,20 @@
         }
     }
 
-    function openReembSemanal(html) {
-        bootbox.dialog({
-            title: "Reembolso Semanal",
-            message: html,
-            buttons: {
-                success: {
-                    label: "Salvar",
-                    className: "btn-success",
-                    callback: function () {
-                        saveReembSemanal();
-                    }
-                }
-            }
-        });
-    }
-
-    function openReembIntervalo(html) {
+    function openReembIntervaloDialog(html) {
         bootbox.dialog({
             title: "Intervalos Multiplos",
             message: html,
             buttons: {
+                cancel: {
+                    label: "Cancelar",
+                    className: "btn-cancel"
+                },
                 success: {
                     label: "Salvar",
                     className: "btn-success",
                     callback: function () {
-                        saveReembIntervalos();
+                        return saveReembIntervalos();
                     }
                 }
             }
@@ -231,14 +147,13 @@
 
     function openReembDiasDialog(html) {
         bootbox.dialog({
-            title: "Dias Transcorridos",
+            title: "Dias Fixos",
             message: html,
             buttons: {
                 cancel: {
                     label: "Cancelar",
                     className: "btn-cancel"
                 },
-
                 success: {
                     label: "Salvar",
                     className: "btn-success",
@@ -250,39 +165,54 @@
         });
     }
 
-
-    function loadReembSemanal(rbId) {
-        $.ajax({
-            type: 'POST',
-            url: "${createLink(controller:'postoCombustivel',action:'manageReembolsoSemanal')}",
-            data: "parId=${postoCombustivelInstance?.id}&id=" + rbId,
-            success: function (data) {
-                openReembSemanal(data);
-            },
-            statusCode: {
-                404: function () {
-                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
+    function openReembSemanalDialog(html) {
+        bootbox.dialog({
+            title: "Reembolso Semanal",
+            message: html,
+            buttons: {
+                cancel: {
+                    label: "Cancelar",
+                    className: "btn-cancel"
+                },
+                success: {
+                    label: "Salvar",
+                    className: "btn-success",
+                    callback: function () {
+                        return saveReembSemanal();
+                    }
                 }
             }
         });
-
     }
 
-    function loadReembIntervalo(rbId) {
-        $.ajax({
-            type: 'POST',
-            url: "${createLink(controller:'postoCombustivel',action:'manageReembolso')}",
-            data: "parId=${postoCombustivelInstance?.id}&id=" + rbId,
-            success: function (data) {
-                openReembIntervalo(data);
-            },
-            statusCode: {
-                404: function () {
-                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
-                }
-            }
-        });
+    function loadReembSemanal(empId) {
 
+        let link = "${createLink(action: 'loadReembolsoSemanal')}";
+        $.get(link, {id: empId}, function(gsp) {
+            $("#divIntervalo").hide();
+            $("#divDias").hide();
+            $("#divSemanal").show();
+            $("#divSemanal").html(gsp);
+        })
+        .fail(function(err){
+            //openMessage('error', "Falha ao carregar Reembolso Semanal!");
+            console.log("Erro: " + err);
+        });
+    }
+
+    function loadReembIntervalo(empId) {
+
+        let link = "${createLink(action: 'loadReembolsoIntervalos')}";
+        $.get(link, {id: empId}, function(gsp) {
+            $("#divIntervalo").show();
+            $("#divSemanal").hide();
+            $("#divDias").hide();
+            $("#divIntervalo").html(gsp);
+        })
+        .fail(function(err){
+            console.log("Erro: " + err);
+            alert("Falha ao carregar Intervalos de Reembolso!");
+        });
     }
 
     function openReembDias(rbId) {
@@ -295,7 +225,40 @@
             },
             statusCode: {
                 404: function () {
-                    openMessage('error', "Falha ao abrir página para inclusão de Novos Funcionários");
+                    alert("Falha ao abrir página Reembolso Dias Fixos");
+                }
+            }
+        });
+    }
+
+    function openReembSemanal(rbId) {
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller:'postoCombustivel', action: 'manageReembolsoSemanal')}",
+            data: {parId: "${postoCombustivelInstance?.id}", id: rbId},
+            success: function (data) {
+                openReembSemanalDialog(data);
+            },
+            statusCode: {
+                404: function () {
+                    alert("Falha ao abrir página Reembolso Semanal!");
+                }
+            }
+        });
+
+    }
+
+    function openReembIntervalos(rbId) {
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller:'postoCombustivel', action: 'manageReembolso')}",
+            data: {parId: "${postoCombustivelInstance?.id}", id: rbId},
+            success: function (data) {
+                openReembIntervaloDialog(data);
+            },
+            statusCode: {
+                404: function () {
+                    alert("Falha ao abrir página Reembolso Semanal!");
                 }
             }
         });
@@ -304,18 +267,15 @@
 
     function openModal(rbId) {
 
-        if (checked != null) {
+        const tipoReemb = $("#tipoReembolso").val();
 
-            if (checked.val() == 'SEMANAL')
-                loadReembSemanal(rbId)
-            else if (checked.val() == 'INTERVALOS_MULTIPLOS')
-                loadReembIntervalo(rbId)
-            else if (checked.val() == 'DIAS_TRANSCORRIDOS')
-                openReembDias();
+        if (tipoReemb === 'SEMANAL')
+            openReembSemanal(rbId)
+        else if (tipoReemb === 'INTERVALOS_MULTIPLOS')
+            openReembIntervalos(rbId)
+        else if (tipoReemb === 'DIAS_FIXOS')
+            openReembDias(rbId);
 
-        } else {
-            alert("Selecione primeiramente um Tipo de Reembolso!");
-        }
     }
 
     function saveReembIntervalos() {
@@ -334,7 +294,8 @@
                 data: data,
                 success: function (o) {
                     if (o.type == "ok") {
-                        rbIntervaloTable.ajax.reload();
+                        const empId = $("#id").val();
+                        loadReembIntervalo(empId);
                     }
                     else if (o.type == "error")
                         alert(o.message);
@@ -345,8 +306,10 @@
                     }
                 }
             });
+            return true;
         } else {
             showErrorList();
+            return false;
         }
     }
 
@@ -368,8 +331,8 @@
                 success: function (o) {
                     if (o.type == "ok") {
                         alert(o.message);
-                        rbSemanalTable.ajax.reload();
-
+                        const empId = $("#id").val();
+                        loadReembSemanal(empId);
                     }
                     else if (o.type == "error")
                         alert(o.message);
@@ -380,8 +343,10 @@
                     }
                 }
             });
+            return true;
         } else {
             showErrorList();
+            return false;
         }
     }
 
@@ -397,13 +362,14 @@
             }
         });
 
-
         if (!hasError) {
             $.post("${createLink(action: 'saveReembolsoDias')}", $("#reembDiasForm").serialize())
                     .done(function (o) {
                         if (o.type == "ok") {
                             alert(o.message);
-                            loadReembDias("${postoCombustivelInstance?.id}");
+                            const empId = $("#id").val();
+                            loadReembDias(empId);
+
                         }
                         else if (o.type == "error")
                             alert(o.message);
@@ -423,14 +389,17 @@
     }
 
     var loadReembDias = function(empId) {
+
         let link = "${createLink(action: 'loadReembolsoDias')}";
-        $.get(link, {id: empId})
-            .done(function(gsp) {
-                $("#divDias").html(gsp);
-            })
-            .fail(function(err){
-                alert(err);
-            });
+        $.get(link, {id: empId}, function(gsp) {
+            $("#divIntervalo").hide();
+            $("#divSemanal").hide();
+            $("#divDias").show();
+            $("#divDias").html(gsp);
+        })
+        .fail(function(err){
+            alert(err);
+        });
     }
 
     var addErrorList = function (err) {
@@ -450,6 +419,26 @@
         $(".error").html(htmlError);
 
     }
+
+    const initCalendario = function() {
+
+        const tipoReemb = $("#tipoReembolso").val();
+        const empId = $("#id").val();
+
+        if (tipoReemb === 'INTERVALOS_MULTIPLOS') {
+            loadReembIntervalo(empId);
+        } else if (tipoReemb === 'SEMANAL') {
+            loadReembSemanal(empId);
+        } else if (tipoReemb === 'DIAS_FIXOS') {
+            loadReembDias(empId);
+        } else {
+            $("#divIntervalo").hide();
+            $("#divSemanal").hide();
+            $("#divDias").hide();
+
+        }
+    }
+
 
 
 </script>

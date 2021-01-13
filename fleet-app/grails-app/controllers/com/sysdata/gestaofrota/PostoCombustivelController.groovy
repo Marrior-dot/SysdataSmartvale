@@ -20,6 +20,12 @@ class ReembolsoSemanalCommand {
     Integer intervaloDias
 }
 
+class ReembolsoDiasFixosCommand {
+    Integer id
+    Integer parId
+    Integer diasTranscorridos
+}
+
 
 class PostoCombustivelController {
 
@@ -182,38 +188,6 @@ class PostoCombustivelController {
         render data as JSON
     }
 
-    def getIntervalosReembolso() {
-        def postoCombustivelInstance = PostoCombustivel.get(params.id)
-
-        def jsonData
-        if (postoCombustivelInstance.tipoReembolso == TipoReembolso.INTERVALOS_MULTIPLOS) {
-
-            def user = springSecurityService.currentUser
-            def hasPerm = user.authorities.find { it.authority in ['ROLE_PROC', 'ROLE_ADMIN'] }
-
-            def fields = postoCombustivelInstance.reembolsos.collect { r ->
-
-                def map = [
-                            inicio       : r.inicioIntervalo,
-                            fim          : r.fimIntervalo,
-                            diaEfetivacao: r.diaEfetivacao,
-                            meses        : r.meses
-                        ]
-
-                if (hasPerm)
-                    map['acao'] = "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-remove'/></a>"
-                else
-                    map['acao'] = ""
-
-                return map
-            }
-
-            jsonData = [totalRecords: postoCombustivelInstance.reembolsos.size(), results: fields]
-        } else
-            jsonData = [totalRecords: 0, results: []]
-
-        render jsonData as JSON
-    }
 
     def deleteReembolso() {
         def retorno
@@ -221,46 +195,19 @@ class PostoCombustivelController {
         if (reembolsoInstance) {
             try {
                 reembolsoInstance.delete(flush: true)
-                retorno = [type: "ok", message: "Reembolso excluído"]
+                retorno = [type: "ok", message: "Reembolso excluído", hasReemb: (reembolsoInstance.participante as PostoCombustivel).reembolsos.size() > 0]
+                render retorno as JSON
+                return
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 retorno = [type: "error", message: "Violação de integridade durante exclusão de Reembolso"]
             }
+        } else {
+            retorno = [type: "error", message: "Reembolso #${params.id} não encontrado"]
+            render status: 500, text: retorno as JSON
+            return
         }
-        render retorno as JSON
     }
-
-
-    def getReembolsoSemanal() {
-        def postoCombustivelInstance = PostoCombustivel.get(params.id)
-
-        def jsonData
-
-        if (postoCombustivelInstance.tipoReembolso == TipoReembolso.SEMANAL) {
-
-            def user = springSecurityService.currentUser
-            def hasPerm = user.authorities.find { it.authority in ['ROLE_PROC', 'ROLE_ADMIN'] }
-
-            def fields = postoCombustivelInstance.reembolsos.collect { r ->
-                def map = [
-                            diaSemana    : r.diaSemana.nome,
-                            intervaloDias: r.intervaloDias
-                        ]
-                if (hasPerm)
-                    map['acao'] = "&nbsp<a href='#' onclick='openModal(${r.id});'><span class='glyphicon glyphicon-edit'/></a>&nbsp&nbsp&nbsp<a href='#' onclick='deleteReembolso(${r.id});'><span class='glyphicon glyphicon-trash'/></a>"
-                else
-                    map['acao'] = ""
-                return map
-            }
-
-            jsonData = [totalRecords: postoCombustivelInstance.reembolsos.size(), results: fields]
-        } else
-            jsonData = [totalRecords: 0, results: []]
-
-
-        render jsonData as JSON
-    }
-
 
     def manageReembolso() {
         def reembolsoCommand
@@ -293,6 +240,41 @@ class PostoCombustivelController {
 
         render(template: 'reembolsoSemanal', model: [reembolsoInstance: reembolsoCommand])
     }
+
+    def manageReembolsoDias() {
+        ReembolsoDias reembolsoDias
+
+        if (params.id && params.id ==~ /\d+/) {
+            reembolsoDias = ReembolsoDias.get(params.id as long)
+
+            if (reembolsoDias) {
+                def reembCommand = new ReembolsoDiasFixosCommand()
+                reembCommand.properties = reembolsoDias.properties
+                render(template: 'reembolsoDias', model: [reembolso: reembCommand])
+                return
+            } else {
+                render status: 404, text: "Reembolso #${params.id} não encontrado!"
+                return
+            }
+
+        } else {
+            if (params.parId && params.parId ==~ /\d+/) {
+                PostoCombustivel empresa = PostoCombustivel.get(params.parId as long)
+                if (empresa) {
+                    def reembCommand = new ReembolsoDiasFixosCommand(parId: empresa.id)
+                    render(template: 'reembolsoDias', model: [reembolso: reembCommand])
+                    return
+                } else {
+                    render status: 404, text: "Empresa #${params.parId} não encontrada!"
+                    return
+                }
+            } else {
+                render status: 500, text: "Request Params inválidos!"
+                return
+            }
+        }
+    }
+
 
 
     def saveReembolsoSemanal(ReembolsoSemanalCommand cmd) {
@@ -385,60 +367,61 @@ class PostoCombustivelController {
 
     }
 
-    def manageReembolsoDias() {
-        ReembolsoDias reembolsoDias
-        if (params.id && params.id ==~ /\d+/) {
-            reembolsoDias = ReembolsoDias.get(params.id as long)
-            render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
-            return
-        } else {
-            if (params.parId && params.parId ==~ /\d+/) {
-                PostoCombustivel empresa = PostoCombustivel.get(params.parId as long)
-                if (empresa) {
-                    reembolsoDias = new ReembolsoDias(participante: empresa)
-                    render(template: 'reembolsoDias', model: [reembolso: reembolsoDias])
+
+    def saveReembolsoDias(ReembolsoDiasFixosCommand reembolsoDiasFixosCommand) {
+
+        def ret = []
+
+
+        if (reembolsoDiasFixosCommand.parId) {
+
+            PostoCombustivel postoCombustivel = PostoCombustivel.get(reembolsoDiasFixosCommand.parId as long)
+
+            if (postoCombustivel) {
+                ReembolsoDias reembolsoDias
+
+
+                if (postoCombustivel.reembolsos.size() == 0) {
+                    def op = ""
+                    if (reembolsoDiasFixosCommand.id) {
+                        reembolsoDias = ReembolsoDias.get(params.id.toLong())
+                        op = "alterado"
+                    }
+                    else {
+                        reembolsoDias = new ReembolsoDias()
+                        op = "inserido"
+                    }
+
+                    reembolsoDias.properties = reembolsoDiasFixosCommand.properties
+
+                    postoCombustivel.tipoReembolso = TipoReembolso.DIAS_FIXOS
+                    postoCombustivel.addToReembolsos(reembolsoDias)
+
+                    //if (reembolsoDias.save(flush: true))
+                    if (postoCombustivel.save(flush: true))
+                        ret = [type: "ok", message: "Reembolso Dias #${reembolsoDias.id} " + op]
+                    else
+                        ret = [type: "error", message: reembolsoDias.errors.allErrors*.defaultMessage.join(";")]
+
+                    render ret as JSON
                     return
+
                 } else {
-                    render status: 404, text: "Empresa ID #${params.parId} não encontrada!"
+                    ret = [type: "error", message: "Empresa já possui reembolso configurado"]
+                    render ret as JSON
                     return
                 }
 
             } else {
-                render status: 500, text: "ID da Empresa não é um número válido (${params.parId})!"
+                ret = [type: "error", message: "Empresa com ID #${params.parId} não encontrada"]
+                render ret as JSON
                 return
             }
-
+        } else {
+            ret = [type: "error", message: "ID de Empresa inválido: ${params.parId}!"]
+            render ret as JSON
+            return
         }
-    }
-
-    def saveReembolsoDias() {
-
-        println "Params:"
-        println params
-
-        ReembolsoDias reembolsoDias
-
-        def op = ""
-
-        def ret = []
-        if (params.id && params.id ==~ /\d+/) {
-            reembolsoDias = ReembolsoDias.get(params.id.toLong())
-            op = "inserido"
-        }
-        else {
-            reembolsoDias = new ReembolsoDias()
-            op = "alterado"
-        }
-
-        reembolsoDias.properties = params
-        if (reembolsoDias.save(flush: true))
-            ret = [type: "ok", message: "Reembolso Dias #${reembolsoDias.id} " + op]
-        else
-            ret = [type: "error", message: reembolsoDias.errors.allErrors*.defaultMessage.join(";")]
-
-
-        render ret as JSON
-
     }
 
     def loadReembolsoDias() {
@@ -454,5 +437,36 @@ class PostoCombustivelController {
         } else
             render status: 500, text: "Reembolso Dias ID não é um número válido (${params.id})!"
     }
+
+    def loadReembolsoIntervalos() {
+        if (params.id && params.id ==~ /\d+/) {
+            PostoCombustivel empresa = PostoCombustivel.get(params.id as long)
+            if (empresa) {
+                render template: 'listReembolsoIntervalo', model: [empresa: empresa]
+                return
+            } else {
+                render status: 404, text: "Reembolso Intervalos com id #${params.id} não encontrado!"
+                return
+            }
+        } else
+            render status: 500, text: "Reembolso Intervalos ID não é um número válido (${params.id})!"
+    }
+
+
+    def loadReembolsoSemanal() {
+
+        if (params.id && params.id ==~ /\d+/) {
+            PostoCombustivel empresa = PostoCombustivel.get(params.id as long)
+            if (empresa) {
+                render template: 'listReembolsoSemanal', model: [empresa: empresa]
+                return
+            } else {
+                render status: 404, text: "Reembolso Semanal com id #${params.id} não encontrado!"
+                return
+            }
+        } else
+            render status: 500, text: "Reembolso Semanal ID não é um número válido (${params.id})!"
+    }
+
 
 }
