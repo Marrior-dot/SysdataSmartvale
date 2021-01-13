@@ -129,6 +129,8 @@ cartao {
         produto = "SMART VALE"
         idCliente = "SVALE"
 
+        enviarPaysmart = true
+
         tamanhoNomeTitular = 24
         gerador = "geracaoEmbossingPaysmartService"
     }
