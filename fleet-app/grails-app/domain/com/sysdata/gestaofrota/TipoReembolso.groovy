@@ -4,7 +4,7 @@ enum TipoReembolso {
 	
 	INTERVALOS_MULTIPLOS("Intervalo Múltiplos"),
 	SEMANAL("Semanal"),
-	DIAS_TRANSCORRIDOS("Dias Transcorridos")
+	DIAS_FIXOS("Dias Fixos")
 
 	String nome
 	

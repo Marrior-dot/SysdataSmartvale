@@ -1,6 +1,6 @@
 <div class="panel panel-default panel-top">
     <div class="panel-heading">
-        Agenda de Reembolso por Dias Fixos
+        Agenda de Reembolso Semanal
     </div>
 
     <div class="panel-body">
@@ -8,13 +8,15 @@
             <div class="col-md-6">
                 <table class="table">
                     <thead>
-                    <th>Reembolsar em (dias)</th>
-                    <th>Ações</th>
+                    <th>Dia Semana</th>
+                    <th>Intervalo Dias</th>
+                    <th>Açoes</th>
                     </thead>
                     <tbody>
                     <g:each in="${empresa.reembolsos}" var="reemb">
                         <tr>
-                            <td>${reemb.diasTranscorridos}</td>
+                            <td>${reemb.diaSemana}</td>
+                            <td>${reemb.intervaloDias}</td>
                             <td><a href="#" onclick="deleteReembolso(${reemb.id});"><i class="glyphicon glyphicon-trash"></i></a></td>
                         </tr>
                     </g:each>

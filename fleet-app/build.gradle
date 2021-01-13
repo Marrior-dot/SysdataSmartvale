@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.0.6"
+version "1.0.7"
 group "fleet-app"
 
 apply plugin:"eclipse"
@@ -83,7 +83,7 @@ dependencies {
     //
     runtime "org.postgresql:postgresql:9.4.1211.jre7"
 
-    compile "org.jrimum:jrimum-bopepo:0.2.3-SNAPSHOT"
+    //compile "org.jrimum:jrimum-bopepo:0.2.3-SNAPSHOT"
 
     //compile "org.grails.plugins:hibernate-filter-plugin:0.5.5"
     compile 'org.grails.plugins:quartz:2.0.13'
