@@ -19,12 +19,12 @@ class FleetRoutesService {
     GrailsApplication grailsApplication
 
     def init() {
-
         if (Environment.current == Environment.PRODUCTION) {
-            initDepositaArquivoPaysmart()
-            initRecuperaArquivoPaysmart()
+            if (grailsApplication.config.projeto.cartao.embossing.enviarPaysmart) {
+                initDepositaArquivoPaysmart()
+                initRecuperaArquivoPaysmart()
+            }
         }
-
     }
 
     private void initDepositaArquivoPaysmart() {
@@ -49,7 +49,7 @@ class FleetRoutesService {
                 def delay = "10m"
                 def indentPath = grailsApplication.config.projeto.arquivos.baseDir + "routes"
 
-                def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{6}_01"
+                def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{6}_01.txt"
 
                 def fromFile="file://$srcDir?delay=$delay&initialDelay=$initDelay&include=$filenamePattern&move=${sentDir}/ENV_\${file:name}"
 
