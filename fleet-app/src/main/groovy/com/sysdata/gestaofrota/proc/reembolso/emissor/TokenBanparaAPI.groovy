@@ -42,7 +42,6 @@ trait TokenBanparaAPI {
 
             msgAutentica.codigoResposta = responseData.statusCode.toString()
             msgAutentica.resposta = responseData.body
-            msgAutentica.jsonResponse = responseData
             msgAutentica.save(flush: true)
 
             if (responseData.statusCode == 200) {
