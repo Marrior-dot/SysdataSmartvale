@@ -1,14 +1,9 @@
 package fleet.app
 
-import com.fourLions.processingControl.BatchProcessing
-import com.fourLions.processingControl.DailySchedule
-import com.fourLions.processingControl.ExecutionFrequency
-import com.fourLions.processingControl.Processing
-import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.FixturesService
 import com.sysdata.gestaofrota.camel.FleetRoutesService
 import com.sysdata.xfiles.FileProcessor
 import grails.core.GrailsApplication
-import grails.util.Holders
 
 class BootStrap {
 
@@ -21,7 +16,7 @@ class BootStrap {
 
         if (grailsApplication.config.projeto.projectId == "banpara" && grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
             System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
-            System.setProperty("javax.net.ssl.trustStorePassword", "sysdata")
+            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
         }
 
         FileProcessor.init()
