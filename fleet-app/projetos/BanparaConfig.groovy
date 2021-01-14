@@ -195,6 +195,7 @@ environments {
                 api {
 
                     jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
+                    password = "sysdata"
 
                     autenticar {
                         endpoint = "https://172.35.21.19/controlecanais/v1/autenticar"
@@ -242,6 +243,7 @@ environments {
                 api {
 
                     jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
+                    password = "sByasNdPartaa"
 
                     autenticar {
                         endpoint = "https://172.35.21.30/controlecanais/v1/autenticar"
