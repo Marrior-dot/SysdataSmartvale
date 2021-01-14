@@ -1,10 +1,29 @@
+# Bypassing Certificado
+
 curl 
 
 -H "Content-Type: application/json" 
 
 -d '{"usuario":"GSMB","chave":"a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"}' 
 
--k https://172.35.21.19/controlecanais/v1/autenticar
+-k https://172.35.21.19/APIControleCanais/v1/autenticar
+
+
+# Com certificado
+
+curl 
+
+-H "Content-Type: application/json" 
+
+--cacert /home/luiz/banpara/banpara.cer
+
+-d '{"usuario":"GSMB","chave":"a9cUGGf2thbc6HUCZeyWchK4BsEVrxmuNRqKasF4CvN3mjt4Wce9GmqtqhmkAm8HJgoV2VbRgrpLqZXJb2hzaP7oTZ9AjoboujvCRS8ads5i9b7nLCXkcXVtog9DiwMkJaOsMJpFyc9hiaVjE6P8cjjpkjfWCfPjAbib9u2PRP3gDrePzPiHtq4Y5Nw4Mw34P8xgi6jExcqTez73hdyDSc2WAGVqVPNi4K6owHOsbnr3teWH6dUiWvEqe82zfgTd"}' 
+
+-k https://172.35.21.19/APIControleCanais/v1/autenticar
+
+
+	
+
 
 Resposta:
 
@@ -20,10 +39,14 @@ Resposta:
 echo -n | openssl s_client -connect 172.35.21.19:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /home/luiz/banpara.cer
 
 
-# Gerar chave a partir do Certificado
-keytool -import -alias banpara.cer -keystore /usr/local/frota/banpara/banparakeystore.jks -file /home/luiz/banpara.cer
+# Produção
+echo -n | openssl s_client -connect 172.35.21.30:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /home/luiz/banpara/banpara.cer
 
-password: sysdata
+
+# Gerar chave a partir do Certificado
+keytool -import -alias banpara.cer -keystore /usr/local/frota/banpara/banparakeystore.jks -file /home/luiz/banpara/banpara.cer
+
+password: sByasNdPartaa
 
 
 

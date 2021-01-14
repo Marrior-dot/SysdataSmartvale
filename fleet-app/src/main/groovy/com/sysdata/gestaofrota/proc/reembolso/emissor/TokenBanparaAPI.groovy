@@ -35,7 +35,7 @@ trait TokenBanparaAPI {
             MensagemIntegracao msgAutentica = new MensagemIntegracao(tipo: TipoMensagem.BANPARA_AUTENTICACAO)
             msgAutentica.corpo = (credencial as JSON).toString(true)
 
-            ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, "/", credencial)
+            ResponseData responseData = RESTClientHelper.instance.postJSON(endpoint, credencial)
 
             if (!responseData)
                 throw new RuntimeException("Sem resposta do servidor!")
@@ -54,6 +54,7 @@ trait TokenBanparaAPI {
                 if (key) {
                     key.status = StatusChaveAcesso.EXPIRADA
                     key.save(flush: true)
+                    log.info "Token #${key.id} expirada"
                 }
 
                 // Persiste novo token recuperado
@@ -65,6 +66,7 @@ trait TokenBanparaAPI {
                     tipoAplicacao = TipoAplicacao.CLIENTE_API_BANPARA
                 }
                 newKey.save(flush: true)
+                log.info "Nova token #${newKey.id} recuperado"
 
                 clos(newKey.token)
             }
