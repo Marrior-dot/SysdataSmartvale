@@ -57,9 +57,8 @@ trait TokenBanparaAPI {
                 }
 
                 // Persiste novo token recuperado
-                ChaveAcessoApi newKey = new ChaveAcessoApi()
+                ChaveAcessoApi newKey = new ChaveAcessoApi(token: receivedToken)
                 newKey.with {
-                    token = receivedToken
                     dataHoraCriacao = dateFormat.parse(receivedDateCreated.replace("T", " "))
                     dataHoraExpiracao = dateFormat.parse(receivedDateExpiration.replace("T", " "))
                     tipoAplicacao = TipoAplicacao.CLIENTE_API_BANPARA
