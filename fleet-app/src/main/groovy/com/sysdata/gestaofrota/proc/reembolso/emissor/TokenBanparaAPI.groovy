@@ -57,12 +57,10 @@ trait TokenBanparaAPI {
                 }
 
                 // Persiste novo token recuperado
-                ChaveAcessoApi newKey = new ChaveAcessoApi(token: receivedToken)
-                newKey.with {
-                    dataHoraCriacao = dateFormat.parse(receivedDateCreated.replace("T", " "))
-                    dataHoraExpiracao = dateFormat.parse(receivedDateExpiration.replace("T", " "))
-                    tipoAplicacao = TipoAplicacao.CLIENTE_API_BANPARA
-                }
+                ChaveAcessoApi newKey = new ChaveAcessoApi(token: receivedToken,
+                                                            dataHoraCriacao: dateFormat.parse(receivedDateCreated.replace("T", " ")),
+                                                            dataHoraExpiracao: dateFormat.parse(receivedDateExpiration.replace("T", " ")),
+                                                            tipoAplicacao: TipoAplicacao.CLIENTE_API_BANPARA)
                 newKey.save(flush: true)
                 log.info "Nova token #${newKey.id} recuperado"
 
@@ -81,7 +79,6 @@ trait TokenBanparaAPI {
 
                 log.error "Falha na autenticação: Erro de Sistema"
 
-            msgAutentica.save(flush: true)
 
             // Utiliza a chave previamente recuperada e armazenada
         } else
