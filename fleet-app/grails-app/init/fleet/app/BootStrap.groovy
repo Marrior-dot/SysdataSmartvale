@@ -21,7 +21,7 @@ class BootStrap {
 
         if (grailsApplication.config.projeto.projectId == "banpara" && grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
             System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
-            System.setProperty("javax.net.ssl.trustStorePassword", "sysdata")
+            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
         }
 
         FileProcessor.init()
