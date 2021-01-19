@@ -19,7 +19,7 @@ class ReembolsoService {
         } else if (empresa.tipoReembolso == TipoReembolso.SEMANAL) {
             return reembolsoSemanalService.calcularDataReembolso(empresa, dataReferencia)
 
-        } else if (empresa.tipoReembolso == TipoReembolso.DIAS_TRANSCORRIDOS) {
+        } else if (empresa.tipoReembolso == TipoReembolso.DIAS_FIXOS) {
             return reembolsoDiasService.calcularDataReembolso(empresa, dataReferencia)
 
         } else

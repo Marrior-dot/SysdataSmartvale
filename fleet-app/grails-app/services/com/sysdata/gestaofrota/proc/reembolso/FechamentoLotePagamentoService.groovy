@@ -1,11 +1,21 @@
 package com.sysdata.gestaofrota.proc.reembolso
 
 import com.fourLions.processingControl.ExecutableProcessing
+import com.sysdata.gestaofrota.CorteConvenio
+import com.sysdata.gestaofrota.Fatura
+import com.sysdata.gestaofrota.ItemFatura
+import com.sysdata.gestaofrota.LancamentoConvenio
 import com.sysdata.gestaofrota.LotePagamento
+import com.sysdata.gestaofrota.LoteRecebimento
 import com.sysdata.gestaofrota.PagamentoEstabelecimento
 import com.sysdata.gestaofrota.PagamentoLote
+import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.StatusCorte
+import com.sysdata.gestaofrota.StatusLancamento
 import com.sysdata.gestaofrota.StatusLotePagamento
 import com.sysdata.gestaofrota.StatusReenvioPagamento
+import com.sysdata.gestaofrota.TipoFatura
+import com.sysdata.gestaofrota.TipoLancamento
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -109,7 +119,9 @@ class FechamentoLotePagamentoService implements ExecutableProcessing {
         log.info "Fechamento de Lote de Pagamento finalizado"
     }
 
-    private void criarLotePagamento(LotePagamento loteLiquidacao, PagamentoEstabelecimento pagamento, BigDecimal valorPagto, List<PagamentoEstabelecimento> pagtoList, Date dataOper) {
+    private void criarLotePagamento(LotePagamento loteLiquidacao, PagamentoEstabelecimento pagamento, BigDecimal valorPagto,
+                                    List<PagamentoEstabelecimento> pagtoList, Date dataOper) {
+
         log.debug "\tLote #${loteLiquidacao.id} pg #$pagamento.id vl:$valorPagto pgtos: $pagtoList"
 
         PagamentoLote pagtoLote = new PagamentoLote()

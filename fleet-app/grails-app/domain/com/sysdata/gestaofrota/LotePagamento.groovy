@@ -21,8 +21,11 @@ class LotePagamento {
         id generator: "sequence", params: ["sequence": "lotepag_seq"]
     }
 
-
     static LotePagamento getAberto() {
         LotePagamento.findByStatus(StatusLotePagamento.ABERTO)
+    }
+
+    BigDecimal getTotal() {
+        return this.pagamentos.sum { it.valor }
     }
 }
