@@ -12,13 +12,13 @@ class ProcessamentoController {
     ProcessingService processingService
 
     def index() {
-        [processingList: Processing.list()]
+        [processingList: Processing.list(sort: 'order')]
     }
 
     def execute(Long id) {
         Processing processing = Processing.get(id)
         if (processing) {
-            Date date = new Date().clearTime()
+            Date date = Util.calcularDataProcessamento()
             processingService.runProcessing(processing, date)
             flash.success = "Processamento (${processing.name}) executado"
         } else
@@ -28,7 +28,7 @@ class ProcessamentoController {
 
     def executeAll() {
         def processingList = Processing.list(sort: 'order')
-        def data = Util.calcularDataProc()
+        def data = Util.calcularDataProcessamento()
         processingList.each { p ->
             try {
                 ExecutableProcessing exec = p as ExecutableProcessing

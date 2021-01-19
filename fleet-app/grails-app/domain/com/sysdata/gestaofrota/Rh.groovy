@@ -78,7 +78,7 @@ class Rh extends Empresa {
     }
 
     String toString() {
-        "${this.cnpj} - ${this.nome}"
+        "#${this.id} (${this.cnpj}) - ${this.nome}"
     }
 
     int getFuncionariosCount() {
