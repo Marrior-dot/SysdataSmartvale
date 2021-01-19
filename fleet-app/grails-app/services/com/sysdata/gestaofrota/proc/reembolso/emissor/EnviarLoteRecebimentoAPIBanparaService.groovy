@@ -41,9 +41,9 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
         loteRecebimento.status = StatusLotePagamento.REJEITADO
         loteRecebimento.save(flush: true)
 
-        loteRecebimento.recebimentos.each { PagamentoLote pgLt ->
-            pgLt.status = StatusPagamentoLote.REJEITADO
-            pgLt.save(flush: true)
+        loteRecebimento.recebimentos.each { RecebimentoLote recLt ->
+            recLt.status = StatusPagamentoLote.REJEITADO
+            recLt.save(flush: true)
         }
 
     }
