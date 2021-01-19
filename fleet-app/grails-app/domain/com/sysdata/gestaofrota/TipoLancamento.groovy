@@ -22,7 +22,10 @@ enum TipoLancamento {
 	TAXA_ADESAO_EC("Taxa de Adesão"),
 	TAXA_VISIBILIDADE_EC("Taxa de Visibilidade"),
 	ANUIDADE_EC("Anuidade"),
-	TARIFA_BANCARIA_EC("Anuidade")
+	TARIFA_BANCARIA_EC("Anuidade"),
+
+	//
+	A_RECEBER_CONVENIO("A Receber Convênio")
 
 	String nome
 	

@@ -139,10 +139,14 @@ class FixturesService {
         Processing.findOrCreateWhere([name: "Faturamento Estabelecimento", order: 8 as byte, service: "corteReembolsoEstabsService", active: true, batch: batch]).save(flush: true)
         Processing.findOrCreateWhere([name: "Fechamento de Lote Pagamento", order: 9 as byte, service: "fechamentoLotePagamentoService", active: true, batch: batch]).save(flush: true)
 
+
         if (grailsApplication.config.projeto.projectId == "banpara") {
-            Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 10 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
-            Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 11 as byte, service: "consultarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
-            Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 12 as byte, service: "consultarLoteDevolucaoAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Fechamento de Lote Recebimento", order: 10 as byte, service: "fechamentoLoteRecebimentoService", active: true, batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 11 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Envio Lote Recebimento Banpará API", order: 12 as byte, service: "enviarLoteRecebimentoAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 13 as byte, service: "consultarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 14 as byte, service: "consultarLoteDevolucaoAPIBanparaService", active: true, batch: batch]).save(flush: true)
         }
 
         if (grailsApplication.config.projeto.projectId == "smartvale") {
