@@ -14,7 +14,7 @@ class ReembolsoDiasService implements CalculoDiasUteis {
             return dataUtil(dataReferencia + reembolsoDias.diasTranscorridos)
 
         } else
-            throw new RuntimeException("Reembolso do EC #${empresa.id} não é do tipo Dias Transcorridos!")
+            throw new RuntimeException("Reembolso do EC #${empresa.id} não é do tipo Dias Fixos!")
     }
 
 }

@@ -14,13 +14,15 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
     @Override
     def execute(Date date) {
 
+        def rhs = [:]
+
         def datasCorte = LancamentoEstabelecimento.withCriteria {
                             projections {
                                 groupProperty("dataEfetivacao")
                             }
                             'in'("tipo", [TipoLancamento.REEMBOLSO])
                             eq("status", StatusLancamento.A_FATURAR)
-                            le("dataEfetivacao", date)
+                            le("dataEfetivacao", date + 1)
                             order("dataEfetivacao")
                         }
 
@@ -50,17 +52,17 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 corteEstab.datasCortadas << dt
                 log.info "Cortando Data ${dt.format('dd/MM/yy')} ..."
                 def contasIds = LancamentoEstabelecimento.withCriteria {
-                                        projections {
-                                            groupProperty("conta.id")
-                                        }
-                                        eq("tipo", TipoLancamento.REEMBOLSO)
-                                        eq("status", StatusLancamento.A_FATURAR)
-                                        eq("dataEfetivacao", dt)
+                                    projections {
+                                        groupProperty("conta.id")
+                                    }
+                                    eq("tipo", TipoLancamento.REEMBOLSO)
+                                    eq("status", StatusLancamento.A_FATURAR)
+                                    eq("dataEfetivacao", dt)
                                 }
                 if (contasIds) {
                     contasIds.eachWithIndex { cid, i ->
                         Conta contaEstab = Conta.get(cid)
-                        cortarConta(corteEstab, contaEstab, dt)
+                        cortarConta(corteEstab, contaEstab, dt, rhs)
                         if ((i + 1) % 50 == 0)
                             clearSession()
                     }
@@ -70,11 +72,47 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             corteEstab.status = StatusCorte.FECHADO
             corteEstab.save(flush: true)
 
+            cortarConvenio(date, rhs)
+
         } else
             log.info "Não há Corte de Reembolso para esta data ${date.format('dd/MM/yy')}"
     }
 
-    private def cortarConta(Corte corte, Conta conta, Date dataRef) {
+    private def cortarConvenio(Date dataOper, Map rhs) {
+        // Gera Recebimentos por RH e os vincula ao Lote Recebimento aberto
+
+        log.info "Cortando RHs para recebimento ..."
+        CorteConvenio corteConvenio = new CorteConvenio()
+        corteConvenio.with {
+            status = StatusCorte.FECHADO
+            dataPrevista = dataOper
+            dataFechamento = dataOper
+            dataCobranca = dataOper + 1
+        }
+        corteConvenio.save(flush: true)
+        log.info "Corte Convênio #${corteConvenio.id} criado"
+
+        rhs.each { k, v ->
+            RecebimentoConvenio recebimentoConvenio = new RecebimentoConvenio()
+            recebimentoConvenio.with {
+                dataProgramada = dataOper + 1
+                rh = Rh.get(k)
+                corte = corteConvenio
+                valor = v
+            }
+            recebimentoConvenio.save(flush: true)
+            log.info "Rebecimento #${recebimentoConvenio.id} criado"
+        }
+
+        // Vincula Corte Convênio a Lote de Recebimento
+        LoteRecebimento loteAberto = LoteRecebimento.aberto
+        loteAberto.addToCortes(corteConvenio)
+        loteAberto.save(flush: true)
+
+    }
+
+
+    private def cortarConta(Corte corte, Conta conta, Date dataRef, Map rhs) {
 
         def global = [:]
 
@@ -82,11 +120,11 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
         log.info "\t$estab"
         def List<LancamentoEstabelecimento> parcelaList = LancamentoEstabelecimento.withCriteria {
-                                                            eq("tipo", TipoLancamento.REEMBOLSO)
-                                                            eq("status", StatusLancamento.A_FATURAR)
-                                                            eq("dataEfetivacao", dataRef)
-                                                            eq("conta", conta)
-                                                        }
+                                                                eq("tipo", TipoLancamento.REEMBOLSO)
+                                                                eq("status", StatusLancamento.A_FATURAR)
+                                                                eq("dataEfetivacao", dataRef)
+                                                                eq("conta", conta)
+                                                            }
 
         def totalTransacoes = parcelaList.sum { it.valor }
         def totalCobrancas = calcularTotalCobrancas(estab, totalTransacoes, global)
@@ -108,6 +146,14 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 lc.pagamento = pagamento
                 lc.save()
                 log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
+
+                // Acumula valor reembolso por RH p/ gerar Lote Recebimento
+                Rh rh = lc.transacao.cartao.portador.unidade.rh
+                if (!rhs.containsKey(rh.id))
+                    rhs[rh.id] = lc.valor
+                else
+                    rhs[rh.id] += lc.valor
+
             }
             pagamento.valor = totalLiquido
 
@@ -117,7 +163,11 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
             corte.save(flush: true)
             log.info "\tPG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
 
-        // Caso contrário, empurra os lançamentos para a próxima data possível de reembolso, conforme calendário
+
+
+
+
+            // Caso contrário, empurra os lançamentos para a próxima data possível de reembolso, conforme calendário
         } else {
 
 

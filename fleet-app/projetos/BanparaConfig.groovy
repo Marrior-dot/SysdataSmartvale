@@ -149,13 +149,14 @@ environments {
                 api {
 
                     autenticar {
-                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
+                        endpoint = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io/controlecanais/v1/autenticar"
                         usuario = "teste"
                         chave = "teste"
                     }
 
-                    transferencia {
-                        baseUrl = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io"
+                    lote {
+                        endpoint = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io/transferencia/contacorrente/v1/lote"
+                        operador = "00000042"
                     }
 
                 }

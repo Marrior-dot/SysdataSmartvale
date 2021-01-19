@@ -4,6 +4,7 @@ enum TipoMensagem {
 
     BANPARA_AUTENTICACAO("Autenticação (Banpará API)"),
     BANPARA_ENVIO_LOTEPAGAMENTO("Envio Lote Pagamento (Banpará API)"),
+    BANPARA_ENVIO_LOTERECEBIMENTO("Envio Lote Recebimento (Banpará API)"),
     BANPARA_CONSULTA_LOTEPAGAMENTO("Consulta Lote Pagamento (Banpará API)"),
     BANPARA_CONSULTA_LOTE_DEVOLUCAO("Consulta Lotes Devolvidos (Banpará API)"),
 
