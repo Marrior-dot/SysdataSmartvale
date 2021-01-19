@@ -17,7 +17,7 @@ class LoteRecebimento {
     }
 
     static mapping = {
-        id generator: "sequence", params: ["sequence": "lotereceb_seq"]
+        id generator: "sequence", params: ["sequence": "lotepag_seq"]
     }
 
     static LoteRecebimento getAberto() {
