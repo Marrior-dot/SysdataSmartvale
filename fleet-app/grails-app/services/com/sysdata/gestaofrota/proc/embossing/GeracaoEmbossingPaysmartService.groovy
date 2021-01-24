@@ -78,6 +78,10 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
     }
 
     private String getRegistros(LoteEmbossing loteEmbossing) {
+
+        def maximoColunas = grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing
+
+
         final String rfu = String.format("%7s", " ")
         final String rfu2 = String.format("%-6s", "*")
         final String rfu3 = String.format("%105s", " ")
@@ -98,43 +102,79 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
         StringBuilder builder = new StringBuilder()
         int sequencial = 2
 
-        loteEmbossing.cartoes.eachWithIndex { c, i ->
-            //Cartao c = Cartao.get(cid)
-            String nome = c.portador.nomeEmbossing;
-            nome = Util.normalize(nome.substring(0, Math.min(26, nome.length())).toUpperCase())
-            String pan = c.numero.substring(0, 16)
-            String validade = sdfAAMM.format(c.validade)
-            String via = c.via.toString().padLeft(2, "0")
-            String discretionaryData = "${c.cvv}${titularidade}${via}".padRight(13, "0")
+
+        def crtIds = Cartao.withCriteria {
+                        projections {
+                            property("id")
+                        }
+                        eq("loteEmbossing", loteEmbossing)
+                        order("id")
+                    }
+
+
+        crtIds.eachWithIndex { cid, i ->
+            Cartao cartao = Cartao.get(cid)
+            String nome = cartao.portador.nomeEmbossing;
+            nome = Util.normalize(nome.substring(0, Math.min(maximoColunas, nome.length())).toUpperCase())
+            String pan = cartao.numero.substring(0, 16)
+            String validade = sdfAAMM.format(cartao.validade)
+            String via = cartao.via.toString().padLeft(2, "0")
+            String discretionaryData = "${cartao.cvv}${titularidade}${via}".padRight(13, "0")
 
             String trilha1 = "B${pan}^${String.format("%-26s", nome)}^${validade}${serviceCode}${discretionaryData}"
             String trilha2 = "${pan}=${validade}${serviceCode}${discretionaryData}"
 
-            String cpf = c.portador.cpfFormatado
-            String cnpj = c.portador.cnpj
+            String cpf = cartao.portador.cpfFormatado
+            String cnpj = cartao.portador.cnpj
             String campoCpf = cpf.length() > 0 ? "CPF=${cpf}" : String.format("%18s", " ")
             String campoCnpj = cnpj.length() > 0 ? "CNPJ${cnpj}" : String.format("%19s", " ")
 
+            def pinBlock = this.tdesChipher.encrypt(cartao.senha)
 
+            builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${produto}${agencia}${posto}${numeroConta}")
 
-            def pinBlock = this.tdesChipher.encrypt(c.senha)
+            // primeira linha de embossing (número do cartão formatado)
+            builder.append("\$${cartao.numeroFormatado.padRight(20, " ")}")
 
-            builder.append("D${sequencial.toString().padLeft(8, '0')}${rfu}${produto}${agencia}${posto}${numeroConta}" +
-                    "\$${c.numeroFormatado.padRight(20, " ")}" +            // primeira linha de embossing (número do cartão formatado)
-                    "*${sdfMMAA.format(c.validade).padRight(24, " ")}" +    // segunda linha de embossing (data validade cartão formato: MM/AA)
-                    "*${getNomeTitular(c.portador).padRight(24, " ")}" +    // terceira linha de embossing (nome do portador)
-                    "*${emb4}" +                                            // quarta linha de embossing (agencia + posto; não se aplica)
-                    "${rfu2}" +                                             // campo reservado uso futuro
-                    "%${trilha1}?" +                                        // trilha 1
-                    ";${trilha2}?" +                                        // trilha 2
-                    "|${getDadosPostagem(c.portador.unidade.rh.endereco)}" +
-                    "${c.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}" +
-                    "${aplicacoes}${pinBlock}  #CH#" +
-                    "${getTerminadorLinha()}")
+            if (cartao.portador.instanceOf(Funcionario)) {
+
+                // segunda linha de embossing (data validade cartão formato: MM/AA)
+                builder.append("*${sdfMMAA.format(cartao.validade).padRight(maximoColunas, " ")}")
+
+                // terceira linha de embossing (nome do portador)
+                builder.append("*${getNomeTitular(cartao.portador).padRight(maximoColunas, " ")}")
+
+                // quarta linha de embossing (agencia + posto; não se aplica)
+                builder.append("*${emb4}")
+
+            } else if (cartao.portador.instanceOf(Veiculo)) {
+
+                def empresaNome = Util.normalize(cartao.portador.unidade.rh.nome).toUpperCase().padRight(maximoColunas, "")
+                def unidadeNome = Util.normalize(cartao.portador.unidade.nome).toUpperCase().padRight(maximoColunas, "")
+
+                // 2ª Linha - Nome da Empresa Cliente
+                builder.append("*${empresaNome}")
+                // 3ª Linha - Nome da Unidade
+                builder.append("*${unidadeNome}")
+                // 4ª Linha - Nome do Portador
+                builder.append("*${getNomeTitular(cartao.portador).padRight(maximoColunas, " ")}")
+
+            }
+
+            // campo reservado uso futuro
+            builder.append("${rfu2}")
+            // trilha 1
+            builder.append("%${trilha1}?")
+            // trilha 2
+            builder.append(";${trilha2}?")
+            builder.append("|${getDadosPostagem(cartao.portador.unidade.rh.endereco)}")
+            builder.append("${cartao.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}")
+            builder.append("${aplicacoes}${pinBlock}  #CH#")
+            builder.append("${getTerminadorLinha()}")
 
             sequencial++
-            c.status = StatusCartao.EMBOSSING
-            c.loteEmbossing = loteEmbossing
+            cartao.status = StatusCartao.EMBOSSING
+            cartao.loteEmbossing = loteEmbossing
 
             if ((i + 1) % 50 == 0) {
                 Cartao.withSession {
