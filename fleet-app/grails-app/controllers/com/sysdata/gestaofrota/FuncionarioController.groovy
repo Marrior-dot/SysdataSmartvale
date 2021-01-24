@@ -74,7 +74,7 @@ class FuncionarioController extends BaseOwnerController {
             // TODO: Refatorar Embossing
             render(view: "form", model: [funcionarioInstance: funcionario,
                                          action             : Util.ACTION_NEW,
-                                         tamMaxEmbossing    : grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing    : grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -94,7 +94,7 @@ class FuncionarioController extends BaseOwnerController {
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                              unidadeInstance: funcionarioInstance.unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
                 return
             }
 
@@ -107,7 +107,7 @@ class FuncionarioController extends BaseOwnerController {
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                              unidadeInstance: funcionarioInstance.unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
 
         }
@@ -116,7 +116,7 @@ class FuncionarioController extends BaseOwnerController {
             flash.error = "Erro Interno. Contatar suporte"
             render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                          action: Util.ACTION_NEW,
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
 
     }
@@ -130,7 +130,7 @@ class FuncionarioController extends BaseOwnerController {
             render(view: 'form', model: [funcionarioInstance: funcionarioInstance,
                                          unidadeInstance: funcionarioInstance.unidade,
                                          action: Util.ACTION_VIEW,
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
     }
 
@@ -144,7 +144,7 @@ class FuncionarioController extends BaseOwnerController {
                                             funcionarioInstance: funcionarioInstance,
                                             unidadeInstance: funcionarioInstance.unidade,
                                             action: Util.ACTION_EDIT,
-                                            tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular,
+                                            tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing,
                                             editable: true
                                 ])
         }
@@ -166,7 +166,7 @@ class FuncionarioController extends BaseOwnerController {
                     render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                                  unidadeInstance: funcionarioInstance.unidade,
                                                  action: Util.ACTION_EDIT,
-                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
                 }
 
             }
@@ -176,7 +176,7 @@ class FuncionarioController extends BaseOwnerController {
                 render(view: "form", model: [funcionarioInstance: funcionarioInstance,
                                              unidadeInstance: funcionarioInstance.unidade,
                                              action: Util.ACTION_EDIT,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
 
         } else {

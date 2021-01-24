@@ -59,7 +59,7 @@ class VeiculoController  {
 
             render(view: "form", model: [veiculoInstance: veiculo,
                                          action: Util.ACTION_NEW,
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         } else {
             flash.message = "Unidade não selecionada!"
             redirect(action: 'list')
@@ -81,7 +81,7 @@ class VeiculoController  {
                     if (ret.message)
                         flash.error = ret.message
                     render(view: "form", model: [veiculoInstance: veiculoInstance, action: Util.ACTION_NEW,
-                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                                 tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
                 }
             }
             catch (Exception e) {
@@ -90,7 +90,7 @@ class VeiculoController  {
                 render(view: "form", model: [veiculoInstance: veiculoInstance,
                                              unidadeInstance: veiculoInstance.unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
 
         } else {
@@ -108,7 +108,7 @@ class VeiculoController  {
             render(view: "form", model: [veiculoInstance: veiculoInstance,
                                          unidadeInstance: veiculoInstance.unidade,
                                          action: Util.ACTION_VIEW,
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
     }
 
@@ -121,7 +121,7 @@ class VeiculoController  {
             render(view: 'form', model: [veiculoInstance: veiculoInstance,
                                          unidadeInstance: veiculoInstance.unidade,
                                          action: 'editando',
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
     }
 
@@ -139,7 +139,7 @@ class VeiculoController  {
                 render(view: 'form', model: [veiculoInstance: veiculoInstance,
                                              unidadeInstance: veiculoInstance.unidade,
                                              action: 'editando',
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'veiculo.label', default: 'Veiculo'), params.id])}"
@@ -300,7 +300,7 @@ class VeiculoController  {
         render(view: "form", model: [veiculoInstance: veiculoInstance,
                                      unidadeInstance: veiculoInstance.unidade,
                                      action: Util.ACTION_VIEW,
-                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
     }
 
 }
