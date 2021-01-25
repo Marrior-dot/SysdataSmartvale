@@ -136,7 +136,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
             // primeira linha de embossing (número do cartão formatado)
             builder.append("\$${cartao.numeroFormatado.padRight(20, " ")}")
 
-            if (cartao.portador.instanceOf(Funcionario)) {
+            if (cartao.portador.instanceOf(PortadorFuncionario)) {
 
                 // segunda linha de embossing (data validade cartão formato: MM/AA)
                 builder.append("*${sdfMMAA.format(cartao.validade).padRight(maximoColunas, " ")}")
@@ -147,7 +147,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 // quarta linha de embossing (agencia + posto; não se aplica)
                 builder.append("*${emb4}")
 
-            } else if (cartao.portador.instanceOf(MaquinaMotorizada)) {
+            } else if (cartao.portador.instanceOf(PortadorMaquina)) {
 
                 def empresaNome = Util.normalize(cartao.portador.unidade.rh.nome).toUpperCase().padRight(maximoColunas, "")
                 def unidadeNome = Util.normalize(cartao.portador.unidade.nome).toUpperCase().padRight(maximoColunas, "")
