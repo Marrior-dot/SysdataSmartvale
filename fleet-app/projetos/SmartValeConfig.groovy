@@ -131,7 +131,7 @@ cartao {
 
         enviarPaysmart = true
 
-        tamanhoNomeTitular = 24
+        maximoColunasLinhaEmbossing = 24
         gerador = "geracaoEmbossingPaysmartService"
     }
 }
