@@ -113,7 +113,7 @@ cartao {
         produto = "BANPARA FROTA"
         idCliente = "BANPR"
 
-        tamanhoNomeTitular = 27
+        maximoColunasLinhaEmbossing = 27
         gerador = "geracaoEmbossingBanparaIntelcavService"
 
     }

@@ -35,7 +35,7 @@ class EquipamentoController extends BaseOwnerController {
             } else {
                 render(view: "form", model: [unidadeInstance: unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
         } else {
             flash.error = "Unidade não encontrada."
@@ -71,14 +71,14 @@ class EquipamentoController extends BaseOwnerController {
                 render(view: "form", model: [equipamentoInstance: equipamentoInstance,
                                              unidadeInstance: equipamentoInstance.unidade,
                                              action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
         } else {
             flash.error = "Unidade não encontrada."
             render(view: "form", model: [equipamentoInstance: equipamentoInstance,
                                          unidadeInstance: equipamentoInstance.unidade,
                                          action: Util.ACTION_NEW,
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
     }
 
@@ -93,7 +93,7 @@ class EquipamentoController extends BaseOwnerController {
         render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
                                      unidadeInstance: equipamentoInstance.unidade,
                                      action: Util.ACTION_VIEW,
-                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                     tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
     }
 
     def edit() {
@@ -105,7 +105,7 @@ class EquipamentoController extends BaseOwnerController {
             render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
                                          unidadeInstance: equipamentoInstance.unidade,
                                          action: 'editando',
-                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         }
     }
 
@@ -118,7 +118,7 @@ class EquipamentoController extends BaseOwnerController {
                 render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
                                              unidadeInstance: equipamentoInstance.unidade,
                                              action: 'editando',
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
                 return
             }
             equipamentoInstance.properties = params
@@ -131,7 +131,7 @@ class EquipamentoController extends BaseOwnerController {
                 render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
                                              unidadeInstance: equipamentoInstance.unidade,
                                              action: 'editando',
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.tamanhoNomeTitular])
+                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'equipamento.label', default: ''), params.id])}"
