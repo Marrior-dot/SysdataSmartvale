@@ -28,10 +28,9 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
 
         def config = Holders.grailsApplication.config.projeto
         final String idCliente = config.cartao.embossing.idCliente
-        final String idAplicacao = "FN"
+        final String idAplicacao = "FN_FROTAS"
         final String data = new SimpleDateFormat("ddMMyy").format(new Date())
-        final String idPerfilEletronico = "01"
-        def fileName =  "${idCliente}_${config.administradora.bin}_${idAplicacao}_${data}_${idPerfilEletronico}.txt"
+        def fileName =  "${idCliente}_${config.administradora.bin}_${idAplicacao}_${data}.txt"
 
         return fileDir + fileName
     }
@@ -102,7 +101,6 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
         StringBuilder builder = new StringBuilder()
         int sequencial = 2
 
-
         def crtIds = Cartao.withCriteria {
                         projections {
                             property("id")
@@ -110,7 +108,6 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                         eq("loteEmbossing", loteEmbossing)
                         order("id")
                     }
-
 
         crtIds.eachWithIndex { cid, i ->
             Cartao cartao = Cartao.get(cid)
@@ -136,7 +133,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
             // primeira linha de embossing (número do cartão formatado)
             builder.append("\$${cartao.numeroFormatado.padRight(20, " ")}")
 
-            if (cartao.portador.instanceOf(Funcionario)) {
+            if (cartao.portador.instanceOf(PortadorFuncionario)) {
 
                 // segunda linha de embossing (data validade cartão formato: MM/AA)
                 builder.append("*${sdfMMAA.format(cartao.validade).padRight(maximoColunas, " ")}")
@@ -147,10 +144,10 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 // quarta linha de embossing (agencia + posto; não se aplica)
                 builder.append("*${emb4}")
 
-            } else if (cartao.portador.instanceOf(MaquinaMotorizada)) {
+            } else if (cartao.portador.instanceOf(PortadorMaquina)) {
 
-                def empresaNome = Util.normalize(cartao.portador.unidade.rh.nome).toUpperCase().padRight(maximoColunas, "")
-                def unidadeNome = Util.normalize(cartao.portador.unidade.nome).toUpperCase().padRight(maximoColunas, "")
+                def empresaNome = Util.normalize(cartao.portador.unidade.rh.nome).toUpperCase().padRight(maximoColunas, " ")
+                def unidadeNome = Util.normalize(cartao.portador.unidade.nome).toUpperCase().padRight(maximoColunas, " ")
 
                 // 2ª Linha - Nome da Empresa Cliente
                 builder.append("*${empresaNome}")
