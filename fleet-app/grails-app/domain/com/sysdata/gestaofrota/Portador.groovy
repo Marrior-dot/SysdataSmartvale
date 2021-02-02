@@ -91,7 +91,6 @@ abstract class Portador {
             MaquinaMotorizada maquina = (this as PortadorMaquina)?.maquina
             return maquina?.nomeEmbossing
         }
-
         return ""
     }
 
