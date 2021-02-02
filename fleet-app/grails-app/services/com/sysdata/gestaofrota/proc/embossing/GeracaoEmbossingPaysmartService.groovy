@@ -3,6 +3,7 @@ package com.sysdata.gestaofrota.proc.embossing
 import com.sysdata.gestaofrota.*
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
+import grails.util.Environment
 import grails.util.Holders
 
 import javax.annotation.PostConstruct
@@ -64,7 +65,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
         String fileSeq = loteEmbossing.id
         final String fileSequence = fileSeq.padLeft(5, '0')
 
-        final String modo = "TEST" //TODO: mudar para 'PROD'
+        final String modo = Environment.DEVELOPMENT ? "TEST" : Environment.PRODUCTION ? 'PROD' : 'TEST'
         final String qtd = loteEmbossing.cartoes.size().toString().padLeft(8, '0')
 
         String fileNsa = loteEmbossing.id
@@ -76,10 +77,15 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 "FILE SEQUENCE=${fileSequence}MODE=${modo}NUM RECORDS=${qtd}NSA=${nsa}${rfu}${terminadorLinha}"
     }
 
+    private String normalizeColumn(String column, maxSize) {
+        String normalized = Util.normalize(column)
+        normalized = normalized.substring(0, Math.min(maxSize, normalized.length()))
+        return sprintf("%-${maxSize}s", normalized)
+    }
+
     private String getRegistros(LoteEmbossing loteEmbossing) {
 
         def maximoColunas = grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing
-
 
         final String rfu = String.format("%7s", " ")
         final String rfu2 = String.format("%-6s", "*")
@@ -139,22 +145,23 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 builder.append("*${sdfMMAA.format(cartao.validade).padRight(maximoColunas, " ")}")
 
                 // terceira linha de embossing (nome do portador)
-                builder.append("*${getNomeTitular(cartao.portador).padRight(maximoColunas, " ")}")
+                builder.append("*${normalizeColumn(cartao.portador)}")
 
                 // quarta linha de embossing (agencia + posto; não se aplica)
                 builder.append("*${emb4}")
 
             } else if (cartao.portador.instanceOf(PortadorMaquina)) {
 
-                def empresaNome = Util.normalize(cartao.portador.unidade.rh.nome).toUpperCase().padRight(maximoColunas, " ")
-                def unidadeNome = Util.normalize(cartao.portador.unidade.nome).toUpperCase().padRight(maximoColunas, " ")
+                def empresaNome = normalizeColumn(cartao.portador.unidade.rh.nome, maximoColunas)
+                def unidadeNome = normalizeColumn(cartao.portador.unidade.nome, maximoColunas)
+                def portadorNome = normalizeColumn(cartao.portador.nomeEmbossing, maximoColunas)
 
                 // 2ª Linha - Nome da Empresa Cliente
                 builder.append("*${empresaNome}")
                 // 3ª Linha - Nome da Unidade
                 builder.append("*${unidadeNome}")
                 // 4ª Linha - Nome do Portador
-                builder.append("*${getNomeTitular(cartao.portador).padRight(maximoColunas, " ")}")
+                builder.append("*${portadorNome}")
 
             }
 
@@ -208,8 +215,5 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
         "\r\n"
     }
 
-    private String getNomeTitular(Portador portador) {
-        return Util.normalize(portador.nomeEmbossing.substring(0, Math.min(portador.nomeEmbossing.length(), 24)).toUpperCase())
-    }
 
 }
