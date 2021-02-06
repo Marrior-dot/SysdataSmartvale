@@ -9,12 +9,13 @@ class CargaPedidoService implements ExecutableProcessing {
 
     @Override
     def execute(Date date) {
+
         def pedidosList = PedidoCargaInstancia.withCriteria {
                                             projections {
                                                 property "id"
                                             }
                                             eq("status", StatusPedidoCarga.NOVO)
-                                            le("dataCarga", date)
+                                            le("dataCarga", date + 1)
                             }
 
         if (pedidosList) {
@@ -43,7 +44,7 @@ class CargaPedidoService implements ExecutableProcessing {
                 Transacao tr = new Transacao()
                 tr.with {
                     tipo = TipoTransacao.CARGA_SALDO
-                    status = StatusTransacao.AGENDAR
+                    status = StatusTransacao.AGENDADA
                     origem = OrigemTransacao.PORTAL
                     dataHora = dataRef
                     valor = item.valor
