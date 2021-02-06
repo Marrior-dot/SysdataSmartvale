@@ -30,13 +30,14 @@
                         <sec:ifAnyGranted roles="ROLE_PROC,ROLE_ADMIN">
 
                             <g:if test="${pedido.status == StatusPedidoCarga.COBRANCA}">
-                                <g:link class="btn btn-primary" action="liberarPedido" id="${pedido.id}" title="Liberar">
+
+                                <g:link class="btn btn-primary" action="liberarPedido" id="${pedido.id}" title="Liberar" onClick="return confirm('Confirma a liberação do Pedido?')">
                                     <i class="glyphicon glyphicon-share"></i>
                                 </g:link>
                             </g:if>
 
                             <g:if test="${pedido.status in [StatusPedidoCarga.NOVO, StatusPedidoCarga.AGENDADO]}">
-                                <g:link class="btn btn-danger" action="cancelarPedido" id="${pedido.id}" title="Cancelar">
+                                <g:link class="btn btn-danger" action="cancelarPedido" id="${pedido.id}" title="Cancelar" onClick="return confirm('Confirma o cancelamento do Pedido?')">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </g:link>
                             </g:if>
