@@ -37,11 +37,11 @@ environments {
         corPrimaria = "#04A34D"
         corSecundaria = "#A4DB05"
 
-        context = "/smartvale-frota"
+        context = "/showroom-dev"
     }
 
     homologation {
-        nome = "SmartVale"
+        nome = "ShowRoom"
         tipoPrograma = 7
         parceiro = 2
 
@@ -57,12 +57,12 @@ environments {
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
          */
-        pasta = "smartvale"
+        pasta = "showroom"
         //geradorCartao = NewGeradorCartaoService
         corPrimaria = "#07A75A"
         corSecundaria = "#696969"
 
-        context = "/smartvale-hom"
+        context = "/showroom"
     }
 
 
@@ -109,27 +109,6 @@ faturamento {
         controlaSaldo = true
 
         extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
-
-        boleto {
-            gerar = true
-            gerador = "bopepoGeradorBoletoBancoBrasilService"
-
-            agencia = "4494"
-            dvAgencia = "6"
-            conta =  "14905"
-            dvConta = "5"
-
-            carteira {
-                numero = "17"
-                variacao = "019"
-            }
-
-            convenio = "3324913"
-
-            instrucao1 = "Referente ao serviço de fornecimento de vale combustível para o abastecimento da frota"
-            instrucao2 = ""
-        }
-
 
     }
 
