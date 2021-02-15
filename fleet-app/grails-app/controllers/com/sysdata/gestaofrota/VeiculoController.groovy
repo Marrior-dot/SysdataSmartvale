@@ -94,7 +94,7 @@ class VeiculoController  {
             }
 
         } else {
-            flash.error = "Unidade não encontrada."
+            flash.error = "Unidade não encontrada"
             redirect(action: 'index')
         }
     }

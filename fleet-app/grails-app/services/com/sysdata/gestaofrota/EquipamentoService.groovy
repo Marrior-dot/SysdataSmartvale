@@ -1,20 +1,34 @@
 package com.sysdata.gestaofrota
 
 class EquipamentoService {
-    def portadorService
     def cartaoService
 
-    Equipamento save(Equipamento equipamento, boolean gerarCartao = false) {
-        if (equipamento?.unidade == null) throw new RuntimeException("Equipamento precisa ter alguma unidade.")
+    def save(Equipamento equipamento, boolean gerarCartao = false) {
+        def ret = [success: true]
 
-        if (equipamento.unidade?.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA
-                && equipamento.portador == null) {
-            equipamento.save()
-            PortadorMaquina portadorMaquina = portadorService.save(equipamento)
-            if (gerarCartao) cartaoService.gerar(portadorMaquina)
+        if (!equipamento.id && equipamento.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
+
+            if (! equipamento.save(flush: true)) {
+                ret.success = false
+                return ret
+            }
+
+            PortadorMaquina portadorMaquina = equipamento.portador
+            portadorMaquina.save(flush: true)
+
+            if (gerarCartao) {
+                if (portadorMaquina.unidade.rh.cartaoComChip)
+                    cartaoService.gerar(portadorMaquina)
+                else
+                    cartaoService.gerar(portadorMaquina, false)
+            }
         }
 
-        if (!equipamento.save(flush: true)) throw new RuntimeException("Erro de negocio em equipamento.")
-        equipamento
+        if (! equipamento.save(flush: true)) {
+            ret.success = false
+            return ret
+        }
+
+        ret
     }
 }
