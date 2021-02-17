@@ -6,6 +6,7 @@ class Unidade {
     String nome
     Status status = Status.ATIVO
     Date dateCreated
+    String nomeEmbossing
 
     static belongsTo = [rh: Rh]
 
@@ -15,10 +16,12 @@ class Unidade {
 
     static constraints = {
         nome nullable: false, blank: false
+        nomeEmbossing nullable: false
     }
 
     static mapping = {
         id generator: 'sequence', params: [sequence: 'unidade_seq']
+        nomeEmbossing size: 50
     }
 
     static hibernateFilters = {

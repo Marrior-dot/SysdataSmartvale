@@ -17,9 +17,9 @@ class LoteEmbossingService {
         }[0]
     }
 
-    List<Cartao> listCartoesParaEmbossing(int max, int offset) {
+    List<Cartao> listCartoesParaEmbossing(params) {
 
-        return Cartao.withCriteria(max: max, offset: offset) {
+        return Cartao.withCriteria() {
 
                     createAlias("portador", "port")
                     createAlias("port.unidade", "unid")
@@ -28,11 +28,13 @@ class LoteEmbossingService {
                     eq("status", StatusCartao.CRIADO)
 
                     order("rh.id")
+                    maxResults(params.max)
+                    firstResult(params.offset)
         }
     }
 
-    List<LoteEmbossing> listLotesEmbossing(int max, int offset) {
-        return LoteEmbossing.list([max: max, offset: offset, order: "dateCreated"])
+    List<LoteEmbossing> listLotesEmbossing(params) {
+        return LoteEmbossing.list(params)
     }
 
     int countLotesEmbossing() {
