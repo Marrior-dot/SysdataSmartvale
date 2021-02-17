@@ -3,12 +3,8 @@ package com.sysdata.gestaofrota
 class UnidadeService {
 
     synchronized def saveNew(Unidade unidadeInstance) {
-        def ultCod = Unidade.withCriteria(uniqueResult: true) {
-            projections {
-                max("codigo")
-            }
-        }
-        def novoCod = ultCod ? ++(ultCod as long) : 1
+        def ultCod = Unidade.executeQuery("select max(cast(codigo as integer )) from Unidade")[0]
+        def novoCod = ultCod ? ++ultCod : 1
         unidadeInstance.codigo = novoCod
         unidadeInstance.save(flush: true)
     }

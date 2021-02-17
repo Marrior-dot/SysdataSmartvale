@@ -152,8 +152,10 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
 
             } else if (cartao.portador.instanceOf(PortadorMaquina)) {
 
-                def empresaNome = normalizeColumn(cartao.portador.unidade.rh.nome, maximoColunas)
-                def unidadeNome = normalizeColumn(cartao.portador.unidade.nome, maximoColunas)
+                def empresaNome = cartao.portador.unidade.rh.nomeEmbossing ? normalizeColumn(cartao.portador.unidade.rh.nomeEmbossing, maximoColunas) :
+                                    normalizeColumn(cartao.portador.unidade.rh.nome, maximoColunas)
+                def unidadeNome = cartao.portador.unidade.nomeEmbossing ? normalizeColumn(cartao.portador.unidade.nomeEmbossing, maximoColunas) :
+                                    normalizeColumn(cartao.portador.unidade.nome, maximoColunas)
                 def portadorNome = normalizeColumn(cartao.portador.nomeEmbossing, maximoColunas)
 
                 // 2ª Linha - Nome da Empresa Cliente

@@ -115,7 +115,13 @@
 						<span id="vinculo-cartao" class="help-block">Não é possível alterar o Vinculo Cartão. Você já possui funcionários/veiculos cadastrados.</span>
 					</g:if>
 				</div>
+				<div class="form-group col-md-6">
+					<label class="control-label" for="nomeEmbossing">Nome Cliente p/ Embossing:</label>
+					<g:textField name="nomeEmbossing" class="form-control ${editable ? 'editable': ''}"
+								 maxLength="${grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing}"
+								 value="${rhInstance?.nomeEmbossing}" required="true"></g:textField>
 
+				</div>
 
 
 			</div>
@@ -190,10 +196,9 @@
 				<div class="form-group col-md-3">
 					<label class="control-label" for="taxaAdministracao">Taxa de Administração *</label>
 					<div class="input-group">
-
 						<g:textField name="taxaAdministracao" class="form-control percentual ${editable ? 'editable': ''}"
 									 value="${Util.formatPercentage(rhInstance?.taxaAdministracao)}">
-							required
+
 						</g:textField>
 						<span class="input-group-addon">%</span>
 					</div>
@@ -204,7 +209,7 @@
 					<div class="input-group">
 						<g:textField name="taxaDesconto" class="form-control percentual ${editable ? 'editable': ''}"
 									 value="${Util.formatPercentage(rhInstance?.taxaDesconto)}">
-							required
+
 						</g:textField>
 						<span class="input-group-addon">%</span>
 					</div>
