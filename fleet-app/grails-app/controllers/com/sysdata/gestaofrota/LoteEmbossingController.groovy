@@ -5,27 +5,30 @@ class LoteEmbossingController {
     LoteEmbossingService loteEmbossingService
 
     def index() {
-        def max = params.max ? params.max as int : 10
-        def offset = params.offset ? params.offset as int : 0
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
+        params.sort = "dateCreated"
+        params.order = "desc"
 
         [
-            lotesEmbossingList: loteEmbossingService.listLotesEmbossing(max, offset),
+            lotesEmbossingList: loteEmbossingService.listLotesEmbossing(params),
             lotesEmbossingCount: loteEmbossingService.countLotesEmbossing()
         ]
     }
 
     def listCartoesEmbossar() {
-        def max = params.max ? params.max as int : 10
-        def offset = params.offset ? params.offset as int : 0
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
 
-        def list = loteEmbossingService.listCartoesParaEmbossing(max, offset)
+        def list = loteEmbossingService.listCartoesParaEmbossing(params)
         def count = loteEmbossingService.countCartoesParaEmbossing()
 
         render template: "cartoesEmbossar",
                 model: [
                     cartoesEmbossarList: list,
                     cartoesEmbossarCount: count
-                ]
+                ],
+                params: params
 
     }
 

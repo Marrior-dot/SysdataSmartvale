@@ -13,6 +13,8 @@ class CartaoController {
 
     def list() {
         params.max = params.max ? params.max as int: 10
+        params.sort = "dateCreated"
+        params.order = "desc"
 
         def criteria = {
 
@@ -30,11 +32,10 @@ class CartaoController {
             if (params.status) {
                 eq("status", StatusCartao.valueOf(params.status))
             }
-
             ne("status", StatusCartao.CANCELADO)
         }
 
-        def cartaoList = Cartao.createCriteria().list(criteria)
+        def cartaoList = Cartao.createCriteria().list(params, criteria)
         def cartaoCount = Cartao.createCriteria().count(criteria)
 
         [cartaoList: cartaoList, cartaoCount: cartaoCount, params: params]

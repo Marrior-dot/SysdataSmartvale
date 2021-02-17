@@ -18,7 +18,13 @@
                 </g:if>
 
                 <div class="col-md-4">
-                    <bs:formField id="nome" name="nome" label="Nome" value="${unidadeInstance?.nome}" />
+                    <bs:formField id="nome" name="nome" label="Nome" class="editable" value="${unidadeInstance?.nome}" />
+                </div>
+
+                <div class="col-md-6">
+                    <bs:formField id="nomeEmbossing" name="nomeEmbossing" label="Nome Unidade p/ Embossing" class="editable"
+                                    maxlength="${grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing}"
+                                    value="${unidadeInstance?.nomeEmbossing}" />
                 </div>
             </div>
 			<div class="panel-footer">

@@ -38,10 +38,9 @@
 
 <script>
 
-    var loadCartoesEmbossar = function() {
+    var loadCartoesEmbossar = function(offset) {
 
-        $.get("${createLink(action: 'listCartoesEmbossar')}", function(data) {
-
+        $.get("${createLink(action: 'listCartoesEmbossar')}", { offset: offset }, function(data) {
             $("#cartoes").html(data);
         })
     }
@@ -49,12 +48,23 @@
     $(document).ready(function() {
 
         $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-
             if (e.target.href.includes("#cartoes")) {
-                loadCartoesEmbossar();
+                loadCartoesEmbossar('0');
             }
-
         });
+
+        // Pega evento de click nos links de paginação
+        $("#cartoes").on('click', 'a.step', function() {
+            event.preventDefault();
+
+            var link = $(this).attr("href");
+            var aux = link.substring(link.lastIndexOf("offset"), link.length);
+            var offsetParam = aux.substring(0, aux.indexOf("&") > -1 ? aux.indexOf("&") : aux.length);
+            var offset = offsetParam.split("=")[1];
+
+            loadCartoesEmbossar(offset);
+        });
+
     });
 </script>
 </body>

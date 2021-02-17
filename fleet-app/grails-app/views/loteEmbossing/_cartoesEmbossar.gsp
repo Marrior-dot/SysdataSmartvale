@@ -13,7 +13,7 @@
                 <tbody>
                 <g:each in="${cartoesEmbossarList}" var="crt">
                     <tr>
-                        <td>${crt.numeroMascarado}</td>
+                        <td><g:link controller="cartao" action="show" id="${crt.id}">${crt.numeroMascarado}</g:link>    </td>
                         <td>${crt.portador.nomeEmbossing}</td>
                         <td>${crt.portador.unidade.rh.nome}</td>
                         <td>${crt.portador.unidade.nome}</td>
@@ -22,7 +22,7 @@
                 </g:each>
                 </tbody>
             </table>
-            <g:paginate total="${cartoesEmbossarCount}"></g:paginate>
+            <g:paginate total="${cartoesEmbossarCount}" params="${params}"></g:paginate>
 
         </div>
         <div class="panel-footer">

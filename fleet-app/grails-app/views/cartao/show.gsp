@@ -31,12 +31,16 @@
 							<td>${cartaoInstance?.id}</td>
 						</tr>
 						<tr>
+							<th>Data/Hora Criação</th>
+							<td>${cartaoInstance?.dateCreated.format('dd/MM/yyyy HH:mm')}</td>
+						</tr>
+						<tr>
 							<th>Número</th>
 							<td>${cartaoInstance?.numero}</td>
 						</tr>
 						<tr>
 							<th>Cliente</th>
-							<td>${cartaoInstance?.portador?.unidade?.rh?.nomeFantasia}</td>
+							<td><g:link controller="rh" action="show" id="${cartaoInstance?.portador?.unidade?.rh?.id}">${cartaoInstance?.portador?.unidade?.rh?.nomeFantasia}</g:link></td>
 						</tr>
 						<tr>
 							<th>Unidade</th>
@@ -53,10 +57,6 @@
 						<tr>
 							<th>Data Validade</th>
 							<td>${cartaoInstance?.validade.format('dd/MM/yyyy')}</td>
-						</tr>
-						<tr>
-							<th>Data/Hora Criação</th>
-							<td>${cartaoInstance?.dateCreated.format('dd/MM/yyyy HH:mm')}</td>
 						</tr>
 
 						<g:if test="${cartaoInstance?.motivoCancelamento}">

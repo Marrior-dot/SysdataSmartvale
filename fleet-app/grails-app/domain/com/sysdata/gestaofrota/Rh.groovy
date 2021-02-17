@@ -29,6 +29,7 @@ class Rh extends Empresa {
     TipoContrato tipoContrato
     Date dataInicioContrato
     Date dataFimContrato
+    String nomeEmbossing
 
     boolean cartaoComChip = true
     boolean renovarLimite = false
@@ -53,6 +54,7 @@ class Rh extends Empresa {
         tipoContrato nullable: true
         dataInicioContrato nullable: true
         dataFimContrato nullable: true
+        nomeEmbossing nullable: true
     }
 
     static transients = ['portadoresCount', "funcionariosCount", "veiculosCount", "limiteComprometido", "limiteDisponivel", "saldoDisponivelCartoes"]
