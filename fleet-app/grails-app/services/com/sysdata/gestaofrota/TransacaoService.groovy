@@ -34,7 +34,7 @@ class TransacaoService {
             if (filtro.dataInicial) gt('dateCreated', filtro.dataInicial)
             if (filtro.dataFinal) lt('dateCreated', filtro.dataFinal)
             if (filtro.numeroCartao) eq("numeroCartao", filtro.numeroCartao)
-            if (filtro.codigoEstabelecimento) eq("codigoEstabelecimento", filtro.codigoEstabelecimento)
+            if (filtro.terminal) eq("terminal", filtro.terminal)
             if (filtro.nsu) eq("nsu", filtro.nsu)
             if (filtro.tipo) eq('tipo', filtro.tipo)
             if (filtro.tipos) 'in'('tipo', filtro.tipos)

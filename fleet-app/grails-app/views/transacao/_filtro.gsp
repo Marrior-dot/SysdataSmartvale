@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="codigoEstabelecimento">Cod Estabelecimento</label>
-                    <input type="text" class="form-control" name="codigoEstabelecimento" id="codigoEstabelecimento" value="${codigoEstabelecimento}">
+                    <label for="terminal">Terminal</label>
+                    <input type="text" class="form-control" name="terminal" id="terminal" value="${terminal}">
                 </div>
 
                 <div class="form-group col-md-2">
