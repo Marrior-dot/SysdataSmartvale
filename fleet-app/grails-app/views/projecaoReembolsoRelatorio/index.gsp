@@ -49,6 +49,7 @@
                 <th>Valor Bruto</th>
                 <th>Valor Reembolsar</th>
                 <th>Taxa Adm (%)</th>
+                <th>Taxa Adm (R$)</th>
                 <th>Banco</th>
                 <th>Agência</th>
                 <th>Conta</th>
@@ -65,6 +66,7 @@
                     <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
                     <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
                     <td>${proj[6]}</td>
+                    <td><g:formatNumber number="${proj[4] - proj[5]}" type="currency"></g:formatNumber> </td>
                     <td>${proj[7]}</td>
                     <td>${proj[8]}</td>
                     <td>${proj[9]}</td>
@@ -80,7 +82,7 @@
 
         <g:paginate total="${projecaoCount}" />
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 </body>
