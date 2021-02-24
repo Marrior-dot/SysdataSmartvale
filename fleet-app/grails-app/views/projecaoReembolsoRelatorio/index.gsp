@@ -72,6 +72,7 @@
                     <td>${proj[9]}</td>
                     <td>${proj[10]}</td>
                     <td>${proj[11]}</td>
+                    <td>${proj[12]}</td>
                 </tr>
             </g:each>
             </tbody>
