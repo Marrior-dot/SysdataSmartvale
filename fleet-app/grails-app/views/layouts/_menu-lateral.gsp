@@ -129,6 +129,7 @@
 
                         <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_ESTAB">
                             <li class="controller"><g:link  class="submenu-logado"  controller="projecaoReembolsoRelatorio">Projeção de Reembolso</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="reembolsoFaturadoRelatorio">Reembolsos Faturados</g:link></li>
                         </sec:ifAnyGranted>
 
                         <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">

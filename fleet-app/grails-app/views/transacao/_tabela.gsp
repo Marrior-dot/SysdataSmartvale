@@ -5,7 +5,7 @@
         <th>ID</th>
         <th><g:message code="transacao.nsu.label" default="NSU"/></th>
         <th>Data/Hora</th>
-        <th><g:message code="transacao.codigoEstabelecimento.label" default="Codigo Estabelecimento"/></th>
+        <th><g:message code="transacao.terminal.label" default="Terminal"/></th>
         <th><g:message code="transacao.cartao.label" default="Cartao"/></th>
         <th><g:message code="transacao.participante.label" default="Funcionário"/></th>
         <th><g:message code="transacao.tipo.label" default="Tipo"/></th>
@@ -29,7 +29,7 @@
                 <td>
                     <g:formatDate date="${transacaoInstance.dateCreated}" format="dd/MM/yyyy HH:mm:ss"/>
                 </td>
-                <td>${transacaoInstance.codigoEstabelecimento}</td>
+                <td>${transacaoInstance.terminal}</td>
                 <td>${transacaoInstance.cartao ? transacaoInstance.cartao.numeroMascarado : '---'}</td>
                 <td>${transacaoInstance.participante?.nome}</td>
                 <td>${transacaoInstance?.tipo?.nome}</td>
