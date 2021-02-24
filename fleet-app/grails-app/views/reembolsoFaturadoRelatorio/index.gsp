@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Relatório de Projeção de Reembolso"/>
+    <g:set var="relatorio" value="Relatório de Reembolsos Faturados"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -57,7 +57,7 @@
                 <th>Doc Titular</th>
             </thead>
             <tbody>
-            <g:each in="${projecaoList}" var="proj">
+            <g:each in="${reembolsoList}" var="proj">
                 <tr>
                     <td>${proj[0]}</td>
                     <td>${proj[1]}</td>
@@ -66,12 +66,12 @@
                     <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
                     <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
                     <td>${proj[6]}</td>
-                    <td><g:formatNumber number="${proj[4] - proj[5]}" type="currency"></g:formatNumber> </td>
-                    <td>${proj[7]}</td>
+                    <td><g:formatNumber number="${proj[7]}" type="currency"></g:formatNumber></td>
                     <td>${proj[8]}</td>
                     <td>${proj[9]}</td>
                     <td>${proj[10]}</td>
                     <td>${proj[11]}</td>
+                    <td>${proj[12]}</td>
                 </tr>
             </g:each>
             </tbody>
@@ -80,7 +80,7 @@
             </tfoot>
         </table>
 
-        <g:paginate total="${projecaoCount}" />
+        <g:paginate total="${reembolsoCount}" />
 
         <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>

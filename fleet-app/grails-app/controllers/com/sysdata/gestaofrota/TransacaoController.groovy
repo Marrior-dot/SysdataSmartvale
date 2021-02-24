@@ -38,23 +38,24 @@ class TransacaoController extends BaseOwnerController {
                 order : 'desc'
         ]
         final Map filtro = [
-                dataInicial          : params.date('dataInicial', 'dd/MM/yyyy'),
-                dataFinal            : params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
-                numeroCartao         : params.numeroCartao,
-                codigoEstabelecimento: params.codigoEstabelecimento,
-                nsu                  : params.int('nsu'),
-                tipo                 : params.tipo ? TipoTransacao.valueOf(params.tipo.toString()) : null,
-                tipos                : [
+                dataInicial: params.date('dataInicial', 'dd/MM/yyyy'),
+                dataFinal: params.date('dataFinal', 'dd/MM/yyyy')?.plus(1),
+                numeroCartao: params.numeroCartao,
+                terminal: params.terminal,
+                nsu: params.int('nsu'),
+                tipo: params.tipo ? TipoTransacao.valueOf(params.tipo.toString()) : null,
+                tipos: [
                                             TipoTransacao.COMBUSTIVEL,
                                             TipoTransacao.SERVICOS,
                                             TipoTransacao.CANCELAMENTO,
                                             TipoTransacao.CANCELAMENTO_COMBUSTIVEL
-                                        ],
-                statusRede           : params.statusRede
+                        ],
+                statusRede: params.statusRede
         ]
 
         final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
-        if (filtro.dataFinal) filtro.dataFinal -= 1
+        if (filtro.dataFinal)
+            filtro.dataFinal -= 1
         [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
     }
 
