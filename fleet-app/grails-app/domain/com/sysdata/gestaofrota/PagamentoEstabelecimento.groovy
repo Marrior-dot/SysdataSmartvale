@@ -13,6 +13,8 @@ class PagamentoEstabelecimento {
     PostoCombustivel estabelecimento
     CorteEstabelecimento corte
     BigDecimal valor
+    BigDecimal valorBruto
+    BigDecimal taxaAdm
     StatusReenvioPagamento statusReenvio
     StatusPagamento status = StatusPagamento.AGENDADO
 
@@ -20,6 +22,8 @@ class PagamentoEstabelecimento {
         dataEfetivada nullable: true
         valor nullable: true
         statusReenvio nullable: true
+        valorBruto nullable: true
+        taxaAdm nullable: true
     }
 
     static mapping = {

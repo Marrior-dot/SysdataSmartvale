@@ -113,11 +113,8 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
 
     private def cortarConta(Corte corte, Conta conta, Date dataRef, Map rhs) {
-
         def global = [:]
-
         PostoCombustivel estab = conta.participante
-
         log.info "\t$estab"
         def List<LancamentoEstabelecimento> parcelaList = LancamentoEstabelecimento.withCriteria {
                                                                 eq("tipo", TipoLancamento.REEMBOLSO)
@@ -125,12 +122,12 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                                                                 eq("dataEfetivacao", dataRef)
                                                                 eq("conta", conta)
                                                             }
-
-        def totalTransacoes = parcelaList.sum { it.valor }
-        def totalCobrancas = calcularTotalCobrancas(estab, totalTransacoes, global)
+        def totalLiquidoEstab = parcelaList.sum { it.valor }
+        def totalCobrancas = calcularTotalCobrancas(estab, totalLiquidoEstab, global)
+        def totalTransacoes = parcelaList.sum { it.transacao.valor }
 
         // Fatura somente se o saldo da diferença entre os lançamentos e as cobranças for positiva
-        if (totalTransacoes - totalCobrancas > 0.0) {
+        if (totalLiquidoEstab - totalCobrancas > 0.0) {
             def totalLiquido = 0
             PagamentoEstabelecimento pagamento = new PagamentoEstabelecimento()
             pagamento.with {
@@ -146,26 +143,22 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 lc.pagamento = pagamento
                 lc.save()
                 log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
-
                 // Acumula valor reembolso por RH p/ gerar Lote Recebimento
                 Rh rh = lc.transacao.cartao.portador.unidade.rh
                 if (!rhs.containsKey(rh.id))
                     rhs[rh.id] = lc.valor
                 else
                     rhs[rh.id] += lc.valor
-
             }
             pagamento.valor = totalLiquido
+            pagamento.valorBruto = totalTransacoes
+            pagamento.taxaAdm = estab.taxaReembolso
 
             //gerarLancamentosExtensoes(global)
 
             pagamento.save(flush: true)
             corte.save(flush: true)
             log.info "\tPG #${pagamento.id} gerado - (total: ${Util.formatCurrency(pagamento.valor)})"
-
-
-
-
 
             // Caso contrário, empurra os lançamentos para a próxima data possível de reembolso, conforme calendário
         } else {
