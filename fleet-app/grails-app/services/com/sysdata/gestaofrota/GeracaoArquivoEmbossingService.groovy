@@ -89,7 +89,7 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
             embossadora = new PaySmart(cartoesComChip)
             Arquivo arquivo = embossadora.gerar()
 
-            if (arquivo.save(flush: true, failOnError: true)) {
+            if (arquivo.save(flush: true)) {
 
                 gerarArquivoEmFileSystem(arquivo)
                 return true
