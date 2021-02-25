@@ -5,7 +5,7 @@ grails {
 
     gorm {
         reactor.events = false
-        //failOnError = true
+        failOnError = true
     }
 
 

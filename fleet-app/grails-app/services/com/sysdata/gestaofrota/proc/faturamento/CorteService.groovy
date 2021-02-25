@@ -111,7 +111,7 @@ class CorteService {
                     dataVencimento = fatRh.dataVencimento
                     valor = fatRh.valorTotal
                 }
-                boleto.save(flush: true, failOnError: true)
+                boleto.save(flush: true)
 
                 GeradorBoleto geradorBoleto = GeradorBoletoFactory.getGerador()
                 geradorBoleto.gerarBoleto(boleto)

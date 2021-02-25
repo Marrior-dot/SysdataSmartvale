@@ -199,12 +199,12 @@ class RhService {
             PostoCombustivel estab = estList.find { it.id == est.id as long }
             if (estab && !est.checked) {
                 rh.removeFromEmpresas(estab)
-                rh.save(flush: true, failOnError: true)
+                rh.save(flush: true)
                 log.info "\t(-) EC #$estab.id a RH #$rh.id"
             } else if (!estab && est.checked){
                 estab = PostoCombustivel.get(est.id)
                 rh.addToEmpresas(estab)
-                rh.save(flush: true, failOnError: true)
+                rh.save(flush: true)
                 log.info "\t(+) EC #$estab.id a RH #$rh.id"
             }
 
