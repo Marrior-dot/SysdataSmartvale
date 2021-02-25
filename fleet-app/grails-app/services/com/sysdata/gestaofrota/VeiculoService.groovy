@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota
 
+import grails.gorm.transactions.Transactional
 
+@Transactional
 class VeiculoService {
 
     CartaoService cartaoService

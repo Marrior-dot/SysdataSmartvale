@@ -37,7 +37,7 @@ class TaxaManutencao implements ExtensaoFaturamento {
                     status = StatusLancamento.EFETIVADO
                     statusFaturamento = StatusFaturamento.FATURADO
                 }
-                lcnTaxManut.save(failOnError: true)
+                lcnTaxManut.save()
 
 
                 ItemFatura itTxMan = new ItemFatura()
