@@ -53,7 +53,7 @@ class TaxaUtilizacao implements ExtensaoFaturamento {
                     status=StatusLancamento.EFETIVADO
                     statusFaturamento=StatusFaturamento.FATURADO
                 }
-                lcnTaxUtiliz.save(failOnError:true)
+                lcnTaxUtiliz.save()
 
                 ItemFatura itTxUtil=new ItemFatura()
                 itTxUtil.with{

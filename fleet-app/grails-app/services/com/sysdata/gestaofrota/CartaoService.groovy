@@ -16,7 +16,7 @@ class CartaoService {
         cartaoInstance.cvv = geradorCartao.gerarCVV()
 
         portador.addToCartoes(cartaoInstance)
-        portador.save(flush: true, failOnError: true)
+        portador.save(flush: true)
 
         log.info "CRT ${cartaoInstance.numeroMascarado} gerado"
 

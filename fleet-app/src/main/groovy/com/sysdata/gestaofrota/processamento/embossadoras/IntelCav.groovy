@@ -52,7 +52,7 @@ class IntelCav extends Embossadora {
             ))
             builder.append(terminadorLinha)
             c.status = StatusCartao.EMBOSSING
-            c.save(flush: true, failOnError: true)
+            c.save(flush: true)
         }
         println "builder: ${builder.toString()}"
         return builder.toString()

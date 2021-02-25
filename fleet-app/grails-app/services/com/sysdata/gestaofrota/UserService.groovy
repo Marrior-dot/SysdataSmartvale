@@ -10,7 +10,7 @@ class UserService {
     def register(command) {
 		def user = new User([username: command.username, email: command.email, password: command.password,
 			accountLocked: false, enabled: true])
-		if(!user.save(failOnError: true, flush: true)){
+		if(!user.save(flush: true)){
 			
 		}
 		def userRole = Role.findByAuthority('ROLE_USER')
