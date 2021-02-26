@@ -92,16 +92,18 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
         corteConvenio.save(flush: true)
         log.info "Corte Convênio #${corteConvenio.id} criado"
 
-        rhs.each { k, v ->
+        rhs.each { rhId, valores ->
             RecebimentoConvenio recebimentoConvenio = new RecebimentoConvenio()
             recebimentoConvenio.with {
                 dataProgramada = dataOper + 1
-                rh = Rh.get(k)
+                rh = Rh.get(rhId)
                 corte = corteConvenio
-                valor = v
+                valor = valores.liquido
+                valorBruto = valores.bruto
+                valorTaxaAdm = valores.comissao
             }
             recebimentoConvenio.save(flush: true)
-            log.info "Rebecimento #${recebimentoConvenio.id} criado"
+            log.info "Receb #${recebimentoConvenio.id} criado - (bru: ${recebimentoConvenio.valorBruto} liq: ${recebimentoConvenio.valor} com: ${recebimentoConvenio.valorTaxaAdm})"
         }
 
         // Vincula Corte Convênio a Lote de Recebimento
@@ -145,16 +147,18 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 log.debug "\t\tLC #${lc.id} - vl.liq:${Util.formatCurrency(lc.valor)}"
                 // Acumula valor reembolso por RH p/ gerar Lote Recebimento
                 Rh rh = lc.transacao.cartao.portador.unidade.rh
-                if (!rhs.containsKey(rh.id))
-                    rhs[rh.id] = lc.valor
-                else
-                    rhs[rh.id] += lc.valor
+                if (! rhs.containsKey(rh.id))
+                    rhs[rh.id] = [liquido: lc.valor, bruto: lc.transacao.valor, comissao: lc.transacao.valor - lc.valor]
+                else {
+                    rhs[rh.id].liquido += lc.valor
+                    rhs[rh.id].bruto += lc.transacao.valor
+                    rhs[rh.id].comissao += (lc.transacao.valor - lc.valor)
+                }
             }
             pagamento.valor = totalLiquido
             pagamento.valorBruto = totalTransacoes
             pagamento.taxaAdm = estab.taxaReembolso
 
-            //gerarLancamentosExtensoes(global)
 
             pagamento.save(flush: true)
             corte.save(flush: true)
@@ -172,15 +176,6 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
     }
 
-    def gerarLancamentosExtensoes(global) {
-
-        global.extensoes.each { e ->
-            ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e.handler)
-            ext.gerarLancamento(global)
-        }
-
-    }
-
     private def calcularTotalCobrancas(PostoCombustivel postoCombustivel, totalParcelas, global) {
 
 /*
@@ -193,14 +188,31 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
         return global.extensoes.sum { it.valor }
 */
+
         return 0.0
 
     }
+
+
+
+
+/*
+
+    def gerarLancamentosExtensoes(global) {
+
+        global.extensoes.each { e ->
+            ExtensaoFaturamento ext = ExtensaoFactory.getInstance(e.handler)
+            ext.gerarLancamento(global)
+        }
+
+    }
+
 
     private void processarExtensoes(PagamentoEstabelecimento pagamento, Conta contaEstab) {
 
 
     }
+*/
 
 
 }

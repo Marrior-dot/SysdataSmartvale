@@ -71,7 +71,7 @@
                     </tr>
                     <tr>
                         <th>Estabelecimento</th>
-                        <td>${transacaoInstance.estabelecimento?.nome}</td>
+                        <td><g:link controller="estabelecimento" action="show" id="${transacaoInstance.estabelecimento?.id}">${transacaoInstance.estabelecimento?.nome}</g:link></td>
                     </tr>
                     <tr>
                         <th>Terminal</th>
