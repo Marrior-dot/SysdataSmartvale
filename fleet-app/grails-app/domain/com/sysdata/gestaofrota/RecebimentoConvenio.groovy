@@ -8,13 +8,17 @@ class RecebimentoConvenio {
     Rh rh
     CorteConvenio corte
     BigDecimal valor
+    BigDecimal valorBruto
+    BigDecimal valorTaxaAdm
     StatusReenvioPagamento statusReenvio
     StatusPagamento status = StatusPagamento.AGENDADO
 
     static constraints = {
         dataEfetivada nullable: true
-        valor nullable: true
         statusReenvio nullable: true
+        valor nullable: true
+        valorBruto nullable: true
+        valorTaxaAdm nullable: true
     }
 
     static mapping = {

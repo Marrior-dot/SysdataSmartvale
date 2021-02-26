@@ -101,6 +101,7 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         //Arredonda
         def arrend = valTxAdm.round(2)
         def valReemb = abastInstance.valor - arrend
+
         def dataReembolso = reembolsoService.calcularDataReembolso(estabelecimentoInstance.empresa, dataRef)
         if (dataReembolso) {
             def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,
