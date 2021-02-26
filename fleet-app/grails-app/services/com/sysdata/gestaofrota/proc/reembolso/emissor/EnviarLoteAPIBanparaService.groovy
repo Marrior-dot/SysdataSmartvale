@@ -50,18 +50,6 @@ class EnviarLoteAPIBanparaService implements ExecutableProcessing, TokenBanparaA
 
     }
 
-    private void enviarMensagem(PagamentoLote pagamentoLote) {
-
-        def json = [
-            Operador: grailsApplication.config.projeto.reembolso.banpara.api.lote.operador,
-            dataContabil: pagamentoLote.dataPrevista.format('yyyy-MM-dd'),
-            CNPJOrgao: pagamentoLote.estabelecimento.cnpj,
-            AgenciaContaOrgao: pagamentoLote.dadoBancario.agencia as int,
-            ContaOrgao: ""
-        ]
-
-    }
-
 
 
     @Override
@@ -73,15 +61,51 @@ class EnviarLoteAPIBanparaService implements ExecutableProcessing, TokenBanparaA
 
             log.info "Preparando Lote de Pagamento $lote.id para envio a API Banpara..."
 
-            lote.pagamentos.each { pg ->
+            def loteJson = [:]
 
-                enviarMensagem(pg)
+            loteJson.Operador = grailsApplication.config.projeto.reembolso.banpara.api.lote.operador
+            loteJson.dataContabil = lote.dateCreated.format('yyyy-MM-dd')
+            loteJson.NSL = lote.id
+
+            def pgtoOutrosBancosList = lote.pagamentos.findAll { it.dadoBancario.banco.codigo != "37" }
+
+            def tedList = pgtoOutrosBancosList.collect { PagamentoLote pgtoLote ->
+
+                [
+                        NSR: pgtoLote.id,
+                        AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia as int,
+                        ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta as int,
+                        BancoDest: pgtoLote.dadoBancario.banco.codigo as int,
+                        AgenciaContaDest: pgtoLote.dadoBancario.agencia as int,
+                        ContaDest: pgtoLote.dadoBancario.conta.replace("-", "") as int,
+                        ProdutoDest: 1,
+                        NomeDest: pgtoLote.estabelecimento.nomeFantasia,
+                        CPFCNPJDest: Util.cnpjToRaw(pgtoLote.estabelecimento.cnpj) as long,
+                        TipoPessoaDest: "J",
+                        Finalidade: 10,
+                        Historico: "",
+                        IdTransf: "",
+                        Valor: pgtoLote.valor
+                ]
             }
 
+            loteJson.TED = tedList
 
+            def pgtoBanparaList = lote.pagamentos.findAll { it.dadoBancario.banco.codigo == "37" }
 
+            def tefList = pgtoBanparaList.collect { PagamentoLote pgtoLote ->
+                [
+                        NSR: pgtoLote.id,
+                        AgenciaContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
+                        ContaOrig: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
+                        ProdutoDest: 1,
+                        AgenciaContaDest: pgtoLote.dadoBancario.agencia,
+                        ContaDest: pgtoLote.dadoBancario.conta,
+                        Valor: pgtoLote.valor
+                ]
+            }
 
-
+            loteJson.TEF = tefList
 
             withToken { token ->
                 MensagemIntegracao msgEnviaLote = new MensagemIntegracao()
