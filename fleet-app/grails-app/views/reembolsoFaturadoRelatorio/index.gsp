@@ -40,8 +40,9 @@
             </div>
         </g:form>
 
-        <table class="table table-bordered table-stripped">
-            <thead>
+        <div class="table-scrolled">
+            <table class="table table-bordered table-stripped">
+                <thead>
                 <th>Razão Social</th>
                 <th>Nome Fantasia</th>
                 <th>CNPJ</th>
@@ -50,35 +51,41 @@
                 <th>Valor Reembolsar</th>
                 <th>Taxa Adm (%)</th>
                 <th>Taxa Adm (R$)</th>
+                <th>Situação</th>
                 <th>Banco</th>
                 <th>Agência</th>
                 <th>Conta</th>
                 <th>Nome Titular</th>
                 <th>Doc Titular</th>
-            </thead>
-            <tbody>
-            <g:each in="${reembolsoList}" var="proj">
-                <tr>
-                    <td>${proj[0]}</td>
-                    <td>${proj[1]}</td>
-                    <td>${proj[2]}</td>
-                    <td><g:formatDate date="${proj[3]}" format="dd/MM/yy"/></td>
-                    <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
-                    <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
-                    <td>${proj[6]}</td>
-                    <td><g:formatNumber number="${proj[7]}" type="currency"></g:formatNumber></td>
-                    <td>${proj[8]}</td>
-                    <td>${proj[9]}</td>
-                    <td>${proj[10]}</td>
-                    <td>${proj[11]}</td>
-                    <td>${proj[12]}</td>
-                </tr>
-            </g:each>
-            </tbody>
-            <tfoot>
+                </thead>
+                <tbody>
+                <g:each in="${reembolsoList}" var="proj">
+                    <tr>
+                        <td>${proj[0]}</td>
+                        <td>${proj[1]}</td>
+                        <td>${proj[2]}</td>
+                        <td><g:formatDate date="${proj[3]}" format="dd/MM/yy"/></td>
+                        <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
+                        <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
+                        <td>${proj[6]}</td>
+                        <td><g:formatNumber number="${proj[7]}" type="currency"></g:formatNumber></td>
+                        <td>${proj[8]?.nome}</td>
+                        <td>${proj[9]}</td>
+                        <td>${proj[10]}</td>
+                        <td>${proj[11]}</td>
+                        <td>${proj[12]}</td>
+                        <td>${proj[13]}</td>
+                    </tr>
+                </g:each>
+                </tbody>
+                <tfoot>
 
-            </tfoot>
-        </table>
+                </tfoot>
+            </table>
+
+        </div>
+
+
 
         <g:paginate total="${reembolsoCount}" />
 

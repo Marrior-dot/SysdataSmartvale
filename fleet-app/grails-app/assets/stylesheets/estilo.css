@@ -23,6 +23,10 @@ html, body {
     background-color: #f6f6f6;
 }
 
+.table-scrolled {
+    overflow-x: scroll;
+}
+
 .table {
     font-size: 12px;
 }
