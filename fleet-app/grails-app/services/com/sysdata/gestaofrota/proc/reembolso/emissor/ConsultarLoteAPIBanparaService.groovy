@@ -12,6 +12,32 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
 
     GrailsApplication grailsApplication
 
+    private void liquidarPagamento(PagamentoLote pgtoLote) {
+        pgtoLote.status = StatusPagamentoLote.LIQUIDADO
+        pgtoLote.save(flush: true)
+        log.info "PG LT #${pgtoLote.id} liq"
+        def pgIds = pgtoLote.pagamentos*.id
+        pgIds.each { pid ->
+            PagamentoEstabelecimento pg = PagamentoEstabelecimento.get(pid)
+            pg.status = StatusPagamento.LIQUIDADO
+            pg.save(flush: true)
+            log.info "\tPG #${pg.id} liq"
+
+            def lancIds = LancamentoEstabelecimento.lancamentoPagamento(pg).list()
+            lancIds.eachWithIndex { lid, idx ->
+                LancamentoEstabelecimento recebivel = LancamentoEstabelecimento.get(lid)
+                recebivel.status = StatusLancamento.LIQUIDADO
+                recebivel.save(flush: true)
+                log.info "\t\tLC #${recebivel.id} liq"
+                if ((idx + 1) % 50 == 0)
+                    clearSession()
+            }
+        }
+    }
+
+
+
+
     private void tratarRetorno(PagamentoLote pgtoLote, tefTed) {
 
         switch (tefTed.status) {
@@ -22,9 +48,8 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
             case 2:
                 // Liquidado somente quando TEF - conta destino BANPARÁ
                 if (pgtoLote.dadoBancario.banco.codigo == "37") {
-                    pgtoLote.status = StatusPagamentoLote.LIQUIDADO
-                    pgtoLote.save(flush: true)
-                    log.info "PG #${pgtoLote.id} Liquidado - (conta Banpará)"
+                    log.info "Conta Banpara:"
+                    liquidarPagamento(pgtoLote)
                 } else
                     log.info "PG #${pgtoLote.id} Confirmado - (conta não Banpará)"
                 

@@ -16,4 +16,14 @@ class LancamentoEstabelecimento extends Lancamento {
     static mapping = {
         dataPrevista type: 'date'
     }
+
+    static namedQueries = {
+
+        lancamentoPagamento { pg ->
+            projections {
+                property("id")
+            }
+            eq("pagamento", pg)
+        }
+    }
 }
