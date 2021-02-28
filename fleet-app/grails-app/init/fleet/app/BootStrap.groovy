@@ -35,6 +35,15 @@ class BootStrap {
 
         fixturesService.init()
         fleetRoutesService.init()
+
+        grailsApplication.serviceClasses.each { srv ->
+            srv.metaClass.clearSession = {
+                def sessFact = grailsApplication.mainContext.sessionFactory
+                sessFact.currentSession.flush()
+                sessFact.currentSession.clear()
+            }
+        }
+
     }
 
     def destroy = {
