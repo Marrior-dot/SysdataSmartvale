@@ -49,6 +49,7 @@
                                 <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Credenciado</a></li>
                                 <li role="presentation"><a href="#calendario" aria-controls="calendario" role="tab" data-toggle="tab">Calendário Reembolso</a></li>
                                 <li role="presentation"><a href="#estabelecimento" aria-controls="estabelecimento" role="tab" data-toggle="tab">Estabelecimentos</a></li>
+                                <li role="presentation"><a href="#lotes" aria-controls="estabelecimento" role="tab" data-toggle="tab">Lotes de Pagamento</a></li>
                             </ul>
 
                             <!-- Tab panes -->
@@ -60,6 +61,9 @@
                                     <g:render template="listReembolso"/>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="estabelecimento">
+                                    <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="lotes">
                                     <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
                                 </div>
                             </div>
