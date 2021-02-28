@@ -43,24 +43,18 @@
 					<bs:formField class="form-control ${editable ? 'editable': ''}" id="email" label="Email" value="${rhInstance?.email}" />
 				</div>
 			</div>
-
-
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					Contrato
 				</div>
-
 				<div class="panel-body">
-
 					<div class="row">
-
 						<div class="form-group col-md-6">
 							<label class="control-label" for="tipoContrato">Tipo Contrato</label>
 							<g:select name="tipoContrato" from="${TipoContrato.values()}" class="form-control ${editable ? 'editable': ''}"
 									  noSelection="[null: '--Selecione o Tipo de Contrato--']"
 									  optionValue="nome" value="${rhInstance?.tipoContrato}" required="required"/>
 						</div>
-
 						<div class="form-group col-md-3">
 							<label for="dataInicioContrato">Data Início</label>
 							<g:textField name="dataInicioContrato" class="form-control datepicker ${editable ? 'editable': ''}"
@@ -71,17 +65,14 @@
 							<g:textField name="dataFimContrato" class="form-control datepicker ${editable ? 'editable': ''}"
 										 value="${Util.formattedDate(rhInstance?.dataFimContrato)}"></g:textField>
 						</div>
-
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
-
 	</div>
-
+	<g:render template="/dadoBancario/form" model="[dadoBancarioInstance: rhInstance?.dadoBancario,
+													dadoBancario: 'dadoBancario',
+													legend:'Conta Cobrança']"/>
 	<div class="panel panel-default">
 		<div class="panel-heading">Cartão</div>
 
