@@ -9,4 +9,8 @@ class LotePagamentoController {
         params.order = "desc"
         [lotePagamentoList: LotePagamento.list(params), lotePagamentoCount: LotePagamento.count()]
     }
+
+    def show(Long id) {
+        respond LotePagamento.get(id)
+    }
 }
