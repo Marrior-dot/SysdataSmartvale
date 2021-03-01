@@ -16,9 +16,8 @@
                 </div>
                 <br/>
                 <div class="panel-body">
-                    <g:if test="${flash.message}">
-                        <div class="alert alert-info" role="alert"><strong>${flash.message}</strong></div>
-                    </g:if>
+
+                    <alert:all/>
 
                     <g:hasErrors bean="${postoCombustivelInstance}">
                         <div class="alert alert-danger" role="alert">
@@ -26,7 +25,6 @@
                             <g:renderErrors bean="${postoCombustivelInstance}" as="list" />
                         </div>
                     </g:hasErrors>
-
 
                     <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'list')}">
                         <i class="glyphicon glyphicon-th-list"></i>
@@ -49,7 +47,9 @@
                                 <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Credenciado</a></li>
                                 <li role="presentation"><a href="#calendario" aria-controls="calendario" role="tab" data-toggle="tab">Calendário Reembolso</a></li>
                                 <li role="presentation"><a href="#estabelecimento" aria-controls="estabelecimento" role="tab" data-toggle="tab">Estabelecimentos</a></li>
+%{--
                                 <li role="presentation"><a href="#lotes" aria-controls="estabelecimento" role="tab" data-toggle="tab">Lotes de Pagamento</a></li>
+--}%
                             </ul>
 
                             <!-- Tab panes -->
@@ -63,9 +63,11 @@
                                 <div role="tabpanel" class="tab-pane" id="estabelecimento">
                                     <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
                                 </div>
+%{--
                                 <div role="tabpanel" class="tab-pane" id="lotes">
                                     <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
                                 </div>
+--}%
                             </div>
                         </g:if>
                         <g:else>
