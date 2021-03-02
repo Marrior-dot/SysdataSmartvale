@@ -13,7 +13,7 @@
             <g:hiddenField name="empresa.id" value="${empresaInstance?.id}"/>
             <g:hiddenField name="action" value="${action}"/>
 
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-top">
                 <div class="panel-heading">
                     Dados Basicos
                 </div>
