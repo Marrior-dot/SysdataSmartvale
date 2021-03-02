@@ -1,8 +1,8 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<div class="panel panel-default">
+<div class="panel panel-default panel-top">
 
-    <div class="panel-heading">
+    <div class="buttons-top">
         <g:if test="${!action || action == Util.ACTION_VIEW}">
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
                 <g:form action="create">

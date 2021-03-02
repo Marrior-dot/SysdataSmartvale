@@ -14,7 +14,6 @@
                 <div class="panel-heading">
                     <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
                 </div>
-                <br/>
                 <div class="panel-body">
 
                     <alert:all/>
@@ -26,20 +25,22 @@
                         </div>
                     </g:hasErrors>
 
-                    <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'list')}">
-                        <i class="glyphicon glyphicon-th-list"></i>
-                        <g:message code="default.list.label" args="[entityName]" />
-                    </a>
+                    <div class="buttons-top">
+                        <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'list')}">
+                            <i class="glyphicon glyphicon-th-list"></i>
+                            <g:message code="default.list.label" args="[entityName]" />
+                        </a>
 
-                    <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                        <g:if test="${action == Util.ACTION_VIEW}">
-                            <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <g:message code="default.new.label" args="[entityName]" />
-                            </a>
-                        </g:if>
+                        <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                            <g:if test="${action == Util.ACTION_VIEW}">
+                                <a type="button" class="btn btn-default" href="${createLink(controller: 'postoCombustivel', action: 'create')}">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <g:message code="default.new.label" args="[entityName]" />
+                                </a>
+                            </g:if>
 
-                    </sec:ifAnyGranted>
+                        </sec:ifAnyGranted>
+                    </div>
 
                     <div class="panel-top">
                         <g:if test="${action==Util.ACTION_VIEW}">
@@ -76,27 +77,20 @@
                 </div>
             </div>
         </div>
-
-
     <script>
-
         var loadEstabelecimentos = function(empId) {
             $.get("${createLink(controller: 'estabelecimento', action: 'listByEmpresa')}", { empId: empId}, function(data) {
                $("#estabelecimento").html(data);
             });
         };
 
-
-
         $(document).ready(function() {
 
             $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if (e.target.href.includes('#estabelecimento'))
-                    loadEstabelecimentos("${postoCombustivelInstance.id}");
+                    loadEstabelecimentos("${postoCombustivelInstance?.id}");
             });
         });
-
     </script>
-
     </body>
 </html>

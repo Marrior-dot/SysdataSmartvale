@@ -1,12 +1,11 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
-<br/>
 <g:form method="post">
 	<g:hiddenField name="id" value="${postoCombustivelInstance?.id}" />
 	<g:hiddenField name="version" value="${postoCombustivelInstance?.version}" />
 	<g:hiddenField name="action" value="${action}"/>
 
-	<div class="panel panel-default">
+	<div class="panel panel-default panel-top">
 		<div class="panel-heading">
 			Dados Básicos
 		</div>
@@ -78,7 +77,7 @@
 
 				<button type="submit" class="btn btn-danger" name="_action_delete"
 						onclick="return confirm('Confirma a exclusão do Conveniado e todos os dados relacionados?');">
-					<span class="glyphicon glyphicon-remove"></span>&nbsp;<g:message code="default.button.delete.label" default="Delete"></g:message>
+						<span class="glyphicon glyphicon-remove"></span>&nbsp;<g:message code="default.button.delete.label" default="Delete"></g:message>
 				</button>
 
 			</g:if>
