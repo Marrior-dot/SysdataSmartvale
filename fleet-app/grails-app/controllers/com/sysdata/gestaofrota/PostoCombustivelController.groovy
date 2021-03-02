@@ -44,12 +44,6 @@ class PostoCombustivelController {
         params.offset = params.offset ? params.offset as int: 0
         params.sort = "dateCreated"
         params.order = "desc"
-
-/*
-        def postoCombustivelInstanceList = PostoCombustivel.createCriteria().list(params, criteria)
-        [postoCombustivelInstanceList: postoCombustivelInstanceList, postoCombustivelInstanceTotal: PostoCombustivel.count()]
-*/
-
         [empresasList: PostoCombustivel.list(params), empresasCount: PostoCombustivel.count()]
     }
 
