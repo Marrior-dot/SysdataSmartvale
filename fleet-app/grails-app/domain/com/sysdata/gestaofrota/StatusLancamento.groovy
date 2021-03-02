@@ -5,16 +5,13 @@ enum StatusLancamento {
 	A_FATURAR("A Faturar"),
 	EFETIVADO("Efetivado"),
 	ESTORNADO("Estornado"),
-	FATURADO("Faturado")
+	FATURADO("Faturado"),
+	LIQUIDADO("Liquidado")
 
 	String nome
 	
 	StatusLancamento(nome){
 		this.nome=nome
-	}
-	
-	static asList(){
-		[A_FATURAR,EFETIVADO,ESTORNADO]
 	}
 	
 }

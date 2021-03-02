@@ -41,11 +41,10 @@ class PostoCombustivelController {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def criteria = {
-            order('id')
-        }
-        def postoCombustivelInstanceList = PostoCombustivel.createCriteria().list(params, criteria)
-        [postoCombustivelInstanceList: postoCombustivelInstanceList, postoCombustivelInstanceTotal: PostoCombustivel.count()]
+        params.offset = params.offset ? params.offset as int: 0
+        params.sort = "dateCreated"
+        params.order = "desc"
+        [empresasList: PostoCombustivel.list(params), empresasCount: PostoCombustivel.count()]
     }
 
 
@@ -102,24 +101,26 @@ class PostoCombustivelController {
         }
     }
 
-    def delete = {
+    def delete() {
         def postoCombustivelInstance = PostoCombustivel.get(params.id)
         if (postoCombustivelInstance) {
             try {
-                log.debug('Inativando ' + postoCombustivelInstance)
-                postoCombustivelInstance = PostoCombustivel.get(params.id)
-                postoCombustivelInstance.status = Status.INATIVO
-                postoCombustivelInstance.estabelecimentos.each {
-                    log.debug('Inativando ' + it)
-                    it.status = Status.INATIVO
+
+                def ret = postoCombustivelService.delete(postoCombustivelInstance)
+                if (ret.success) {
+                    flash.success = ret.message
+                    log.info ret.message
                 }
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
+                else {
+                    flash.error = ret.message
+                    log.error ret.message
+                }
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 log.error("Erro ao deletar posto combustivel " + postoCombustivelInstance)
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"
-                redirect(action: "show", params: [selectedId: params.id])
+                flash.error = "Erro ao remover credenciado. Contate suporte."
+                redirect(action: "show", id: params.id)
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), params.id])}"

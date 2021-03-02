@@ -27,23 +27,37 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
                                 order("r.rh")
                             }
 
-
+                def currRhId = 0
+                RecebimentoLote recebimentoLote
                 recIds.each { rid ->
 
                     RecebimentoConvenio receb = RecebimentoConvenio.get(rid)
 
-                    RecebimentoLote recebimentoLote = new RecebimentoLote()
-                    Rh rh = receb.rh
-                    recebimentoLote.with {
-                        dataPrevista = date
-                        convenio = rh
-                        domicilioBancario = rh.dadoBancario
-                        valor = receb.valor
-                        recebimentos = [ receb ] as Set
+                    if (currRhId != receb.rh.id) {
+                        recebimentoLote = new RecebimentoLote()
+                        Rh rh = receb.rh
+                        recebimentoLote.with {
+                            dataPrevista = date
+                            convenio = rh
+                            domicilioBancario = rh.dadoBancario
+                            valor = receb.valor
+                            valorBruto = receb.valorBruto
+                            valorTaxaAdm = receb.valorTaxaAdm
+                            recebimentos = [ receb ] as Set
+                        }
+                        loteReceb.addToRecebimentos(recebimentoLote)
+                        loteReceb.save(flush: true)
+                        log.info "\tReceb Lote ${recebimentoLote} criado"
+
+                        currRhId = receb.rh.id
+                    } else {
+                        recebimentoLote.valor += receb.valor
+                        recebimentoLote.valorBruto += receb.valorBruto
+                        recebimentoLote.valorTaxaAdm += receb.valorTaxaAdm
+                        recebimentoLote.save(flush: true)
                     }
-                    loteReceb.addToRecebimentos(recebimentoLote)
-                    loteReceb.save(flush: true)
-                    log.info "\tReceb Lote ${recebimentoLote} criado"
+
+
                 }
 
                 loteReceb.status = StatusLotePagamento.FECHADO

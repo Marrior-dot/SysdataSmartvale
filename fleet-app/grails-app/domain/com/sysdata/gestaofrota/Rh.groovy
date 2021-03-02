@@ -63,7 +63,6 @@ class Rh extends Empresa {
         empresaPorUser(condition: 'id=:owner_id', types: 'long')
     }
 
-
     static namedQueries = {
 
         ativos {

@@ -152,4 +152,22 @@ class EstabelecimentoController {
         render data as JSON
     }
 
+    def listByEmpresa() {
+
+        if (params.empId && params.empId ==~ /\d+/) {
+            PostoCombustivel empresa = PostoCombustivel.get(params.empId as long)
+            if (empresa) {
+                render template: 'list', model: [empId: empresa.id, estabelementosList: Estabelecimento.findAllWhere([empresa: empresa],
+                                                                                                    [sort: 'dateCreated', order: 'desc'])]
+                return
+            } else {
+                render status: 404, text: "Empresa #${params.empId} não encontrada"
+                return
+            }
+        } else
+            render status: 500, text: "Emp ID informado na request (${params.empId}) não é válido"
+
+
+    }
+
 }

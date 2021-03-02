@@ -12,7 +12,10 @@ class PostoCombustivel extends Empresa {
     static belongsTo = Rh
 
     static hasMany = [estabelecimentos: Estabelecimento, reembolsos: Reembolso, programas: Rh]
-    //, role: Role
+
+    static mapping = {
+        reembolsos cascade: 'all-delete-orphan'
+    }
 
     static constraints = {
         tipoReembolso(nullable: true)
