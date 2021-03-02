@@ -2,7 +2,7 @@
 <g:form controller="produtoEstabelecimento" action="save" method="POST">
     <g:hiddenField name="estabelecimento.id" value="${estabelecimentoInstance?.id}"/>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-top">
         <div class="panel-heading">
             Produtos Disponíveis
         </div>
@@ -34,7 +34,7 @@
             </table>
         </g:if>
         <g:else>
-            <div class="text-center"><strong>SEM REGISTROS</strong></div>
+            <div class="well text-center"><strong>Sem Produtos vinculados</strong></div>
         </g:else>
     </div>
 

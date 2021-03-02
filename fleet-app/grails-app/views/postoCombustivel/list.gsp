@@ -13,18 +13,14 @@
             <h4><g:message code="default.list.label" args="[entityName]" /></h4>
         </div>
         <div class="panel-body">
-
             <alert:all/>
-
-
-            <div class="panel panel-default">
             <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
-                <div class="panel-heading">
-                    <g:link action="create" class="btn btn-default">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        <g:message code="default.new.label" args="[entityName]" />
-                    </g:link>
-                </div>
+            <div class="buttons-top">
+                <g:link action="create" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <g:message code="default.new.label" args="[entityName]" />
+                </g:link>
+            </div>
             </sec:ifAnyGranted>
                 <div class="panel-body">
 
