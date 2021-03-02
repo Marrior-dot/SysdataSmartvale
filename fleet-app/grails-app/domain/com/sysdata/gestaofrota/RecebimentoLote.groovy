@@ -8,6 +8,8 @@ class RecebimentoLote {
     Rh convenio
     DadoBancario domicilioBancario
     BigDecimal valor
+    BigDecimal valorBruto
+    BigDecimal valorTaxaAdm
     StatusPagamentoLote status = StatusPagamentoLote.AGENDADO
     StatusRetornoPagamento statusRetorno
 
@@ -18,6 +20,8 @@ class RecebimentoLote {
     static constraints = {
         statusRetorno nullable: true
         dataRecebimento nullable: true
+        valorBruto nullable: true
+        valorTaxaAdm nullable: true
     }
 
     static mapping = {

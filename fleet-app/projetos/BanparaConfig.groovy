@@ -159,6 +159,10 @@ environments {
                         operador = "00000042"
                     }
 
+                    loteRecebimento {
+                        endpoint = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io/transferencia/contacorrente/v1/lote"
+                        operador = "00000042"
+                    }
                 }
             }
         }
@@ -208,6 +212,12 @@ environments {
                         endpoint = "https://172.35.21.19/transferencia/contacorrente/v1/lote"
                         operador = "00000042"
                     }
+
+                    loteRecebimento {
+                        endpoint = "https://172.35.21.19/gestaocombustivel/v1/projecaoreembolso"
+                        operador = "00000042"
+                    }
+
                 }
             }
         }
@@ -258,6 +268,12 @@ environments {
                         endpoint = "https://srvwspa02/transferencia/contacorrente/v1/lote"
                         operador = "00000042"
                     }
+
+                    loteRecebimento {
+                        endpoint = "https://srvwspa02/gestaocombustivel/v1/projecaoreembolso"
+                        operador = "00000042"
+                    }
+
                 }
             }
         }

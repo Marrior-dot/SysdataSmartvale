@@ -5,6 +5,8 @@ class Estabelecimento extends Empresa {
 
     static belongsTo = [empresa: PostoCombustivel]
 
+    static hasMany = [produtos: ProdutoEstabelecimento]
+
     static transients = ['descricaoResumida']
 
     static constraints = {
@@ -13,6 +15,7 @@ class Estabelecimento extends Empresa {
 
     static mapping = {
         id generator: 'sequence', params: [sequence: 'estabelecimento_seq']
+        produtos cascade: 'all-delete-orphan'
     }
 
     String getDescricaoResumida() {

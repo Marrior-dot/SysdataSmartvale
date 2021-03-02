@@ -10,5 +10,9 @@ class DadoBancario {
 	TipoTitular tipoTitular
 	
     static constraints = {
+		nomeTitular nullable: true
+		documentoTitular nullable: true
+		tipoTitular nullable: true
+
     }
 }

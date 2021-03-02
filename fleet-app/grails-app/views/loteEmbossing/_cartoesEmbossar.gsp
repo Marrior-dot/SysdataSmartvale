@@ -1,7 +1,6 @@
 <g:if test="${cartoesEmbossarList}">
     <div class="panel panel-default panel-top">
         <div class="panel-body">
-
             <table class="table">
                 <thead>
                 <th>Cartão</th>
@@ -36,7 +35,9 @@
     </div>
 </g:if>
 <g:else>
-    <div class="alert alert-info text-center" role="alert">Não há Cartões a Embossar</div>
+    <div class="row">
+        <div class="alert alert-info text-center" role="alert">Não há Cartões a Embossar</div>
+    </div>
 </g:else>
 
 
