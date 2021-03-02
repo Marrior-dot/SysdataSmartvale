@@ -61,7 +61,6 @@
                                     <g:render template="listReembolso"/>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="estabelecimento">
-                                    <g:render template="/estabelecimento/search" model="[controller:'estabelecimento',empId:postoCombustivelInstance?.id]" />
                                 </div>
 %{--
                                 <div role="tabpanel" class="tab-pane" id="lotes">
@@ -77,5 +76,27 @@
                 </div>
             </div>
         </div>
+
+
+    <script>
+
+        var loadEstabelecimentos = function(empId) {
+            $.get("${createLink(controller: 'estabelecimento', action: 'listByEmpresa')}", { empId: empId}, function(data) {
+               $("#estabelecimento").html(data);
+            });
+        };
+
+
+
+        $(document).ready(function() {
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                if (e.target.href.includes('#estabelecimento'))
+                    loadEstabelecimentos("${postoCombustivelInstance.id}");
+            });
+        });
+
+    </script>
+
     </body>
 </html>

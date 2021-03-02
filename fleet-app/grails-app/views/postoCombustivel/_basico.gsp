@@ -77,7 +77,7 @@
 				</button>
 
 				<button type="submit" class="btn btn-danger" name="_action_delete"
-						onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+						onclick="return confirm('Confirma a exclusão do Conveniado e todos os dados relacionados?');">
 					<span class="glyphicon glyphicon-remove"></span>&nbsp;<g:message code="default.button.delete.label" default="Delete"></g:message>
 				</button>
 
