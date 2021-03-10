@@ -26,4 +26,10 @@ class Empresa extends Participante {
         inscricaoMunicipal(nullable: true)
     }
 
+    static transients = ['documentoSemMascara']
+
+    String getDocumentoSemMascara() {
+        return Util.cnpjToRaw(this.cnpj)
+    }
+
 }
