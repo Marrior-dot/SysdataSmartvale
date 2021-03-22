@@ -14,7 +14,7 @@ class FixturesService {
 
     def init() {
         criarProcessadora()
-        criarAdministradora()
+        //criarAdministradora()
         criarAutenticacaoInicial()
         criarEstadosCapitais()
         criarBancos()
