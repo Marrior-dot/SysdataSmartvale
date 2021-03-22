@@ -20,12 +20,12 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
 
     private void rejeitarLoteRecebimento(RecebimentoLote recebimentoLote, ResponseData responseData) {
         if (responseData.json) {
-            StatusRetornoPagamento statusRetorno = StatusRetornoPagamento.findByCodigo(responseData.json.codErro.toString())
+            StatusRetornoPagamento statusRetorno = StatusRetornoPagamento.findByCodigo(responseData.json.codigo.toString())
             if (!statusRetorno) {
-                statusRetorno = new StatusRetornoPagamento(codigo: responseData.json.codErro.toString(), descricao: responseData.json.msgErro)
+                statusRetorno = new StatusRetornoPagamento(codigo: responseData.json.codigo.toString(), descricao: responseData.json.mensagem)
                 statusRetorno.save(flush: true)
-            } else if (statusRetorno && statusRetorno.descricao != responseData.json.msgErro ) {
-                statusRetorno.descricao = responseData.json.msgErro
+            } else if (statusRetorno && statusRetorno.descricao != responseData.json.mensagem ) {
+                statusRetorno.descricao = responseData.json.mensagem
                 statusRetorno.save(flush: true)
             }
             recebimentoLote.statusRetorno = statusRetorno
@@ -40,16 +40,17 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
 
         def msgJson = [
             Operador: grailsApplication.config.projeto.reembolso.banpara.api.loteRecebimento.operador,
-            dataContabil: recebimentoLote.dataPrevista,
-            CNPJOrgao: recebimentoLote.convenio.cnpj,
-            AgenciaContaOrgao: recebimentoLote.convenio.dadoBancario.agencia,
-            ContaOrgao: recebimentoLote.convenio.dadoBancario.conta,
-            ValorOrgao: recebimentoLote.valorBruto,
-            AgenciaContaSysdata: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia,
-            ContaSysdata: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta,
-            ValorSysdata: recebimentoLote.valor,
+            DataContabil: recebimentoLote.dataPrevista.format('yyyy-MM-dd'),
+            CNPJOrgao: recebimentoLote.convenio.documentoSemMascara as long,
+            AgenciaOrgao: recebimentoLote.convenio.dadoBancario.agencia as int,
+            ContaOrgao: recebimentoLote.convenio.dadoBancario.contaSemMascara as int,
+            ValorDebito: recebimentoLote.valorBruto,
+            AgenciaDestino: grailsApplication.config.projeto.reembolso.banpara.contaDebito.agencia as int,
+            ContaDestino: grailsApplication.config.projeto.reembolso.banpara.contaDebito.conta as int,
+            ValorCredito: recebimentoLote.valor,
             ValorComissao: recebimentoLote.valorTaxaAdm
         ]
+
 
         withToken { token ->
             MensagemIntegracao msgEnviaLote = new MensagemIntegracao()
@@ -101,7 +102,7 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
         if (loteRecebList) {
             loteRecebList.each { lote ->
                 log.info "Preparando Lote de Recebimento $lote.id para envio a API Banpara..."
-                loteRecebList.recebimentos.each { receb ->
+                lote.recebimentos.each { receb ->
                     enviarMensagem(receb)
                 }
                 lote.statusEmissao = StatusEmissao.ARQUIVO_GERADO

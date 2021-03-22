@@ -53,13 +53,16 @@ class PostoCombustivelController {
     }
 
     def save() {
-
         PostoCombustivel postoCombustivelInstance = new PostoCombustivel(params)
-
-        if (postoCombustivelInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
-            redirect(action: "show", id: postoCombustivelInstance.id)
-        } else {
+        try {
+            if (postoCombustivelInstance.save(flush: true)) {
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'postoCombustivel.label', default: 'PostoCombustivel'), postoCombustivelInstance.id])}"
+                redirect(action: "show", id: postoCombustivelInstance.id)
+            } else {
+                render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: Util.ACTION_NEW])
+            }
+        } catch (e) {
+            flash.error = e.message
             render(view: "form", model: [postoCombustivelInstance: postoCombustivelInstance, action: Util.ACTION_NEW])
         }
     }

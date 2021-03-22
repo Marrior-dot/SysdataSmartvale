@@ -160,7 +160,7 @@ environments {
                     }
 
                     loteRecebimento {
-                        endpoint = "https://eaa6b7a5-9b4a-4159-a105-6135eb7dbfeb.mock.pstmn.io/transferencia/contacorrente/v1/lote"
+                        endpoint = "https://27d4c202-6bc1-4671-8869-cbc62723248d.mock.pstmn.io/gestaocombustivel/v1/projecaoreembolso"
                         operador = "00000042"
                     }
                 }
@@ -214,7 +214,7 @@ environments {
                     }
 
                     loteRecebimento {
-                        endpoint = "https://172.35.21.19/gestaocombustivel/v1/projecaoreembolso"
+                        endpoint = "https://172.35.21.19/apigestaocombustivel/gestao/v1/reembolso"
                         operador = "00000042"
                     }
 
