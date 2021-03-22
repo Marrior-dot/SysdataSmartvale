@@ -112,7 +112,7 @@ class MockTransacaoService {
             } else if (crt.portador.instanceOf(PortadorMaquina)) {
                 maquinaMotorizada = (crt.portador as PortadorMaquina).maquina
                 def funcList = maquinaMotorizada.funcionarios as List
-                funcionario = funcList[Math.abs(random.nextInt() % funcList.size())]
+                funcionario = funcList[Math.abs(random.nextInt() % funcList.size())].funcionario
             }
 
             TipoCombustivel tipoComb
