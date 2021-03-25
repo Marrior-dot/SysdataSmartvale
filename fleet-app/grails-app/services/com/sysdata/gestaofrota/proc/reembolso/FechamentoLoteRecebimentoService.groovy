@@ -37,7 +37,7 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
                         recebimentoLote = new RecebimentoLote()
                         Rh rh = receb.rh
                         recebimentoLote.with {
-                            dataPrevista = date
+                            dataPrevista = date - 1
                             convenio = rh
                             domicilioBancario = rh.dadoBancario
                             valor = receb.valor
@@ -61,6 +61,7 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
                 }
 
                 loteReceb.status = StatusLotePagamento.FECHADO
+                loteReceb.statusEmissao = StatusEmissao.GERAR_ARQUIVO
                 loteReceb.save(flush: true)
                 log.info "Lote Recebimento #${loteReceb.id} fechado"
             }
