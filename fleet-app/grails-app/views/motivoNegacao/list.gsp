@@ -15,10 +15,12 @@
 			</div>
 			<div class="panel-body">
 				<a class="btn btn-default" href="${createLink(uri: '/')}"><span class="glyphicon glyphicon-home"></span> <g:message code="default.home.label"/></a>
-				<g:link action="create" class="btn btn-default">
-					<span class="glyphicon glyphicon-plus"></span>
-					<g:message code="default.new.label" args="[entityName]" />
-				</g:link>
+				<sec:ifAnyGranted roles="ROLE_PROC">
+					<g:link action="create" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus"></span>
+						<g:message code="default.new.label" args="[entityName]" />
+					</g:link>
+				</sec:ifAnyGranted>
 				<br><br>
 				<div id="list-motivoNegacao" class="content scaffold-list" role="main">
 					<g:if test="${flash.message}">

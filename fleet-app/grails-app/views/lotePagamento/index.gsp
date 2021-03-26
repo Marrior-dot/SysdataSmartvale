@@ -21,7 +21,8 @@
                     <table class="table">
                         <thead>
                         <th>#</th>
-                        <th>Data</th>
+                        <th>Data Criação</th>
+                        <th>Data Prevista</th>
                         <th>Total</th>
                         </thead>
                         <tbody>
@@ -29,6 +30,7 @@
                             <tr>
                                 <td><g:link action="show" id="${lote.id}">${lote.id}</g:link></td>
                                 <td><g:formatDate date="${lote.dateCreated}" format="dd/MM/yyyy"></g:formatDate></td>
+                                <td><g:formatDate date="${lote.dataEfetivacao}" format="dd/MM/yyyy"></g:formatDate></td>
                                 <td><g:formatNumber number="${lote.total}" type="currency"></g:formatNumber></td>
                             </tr>
                         </g:each>

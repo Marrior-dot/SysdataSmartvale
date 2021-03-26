@@ -367,9 +367,7 @@ class Util {
         def refDate = new Date()
         def hr = refDate[Calendar.HOUR_OF_DAY]
         def min = refDate[Calendar.MINUTE]
-        if (hr in (0..18) && min in (0..59))
-            refDate--
-        return refDate.clearTime()
+        return (hr in (0..18) && min in (0..59)) ? --refDate.clearTime() : refDate.clearTime()
     }
 
 }

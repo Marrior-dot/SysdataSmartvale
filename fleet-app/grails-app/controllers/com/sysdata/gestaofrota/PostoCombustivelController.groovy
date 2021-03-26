@@ -31,7 +31,7 @@ class PostoCombustivelController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def postoCombustivelService
+    PostoCombustivelService postoCombustivelService
 
     def springSecurityService
 
@@ -40,11 +40,12 @@ class PostoCombustivelController {
     }
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.offset = params.offset ? params.offset as int: 0
-        params.sort = "dateCreated"
-        params.order = "desc"
-        [empresasList: PostoCombustivel.list(params), empresasCount: PostoCombustivel.count()]
+        def pars = params.subMap(['cnpj', 'razao', 'fantasia'])
+        pars.max = Math.min(params.max ? params.int('max') : 10, 100)
+        pars.offset = params.offset ? params.offset as int: 0
+        pars.sort = "dateCreated"
+        pars.order = "desc"
+        [empresasList: postoCombustivelService.list(pars), empresasCount: postoCombustivelService.count(pars) ]
     }
 
 

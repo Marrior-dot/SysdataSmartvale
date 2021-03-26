@@ -9,13 +9,9 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
 
     @Override
     def execute(Date date) {
-
         List<LoteRecebimento> lotesAbertos = LoteRecebimento.findAllByStatus(StatusLotePagamento.ABERTO)
-
         if (lotesAbertos) {
-
             lotesAbertos.each { loteReceb ->
-
                 log.info "Lote Receb #${loteReceb.id}:"
                 def recIds = LoteRecebimento.withCriteria {
                                 createAlias("cortes", "c")
@@ -30,9 +26,7 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
                 def currRhId = 0
                 RecebimentoLote recebimentoLote
                 recIds.each { rid ->
-
                     RecebimentoConvenio receb = RecebimentoConvenio.get(rid)
-
                     if (currRhId != receb.rh.id) {
                         recebimentoLote = new RecebimentoLote()
                         Rh rh = receb.rh
@@ -56,15 +50,12 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing {
                         recebimentoLote.valorTaxaAdm += receb.valorTaxaAdm
                         recebimentoLote.save(flush: true)
                     }
-
-
                 }
-
                 loteReceb.status = StatusLotePagamento.FECHADO
+                loteReceb.statusEmissao = StatusEmissao.GERAR_ARQUIVO
                 loteReceb.save(flush: true)
                 log.info "Lote Recebimento #${loteReceb.id} fechado"
             }
-
         } else
             log.warn "Não há lotes de recebimento para hoje"
 

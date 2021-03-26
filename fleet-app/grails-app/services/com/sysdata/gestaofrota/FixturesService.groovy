@@ -116,37 +116,82 @@ class FixturesService {
 
     private def criarProcessamentos() {
 
-        BatchProcessing batch = BatchProcessing.findByName("Processamento Diário")
-        if (! batch) {
-            batch = new BatchProcessing([name: "Processamento Diário",
-                                         active: true,
-                                         executionSchedule: new DailySchedule(hour: 0, minute: 10, executionFrequency: ExecutionFrequency.DAILY)])
-            batch.save(flush: true)
-        }
-
-        Processing.findOrCreateWhere([name: "Carga de Pedidos", order: 1 as byte, service: "cargaPedidoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Agendamento de Transações", order: 2 as byte, service: "agendamentoTransacaoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Faturamento Pedidos de Carga", order: 3 as byte, service: "faturamentoCargaPedidoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Faturamento Portador", order: 4 as byte, service: "faturamentoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Geração Remessa Cobrança Banco do Brasil", order: 5 as byte, service: "geradorRemessaBancoBrasilService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Geração Arquivo Embossing", order: 6 as byte, service: "geracaoArquivoEmbossingService", active: true, batch: batch]).save(flush: true)
-
-
         if (grailsApplication.config.projeto.projectId == "bahiavale")
             Processing.findOrCreateWhere([name: "Geração Arquivo NFe - RPS Barueri", order: 6 as byte, service: "geracaoArquivoRPSBarueriService", active: true, batch: batch]).save(flush: true)
 
-        Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 7 as byte, service: "atualizacaoSaldoService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Faturamento Estabelecimento", order: 8 as byte, service: "corteReembolsoEstabsService", active: true, batch: batch]).save(flush: true)
-        Processing.findOrCreateWhere([name: "Fechamento de Lote Pagamento", order: 9 as byte, service: "fechamentoLotePagamentoService", active: true, batch: batch]).save(flush: true)
-
-
         if (grailsApplication.config.projeto.projectId == "banpara") {
-            Processing.findOrCreateWhere([name: "Fechamento de Lote Recebimento", order: 10 as byte, service: "fechamentoLoteRecebimentoService", active: true, batch: batch]).save(flush: true)
 
-            Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 11 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
-            Processing.findOrCreateWhere([name: "Envio Lote Recebimento Banpará API", order: 12 as byte, service: "enviarLoteRecebimentoAPIBanparaService", active: true, batch: batch]).save(flush: true)
-            Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 13 as byte, service: "consultarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
-            Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 14 as byte, service: "consultarLoteDevolucaoAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            BatchProcessing batchCorte = BatchProcessing.findByName("Corte Diário")
+            if (! batchCorte) {
+                batchCorte = new BatchProcessing([name: "Corte Diário",
+                                                  active: true,
+                                                  executionSchedule: new DailySchedule(hour: 22,
+                                                                                        minute: 0,
+                                                                                        executionFrequency: ExecutionFrequency.DAILY)])
+                batchCorte.save(flush: true)
+            }
+
+            Processing.findOrCreateWhere([name: "Agendamento de Transações", order: 1 as byte,
+                                          service: "agendamentoTransacaoService", active: true,
+                                          batch: batchCorte]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Faturamento Estabelecimento", order: 2 as byte,
+                                          service: "corteReembolsoEstabsService", active: true,
+                                          batch: batchCorte]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Fechamento de Lote Pagamento", order: 3 as byte,
+                                          service: "fechamentoLotePagamentoService", active: true,
+                                          batch: batchCorte]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Fechamento de Lote Recebimento", order: 4 as byte,
+                                          service: "fechamentoLoteRecebimentoService", active: true,
+                                          batch: batchCorte]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Envio Lote Recebimento Banpará API", order: 5 as byte,
+                                          service: "enviarLoteRecebimentoAPIBanparaService", active: true,
+                                          batch: batchCorte]).save(flush: true)
+
+
+            BatchProcessing batch = BatchProcessing.findByName("Processamento Diário")
+            if (! batch) {
+                batch = new BatchProcessing([name: "Processamento Diário",
+                                             active: true,
+                                             executionSchedule: new DailySchedule(hour: 2, minute: 0, executionFrequency: ExecutionFrequency.DAILY)])
+                batch.save(flush: true)
+            }
+
+            Processing.findOrCreateWhere([name: "Carga de Pedidos", order: 1 as byte,
+                                          service: "cargaPedidoService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Faturamento Pedidos de Carga", order: 2 as byte,
+                                          service: "faturamentoCargaPedidoService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Faturamento Portador", order: 3 as byte,
+                                          service: "faturamentoService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Geração Arquivo Embossing", order: 4 as byte,
+                                          service: "geracaoArquivoEmbossingService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Atualização de Saldos", order: 5 as byte,
+                                          service: "atualizacaoSaldoService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Consulta Lote Banpará API", order: 6 as byte,
+                                          service: "consultarLoteAPIBanparaService", active: true,
+                                          batch: batch]).save(flush: true)
+
+            Processing.findOrCreateWhere([name: "Consulta Lotes Devolvidos - Banpará API", order: 7 as byte,
+                                          service: "consultarLoteDevolucaoAPIBanparaService", active: true,
+                                          batch: batch]).save(flush: true)
+
+
+
+
+            //Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 11 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
         }
 
         if (grailsApplication.config.projeto.projectId == "smartvale") {
