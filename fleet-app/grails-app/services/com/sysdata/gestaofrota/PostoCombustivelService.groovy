@@ -25,22 +25,22 @@ class PostoCombustivelService {
             if (pars.cnpj)
                 eq("cnpj", pars.cnpj)
             if (pars.razao)
-                eq("nome", pars.razao)
+                ilike("nome", pars.razao + '%')
             if (pars.fantasia)
-                eq("nomeFantasia", pars.fantasia)
+                ilike("nomeFantasia", pars.fantasia + '%')
         }
         clo(criteria)
     }
 
-    def list(Map pars) {
+    def list(pars) {
         withParams(pars) { criteria ->
-            return PostoCombustivel.list(pars, criteria)
+            return PostoCombustivel.createCriteria().list(pars, criteria)
         }
     }
 
-    def count(Map pars) {
+    def count(pars) {
         withParams(pars) { criteria ->
-            return PostoCombustivel.count(criteria)
+            return PostoCombustivel.createCriteria().count(criteria)
         }
     }
 

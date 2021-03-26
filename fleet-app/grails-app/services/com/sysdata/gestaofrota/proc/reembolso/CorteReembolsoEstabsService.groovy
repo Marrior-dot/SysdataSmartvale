@@ -2,8 +2,6 @@ package com.sysdata.gestaofrota.proc.reembolso
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
-import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
-import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -41,7 +39,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
             LotePagamento loteAberto = LotePagamento.aberto
             if (!loteAberto) {
-                loteAberto = new LotePagamento()
+                loteAberto = new LotePagamento(dataEfetivacao: corteEstab.dataCobranca)
                 loteAberto.save(flush: true)
             }
             loteAberto.addToCortes(corteEstab)

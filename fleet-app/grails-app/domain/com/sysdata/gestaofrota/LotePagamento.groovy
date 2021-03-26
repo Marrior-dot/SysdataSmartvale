@@ -7,6 +7,7 @@ package com.sysdata.gestaofrota
 class LotePagamento {
 
     Date dateCreated
+    Date dataEfetivacao
     StatusLotePagamento status = StatusLotePagamento.ABERTO
     StatusEmissao statusEmissao = StatusEmissao.NAO_GERAR
     StatusRetornoPagamento statusRetorno
@@ -15,6 +16,7 @@ class LotePagamento {
     
     static constraints = {
         statusRetorno nullable: true
+        dataEfetivacao nullable: true
     }
 
     static mapping = {
@@ -26,6 +28,6 @@ class LotePagamento {
     }
 
     BigDecimal getTotal() {
-        return this.pagamentos.sum { it.valor }
+        return this.pagamentos ? this.pagamentos.sum { it.valor } : 0
     }
 }

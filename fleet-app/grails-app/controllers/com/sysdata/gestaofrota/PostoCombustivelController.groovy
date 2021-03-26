@@ -31,7 +31,7 @@ class PostoCombustivelController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def postoCombustivelService
+    PostoCombustivelService postoCombustivelService
 
     def springSecurityService
 
