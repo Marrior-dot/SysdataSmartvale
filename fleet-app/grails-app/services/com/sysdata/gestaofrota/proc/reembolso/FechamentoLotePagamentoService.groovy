@@ -98,6 +98,7 @@ class FechamentoLotePagamentoService implements ExecutableProcessing {
                 if (!lotePagamento.isAttached())
                     lotePagamento.attach()
                 criarLotePagamento(lotePagamento, pagamento, valorPagto, pagtoList, date)
+
                 lotePagamento.status = StatusLotePagamento.FECHADO
                 lotePagamento.save(flush: true)
 

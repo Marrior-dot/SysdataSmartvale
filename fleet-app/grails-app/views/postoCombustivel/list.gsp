@@ -36,6 +36,10 @@
                                         <label class="control-label">Razão Social</label>
                                         <g:textField class="form-control" name="razao" value="${params.razao}"></g:textField>
                                     </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="control-label">Nome Fantasia</label>
+                                        <g:textField class="form-control" name="fantasia" value="${params.fantasia}"></g:textField>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">

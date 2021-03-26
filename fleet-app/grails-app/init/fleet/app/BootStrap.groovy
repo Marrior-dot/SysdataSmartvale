@@ -43,7 +43,6 @@ class BootStrap {
                 sessFact.currentSession.clear()
             }
         }
-
     }
 
     def destroy = {
