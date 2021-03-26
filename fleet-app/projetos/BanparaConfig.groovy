@@ -270,7 +270,7 @@ environments {
                     }
 
                     loteRecebimento {
-                        endpoint = "https://srvwspa02/gestaocombustivel/v1/projecaoreembolso"
+                        endpoint = "https://srv-wspa02/gestaocombustivel/gestao/v1/reembolso"
                         operador = "00000042"
                     }
 

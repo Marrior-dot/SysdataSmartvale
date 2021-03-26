@@ -64,7 +64,7 @@ class EnviarLoteAPIBanparaService implements ExecutableProcessing, TokenBanparaA
             def loteJson = [:]
 
             loteJson.Operador = grailsApplication.config.projeto.reembolso.banpara.api.lote.operador
-            loteJson.dataContabil = lote.dateCreated.format('yyyy-MM-dd')
+            loteJson.dataContabil = lote.dataEfetivacao.format('yyyy-MM-dd')
             loteJson.NSL = lote.id
 
             def pgtoOutrosBancosList = lote.pagamentos.findAll { it.dadoBancario.banco.codigo != "37" }

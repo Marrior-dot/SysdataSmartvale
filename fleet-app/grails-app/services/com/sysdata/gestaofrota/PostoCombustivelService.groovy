@@ -20,6 +20,32 @@ class PostoCombustivelService {
 
     }
 
+    private def withParams(Map pars, Closure clo) {
+        def criteria = {
+            if (pars.cnpj)
+                eq("cnpj", pars.cnpj)
+            if (pars.razao)
+                ilike("nome", pars.razao + '%')
+            if (pars.fantasia)
+                ilike("nomeFantasia", pars.fantasia + '%')
+        }
+        clo(criteria)
+    }
+
+    def list(pars) {
+        withParams(pars) { criteria ->
+            return PostoCombustivel.createCriteria().list(pars, criteria)
+        }
+    }
+
+    def count(pars) {
+        withParams(pars) { criteria ->
+            return PostoCombustivel.createCriteria().count(criteria)
+        }
+    }
+
+
+
     def delete(PostoCombustivel empresa) {
         def empId = empresa.toString()
         def transacaoCount = Transacao.withCriteria {
