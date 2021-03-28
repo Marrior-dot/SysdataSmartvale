@@ -63,6 +63,7 @@ class ReembolsoFaturadoService {
             pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
             sb.append(""" and p.dataProgramada >= :dataInicio and p.dataProgramada <= :dataFim """)
         }
-        return PagamentoEstabelecimento.executeQuery(sb.toString(), pars)[0]
+        def rowsCount = PagamentoEstabelecimento.executeQuery(sb.toString(), pars)
+        return rowsCount ? rowsCount[0] : 0
     }
 }
