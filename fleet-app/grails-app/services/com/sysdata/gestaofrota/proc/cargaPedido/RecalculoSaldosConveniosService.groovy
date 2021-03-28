@@ -10,14 +10,17 @@ import grails.gorm.transactions.Transactional
 class RecalculoSaldosConveniosService implements ExecutableProcessing {
 
     private void atualizarSaldoConvenio(Rh convenio, totalGeralPedidos) {
-        def novoSaldoConvenio = 0
+        def novoSaldoConvenio
         def limiteConvenio = convenio.limiteTotal
         if (limiteConvenio - totalGeralPedidos < 0)
             log.warn "\tEMP #${convenio.id} - recalc < 0 = (${limiteConvenio - totalGeralPedidos})"
         novoSaldoConvenio = limiteConvenio - totalGeralPedidos
-        log.info "\tEMP #${convenio.id} - LIM:${limiteConvenio} T.P:${totalGeralPedidos} (S.A:${convenio.saldoDisponivel} N.S:${novoSaldoConvenio} DIF:${novoSaldoConvenio - limiteConvenio})"
-        convenio.saldoDisponivel = novoSaldoConvenio
-        convenio.save(flush: true)
+        log.info "\tEMP #${convenio.id} - LIM:${limiteConvenio} T.P:${totalGeralPedidos} (S.A:${convenio.saldoDisponivel} N.S:${novoSaldoConvenio} DIF:${novoSaldoConvenio - convenio.saldoDisponivel})"
+        if (novoSaldoConvenio != convenio.saldoDisponivel) {
+            convenio.saldoDisponivel = novoSaldoConvenio
+            convenio.save(flush: true)
+            log.info "\t\t(alt) EMP #${convenio.id} SLD:${convenio.saldoDisponivel}"
+        }
     }
 
     @Override
@@ -40,7 +43,7 @@ class RecalculoSaldosConveniosService implements ExecutableProcessing {
                     atualizarSaldoConvenio(convenio, totalGeralPedidos)
                     // Aponta p/ convênio corrente na iteração
                     convenio = pedidoCarga.unidade.rh
-                    totalGeralPedidos = 0
+                    totalGeralPedidos = pedidoCarga.total
                 } else {
                     if (!convenio)
                         convenio = pedidoCarga.unidade.rh
