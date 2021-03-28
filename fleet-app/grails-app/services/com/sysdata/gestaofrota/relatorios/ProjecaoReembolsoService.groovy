@@ -1,15 +1,14 @@
 package com.sysdata.gestaofrota.relatorios
 
 import com.sysdata.gestaofrota.Lancamento
+import com.sysdata.gestaofrota.Transacao
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class ProjecaoReembolsoService {
 
     def list(params, paginate = true) {
-
         def pars = [:]
-
         def sb = new StringBuilder()
         sb.append("""
             select
@@ -26,18 +25,14 @@ class ProjecaoReembolsoService {
                 t.estabelecimento.empresa.dadoBancario.conta,
                 t.estabelecimento.empresa.dadoBancario.nomeTitular,
                 t.estabelecimento.empresa.dadoBancario.documentoTitular
-
-
             from
                 Transacao t,
                 Lancamento l
-
             where
                 l.transacao = t and
                 l.tipo = 'REEMBOLSO' and
                 l.status = 'A_FATURAR'
         """)
-
 
         if (params.dataInicio && params.dataFim) {
 
@@ -48,14 +43,6 @@ class ProjecaoReembolsoService {
                 and l.dataEfetivacao >= :dataInicio and l.dataEfetivacao <= :dataFim """)
 
         }
-
-/*
-            sb.append("""
-                and l.dataEfetivacao >= ${params.date('dataInicio', 'dd/MM/yyyy')} and
-                l.dataEfetivacao <= ${params.date('dataFim', 'dd/MM/yyyy')}""")
-*/
-
-
 
         sb.append("""
             group by
@@ -69,31 +56,20 @@ class ProjecaoReembolsoService {
                 t.estabelecimento.empresa.dadoBancario.conta,
                 t.estabelecimento.empresa.dadoBancario.nomeTitular,
                 t.estabelecimento.empresa.dadoBancario.documentoTitular
-
-
-
             order by
                 l.dataEfetivacao,
                 t.estabelecimento.empresa.nome
-
         """)
-
 
         if (paginate)
             pars += [max: params.max, offset: params.offset]
 
         return Lancamento.executeQuery(sb.toString(), pars)
-
-
     }
 
     def count(params) {
-
         def pars = [:]
-
-
         def sb = new StringBuilder()
-
             sb.append("""
                 select
                     count(*)
@@ -114,11 +90,7 @@ class ProjecaoReembolsoService {
 
             sb.append("""
                 and l.dataEfetivacao >= :dataInicio and l.dataEfetivacao <= :dataFim """)
-
         }
-
-
-
         sb.append("""
             group by
                 t.estabelecimento.empresa.nome,
@@ -131,18 +103,11 @@ class ProjecaoReembolsoService {
                 t.estabelecimento.empresa.dadoBancario.conta,
                 t.estabelecimento.empresa.dadoBancario.nomeTitular,
                 t.estabelecimento.empresa.dadoBancario.documentoTitular
-
-
             order by
                 l.dataEfetivacao,
                 t.estabelecimento.empresa.nome
-
 """)
-
-
-
-
-        return Lancamento.executeQuery(sb.toString(), pars)
+        return Lancamento.executeQuery(sb.toString(), pars)[0]
 
     }
 }
