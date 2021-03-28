@@ -40,8 +40,10 @@
             </div>
         </g:form>
 
-        <table class="table table-bordered table-stripped">
-            <thead>
+
+        <div class="table-scrolled">
+            <table class="table table-bordered table-stripped">
+                <thead>
                 <th>Razão Social</th>
                 <th>Nome Fantasia</th>
                 <th>CNPJ</th>
@@ -55,32 +57,32 @@
                 <th>Conta</th>
                 <th>Nome Titular</th>
                 <th>Doc Titular</th>
-            </thead>
-            <tbody>
-            <g:each in="${projecaoList}" var="proj">
-                <tr>
-                    <td>${proj[0]}</td>
-                    <td>${proj[1]}</td>
-                    <td>${proj[2]}</td>
-                    <td><g:formatDate date="${proj[3]}" format="dd/MM/yy"/></td>
-                    <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
-                    <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
-                    <td>${proj[6]}</td>
-                    <td><g:formatNumber number="${proj[4] - proj[5]}" type="currency"></g:formatNumber> </td>
-                    <td>${proj[7]}</td>
-                    <td>${proj[8]}</td>
-                    <td>${proj[9]}</td>
-                    <td>${proj[10]}</td>
-                    <td>${proj[11]}</td>
-                </tr>
-            </g:each>
-            </tbody>
-            <tfoot>
+                </thead>
+                <tbody>
+                <g:each in="${projecaoList}" var="proj">
+                    <tr>
+                        <td>${proj[0]}</td>
+                        <td>${proj[1]}</td>
+                        <td>${proj[2]}</td>
+                        <td><g:formatDate date="${proj[3]}" format="dd/MM/yy"/></td>
+                        <td><g:formatNumber number="${proj[4]}" type="currency"></g:formatNumber> </td>
+                        <td><g:formatNumber number="${proj[5]}" type="currency"></g:formatNumber> </td>
+                        <td>${proj[6]}</td>
+                        <td><g:formatNumber number="${proj[4] - proj[5]}" type="currency"></g:formatNumber> </td>
+                        <td>${proj[7]}</td>
+                        <td>${proj[8]}</td>
+                        <td>${proj[9]}</td>
+                        <td>${proj[10]}</td>
+                        <td>${proj[11]}</td>
+                    </tr>
+                </g:each>
+                </tbody>
+                <tfoot>
 
-            </tfoot>
-        </table>
-
-        <g:paginate total="${projecaoCount}" />
+                </tfoot>
+            </table>
+        </div>
+        <g:paginate total="${projecaoCount}" params="${params}"/>
 
         <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
