@@ -107,7 +107,9 @@ class ProjecaoReembolsoService {
                 l.dataEfetivacao,
                 t.estabelecimento.empresa.nome
 """)
-        return Lancamento.executeQuery(sb.toString(), pars)[0]
+
+        def rowsCount = Lancamento.executeQuery(sb.toString(), pars)
+        return rowsCount ? rowsCount[0] : 0
 
     }
 }
