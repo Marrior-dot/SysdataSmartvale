@@ -115,9 +115,10 @@ class FixturesService {
     }
 
     private def criarProcessamentos() {
-
+/*
         if (grailsApplication.config.projeto.projectId == "bahiavale")
             Processing.findOrCreateWhere([name: "Geração Arquivo NFe - RPS Barueri", order: 6 as byte, service: "geracaoArquivoRPSBarueriService", active: true, batch: batch]).save(flush: true)
+*/
 
         if (grailsApplication.config.projeto.projectId == "banpara") {
 
@@ -197,6 +198,11 @@ class FixturesService {
         if (grailsApplication.config.projeto.projectId == "smartvale") {
             Processing.findOrCreateWhere([name: "Faturamento de Ordens de Serviços - Omie API", order: 10 as byte, service: "faturamentoOrdemServiceOmieService", active: true, batch: batch]).save(flush: true)
         }
+
+        Processing.findOrCreateWhere([name: "Recálculo Saldos de Clientes", order: 1 as byte,
+                                      service: "recalculoSaldosConveniosService", active: true])
+                                      .save(flush: true)
+
 
     }
 

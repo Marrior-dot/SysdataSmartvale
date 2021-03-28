@@ -32,6 +32,10 @@ class PagamentoEstabelecimento {
         dataEfetivada type: 'date'
     }
 
+    static hibernateFilters = {
+        reembolsoPorEstabelecimento(condition: 'estabelecimento_id = :est_id', types: 'long')
+    }
+
     String toString() {
         return "#${this.id} ${this.dataProgramada.format('dd/MM/yy')} ${this.valor}"
     }

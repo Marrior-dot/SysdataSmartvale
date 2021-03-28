@@ -78,17 +78,9 @@
                     </tr>
                 </g:each>
                 </tbody>
-                <tfoot>
-
-                </tfoot>
             </table>
-
+            <g:paginate total="${reembolsoCount}" params="${params}"/>
         </div>
-
-
-
-        <g:paginate total="${reembolsoCount}" />
-
         <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
