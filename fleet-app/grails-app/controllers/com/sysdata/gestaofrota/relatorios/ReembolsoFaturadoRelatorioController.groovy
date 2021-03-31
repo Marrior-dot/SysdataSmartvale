@@ -9,7 +9,7 @@ class ReembolsoFaturadoRelatorioController {
     ReembolsoFaturadoService reembolsoFaturadoService
 
     def index() {
-        params.max = params.max ? params.max as int : 0
+        params.max = params.max ? params.max as int : 10
         params.offset = params.offset ? params.offset as int : 0
 
 

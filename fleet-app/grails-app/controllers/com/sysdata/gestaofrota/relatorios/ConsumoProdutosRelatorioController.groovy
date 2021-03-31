@@ -23,8 +23,19 @@ select
     v.unidade.nome,
     p.nome,
     sum(t.qtd_litros),
-    sum(t.quilometragem)
 
+    (
+        (select t1.quilometragem from Transacao t1 where t1.id =
+            (select max(tu.id) from Transacao tu where tu.maquina = t.maquina and tu.tipo = 'COMBUSTIVEL'
+                and tu.statusControle in ('PENDENTE', 'CONFIRMADA')))
+
+        -
+
+        (select t2.quilometragem from Transacao t2 where t2.id =
+            (select min(ti.id) from Transacao ti where ti.maquina = t.maquina and ti.tipo = 'COMBUSTIVEL'
+                and ti.statusControle = 'CONFIRMADA'))
+
+    ) as kms_percorridos
 
 from
     Transacao as t,
@@ -58,10 +69,10 @@ group by
     v.modelo,
     v.unidade.rh.nome,
     v.unidade.nome,
-    p.nome
+    p.nome,
+    t.maquina
 having
-    sum(t.qtd_litros) > 0 and
-    sum(t.quilometragem) > 0
+    sum(t.qtd_litros) > 0
 
 
 order by
@@ -90,16 +101,25 @@ order by
                                 ]
                             }
 
-            def fields = ["placa", "marca", "modelo", "rh", "unidade", "produto", "consumo", "Km Percorida "]
+            def fields = [
+                            "placa",
+                            "marca",
+                            "modelo",
+                            "rh",
+                            "unidade",
+                            "produto",
+                            "consumo",
+                            "quilometragem"
+                        ]
 
             def labels = [
-                            "placa"   : "Placa",
-                            "marcar"  : "Marca",
-                            "modelo"  : "Modelo",
-                            "rh"      : "Empresa",
-                            "unidade" : "Unidade",
-                            "produto" : "Produto",
-                            "consumo" : "Consumo(lts)",
+                            "placa"         : "Placa",
+                            "marca"         : "Marca",
+                            "modelo"        : "Modelo",
+                            "rh"            : "Empresa",
+                            "unidade"       : "Unidade",
+                            "produto"       : "Produto",
+                            "consumo"       : "Consumo(lts)",
                             "quilometragem" : "KM Percorrida"
                         ]
 
