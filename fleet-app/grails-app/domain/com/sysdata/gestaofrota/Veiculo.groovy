@@ -11,7 +11,7 @@ class Veiculo extends MaquinaMotorizada {
     Date validadeExtintor
     Long hodometro = 0
 
-    static transients = ['hodometroAtualizado']
+    static transients = ['hodometroAtualizado', 'identificacaoCompacta']
 
     static constraints = {
         validadeExtintor(nullable: true)
@@ -26,7 +26,9 @@ class Veiculo extends MaquinaMotorizada {
     static mapping = {
     }
 
-
+    String getIdentificacaoCompacta() {
+        return "(${this.placa}) ${this.marca.nome} ${this.modelo}"
+    }
 
     Long getHodometroAtualizado() {
 

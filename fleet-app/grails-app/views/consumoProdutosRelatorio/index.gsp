@@ -55,9 +55,6 @@
             <th>Produto</th>
             <th>Consumo (lts)</th>
             <th>KM Percorrida</th>
-
-
-
             </thead>
             <tbody>
             <g:each in="${consumoList}" var="csm">
@@ -69,10 +66,6 @@
                     <td>${csm[5]}</td>
                     <td>${csm[6] ?: 0}</td>
                     <td>${csm[7] ?: 0}</td>
-
-
-
-
                 </tr>
             </g:each>
             </tbody>

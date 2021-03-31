@@ -16,8 +16,14 @@ class Equipamento extends MaquinaMotorizada {
     static mapping = {
     }
 
+    static transients = ['identificacaoCompacta']
+
     @Override
     String getNomeEmbossing() {
         "${codigo} ${tipo.abreviacao} ${complementoEmbossing}".toUpperCase()
+    }
+
+    String getIdentificacaoCompacta() {
+        return "(${this.codigo}) ${this.descricao}"
     }
 }
