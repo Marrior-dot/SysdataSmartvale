@@ -127,8 +127,8 @@
                         <td>${cveic?.qtd_litros}</td>
                         <td>${cveic?.cartao?.portador?.unidade?.rh?.nomeFantasia}</td>
                         <td>${cveic?.cartao?.portador?.unidade?.nome}</td>
-                        <td>${cveic?.tipo}</td>
-                        <td>${cveic?.statusControle}</td>
+                        <td>${cveic?.tipo.nome}</td>
+                        <td>${cveic?.statusControle.nome}</td>
                 </tr>
             </g:each>
 
