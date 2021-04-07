@@ -112,6 +112,7 @@ class FixturesService {
         Banco.findOrCreateWhere([codigo: "237", nome: "BANCO BRADESCO S.A."]).save(flush: true)
         Banco.findOrCreateWhere([codigo: "341", nome: "BANCO ITAU S.A."]).save(flush: true)
         Banco.findOrCreateWhere([codigo: "37", nome: "BANCO DO ESTADO DO PARÁ S.A."]).save(flush: true)
+        Banco.findOrCreateWhere([codigo: "748", nome: "BANCO COOPERATIVO SICRED S.A."]).save(flush: true)
     }
 
     private def criarProcessamentos() {
