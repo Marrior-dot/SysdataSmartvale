@@ -1,14 +1,14 @@
 <%@ page import="com.sysdata.gestaofrota.Unidade" %>
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="layout-restrito" />
-        <g:set var="entityName" value="Unidade" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
-    </head>
-    <body>
-        <div class="panel panel-default panel-top">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="layout" content="layout-restrito" />
+    <g:set var="entityName" value="Unidade" />
+    <title><g:message code="default.edit.label" args="[entityName]" /></title>
+</head>
+<body>
+    <div class="panel panel-default panel-top">
             <div class="panel-heading">
                 <h4><g:message code="default.create.label" args="[entityName]" /> - [${action}]</h4>
             </div>
@@ -57,7 +57,7 @@
                                     <g:render template="basico" model="[rhId:rhInstance?.id]"/>
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <g:render template="/funcionario/search" model="[controller:'funcionario',unidade_id:unidadeInstance?.id]"/>
+                                    <div id="unidFuncList"></div>
                                 </div>
                                 <div class="tab-pane" id="tab3">
                                     <g:render template="/veiculo/search" model="[controller:'veiculo',unidade_id:unidadeInstance?.id]"/>
@@ -73,15 +73,26 @@
                 <g:else>
                     <g:render template="basico" model="[rhId:rhInstance?.id]"/>
                 </g:else>
-
-
-
-
-
-
             </div>
         </div>
-    </body>
+
+<script>
+    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+        if (e.target.href.includes("#tab2")) {
+            $.get("${createLink(action: 'listFuncionarios')}", {unidId: "${unidadeInstance.id}"}, function(data) {
+            })
+            .done(function(data){
+                $("#unidFuncList").html(data);
+            })
+            .fail(function(xhr, status, err) {
+                console.error(xhr.responseText);
+            });
+        }
+    });
+</script>
+</body>
+
+
 </html>
 
 

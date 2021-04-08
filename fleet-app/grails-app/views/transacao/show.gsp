@@ -65,10 +65,18 @@
                         <th>Funcionário</th>
                         <td>${transacaoInstance.participante?.nome}</td>
                     </tr>
+                    <g:if test="${transacaoInstance.cartao}">
                     <tr>
                         <th>Cartão</th>
                         <td>${transacaoInstance.cartao?.numero}</td>
                     </tr>
+                    </g:if>
+                    <g:else>
+                    <tr>
+                        <th>Número Cartão</th>
+                        <td>${transacaoInstance.numeroCartao}</td>
+                    </tr>
+                    </g:else>
                     <tr>
                         <th>Estabelecimento</th>
                         <td><g:link controller="estabelecimento" action="show" id="${transacaoInstance.estabelecimento?.id}">${transacaoInstance.estabelecimento?.nome}</g:link></td>
@@ -100,6 +108,12 @@
                             <td>${transacaoInstance.maquina?.placa}</td>
                         </tr>
                     </g:if>
+                    <g:elseif test="${transacaoInstance.placa}">
+                        <tr>
+                            <th>Placa</th>
+                            <td>${transacaoInstance.placa}</td>
+                        </tr>
+                    </g:elseif>
 
                     <g:if test="${transacaoInstance.maquina?.instanceOf(Equipamento) && transacaoInstance.maquina?.codigo}">
                         <tr>

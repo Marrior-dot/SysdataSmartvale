@@ -100,4 +100,29 @@ class FuncionarioService {
             log.info "FUNC #$funcionario.id inativado"
         }
     }
+
+
+    def list(args) {
+        def criteria = {
+            if (args.unidId) {
+                unidade {
+                    idEq(args.unidId.toLong())
+                }
+            }
+            if (args.cpf)
+                ilike("cpf", args.cpf + '%')
+            if (args.nome)
+                ilike("nome", args.nome + '%')
+            if (args.matricula)
+                ilike("matricula", args.matricula + '%')
+
+        }
+        args.sort = "nome"
+        [
+            list: Funcionario.createCriteria().list(args, criteria),
+            count: Funcionario.createCriteria().count(criteria)
+        ]
+    }
+
+
 }
