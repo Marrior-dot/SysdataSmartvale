@@ -13,8 +13,12 @@ class MaquinaMotorizadaService {
         for (int i = 0; i < idsFuncionariosSelecionados.size(); i++) {
             long id = idsFuncionariosSelecionados[i]
             MaquinaFuncionario maqFuncInstance = maquina.funcionarios.find { it.funcionario.id == id }
-            if (maqFuncInstance)
-                continue; //funcionario já associado a instancia! Continuar para o próximo da lista
+            if (maqFuncInstance) {
+                log.warn "Func #${id} ja vinculado a Maquina #${maquina.id}"
+                ret.success = false
+                ret.message = "Funcionário já vinculado à Máquina!"
+                break //funcionario já associado a instancia! Continuar para o próximo da lista
+            }
 
             Funcionario funcionarioInstance = Funcionario.get(id)
 
@@ -25,6 +29,9 @@ class MaquinaMotorizadaService {
                 maquina.addToFuncionarios(instanceFuncionario)
             }
         }
+        if (!ret.success)
+            return ret
+
         if (! maquina.save(flush: true)) {
             ret.success = false
             ret.message = maquina.errors
