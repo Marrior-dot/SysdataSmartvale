@@ -70,6 +70,14 @@
                 //Recarrega a lista de funcionários relacionados ao veículo
                 tabelaFuncionariosHabilitados.ajax.reload();
             },
+            error: function(err) {
+                $("#message").html("<div class='alert alert-danger' role='alert'>" + err.responseText + "</div>");
+                $("#message").show();
+                $("#message").fadeOut(5000);
+                //Recarrega a lista de funcionários relacionados ao veículo
+                tabelaFuncionariosHabilitados.ajax.reload();
+
+            },
             complete: function () {
                 waitingDialog.hide();
             }
@@ -100,13 +108,13 @@
     function loadModalFuncionario() {
         var output = {
             'controller': "funcionario",
-            'unidade_id': ${instance?.unidade?.id},
+            'unidId': ${instance?.unidade?.id},
             'action': "filtro"
         };
 
         $.ajax({
             type: 'POST',
-            url: "${createLink(controller:'funcionario', action:'search')}",
+            url: "${createLink(controller:'unidade', action:'listFuncionarios')}",
             data: output,
             success: function (data) {
                 openFuncModal(data);

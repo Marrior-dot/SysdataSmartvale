@@ -300,4 +300,12 @@ class FuncionarioController extends BaseOwnerController {
         ret['newPsw'] = cartaoInstance.senha
         render ret as JSON
     }
+
+    def listByUnidade() {
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
+        def ret = funcionarioService.list(params)
+        render template: 'tableFuncList', model: [funcionariosList: ret.list, funcionariosCount: ret.count]
+    }
+
 }
