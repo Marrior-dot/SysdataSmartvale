@@ -74,7 +74,7 @@
                     <g:else>
                     <tr>
                         <th>Número Cartão</th>
-                        <td>${transacaoInstance.numeroCartao} (Numeração não encontrada na base)</td>
+                        <td>${transacaoInstance.numeroCartao}</td>
                     </tr>
                     </g:else>
                     <tr>
@@ -108,12 +108,12 @@
                             <td>${transacaoInstance.maquina?.placa}</td>
                         </tr>
                     </g:if>
-                    <g:elsif test="${transacaoInstance.placa}">
+                    <g:elseif test="${transacaoInstance.placa}">
                         <tr>
                             <th>Placa</th>
-                            <td>${transacaoInstance.placa} (Placa não encontrada na base)</td>
+                            <td>${transacaoInstance.placa}</td>
                         </tr>
-                    </g:elsif>
+                    </g:elseif>
 
                     <g:if test="${transacaoInstance.maquina?.instanceOf(Equipamento) && transacaoInstance.maquina?.codigo}">
                         <tr>
