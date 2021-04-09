@@ -54,6 +54,13 @@ class EnviarLoteAPIBanparaService implements ExecutableProcessing, TokenBanparaA
 
     @Override
     def execute(Date date) {
+
+        if (grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
+            System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
+            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
+        }
+
+
         def pars = [sort: "dateCreated"]
         List<LotePagamento> lotePagtoList = LotePagamento.findAllByStatusEmissao(StatusEmissao.GERAR_ARQUIVO, pars)
 
