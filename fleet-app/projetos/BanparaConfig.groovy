@@ -256,6 +256,9 @@ environments {
                     jksFile = "/usr/local/frota/banpara/banparakeystore.jks"
                     password = "sByasNdPartaa"
 
+                    jksFile2 = "/usr/local/frota/banpara/banparakeystore2.jks"
+                    password2 = "sByasNdPartaa"
+
                     autenticar {
                         //endpoint = "https://172.35.21.30/APIControleCanais/v1/autenticar"
                         endpoint = "https://srvwspa02/APIControleCanais/v1/autenticar"
@@ -270,7 +273,8 @@ environments {
                     }
 
                     loteRecebimento {
-                        endpoint = "https://srv-wspa02/gestaocombustivel/gestao/v1/reembolso"
+                        //endpoint = "https://srvwspa03/gestaocombustivel/gestao/v1/reembolso"
+                        endpoint = "https://srvwspa03/apigestaocombustivel/gestao/v1/reembolso"
                         operador = "00000042"
                     }
 
