@@ -106,12 +106,15 @@ class ConsultarLoteAPIBanparaService implements ExecutableProcessing, TokenBanpa
             lote.save(flush: true)
 
         }
-
     }
-
 
     @Override
     def execute(Date date) {
+        if (grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
+            System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
+            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
+        }
+
         List<LotePagamento> lotePgtoList = LotePagamento.where {
                                                 status == StatusLotePagamento.ACEITO
                                             }.list()
