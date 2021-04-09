@@ -52,3 +52,11 @@ password: sByasNdPartaa
 
 # TCP dump host Banpará
 tcpdump -i eth0 dst host 172.35.21.19 -vv
+
+
+
+# Novo certificado da nova API
+echo -n | openssl s_client -connect 172.35.21.44:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /home/luiz/banpara/banpara2.cer
+
+# Gerar chave a partir do Certificado
+keytool -import -alias banpara2.cer -keystore /usr/local/frota/banpara/banparakeystore2.jks -file /home/luiz/banpara/banpara2.cer
