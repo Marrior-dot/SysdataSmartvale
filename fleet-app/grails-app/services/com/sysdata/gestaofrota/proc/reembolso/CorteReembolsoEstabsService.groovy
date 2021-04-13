@@ -2,10 +2,11 @@ package com.sysdata.gestaofrota.proc.reembolso
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.proc.agendamento.CalculoDiasUteis
 import grails.gorm.transactions.Transactional
 
 @Transactional
-class CorteReembolsoEstabsService implements ExecutableProcessing {
+class CorteReembolsoEstabsService implements ExecutableProcessing, CalculoDiasUteis {
 
     def grailsApplication
 
@@ -14,13 +15,16 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
 
         def rhs = [:]
 
+
+        def dateRef = dataUtil(date + 1)
+
         def datasCorte = LancamentoEstabelecimento.withCriteria {
                             projections {
                                 groupProperty("dataEfetivacao")
                             }
                             'in'("tipo", [TipoLancamento.REEMBOLSO])
                             eq("status", StatusLancamento.A_FATURAR)
-                            le("dataEfetivacao", date + 1)
+                            le("dataEfetivacao", dateRef)
                             order("dataEfetivacao")
                         }
 
@@ -31,7 +35,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
                 status = StatusCorte.ABERTO
                 dataPrevista = date
                 dataFechamento = date
-                dataCobranca = date + 1
+                dataCobranca = dateRef
             }
             corteEstab.save(flush: true)
             log.info "Corte EC #$corteEstab.id criado"
@@ -79,13 +83,15 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
     private def cortarConvenio(Date dataOper, Map rhs) {
         // Gera Recebimentos por RH e os vincula ao Lote Recebimento aberto
 
+
+
         log.info "Cortando RHs para recebimento ..."
         CorteConvenio corteConvenio = new CorteConvenio()
         corteConvenio.with {
             status = StatusCorte.FECHADO
             dataPrevista = dataOper
             dataFechamento = dataOper
-            dataCobranca = dataOper + 1
+            dataCobranca = dataUtil(dataOper)
         }
         corteConvenio.save(flush: true)
         log.info "Corte Convênio #${corteConvenio.id} criado"
@@ -93,7 +99,7 @@ class CorteReembolsoEstabsService implements ExecutableProcessing {
         rhs.each { rhId, valores ->
             RecebimentoConvenio recebimentoConvenio = new RecebimentoConvenio()
             recebimentoConvenio.with {
-                dataProgramada = dataOper + 1
+                dataProgramada = dataUtil(dataOper)
                 rh = Rh.get(rhId)
                 corte = corteConvenio
                 valor = valores.liquido

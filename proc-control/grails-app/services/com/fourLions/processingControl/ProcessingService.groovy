@@ -62,21 +62,17 @@ class ProcessingService {
         BatchProcessing.findAllByActive(true).each { batch ->
             if (batch.runNow(date)) {
                 batch.processings.sort { it.order }.each { proc ->
-                    runProcessing(proc, date)
+                    runProcessing(proc, date.clearTime())
                 }
             }
         }
-
-/*
-        Processing.withCriteria {
-            isNull("batch")
-            isNotNull("executionSchedule")
-            eq("active", true)
-        }.each { proc ->
+        def procList = Processing.executeQuery("""from Processing pr
+                                                    where pr.batch is null and
+                                                    pr.executionSchedule in (select es from ExecutionSchedule es where es.processing = pr)
+                                                    and pr.active = true""")
+        procList.each { proc ->
             if (proc.runNow(date))
-                runProcessing(proc, date)
+                runProcessing(proc, date.clearTime())
         }
-*/
-
     }
 }
