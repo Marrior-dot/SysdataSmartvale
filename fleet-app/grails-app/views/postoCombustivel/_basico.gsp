@@ -42,11 +42,11 @@
 		</div>
 	</div>
 
-	<g:render template="/endereco/form" model="[enderecoInstance:postoCombustivelInstance?.endereco,endereco:'endereco',legend:'Endereço']"/>
+	<g:render template="/endereco/form" model="[enderecoInstance:postoCombustivelInstance?.endereco,endereco: 'endereco',legend: 'Endereço']"/>
 
-	<g:render template="/telefone/form" model="[telefoneInstance:postoCombustivelInstance?.telefone,telefone:'telefone',legend:'Telefone']"/>
+	<g:render template="/telefone/form" model="[telefoneInstance:postoCombustivelInstance?.telefone,telefone: 'telefone',legend: 'Telefone', className: 'cell-phone']"/>
 
-	<g:render template="/dadoBancario/form" model="[dadoBancarioInstance:postoCombustivelInstance?.dadoBancario,dadoBancario:'dadoBancario',legend:'Conta para Reembolso']"/>
+	<g:render template="/dadoBancario/form" model="[dadoBancarioInstance:postoCombustivelInstance?.dadoBancario,dadoBancario: 'dadoBancario', legend:'Conta para Reembolso']"/>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
