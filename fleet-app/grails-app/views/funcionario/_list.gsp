@@ -4,10 +4,18 @@
         <div class="panel-heading">
             <h4><g:message code="default.list.label" args="[entityName]"/></h4>
         </div>
+
+        <div class="buttons-top">
+            <g:link class="btn btn-default" controller="funcionario" action="create" params="[unidade_id: unidadeInstance?.id]">
+                <i class="glyphicon glyphicon-plus"></i> Novo Funcionário(a)</g:link>
+        </div>
+
+
         <div class="panel-body">
             <g:if test="${flash.message}">
                 <div class="alert alert-info" role="alert">${flash.message}</div>
             </g:if>
+
 
             <g:hiddenField name="unidadeId" value="${unidadeInstance?.id}"></g:hiddenField>
 

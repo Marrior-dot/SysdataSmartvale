@@ -20,7 +20,8 @@ abstract class MaquinaMotorizada {
         complementoEmbossing nullable: true
         status nullable: true
         categoria nullable: true, validator: { val, obj ->
-                                    if (obj.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA && !val)
+                                    if (obj.unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO &&
+                                            obj.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA && !val)
                                         return "maquinaMotorizada.categoria.nula"
                                 }
     }

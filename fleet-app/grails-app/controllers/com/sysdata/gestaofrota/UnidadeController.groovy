@@ -208,7 +208,8 @@ ${
         params.max = 10
         params.offset = 0
         def ret = funcionarioService.list(params)
-        render template: '/funcionario/list', model: [unidadeInstance: Unidade.get(params.unidId as long), funcionariosList: ret.list, funcionariosCount: ret.count]
+        render template: '/funcionario/list', model: [unidadeInstance: Unidade.get(params.unidId as long),
+                                                      funcionariosList: ret.list, funcionariosCount: ret.count]
     }
 
 }
