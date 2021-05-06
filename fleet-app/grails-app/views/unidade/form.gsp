@@ -79,7 +79,7 @@
 <script>
     $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
         if (e.target.href.includes("#tab2")) {
-            $.get("${createLink(action: 'listFuncionarios')}", {unidId: "${unidadeInstance.id}"}, function(data) {
+            $.get("${createLink(action: 'listFuncionarios')}", {unidId: "${unidadeInstance?.id}"}, function(data) {
             })
             .done(function(data){
                 $("#unidFuncList").html(data);
