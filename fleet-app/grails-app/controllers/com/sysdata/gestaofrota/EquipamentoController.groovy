@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 import grails.core.GrailsApplication
+import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
 
 //@Secured(['IS_AUTHENTICATED_FULLY'])
@@ -26,38 +27,15 @@ class EquipamentoController extends BaseOwnerController {
 
     def create() {
         Unidade unidade = Unidade.get(params.long('unidade.id'))
-        if (unidade) {
-
-            if (unidade.rh.modeloCobranca == TipoCobranca.PRE_PAGO &&
-                    unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA &&
-                    CategoriaFuncionario.porUnidade(unidade).count() == 0) {
-
-                flash.error = "Não existe nenhum Perfil de Recarga definido. É necessário cadastrar um primeiro."
-                redirect(controller: 'rh', action: 'show', id: unidade?.rh?.id)
-                return
-            }
-
-            if (TipoEquipamento.count() == 0) {
-                flash.error = "É necessário criar primeiramente um Tipo de Equipamento."
-                redirect(controller: 'tipoEquipamento', action: 'list')
-                return
-            } else {
-
-                Equipamento equipamento = new Equipamento(params)
-                equipamento.unidade = unidade
-
-                if (unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-                    equipamento.portador = new PortadorMaquina()
-                    equipamento.portador.unidade = unidade
-                }
-
-                render(view: "form", model: [equipamentoInstance: equipamento,
-                                             action: Util.ACTION_NEW,
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
-            }
+        def ret = equipamentoService.create(unidade, params)
+        if (ret.success) {
+            render(view: "form", model: [equipamentoInstance: ret.equipamento,
+                                         action: Util.ACTION_NEW,
+                                         tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
         } else {
-            flash.error = "Unidade não encontrada."
-            redirect(action: 'selecionarRhUnidade')
+            flash.error = ret.message
+            redirect(controller: 'rh', action: 'show', id: unidade?.rh?.id)
+            return
         }
     }
 
@@ -123,27 +101,18 @@ class EquipamentoController extends BaseOwnerController {
     def update() {
         def equipamentoInstance = Equipamento.get(params.long('id'))
         if (equipamentoInstance) {
-            long version = params.long('version')
-            if (version != null && equipamentoInstance.version > version) {
-                equipamentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure", "Outro usuário estava editando esse Equipamento.")
+            try {
+                equipamentoService.update(equipamentoInstance, params)
+            } catch (ValidationException ev) {
+                log.error "Erro ao salvar Equipamento -> $ev"
                 render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
                                              unidadeInstance: equipamentoInstance.unidade,
                                              action: 'editando',
                                              tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
                 return
             }
-            equipamentoInstance.properties = params
-            equipamentoInstance.portador.valorLimite = params.double('portador.valorLimite')
-            equipamentoInstance.portador.tipoLimite = TipoLimite.valueOf(params['portador.tipoLimite'])
-            if (!equipamentoInstance.hasErrors() && equipamentoInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'equipamento.label', default: 'Equipamento'), equipamentoInstance.id])}"
-                redirect(action: "show", id: equipamentoInstance.id)
-            } else {
-                render(view: 'form', model: [equipamentoInstance: equipamentoInstance,
-                                             unidadeInstance: equipamentoInstance.unidade,
-                                             action: 'editando',
-                                             tamMaxEmbossing: grailsApplication.config.projeto.cartao.embossing.maximoColunasLinhaEmbossing])
-            }
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'equipamento.label', default: 'Equipamento'), equipamentoInstance.id])}"
+            redirect(action: "show", id: equipamentoInstance.id)
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'equipamento.label', default: ''), params.id])}"
             redirect(action: "list")

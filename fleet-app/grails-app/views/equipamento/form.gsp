@@ -46,7 +46,9 @@
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab1" data-toggle="tab">Dados Básicos</a></li>
+                        <g:if test="${equipamentoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                         <li><a href="#tab2" data-toggle="tab">Cartões</a></li>
+                        </g:if>
                         <li><a href="#tab3" data-toggle="tab">Funcionários</a></li>
                     </ul>
 
