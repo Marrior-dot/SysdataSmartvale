@@ -70,10 +70,8 @@ class EquipamentoService {
     def update(Equipamento equipamento, props) {
         if (equipamento) {
             equipamento.properties = props
-            if (equipamento.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO && equipamento.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-                equipamento.portador.valorLimite = params.double('portador.valorLimite')
-                equipamento.portador.tipoLimite = TipoLimite.valueOf(props['portador.tipoLimite'])
-            }
+            if (equipamento.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO && equipamento.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA)
+                equipamento.portador.limiteTotal = Util.parseCurrency(props.portador.limiteTotal)
             equipamento.save(flush: true)
         }
     }

@@ -93,6 +93,9 @@
     </div>
 </div>
 
+<asset:javascript src="userMessageModal"></asset:javascript>
+
+
 <script type="application/javascript">
     $(document).ready(function () {
         alterarModeloCobranca();

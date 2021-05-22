@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.CategoriaFuncionario; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Equipamento" %>
+<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.CategoriaFuncionario; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.TipoVinculoCartao; com.sysdata.gestaofrota.Equipamento" %>
 <%@ page import="com.sysdata.gestaofrota.TipoEquipamento" %>
 
 <div class="panel panel-default">
@@ -108,30 +108,38 @@
                                   class="form-control" optionValue="nome"/>
                     </div>--}%
 
+				<g:if test = "${equipamentoInstance?.unidade?.rh?.vinculoCartao == TipoVinculoCartao.MAQUINA}">
 
-				<g:if test="${equipamentoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.PRE_PAGO}" >
-					<div class="form-group col-md-3">
-						<label for="categoria.id">Perfil de Recarga *</label>
-						<g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(equipamentoInstance?.unidade)?.list()}"
-								  value="${equipamentoInstance?.categoria?.id}" required="required"
-								  noSelection="${['null': 'Selecione a categoria...']}"
-								  optionKey="id" class="form-control editable" optionValue="nome"/>
-					</div>
-				</g:if>
+					<g:if test="${equipamentoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.PRE_PAGO}" >
+						<div class="form-group col-md-3">
+							<label for="categoria.id">Perfil de Recarga *</label>
+							<g:select name="categoria.id" from="${CategoriaFuncionario.porUnidade(equipamentoInstance?.unidade)?.list()}"
+									  value="${equipamentoInstance?.categoria?.id}" required="required"
+									  noSelection="${['null': 'Selecione a categoria...']}"
+									  optionKey="id" class="form-control editable" optionValue="nome"/>
+						</div>
+					</g:if>
 
 
-				<g:if test="${equipamentoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
+					<g:if test="${equipamentoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
 
 						<div class="form-group col-md-2">
 							<label for="portador.limiteTotal">Limite Total *</label>
 							<div class="input-group">
 								<input class="form-control money editable"
 									   id="portador.limiteTotal" name="portador.limiteTotal"
-									   value="${equipamentoInstance?.portador?.limiteTotal}" required/>
+									   value="${ com.sysdata.gestaofrota.Util.formatCurrency(equipamentoInstance?.portador?.limiteTotal)  }" required/>
 							</div>
 						</div>
 
+					</g:if>
+
+
 				</g:if>
+
+
+
+
 
 				</div>
 

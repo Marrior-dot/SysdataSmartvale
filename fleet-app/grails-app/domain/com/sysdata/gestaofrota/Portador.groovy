@@ -45,7 +45,7 @@ abstract class Portador {
                 def oldValue = obj.getPersistentValue('limiteTotal')
                 def newValue = val
 
-                if (oldValue && newValue > oldValue) {
+                if (newValue > oldValue) {
                     def dif = newValue - oldValue
                     def rhLimite = obj.unidade.rh.limiteTotal
                     def rhLimiteComprometido = obj.unidade.rh.limiteComprometido.list()[0]

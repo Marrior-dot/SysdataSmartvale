@@ -20,24 +20,20 @@
     }
 
     function removerFechamento(id) {
-        swal({
-            title: "Você tem certeza?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "Sim",
-            cancelButtonText: "Não",
-            closeOnConfirm: true
-        },
-        function(){
-            var fechamentoDeleteUrl = $("input:hidden#fechamento-delete-url").val();
-            $.ajax ({
-                url: fechamentoDeleteUrl + '/' + id,
-                method: "DELETE",
-            }).done(function () {
-                atualizarTabelaFechamentos();
-            });
-        });
+
+        showModal($("#modal"), 'question', 'O usuário confirma a exclusão do fechamento selecionado?',
+                    function() {
+
+                        //var fechamentoDeleteUrl = $("input:hidden#fechamento-delete-url").val();
+                        $.ajax ({
+                            //url: fechamentoDeleteUrl + '/' + id,
+                            url: "${createLink(controller: 'fechamento', action: 'delete')}/" + id,
+                            method: "DELETE",
+                        }).done(function () {
+                            atualizarTabelaFechamentos();
+                        });
+                    }
+                );
     }
 
     function abrirCortes(id) {
@@ -98,6 +94,9 @@
             </div>
         </g:if>
     </g:form>
+
+    <div id="modal"></div>
+
 </div>
 <hr>
 

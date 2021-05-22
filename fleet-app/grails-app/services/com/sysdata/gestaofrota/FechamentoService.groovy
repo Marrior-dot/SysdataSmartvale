@@ -1,7 +1,10 @@
 package com.sysdata.gestaofrota
 
+import grails.gorm.transactions.Transactional
+
 import javax.validation.ValidationException
 
+@Transactional
 class FechamentoService {
 
     Fechamento save(Fechamento fechamento) {
@@ -16,8 +19,15 @@ class FechamentoService {
 
     void delete(Fechamento fechamento) {
         //Se ja possuir cortes, DESATIVE
-        if (fechamento.cortes.size() > 0) fechamento.ativo = false
-        else fechamento.delete()
+        def fid = fechamento.id
+        if (fechamento.cortes.size() > 0) {
+            fechamento.ativo = false
+            fechamento.save(flush: true)
+            log.info "Fechamento #${fid} inativado!"
+        } else {
+            fechamento.delete(flush: true)
+            log.info "Fechamento #${fid} deletado!"
+        }
     }
 
     def findFaturaByCorte(Corte corte) {
