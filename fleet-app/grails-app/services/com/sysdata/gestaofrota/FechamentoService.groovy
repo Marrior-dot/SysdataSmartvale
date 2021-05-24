@@ -17,16 +17,24 @@ class FechamentoService {
         fechamento
     }
 
-    void delete(Fechamento fechamento) {
+    def delete(Fechamento fechamento) {
+        def ret = [:]
         //Se ja possuir cortes, DESATIVE
         def fid = fechamento.id
         if (fechamento.cortes.size() > 0) {
+            ret.success = false
+            ret.message = "Fechamento com Corte já associado!"
+            return ret
+/*
             fechamento.ativo = false
             fechamento.save(flush: true)
             log.info "Fechamento #${fid} inativado!"
+*/
         } else {
             fechamento.delete(flush: true)
-            log.info "Fechamento #${fid} deletado!"
+            ret.success = true
+            ret.message = "Fechamento #${fid} deletado!"
+            return ret
         }
     }
 

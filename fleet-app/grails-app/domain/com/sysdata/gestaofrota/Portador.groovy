@@ -48,7 +48,7 @@ abstract class Portador {
                 if (newValue > oldValue) {
                     def dif = newValue - oldValue
                     def rhLimite = obj.unidade.rh.limiteTotal
-                    def rhLimiteComprometido = obj.unidade.rh.limiteComprometido.list()[0]
+                    def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
                     if (rhLimiteComprometido + dif > rhLimite)
                         return ["portador.limiteTotal.superiorAoComprometido"]
                 }

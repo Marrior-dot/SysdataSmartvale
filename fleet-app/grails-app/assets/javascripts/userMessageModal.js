@@ -31,6 +31,10 @@ function showModal(divElem, type, message, callback) {
         userModal.find("#modalTitle").text("Pergunta");
         userModal.find("#questionButtons").show();
         userModal.find("#messageButtons").hide();
+
+        // Attach event
+        $("#yesButton").on('click', callback);
+
     } else {
         userModal.find("#modalTitle").text("Mensagem");
         userModal.find("#questionButtons").hide();
@@ -38,8 +42,6 @@ function showModal(divElem, type, message, callback) {
     }
     userModal.find("#message").text(message);
     userModal.modal();
-    // Attach event
-    $("#yesButton").on('click', callback);
 }
 
 

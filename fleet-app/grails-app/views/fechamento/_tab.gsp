@@ -20,18 +20,18 @@
     }
 
     function removerFechamento(id) {
-
         showModal($("#modal"), 'question', 'O usuário confirma a exclusão do fechamento selecionado?',
                     function() {
-
-                        //var fechamentoDeleteUrl = $("input:hidden#fechamento-delete-url").val();
                         $.ajax ({
-                            //url: fechamentoDeleteUrl + '/' + id,
                             url: "${createLink(controller: 'fechamento', action: 'delete')}/" + id,
                             method: "DELETE",
                         }).done(function () {
                             atualizarTabelaFechamentos();
-                        });
+                        }).fail(function(xhr) {
+                            //showModal($("#modal"), 'message', err.msg);
+                            console.log(xhr.responseText);
+                            alert(xhr.responseText);
+                        })
                     }
                 );
     }
