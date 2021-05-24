@@ -25,8 +25,9 @@
                         $.ajax ({
                             url: "${createLink(controller: 'fechamento', action: 'delete')}/" + id,
                             method: "DELETE",
-                        }).done(function () {
+                        }).done(function(resp) {
                             atualizarTabelaFechamentos();
+                            alert(resp.msg);
                         }).fail(function(xhr) {
                             //showModal($("#modal"), 'message', err.msg);
                             console.log(xhr.responseText);

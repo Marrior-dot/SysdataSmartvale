@@ -8,4 +8,12 @@ class CortePortador extends Corte {
 
     static constraints = {
     }
+
+    static namedQueries = {
+        ativosPorFechamento { Fechamento fechamento ->
+            eq("status", StatusCorte.ABERTO)
+            eq("fechamento", fechamento)
+        }
+    }
+
 }

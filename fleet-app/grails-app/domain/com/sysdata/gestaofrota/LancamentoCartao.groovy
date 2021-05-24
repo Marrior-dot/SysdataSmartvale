@@ -26,5 +26,11 @@ class LancamentoCartao extends Lancamento {
         desc
     }
 
+    static namedQueries = {
+        abertosPorCorte { Corte corte ->
+            eq("status", StatusLancamento.A_FATURAR)
+            eq("corte", corte)
+        }
+    }
 
 }

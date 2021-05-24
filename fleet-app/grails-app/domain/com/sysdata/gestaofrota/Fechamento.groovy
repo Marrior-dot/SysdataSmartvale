@@ -7,10 +7,11 @@ class Fechamento {
     Integer diaCorte
     Integer diasAteVencimento
 
-
     static belongsTo = [programa: Rh]
 
     static hasMany = [cortes: CortePortador]
+
+    static transients = ['corteAberto']
 
     static constraints = {
         ativo nullable: false
@@ -27,6 +28,13 @@ class Fechamento {
         ativosPorPrograma { Rh programa ->
             ativos()
             eq('programa', programa)
+        }
+    }
+
+    CortePortador getCorteAberto() {
+        return CortePortador.withCriteria(uniqueResult: true) {
+            eq("status", StatusCorte.ABERTO)
+            eq("fechamento", this)
         }
     }
 }

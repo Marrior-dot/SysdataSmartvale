@@ -42,10 +42,12 @@ class FechamentoController {
         Fechamento fechamentoInstance = Fechamento.get(params.long('id'))
         def ret= fechamentoService.delete(fechamentoInstance)
         if (ret.success) {
+            log.info ret.message
             response.status = HttpStatus.OK.value()
             render (['msg': ret.message] as JSON)
             return
         } else {
+            log.error ret.message
             response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
             render text: ret.message
             return

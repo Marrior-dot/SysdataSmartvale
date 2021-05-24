@@ -22,14 +22,29 @@ class FechamentoService {
         //Se ja possuir cortes, DESATIVE
         def fid = fechamento.id
         if (fechamento.cortes.size() > 0) {
-            ret.success = false
-            ret.message = "Fechamento com Corte já associado!"
-            return ret
-/*
+            def corteAberto = fechamento.corteAberto
+            if (corteAberto) {
+                def lancamentosAbertos = LancamentoCartao.abertosPorCorte(corteAberto).list()
+                if (lancamentosAbertos) {
+                    log.info "Fechamento #${fechamento.id} tem Corte #${corteAberto.id} com lançamentos abertos"
+                    Fechamento proximoFechamento = next(fechamento)
+                    CortePortador novoCorte = proximoFechamento.corteAberto
+                    // Vincular lançamentos ao Corte aberto do próximo Fechamento
+                    log.info "Alterando corte de lançamentos de #${corteAberto.id} para #${novoCorte.id}..."
+                    lancamentosAbertos.each { lancamento ->
+                        lancamento.corte = novoCorte
+                        lancamento.save()
+                        log.info "\tLC #${lancamento.id}"
+                    }
+                }
+                corteAberto.status = StatusCorte.CANCELADO
+                corteAberto.save()
+            }
             fechamento.ativo = false
             fechamento.save(flush: true)
-            log.info "Fechamento #${fid} inativado!"
-*/
+            ret.success = true
+            ret.message = "Fechamento com Cortes vinculados. Fechamento #${fechamento.id} inativado."
+            return ret
         } else {
             fechamento.delete(flush: true)
             ret.success = true
@@ -64,6 +79,14 @@ class FechamentoService {
 
         } else
             return Fatura.findByCorte(corte)
+    }
+
+    Fechamento next(Fechamento fechamentoAtual) {
+        def fechamentosList = Fechamento.list([sort: 'diaCorte'])
+        Fechamento proximo = fechamentosList.find { it.diaCorte >= fechamentoAtual.diaCorte }
+        if (!proximo)
+            proximo = fechamentosList[0]
+        return proximo
     }
 
 }
