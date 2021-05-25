@@ -76,7 +76,7 @@ class PedidoCarga {
         Date.parse('dd/MM/yyyy', dataCarga)
     }
 
-    boolean isVeiculoInPedido(Veiculo veiculo) {
+    boolean isVeiculoInPedido(MaquinaMotorizada veiculo) {
         ItemPedido item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.maquina == veiculo }
         return item
     }
@@ -90,7 +90,7 @@ class PedidoCarga {
         ItemPedido item
         if (objeto instanceof Funcionario)
             item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.participante == objeto }
-        else if (objeto instanceof Veiculo)
+        else if (objeto instanceof MaquinaMotorizada)
             item = this.itens.find { it.tipo == TipoItemPedido.CARGA && it.maquina == objeto  }
 
         def valor = item?.valor ?: objeto.categoria.valorCarga

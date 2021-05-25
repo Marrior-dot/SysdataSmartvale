@@ -5,9 +5,7 @@
         <thead>
         <tr>
             <th>Seleção</th>
-            <th>Placa</th>
-            <th>Marca</th>
-            <th>Modelo</th>
+            <th>Máquina</th>
             <th>Valor Carga</th>
         </tr>
         </thead>
@@ -18,9 +16,7 @@
                     <input type="checkbox" class="checkbox" name="veic_${veiculo.id}"
                            onchange="setItemPedido(${veiculo.id})" ${pedidoCargaInstance?.isVeiculoInPedido(veiculo) || action == Util.ACTION_NEW ? 'checked' : ''} />
                 </td>
-                <td>${veiculo?.placa}</td>
-                <td>${veiculo?.marca}</td>
-                <td>${veiculo?.modelo}</td>
+                <td>${veiculo?.nomeEmbossing}</td>
 
                 <g:if test="${action == Util.ACTION_VIEW}">
                     <td>R$ ${pedidoCargaInstance?.valorInPedido(veiculo)}</td>

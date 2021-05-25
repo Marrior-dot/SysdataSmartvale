@@ -252,7 +252,6 @@
             divInstancia.hide();
             divProgramado.show();
 
-            //$.get(relative + "loadPedidoProgramado", {id: pedId}, function(data) {
             $.get("${createLink(action: 'loadPedidoProgramado')}", {id: pedId}, function(data) {
                 divProgramado.html(data);
             });
@@ -261,7 +260,6 @@
             divInstancia.show();
             divProgramado.hide();
 
-            //$.get(relative + "loadPedidoInstancia", {id: pedId}, function(data) {
             $.get("${createLink(action: 'loadPedidoInstancia')}", {id: pedId}, function(data) {
                 divInstancia.html(data);
                 $('.datepicker').datepicker({language: 'pt-BR'});

@@ -231,16 +231,17 @@ class PedidoCargaController {
 
         def criteria = {
 
-            if (! categoriaInstance) {
-                def unidId = params.unidade ? params.long('unidade') : null
-                unidade {
-                    idEq(unidId)
-                }
+            def unidId = params.unidade ? params.long('unidade') : null
+
+            unidade {
+                idEq(unidId)
             }
 
+/*
             if (params?.searchPlaca && params?.searchPlaca.length() > 0) {
                 eq('placa', params.searchPlaca)
             }
+*/
 
             if (categoriaInstance) {
                 eq('categoria', categoriaInstance)
@@ -256,8 +257,8 @@ class PedidoCargaController {
 
         render(template: '/pedidoCarga/veiculoList',
                 model: [pedidoCargaInstance     : pedidoCargaInstance,
-                        veiculoInstanceList     : Veiculo.createCriteria().list(params, criteria),
-                        veiculoInstanceCount    : Veiculo.createCriteria().count(criteria),
+                        veiculoInstanceList     : MaquinaMotorizada.createCriteria().list(params, criteria),
+                        veiculoInstanceCount    : MaquinaMotorizada.createCriteria().count(criteria),
                         categoriaInstance       : categoriaInstance,
                         action                  : params.actionView])
 

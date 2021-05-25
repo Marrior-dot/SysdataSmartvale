@@ -65,7 +65,7 @@ class PedidoCargaService {
             }
 
             veicIds.each { fid ->
-                Veiculo veiculo = Veiculo.get(fid)
+                MaquinaMotorizada veiculo = MaquinaMotorizada.get(fid)
                 ItemPedidoMaquina itemPedido = new ItemPedidoMaquina()
                 itemPedido.maquina = veiculo
                 def map = params.find { it.key == "valorCarga_${fid}" }
