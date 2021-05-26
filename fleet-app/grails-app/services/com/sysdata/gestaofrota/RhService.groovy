@@ -9,14 +9,36 @@ class RhService {
 
     UnidadeService unidadeService
 
+    private void deleteAllUsers(Rh cliente) {
+        def usersIds = User.withCriteria {
+            projections {
+                property "id"
+            }
+            eq("owner", cliente)
+        }
+        if (usersIds) {
+            usersIds.each { uid ->
+                User user = User.get(uid)
+                UserRole.removeAll(user)
+                log.info "(-) USR #${uid}"
+                user.delete()
+            }
+        }
+    }
+
     def delete(Rh rh) {
+        log.info "Excluindo Cliente #${rh.id}..."
         def msg = ""
         if (rh.unidades.isEmpty()) {
+            rh.empresas.clear()
+            deleteAllUsers(rh)
             rh.delete(flush: true)
-            msg = "Empresa $rh removida"
+            msg = "(-) Cli $rh "
         } else {
             def canDelete = true
             def unidIds = rh.unidades*.id
+            rh.empresas.clear()
+            deleteAllUsers(rh)
             unidIds.each { uid ->
                 def ret = unidadeService.delete(Unidade.get(uid))
                 if (! ret.success) {

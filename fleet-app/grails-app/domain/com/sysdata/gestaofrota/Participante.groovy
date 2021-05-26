@@ -26,6 +26,7 @@ class Participante {
     static mapping = {
         id generator: 'sequence', params: [sequence: 'participante_seq']
         conta lazy: false
+        propriedades cascade: 'all-delete-orphan'
     }
 
     static hibernateFilters = {

@@ -25,17 +25,29 @@ class Cartao {
         loteEmbossing nullable: true
     }
 
+    static namedQueries = {
+        countCartoesAtivosUnidade { Unidade unidade ->
+            projections {
+                rowCount('id')
+            }
+            portador {
+                eq("unidade", unidade)
+            }
+
+        }
+    }
+
+
 
     def beforeUpdate() {
-
-        def histCartao
-
-        if (status in [StatusCartao.ATIVO, StatusCartao.BLOQUEADO, StatusCartao.CANCELADO]) {
-            histCartao = new HistoricoStatusCartao(cartao: this, novoStatus: this.status)
-            if (!histCartao.save())
-                return false
+        if (this.portador) {
+            def histCartao
+            if (status in [StatusCartao.ATIVO, StatusCartao.BLOQUEADO, StatusCartao.CANCELADO]) {
+                histCartao = new HistoricoStatusCartao(cartao: this, novoStatus: this.status)
+                if (!histCartao.save())
+                    return false
+            }
         }
-
         return true
     }
 

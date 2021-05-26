@@ -59,6 +59,19 @@ class Transacao {
         autonomia nullable: true
     }
 
+    static namedQueries = {
+        countTransacoesUnidade { Unidade unidade ->
+            projections {
+                rowCount('id')
+            }
+            cartao {
+                portador {
+                    eq("unidade", unidade)
+                }
+            }
+        }
+    }
+
 
     Conta getConta() {
         this.cartao?.funcionario?.conta

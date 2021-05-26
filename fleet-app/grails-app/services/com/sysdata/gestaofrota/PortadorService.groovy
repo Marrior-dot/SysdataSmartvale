@@ -2,6 +2,55 @@ package com.sysdata.gestaofrota
 
 class PortadorService {
 
+    private void removeAllCartoes(Portador portador) {
+        if (portador.cartoes) {
+            def cartoesIds = portador.cartoes.collect{ it.id }
+            Cartao.executeUpdate("delete from HistoricoStatusCartao hsc where hsc.cartao.id in :ids", [ids: cartoesIds])
+            cartoesIds.each { cid ->
+                Cartao cartao = Cartao.get(cid)
+                log.info "(-) CRT #${cartao.id} ${cartao.numero}"
+                portador.removeFromCartoes(cartao)
+                cartao.delete(flush: true)
+            }
+            //Cartao.executeUpdate("delete from Cartao c where c.id in :ids", [ids: cartoesIds])
+        }
+    }
+
+    def delete(Portador portador) {
+        log.info "Excluindo Portador #${portador.id}..."
+        removeAllCartoes(portador)
+        if (portador.instanceOf(PortadorFuncionario)) {
+            Funcionario funcionario = (portador as PortadorFuncionario).funcionario
+            funcionario.propriedades.clear()
+            funcionario.veiculos.clear()
+/*
+            funcionario.veiculos*.id.each { vid ->
+                MaquinaFuncionario maquinaFuncionario = MaquinaFuncionario.get(vid)
+                maquinaFuncionario.delete()
+            }
+*/
+            //funcionario.portador.delete()
+            log.info "(-) FCN #${funcionario.id} ${funcionario.nome}"
+            funcionario.delete()
+        } else if (portador.instanceOf(PortadorMaquina)) {
+            MaquinaMotorizada maquina = (portador as PortadorMaquina).maquina
+            def funcionariosIds = []
+            maquina.funcionarios.collect().each { funcionario ->
+                maquina.removeFromFuncionarios(funcionario)
+                funcionariosIds << funcionario.id
+            }
+            if (funcionariosIds)
+                MaquinaFuncionario.executeUpdate("delete from MaquinaFuncionario mf where mf.id in :ids", [ids: funcionariosIds])
+            log.info "(-) MAQ #${maquina.id} ${maquina.nomeEmbossing}"
+            maquina.delete()
+        }
+        portador.conta.delete()
+        log.info "(-) PRT #${portador.id}"
+        portador.delete(flush: true)
+    }
+
+
+
     PortadorFuncionario save(params, Funcionario funcionario) {
 
 /*
