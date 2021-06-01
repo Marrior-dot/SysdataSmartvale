@@ -26,11 +26,12 @@
                         <td>${corte.status.nome}</td>
                         <td>${corte.liberado?'Sim':'Não'}</td>
 
-                         <g:if test="${corte.status==StatusCorte.FECHADO}">
+                        <g:if test="${corte.status == StatusCorte.FECHADO}">
                             %{--<td><g:link action="downloadBoleto" params="[corId:corte.id,prgId:prgId]">Boleto</g:link></td>--}%
+                        <td><a id="undoCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-step-backward"></i></a></td>
                          </g:if>
                         <g:if test="${!corte.liberado}">
-                            <td><a id="releaseCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-ok-sign"></i></a></td>
+                        <td><a id="releaseCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-ok-sign"></i></a></td>
                         </g:if>
                     </tr>
                 </g:each>
@@ -49,6 +50,24 @@
 </div>
 
 <script>
+    $("a#undoCorte").click(function() {
+        var corteId = $(this).data("corte");
+
+        showModal($("#modal"), 'question', 'O usuário confirma o desfaturamento do Corte selecionado?',
+                function() {
+                    $.post("${createLink(controller: 'fechamento', action: 'undoCorte')}", {id: corteId})
+                        .done(function(resp) {
+                            atualizarTabelaFechamentos();
+                            alert(resp.msg);
+                        })
+                        .fail(function(xhr) {
+                            console.log(xhr.responseText);
+                            alert(xhr.responseText);
+                        })
+                }
+        );
+    })
+
     $("a#releaseCorte").click(function() {
         var corteId = $(this).data('corte');
         $.post("${createLink(controller: 'fechamento', action: 'releaseCorte')}", {id: corteId})

@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.proc.faturamento.CorteService
 import grails.converters.JSON
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -11,18 +12,7 @@ class FechamentoController {
     static allowedMethods = [save: "POST", delete: "DELETE"]
 
     FechamentoService fechamentoService
-
-
-    class FaturaCommand {
-        Date dataPrevista
-        Date dataOcorrencia
-        Date dataVencimento
-        StatusFatura statusFatura
-        boolean corteLiberado
-    }
-
-
-
+    CorteService corteService
 
     def index() {
         Rh programa = Rh.get(params.long('programa.id'))
@@ -146,6 +136,35 @@ and p.id=:id
             render status: 500, text: "Corte ID inválido: ${params.id}!"
             return
         }
+    }
+
+    def undoCorte() {
+        if (params.id && params.id ==~ /\d+/) {
+            CortePortador corte = CortePortador.get(params.id as long)
+            if (corte) {
+                try {
+                    corteService.desfaturar(corte)
+                    Fechamento fechamento = corte.fechamento
+                    def cortes = fechamento.cortes.sort{it.dataPrevista}
+                    render template:'cortes', model:[cortes: cortes, prgId: fechamento.programa.id]
+                } catch (e) {
+                    log.error e.message
+                    render status: 500, text: "Erro - ${e.message}"
+                    return
+                }
+            } else {
+                render status: 404, text: "Não há corte com este ID: ${params.id}"
+                return
+            }
+
+        } else {
+            render status: 500, text: "Corte ID inválido: ${params.id}"
+            return
+        }
+
+
+
+
     }
 
 }

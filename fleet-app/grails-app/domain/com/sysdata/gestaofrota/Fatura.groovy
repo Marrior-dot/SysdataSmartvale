@@ -23,6 +23,8 @@ class Fatura {
 
     static mapping = {
         id generator: "sequence", params: [sequence: "fatura_seq"]
+        itens cascade: 'all-delete-orphan'
+        boletos cascade: 'all-delete-orphan'
     }
 
     BigDecimal getValorTotal() {

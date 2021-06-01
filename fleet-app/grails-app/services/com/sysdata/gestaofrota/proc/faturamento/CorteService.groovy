@@ -19,9 +19,9 @@ class CorteService {
      *
      */
 
-    def faturar(Corte corte, Date dataCorte) {
+    def faturar(Corte cortePortador, Date dataCorte) {
 
-        log.info "Faturando Corte $corte ..."
+        log.info "Faturando Corte $cortePortador ..."
 
         def contasId = LancamentoPortador.withCriteria {
                             projections {
@@ -33,7 +33,7 @@ class CorteService {
                                     unidade {
                                         rh {
                                             fechamentos {
-                                                eq("id", corte.fechamento.id)
+                                                eq("id", cortePortador.fechamento.id)
                                             }
                                         }
                                     }
@@ -45,19 +45,19 @@ class CorteService {
         if (contasId.isEmpty())
             log.info "Não há contas a faturar para este corte"
         else {
-            corte.dataFechamento = dataCorte
+            cortePortador.dataFechamento = dataCorte
 
             log.info "Total de Contas a Faturar: ${contasId.size()}"
-            Conta contaRh = corte.fechamento.programa.conta
+            Conta contaRh = cortePortador.fechamento.programa.conta
             Fatura fatRh = new Fatura()
             fatRh.with {
                 conta = contaRh
                 data = dataCorte
-                dataVencimento = corte.dataCobranca
+                dataVencimento = cortePortador.dataCobranca
                 status = StatusFatura.ABERTA
                 tipo = TipoFatura.CONVENIO_POSPAGO
             }
-            fatRh.corte = corte
+            fatRh.corte = cortePortador
 
             tratarAtraso(fatRh, dataCorte)
 
@@ -66,7 +66,7 @@ class CorteService {
             // Fatura cada conta de portador individualmente
             contasId.each {
                 Conta conta = Conta.get(it)
-                Fatura fatPort = portadorCorteService.faturar(conta.portador, corte, dataCorte)
+                Fatura fatPort = portadorCorteService.faturar(conta.portador, cortePortador, dataCorte)
 
 
                 fatPort.itens.each { itf ->
@@ -121,7 +121,7 @@ class CorteService {
 
             //Fecha última fatura e transfere saldo
 
-            CortePortador proxCorte = fechar(corte, dataCorte)
+            CortePortador proxCorte = fechar(cortePortador, dataCorte)
 
             //Gerar próximo corte
             def totalFatura = fatRh.valorTotal
@@ -135,7 +135,7 @@ class CorteService {
                 corte = fatRh.corte
                 status = StatusLancamento.FATURADO
             }
-            fechamento.save()
+            fechamento.save(flush: true)
             LancamentoConvenio saldoAnterior = new LancamentoConvenio()
             saldoAnterior.with {
                 conta = fatRh.conta
@@ -145,9 +145,9 @@ class CorteService {
                 corte = proxCorte
                 status = StatusLancamento.A_FATURAR
             }
-            saldoAnterior.save()
+            saldoAnterior.save(flush: true)
         }
-        corte.save()
+        cortePortador.save(flush: true)
     }
 
 
@@ -255,7 +255,7 @@ class CorteService {
             dataInicioCiclo = corte.dataFechamento + 1
             status = StatusCorte.ABERTO
         }
-        corteProx.save()
+        corteProx.save(flush: true)
         corteProx
 
     }
@@ -332,6 +332,88 @@ class CorteService {
             log.info "Corte $corteAberto criado"
         }
         return corteAberto
+    }
+
+    def desfaturar(CortePortador corte) {
+        log.info "Iniciando Desfaturamento Corte #${corte.id}..."
+        Corte corteAberto = corte.fechamento.corteAberto
+        def temLancamentos = LancamentoPortador.withCriteria {
+                                projections {
+                                    rowCount('id')
+                                }
+                                eq("corte", corteAberto)
+                            }[0] > 0
+        if (temLancamentos)
+            throw new RuntimeException("Corte #${corte.id} não pode ser desfaturado! Corte aberto já possui lançamentos agendados")
+
+        LancamentoConvenio saldoAnterior = LancamentoConvenio.withCriteria(uniqueResult: true) {
+                                                eq("corte", corteAberto)
+                                                eq("tipo", TipoLancamento.SALDO_ANTERIOR)
+                                            }
+        if (saldoAnterior) {
+            log.info "(-) LC #${saldoAnterior.id} ${saldoAnterior.tipo}"
+            saldoAnterior.delete()
+        }
+
+        def lancamentosConvenio = LancamentoConvenio.withCriteria() {
+                                        eq("corte", corte)
+                                        eq("status", StatusLancamento.FATURADO)
+                                    }
+        lancamentosConvenio.each {
+            log.info "(-) LC #${it.id} ${it.tipo}"
+            it.delete()
+        }
+        log.info "(-) COR AB #${corteAberto.id}"
+        corteAberto.delete(flush: true)
+        def faturasIds = Fatura.withCriteria {
+                            projections {
+                                property "id"
+                            }
+                            eq("corte", corte)
+                        }
+        faturasIds.eachWithIndex{ fatId, idx ->
+            Fatura fatura = Fatura.get(fatId)
+            log.info "Deletando boletos da fatura #${fatId}..."
+            fatura.boletos.collect().each {
+                log.info "(-) BOL #${it.id}"
+                fatura.removeFromBoletos(it)
+            }
+            log.info "Deletando itens da fatura ${fatId}..."
+            fatura.itens.collect().each {
+                log.info "(-) IT FAT #${it.id}"
+                fatura.removeFromItens(it)
+            }
+            log.info "(-) FAT #${fatId}"
+            fatura.delete()
+            if ((idx + 1) % 50 == 0)
+                clearSession()
+        }
+        if (!corte.isAttached())
+            corte.attach()
+        log.info "Desfaturando lançamentos..."
+        // Lançamentos Faturados
+        def lancamentosIds = LancamentoPortador.withCriteria {
+            projections {
+                property "id"
+            }
+            eq("corte", corte)
+            eq("status", StatusLancamento.FATURADO)
+        }
+        lancamentosIds.eachWithIndex{ lid, idx ->
+            LancamentoPortador lancamentoPortador = LancamentoPortador.get(lid)
+            lancamentoPortador.status = StatusLancamento.A_FATURAR
+            lancamentoPortador.save()
+            log.info "LC #${lid} dfat"
+            if ((idx + 1) % 50 == 0)
+                clearSession()
+        }
+        if (! corte.isAttached())
+            corte.attach()
+
+        corte.dataFechamento = null
+        corte.status = StatusCorte.ABERTO
+        corte.save(flush: true)
+        log.info "Corte #${corte.id} desfaturado"
     }
 
 }
