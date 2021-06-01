@@ -1,7 +1,9 @@
 <%@ page import="com.sysdata.gestaofrota.StatusCorte" %>
 
 <div class="panel panel-default">
-
+    <div class="panel-heading">
+        Cortes por Cliente
+    </div>
     <div class="panel-body">
         <g:if test="${cortes}">
             <table class="table table-striped table-hover table-condensed">
@@ -12,7 +14,7 @@
                     <th>Data Vencimento</th>
                     <th>Status</th>
                     <th>Liberado</th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,9 +29,9 @@
                          <g:if test="${corte.status==StatusCorte.FECHADO}">
                             <td><g:link action="downloadBoleto" params="[corId:corte.id,prgId:prgId]">Boleto</g:link></td>
                          </g:if>
-                        <g:else>
-                            <td>----</td>
-                        </g:else>
+                        <g:if test="${!corte.liberado}">
+                            <td><a id="releaseCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-unchecked"></i></a></td>
+                        </g:if>
                     </tr>
                 </g:each>
                 </tbody>
@@ -38,9 +40,24 @@
         <g:else>
             <div class="well text-center">Sem Faturamentos até o momento</div>
         </g:else>
-
+    </div>
+    <div class="panel-footer">
         <a type="button" class="btn btn-sm btn-default" title="Voltar" onclick="abrirFechamentos(${prgId})">
-            Voltar</i>
+            <i class="glyphicon glyphicon-arrow-left"></i> Voltar
         </a>
     </div>
 </div>
+
+<script>
+    $("a#releaseCorte").click(function() {
+        var corteId = $(this).data('corte');
+        $.post("${createLink(controller: 'fechamento', action: 'releaseCorte')}", {id: corteId})
+            .done(function(data) {
+                $("#fechamento-index").html(data);
+            })
+            .fail(function(error) {
+                console.error(error.responseText);
+                alert(error.responseText);
+            })
+    });
+</script>

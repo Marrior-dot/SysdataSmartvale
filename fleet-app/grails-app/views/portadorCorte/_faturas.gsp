@@ -1,14 +1,17 @@
-<div class="tabbable">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tabFatAberta" data-toggle="tab">Fatura Aberta</a></li>
-        <li><a href="#tabFatFechada" data-toggle="tab">Fatura Fechada</a></li>
-        <li><a href="#tabFatAnteriores" data-toggle="tab">Faturas Anteriores</a></li>
-    </ul>
-
-    <div class="tab-content">
-        <div class="tab-pane active" id="tabFatAberta"></div>
-        <div class="tab-pane" id="tabFatFechada"></div>
-        <div class="tab-pane" id="tabFatAnteriores"></div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tabFatAberta" data-toggle="tab">Fatura Aberta</a></li>
+                <li><a href="#tabFatFechada" data-toggle="tab">Fatura Fechada</a></li>
+                <li><a href="#tabFatAnteriores" data-toggle="tab">Faturas Anteriores</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabFatAberta"></div>
+                <div class="tab-pane" id="tabFatFechada"></div>
+                <div class="tab-pane" id="tabFatAnteriores"></div>
+            </div>
+        </div>
     </div>
 </div>
 

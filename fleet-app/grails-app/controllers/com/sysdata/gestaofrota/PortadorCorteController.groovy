@@ -49,8 +49,14 @@ class PortadorCorteController {
                 redirect(controller: 'funcionario', action: 'show', id: (portador as PortadorFuncionario).funcionario.id)
                 return
             } else if (portador.instanceOf(PortadorMaquina)) {
-                redirect(controller: 'veiculo', action: 'show', id: (portador as PortadorMaquina).maquina.id)
-                return
+                PortadorMaquina portadorMaquina = portador as PortadorMaquina
+                if (portadorMaquina.maquina.instanceOf(Veiculo)) {
+                    redirect(controller: 'veiculo', action: 'show', id: portadorMaquina.maquina.id)
+                    return
+                } else if (portadorMaquina.maquina.instanceOf(Equipamento)) {
+                    redirect(controller: 'equipamento', action: 'show', id: portadorMaquina.maquina.id)
+                    return
+                }
             }
         }
     }

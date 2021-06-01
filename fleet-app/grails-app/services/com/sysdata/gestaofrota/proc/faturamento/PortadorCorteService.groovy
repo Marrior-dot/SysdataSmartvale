@@ -8,6 +8,7 @@ import com.sysdata.gestaofrota.LancamentoPortador
 import com.sysdata.gestaofrota.Portador
 import com.sysdata.gestaofrota.StatusFatura
 import com.sysdata.gestaofrota.StatusLancamento
+import com.sysdata.gestaofrota.TipoFatura
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFactory
 import com.sysdata.gestaofrota.proc.faturamento.ext.ExtensaoFaturamento
 import grails.gorm.transactions.Transactional
@@ -93,6 +94,7 @@ class PortadorCorteService {
             data = dataProc
             corte = corteAberto
             status = StatusFatura.ABERTA
+            tipo = TipoFatura.PORTADOR_POSPAGO
         }
         ctx.fatura = fatura
         ctx.portador = portador

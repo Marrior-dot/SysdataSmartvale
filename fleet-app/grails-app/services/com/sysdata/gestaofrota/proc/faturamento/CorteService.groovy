@@ -55,6 +55,7 @@ class CorteService {
                 data = dataCorte
                 dataVencimento = corte.dataCobranca
                 status = StatusFatura.ABERTA
+                tipo = TipoFatura.CONVENIO_POSPAGO
             }
             fatRh.corte = corte
 
@@ -250,7 +251,7 @@ class CorteService {
             fechamento = fechProx
             dataPrevista = cal.time.clearTime()
             dataFechamento = cal.time.clearTime()
-            dataCobranca = cal.time.clearTime() + rh.prazoPgtFatura
+            dataCobranca = cal.time.clearTime() + fechProx.diasAteVencimento
             dataInicioCiclo = corte.dataFechamento + 1
             status = StatusCorte.ABERTO
         }
@@ -322,7 +323,7 @@ class CorteService {
             corteAberto = new CortePortador()
             corteAberto.with {
                 dataPrevista = dataCorte
-                dataCobranca = dataCorte + rh.prazoPgtFatura
+                dataCobranca = dataCorte + ciclo.diasAteVencimento
                 dataInicioCiclo = datInicCiclo
                 status = StatusCorte.ABERTO
                 fechamento = ciclo

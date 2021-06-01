@@ -17,13 +17,13 @@ class FaturamentoService implements ExecutableProcessing {
         def cortes = Corte.withCriteria {
                             eq("liberado", true)
                             eq("status", StatusCorte.ABERTO)
-                            le("dataPrevista", date)
+                            le("dataPrevista", date + 1)
                         }
         if (cortes.isEmpty())
             log.info "Não há cortes a faturar"
         else {
             cortes.each { cr ->
-                corteService.faturar(cr, date)
+                corteService.faturar(cr, date + 1)
             }
         }
 

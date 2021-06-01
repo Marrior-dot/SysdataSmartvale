@@ -37,14 +37,17 @@
                 );
     }
 
-    function abrirCortes(id) {
-        $.ajax({
-            url:"${createLink(controller:'fechamento',action:'abrirCortes')}/"+id,
-            method:'POST',
-            success:function(data){
+    function abrirCortes(fechamentoId) {
+
+        $.get("${createLink(controller: 'fechamento', action: 'abrirCortes')}", {id: fechamentoId})
+            .done(function(data) {
                 $("#fechamento-index").html(data);
-            }
-        })
+            })
+            .fail(function(err) {
+                console.log("Erro: " + err.responseText);
+                alert("Erro: "+ err.responseText);
+            });
+
     }
 
     function abrirFechamentos(id) {
@@ -58,16 +61,14 @@
     }
 
     function abrirFatura(corteId) {
-        $.get("${createLink(controller: 'fechamento', action: 'findFaturaByCorte')}",{id: corteId},
-            function(data){
-                $("#fechamento-index").html(data);
-            }
-        )
-        .fail(function(err) {
-            console.log("Erro: " + err)
-            alert("Erro: " + err);
+        $.get("${createLink(controller: 'fechamento', action: 'findFaturaByCorte')}", {id: corteId})
+        .done(function(data) {
+            $("#fechamento-index").html(data);
         })
-
+        .fail(function(err) {
+            console.log("Erro: " + err.responseText);
+            alert("Erro: " + err.responseText);
+        })
     }
 
 </script>

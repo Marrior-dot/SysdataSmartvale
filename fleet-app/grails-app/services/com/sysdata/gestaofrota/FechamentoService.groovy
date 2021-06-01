@@ -65,21 +65,33 @@ class FechamentoService {
                                                         eq("corte", corte)
                                                     }
             if (totalFatura) {
+                fatura.corte = corte
                 fatura.data = corte.dataPrevista
                 fatura.dataVencimento = corte.dataPrevista + corte.fechamento.diasAteVencimento
                 fatura.valorTotal = totalFatura
                 fatura.itens = []
                 fatura.itens << [
                                     "data": corte.dataPrevista,
-                                    "descricao": "CONSOLIDAÇÂO DE FATURAS",
+                                    "descricao": "Compras",
                                     "valor": totalFatura
                                 ]
                 return fatura
             }
 
         } else
-            return Fatura.findByCorte(corte)
+            return Fatura.withCriteria(uniqueResult: true) {
+                            eq("corte", corte)
+                            eq("tipo", TipoFatura.CONVENIO_POSPAGO)
+                        }
     }
+
+    def findAllFaturasPortadores(Corte corte, int max, int offset) {
+        return Fatura.withCriteria(max: max, offset: offset) {
+                    eq("corte", corte)
+                    eq("tipo", TipoFatura.PORTADOR_POSPAGO)
+                }
+    }
+
 
     Fechamento next(Fechamento fechamentoAtual) {
         def fechamentosList = Fechamento.list([sort: 'diaCorte'])
@@ -88,5 +100,19 @@ class FechamentoService {
             proximo = fechamentosList[0]
         return proximo
     }
+
+
+    def releaseCorte(Corte corte) {
+        if (corte.status == StatusCorte.ABERTO) {
+            if (!corte.liberado) {
+                corte.liberado = true
+                corte.save(flush: true)
+                log.info "Corte ${corte.id} liberado"
+            } else
+                throw new RuntimeException("Corte #${corte.id} já liberado!")
+        } else
+            throw new RuntimeException("Corte #${corte.id} não pode ser liberado, pois já está fechado!")
+    }
+
 
 }

@@ -10,7 +10,19 @@ class FechamentoController {
 
     static allowedMethods = [save: "POST", delete: "DELETE"]
 
-    def fechamentoService
+    FechamentoService fechamentoService
+
+
+    class FaturaCommand {
+        Date dataPrevista
+        Date dataOcorrencia
+        Date dataVencimento
+        StatusFatura statusFatura
+        boolean corteLiberado
+    }
+
+
+
 
     def index() {
         Rh programa = Rh.get(params.long('programa.id'))
@@ -55,9 +67,9 @@ class FechamentoController {
     }
 
     def abrirCortes(){
-        Fechamento fechamento=Fechamento.get(params.long('id'))
-        def cortes=fechamento.cortes.sort{it.dataPrevista}
-        render template:'cortes',model:[cortes:cortes,prgId:fechamento.programa.id]
+        Fechamento fechamento = Fechamento.get(params.long('id'))
+        def cortes = fechamento.cortes.sort {it.dataPrevista}
+        render template: 'cortes', model:[cortes: cortes, prgId: fechamento.programa.id]
     }
 
     def abrirFechamentos(){
@@ -93,9 +105,10 @@ and p.id=:id
         if (params.id) {
             Corte corte = Corte.get(params.id.toLong())
             if (corte) {
-                def fat = fechamentoService.findFaturaByCorte(corte)
-                if (fat) {
-                    render template: "/portadorCorte/fatura", model: [fatura: fat]
+                def faturaCliente = fechamentoService.findFaturaByCorte(corte)
+                def faturasPortadores = fechamentoService.findAllFaturasPortadores(corte, 100, 0)
+                if (faturaCliente) {
+                    render template: "fatura", model: [fatura: faturaCliente, faturasPortadoresList: faturasPortadores]
                     return
                 } else
                     render status: 404, text: "Não há fatura para o corte #${corte.id}"
@@ -105,5 +118,34 @@ and p.id=:id
             render status: 500, text: "Corte ID não informado"
     }
 
+    def findAllFaturasPortadoresByCorte() {
+
+    }
+
+
+    def releaseCorte() {
+        if (params.id && params.id ==~ /\d+/) {
+            CortePortador corte = CortePortador.get(params.id as long)
+            if (corte) {
+                try {
+                    fechamentoService.releaseCorte(corte)
+                    Fechamento fechamento = corte.fechamento
+                    def cortes = fechamento.cortes.sort{it.dataPrevista}
+                    render template:'cortes', model:[cortes: cortes, prgId: fechamento.programa.id]
+                    return
+                } catch (e) {
+                    log.error e.message
+                    render status: 500, text: "Erro - ${e.message}"
+                    return
+                }
+            } else {
+                render status: 404, text: "Não há fatura para o corte #${corte.id}"
+                return
+            }
+        } else {
+            render status: 500, text: "Corte ID inválido: ${params.id}!"
+            return
+        }
+    }
 
 }
