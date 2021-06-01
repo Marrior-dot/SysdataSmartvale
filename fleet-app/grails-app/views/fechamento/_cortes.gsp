@@ -27,10 +27,10 @@
                         <td>${corte.liberado?'Sim':'Não'}</td>
 
                          <g:if test="${corte.status==StatusCorte.FECHADO}">
-                            <td><g:link action="downloadBoleto" params="[corId:corte.id,prgId:prgId]">Boleto</g:link></td>
+                            %{--<td><g:link action="downloadBoleto" params="[corId:corte.id,prgId:prgId]">Boleto</g:link></td>--}%
                          </g:if>
                         <g:if test="${!corte.liberado}">
-                            <td><a id="releaseCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-unchecked"></i></a></td>
+                            <td><a id="releaseCorte" href="#" data-corte="${corte.id}"><i class="glyphicon glyphicon-ok-sign"></i></a></td>
                         </g:if>
                     </tr>
                 </g:each>
