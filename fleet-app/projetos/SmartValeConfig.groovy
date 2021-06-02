@@ -145,7 +145,7 @@ faturamento {
         extensoes = [TaxaUtilizacao, TaxaManutencao, TaxaAdministracao]
 
         boleto {
-            gerar = true
+            gerar = false
             gerador = "bopepoGeradorBoletoBancoBrasilService"
 
             agencia = "4494"
@@ -166,7 +166,7 @@ faturamento {
 
         notaFiscal {
 
-            gerar = true
+            gerar = false
             gerador = "omieIntegradorNotaFiscalService"
 
             omie {

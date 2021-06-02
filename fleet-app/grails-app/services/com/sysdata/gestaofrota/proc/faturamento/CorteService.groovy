@@ -100,6 +100,9 @@ class CorteService {
                 fatRh.save()
             }
 
+            tratarTaxas(fatRh)
+
+
 
             if (grailsApplication.config.projeto.faturamento.portador.boleto.gerar) {
 
@@ -150,6 +153,18 @@ class CorteService {
         cortePortador.save(flush: true)
     }
 
+    private void tratarTaxas(Fatura fatRh, Date dataProc) {
+        CortePortador cortePortador = fatRh.corte as CortePortador
+        Rh cliente = cortePortador.fechamento.programa
+        if (cliente.taxaDesconto) {
+
+            def valorDesconto = fatRh.valorTotal * cliente.taxaDesconto / 100
+
+
+        }
+
+
+    }
 
     private void tratarAtraso(Fatura fatRh, Date dataProc) {
         Conta contaRh = fatRh.conta
