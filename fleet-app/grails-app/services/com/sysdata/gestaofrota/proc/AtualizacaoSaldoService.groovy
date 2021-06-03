@@ -17,7 +17,7 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
 
         if (! empresasCredito.isEmpty()) {
             empresasCredito.each { Rh rh ->
-                log.info "Processando Empresa #${rh.id} $rh.nomeEmbossing ..."
+                log.info "Processando Empresa #${rh.id} - $rh.nome ..."
                 def portadorIds = Portador.withCriteria {
                                                 projections {
                                                     property "id"
@@ -55,7 +55,7 @@ class AtualizacaoSaldoService implements ExecutableProcessing {
                     if (saldoNovo != saldoAtual) {
                         portador.saldoTotal = saldoNovo > 0 ? saldoNovo : 0
                         portador.save(flush: true)
-                        log.info "PRT #${portador.id} -> SA: ${saldoAtual} NS: ${portador.saldoTotal} (dif: $portador.saldoTotal - saldoAtual})"
+                        log.info "PRT #${portador.id} -> SA: ${saldoAtual} NS: ${portador.saldoTotal} (dif: ${portador.saldoTotal - saldoAtual})"
                     }
                     if ((i + 1) % 50 == 0)
                         clearSession()
