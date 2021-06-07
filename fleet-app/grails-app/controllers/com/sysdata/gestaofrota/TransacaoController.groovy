@@ -22,7 +22,7 @@ class TransacaoController extends BaseOwnerController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def transacaoService
+    TransacaoService transacaoService
     def autorizadorService
     def estornoService
 
@@ -236,6 +236,29 @@ class TransacaoController extends BaseOwnerController {
 
         }
         redirect action: "list", params: params
+    }
 
+    def confirmar() {
+        Transacao transacao = Transacao.get(params.id.toLong())
+        try {
+            transacaoService.confirmar(transacao)
+            flash.success = "Transação ${transacao.id} Confirmada"
+        } catch (e) {
+            log.error e.message
+            flash.error = "Erro: ${e.message}"
+        }
+        redirect action: 'show', id: transacao.id
+    }
+
+    def desfazer() {
+        Transacao transacao = Transacao.get(params.id.toLong())
+        try {
+            transacaoService.desfazer(transacao)
+            flash.success = "Transação ${transacao.id} Desfeita"
+        } catch (e) {
+            log.error e.message
+            flash.error = "Erro: ${e.message}"
+        }
+        redirect action: 'show', id: transacao.id
     }
 }

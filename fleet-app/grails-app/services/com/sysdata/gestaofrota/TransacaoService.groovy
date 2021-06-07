@@ -72,11 +72,11 @@ class TransacaoService {
         if (transacao.tipo == TipoTransacao.COMBUSTIVEL || transacao.tipo == TipoTransacao.SERVICOS) {
             transacao.statusControle = StatusControleAutorizacao.CONFIRMADA
             transacao.status = StatusTransacao.AGENDAR
-        } else if (transacao.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
-            transacao.statusControle = StatusControleAutorizacao.CONFIRMADA
-        }
+            log.info "TR #${transacao.id} Confirmada"
+        } else
+            throw new RuntimeException("Tipo de Transação indevido para Confirmação: ${transacao.tipo}")
 
-        transacao.save()
+        transacao.save(flush: true)
     }
 
     void desfazer(List<Long> ids) {
@@ -88,11 +88,15 @@ class TransacaoService {
 
         if (transacao.tipo == TipoTransacao.COMBUSTIVEL || transacao.tipo == TipoTransacao.SERVICOS) {
             transacao.statusControle = StatusControleAutorizacao.DESFEITA
-            transacao.participante.conta.saldo += transacao.valor
-        } else if (transacao.tipo == TipoTransacao.CONFIGURACAO_PRECO) {
-            transacao.statusControle = StatusControleAutorizacao.DESFEITA
-        }
+            log.info "TR #${transacao.id} Desfeita"
+            Portador portador = transacao.cartao.portador
+            def saldoAnterior = portador.saldoTotal
+            portador.saldoTotal += transacao.valor
+            log.info "\tPRT #${portador.id} => SA: ${saldoAnterior} NS: ${portador.saldoTotal}"
+            portador.save(flush: true)
+        } else
+            throw new RuntimeException("Tipo de Transação indevido para Desfazimento: ${transacao.tipo}")
 
-        transacao.save()
+        transacao.save(flush: true)
     }
 }
