@@ -10,7 +10,12 @@
             <h4>Detalhes Lote de Pagamento</h4>
         </div>
         <div class="panel-body">
-            <div class="panel panel-default">
+            <div class="row">
+                <div class="col-md-12">
+                    <g:link action="index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Voltar</g:link>
+                </div>
+            </div>
+            <div class="panel panel-default panel-top">
                 <div class="panel-heading">
                     <h5>Lote #${lotePagamento.id}</h5>
                 </div>
@@ -42,10 +47,18 @@
                     <th>Status</th>
                 </thead>
                 <tbody>
-                    
+                <g:each in="${lotePagamento.pagamentos}" var="pagto">
+                    <tr>
+                        <td>${pagto.id}</td>
+                        <td>${pagto.estabelecimento.identificacaoResumida}</td>
+                        <td><g:formatNumber number="${pagto.valor}" type="currency"></g:formatNumber></td>
+                        <td><g:formatDate date="${pagto.dataPrevista}" format="dd/MM/yy"></g:formatDate></td>
+                        <td><g:formatDate date="${pagto.dataPagamento}" format="dd/MM/yy"></g:formatDate></td>
+                        <td>${pagto.status.nome}</td>
+                    </tr>
+                </g:each>
                 </tbody>
             </table>
-
         </div>
     </div>
 

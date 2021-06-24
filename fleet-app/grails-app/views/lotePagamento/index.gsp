@@ -2,18 +2,18 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8">
-    <title>Listagem de Lotes de Pagamento à Conveniados</title>
+    <title>Lista de Lotes de Repasses à Conveniados</title>
 </head>
 <body>
     <div class="panel panel-default panel-top">
         <div class="panel-heading">
-            <h3>Listagem de Lotes de Pagamentos à Conveniados</h3>
+            <h3>Lista de Lotes de Repasses à Conveniados</h3>
         </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <g:link uri="/" class="btn btn-default"><span class="glyphicon glyphicon-home"></span></g:link>
-                    <g:link action="index" class="btn btn-default"><span class="glyphicon glyphicon-list"></span></g:link>
+                    <g:link uri="/" class="btn btn-default"><span class="glyphicon glyphicon-home"></span> Início</g:link>
+                    <g:link action="index" class="btn btn-default"><span class="glyphicon glyphicon-list"></span> Lista de Lotes</g:link>
                 </div>
             </div>
             <div class="panel panel-default panel-top">
