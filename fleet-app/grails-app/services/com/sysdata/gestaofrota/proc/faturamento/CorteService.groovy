@@ -100,9 +100,7 @@ class CorteService {
                 fatRh.save()
             }
 
-            tratarTaxas(fatRh)
-
-
+            tratarTaxas(fatRh, dataCorte)
 
             if (grailsApplication.config.projeto.faturamento.portador.boleto.gerar) {
 
@@ -157,13 +155,30 @@ class CorteService {
         CortePortador cortePortador = fatRh.corte as CortePortador
         Rh cliente = cortePortador.fechamento.programa
         if (cliente.taxaDesconto) {
+            def valorDesconto = (fatRh.valorTotal * cliente.taxaDesconto / 100).round(2)
+            LancamentoConvenio taxaDesconto = new LancamentoConvenio()
+            taxaDesconto.with {
+                conta = fatRh.conta
+                valor = - valorDesconto
+                tipo = TipoLancamento.TAXA_DESCONTO
+                dataEfetivacao = dataProc
+                corte = fatRh.corte
+                status = StatusLancamento.FATURADO
+            }
+            taxaDesconto.save(flush: true)
+            log.info "(+) TX DESC: #${taxaDesconto.id} ${taxaDesconto.valor}"
 
-            def valorDesconto = fatRh.valorTotal * cliente.taxaDesconto / 100
-
-
+            ItemFatura itemDesconto = new ItemFatura()
+            itemDesconto.with {
+                data = taxaDesconto.dataEfetivacao
+                descricao = taxaDesconto.tipo.nome
+                valor = taxaDesconto.valor
+                lancamento = taxaDesconto
+                saldo = taxaDesconto.valor
+            }
+            fatRh.addToItens itemDesconto
+            fatRh.save(flush: true)
         }
-
-
     }
 
     private void tratarAtraso(Fatura fatRh, Date dataProc) {
