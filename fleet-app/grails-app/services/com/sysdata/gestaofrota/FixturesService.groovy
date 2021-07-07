@@ -13,6 +13,7 @@ class FixturesService {
     GrailsApplication grailsApplication
 
     def init() {
+        criarPerfisAcesso()
         criarProcessadora()
         //criarAdministradora()
         criarAutenticacaoInicial()
@@ -22,6 +23,15 @@ class FixturesService {
         criarMarcasVeiculos()
         criarMotivosNegacao()
     }
+
+    private void criarPerfisAcesso() {
+        Role.findOrCreateWhere(authority: 'ROLE_PROC').save(flush: true)
+        Role.findOrCreateWhere(authority: 'ROLE_ADMIN').save(flush: true)
+        Role.findOrCreateWhere(authority: 'ROLE_RH').save(flush: true)
+        Role.findOrCreateWhere(authority: 'ROLE_ESTAB').save(flush: true)
+        Role.findOrCreateWhere(authority: 'ROLE_PROC_FINANC', description: 'Perfil do Financeiro Processadora').save(flush: true)
+    }
+
 
     private def criarProcessadora() {
         Processadora.findOrCreateWhere(nome: "Sysdata Tecnologia").save(flush: true)

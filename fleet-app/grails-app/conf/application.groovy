@@ -149,7 +149,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/tipoEquipamento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/portadorCorte/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/loteEmbossing/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
-        [pattern: '/lotePagamento/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/lotePagamento/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
 
 
         // Relatórios
@@ -168,7 +168,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/motivoNegacao/list',                    access: ['ROLE_ADMIN', 'ROLE_PROC']],
         [pattern: '/motivoNegacao/show/**',                 access: ['ROLE_ADMIN', 'ROLE_PROC']],
         [pattern: '/motivoNegacao/**',                      access: ['ROLE_PROC']],
-        [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH']],
+        [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_PROC_FINANC']],
         [pattern: '/role/**',                               access: ['ROLE_PROC']],
         [pattern: '/processamento/**',                      access: ['ROLE_PROC']],
 

@@ -36,6 +36,19 @@
                 </li>
             </sec:ifAnyGranted>
 
+            <sec:ifAnyGranted roles="ROLE_PROC_FINANC">
+
+                <li>
+                    <a href="#" class="menu-logado"><i class="fa fa-cogs"></i> Financeiro<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+
+
+            </sec:ifAnyGranted>
+
 
             <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC">
                 <li>
@@ -44,7 +57,7 @@
                         <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="list">Pedidos de Carga</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listAdmin">Transações Administrativas</g:link></li>
-                        <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes de Pagamento</g:link></li>
+                        <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
@@ -170,7 +183,7 @@
 
             </sec:ifAnyGranted>
 
-            <sec:ifAnyGranted roles="ROLE_RH, ROLE_ESTAB">
+            <sec:ifAnyGranted roles="ROLE_RH, ROLE_ESTAB, ROLE_PROC_FINANC">
                 <li class="controller"><g:link class="submenu-logado" controller="user" action="meuUsuario" id="${sec.loggedInUserInfo(field: 'id')}">&nbsp;Meu Usuário</g:link></li>
 
             </sec:ifAnyGranted>

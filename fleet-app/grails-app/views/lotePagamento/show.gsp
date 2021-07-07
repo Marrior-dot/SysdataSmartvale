@@ -1,3 +1,4 @@
+<%@ page import="com.sysdata.gestaofrota.StatusLotePagamento; com.sysdata.gestaofrota.StatusEmissao" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +21,9 @@
                     <h5>Lote #${lotePagamento.id}</h5>
                 </div>
                 <div class="panel-body">
-                    <div class="row">
+                    <alert:all/>
+
+                    <div class="row form-group">
                         <div class="col-md-4">
                             <label>Data</label>
                             <p><g:formatDate date="${lotePagamento.dateCreated}" format="dd/MM/yyyy"/></p>
@@ -34,12 +37,33 @@
                             <p>${lotePagamento.statusEmissao.nome}</p>
                         </div>
                     </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label>Valor Total</label>
+                            <h4>
+                                <span class="label label-default"><g:formatNumber number="${lotePagamento.total}" type="currency"></g:formatNumber></span>
+                            </h4>
+                        </div>
+                    </div>
                 </div>
+                <sec:ifAnyGranted roles="ROLE_PROC, ROLE_PROC_FINANC">
+                    <g:if test="${lotePagamento.statusEmissao == StatusEmissao.NAO_GERAR && lotePagamento.status == StatusLotePagamento.FECHADO}">
+                        <div class="panel-footer">
+                            <g:form>
+                                <g:hiddenField name="id" value="${lotePagamento.id}"></g:hiddenField>
+                                <button type="submit"
+                                        name="_action_confirm"
+                                        class="btn btn-success"
+                                        onclick="return confirm('Confirma o Lote para Envio?')">
+                                    <i class="fa fa-thumbs-o-up fa-fw"></i> Confirmar p/ Envio</button>
+                            </g:form>
+                        </div>
+                    </g:if>
+                </sec:ifAnyGranted>
             </div>
 
             <table class="table">
                 <thead>
-                    <th>#</th>
                     <th>Conveniado</th>
                     <th>Valor</th>
                     <th>Data Prevista</th>
@@ -47,10 +71,9 @@
                     <th>Status</th>
                 </thead>
                 <tbody>
-                <g:each in="${lotePagamento.pagamentos}" var="pagto">
+                <g:each in="${lotePagamento.pagamentos.sort{it.id}}" var="pagto">
                     <tr>
-                        <td>${pagto.id}</td>
-                        <td>${pagto.estabelecimento.identificacaoResumida}</td>
+                        <td><g:link action="showPagamentoLote" id="${pagto.id}">${pagto.estabelecimento.identificacaoResumida}</g:link></td>
                         <td><g:formatNumber number="${pagto.valor}" type="currency"></g:formatNumber></td>
                         <td><g:formatDate date="${pagto.dataPrevista}" format="dd/MM/yy"></g:formatDate></td>
                         <td><g:formatDate date="${pagto.dataPagamento}" format="dd/MM/yy"></g:formatDate></td>
@@ -61,10 +84,5 @@
             </table>
         </div>
     </div>
-
-
-
-
-
 </body>
 </html>

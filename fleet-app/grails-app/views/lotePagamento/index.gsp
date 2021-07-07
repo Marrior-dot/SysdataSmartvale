@@ -20,18 +20,20 @@
                 <div class="panel-body">
                     <table class="table">
                         <thead>
-                        <th>#</th>
                         <th>Data Criação</th>
                         <th>Data Prevista</th>
                         <th>Total</th>
+                        <th>Status</th>
+                        <th>Envio</th>
                         </thead>
                         <tbody>
                         <g:each in="${lotePagamentoList}" var="lote">
                             <tr>
-                                <td><g:link action="show" id="${lote.id}">${lote.id}</g:link></td>
-                                <td><g:formatDate date="${lote.dateCreated}" format="dd/MM/yyyy"></g:formatDate></td>
+                                <td><g:link action="show" id="${lote.id}"><g:formatDate date="${lote.dateCreated}" format="dd/MM/yyyy"></g:formatDate></g:link></td>
                                 <td><g:formatDate date="${lote.dataEfetivacao}" format="dd/MM/yyyy"></g:formatDate></td>
                                 <td><g:formatNumber number="${lote.total}" type="currency"></g:formatNumber></td>
+                                <td>${lote.status.nome}</td>
+                                <td>${lote.statusEmissao.nome}</td>
                             </tr>
                         </g:each>
                         </tbody>
