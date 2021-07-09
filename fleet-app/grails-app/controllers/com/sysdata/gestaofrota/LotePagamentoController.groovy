@@ -1,8 +1,12 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.banpara.ConsultaLoteRepasseIndividualService
+import com.sysdata.gestaofrota.http.ResponseData
+
 class LotePagamentoController {
 
     LotePagamentoService lotePagamentoService
+    ConsultaLoteRepasseIndividualService consultaLoteRepasseIndividualService
 
     def index() {
         params.max = params.max ? params.max as int: 10
@@ -64,12 +68,22 @@ class LotePagamentoController {
     }
 
     def loadEntries() {
-        params.max = params.max ? paramas.max as int : 10
-        params.offset = params.offset ? paramas.offset as int : 0
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
         def pagEstabId = params.pagEstabId as long
         PagamentoEstabelecimento pagamentoEstabelecimento = PagamentoEstabelecimento.get(pagEstabId)
         def ret = lotePagamentoService.getLancamentosByPagamentoEstab(pagamentoEstabelecimento, params)
         render template: 'lancamentos', model: [entriesList: ret.list, entriesCount: ret.count]
+    }
+
+    def queryPayment(Long id) {
+        PagamentoLote pagamentoLote = PagamentoLote.get(id)
+        try {
+            ResponseData responseData = consultaLoteRepasseIndividualService.queryPayment(pagamentoLote)
+            render template: 'queryPayment', model: [response: responseData]
+        } catch (e) {
+            render template: 'queryPayment', model: [error: e.message]
+        }
     }
 
 }

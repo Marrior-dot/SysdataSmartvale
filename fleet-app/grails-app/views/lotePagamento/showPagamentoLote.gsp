@@ -72,6 +72,8 @@
                     <g:form>
                         <g:hiddenField name="id" value="${pagamentoLote.id}"></g:hiddenField>
                         <button type="submit" name="_action_updateDataBank" class="btn btn-default"><i class="fa fa-refresh fa-fw"></i> Atualizar Domicílio Bancário</button>
+                        <button type="button" name="consultaRepasseApi" class="btn btn-default" data-toggle="modal" data-target="#queryPaymentModal">
+                            <i class="fa fa-search fa-fw"></i> Consultar Status API</button>
                     </g:form>
                 </div>
             </div>
@@ -100,5 +102,50 @@
             </table>
         </div>
     </div>
+
+
+    <!-- Modal Consulta Lote Banpará API -->
+
+    <div class="modal fade" id="queryPaymentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Consulta Lote - Banpará API</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="responseQueryPayment"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function consultarRepasseApi(pagtoLoteId) {
+            $("#responseQueryPayment").html("");
+            waitingDialog.show();
+            $.get("${createLink(action: 'queryPayment')}", {id: pagtoLoteId})
+                .done(function(data) {
+                    $("#responseQueryPayment").html(data);
+                })
+                .fail(function() {
+                    alert("Erro ao conectar servidor!");
+                })
+                .always(function() {
+                    waitingDialog.hide();
+                });
+        }
+
+        $('#queryPaymentModal').on('shown.bs.modal', function (e) {
+            consultarRepasseApi("${pagamentoLote.id}");
+        })
+
+    </script>
 </body>
 </html>

@@ -52,17 +52,15 @@
         </div>
     </div>
     <script>
-
         function loadEntries() {
             $.get("${createLink(action: 'loadEntries')}", {pagEstabId: "${pagamentoEstabelecimento.id}"})
-                    .done(function(data) {
-                        $("div#entries").html(data);
-                    })
-                    .fail(function() {
+                .done(function(data) {
+                    $("div#entries").html(data);
+                })
+                .fail(function() {
 
-                    })
+                })
         }
-
 
         $(document).ready(function() {
             loadEntries();
