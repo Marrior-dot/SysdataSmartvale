@@ -9,7 +9,13 @@ trait CalculoDiasUteis {
             data += 2
         else if (diaSemana == Calendar.SUNDAY)
             data += 1
-
         data
     }
+
+    boolean isDataUtil(Date data) {
+        return ! data[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY]
+    }
+
+
+
 }

@@ -13,71 +13,77 @@ class CorteReembolsoEstabsService implements ExecutableProcessing, CalculoDiasUt
     @Override
     def execute(Date date) {
 
-        def rhs = [:]
+        log.info "Iniciando Corte de ECs..."
 
+        if (isDataUtil(date)) {
+            def rhs = [:]
 
-        def dateRef = dataUtil(date + 1)
+            def dateRef = dataUtil(date + 1)
 
-        def datasCorte = LancamentoEstabelecimento.withCriteria {
-                            projections {
-                                groupProperty("dataEfetivacao")
-                            }
-                            'in'("tipo", [TipoLancamento.REEMBOLSO])
-                            eq("status", StatusLancamento.A_FATURAR)
-                            le("dataEfetivacao", dateRef)
-                            order("dataEfetivacao")
-                        }
-
-        if (datasCorte) {
-            CorteEstabelecimento corteEstab = new CorteEstabelecimento()
-            corteEstab.with {
-                tipoCorte = TipoCorteEstabelecimento.REEMBOLSO
-                status = StatusCorte.ABERTO
-                dataPrevista = date
-                dataFechamento = date
-                dataCobranca = dateRef
+            def datasCorte = LancamentoEstabelecimento.withCriteria {
+                projections {
+                    groupProperty("dataEfetivacao")
+                }
+                'in'("tipo", [TipoLancamento.REEMBOLSO])
+                eq("status", StatusLancamento.A_FATURAR)
+                le("dataEfetivacao", dateRef)
+                order("dataEfetivacao")
             }
-            corteEstab.save(flush: true)
-            log.info "Corte EC #$corteEstab.id criado"
-            corteEstab.datasCortadas = []
 
-            LotePagamento loteAberto = LotePagamento.aberto
-            if (!loteAberto) {
-                loteAberto = new LotePagamento(dataEfetivacao: corteEstab.dataCobranca)
+            if (datasCorte) {
+                CorteEstabelecimento corteEstab = new CorteEstabelecimento()
+                corteEstab.with {
+                    tipoCorte = TipoCorteEstabelecimento.REEMBOLSO
+                    status = StatusCorte.ABERTO
+                    dataPrevista = date
+                    dataFechamento = date
+                    dataCobranca = dateRef
+                }
+                corteEstab.save(flush: true)
+                log.info "Corte EC #$corteEstab.id criado"
+                corteEstab.datasCortadas = []
+
+                LotePagamento loteAberto = LotePagamento.aberto
+                if (!loteAberto) {
+                    loteAberto = new LotePagamento(dataEfetivacao: corteEstab.dataCobranca)
+                    loteAberto.save(flush: true)
+                }
+                loteAberto.addToCortes(corteEstab)
                 loteAberto.save(flush: true)
-            }
-            loteAberto.addToCortes(corteEstab)
-            loteAberto.save(flush: true)
 
-            datasCorte.each { dt ->
+                datasCorte.each { dt ->
 
-                corteEstab.datasCortadas << dt
-                log.info "Cortando Data ${dt.format('dd/MM/yy')} ..."
-                def contasIds = LancamentoEstabelecimento.withCriteria {
-                                    projections {
-                                        groupProperty("conta.id")
-                                    }
-                                    eq("tipo", TipoLancamento.REEMBOLSO)
-                                    eq("status", StatusLancamento.A_FATURAR)
-                                    eq("dataEfetivacao", dt)
-                                }
-                if (contasIds) {
-                    contasIds.eachWithIndex { cid, i ->
-                        Conta contaEstab = Conta.get(cid)
-                        cortarConta(corteEstab, contaEstab, dt, rhs)
-                        if ((i + 1) % 50 == 0)
-                            clearSession()
+                    corteEstab.datasCortadas << dt
+                    log.info "Cortando Data ${dt.format('dd/MM/yy')} ..."
+                    def contasIds = LancamentoEstabelecimento.withCriteria {
+                        projections {
+                            groupProperty("conta.id")
+                        }
+                        eq("tipo", TipoLancamento.REEMBOLSO)
+                        eq("status", StatusLancamento.A_FATURAR)
+                        eq("dataEfetivacao", dt)
                     }
-                } else
-                    log.warn "Não há contas de estabelecimento para corte!"
-            }
-            corteEstab.status = StatusCorte.FECHADO
-            corteEstab.save(flush: true)
+                    if (contasIds) {
+                        contasIds.eachWithIndex { cid, i ->
+                            Conta contaEstab = Conta.get(cid)
+                            cortarConta(corteEstab, contaEstab, dt, rhs)
+                            if ((i + 1) % 50 == 0)
+                                clearSession()
+                        }
+                    } else
+                        log.warn "Não há contas de estabelecimento para corte!"
+                }
+                corteEstab.status = StatusCorte.FECHADO
+                corteEstab.save(flush: true)
 
-            cortarConvenio(date, rhs)
+                cortarConvenio(date, rhs)
 
+            } else
+                log.info "Não há Corte de Reembolso para esta data ${date.format('dd/MM/yy')}"
         } else
-            log.info "Não há Corte de Reembolso para esta data ${date.format('dd/MM/yy')}"
+            log.warn "Não há Corte de ECs em dias não úteis!"
+
+        log.info "Corte de ECs finalizado"
     }
 
     private def cortarConvenio(Date dataOper, Map rhs) {
