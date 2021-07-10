@@ -62,6 +62,11 @@ class ConsultaLoteRepasseIndividualService implements TokenBanparaAPI {
 
     def queryPayment(PagamentoLote pagamentoLote) {
 
+        if (grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
+            System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
+            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
+        }
+
         ResponseData responseData
 
         withToken { token ->
