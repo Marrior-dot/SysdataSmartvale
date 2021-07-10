@@ -43,9 +43,11 @@
                     <ul class="nav nav-second-level">
                         <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
                     </ul>
+                    <ul class="nav nav-second-level">
+                        <li class="controller"><g:link class="submenu-logado" controller="loteRecebimento">Lotes Recebimentos Clientes</g:link></li>
+                    </ul>
                     <!-- /.nav-second-level -->
                 </li>
-
 
             </sec:ifAnyGranted>
 
@@ -58,6 +60,7 @@
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listAdmin">Transações Administrativas</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
+                        <li class="controller"><g:link class="submenu-logado" controller="loteRecebimento">Lotes Recebimentos Clientes</g:link></li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>

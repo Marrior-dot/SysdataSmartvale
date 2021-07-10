@@ -10,6 +10,8 @@ class LoteRecebimento {
     StatusEmissao statusEmissao = StatusEmissao.NAO_GERAR
     StatusRetornoPagamento statusRetorno
 
+    static transients = ['totalLiquido', 'totalBruto', 'totalComissao']
+
     static hasMany = [recebimentos: RecebimentoLote, cortes: CorteConvenio]
 
     static constraints = {
@@ -28,6 +30,18 @@ class LoteRecebimento {
             log.info "Lote Recebimento #${loteAberto.id} criado"
         }
         return loteAberto
+    }
+
+    BigDecimal getTotalBruto() {
+        return this.recebimentos.sum { it.valorBruto }
+    }
+
+    BigDecimal getTotalComissao() {
+        return this.recebimentos.sum { it.valorTaxaAdm }
+    }
+
+    BigDecimal getTotalLiquido() {
+        return this.recebimentos.sum { it.valor }
     }
 
 }
