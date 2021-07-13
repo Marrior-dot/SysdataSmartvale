@@ -13,7 +13,7 @@ trait CalculoDiasUteis {
     }
 
     boolean isDataUtil(Date data) {
-        return ! data[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY]
+        return ! (data[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY])
     }
 
 
