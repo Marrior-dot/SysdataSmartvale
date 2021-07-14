@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Relatório Historico de Frota"/>
+    <g:set var="relatorio" value="Relatório Histórico de Transações Frota "/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -139,9 +139,9 @@
         </table>
         </div>
 
-        <g:paginate total="${historicoFrotaCount}" />
+        <g:paginate total="${historicoFrotaCount}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 </body>

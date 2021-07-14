@@ -162,7 +162,7 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="baseFuncionariosRelatorio">Base de Funcionários</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentosRelatorio">Base de Equipamentos</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculosRelatorio">Base de Veículos</g:link></li>
-                            <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Frota</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Transações Frota</g:link></li>
                         </sec:ifAnyGranted>
 
                         %{--

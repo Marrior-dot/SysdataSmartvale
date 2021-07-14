@@ -18,6 +18,9 @@ class HistoricoFrotaRelatorioController {
             response.setHeader("Content-disposition", "attachment; filename=historicoFrota.${params.extension}")
 
             def reportList = historicoFrotaService.list(params, false)
+
+            def totalValor = reportList.sum { it.valor }
+
             reportList = reportList.collect { tr ->
                                 [
                                     "nsu": tr.nsu,
@@ -38,6 +41,32 @@ class HistoricoFrotaRelatorioController {
 
                                 ]
                             }
+
+            reportList += ["nsu": "", "dataHora": "", "terminal": "", "estabelecimento": "", "veiculo": "", "km": "", "equipamento": "", "funcionario": "",
+                    "produtos": "", "precoUnitario": "", "valor": "", "litros": "", "unidade": "", "tipoTransacao": "", "statusTransacao": ""
+            ]
+
+
+            // Inclui linha com totalizador de valor da transação
+            reportList += [
+
+                    "nsu": "",
+                    "dataHora": "",
+                    "terminal": "",
+                    "estabelecimento": "",
+                    "veiculo": "",
+                    "km": "",
+                    "equipamento": "",
+                    "funcionario": "",
+                    "produtos": "TOTAL GERAL",
+                    "precoUnitario": "",
+                    "valor": Util.formatCurrency(totalValor),
+                    "litros": "",
+                    "unidade": "",
+                    "tipoTransacao": "",
+                    "statusTransacao": ""
+            ]
+
 
             List fields = [
                             "nsu",
@@ -77,7 +106,7 @@ class HistoricoFrotaRelatorioController {
 
                         ]
 
-           Map parameters = [title: "Historico de Frota", "column.widths": [0.2, 0.3, 0.5]]
+           Map parameters = [title: "Histórico de Transações Frota", "column.widths": [0.2, 0.3, 0.5]]
 
 
             exportService.export(params.f,
@@ -90,7 +119,10 @@ class HistoricoFrotaRelatorioController {
 
         }
 
-        [historicoFrotaList: historicoFrotaService.list(params), historicoFrotaCount: historicoFrotaService.count(params)]
+        [
+            historicoFrotaList: historicoFrotaService.list(params),
+            historicoFrotaCount: historicoFrotaService.count(params)
+        ]
     }
 
 

@@ -9,13 +9,40 @@ import com.sysdata.gestaofrota.Transacao
 
 class HistoricoFrotaService {
 
+    /**
+     *
+     * @param pars
+     * @param clo
+     * @return
+     *
+     *
+     * select
+     *  t.*
+ *     from
+     *     Transacao t
+     *
+     * where
+     *      (t.tipo = 'COMBUSTIVEL' or t.tipo = 'SERVICOS')
+     *      and t.statusControle = 'CONFIRMADA'
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+
     private def withParams(pars, Closure clo) {
+
         def criteria = {
+
             or {
                 eq("tipo", TipoTransacao.COMBUSTIVEL)
                 eq("tipo", TipoTransacao.SERVICOS)
             }
+
             eq("statusControle", StatusControleAutorizacao.CONFIRMADA)
+
             if (pars.empresa) {
                 cartao {
                     portador {
@@ -47,19 +74,23 @@ class HistoricoFrotaService {
                 }
             }
             if (pars.dataInicio)
-                gt('dateCreated', pars.dataInicio)
+                gt('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
             if (pars.dataFim)
-                lt('dateCreated', pars.dataFim)
+                lt('dateCreated', pars.date('dataFim', 'dd/MM/yyyy'))
         }
         clo(criteria)
     }
 
     def list(pars, paginate = true) {
+        pars.sort = "dateCreated"
+
         withParams(pars) { criteria ->
             if (paginate)
-                return Transacao.createCriteria().list([max: pars.max, offset: pars.offset], criteria)
-            else
+                return Transacao.createCriteria().list([max: pars.max, offset: pars.offset, sort: pars.sort], criteria)
+            else {
+                println "Params: $pars"
                 return Transacao.createCriteria().list(criteria)
+            }
         }
     }
 
