@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.6.3"
+version "1.6.4"
 group "fleet-app"
 
 apply plugin:"eclipse"
