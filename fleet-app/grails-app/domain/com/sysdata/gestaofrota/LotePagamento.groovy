@@ -24,7 +24,10 @@ class LotePagamento {
     }
 
     static LotePagamento getAberto() {
-        LotePagamento.findByStatus(StatusLotePagamento.ABERTO)
+        LotePagamento loteAberto = LotePagamento.findWhere(status: StatusLotePagamento.ABERTO)
+        if (! loteAberto)
+            loteAberto = new LotePagamento()
+        return loteAberto
     }
 
     BigDecimal getTotal() {

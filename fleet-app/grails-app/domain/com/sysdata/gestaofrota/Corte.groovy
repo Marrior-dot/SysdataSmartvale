@@ -9,6 +9,8 @@ class Corte {
     StatusCorte status
     Boolean liberado=false
 
+    static belongsTo = [loteLiquidacao: LotePagamento]
+
     static constraints = {
         dataFechamento nullable: true
         liberado nullable:true

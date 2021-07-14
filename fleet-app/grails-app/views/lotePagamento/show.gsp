@@ -38,12 +38,17 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label>Valor Total</label>
                             <h4>
                                 <span class="label label-default"><g:formatNumber number="${lotePagamento.total}" type="currency"></g:formatNumber></span>
                             </h4>
                         </div>
+                        <div class="col-md-4">
+                            <label>Status Retorno</label>
+                            <p>${lotePagamento.statusRetorno}</p>
+                        </div>
+
                     </div>
                 </div>
                 <sec:ifAnyGranted roles="ROLE_PROC, ROLE_PROC_FINANC">

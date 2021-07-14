@@ -86,4 +86,12 @@ class LotePagamentoController {
         }
     }
 
+    def cancel(Long id) {
+        try {
+            lotePagamentoService.cancel(LotePagamento.get(id))
+        } catch (e) {
+            redirect action: 'show', id: id
+        }
+    }
+
 }

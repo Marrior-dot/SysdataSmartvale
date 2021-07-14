@@ -68,6 +68,7 @@
                         </div>
                     </div>
                 </div>
+                <sec:ifAnyGranted roles="ROLE_PROC">
                 <div class="panel-footer">
                     <g:form>
                         <g:hiddenField name="id" value="${pagamentoLote.id}"></g:hiddenField>
@@ -76,6 +77,7 @@
                             <i class="fa fa-search fa-fw"></i> Consultar Status API</button>
                     </g:form>
                 </div>
+                </sec:ifAnyGranted>
             </div>
 
             <table class="table">

@@ -30,4 +30,26 @@ class LotePagamentoService {
         pagamentoLote.save(flush: true)
     }
 
+    def cancel(LotePagamento lotePagamento) {
+        log.info "Cancelando Lote Repasse #$lotePagamento.id ..."
+        if (lotePagamento.status != StatusLotePagamento.CANCELADO) {
+            lotePagamento.status = StatusLotePagamento.CANCELADO
+
+            // Vincula cortes liberados ao novo lote aberto
+            LotePagamento loteAberto = LotePagamento.aberto
+
+            lotePagamento.cortes.each { Corte cor ->
+                cor.loteLiquidacao = null
+                cor.save()
+                log.info "\t(-) COR #${cor.id} desvinculado ao Lote"
+                loteAberto.addToCortes(cor)
+                log.info "\t(+) COR #${cor.id} vinculado ao Lote Aberto #$loteAberto.id"
+            }
+            loteAberto.save(flush: true)
+            lotePagamento.save(flush: true)
+            log.info "Lote Repasse #${lotePagamento.id} cancelado"
+        } else
+            throw new RuntimeException("Operação inválida para Lote com status (${lotePagamento.status.nome})")
+    }
+
 }

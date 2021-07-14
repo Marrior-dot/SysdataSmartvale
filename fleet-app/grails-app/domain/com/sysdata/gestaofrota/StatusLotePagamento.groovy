@@ -5,6 +5,7 @@ enum StatusLotePagamento {
 
     ABERTO("Aberto"),
     FECHADO("Fechado"),
+    CANCELADO("Cancelado"),
     REJEITADO("Rejeitado"),
     ACEITO("Aceito"),
     LIQUIDADO("Liquidado"),

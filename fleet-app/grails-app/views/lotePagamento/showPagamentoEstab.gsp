@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-4">
                             <label>Corte</label>
-                            <p>${pagamentoEstabelecimento.corte}</p>
+                            <p>${pagamentoEstabelecimento.corte.dataPrevista}</p>
                         </div>
                     </div>
 
@@ -44,6 +44,21 @@
                             <p><g:formatDate date="${pagamentoEstabelecimento.dataEfetivada}" format="dd/MM/yyyy"/></p>
                         </div>
                     </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label>Valor Bruto</label>
+                            <p><g:formatNumber number="${pagamentoEstabelecimento.valorBruto}" type="currency"></g:formatNumber></p>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Valor Comissão</label>
+                            <p><g:formatNumber number="${pagamentoEstabelecimento.taxaAdm}" type="currency"></g:formatNumber></p>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Valor Líquido</label>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
