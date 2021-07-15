@@ -38,14 +38,14 @@ class FechamentoLotePagamentoService implements ExecutableProcessing, CalculoDia
 
                 log.info "Lote Pagto #${lotePagamento.id}:"
                 def pagIds = LotePagamento.withCriteria {
-                    createAlias("cortes", "c")
-                    createAlias("c.pagamentos", "p")
-                    projections {
-                        property("p.id")
-                    }
-                    eq("id", lotePagamento.id)
-                    order("p.estabelecimento")
-                }
+                                createAlias("cortes", "c")
+                                createAlias("c.pagamentos", "p")
+                                projections {
+                                    property("p.id")
+                                }
+                                eq("id", lotePagamento.id)
+                                order("p.estabelecimento")
+                            }
 
                 def ultPagIds = []
 
@@ -101,6 +101,7 @@ class FechamentoLotePagamentoService implements ExecutableProcessing, CalculoDia
                         lotePagamento.attach()
                     criarLotePagamento(lotePagamento, pagamento, valorPagto, pagtoList, date)
 
+                    lotePagamento.dataEfetivacao = lotePagamento.pagamentos.max { it.dataPrevista }
                     lotePagamento.status = StatusLotePagamento.FECHADO
                     lotePagamento.save(flush: true)
 
@@ -132,7 +133,7 @@ class FechamentoLotePagamentoService implements ExecutableProcessing, CalculoDia
         pagtoLote.with {
             estabelecimento = pagamento.estabelecimento
             valor = valorPagto
-            dataPrevista = dataOper
+            dataPrevista = pagamento.dataProgramada
             dadoBancario = pagamento.estabelecimento.dadoBancario
             pagamentos = pagtoList as Set
         }

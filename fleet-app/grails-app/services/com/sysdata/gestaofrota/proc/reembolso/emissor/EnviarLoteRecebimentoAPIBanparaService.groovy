@@ -53,6 +53,12 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
 
 
         withToken { token ->
+
+            if (grailsApplication.config.projeto.reembolso.banpara.api.jksFile2) {
+                System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile2)
+                System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password2)
+            }
+
             MensagemIntegracao msgEnviaLote = new MensagemIntegracao()
             msgEnviaLote.with {
                 tipo = TipoMensagem.BANPARA_ENVIO_LOTERECEBIMENTO
@@ -97,11 +103,6 @@ class EnviarLoteRecebimentoAPIBanparaService implements ExecutableProcessing, To
 
     @Override
     def execute(Date date) {
-
-        if (grailsApplication.config.projeto.reembolso.banpara.api.jksFile2) {
-            System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile2)
-            System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password2)
-        }
 
         def pars = [sort: "dateCreated"]
         List<LoteRecebimento> loteRecebList = LoteRecebimento.findAllByStatusEmissao(StatusEmissao.GERAR_ARQUIVO, pars)

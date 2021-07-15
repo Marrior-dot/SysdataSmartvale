@@ -8,6 +8,7 @@ import com.sysdata.gestaofrota.TipoMensagem
 import com.sysdata.gestaofrota.http.RESTClientHelper
 import com.sysdata.gestaofrota.http.ResponseData
 import grails.converters.JSON
+import grails.core.GrailsApplication
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 
@@ -25,6 +26,11 @@ trait TokenBanparaAPI {
 
         // Se não existe chave válida ou chave já expirou pelo tempo
         if (!key || key.dataHoraExpiracao < new Date() ) {
+
+            if (Holders.grailsApplication.config.projeto.reembolso.banpara.api.jksFile) {
+                System.setProperty("javax.net.ssl.trustStore", grailsApplication.config.projeto.reembolso.banpara.api.jksFile)
+                System.setProperty("javax.net.ssl.trustStorePassword", grailsApplication.config.projeto.reembolso.banpara.api.password)
+            }
 
             def endpoint = Holders.grailsApplication.config.projeto.reembolso.banpara.api.autenticar.endpoint
             def credencial = [

@@ -21,6 +21,7 @@ class LotePagamento {
 
     static mapping = {
         id generator: "sequence", params: ["sequence": "lotepag_seq"]
+        dataEfetivacao type: 'date'
     }
 
     static LotePagamento getAberto() {
