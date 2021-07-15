@@ -66,12 +66,11 @@ class ProcessingService {
                 }
             }
         }
-        def procList = Processing.executeQuery("""from Processing pr
-                                                    where pr.batch is null and
-                                                    pr.executionSchedule in (select es from ExecutionSchedule es where es.processing = pr)
+        def procList = Processing.executeQuery("""select pr from Processing pr, ExecutionSchedule es
+                                                    where pr.batch is null and es.processing = pr
                                                     and pr.active = true""")
         procList.each { proc ->
-            if (proc.runNow(date))
+            if (proc.executionSchedule && proc.runNow(date))
                 runProcessing(proc, date.clearTime())
         }
     }

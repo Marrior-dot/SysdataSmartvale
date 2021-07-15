@@ -10,8 +10,11 @@ class CorteEstabelecimento extends Corte {
 
     TipoCorteEstabelecimento tipoCorte
 
+    static belongsTo = [loteLiquidacao: LotePagamento]
+
     static hasMany = [datasCortadas: Date, pagamentos: PagamentoEstabelecimento]
 
     static constraints = {
+        loteLiquidacao nullable: true
     }
 }
