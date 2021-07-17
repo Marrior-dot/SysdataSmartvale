@@ -300,5 +300,6 @@ environments {
             }
         }
     }
-
 }
+
+features = ["lotePagamento", "loteRecebimento"]

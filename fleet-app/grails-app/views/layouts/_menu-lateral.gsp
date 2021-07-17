@@ -63,15 +63,16 @@
                     <!-- /.nav-second-level -->
                 </li>
 
-                <li>
-                    <a href="#" class="menu-logado"><i class="fa fa-money"></i> Financeiro<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
-                        <li class="controller"><g:link class="submenu-logado" controller="loteRecebimento">Lotes Recebimentos Clientes</g:link></li>
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-
+                <g:if test="${grailsApplication.config.projeto.features == ["lotePagamento", "loteRecebimento"]}">
+                    <li>
+                        <a href="#" class="menu-logado"><i class="fa fa-money"></i> Financeiro<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="loteRecebimento">Lotes Recebimentos Clientes</g:link></li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                </g:if>
 
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-shield fa-fw"></i>&nbsp;Segurança<span class="fa arrow"></span></a>
