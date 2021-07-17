@@ -8,14 +8,14 @@ class DadoBancario {
 	String nomeTitular
 	String documentoTitular
 	TipoTitular tipoTitular
-	
+
+	static transients = ['contaSemMascara']
+
     static constraints = {
 		nomeTitular nullable: true
 		documentoTitular nullable: true
 		tipoTitular nullable: true
     }
-
-	static transients = ['contaSemMascara']
 
 	String getContaSemMascara() {
 		if (this.conta.contains('-')) {

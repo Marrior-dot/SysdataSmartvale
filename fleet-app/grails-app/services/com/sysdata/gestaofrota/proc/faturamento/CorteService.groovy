@@ -293,7 +293,7 @@ class CorteService {
     CortePortador getCorteAberto(Rh rh) {
 
         if (! rh.fechamentos)
-            throw new RuntimeException("Nao ha dias de fechamento definidos para o programa $this")
+            throw new RuntimeException("Nao ha dias de fechamento definidos para o programa #${rh.id}")
 
         CortePortador corteAberto = Corte.withCriteria(uniqueResult: true) {
                                 'in'("fechamento", rh.fechamentos)

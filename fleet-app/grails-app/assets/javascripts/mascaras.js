@@ -35,8 +35,9 @@ function configInputMasks() {
 	$(".cnpj-filial").mask("9999-99", {placeholder: '____-__'});
 	$(".matricula").mask("99999999-9", {placeholder: "________-_"});
 	$(".cvv").mask("999");
-	$(".agencia").mask("9999999999");
-	$(".conta").mask("999999999999");
+	$(".agencia").mask("9999");
+	$(".conta").mask("9999999999");
+	$(".dv").mask("9");
 	$(".number").mask("9999999999999999999");
 	$(".decimalmask").mask("99.9");
 	$('.decimal').mask('#.##0,00', {reverse: true});

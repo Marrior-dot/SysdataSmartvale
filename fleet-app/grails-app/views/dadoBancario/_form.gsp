@@ -15,18 +15,17 @@
 							  from="${Banco.list()}" optionKey="id" optionValue="nome"/>
 				</div>
 			</div>
-
 			<div class="col-xs-4">
 				<bs:formField id="${dadoBancario}.agencia" name="${dadoBancario}.agencia" label="Agência"
-							  value="${dadoBancarioInstance?.agencia}" class="editable"/>
+							  value="${dadoBancarioInstance?.agencia}" class="editable agencia"/>
 			</div>
 
 			<div class="col-xs-4">
 				<bs:formField id="${dadoBancario}.conta" name="${dadoBancario}.conta" label="Nº Conta"
-							  value="${dadoBancarioInstance?.conta}" class="editable"/>
+							  value="${dadoBancarioInstance?.conta}" class="editable conta"/>
 			</div>
-		</div>
 
+		</div>
 		<div class="row">
 			<div class="col-xs-4">
 				<div class="form-group">
