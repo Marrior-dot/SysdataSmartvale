@@ -1,0 +1,22 @@
+#nav-top.navbar-static-top {
+    background: var(--cor-primaria) !important;
+}
+
+.panel-primary > .panel-heading, .panel-default > .panel-heading {
+    background-image: linear-gradient(to right, var(--cor-primaria), var(--cor-secundaria));
+    border-color: var(--cor-secundaria) !important;
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: var(--cor-primaria) !important;
+    border-color: var(--cor-secundaria) !important;
+}
+
+table tbody tr.selected {
+    background-color: var(--cor-primaria) !important;
+}
+
+.btn-login {
+    background-color: var(--cor-secundaria) !important;
+}

@@ -1,0 +1,3 @@
+# Conectar com SFTP e chave privada 
+
+sftp -oIdentityFile=/usr/local/frota/bahiavale/.ssh/id_rsa sysdata@172.17.17.2
