@@ -148,6 +148,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/marcaVeiculo/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/tipoEquipamento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/portadorCorte/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/solicitacaoCartaoProvisorio/**',        access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/loteEmbossing/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/lotePagamento/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
         [pattern: '/loteRecebimento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],

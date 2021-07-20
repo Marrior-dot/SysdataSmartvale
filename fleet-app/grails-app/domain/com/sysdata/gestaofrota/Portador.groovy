@@ -30,6 +30,7 @@ abstract class Portador {
         saldoDiario nullable: true
         saldoMensal nullable: true
         status nullable: true
+        unidade nullable: true
 
         limiteTotal validator: { val, obj ->
 

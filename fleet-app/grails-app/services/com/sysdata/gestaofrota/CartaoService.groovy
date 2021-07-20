@@ -7,13 +7,14 @@ class CartaoService {
     def processamentoService
     def geradorCartao
 
-    synchronized Cartao gerar(Portador portador, comChip = true) {
+    private Cartao gerarCartao(Portador portador, TipoCartao tipoCartao, comChip = true) {
         Administradora administradora = processamentoService.getAdministradoraProjeto()
         Cartao cartaoInstance = new Cartao()
         cartaoInstance.numero = geradorCartao.gerarNumero(administradora, portador)
         cartaoInstance.senha = geradorCartao.gerarSenha()
         cartaoInstance.validade = geradorCartao.gerarDataValidade()
         cartaoInstance.cvv = geradorCartao.gerarCVV()
+        cartaoInstance.tipo = tipoCartao
 
         portador.addToCartoes(cartaoInstance)
         portador.save(flush: true)
@@ -24,6 +25,14 @@ class CartaoService {
         administradora.save(flush: true)
 
         return cartaoInstance
+    }
+
+    synchronized gerarCartaoProvisorio(comChip = true) {
+        return gerarCartao(PortadorAnonimo.unico, TipoCartao.PROVISORIO, comChip)
+    }
+
+    synchronized Cartao gerar(Portador portador, comChip = true) {
+        return gerarCartao(portador, TipoCartao.PADRAO, comChip)
     }
 
     Cartao desbloquear(Cartao cartao) {

@@ -11,6 +11,7 @@ class Cartao {
     Date validade
     String cvv
     Integer via = 1
+    TipoCartao tipo
 
     static belongsTo = [portador: Portador, loteEmbossing: LoteEmbossing]
 
@@ -23,6 +24,7 @@ class Cartao {
         cvv nullable: false, blank: false, maxSize: 3
         via nullable: false
         loteEmbossing nullable: true
+        tipo nullable: true
     }
 
     static namedQueries = {
