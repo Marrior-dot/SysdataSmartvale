@@ -101,7 +101,8 @@ class FechamentoLotePagamentoService implements ExecutableProcessing, CalculoDia
                         lotePagamento.attach()
                     criarLotePagamento(lotePagamento, pagamento, valorPagto, pagtoList, date)
 
-                    lotePagamento.dataEfetivacao = lotePagamento.pagamentos.max { it.dataPrevista }
+                    PagamentoLote maxPagtoLote = lotePagamento.pagamentos.max { it.dataPrevista }
+                    lotePagamento.dataEfetivacao = maxPagtoLote.dataPrevista
                     lotePagamento.status = StatusLotePagamento.FECHADO
                     lotePagamento.save(flush: true)
 
