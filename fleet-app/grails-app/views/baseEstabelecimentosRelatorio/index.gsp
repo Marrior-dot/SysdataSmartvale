@@ -91,7 +91,7 @@
                     <td>${est?.empresa?.endereco?.cidade?.nome}</td>
                     <td>${est?.empresa?.endereco?.cidade?.estado}</td>
                     <td>${est?.empresa?.endereco?.cep}</td>
-                    <td>${est?.email}</td>
+                    <td>${est?.empresa?.email}</td>
                     <td>${est?.empresa?.taxaReembolso}</td>
                     <td>${est?.empresa?.dadoBancario?.banco.nome}</td>
                     <td>${est?.empresa?.dadoBancario?.agencia}</td>
