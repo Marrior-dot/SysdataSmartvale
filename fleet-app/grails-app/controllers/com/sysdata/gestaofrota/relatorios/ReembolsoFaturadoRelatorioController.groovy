@@ -33,8 +33,8 @@ class ReembolsoFaturadoRelatorioController {
                         "banco": it[9],
                         "agencia": it[10],
                         "conta": it[11],
-                        "nomeTitular": it[12],
-                        "docTitular": it[13]
+                        //"nomeTitular": it[12],
+                        //"docTitular": it[13]
                 ]
             }
 
@@ -51,8 +51,8 @@ class ReembolsoFaturadoRelatorioController {
                     "banco": "Banco",
                     "agencia": "Agência",
                     "conta": "Conta",
-                    "nomeTitular": "Nome Titular",
-                    "docTitular": "Doc Titular"
+                    //"nomeTitular": "Nome Titular",
+                    //"docTitular": "Doc Titular"
             ]
 
             def fields = [
@@ -68,8 +68,8 @@ class ReembolsoFaturadoRelatorioController {
                     "banco",
                     "agencia",
                     "conta",
-                    "nomeTitular",
-                    "docTitular"
+                    //"nomeTitular",
+                    //"docTitular"
             ]
 
             exportService.export(params.f, response.outputStream, reembolsoFaturadoReport, fields, labels, [:], [:])

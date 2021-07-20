@@ -55,8 +55,8 @@
                 <th>Banco</th>
                 <th>Agência</th>
                 <th>Conta</th>
-                <th>Nome Titular</th>
-                <th>Doc Titular</th>
+                <!--<th>Nome Titular</th>
+                <th>Doc Titular</th>--!>
                 </thead>
                 <tbody>
                 <g:each in="${reembolsoList}" var="proj">
@@ -73,8 +73,8 @@
                         <td>${proj[9]}</td>
                         <td>${proj[10]}</td>
                         <td>${proj[11]}</td>
-                        <td>${proj[12]}</td>
-                        <td>${proj[13]}</td>
+                        <!--<td>${proj[12]}</td>
+                        <td>${proj[13]}</td>--!>
                     </tr>
                 </g:each>
                 </tbody>
