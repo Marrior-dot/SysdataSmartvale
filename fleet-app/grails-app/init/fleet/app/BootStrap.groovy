@@ -29,7 +29,7 @@ class BootStrap {
         }
 
         fixturesService.init()
-        fleetRoutesService.init()
+        fleetRoutesService.initRoutes()
 
         grailsApplication.serviceClasses.each { srv ->
             srv.metaClass.clearSession = {
