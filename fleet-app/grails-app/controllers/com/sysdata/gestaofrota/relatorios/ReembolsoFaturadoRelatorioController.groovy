@@ -19,6 +19,10 @@ class ReembolsoFaturadoRelatorioController {
             response.setHeader("Content-disposition", "attachment; filename=reembolsoFaturado-${new Date().format('yyMMdd')}.${params.extension}")
 
             def reembolsoFaturadoReport = reembolsoFaturadoService.list(params, false)
+            //D.Lyra 20/07/2021
+            def totalValorB = reembolsoFaturadoReport.sum { it[4] }
+            def totalValorL = reembolsoFaturadoReport.sum { it[5] }
+            def totalValorTAdm = reembolsoFaturadoReport.sum { it[7] }
             reembolsoFaturadoReport = reembolsoFaturadoReport.collect {
                 [
                         "razao": it[0],
@@ -37,6 +41,24 @@ class ReembolsoFaturadoRelatorioController {
                         //"docTitular": it[13]
                 ]
             }
+
+            reembolsoFaturadoReport += [
+
+                    "razao": "",
+                    "nomeFantasia": "",
+                    "cnpj": "",
+                    "data": "Total Geral",
+                    "valorBruto": Util.formatCurrency(totalValorB),
+                    "valorLiquido": Util.formatCurrency(totalValorL),
+                    "taxaAdm": "",
+                    "valorTaxaAdm": Util.formatCurrency(totalValorTAdm),
+                    "status": "",
+                    "banco": "",
+                    "agencia": "",
+                    "conta": "",
+                    //"nomeTitular": it[12],
+                    //"docTitular": it[13]
+            ]
 
             def labels = [
                     "razao": "Razão Social",
