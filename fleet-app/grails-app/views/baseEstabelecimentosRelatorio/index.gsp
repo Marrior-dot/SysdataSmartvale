@@ -30,11 +30,15 @@
                 <div class="panel-body" >
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <label class="control-label" for="NomeFanta">Nome Fantasia</label>
+                        <g:textField name="nFanta" class="form-control nFanta" value="${params.nFanta}"></g:textField>
+                    </div>
+                    <!--<div class="col-md-3">
                         <label class="control-label" for="cnpj">CNPJ</label>
                         <g:textField name="cnpj" class="form-control cnpj" value="${params.cnpj}"></g:textField>
                     </div>
-                   <!-- <div class="col-md-3">
+                    <div class="col-md-3">
                         <label class="control-label" for="dataInicio">Data Inicial</label>
                         <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
                     </div>
