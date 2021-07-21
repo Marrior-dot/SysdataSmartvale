@@ -67,3 +67,6 @@ class ReembolsoFaturadoService {
         return rowsCount ? rowsCount[0] : 0
     }
 }
+
+
+

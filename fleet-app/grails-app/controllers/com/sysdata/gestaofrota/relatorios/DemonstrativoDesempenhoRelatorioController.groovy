@@ -17,10 +17,10 @@ class DemonstrativoDesempenhoRelatorioController {
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=DemonstrativoDesempenho-${new Date().format('yyMMdd')}.${params.extension}")
 
-            def DemonstrativoDesempenhoReport = demonstrativoDesempenhoService.list(params, false)
+            def demonstrativoDesempenhoReport = demonstrativoDesempenhoService.list(params, false)
             //D.Lyra 20/07/2021
-            def totalKmRod = DemonstrativoDesempenhoReport.sum { it[5] }
-            DemonstrativoDesempenhoReport = DemonstrativoDesempenhoReport.collect {
+            def totalKmRod = demonstrativoDesempenhoReport.sum { it[5] }
+            demonstrativoDesempenhoReport = demonstrativoDesempenhoReport.collect {
                 [
                         "placa": it[0],
                         "modelo": it[1],
@@ -33,7 +33,7 @@ class DemonstrativoDesempenhoRelatorioController {
                 ]
             }
 
-            DemonstrativoDesempenhoReport += [
+            demonstrativoDesempenhoReport += [
 
                     "placa": "",
                     "modelo": "",
@@ -64,7 +64,7 @@ class DemonstrativoDesempenhoRelatorioController {
                     "desempenho"
             ]
 
-            exportService.export(params.f, response.outputStream, DemonstrativoDesempenhoReport, fields, labels, [:], [:])
+            exportService.export(params.f, response.outputStream, demonstrativoDesempenhoReport, fields, labels, [:], [:])
 
             return
         }

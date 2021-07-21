@@ -54,6 +54,7 @@
             <th>Empresa</th>
             <th>Unidade</th>
             <th>Km Rodados</th>
+            <th>Lts Abastecidos</th>
             <th>Desempenho (km/l)</th>
             </thead>
 
@@ -66,7 +67,8 @@
                     <td>${csm[5]}</td>
                     <td>${csm[6]}</td>
                     <td>${csm[7]}</td>
-                    <td>${csm[8].round(2)}</td>
+                    <td>${csm[8]}</td>
+                    <td>${csm[9].round(2)}</td>
                 </tr>
             </g:each>
             </tbody>
