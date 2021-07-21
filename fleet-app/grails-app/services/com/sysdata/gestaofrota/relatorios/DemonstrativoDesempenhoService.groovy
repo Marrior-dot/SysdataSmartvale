@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 
+import com.sysdata.gestaofrota.PagamentoEstabelecimento
 import com.sysdata.gestaofrota.StatusControleAutorizacao
 import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Transacao
@@ -8,9 +9,10 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class DemonstrativoDesempenhoService {
 
-    def list(params) {
-
-        def desempenhoList = Transacao.executeQuery("""
+    def list(params,paginate = true) {
+        def pars = [:]
+        def sb = new StringBuilder()
+        sb.append("""
         select
             v.placa,
             v.marca.abreviacao,
@@ -43,16 +45,34 @@ class DemonstrativoDesempenhoService {
 
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0) > 0
 
-        """, [
+        """)
+
+        if (params.placa)
+            sb.append(" and v.placa = ${params.placa}")
+
+        else if (params.unidade) {
+            sb.append(" and v.unidade.id = ${params.unidade as long}")
+        }
+
+        /*if (params.dataInicio && params.dataFim) {
+            sb.append(""" and v.dateCreated >= ${params.date('dataInicio', 'dd/MM/yyyy')} and
+                v.dateCreated <= ${params.date('dataFim', 'dd/MM/yyyy') + 1} """)
+        }*/
+
+        if (paginate)
+            pars += [max: params.max, offset: params.offset]
+
+        return desempenhoList.executeQuery(sb.toString(), [
                 tipo:   TipoTransacao.COMBUSTIVEL,
                 status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]
-        ], [max: params.max ? params.max as int: 10, offset: params.offset ? params.offset as int : 0])
-
-        return desempenhoList
+        ])
     }
 
-    def count() {
-        def desempenhoCount = Transacao.executeQuery("""
+    def count(params) {
+        //def desempenhoCount = Transacao.executeQuery("""
+        def pars = [:]
+        def sb = new StringBuilder()
+        sb.append("""
         select
             count(v.id)
         from
@@ -72,12 +92,21 @@ class DemonstrativoDesempenhoService {
 
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0) > 0
 
-        """, [
+        """)
+                /*, [
                 tipo:   TipoTransacao.COMBUSTIVEL,
                 status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]
         ])
-
-        return desempenhoCount
+        if (params.dataInicio && params.dataFim) {
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+            sb.append(""" and v.dataProgramada >= :dataInicio and p.dataProgramada <= :dataFim """)
+        }*/
+        def rowsCount = desempenhoCount.executeQuery(sb.toString(), [
+                tipo:   TipoTransacao.COMBUSTIVEL,
+                status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]
+        ])
+        return rowsCount ? rowsCount[0] : 0
     }
 
 }
