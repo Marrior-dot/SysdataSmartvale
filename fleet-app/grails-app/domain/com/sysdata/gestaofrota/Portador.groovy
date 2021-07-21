@@ -31,32 +31,32 @@ abstract class Portador {
         saldoMensal nullable: true
         status nullable: true
         unidade nullable: true
+        conta nullable: true
 
         limiteTotal validator: { val, obj ->
-
-            // INSERT
-            if (! obj.id) {
-                def rhLimite = obj.unidade.rh.limiteTotal
-                def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
-
-                if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
-                    return ["portador.limiteTotal.superiorAoComprometido"]
-            // UPDATE
-            } else {
-                def oldValue = obj.getPersistentValue('limiteTotal')
-                def newValue = val
-
-                if (newValue > oldValue) {
-                    def dif = newValue - oldValue
+            if (! obj.instanceOf(PortadorAnonimo)) {
+                // INSERT
+                if (! obj.id) {
                     def rhLimite = obj.unidade.rh.limiteTotal
                     def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
-                    if (rhLimiteComprometido + dif > rhLimite)
+
+                    if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
                         return ["portador.limiteTotal.superiorAoComprometido"]
+                    // UPDATE
+                } else {
+                    def oldValue = obj.getPersistentValue('limiteTotal')
+                    def newValue = val
+
+                    if (newValue > oldValue) {
+                        def dif = newValue - oldValue
+                        def rhLimite = obj.unidade.rh.limiteTotal
+                        def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
+                        if (rhLimiteComprometido + dif > rhLimite)
+                            return ["portador.limiteTotal.superiorAoComprometido"]
+                    }
                 }
             }
-
         }
-
     }
 
     static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone', 'ativo']

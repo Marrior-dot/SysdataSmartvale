@@ -12,7 +12,10 @@ class ProcessamentoController {
     ProcessingService processingService
 
     def index() {
-        [processingList: Processing.list(sort: 'order')]
+        params.max = params.max ? params.max as int : 10
+        params.offset = params.offset ? params.offset as int : 0
+        params.sort = "order"
+        [processingList: Processing.list(params), processingCount: Processing.count()]
     }
 
     def execute(Long id) {
