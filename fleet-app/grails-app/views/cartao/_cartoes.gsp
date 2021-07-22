@@ -1,22 +1,33 @@
-<%@ page import="com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCartao; com.sysdata.gestaofrota.TipoCobranca; com.sysdata.gestaofrota.Util" %>
 
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<button type="button" class="btn btn-default">Vincular Cartão Provisório</button>
+		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#tempCardModal"><span class="glyphicon glyphicon-plus">&nbsp;Cartão Provisório</span></button>
 	</div>
 	<div class="panel-body">
-		<table class="table table-bordered" style="font-size: 12px">
+
+		<g:set var="currentCard" value="${portador?.cartaoAtual}"></g:set>
+
+		<table class="table" style="font-size: 12px">
 			<thead>
 			<tr>
 				<th>Cartão</th>
 				<th>Saldo Total</th>
+				<th>Tipo</th>
+				<g:if test="${currentCard.tipo == TipoCartao.PROVISORIO}">
+				<th></th>
+				</g:if>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<td>${portador?.cartaoAtual}</td>
+				<td>${currentCard}</td>
 				<td>${Util.formatCurrency(portador?.saldoTotal)}</td>
+				<td>${currentCard.tipo?.name}</td>
+				<g:if test="${currentCard.tipo == TipoCartao.PROVISORIO}">
+				<td><button id="btnUnlink" class="btn btn-circle" data-toggle="tooltip" title="Desvincula Cartão do Portador"><span class="glyphicon glyphicon-minus"></span></button></td>
+				</g:if>
 			</tr>
 			</tbody>
 		</table>
@@ -36,10 +47,28 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<div id="responseQueryPayment"></div>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div id="divMessage" hidden>
+							<div class="alert alert-danger" role="alert">
+								<span id="errorMessage" class="glyphicon glyphicon-exclamation-sign"></span>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label>Cartão Provisório</label>
+								<g:textField name="card" class="form-control cartao enable"></g:textField>
+							</div>
+							<div class="col-md-6">
+								<label>Data Limite</label>
+								<g:textField name="limitDate" class="form-control datepicker enable"></g:textField>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary">Vincular Cartão</button>
+				<button type="button" id="btnLink" class="btn btn-primary">Vincular Cartão</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
 			</div>
 		</div>
@@ -48,26 +77,55 @@
 
 
 <script>
+	var tempCardModal = $("#tempCardModal");
 
-/*
-	function consultarRepasseApi(pagtoLoteId) {
-		$("#responseQueryPayment").html("");
-		waitingDialog.show();
-		$.get("${createLink(action: 'queryPayment')}", {id: pagtoLoteId})
-				.done(function(data) {
-					$("#responseQueryPayment").html(data);
-				})
-				.fail(function() {
-					alert("Erro ao conectar servidor!");
-				})
-				.always(function() {
-					waitingDialog.hide();
-				});
+	function linkToCardHolder(cardNumber, cardHolderId, limitDate) {
+		$.get("${createLink(controller: 'vinculoCartaoProvisorio', action: 'linkToCardHolder')}",
+				{
+					cardNumber: cardNumber,
+					cardHolderId: cardHolderId,
+					limitDate: limitDate
+				}
+		).done(function(data) {
+			console.log(data);
+			tempCardModal.modal('hide');
+		}).fail(function(xhr) {
+			var divMessage = tempCardModal.find("#divMessage");
+			divMessage.show();
+			divMessage.find("#errorMessage").text(" " + xhr.responseText);
+			console.log("Erro: ", xhr.responseText);
+		});
 	}
 
-	$('#tempCardModal').on('shown.bs.modal', function (e) {
-		consultarRepasseApi("${pagamentoLote.id}");
+	function unlinkToCardHolder(cardId, cardHolderId) {
+		$.get("${createLink(controller: 'vinculoCartaoProvisorio', action: 'unlinkFromCardHolder')}",
+				{
+					cardId: cardId,
+					cardHolderId: cardHolderId,
+				}
+		).done(function(data) {
+			console.log(data);
+		}).fail(function(xhr) {
+			console.log("Erro: ", xhr.responseText);
+		});
+	}
+
+	tempCardModal.find("#btnLink").click(function() {
+		var cardNumber = $("input[name='card']").val();
+		var limitDate = $("input[name='limitDate']").val();
+		var cardHolderId = "${portador.id}";
+		linkToCardHolder(cardNumber, cardHolderId, limitDate);
+	});
+
+
+	$("#btnUnlink").click(function() {
+
+		if (confirm("Confirma a Desvinculação do Cartão Provisório do Portador?")) {
+			var cardId = "${currentCard.id}";
+			var cardHolderId = "${portador.id}";
+			unlinkToCardHolder(cardId, cardHolderId);
+		}
+
 	})
-*/
 
 </script>

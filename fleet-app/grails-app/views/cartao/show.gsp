@@ -83,6 +83,14 @@
 
 						</g:if>
 
+						<g:if test="${cartaoInstance?.tipo}">
+							<tr>
+								<th>Tipo Cartão</th>
+								<td>${cartaoInstance?.tipo?.name}</td>
+							</tr>
+
+						</g:if>
+
 
 					</table>
 				</div>
