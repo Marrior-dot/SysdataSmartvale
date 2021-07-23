@@ -27,9 +27,9 @@ class IntelcavEmbossingRoutesService {
             void configure() throws Exception {
 
                 def baseDir = grailsApplication.config.projeto.arquivos.baseDir
-                def srcDir = baseDir + grailsApplication.config.projeto.arquivos.paysmart.dir.saida
-                def sentDir = baseDir + grailsApplication.config.projeto.arquivos.paysmart.dir.enviado
-                def tgtDir = grailsApplication.config.projeto.arquivos.paysmart.dir.enviar
+                def srcDir = baseDir + grailsApplication.config.projeto.arquivos.intelcav.dir.saida
+                def sentDir = baseDir + grailsApplication.config.projeto.arquivos.intelcav.dir.enviado
+                def tgtDir = grailsApplication.config.projeto.arquivos.intelcav.dir.enviar
 
                 def host = grailsApplication.config.projeto.sftp.host
                 def port = grailsApplication.config.projeto.sftp.port
@@ -40,7 +40,7 @@ class IntelcavEmbossingRoutesService {
                 def delay = "10m"
                 def indentPath = grailsApplication.config.projeto.arquivos.baseDir + "routes"
 
-                def filenamePattern = "${grailsApplication.config.projeto.cartao.embossing.idCliente}_${Administradora.list().first().bin}_FN_\\d{6}_01.txt"
+                def filenamePattern = "BANP_74_\\d{5}_\\d{8}.txt"
 
                 def fromFile="file://$srcDir?delay=$delay&initialDelay=$initDelay&include=$filenamePattern&move=${sentDir}/\${file:name}.sent"
 

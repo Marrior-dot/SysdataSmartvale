@@ -126,7 +126,10 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
 
     @Transactional
     def marcarEnviado(file) {
-        Arquivo arqEmbossing = Arquivo.findByNome(file.fileName)
+        Arquivo arqEmbossing = Arquivo.withCriteria(uniqueResult: true) {
+                                    like("nome", "%" + file.fileName)
+                                    eq("status", StatusArquivo.GERADO)
+                                }
         if (arqEmbossing) {
 
             LoteEmbossing loteEmbossing = LoteEmbossing.withCriteria(uniqueResult: true) {
@@ -143,9 +146,8 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
                 arqEmbossing.save(flush: true)
                 log.info "Arquivo #$arqEmbossing.id marcado como ${StatusArquivo.ENVIADO}"
 
-            } else {
+            } else
                 log.error "Nenhum Lote Embossing foi encontrado vinculado ao arquivo (${file.fileName})"
-            }
 
         } else
             log.error "Arquivo ($file.fileName) não encontrado na base"

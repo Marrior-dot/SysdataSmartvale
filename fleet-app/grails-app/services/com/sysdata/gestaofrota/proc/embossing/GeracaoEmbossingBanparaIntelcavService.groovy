@@ -21,7 +21,7 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
     @Override
     String gerarNomeArquivo(LoteEmbossing loteEmbossing) {
         def fileDir = grailsApplication.config.projeto.arquivos.baseDir +
-                grailsApplication.config.projeto.arquivos.intelcav.dir.embossing
+                grailsApplication.config.projeto.arquivos.intelcav.dir.saida
 
         def fileName = sprintf("BANP_74_%05d_%s.txt", loteEmbossing.id, new Date().clearTime().format('yyyyMMdd'))
 
