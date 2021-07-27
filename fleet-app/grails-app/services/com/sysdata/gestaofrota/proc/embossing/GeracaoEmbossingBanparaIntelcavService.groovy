@@ -13,6 +13,8 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
     GrailsApplication grailsApplication
     private TDESChipher tdesChipher
 
+    private static final String CARTAO_EXTRA = "CARTAO EXTRA"
+
     @PostConstruct
     def init() {
         tdesChipher = new TDESChipher("CBC", grailsApplication.config.projeto.cartao.embossing.cipher.combinedKey)
@@ -78,28 +80,42 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
 
     private int writeCartao(writer, Cartao cartao, int counter) {
 
-        MaquinaMotorizada maquinaMotorizada = ((cartao.portador) as PortadorMaquina).maquina
-
         def vars = [
                         sequencial: ++counter,
                         cartaoFormatado: cartao.numeroFormatado,
-                        orgao: Util.normalize(cartao.portador.unidade.rh.nomeFantasia.toUpperCase()),
-
-                        placa: maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).placa :
-                                                                        (maquinaMotorizada as Equipamento).codigo,
-
-                        marca: Util.normalize(maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).marca.abreviacao.toUpperCase() :
-                                                                                        (maquinaMotorizada as Equipamento).tipo.abreviacao.toUpperCase()),
-
-                        modelo: Util.normalize(maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).modelo.toUpperCase() :
-                                                                                        (maquinaMotorizada as Equipamento).complementoEmbossing),
-
-                        combustivel: maquinaMotorizada.tipoAbastecimento.nome.toUpperCase(),
-                        trilha1: "B${cartao.numero}^${sprintf('%-26s', Util.normalize(cartao.portador.nomeEmbossing.length() > 26 ? cartao.portador.nomeEmbossing[0..25] : cartao.portador.nomeEmbossing))}^${cartao.validade.format('yyMM')}5060000000000000",
                         trilha2: "${cartao.numero}=${cartao.validade.format('yyMM')}5060000000000000",
                         pinBlock: this.tdesChipher.encrypt(cartao.senha)
                     ]
 
+        if (cartao.tipo == TipoCartao.PROVISORIO) {
+            vars += [
+                orgao: CARTAO_EXTRA,
+                placa: "",
+                marca: "",
+                modelo: "",
+                combustivel: "",
+                trilha1: "B${cartao.numero}^${sprintf('%-26s', "")}^${cartao.validade.format('yyMM')}5060000000000000",
+            ]
+
+        } else {
+            MaquinaMotorizada maquinaMotorizada = ((cartao.portador) as PortadorMaquina).maquina
+            vars += [
+                    orgao: Util.normalize(cartao.portador.unidade.rh.nomeFantasia.toUpperCase()),
+
+                    placa: maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).placa :
+                            (maquinaMotorizada as Equipamento).codigo,
+
+                    marca: Util.normalize(maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).marca.abreviacao.toUpperCase() :
+                            (maquinaMotorizada as Equipamento).tipo.abreviacao.toUpperCase()),
+
+                    modelo: Util.normalize(maquinaMotorizada.instanceOf(Veiculo) ? (maquinaMotorizada as Veiculo).modelo.toUpperCase() :
+                            (maquinaMotorizada as Equipamento).complementoEmbossing),
+
+                    combustivel: maquinaMotorizada.tipoAbastecimento.nome.toUpperCase(),
+                    trilha1: "B${cartao.numero}^${sprintf('%-26s', Util.normalize(cartao.portador.nomeEmbossing.length() > 26 ? cartao.portador.nomeEmbossing[0..25] : cartao.portador.nomeEmbossing))}^${cartao.validade.format('yyMM')}5060000000000000"
+            ]
+
+        }
         writer.writeRecord("D", vars)
         return counter
     }
