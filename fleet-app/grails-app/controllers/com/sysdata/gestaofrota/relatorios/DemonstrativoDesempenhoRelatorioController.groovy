@@ -19,7 +19,7 @@ class DemonstrativoDesempenhoRelatorioController {
 
             def demonstrativoDesempenhoReport = demonstrativoDesempenhoService.list(params, false)
             //D.Lyra 20/07/2021
-            def totalKmRod = demonstrativoDesempenhoReport.sum { it[5] }
+            //def totalKmRod = demonstrativoDesempenhoReport.sum { it[5] }
             demonstrativoDesempenhoReport = demonstrativoDesempenhoReport.collect {
                 [
                         "placa": it[0],
@@ -33,7 +33,7 @@ class DemonstrativoDesempenhoRelatorioController {
                 ]
             }
 
-            demonstrativoDesempenhoReport += [
+            /*demonstrativoDesempenhoReport += [
 
                     "placa": "",
                     "modelo": "",
@@ -42,7 +42,7 @@ class DemonstrativoDesempenhoRelatorioController {
                     "unidade": "TOTAL GERAL",
                     "kmRodados": totalKmRod,
                     "desempenho": ""
-            ]
+            ]*/
 
             def labels = [
                     "placa": "Placa",

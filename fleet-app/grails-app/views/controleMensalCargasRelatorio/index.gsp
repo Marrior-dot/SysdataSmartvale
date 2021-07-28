@@ -1,6 +1,3 @@
-<%@ page import="com.sysdata.gestaofrota.PedidoCarga" %>
-<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +47,7 @@
 
         </g:form>
 
-        <div class="table-responsive">
+        <!--<div class="table-responsive">-->
 
         <table class="table table-bordered table-stripped table-responsive ">
             <thead>
@@ -94,7 +91,7 @@
 
             </tfoot>
         </table>
-        </div>
+        <!--</div>-->
 
         <g:paginate total="${controleMensalCargasCount}" />
 

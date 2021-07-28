@@ -1,17 +1,11 @@
 package com.sysdata.gestaofrota.relatorios
 
-
-import grails.core.GrailsApplication
-import com.sysdata.gestaofrota.Funcionario
-import com.sysdata.gestaofrota.ItemPedidoParticipante
+import com.sysdata.gestaofrota.Util
 
 
 class ControleMensalCargasRelatorioController {
 
     def exportService
-
-    GrailsApplication grailsApplication
-
 
     ControleMensalCargasService controleMensalCargasService
 

@@ -76,7 +76,7 @@
 
         <g:paginate total="${consumoCount}" />
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 </body>
