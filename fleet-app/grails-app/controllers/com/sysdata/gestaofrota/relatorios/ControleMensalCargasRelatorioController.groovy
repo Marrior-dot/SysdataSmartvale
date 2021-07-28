@@ -22,16 +22,48 @@ class ControleMensalCargasRelatorioController {
             response.setHeader("Content-disposition", "attachment; filename=controleMensalCargas.${params.extension}")
 
 
-            List fields = ["pedido.unidade.rh.nomeFantasia", "pedido.unidade.nome","pedido.id","pedido.dateCreated",
-                           "pedido.dataCarga", "pedido.status","participante.matricula","participante.nome",
-                           "valor", "pedido.itens.valor.sum()", "pedido.taxa", "pedido.taxaDesconto", "pedido.validade",
-                          ]
+/*
+            [
+                    cliente: it.pedido.unidade.rh.nomeFantasia,
+                    unidade: it.pedido.unidade.nome,
+                    pedidoId: it.pedido.id,
+                    pedidoDataCriacao: it.pedido.dateCreated,
+                    pedidoDataCarga: it.pedido.dataCarga,
+                    identificadorMaquina: it.maquina.identificacaoCompacta,
+                    valor: it.valor,
+                    pedidoTotal: it.pedido.itens.sum { it.valor },
+                    pedidoTaxa: it.pedido.taxa,
+                    pedidoTaxaDesconto: it.pedido.taxaDesconto,
+                    pedidoValidade: it.pedido.validade
+            ]
+*/
 
-            Map labels = ["pedido.unidade.rh.nomeFantasia": "Cliente", "pedido.unidade.nome": "Unidade","pedido.id": "Cod Pedido",
-                          "pedido.dateCreated": "Data Pedido", "pedido.dataCarga": "Data Carga","pedido.status": "Status",
-                          "participante.matricula": "Matricula","participante.nome": "Funcionario", "valor": "Valor Carga",
-                          "pedido.itens.valor.sum()": "Valor total Pedido", "pedido.taxa": "Taxa(%),",
-                          "pedido.taxaDesconto": "Taxa Desconto(%)","pedido.validade": "Validade(dias)"]
+
+            List fields =             [
+                    "cliente",
+                    "unidade",
+                    'pedidoId',
+                    'pedidoDataCriacao',
+                    'pedidoDataCarga',
+                    'identificadorMaquina',
+                    'valor',
+                    'pedidoTotal',
+                    'pedidoTaxa',
+                    'pedidoTaxaDesconto',
+                    'pedidoValidade'
+            ]
+
+            Map labels = ["cliente": "Cliente",
+                          "unidade": "Unidade",
+                          "pedidoId": "Cod Pedido",
+                          "pedidoDataCriacao": "Data Pedido",
+                          "pedidoDataCarga": "Data Carga",
+                          'identificadorMaquina': "Placa/Cod.Equip.",
+                          "valor": "Valor Carga",
+                          "pedidoTotal": "Valor total Pedido",
+                          "pedidoTaxa": "Taxa(%),",
+                          "pedidoTaxaDesconto": "Taxa Desconto(%)",
+                          "pedidoValidade": "Validade(dias)"]
 
 
             //  Map formatters = [author: upperCase]

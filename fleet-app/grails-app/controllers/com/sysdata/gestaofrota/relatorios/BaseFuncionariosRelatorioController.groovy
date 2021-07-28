@@ -24,17 +24,44 @@ class BaseFuncionariosRelatorioController {
             response.setHeader("Content-disposition", "attachment; filename=baseFuncionarios.${params.extension}")
 
 
-            List fields = ["unidade.rh.nomeFantasia", "unidade.nome","matricula", "nome", "cpf","portador.cartaoAtual.numero",
-                           "cnh", "categoriaCnh.nome", "validadeCnh", "email", "telefone", "portador.endereco.logradouro",
-                           "portador.endereco.numero","portador.endereco.complemento", "portador.endereco.bairro",
-                           "portador.endereco.cidade.nome", "portador.endereco.cidade.estado", "portador.endereco.cep"]
+            List fields = [
+                            "unidade.rh.nomeFantasia",
+                           "unidade.nome",
+                           "matricula",
+                           "nome",
+                           "cpf",
+                           "portador.cartaoAtual.numero",
+                           "cnh",
+                           "categoriaCnh.nome",
+                           "validadeCnh",
+                           "email",
+                           "telefone",
+                           "endereco.logradouro",
+                           "endereco.numero",
+                           "endereco.complemento",
+                           "endereco.bairro",
+                           "endereco.cidade.nome",
+                           "endereco.cidade.estado",
+                           "endereco.cep"]
 
-            Map labels = ["unidade.rh.nomeFantasia": "Cliente", "unidade.nome": "Unidade","matricula": "Matrícula",
-                          "nome": "Nome", "cpf": "CPF","portador.cartaoAtual.numero": "Cartão","cnh": "CNH",
-                          "categoriaCnh.nome": "CNH Categoria", "validadeCnh": "CNH Validade", "email": "Email", "telefone": "Telefone,",
-                          "portador.endereco.logradouro": "Logradouro","portador.endereco.numero": "Numero",
-                          "portador.endereco.complemento": "Complemento", "portador.endereco.bairro": "Bairro",
-                          "portador.endereco.cidade.nome": "Cidade","portador.endereco.cidade.estado": "Estado","portador.endereco.cep": "Cep" ]
+            Map labels = ["unidade.rh.nomeFantasia": "Cliente",
+                          "unidade.nome": "Unidade",
+                          "matricula": "Matrícula",
+                          "nome": "Nome",
+                          "cpf": "CPF",
+                          "portador.cartaoAtual.numero": "Cartão",
+                          "cnh": "CNH",
+                          "categoriaCnh.nome": "CNH Categoria",
+                          "validadeCnh": "CNH Validade",
+                          "email": "Email",
+                          "telefone": "Telefone",
+                          "endereco.logradouro": "Logradouro",
+                          "endereco.numero": "Numero",
+                          "endereco.complemento": "Complemento",
+                          "endereco.bairro": "Bairro",
+                          "endereco.cidade.nome": "Cidade",
+                          "endereco.cidade.estado": "Estado",
+                          "endereco.cep": "Cep" ]
 
 
             //  Map formatters = [author: upperCase]
@@ -43,7 +70,6 @@ class BaseFuncionariosRelatorioController {
             exportService.export(params.f,
                                 response.outputStream,
                                 baseFuncionariosService.list(params, false),
-
                                 fields,
                                 labels, [:], [:])
             return 
