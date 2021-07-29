@@ -29,14 +29,14 @@
                             <label class="control-label" for="placa">Placa</label>
                             <g:textField name="placa" class="form-control placa" value="${params.placa}"></g:textField>
                         </div>
-                        <div class="col-md-3">
+                        <!--<div class="col-md-3">
                             <label class="control-label" for="dataInicio">Data Inicial</label>
                             <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
                         </div>
                         <div class="col-md-3">
                             <label class="control-label" for="dataFim">Data Final</label>
                             <g:textField name="dataFim" class="form-control datepicker" value="${params.dataFim}"></g:textField>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
 

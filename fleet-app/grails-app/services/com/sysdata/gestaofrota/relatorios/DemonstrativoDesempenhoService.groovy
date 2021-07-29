@@ -46,7 +46,15 @@ class DemonstrativoDesempenhoService {
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0) > 0
 
         """)
+        if (params.dataInicio && params.dataFim) {
 
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+
+            sb.append("""
+                and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
+
+        }
         if (params.placa)
             sb.append(" and v.placa = '${params.placa}'")
 
@@ -92,6 +100,15 @@ class DemonstrativoDesempenhoService {
 
         else if (params.unidade) {
             sb.append(" and v.unidade.id = ${params.unidade.toLong()}")
+        }
+        if (params.dataInicio && params.dataFim) {
+
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+
+            sb.append("""
+                and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
+
         }
 
         def rowsCount = Transacao.executeQuery(sb.toString(), [

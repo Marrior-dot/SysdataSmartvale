@@ -1,6 +1,8 @@
 package com.sysdata.gestaofrota.relatorios
 
 import com.sysdata.gestaofrota.Equipamento
+import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.Unidade
 import com.sysdata.gestaofrota.Util
 import com.sysdata.gestaofrota.Veiculo
 
@@ -16,6 +18,74 @@ class HistoricoFrotaRelatorioController {
         if (params?.f && params.f != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=historicoFrota.${params.extension}")
+
+            def cabecalhoHistoricoFrotaRelatorio = []
+            def cabecalho = [:]
+            cabecalho.nsu = "EMISSAO"
+            cabecalho.dataHora = new Date().format('dd/MM/yyyy')
+            cabecalhoHistoricoFrotaRelatorio << cabecalho
+
+            def cabecalho1 = [:]
+            if (params.empresa) {
+                cabecalho1.nsu = "EMPRESA"
+                Rh empresaCliente = Rh.get(params.empresa.toLong())
+                cabecalho1.dataHora = empresaCliente.nomeFantasia
+                cabecalhoHistoricoFrotaRelatorio << cabecalho1
+            }
+            def cabecalho2 = [:]
+            if (params.unidade) {
+                cabecalho2.nsu = "UNIDADE"
+                Unidade unidade = Unidade.get(params.unidade.toLong())
+                cabecalho2.dataHora = unidade.nome
+                cabecalhoHistoricoFrotaRelatorio << cabecalho2
+            }
+            def cabecalho3 = [:]
+            if (params.placa) {
+                cabecalho3.nsu = "PLACA"
+                cabecalho3.dataHora = params.placa
+                cabecalhoHistoricoFrotaRelatorio << cabecalho3
+            }
+            def cabecalho4 = [:]
+            if (params.codigo) {
+                cabecalho4.nsu = "PLACA"
+                cabecalho4.dataHora = params.placa
+                cabecalhoHistoricoFrotaRelatorio << cabecalho4
+            }
+            def cabecalho5 = [:]
+            if (params.dataInicio) {
+                cabecalho5.nsu = "DT. Inicio"
+                cabecalho5.dataHora = params.dataInicio
+                cabecalhoHistoricoFrotaRelatorio << cabecalho5
+            }
+            def cabecalho6 = [:]
+            if (params.dataFim) {
+                cabecalho6.nsu = "DT. Fim"
+                cabecalho6.dataHora = params.dataFim
+                cabecalhoHistoricoFrotaRelatorio << cabecalho6
+            }
+
+            def cabecalho7 = [:]
+            cabecalho7.nsu = ""
+            cabecalhoHistoricoFrotaRelatorio << cabecalho7
+
+            def cabecalho8 = [:]
+            cabecalho8.nsu = "NSU"
+            cabecalho8.dataHora = "DATA/HORA"
+            cabecalho8.terminal = "TERMINAL"
+            cabecalho8.estabelecimento = "ESTABELECIMENTO"
+            cabecalho8.veiculo = "VEICULO"
+            cabecalho8.km = "HODOMETRO"
+            cabecalho8.equipamento = "EQUIPAMENTO"
+            cabecalho8.funcionario = "FUNCIONARIO"
+            cabecalho8.produtos = "VALOR TOTAL"
+            cabecalho8.precoUnitario = "PRODUTOS"
+            cabecalho8.valor = "QTD LITROS"
+            cabecalho8.litros = "PREÇO UNITARIO"
+            cabecalho8.cliente = "CLIENTE"
+            cabecalho8.unidade = "UNIDADE"
+            cabecalho8.tipoTransacao = "TIPO TRANSACAO"
+            cabecalho8.statusTransacao = "STATUS"
+            cabecalhoHistoricoFrotaRelatorio << cabecalho8
 
             def reportList = historicoFrotaService.list(params, false)
 
@@ -35,6 +105,7 @@ class HistoricoFrotaRelatorioController {
                                     "precoUnitario": Util.formatCurrency(tr.precoUnitario),
                                     "valor": Util.formatCurrency(tr.valor),
                                     "litros": tr.qtd_litros,
+                                    "cliente": tr.cartao.portador.unidade.rh.nome,
                                     "unidade": tr.cartao.portador.unidade.nome,
                                     "tipoTransacao": tr.tipo.nome,
                                     "statusTransacao": tr.statusControle.nome,
@@ -42,8 +113,21 @@ class HistoricoFrotaRelatorioController {
                                 ]
                             }
 
-            reportList += ["nsu": "", "dataHora": "", "terminal": "", "estabelecimento": "", "veiculo": "", "km": "", "equipamento": "", "funcionario": "",
-                    "produtos": "", "precoUnitario": "", "valor": "", "litros": "", "unidade": "", "tipoTransacao": "", "statusTransacao": ""
+            reportList += ["nsu": "",
+                           "dataHora": "",
+                           "terminal": "",
+                           "estabelecimento": "",
+                           "veiculo": "",
+                           "km": "",
+                           "equipamento": "",
+                           "funcionario": "",
+                           "produtos": "",
+                           "precoUnitario": "",
+                           "valor": "",
+                           "litros": "",
+                           "unidade": "",
+                           "tipoTransacao": "",
+                           "statusTransacao": ""
             ]
 
 
@@ -62,6 +146,7 @@ class HistoricoFrotaRelatorioController {
                     "precoUnitario": "",
                     "valor": Util.formatCurrency(totalValor),
                     "litros": "",
+                    "cliente": "",
                     "unidade": "",
                     "tipoTransacao": "",
                     "statusTransacao": ""
@@ -81,6 +166,7 @@ class HistoricoFrotaRelatorioController {
                             "valor",
                             "litros",
                             "precoUnitario",
+                            "cliente",
                             "unidade",
                             "tipoTransacao",
                             "statusTransacao"
@@ -100,6 +186,7 @@ class HistoricoFrotaRelatorioController {
                             "produtos": "Produtos",
                             "litros": "Qtde Litros",
                             "precoUnitario": "Preço Unitário",
+                            "cliente": "cliente",
                             "unidade": "Unidade",
                             "tipoTransacao": "Tipo Transação",
                             "statusTransacao": "Status"
@@ -111,9 +198,11 @@ class HistoricoFrotaRelatorioController {
 
             exportService.export(params.f,
                                 response.outputStream,
-                                reportList,
+                    cabecalhoHistoricoFrotaRelatorio+reportList,
                                 fields,
-                                labels, [:], [:])
+                                labels,
+                                [:],
+                                ['header.enabled': false])
 
             return
 

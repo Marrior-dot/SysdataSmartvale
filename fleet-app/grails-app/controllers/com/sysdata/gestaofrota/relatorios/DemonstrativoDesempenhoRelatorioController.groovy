@@ -1,7 +1,12 @@
 package com.sysdata.gestaofrota.relatorios
 
 import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.Unidade
 import com.sysdata.gestaofrota.Util
+import jxl.write.DateTime
+import sun.util.calendar.BaseCalendar
+
+import java.time.format.DateTimeFormatter
 
 class DemonstrativoDesempenhoRelatorioController {
 
@@ -21,12 +26,61 @@ class DemonstrativoDesempenhoRelatorioController {
             def cabecalhoDemonstrativoRelatorio = []
 
             def cabecalho = [:]
-            if (params.empresa) {
-                cabecalho.placa = "Empresa Cliente"
-                Rh empresaCliente = Rh.get(params.empresa.toLong())
-                cabecalho.modelo = empresaCliente.nomeFantasia
-            }
+            cabecalho.placa = "EMISSAO"
+            cabecalho.modelo = new Date().format('dd/MM/yyyy')
             cabecalhoDemonstrativoRelatorio << cabecalho
+
+            def cabecalho1 = [:]
+            if (params.empresa) {
+                cabecalho1.placa = "EMPRESA"
+                Rh empresaCliente = Rh.get(params.empresa.toLong())
+                cabecalho1.modelo = empresaCliente.nomeFantasia
+                cabecalhoDemonstrativoRelatorio << cabecalho1
+            }
+            def cabecalho2 = [:]
+            if (params.unidade) {
+                cabecalho2.placa = "UNIDADE"
+                Unidade unidade = Unidade.get(params.unidade.toLong())
+                cabecalho2.modelo = unidade.nome
+                cabecalhoDemonstrativoRelatorio << cabecalho2
+            }
+            def cabecalho3 = [:]
+            if (params.placa) {
+                cabecalho3.placa = "PLACA"
+                cabecalho3.modelo = params.placa
+                cabecalhoDemonstrativoRelatorio << cabecalho3
+            }
+            def cabecalho4 = [:]
+            if (params.dataInicio) {
+                cabecalho4.placa = "DT. Inicio"
+                cabecalho4.modelo = params.dataInicio
+                cabecalhoDemonstrativoRelatorio << cabecalho4
+            }
+            def cabecalho5 = [:]
+            if (params.dataFim) {
+                cabecalho5.placa = "DT. Fim"
+                cabecalho5.modelo = params.dataFim
+                cabecalhoDemonstrativoRelatorio << cabecalho5
+            }
+
+            def cabecalho6 = [:]
+            cabecalho6.placa = ""
+            cabecalhoDemonstrativoRelatorio << cabecalho6
+
+            def cabecalho7 = [:]
+            cabecalho7.placa = "Placa"
+            cabecalho7.modelo = "Marca/Modelo"
+            cabecalho7.funcionario = "Funcionário"
+            cabecalho7.empresa = "Empresa"
+            cabecalho7.unidade = "Unidade"
+            cabecalho7.kmRodados = "Km Rodados"
+            cabecalho7.litros = "Lts Abastecidos"
+            cabecalho7.desempenho = "Desempenho (km/l)"
+            //cabecalhoDemonstrativoRelatorio << cabecalho
+            //cabecalhoDemonstrativoRelatorio << cabecalho1
+            //cabecalhoDemonstrativoRelatorio << cabecalho2
+            cabecalhoDemonstrativoRelatorio << cabecalho7
+
 
 
 /*
@@ -53,6 +107,7 @@ class DemonstrativoDesempenhoRelatorioController {
 
 
             demonstrativoDesempenhoReport = demonstrativoDesempenhoReport.collect {
+
                 [
                     "placa": it[0],
                     "modelo": "${it[1]} / ${it[2]}",
@@ -98,7 +153,7 @@ class DemonstrativoDesempenhoRelatorioController {
                     "desempenho"
             ]
 
-            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio + demonstrativoDesempenhoReport, fields, labels, [:], ['header.enabled': false])
+            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+demonstrativoDesempenhoReport, fields, labels, [:], [/*:*/'header.enabled': false])
 
             return
         }
