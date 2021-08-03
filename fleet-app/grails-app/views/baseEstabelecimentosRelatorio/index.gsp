@@ -114,9 +114,9 @@
         </table>
         </div>
 
-        <g:paginate total="${baseEstabelecimentosList}" />
+        <g:paginate total="${baseEstabelecimentosList}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 
