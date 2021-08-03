@@ -56,12 +56,12 @@
             <th>Codigo Pedido</th>
             <th>Data Pedido</th>
             <th>Data da Carga</th>
-            %{--<th>Status</th>--}%
+            <!--<th>Status</th>-->
             <th>Placa/Cod Equip.</th>
             <th>Valor Carga</th>
-            <th>Total Pedido (- taxa)</th>
+            <!--<th>Total Pedido (- taxa)</th>
             <th>Taxa(%)</th>
-            <th>Taxa Desconto</th>
+            <th>Taxa Desconto</th>-->
             <th>Validade(dias) </th>
 
             </thead>
@@ -76,9 +76,9 @@
                     %{--<td>${carga.pedido.status}</td>--}%
                     <td>${carga.identificadorMaquina}</td>
                     <td>${carga?.valor}
-                    <td>${carga?.pedidoTotal}</td>
+                    <!--<td>${carga?.pedidoTotal}</td>
                     <td>${carga?.pedidoTaxa}</td>
-                    <td>${carga.pedidoTaxaDesconto}</td>
+                    <td>${carga.pedidoTaxaDesconto}</td>-->
                     <td>${carga.pedidoValidade}</td>
                 </tr>
             </g:each>
@@ -91,7 +91,7 @@
 
         <g:paginate total="${controleMensalCargasCount}" />
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 

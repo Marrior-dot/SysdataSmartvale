@@ -50,7 +50,7 @@
             <thead>
             <th>Placa</th>
             <th>Marca/Modelo</th>
-            <th>Empresa</th>
+            <!--<th>Empresa</th>-->
             <th>Unidade</th>
             <th>Produto</th>
             <th>Consumo (lts)</th>

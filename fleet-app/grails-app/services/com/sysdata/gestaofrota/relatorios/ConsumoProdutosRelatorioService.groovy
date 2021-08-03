@@ -12,31 +12,16 @@ class ConsumoProdutosRelatorioService {
         def sb = new StringBuilder()
         sb.append("""
         select
-            v.placa,
-            v.marca.abreviacao,
-            v.modelo,
+            v.identificacaoCompacta,
             v.unidade.rh.nome,
             v.unidade.nome,
             p.nome,
-            sum(t.qtd_litros),
-        
-            (
-                select t1.quilometragem from Transacao t1 where t1.id =
-                    (select max(tu.id) from Transacao tu where tu.maquina = t.maquina and tu.tipo = 'COMBUSTIVEL'
-                        and tu.statusControle in ('PENDENTE', 'CONFIRMADA'))
-        
-                -
-        
-                select t2.quilometragem from Transacao t2 where t2.id =
-                    (select min(ti.id) from Transacao ti where ti.maquina = t.maquina and ti.tipo = 'COMBUSTIVEL'
-                        and ti.statusControle = 'CONFIRMADA')
-        
-            )  as teste
+            sum(t.qtd_litros)
         
         from
-            Transacao as t,
-            Veiculo as v,
-            TransacaoProduto as tp,
+            Transacao t,
+            Veiculo v,
+            TransacaoProduto tp,
             Produto p
         
         where
@@ -46,17 +31,17 @@ class ConsumoProdutosRelatorioService {
             t.statusControle in :status
         """)
 
-        if (params.placa)
+        /*if (params.placa)
             sb.append(" and v.placa = ${params.placa}")
 
         else if (params.unidade) {
             sb.append(" and v.unidade.id = ${params.unidade as long}")
-        }
+        }*/
 
-        if (params.dataInicio && params.dataFim) {
+       /* if (params.dataInicio && params.dataFim) {
             sb.append(""" and t.dateCreated >= ${params.date('dataInicio', 'dd/MM/yyyy')} and
                 t.dateCreated <= ${params.date('dataFim', 'dd/MM/yyyy') + 1} """)
-        }
+        }*/
         sb.append("""
 group by
         v.placa,
@@ -64,8 +49,7 @@ group by
         v.modelo,
         v.unidade.rh.nome,
         v.unidade.nome,
-        p.nome,
-        teste
+        p.nome
 having
     sum(t.qtd_litros) > 0
 
@@ -73,10 +57,28 @@ having
 order by
     v.placa
 """)
-        return Transacao.executeQuery(sb.toString(), [
+        def consumoProdutoList
+        consumoProdutoList = Transacao.executeQuery(sb.toString(), [
                 status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA],
                 max: params.max ? params.max as int : 10, offset: params.offset ? params.offset as int : 0
         ], pars)
+
+        consumoProdutoList = consumoProdutoList.collect {
+            [
+                    "placa": it[0],
+                    "marca": it[1] / it[2],
+                    "rh": it[3],
+                    "unidade": it[4],
+                    "produto": it[5],
+                    "consudmo": it[6],
+                    //"quilometragem": it[7],
+            ]
+        }
+        return consumoProdutoList
+        /*return Transacao.executeQuery(sb.toString(), [
+                status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA],
+                max: params.max ? params.max as int : 10, offset: params.offset ? params.offset as int : 0
+        ], pars)*/
     }
 
     def count(params) {
@@ -85,9 +87,9 @@ order by
         select
             count(v.id)        
         from
-            Transacao as t,
-            Veiculo as v,
-            TransacaoProduto as tp,
+            Transacao t,
+            Veiculo v,
+            TransacaoProduto tp,
             Produto p
         
         where

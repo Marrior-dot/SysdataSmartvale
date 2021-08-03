@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota.relatorios
 
+import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.Unidade
 import com.sysdata.gestaofrota.Util
 
 
@@ -21,6 +23,52 @@ class ControleMensalCargasRelatorioController {
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=controleMensalCargas.${params.extension}")
 
+            def cabecalhoMensalCargasRelatorio = []
+            def cabecalho = [:]
+            cabecalho.cliente = "EMISSAO"
+            cabecalho.unidade = new Date().format('dd/MM/yyyy')
+            cabecalhoMensalCargasRelatorio << cabecalho
+
+            def cabecalho1 = [:]
+            if (params.empresa) {
+                cabecalho1.cliente = "EMPRESA"
+                Rh empresaCliente = Rh.get(params.empresa.toLong())
+                cabecalho1.unidade = empresaCliente.nomeFantasia
+                cabecalhoMensalCargasRelatorio << cabecalho1
+            }
+            def cabecalho2 = [:]
+            if (params.unidade) {
+                cabecalho2.cliente = "UNIDADE"
+                Unidade unidade = Unidade.get(params.unidade.toLong())
+                cabecalho2.unidade = unidade.nome
+                cabecalhoMensalCargasRelatorio << cabecalho2
+            }
+            def cabecalho3 = [:]
+            if (params.dataInicio) {
+                cabecalho3.cliente = "DT. Inicio"
+                cabecalho3.unidade = params.dataInicio
+                cabecalhoMensalCargasRelatorio << cabecalho3
+            }
+            def cabecalho4 = [:]
+            if (params.dataFim) {
+                cabecalho4.cliente = "DT. Fim"
+                cabecalho4.unidade = params.dataFim
+                cabecalhoMensalCargasRelatorio << cabecalho4
+            }
+            def cabecalho5 = [:]
+            cabecalho5.cliente = ""
+            cabecalhoMensalCargasRelatorio << cabecalho5
+
+            def cabecalho6 = [:]
+            cabecalho6.cliente = "CLIENTE"
+            cabecalho6.unidade = "UNIDADE"
+            cabecalho6.pedidoId = "COD. PEDIDO"
+            cabecalho6.pedidoDataCriacao = "DT PEDIDO"
+            cabecalho6.pedidoDataCarga = "DT CARGA"
+            cabecalho6.identificadorMaquina = "PLACA/COD. EQUIP"
+            cabecalho6.valor = "VALOR CARGA"
+            cabecalho6.pedidoValidade = "VALIDADE"
+            cabecalhoMensalCargasRelatorio << cabecalho6
 
 /*
             [
@@ -37,7 +85,20 @@ class ControleMensalCargasRelatorioController {
                     pedidoValidade: it.pedido.validade
             ]
 */
-
+            //Pedir ajuda ao Luiz como totalizar as cargas no Excel fizemos o collection no Service, por isso o problema.
+            /*def report = controleMensalCargasService.list(params, false)
+            def totalValorC = report.sum { it.valor }
+            report +=
+                    [
+                            cliente: "",
+                            unidade: "",
+                            pedidoId:"",
+                            pedidoDataCriacao: "",
+                            pedidoDataCarga: "",
+                            identificadorMaquina: "TOTAL CARGA",
+                            valor: Util.formatCurrency(totalValorC),
+                            pedidoValidade: ""
+                    ]*/
 
             List fields =             [
                     "cliente",
@@ -47,9 +108,9 @@ class ControleMensalCargasRelatorioController {
                     'pedidoDataCarga',
                     'identificadorMaquina',
                     'valor',
-                    'pedidoTotal',
+                    /*'pedidoTotal',
                     'pedidoTaxa',
-                    'pedidoTaxaDesconto',
+                    'pedidoTaxaDesconto',*/
                     'pedidoValidade'
             ]
 
@@ -60,9 +121,9 @@ class ControleMensalCargasRelatorioController {
                           "pedidoDataCarga": "Data Carga",
                           'identificadorMaquina': "Placa/Cod.Equip.",
                           "valor": "Valor Carga",
-                          "pedidoTotal": "Valor total Pedido",
+                          /*"pedidoTotal": "Valor total Pedido",
                           "pedidoTaxa": "Taxa(%),",
-                          "pedidoTaxaDesconto": "Taxa Desconto(%)",
+                          "pedidoTaxaDesconto": "Taxa Desconto(%)",*/
                           "pedidoValidade": "Validade(dias)"]
 
 
@@ -71,10 +132,10 @@ class ControleMensalCargasRelatorioController {
 
             exportService.export(params.f,
                                 response.outputStream,
-                                controleMensalCargasService.list(params, false),
+                    cabecalhoMensalCargasRelatorio+controleMensalCargasService.list(params, false),
 
                                 fields,
-                                labels, [:], [:])
+                                labels, [:], ['header.enabled': false])
             return
         }
 

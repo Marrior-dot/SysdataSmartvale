@@ -39,13 +39,13 @@ class ControleMensalCargasService {
             if (params.dataInicio){
 
                 pedido{
-                    gt('dateCreated', params.dataInicio)
+                    gt('dateCreated', params.date('dataInicio', 'dd/MM/yyyy'))
                 }
             }
 
             if (params.dataFim) {
                 pedido{
-                    lt('dateCreated', params.dataFim)
+                    lt('dateCreated', params.date('dataFim', 'dd/MM/yyyy'))
                 }
             }
         }
@@ -71,7 +71,7 @@ class ControleMensalCargasService {
             itensPedidoList = ItemPedido.createCriteria().list([max: params.max, offset: params.offset], criteria)
         else
             itensPedidoList = ItemPedido.createCriteria().list(criteria)
-
+        //def totalValorC = itensPedidoList.sum { it.valor }
         itensPedidoList = itensPedidoList.collect {
             [
                 cliente: it.pedido.unidade.rh.nomeFantasia,
@@ -81,11 +81,22 @@ class ControleMensalCargasService {
                 pedidoDataCarga: it.pedido.dataCarga,
                 identificadorMaquina: it.maquina.identificacaoCompacta,
                 valor: Util.formatCurrency(it.valor),
-                pedidoTotal: Util.formatCurrency(it.pedido.itens.sum { it.valor }),
+               /* pedidoTotal: Util.formatCurrency(it.pedido.itens.sum { it.valor }),
                 pedidoTaxa: it.pedido.taxa,
-                pedidoTaxaDesconto: it.pedido.taxaDesconto,
+                pedidoTaxaDesconto: it.pedido.taxaDesconto,*/
                 pedidoValidade: it.pedido.validade
             ]
+            /*itensPedidoList +=
+            [
+                cliente: "",
+                unidade: "",
+                pedidoId:"",
+                pedidoDataCriacao: "",
+                pedidoDataCarga: "",
+                identificadorMaquina: "TOTAL CARGA",
+                valor: Util.formatCurrency(totalValorC),
+                pedidoValidade: ""
+            ]*/
         }
         return itensPedidoList
 
@@ -116,18 +127,17 @@ class ControleMensalCargasService {
                 }
             }
 
-
             if (pars.dataInicio){
 
                 pedido{
-                    gt('dateCreated', pars.dataInicio)
+                    gt('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
                 }
             }
 
             if (pars.dataFim) {
 
                 pedido{
-                    lt('dateCreated', pars.dataFim)
+                    lt('dateCreated', pars.date('dataFim', 'dd/MM/yyyy'))
                 }
             }
         }
