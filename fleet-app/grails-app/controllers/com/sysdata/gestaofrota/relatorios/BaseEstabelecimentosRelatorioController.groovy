@@ -49,12 +49,10 @@ class BaseEstabelecimentosRelatorioController {
             cabecalho3.Numero = "NUMERO"
             cabecalho3.Complemento = "COMPLEMENTO"
             cabecalho3.Bairro = "BAIRRO"
-            cabecalho3.Cidade = "PLACA"
-            cabecalho3.Estado = "MARCA/MODELO"
-            cabecalho3.Cep = "CHASSI"
-            cabecalho3.Email = "ANO FABRIC."
-            cabecalho3.Banco = "CAP. TANQUE"
-            cabecalho3.TipoTitular = "TIPO COMBUST."
+            cabecalho3.Cidade = "CIDADE"
+            cabecalho3.Estado = "ESTADO"
+            cabecalho3.Cep = "CEP"
+            cabecalho3.Email = "EMAIL"
             BaseEstabelecimentosRelatorio << cabecalho3
 
             def reportList = baseEstabelecimentosService.list(params, false)
@@ -75,8 +73,8 @@ class BaseEstabelecimentosRelatorioController {
                         "Estado": tr.empresa.endereco.cidade.estado,
                         "Cep": tr.empresa.endereco.cep,
                         "Email": tr.empresa.email,
-                        "Banco": tr.empresa.dadoBancario.banco.nome,
-                        "Tipo Titular": tr.empresa.dadoBancario.tipoTitular
+                        //"Banco": tr.empresa.dadoBancario.banco.nome,
+                        //"TipoTitular": tr.empresa.dadoBancario.tipoTitular
                 ]
             }
 
@@ -93,12 +91,26 @@ class BaseEstabelecimentosRelatorioController {
                     "Estado": "",
                     "Cep": "",
                     "Email": "",
-                    "Banco": "",
-                    "Tipo Titular": ""
+                    //"Banco": "",
+                    //"TipoTitular": ""
             ]
 
             List fields = [
-                            "codigo",
+                    "codigo",
+                    "cnpj",
+                    "nome",
+                    "nomeFantasia",
+                    "Logradouro",
+                    "Numero",
+                    "Complemento",
+                    "Bairro",
+                    "Cidade",
+                    "Estado",
+                    "Cep",
+                    "Email",
+                    //"Banco",
+                   // "TipoTitular"
+                            /*"codigo",
                             "cnpj",
                             "nome",
                             "nomeFantasia",
@@ -113,11 +125,26 @@ class BaseEstabelecimentosRelatorioController {
                             //"empresa.taxaReembolso",
                             "empresa.dadoBancario.banco.nome",
                             //"empresa.dadoBancario.agencia", "empresa.dadoBancario.conta",
-                            "empresa.dadoBancario.tipoTitular",
-                            //"empresa.dadoBancario.nomeTitular","empresa.dadoBancario.documentoTitular"
+                            "empresa.dadoBancario.tipoTitular"
+                            //"empresa.dadoBancario.nomeTitular","empresa.dadoBancario.documentoTitular"*/
                           ]
 
-            Map labels = ["codigo": "Cod.Estab",
+            Map labels = [
+                    "codigo": "CODIGO",
+                    "cnpj": "CNPJ",
+                    "nome": "RAZAO SOCIAL",
+                    "nomeFantasia": "NOME FANTASIA",
+                    "Logradouro": "LOGRADOURO",
+                    "Numero": "NUMERO",
+                    "Complemento": "COMPLEMENTO",
+                    "Bairro": "BAIRRO",
+                    "Cidade": "CIDADE",
+                    "Estado": "UF",
+                    "Cep": "CEP",
+                    "Email": "EMAIL",
+                    //"Banco": "BAIRRO",
+                    //"TipoTitular": "TIPO TITULAR"
+                    /*"codigo": "Cod.Estab",
                           "cnpj": "CNPJ",
                           "nome": "Razão Social",
                           "nomeFantasia": "Fantasia",
@@ -133,8 +160,8 @@ class BaseEstabelecimentosRelatorioController {
                           //"empresa.taxaReembolso": "Taxa Reembolso(%)",
                           "empresa.dadoBancario.banco.nome": "Banco",
                           //"empresa.dadoBancario.agencia": "Agencia","empresa.dadoBancario.conta": "Conta",
-                          "empresa.dadoBancario.tipoTitular": "Tipo Titular",
-                          //"empresa.dadoBancario.nomeTitular": "Nome Titular", "empresa.dadoBancario.documentoTitular": "Documento"
+                          "empresa.dadoBancario.tipoTitular": "Tipo Titular"
+                          //"empresa.dadoBancario.nomeTitular": "Nome Titular", "empresa.dadoBancario.documentoTitular": "Documento"*/
                           ]
 
 

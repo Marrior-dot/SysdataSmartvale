@@ -63,6 +63,17 @@ class HistoricoFrotaService {
                     }
                 }
             }
+            if (pars.nFanta) {
+                cartao {
+                    portador {
+                        unidade {
+                            rh {
+                                eq("nomeFantasia", pars.nFanta)
+                            }
+                        }
+                    }
+                }
+            }
             if (pars.placa) {
                 maquina {
                     eq("placa", pars.placa)
@@ -74,9 +85,9 @@ class HistoricoFrotaService {
                 }
             }
             if (pars.dataInicio)
-                gt('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
+                ge('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
             if (pars.dataFim)
-                lt('dateCreated', pars.date('dataFim', 'dd/MM/yyyy'))
+                le('dateCreated', pars.date('dataFim', 'dd/MM/yyyy'))
         }
         clo(criteria)
     }

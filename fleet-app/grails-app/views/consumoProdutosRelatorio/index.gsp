@@ -50,7 +50,7 @@
             <thead>
             <th>Placa</th>
             <th>Marca/Modelo</th>
-            <!--<th>Empresa</th>-->
+            <th>Cliente</th>
             <th>Unidade</th>
             <th>Produto</th>
             <th>Consumo (lts)</th>
@@ -74,7 +74,7 @@
             </tfoot>
         </table>
 
-        <g:paginate total="${consumoCount}" />
+        <g:paginate total="${consumoCount}" params="${params}"/>
 
         <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>

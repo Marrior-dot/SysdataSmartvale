@@ -153,7 +153,7 @@ class DemonstrativoDesempenhoRelatorioController {
                     "desempenho"
             ]
 
-            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+demonstrativoDesempenhoReport, fields, labels, [:], [/*:*/'header.enabled': false])
+            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+demonstrativoDesempenhoReport, fields, labels, [:], ['header.enabled': false])
 
             return
         }

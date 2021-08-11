@@ -34,7 +34,10 @@
                         <div class="col-md-2">
                             <label class="control-label" for="placa">Placa</label>
                             <g:textField name="placa" class="form-control placa" value="${params.placa}"></g:textField>
-
+                        </div>
+                    <div class="col-md-2">
+                            <label class="control-label" for="NomeFanta">Nome Fantasia</label>
+                            <g:textField name="nFanta" class="form-control nFanta" value="${params.nFanta}"></g:textField>
                         </div>
                     <div class="col-md-2">
                         <label class="control-label" for="codEquipamento">Cod Equipamento</label>
@@ -66,8 +69,8 @@
 
         <table class="table table-bordered table-stripped">
             <thead>
-            <th>Nsu</th>
             <th>Data</th>
+            <th>Nsu</th>
             <th>Hora</th>
             <th>Terminal</th>
             <th>Estabelecimento</th>
@@ -92,8 +95,8 @@
 
           <g:each in="${historicoFrotaList}" var="cveic">
                 <tr>
-                        <td>${cveic.nsu}</td>
                         <td><g:formatDate date="${cveic?.dateCreated}" format="dd/MM/yyyy" /></td>
+                        <td>${cveic.nsu}</td>
                         <td><g:formatDate date="${cveic?.dateCreated}" format="HH:mm:ss" />
                          <td>${cveic.terminal}</td>
                         <td>${cveic?.estabelecimento?.nomeFantasia}</td>

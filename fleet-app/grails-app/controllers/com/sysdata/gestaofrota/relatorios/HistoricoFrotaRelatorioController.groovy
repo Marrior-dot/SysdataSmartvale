@@ -21,71 +21,77 @@ class HistoricoFrotaRelatorioController {
 
             def cabecalhoHistoricoFrotaRelatorio = []
             def cabecalho = [:]
-            cabecalho.nsu = "EMISSAO"
-            cabecalho.dataHora = new Date().format('dd/MM/yyyy')
+            cabecalho.dataHora = "EMISSAO"
+            cabecalho.nsu = new Date().format('dd/MM/yyyy')
             cabecalhoHistoricoFrotaRelatorio << cabecalho
 
             def cabecalho1 = [:]
             if (params.empresa) {
-                cabecalho1.nsu = "EMPRESA"
+                cabecalho1.dataHora = "EMPRESA"
                 Rh empresaCliente = Rh.get(params.empresa.toLong())
-                cabecalho1.dataHora = empresaCliente.nomeFantasia
+                cabecalho1.nsu = empresaCliente.nomeFantasia
                 cabecalhoHistoricoFrotaRelatorio << cabecalho1
             }
             def cabecalho2 = [:]
             if (params.unidade) {
-                cabecalho2.nsu = "UNIDADE"
+                cabecalho2.dataHora = "UNIDADE"
                 Unidade unidade = Unidade.get(params.unidade.toLong())
-                cabecalho2.dataHora = unidade.nome
+                cabecalho2.nsu = unidade.nome
                 cabecalhoHistoricoFrotaRelatorio << cabecalho2
             }
             def cabecalho3 = [:]
-            if (params.placa) {
-                cabecalho3.nsu = "PLACA"
-                cabecalho3.dataHora = params.placa
+            if (params.dataFim) {
+                cabecalho3.dataHora = "DATA FIM"
+                cabecalho3.nsu = params.dataFim
                 cabecalhoHistoricoFrotaRelatorio << cabecalho3
             }
             def cabecalho4 = [:]
-            if (params.codigo) {
-                cabecalho4.nsu = "PLACA"
-                cabecalho4.dataHora = params.placa
+            if (params.placa) {
+                cabecalho4.dataHora = "PLACA"
+                cabecalho4.nsu = params.placa
                 cabecalhoHistoricoFrotaRelatorio << cabecalho4
             }
             def cabecalho5 = [:]
-            if (params.dataInicio) {
-                cabecalho5.nsu = "DT. Inicio"
-                cabecalho5.dataHora = params.dataInicio
+            if (params.codigo) {
+                cabecalho5.dataHora = "PLACA"
+                cabecalho5.nsu = params.placa
                 cabecalhoHistoricoFrotaRelatorio << cabecalho5
             }
             def cabecalho6 = [:]
-            if (params.dataFim) {
-                cabecalho6.nsu = "DT. Fim"
-                cabecalho6.dataHora = params.dataFim
+            if (params.dataInicio) {
+                cabecalho6.dataHora = "DATA INICIO"
+                cabecalho6.nsu = params.dataInicio
                 cabecalhoHistoricoFrotaRelatorio << cabecalho6
             }
-
             def cabecalho7 = [:]
-            cabecalho7.nsu = ""
-            cabecalhoHistoricoFrotaRelatorio << cabecalho7
+            if (params.dataFim) {
+                cabecalho7.dataHora = "DATA FIM"
+                cabecalho7.nsu = params.dataFim
+                cabecalhoHistoricoFrotaRelatorio << cabecalho7
+            }
 
             def cabecalho8 = [:]
-            cabecalho8.nsu = "NSU"
-            cabecalho8.dataHora = "DATA/HORA"
-            cabecalho8.terminal = "TERMINAL"
-            cabecalho8.estabelecimento = "ESTABELECIMENTO"
-            cabecalho8.veiculo = "VEICULO"
-            cabecalho8.km = "HODOMETRO"
-            cabecalho8.equipamento = "EQUIPAMENTO"
-            cabecalho8.funcionario = "FUNCIONARIO"
-            cabecalho8.produtos = "VALOR TOTAL"
-            cabecalho8.precoUnitario = "PRODUTOS"
-            cabecalho8.valor = "QTD LITROS"
-            cabecalho8.litros = "PREÇO UNITARIO"
-            cabecalho8.cliente = "CLIENTE"
-            cabecalho8.unidade = "UNIDADE"
-            cabecalho8.tipoTransacao = "TIPO TRANSACAO"
-            cabecalho8.statusTransacao = "STATUS"
+            cabecalho8.dataHora = ""
             cabecalhoHistoricoFrotaRelatorio << cabecalho8
+
+            def cabecalho9 = [:]
+            cabecalho9.dataHora = "DATA/HORA"
+            cabecalho9.nsu = "NSU"
+            cabecalho9.terminal = "TERMINAL"
+            cabecalho9.estabelecimento = "ESTABELECIMENTO"
+            cabecalho9.veiculo = "VEICULO"
+            cabecalho9.km = "HODOMETRO"
+            cabecalho9.equipamento = "EQUIPAMENTO"
+            cabecalho9.funcionario = "FUNCIONARIO"
+            cabecalho9.produtos = "VALOR TOTAL"
+            cabecalho9.precoUnitario = "PRODUTOS"
+            cabecalho9.valor = "QTD LITROS"
+            cabecalho9.litros = "PREÇO UNITARIO"
+            cabecalho9.cliente = "CLIENTE"
+            cabecalho9.unidade = "UNIDADE"
+            cabecalho9.tipoTransacao = "TIPO TRANSACAO"
+            cabecalho9.statusTransacao = "STATUS"
+            cabecalhoHistoricoFrotaRelatorio << cabecalho9
 
             def reportList = historicoFrotaService.list(params, false)
 
@@ -93,8 +99,8 @@ class HistoricoFrotaRelatorioController {
 
             reportList = reportList.collect { tr ->
                                 [
-                                    "nsu": tr.nsu,
                                     "dataHora": tr.dateCreated.format('dd/MM/yy HH:mm:ss'),
+                                    "nsu": tr.nsu,
                                     "terminal": tr.terminal,
                                     "estabelecimento": tr.estabelecimento.identificacaoResumida,
                                     "veiculo": tr.maquina.instanceOf(Veiculo) ? (tr.maquina as Veiculo).identificacaoCompacta : '',
@@ -113,8 +119,9 @@ class HistoricoFrotaRelatorioController {
                                 ]
                             }
 
-            reportList += ["nsu": "",
+            reportList += [
                            "dataHora": "",
+                           "nsu": "",
                            "terminal": "",
                            "estabelecimento": "",
                            "veiculo": "",
@@ -134,8 +141,8 @@ class HistoricoFrotaRelatorioController {
             // Inclui linha com totalizador de valor da transação
             reportList += [
 
-                    "nsu": "",
                     "dataHora": "",
+                    "nsu": "",
                     "terminal": "",
                     "estabelecimento": "",
                     "veiculo": "",
@@ -154,8 +161,8 @@ class HistoricoFrotaRelatorioController {
 
 
             List fields = [
-                            "nsu",
                             "dataHora",
+                            "nsu",
                             "terminal",
                             "estabelecimento",
                             "veiculo",
@@ -174,8 +181,8 @@ class HistoricoFrotaRelatorioController {
 
             Map labels = [
 
-                            "nsu": "NSU",
                             "dataHora": "Data/Hora",
+                            "nsu": "NSU",
                             "terminal": "Terminal",
                             "estabelecimento": "Estabelecimento",
                             "veiculo": "Veículo",

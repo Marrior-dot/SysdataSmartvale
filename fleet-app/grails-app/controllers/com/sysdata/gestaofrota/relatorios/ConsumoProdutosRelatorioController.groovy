@@ -1,20 +1,87 @@
 package com.sysdata.gestaofrota.relatorios
 
 import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.Unidade
 import com.sysdata.gestaofrota.StatusControleAutorizacao
 import com.sysdata.gestaofrota.Transacao
-import com.sysdata.gestaofrota.Unidade
 import grails.core.GrailsApplication
 
 class ConsumoProdutosRelatorioController {
 
     def exportService
 
-    ConsumoProdutosRelatorioService ConsumoProdutosRelatorioService
+    GrailsApplication grailsApplication
 
     def index() {
-        params.max = params.max ? params.max as int : 10
-        params.offset = params.offset ? params.offset as int : 0
+
+        StringBuilder sb = new StringBuilder()
+
+        sb.append("""
+select
+    v.placa,
+    v.marca.abreviacao,
+    v.modelo,
+    v.unidade.rh.nome,
+    v.unidade.nome,
+    p.nome,
+    sum(t.qtd_litros),
+
+    (
+        (select t1.quilometragem from Transacao t1 where t1.id =
+            (select max(tu.id) from Transacao tu where tu.maquina = t.maquina and tu.tipo = 'COMBUSTIVEL'
+                and tu.statusControle in ('PENDENTE', 'CONFIRMADA')))
+
+        -
+
+        (select t2.quilometragem from Transacao t2 where t2.id =
+            (select min(ti.id) from Transacao ti where ti.maquina = t.maquina and ti.tipo = 'COMBUSTIVEL'
+                and ti.statusControle = 'CONFIRMADA'))
+
+    ) as kms_percorridos
+
+from
+    Transacao as t,
+    Veiculo as v,
+    TransacaoProduto as tp,
+    Produto p
+
+where
+    v = t.maquina and
+    tp.transacao = t and
+    tp.produto = p and
+    t.statusControle in :status
+""")
+
+        if (params.placa)
+            sb.append(" and v.placa = '${params.placa}' ")
+
+        if (params.dataInicio && params.dataFim) {
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+            sb.append(""" and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
+        }
+
+        if (params.unidade)
+            sb.append(" and v.unidade.id = ${params.unidade as long} ")
+
+
+        sb.append("""
+group by
+    v.placa,
+    v.marca.abreviacao,
+    v.modelo,
+    v.unidade.rh.nome,
+    v.unidade.nome,
+    p.nome,
+    t.maquina
+having
+    sum(t.qtd_litros) > 0
+
+
+order by
+    v.placa
+""")
+
 
         if (params.f && params.f != 'html') {
 
@@ -66,57 +133,73 @@ class ConsumoProdutosRelatorioController {
             cabecalhoDemonstrativoRelatorio << cabecalho6
 
             def cabecalho7 = [:]
-            cabecalho7.placa = "Placa"
-            cabecalho7.marca = "Marca/Modelo"
-            cabecalho7.modelo = "Funcionário"
-            cabecalho7.rh = "Empresa"
-            cabecalho7.unidade = "Unidade"
-            cabecalho7.produto = "Km Rodados"
-            cabecalho7.consumo = "Lts Abastecidos"
-            cabecalho7.quilometragem = "Desempenho (km/l)"
-            //cabecalhoDemonstrativoRelatorio << cabecalho
-            //cabecalhoDemonstrativoRelatorio << cabecalho1
-            //cabecalhoDemonstrativoRelatorio << cabecalho2
+            cabecalho7.placa = "PLACA"
+            cabecalho7.marca = "MARCA/MODELO"
+            cabecalho7.rh = "CLIENTE"
+            cabecalho7.unidade = "UNIDADE"
+            cabecalho7.produto = "PRODUTO"
+            cabecalho7.consumo = "LTS ABASTECIDOS"
+            cabecalho7.quilometragem = "DESEMPENHO (km/l)"
             cabecalhoDemonstrativoRelatorio << cabecalho7
 
+            def consumoReport = Transacao.executeQuery(sb.toString(),
+                    [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
+
             consumoReport = consumoReport.collect {
-                                [
-                                    "placa": it[0],
-                                    "marca": it[1] / it[2],
-                                    "rh": it[3],
-                                    "unidade": it[4],
-                                    "produto": it[5],
-                                    "consumo": it[6],
-                                    "quilometragem": it[7],
-                                ]
-                            }
+                [
+                        "placa": it[0],
+                        "marca": "${it[1]} / ${it[2]}",
+                        "rh": it[3],
+                        "unidade": it[4],
+                        "produto": it[5],
+                        "consumo": it[6],
+                        "quilometragem": it[7],
+                ]
+            }
+            consumoReport += [
+                    "placa"         : "",
+                    "marca"         : "",
+                    "rh"            : "",
+                    "unidade"       : "",
+                    "produto"       : "",
+                    "consumo"       : "",
+                    "quilometragem" : ""
+
+                    ]
 
             def fields = [
-                            "placa",
-                            "marca",
-                            "rh",
-                            "unidade",
-                            "produto",
-                            "consumo",
-                            "quilometragem"
-                        ]
+                    "placa",
+                    "marca",
+                    "rh",
+                    "unidade",
+                    "produto",
+                    "consumo",
+                    "quilometragem"
+            ]
 
             def labels = [
-                            "placa"         : "Placa",
-                            "marca"         : "Marca / Modelo",
-                            "rh"            : "Empresa",
-                            "unidade"       : "Unidade",
-                            "produto"       : "Produto",
-                            "consumo"       : "Consumo(lts)",
-                            "quilometragem" : "KM Percorrida"
-                        ]
+                    "placa"         : "Placa",
+                    "marca"         : "Marca",
+                    "rh"            : "Empresa",
+                    "unidade"       : "Unidade",
+                    "produto"       : "Produto",
+                    "consumo"       : "Consumo(lts)",
+                    "quilometragem" : "KM Percorrida"
+            ]
 
-            exportService.export(params.f, response.outputStream, consumoReport, fields, labels, [:], [:])
+            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+consumoReport, fields, labels, [:], ['header.enabled': false])
 
             return
         }
 
-        [consumoList: ConsumoProdutosRelatorioService.list(params), consumoCount: ConsumoProdutosRelatorioService.count(params)]
+        def consumoList = Transacao.executeQuery(sb.toString(),
+                [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]],
+                [max: params.max ? params.max as int : 10, offset: params.offset ? params.offset as int : 0] )
+
+        def consumoCount = Transacao.executeQuery(sb.toString(),
+                [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]]).size()
+
+        [consumoList: consumoList, consumoCount: consumoCount, params: params]
 
 
 

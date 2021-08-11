@@ -62,7 +62,7 @@ class ReembolsoFaturadoRelatorioController {
             //cabecalhoReembolsoFaturadoRelatorio << cabecalho
             //cabecalhoReembolsoFaturadoRelatorio << cabecalho1
             //cabecalhoReembolsoFaturadoRelatorio << cabecalho2
-            cabecalhoReembolsoFaturadoRelatorio << 5
+            cabecalhoReembolsoFaturadoRelatorio << cabecalho5
 
             def reembolsoFaturadoReport = reembolsoFaturadoService.list(params, false)
             //D.Lyra 20/07/2021

@@ -92,9 +92,9 @@
         </table>
         </div>
 
-        <g:paginate total="${baseFuncionariosCount}" />
+        <g:paginate total="${baseFuncionariosCount}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 

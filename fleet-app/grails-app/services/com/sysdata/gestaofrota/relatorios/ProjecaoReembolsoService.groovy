@@ -34,6 +34,11 @@ class ProjecaoReembolsoService {
                 l.status = 'A_FATURAR'
         """)
 
+        if (params.cnpj) {
+            pars.cnpj = params.cnpj
+            sb.append(""" and t.estabelecimento.empresa.cnpj = :cnpj """)
+        }
+
         if (params.dataInicio && params.dataFim) {
 
             pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
@@ -83,6 +88,10 @@ class ProjecaoReembolsoService {
                     l.status = 'A_FATURAR'
 """)
 
+        if (params.cnpj) {
+            pars.cnpj = params.cnpj
+            sb.append(""" and t.estabelecimento.empresa.cnpj = :cnpj """)
+        }
 
         if (params.dataInicio && params.dataFim) {
             pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')

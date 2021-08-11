@@ -71,12 +71,12 @@
             <th>Estado</th>
             <th>Cep</th>
             <th>Email</th>
-           <!-- <th>Reembolso(%)</th>-->
+           <!--<th>Reembolso(%)</th>
             <th>Banco</th>
-            <!--<th>Agência</th>
-            <th>Conta</th>-->
+            <th>Agência</th>
+            <th>Conta</th>
             <th>Tipo Titular</th>
-           <!-- <th>Nome Titular</th>
+            <th>Nome Titular</th>
             <th>Documento</th>-->
 
 
@@ -96,12 +96,12 @@
                     <td>${est?.empresa?.endereco?.cidade?.estado}</td>
                     <td>${est?.empresa?.endereco?.cep}</td>
                     <td>${est?.empresa?.email}</td>
-                    <!--<td>${est?.empresa?.taxaReembolso}</td>-->
+                    <!--<td>${est?.empresa?.taxaReembolso}</td>
                     <td>${est?.empresa?.dadoBancario?.banco.nome}</td>
-                    <!--<td>${est?.empresa?.dadoBancario?.agencia}</td>
-                    <td>${est?.empresa?.dadoBancario?.conta}</td>-->
+                    <td>${est?.empresa?.dadoBancario?.agencia}</td>
+                    <td>${est?.empresa?.dadoBancario?.conta}</td>
                     <td>${est?.empresa?.dadoBancario?.tipoTitular}</td>
-                    <!--<td>${est?.empresa?.dadoBancario?.nomeTitular}</td>
+                    <td>${est?.empresa?.dadoBancario?.nomeTitular}</td>
                     <td>${est?.empresa?.dadoBancario?.documentoTitular}</td>-->
 
 
