@@ -18,7 +18,7 @@ class HistoricoFrotaService {
      *
      * select
      *  t.*
- *     from
+     *     from
      *     Transacao t
      *
      * where
@@ -63,6 +63,11 @@ class HistoricoFrotaService {
                     }
                 }
             }
+            if (pars.nomeFantasia) {
+                estabelecimento {
+                    ilike("nomeFantasia", pars.nomeFantasia + "%")
+                }
+            }
             if (pars.placa) {
                 maquina {
                     eq("placa", pars.placa)
@@ -74,9 +79,9 @@ class HistoricoFrotaService {
                 }
             }
             if (pars.dataInicio)
-                gt('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
+                ge('dateCreated', pars.date('dataInicio', 'dd/MM/yyyy'))
             if (pars.dataFim)
-                lt('dateCreated', pars.date('dataFim', 'dd/MM/yyyy'))
+                le('dateCreated', pars.date('dataFim', 'dd/MM/yyyy') + 1)
         }
         clo(criteria)
     }
@@ -88,7 +93,6 @@ class HistoricoFrotaService {
             if (paginate)
                 return Transacao.createCriteria().list([max: pars.max, offset: pars.offset, sort: pars.sort], criteria)
             else {
-                println "Params: $pars"
                 return Transacao.createCriteria().list(criteria)
             }
         }

@@ -24,6 +24,6 @@ class Equipamento extends MaquinaMotorizada {
     }
 
     String getIdentificacaoCompacta() {
-        return "(${this.codigo}) ${this.descricao}"
+        return "(${this.codigo}) ${this.tipo.nome}"
     }
 }
