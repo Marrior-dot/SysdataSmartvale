@@ -1,0 +1,9 @@
+
+
+
+class DesfaturaLoteRepasse {
+
+    def execute() {
+
+    }
+}
