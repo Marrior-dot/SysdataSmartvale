@@ -75,16 +75,21 @@ class ReembolsoFaturadoRelatorioController {
                         "nomeFantasia": it[1],
                         "cnpj": it[2],
                         "data": it[3].format('dd/MM/yyyy'),
-                        "valorBruto": Util.formatCurrency(it[4]),
-                        "valorLiquido": Util.formatCurrency(it[5]),
+                        "valorBruto": 'R$'+it[4],
+                        "valorLiquido": 'R$'+it[5],
                         "taxaAdm": Util.formatPercentage(it[6]),
-                        "valorTaxaAdm": Util.formatCurrency(it[7]),
+                        "valorTaxaAdm": 'R$'+it[7],
                         "status": it[8]?.nome
                         /*"banco": it[9],
                         "agencia": it[10],
                         "conta": it[11],
                         "nomeTitular": it[12],
-                        "docTitular": it[13]*/
+                        "docTitular": it[13]
+                        Só pra lembrar.
+                        "valorBruto": 'R$'+it[4],
+                        "valorLiquido": 'R$'+it[5],
+                        "taxaAdm": Util.formatPercentage(it[6]).replaceAll("\\s+",""),
+                        "valorTaxaAdm": Util.formatCurrency(it[7]).replaceAll("\\s+",""),*/
                 ]
             }
 
@@ -95,7 +100,7 @@ class ReembolsoFaturadoRelatorioController {
                     "cnpj": "",
                     "data": "Total Geral",
                     "valorBruto": "",//Util.formatCurrency(totalValorB),
-                    "valorLiquido": Util.formatCurrency(totalValorL),
+                    "valorLiquido": 'R$'+totalValorL,
                     "taxaAdm": "",
                     "valorTaxaAdm": "",//Util.formatCurrency(totalValorTAdm),
                     "status": ""
