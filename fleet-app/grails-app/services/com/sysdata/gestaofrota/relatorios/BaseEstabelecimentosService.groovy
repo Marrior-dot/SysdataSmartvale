@@ -9,6 +9,10 @@ class BaseEstabelecimentosService {
 
         def criteria = {
 
+            if (params.nFanta) {
+
+                eq("nomeFantasia", params.nFanta)
+            }
 
             if (params.cnpj) {
 

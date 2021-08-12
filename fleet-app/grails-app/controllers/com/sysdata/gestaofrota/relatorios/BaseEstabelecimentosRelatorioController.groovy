@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 
+import com.sysdata.gestaofrota.Rh
 import grails.core.GrailsApplication
 
 class BaseEstabelecimentosRelatorioController {
@@ -22,22 +23,146 @@ class BaseEstabelecimentosRelatorioController {
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=baseEstabelecimentos.${params.extension}")
 
+            def BaseEstabelecimentosRelatorio = []
 
+            def cabecalho = [:]
+            cabecalho.codigo = "EMISSAO"
+            cabecalho.cnpj = new Date().format('dd/MM/yyyy')
+            BaseEstabelecimentosRelatorio << cabecalho
 
-            List fields = ["codigo", "cnpj", "nome","nomeFantasia", "telefone", "empresa.endereco.logradouro","empresa.endereco.numero",
-                           "empresa.endereco.complemento", "empresa.endereco.bairro","empresa.endereco.cidade.nome","empresa.endereco.cidade.estado",
-                           "empresa.endereco.cep", "email", "empresa.taxaReembolso", "empresa.dadoBancario.banco.nome", "empresa.dadoBancario.agencia",
-                           "empresa.dadoBancario.conta",  "empresa.dadoBancario.tipoTitular", "empresa.dadoBancario.nomeTitular",
-                           "empresa.dadoBancario.documentoTitular"]
+            def cabecalho1 = [:]
+            if (params.nFanta) {
+                cabecalho1.codigo = "EMPRESA"
+                cabecalho1.cnpj = params.nFanta
+                BaseEstabelecimentosRelatorio << cabecalho1
+            }
+            def cabecalho2 = [:]
+            cabecalho2.codigo = ""
+            BaseEstabelecimentosRelatorio << cabecalho2
 
-            Map labels = ["codigo": "Cod.Estab", "cnpj": "CNPJ", "nome": "Razão Social", "nomeFantasia": "Fantasia",
-                          "telefone": "Telefone", "empresa.endereco.logradouro": "Logradouro","empresa.endereco.numero": "Numero",
-                          "empresa.endereco.complemento": "Complemento", "empresa.endereco.bairro": "Bairro",
-                          "empresa.endereco.cidade.nome": "Cidade", "empresa.endereco.cidade.estado": "Estado",
-                          "empresa.endereco.cep": "Cep","email": "Email", "empresa.taxaReembolso": "Taxa Reembolso(%)",
-                          "empresa.dadoBancario.banco.nome": "Banco", "empresa.dadoBancario.agencia": "Agencia",
-                          "empresa.dadoBancario.conta": "Conta", "empresa.dadoBancario.tipoTitular": "Tipo Titular",
-                          "empresa.dadoBancario.nomeTitular": "Nome Titular", "empresa.dadoBancario.documentoTitular": "Documento" ]
+            def cabecalho3 = [:]
+            cabecalho3.codigo = "CODIGO"
+            cabecalho3.cnpj = "CNPJ"
+            cabecalho3.nome = "NOME"
+            cabecalho3.nomeFantasia = "NOME FANTASIA"
+            cabecalho3.Logradouro = "lOGRADOURO"
+            cabecalho3.Numero = "NUMERO"
+            cabecalho3.Complemento = "COMPLEMENTO"
+            cabecalho3.Bairro = "BAIRRO"
+            cabecalho3.Cidade = "CIDADE"
+            cabecalho3.Estado = "ESTADO"
+            cabecalho3.Cep = "CEP"
+            cabecalho3.Email = "EMAIL"
+            BaseEstabelecimentosRelatorio << cabecalho3
+
+            def reportList = baseEstabelecimentosService.list(params, false)
+
+            //def totalValor = reportList.sum { it.valor }
+
+            reportList = reportList.collect { tr ->
+                [
+                        "codigo": tr.codigo,
+                        "cnpj": tr.cnpj,
+                        "nome": tr.nome,
+                        "nomeFantasia": tr.nomeFantasia,
+                        "Logradouro": tr.telefone,
+                        "Numero": tr.empresa.endereco.logradouro,
+                        "Complemento": tr.empresa.endereco.complemento,
+                        "Bairro": tr.empresa.endereco.bairro,
+                        "Cidade": tr.endereco.cidade.nome,
+                        "Estado": tr.empresa.endereco.cidade.estado,
+                        "Cep": tr.empresa.endereco.cep,
+                        "Email": tr.empresa.email,
+                        //"Banco": tr.empresa.dadoBancario.banco.nome,
+                        //"TipoTitular": tr.empresa.dadoBancario.tipoTitular
+                ]
+            }
+
+            reportList += [
+                    "codigo": "",
+                    "cnpj": "",
+                    "nome": "",
+                    "nomeFantasia": "",
+                    "Logradouro": "",
+                    "Numero": "",
+                    "Complemento": "",
+                    "Bairro": "",
+                    "Cidade": "",
+                    "Estado": "",
+                    "Cep": "",
+                    "Email": "",
+                    //"Banco": "",
+                    //"TipoTitular": ""
+            ]
+
+            List fields = [
+                    "codigo",
+                    "cnpj",
+                    "nome",
+                    "nomeFantasia",
+                    "Logradouro",
+                    "Numero",
+                    "Complemento",
+                    "Bairro",
+                    "Cidade",
+                    "Estado",
+                    "Cep",
+                    "Email",
+                    //"Banco",
+                   // "TipoTitular"
+                            /*"codigo",
+                            "cnpj",
+                            "nome",
+                            "nomeFantasia",
+                            //"telefone",
+                            "empresa.endereco.logradouro",
+                            "empresa.endereco.numero",
+                            "empresa.endereco.complemento",
+                            "empresa.endereco.bairro",
+                            "empresa.endereco.cidade.nome",
+                            "empresa.endereco.cidade.estado",
+                            "empresa.endereco.cep", "email",
+                            //"empresa.taxaReembolso",
+                            "empresa.dadoBancario.banco.nome",
+                            //"empresa.dadoBancario.agencia", "empresa.dadoBancario.conta",
+                            "empresa.dadoBancario.tipoTitular"
+                            //"empresa.dadoBancario.nomeTitular","empresa.dadoBancario.documentoTitular"*/
+                          ]
+
+            Map labels = [
+                    "codigo": "CODIGO",
+                    "cnpj": "CNPJ",
+                    "nome": "RAZAO SOCIAL",
+                    "nomeFantasia": "NOME FANTASIA",
+                    "Logradouro": "LOGRADOURO",
+                    "Numero": "NUMERO",
+                    "Complemento": "COMPLEMENTO",
+                    "Bairro": "BAIRRO",
+                    "Cidade": "CIDADE",
+                    "Estado": "UF",
+                    "Cep": "CEP",
+                    "Email": "EMAIL",
+                    //"Banco": "BAIRRO",
+                    //"TipoTitular": "TIPO TITULAR"
+                    /*"codigo": "Cod.Estab",
+                          "cnpj": "CNPJ",
+                          "nome": "Razão Social",
+                          "nomeFantasia": "Fantasia",
+                          //"telefone": "Telefone",
+                          "empresa.endereco.logradouro": "Logradouro",
+                          "empresa.endereco.numero": "Numero",
+                          "empresa.endereco.complemento": "Complemento",
+                          "empresa.endereco.bairro": "Bairro",
+                          "empresa.endereco.cidade.nome": "Cidade",
+                          "empresa.endereco.cidade.estado": "Estado",
+                          "empresa.endereco.cep": "Cep",
+                          "email": "Email",
+                          //"empresa.taxaReembolso": "Taxa Reembolso(%)",
+                          "empresa.dadoBancario.banco.nome": "Banco",
+                          //"empresa.dadoBancario.agencia": "Agencia","empresa.dadoBancario.conta": "Conta",
+                          "empresa.dadoBancario.tipoTitular": "Tipo Titular"
+                          //"empresa.dadoBancario.nomeTitular": "Nome Titular", "empresa.dadoBancario.documentoTitular": "Documento"*/
+                          ]
 
 
             //  Map formatters = [author: upperCase]
@@ -45,9 +170,9 @@ class BaseEstabelecimentosRelatorioController {
 
             exportService.export(params.f,
                                 response.outputStream,
-                                baseEstabelecimentosService.list(params, false),
+                    BaseEstabelecimentosRelatorio+reportList,
                                 fields,
-                                labels, [:], [:])
+                                labels, [:], ['header.enabled': false])
 
             return
 

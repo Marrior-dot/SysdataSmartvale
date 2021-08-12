@@ -24,6 +24,10 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
+                            <label class="control-label" for="cnpj">CNPJ</label>
+                            <g:textField name="cnpj" class="form-control cnpj" value="${params.cnpj}"></g:textField>
+                        </div>
+                        <div class="col-md-3">
                             <label class="control-label" for="dataInicio">Data Inicial</label>
                             <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
                         </div>
@@ -52,11 +56,11 @@
                 <th>Taxa Adm (%)</th>
                 <th>Taxa Adm (R$)</th>
                 <th>Situação</th>
-                <th>Banco</th>
+                <!--<th>Banco</th>
                 <th>Agência</th>
                 <th>Conta</th>
                 <th>Nome Titular</th>
-                <th>Doc Titular</th>
+                <th>Doc Titular</th>-->
                 </thead>
                 <tbody>
                 <g:each in="${reembolsoList}" var="proj">
@@ -70,11 +74,11 @@
                         <td>${proj[6]}</td>
                         <td><g:formatNumber number="${proj[7]}" type="currency"></g:formatNumber></td>
                         <td>${proj[8]?.nome}</td>
-                        <td>${proj[9]}</td>
+                        <!--<td>${proj[9]}</td>
                         <td>${proj[10]}</td>
                         <td>${proj[11]}</td>
                         <td>${proj[12]}</td>
-                        <td>${proj[13]}</td>
+                        <td>${proj[13]}</td>--!>
                     </tr>
                 </g:each>
                 </tbody>

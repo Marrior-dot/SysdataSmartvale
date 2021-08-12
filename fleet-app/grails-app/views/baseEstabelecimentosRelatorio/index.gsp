@@ -30,11 +30,15 @@
                 <div class="panel-body" >
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <label class="control-label" for="NomeFanta">Nome Fantasia</label>
+                        <g:textField name="nFanta" class="form-control nFanta" value="${params.nFanta}"></g:textField>
+                    </div>
+                    <!--<div class="col-md-3">
                         <label class="control-label" for="cnpj">CNPJ</label>
                         <g:textField name="cnpj" class="form-control cnpj" value="${params.cnpj}"></g:textField>
                     </div>
-                   <!-- <div class="col-md-3">
+                    <div class="col-md-3">
                         <label class="control-label" for="dataInicio">Data Inicial</label>
                         <g:textField name="dataInicio" class="form-control datepicker" value="${params.dataInicio}"></g:textField>
                     </div>
@@ -59,7 +63,7 @@
             <th>CNPJ</th>
             <th>Razão Social</th>
             <th>Fantasia</th>
-            <th>Telefone</th>
+            <!--<th>Telefone</th>-->
             <th>Endereço</th>
             <th>Complemento</th>
             <th>Bairro</th>
@@ -67,13 +71,13 @@
             <th>Estado</th>
             <th>Cep</th>
             <th>Email</th>
-            <th>Reembolso(%)</th>
+           <!--<th>Reembolso(%)</th>
             <th>Banco</th>
             <th>Agência</th>
             <th>Conta</th>
             <th>Tipo Titular</th>
             <th>Nome Titular</th>
-            <th>Documento</th>
+            <th>Documento</th>-->
 
 
             </thead>
@@ -84,21 +88,21 @@
                     <td>${est?.cnpj}</td>
                     <td>${est.nome}</td>
                     <td>${est?.nomeFantasia}</td>
-                    <td>${est?.telefone}</td>
+                    <!--<td>${est?.telefone}</td>-->
                     <td>${est?.empresa?.endereco?.logradouro} ${est?.empresa?.endereco?.numero}</td>
                     <td>${est?.empresa?.endereco?.complemento}</td>
                     <td>${est?.empresa?.endereco?.bairro}</td>
                     <td>${est?.empresa?.endereco?.cidade?.nome}</td>
                     <td>${est?.empresa?.endereco?.cidade?.estado}</td>
                     <td>${est?.empresa?.endereco?.cep}</td>
-                    <td>${est?.email}</td>
-                    <td>${est?.empresa?.taxaReembolso}</td>
+                    <td>${est?.empresa?.email}</td>
+                    <!--<td>${est?.empresa?.taxaReembolso}</td>
                     <td>${est?.empresa?.dadoBancario?.banco.nome}</td>
                     <td>${est?.empresa?.dadoBancario?.agencia}</td>
                     <td>${est?.empresa?.dadoBancario?.conta}</td>
                     <td>${est?.empresa?.dadoBancario?.tipoTitular}</td>
                     <td>${est?.empresa?.dadoBancario?.nomeTitular}</td>
-                    <td>${est?.empresa?.dadoBancario?.documentoTitular}</td>
+                    <td>${est?.empresa?.dadoBancario?.documentoTitular}</td>-->
 
 
                 </tr>
@@ -110,9 +114,9 @@
         </table>
         </div>
 
-        <g:paginate total="${baseEstabelecimentosList}" />
+        <g:paginate total="${baseEstabelecimentosList}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 

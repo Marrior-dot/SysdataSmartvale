@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.relatorios
 
+import com.sysdata.gestaofrota.PagamentoEstabelecimento
 import com.sysdata.gestaofrota.StatusControleAutorizacao
 import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Transacao
@@ -8,9 +9,10 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class DemonstrativoDesempenhoService {
 
-    def list(params) {
-
-        def desempenhoList = Transacao.executeQuery("""
+    def list(params, paginate = true) {
+        def pars = [:]
+        def sb = new StringBuilder()
+        sb.append("""
         select
             v.placa,
             v.marca.abreviacao,
@@ -20,11 +22,11 @@ class DemonstrativoDesempenhoService {
             v.unidade.rh.nome,
             v.unidade.nome,
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0),
+            coalesce((select sum(tc.qtd_litros) from Transacao tc where tc.maquina = v and tc.tipo = :tipo and tc.statusControle in :status), 0),
 
         (coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0))
         /
-    (coalesce((select sum(tc.qtd_litros) from Transacao tc where tc.maquina = v and tc.tipo = :tipo and tc.statusControle in :status), 0)
-    - tl.qtd_litros)
+    (coalesce((select sum(tc.qtd_litros) from Transacao tc where tc.maquina = v and tc.tipo = :tipo and tc.statusControle in :status), 0))
 
         from
             Veiculo v,
@@ -43,16 +45,35 @@ class DemonstrativoDesempenhoService {
 
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0) > 0
 
-        """, [
+        """)
+        if (params.dataInicio && params.dataFim) {
+
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+
+            sb.append("""
+                and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
+
+        }
+        if (params.placa)
+            sb.append(" and v.placa = '${params.placa}'")
+
+        else if (params.unidade) {
+            sb.append(" and v.unidade.id = ${params.unidade.toLong()}")
+        }
+
+        if (paginate)
+            pars += [max: params.max, offset: params.offset]
+
+        return Transacao.executeQuery(sb.toString(), [
                 tipo:   TipoTransacao.COMBUSTIVEL,
                 status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]
-        ], [max: params.max ? params.max as int: 10, offset: params.offset ? params.offset as int : 0])
-
-        return desempenhoList
+        ], pars)
     }
 
-    def count() {
-        def desempenhoCount = Transacao.executeQuery("""
+    def count(params) {
+        def sb = new StringBuilder()
+        sb.append("""
         select
             count(v.id)
         from
@@ -72,12 +93,29 @@ class DemonstrativoDesempenhoService {
 
             coalesce(tl.quilometragem, 0) - coalesce(tf.quilometragem, 0) > 0
 
-        """, [
+        """)
+
+        if (params.placa)
+            sb.append(" and v.placa = '${params.placa}'")
+
+        else if (params.unidade) {
+            sb.append(" and v.unidade.id = ${params.unidade.toLong()}")
+        }
+        if (params.dataInicio && params.dataFim) {
+
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+
+            sb.append("""
+                and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
+
+        }
+
+        def rowsCount = Transacao.executeQuery(sb.toString(), [
                 tipo:   TipoTransacao.COMBUSTIVEL,
                 status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]
         ])
-
-        return desempenhoCount
+        return rowsCount ? rowsCount[0] : 0
     }
 
 }

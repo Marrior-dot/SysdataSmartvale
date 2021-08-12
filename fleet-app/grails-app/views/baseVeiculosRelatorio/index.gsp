@@ -80,9 +80,9 @@
         </table>
         </div>
 
-        <g:paginate total="${baseVeiculosCount}" />
+        <g:paginate total="${baseVeiculosCount}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 </body>

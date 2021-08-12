@@ -77,12 +77,12 @@
                     <td><g:formatDate date="${func.validadeCnh}" format="dd/MM/yy"/></td>
                     <td>${func?.email}</td>
                     <td>${func?.telefone}</td>
-                    <td>${func?.portador?.endereco?.logradouro} ${func?.portador?.endereco?.numero}</td>
-                    <td>${func?.portador?.endereco?.complemento}</td>
-                    <td>${func?.portador?.endereco?.bairro}</td>
-                    <td>${func?.portador?.endereco?.cidade?.nome}</td>
-                    <td>${func?.portador?.endereco?.cidade?.estado}</td>
-                    <td>${func?.portador?.endereco?.cep}</td>
+                    <td>${func?.endereco?.logradouro} ${func?.portador?.endereco?.numero}</td>
+                    <td>${func?.endereco?.complemento}</td>
+                    <td>${func?.endereco?.bairro}</td>
+                    <td>${func?.endereco?.cidade?.nome}</td>
+                    <td>${func?.endereco?.cidade?.estado}</td>
+                    <td>${func?.endereco?.cep}</td>
                 </tr>
             </g:each>
             </tbody>
@@ -92,9 +92,9 @@
         </table>
         </div>
 
-        <g:paginate total="${baseFuncionariosCount}" />
+        <g:paginate total="${baseFuncionariosCount}" params="${params}"/>
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 

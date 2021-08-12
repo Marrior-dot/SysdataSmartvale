@@ -1,5 +1,7 @@
 package com.sysdata.gestaofrota.relatorios
 
+import com.sysdata.gestaofrota.Rh
+import com.sysdata.gestaofrota.Unidade
 import com.sysdata.gestaofrota.StatusControleAutorizacao
 import com.sysdata.gestaofrota.Transacao
 import grails.core.GrailsApplication
@@ -51,18 +53,19 @@ where
 """)
 
         if (params.placa)
-            sb.append(" and v.placa = ${params.placa}")
-
-        else if (params.unidade) {
-            sb.append(" and v.unidade.id = ${params.unidade as long}")
-        }
+            sb.append(" and v.placa = '${params.placa}' ")
 
         if (params.dataInicio && params.dataFim) {
-            sb.append(""" and t.dateCreated >= ${params.date('dataInicio', 'dd/MM/yyyy')} and
-                t.dateCreated <= ${params.date('dataFim', 'dd/MM/yyyy') + 1} """)
+            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
+            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
+            sb.append(""" and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
         }
 
-sb.append("""
+        if (params.unidade)
+            sb.append(" and v.unidade.id = ${params.unidade as long} ")
+
+
+        sb.append("""
 group by
     v.placa,
     v.marca.abreviacao,
@@ -85,45 +88,106 @@ order by
             response.contentType = grailsApplication.config.grails.mime.types[params.f]
             response.setHeader("Content-disposition", "attachment; filename=consumoCombustivel-${new Date().format('yyMMddHHmmss')}.${params.extension}")
 
+            def cabecalhoDemonstrativoRelatorio = []
+
+            def cabecalho = [:]
+            cabecalho.placa = "EMISSAO"
+            cabecalho.marca = new Date().format('dd/MM/yyyy')
+            cabecalhoDemonstrativoRelatorio << cabecalho
+
+            def cabecalho1 = [:]
+            if (params.empresa) {
+                cabecalho1.placa = "EMPRESA"
+                Rh empresaCliente = Rh.get(params.empresa.toLong())
+                cabecalho1.marca = empresaCliente.nomeFantasia
+                cabecalhoDemonstrativoRelatorio << cabecalho1
+            }
+            def cabecalho2 = [:]
+            if (params.unidade) {
+                cabecalho2.placa = "UNIDADE"
+                Unidade unidade = Unidade.get(params.unidade.toLong())
+                cabecalho2.marca = unidade.nome
+                cabecalhoDemonstrativoRelatorio << cabecalho2
+            }
+            def cabecalho3 = [:]
+            if (params.placa) {
+                cabecalho3.placa = "PLACA"
+                cabecalho3.marca = params.placa
+                cabecalhoDemonstrativoRelatorio << cabecalho3
+            }
+            def cabecalho4 = [:]
+            if (params.dataInicio) {
+                cabecalho4.placa = "DT. Inicio"
+                cabecalho4.marca = params.dataInicio
+                cabecalhoDemonstrativoRelatorio << cabecalho4
+            }
+            def cabecalho5 = [:]
+            if (params.dataFim) {
+                cabecalho5.placa = "DT. Fim"
+                cabecalho5.marca = params.dataFim
+                cabecalhoDemonstrativoRelatorio << cabecalho5
+            }
+
+            def cabecalho6 = [:]
+            cabecalho6.placa = ""
+            cabecalhoDemonstrativoRelatorio << cabecalho6
+
+            def cabecalho7 = [:]
+            cabecalho7.placa = "PLACA"
+            cabecalho7.marca = "MARCA/MODELO"
+            cabecalho7.rh = "CLIENTE"
+            cabecalho7.unidade = "UNIDADE"
+            cabecalho7.produto = "PRODUTO"
+            cabecalho7.consumo = "LTS ABASTECIDOS"
+            cabecalho7.quilometragem = "DESEMPENHO (km/l)"
+            cabecalhoDemonstrativoRelatorio << cabecalho7
+
             def consumoReport = Transacao.executeQuery(sb.toString(),
-                                                        [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
+                    [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
 
             consumoReport = consumoReport.collect {
-                                [
-                                    "placa": it[0],
-                                    "marca": it[1],
-                                    "modelo": it[2],
-                                    "rh": it[3],
-                                    "unidade": it[4],
-                                    "produto": it[5],
-                                    "consumo": it[6],
-                                    "quilometragem": it[7],
-                                ]
-                            }
+                [
+                        "placa": it[0],
+                        "marca": "${it[1]} / ${it[2]}",
+                        "rh": it[3],
+                        "unidade": it[4],
+                        "produto": it[5],
+                        "consumo": it[6],
+                        "quilometragem": it[7],
+                ]
+            }
+            consumoReport += [
+                    "placa"         : "",
+                    "marca"         : "",
+                    "rh"            : "",
+                    "unidade"       : "",
+                    "produto"       : "",
+                    "consumo"       : "",
+                    "quilometragem" : ""
+
+                    ]
 
             def fields = [
-                            "placa",
-                            "marca",
-                            "modelo",
-                            "rh",
-                            "unidade",
-                            "produto",
-                            "consumo",
-                            "quilometragem"
-                        ]
+                    "placa",
+                    "marca",
+                    "rh",
+                    "unidade",
+                    "produto",
+                    "consumo",
+                    "quilometragem"
+            ]
 
             def labels = [
-                            "placa"         : "Placa",
-                            "marca"         : "Marca",
-                            "modelo"        : "Modelo",
-                            "rh"            : "Empresa",
-                            "unidade"       : "Unidade",
-                            "produto"       : "Produto",
-                            "consumo"       : "Consumo(lts)",
-                            "quilometragem" : "KM Percorrida"
-                        ]
+                    "placa"         : "Placa",
+                    "marca"         : "Marca",
+                    "rh"            : "Empresa",
+                    "unidade"       : "Unidade",
+                    "produto"       : "Produto",
+                    "consumo"       : "Consumo(lts)",
+                    "quilometragem" : "KM Percorrida"
+            ]
 
-            exportService.export(params.f, response.outputStream, consumoReport, fields, labels, [:], [:])
+            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+consumoReport, fields, labels, [:], ['header.enabled': false])
 
             return
         }

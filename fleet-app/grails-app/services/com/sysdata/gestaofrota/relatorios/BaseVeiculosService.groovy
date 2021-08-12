@@ -1,7 +1,10 @@
 
 package com.sysdata.gestaofrota.relatorios
+import com.sysdata.gestaofrota.StatusControleAutorizacao
+import com.sysdata.gestaofrota.TipoAbastecimento
+import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Veiculo
-import grails.core.GrailsApplication
+import com.sysdata.gestaofrota.Transacao
 
 class BaseVeiculosService {
 

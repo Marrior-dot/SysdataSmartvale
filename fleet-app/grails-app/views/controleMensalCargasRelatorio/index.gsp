@@ -1,6 +1,3 @@
-<%@ page import="com.sysdata.gestaofrota.PedidoCarga" %>
-<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +47,7 @@
 
         </g:form>
 
-        <div class="table-responsive">
+        <!--<div class="table-responsive">-->
 
         <table class="table table-bordered table-stripped table-responsive ">
             <thead>
@@ -59,34 +56,30 @@
             <th>Codigo Pedido</th>
             <th>Data Pedido</th>
             <th>Data da Carga</th>
-            <th>Status</th>
-            <th>Matricula</th>
-            <th>Funcionario</th>
+            <!--<th>Status</th>-->
+            <th>Placa/Cod Equip.</th>
             <th>Valor Carga</th>
-            <th>Total Pedido (- taxa)</th>
+            <!--<th>Total Pedido (- taxa)</th>
             <th>Taxa(%)</th>
-            <th>Taxa Desconto</th>
+            <th>Taxa Desconto</th>-->
             <th>Validade(dias) </th>
 
             </thead>
             <tbody>
             <g:each in="${controleMensalCargasList}" var="carga">
                 <tr>
-                    <td>${carga.pedido.unidade.rh.nomeFantasia}</td>
-                    <td>${carga.pedido.unidade.nome}</td>
-                    <td>${carga.pedido.id}</td>
-                    <td><g:formatDate date="${carga.pedido.dateCreated}" format="dd/MM/yy"/></td>
-                    <td><g:formatDate date="${carga.pedido.dataCarga}" format="dd/MM/yy"/></td>
-                    <td>${carga.pedido.status}</td>
-                    <td>${carga?.participante?.matricula}</td>
-                    <td>${carga?.participante?.nome}</td>
+                    <td>${carga.cliente}</td>
+                    <td>${carga.unidade}</td>
+                    <td>${carga.pedidoId}</td>
+                    <td><g:formatDate date="${carga.pedidoDataCriacao}" format="dd/MM/yy"/></td>
+                    <td><g:formatDate date="${carga.pedidoDataCarga}" format="dd/MM/yy"/></td>
+                    %{--<td>${carga.pedido.status}</td>--}%
+                    <td>${carga.identificadorMaquina}</td>
                     <td>${carga?.valor}
-                    <td>${carga?.pedido.itens.valor.sum()}</td>
-                    <td>${carga?.pedido.taxa}</td>
-                    <td>${carga.pedido.taxaDesconto}</td>
-                    <td>${carga.pedido.validade}</td>
-
-
+                    <!--<td>${carga?.pedidoTotal}</td>
+                    <td>${carga?.pedidoTaxa}</td>
+                    <td>${carga.pedidoTaxaDesconto}</td>-->
+                    <td>${carga.pedidoValidade}</td>
                 </tr>
             </g:each>
             </tbody>
@@ -94,11 +87,11 @@
 
             </tfoot>
         </table>
-        </div>
+        <!--</div>-->
 
         <g:paginate total="${controleMensalCargasCount}" />
 
-        <export:formats formats="['csv', 'excel', 'pdf']" />
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
 </div>
 

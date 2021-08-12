@@ -18,7 +18,7 @@ class ReembolsoFaturadoService {
                 p.valorBruto,
                 p.valor as valorLiquido,
                 p.taxaAdm,
-                p.valorBruto - p.valor as valorTaxaAdm,
+                p.valorBruto - p.valor as valorTaxadm,
                 p.status,
                 p.estabelecimento.dadoBancario.banco.nome as banco,
                 p.estabelecimento.dadoBancario.agencia,
@@ -36,6 +36,10 @@ class ReembolsoFaturadoService {
             pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
             pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
             sb.append(""" and p.dataProgramada >= :dataInicio and p.dataProgramada <= :dataFim """)
+        }
+        if (params.cnpj) {
+            pars.cnpj = params.cnpj
+            sb.append(""" and p.estabelecimento.cnpj = :cnpj """)
         }
 
         sb.append("""order by p.dataProgramada desc, p.estabelecimento.nome desc""")
@@ -63,7 +67,14 @@ class ReembolsoFaturadoService {
             pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
             sb.append(""" and p.dataProgramada >= :dataInicio and p.dataProgramada <= :dataFim """)
         }
+        if (params.cnpj) {
+            pars.cnpj = params.cnpj
+            sb.append(""" and p.estabelecimento.cnpj = :cnpj """)
+        }
         def rowsCount = PagamentoEstabelecimento.executeQuery(sb.toString(), pars)
         return rowsCount ? rowsCount[0] : 0
     }
 }
+
+
+
