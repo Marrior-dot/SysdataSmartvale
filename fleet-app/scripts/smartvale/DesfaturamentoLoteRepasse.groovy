@@ -1,14 +1,16 @@
-import com.sysdata.gestaofrota.LotePagamento
+import com.sysdata.gestaofrota.CorteEstabelecimento
 
-DesfaturaLoteRepasse desfaturaLoteRepasse = new DesfaturaLoteRepasse()
-desfaturaLoteRepasse.execute(ctx.getBean('desfaturamentoRepasseEstabsService'), 1)
+DesfaturaCorteEstabelecimento desfaturaLoteRepasse = new DesfaturaCorteEstabelecimento()
+desfaturaLoteRepasse.execute(ctx.getBean('desfaturamentoRepasseEstabsService'), [4,9,13,21,24,27,29])
 
-class DesfaturaLoteRepasse {
+class DesfaturaCorteEstabelecimento {
 
-    def execute(desfaturamentoService, lotePagtoId) {
-        LotePagamento lotePagamento = LotePagamento.get(lotePagtoId)
-        if (!lotePagamento)
-            throw new RuntimeException("Lote Repasse #${lotePagtoId} não encontrado!")
-        desfaturamentoService.desfaturar(lotePagamento)
+    def execute(desfaturamentoService, corteIds) {
+        corteIds.each { cid ->
+            CorteEstabelecimento corteEstabelecimento = CorteEstabelecimento.get(cid)
+            if (!corteEstabelecimento)
+                throw new RuntimeException("Corte EC #${corteId} não encontrado!")
+            desfaturamentoService.desfaturar(corteEstabelecimento)
+        }
     }
 }
