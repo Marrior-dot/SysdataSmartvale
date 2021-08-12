@@ -18,7 +18,7 @@ class ReembolsoFaturadoService {
                 p.valorBruto,
                 p.valor as valorLiquido,
                 p.taxaAdm,
-                p.valorBruto - p.valor as valorTaxaAdm,
+                p.valorBruto - p.valor as valorTaxadm,
                 p.status,
                 p.estabelecimento.dadoBancario.banco.nome as banco,
                 p.estabelecimento.dadoBancario.agencia,
