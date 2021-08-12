@@ -168,19 +168,19 @@ environments {
         }
 
         sftp {
-            host = "localhost"
+            host = '192.168.250.41'
             port = 22
-            user = 'sysdata'
-            pswd = 'ldAFWzWLA85i3XWP'
-
+            user = 'luiz'
+            pswd = 'l1@a2@l3'
         }
 
         arquivos {
             baseDir = "/home/luiz/tmp/frota/banpara/"
-
             intelcav {
                 dir {
-                    embossing = "intelcav/embossing/"
+                    saida   = "intelcav/saida/"
+                    enviado = "intelcav/enviado/"
+                    enviar  = "/"
                 }
             }
         }
@@ -234,7 +234,8 @@ environments {
             baseDir = "/usr/local/frota/banpara/"
             intelcav {
                 dir {
-                    embossing = "intelcav/embossing/"
+                    saida = "intelcav/saida/"
+                    enviado = "intelcav/enviado/"
                 }
             }
         }
@@ -282,20 +283,20 @@ environments {
             }
         }
 
-
         sftp {
-            host = "172.17.17.2"
+            host = '189.126.203.86'
             port = 22
-            user = 'sysdata'
-            pswd = 'ldAFWzWLA85i3XWP'
-            privateKeyFile = "/usr/local/frota/bahiavale/.ssh/id_rsa"
+            user = 'sys_data'
+            pswd = '5y5d@7@123*'
         }
 
         arquivos {
             baseDir = "/usr/local/frota/banpara/"
             intelcav {
                 dir {
-                    embossing = "intelcav/embossing/"
+                    saida = "intelcav/saida/"
+                    enviado = "intelcav/enviado/"
+                    enviar  = "/"
                 }
             }
         }
