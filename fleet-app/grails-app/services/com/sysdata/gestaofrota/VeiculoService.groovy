@@ -55,29 +55,35 @@ class VeiculoService {
     }
 
     def delete(Veiculo veiculo) {
-        if (veiculo.portador && veiculo.portador.cartaoAtivo) {
-
+        def transacaoCount = Transacao.withCriteria(uniqueResult: true) {
+                                projections {
+                                    rowCount()
+                                }
+                                eq("maquina", veiculo)
+                            }
+        if (transacaoCount > 0) {
             Cartao cartao = veiculo.portador.cartaoAtivo
             cartao.status = StatusCartao.CANCELADO
             cartao.save()
             log.info "CRT #$cartao.id cancelado"
-
             veiculo.status = Status.INATIVO
             veiculo.save(flush: true)
             log.info "Veiculo #$veiculo.id inativado"
-
-
         } else if (veiculo.portador) {
-
             Portador portador = veiculo.portador
+            if (portador.cartoes) {
+                portador.cartoes.each { crt ->
+                    HistoricoStatusCartao.executeUpdate("delete from HistoricoStatusCartao hsc where hsc.cartao =:crt", [crt: crt])
+                    log.info "(-) CRT #${crt.id}"
+                    crt.delete()
+                }
+            }
             def prtId = portador.id
             def vecId = veiculo.id
             portador.delete()
-            log.info "PRT #$prtId del"
-
+            log.info "(-) PRT #$prtId"
             veiculo.delete(flush: true)
-            log.info "Veiculo #$vecId del"
-
+            log.info "(-) VCL #$vecId"
         } else if (veiculo.funcionarios) {
             def funcIds = veiculo.funcionarios*.id
             def vecId = veiculo.id
@@ -87,11 +93,11 @@ class VeiculoService {
                 maquinaFuncionario.delete(flush: true)
             }
             veiculo.delete(flush: true)
-            log.info "Veiculo #$vecId DEL"
+            log.info "(-) VCL #$vecId"
         } else {
             def vecId = veiculo.id
             veiculo.delete(flush: true)
-            log.info "Veiculo #$vecId DEL"
+            log.info "(-) VCL #$vecId"
         }
     }
 
