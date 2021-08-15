@@ -106,6 +106,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/unidade/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/funcionario/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/veiculo/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/maquina/**',                                   access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/equipamento/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/maquinaMotorizada/**',                         access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/categoriaFuncionario/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
@@ -134,6 +135,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
         [pattern: '/centralAtendimento/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/cartao/**',                             access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/funcionarioCadastro/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/pedidoCarga/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/transacao/**',                          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH', 'ROLE_ESTAB']],
         [pattern: '/endereco/**',                           access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],

@@ -64,40 +64,38 @@ class FuncionarioService {
 
     @Transactional
     def delete(Funcionario funcionario) {
-        if (funcionario.portador && funcionario.portador.cartaoAtivo) {
+        def transacaoCount = Transacao.withCriteria(uniqueResult: true) {
+                                projections {
+                                    rowCount()
+                                }
+                                eq("participante", funcionario)
+                            }
+        if (transacaoCount > 0) {
             Cartao cartao = funcionario.portador.cartaoAtivo
             cartao.status = StatusCartao.CANCELADO
             cartao.save()
             log.info "CRT #$cartao.id cancelado"
-
             funcionario.status = Status.INATIVO
             funcionario.save(flush: true)
             log.info "FUNC #$funcionario.id inativado"
-
         } else if (funcionario.portador) {
             Portador portador = funcionario.portador
-
-            def funcId = funcionario.id
-
-            def prtId = portador.id
-
-            Cartao cartao = portador.cartaoAtual
-            if (cartao) {
-                def crtId = cartao.id
-                cartao.delete()
-                log.info "CRT #$crtId del"
+            if (portador.cartoes) {
+                portador.cartoes.each { crt ->
+                    HistoricoStatusCartao.executeUpdate("delete from HistoricoStatusCartao hsc where hsc.cartao =:crt", [crt: crt])
+                    log.info "(-) CRT #${crt.id}"
+                    crt.delete()
+                }
             }
-
+            def funcId = funcionario.id
+            def prtId = portador.id
             portador.delete()
-            log.info "PRT #$prtId del"
+            log.info "(-) PRT #$prtId"
             funcionario.delete(flush: true)
-            log.info "FUNC #$funcId del"
-
-
-        } else if (funcionario.veiculos) {
-            funcionario.status = Status.INATIVO
-            funcionario.save(flush: true)
-            log.info "FUNC #$funcionario.id inativado"
+            log.info "(-) FCN #$funcId"
+        } else {
+            log.info "(-) FCN ${funcionario.id}"
+            funcionario.delete(flush: true)
         }
     }
 
