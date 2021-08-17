@@ -25,7 +25,18 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
         def fileDir = grailsApplication.config.projeto.arquivos.baseDir +
                 grailsApplication.config.projeto.arquivos.intelcav.dir.embossing
 
-        def fileName = sprintf("BANP_74_%05d_%s.txt", loteEmbossing.id, new Date().clearTime().format('yyyyMMdd'))
+        def projetoSubprojeto
+        if (loteEmbossing.tipo == TipoLoteEmbossing.PADRAO)
+            projetoSubprojeto = "74"
+        else if (loteEmbossing.tipo == TipoLoteEmbossing.PROVISORIO)
+            projetoSubprojeto = "75"
+        else
+            throw new RuntimeException("Tipo Lote Embossing não identificado!")
+
+        def fileName = sprintf("BANP_%02d_%05d_%s.txt",
+                                projetoSubprojeto,
+                                loteEmbossing.id,
+                                new Date().clearTime().format('yyyyMMdd'))
 
         return fileDir + fileName
     }

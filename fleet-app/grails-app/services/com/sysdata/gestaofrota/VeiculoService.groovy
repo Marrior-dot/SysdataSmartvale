@@ -38,12 +38,15 @@ class VeiculoService {
             PortadorMaquina portadorMaquina = veiculo.portador
             portadorMaquina.save(flush: true)
 
-            if (gerarCartao) {
-                if (portadorMaquina.unidade.rh.cartaoComChip)
-                    cartaoService.gerar(portadorMaquina)
-                else
-                    cartaoService.gerar(portadorMaquina, false)
+            if (portadorMaquina.vincularCartao) {
+                if (gerarCartao) {
+                    if (portadorMaquina.unidade.rh.cartaoComChip)
+                        cartaoService.gerar(portadorMaquina)
+                    else
+                        cartaoService.gerar(portadorMaquina, false)
+                }
             }
+
         }
 
         if (! veiculo.save(flush: true)) {

@@ -19,6 +19,9 @@ abstract class Portador {
 
     Status status = Status.ATIVO
 
+    Boolean vincularCartao = true
+
+
     static hasMany = [cartoes: Cartao]
 
     static belongsTo = [unidade: Unidade]
@@ -32,6 +35,7 @@ abstract class Portador {
         status nullable: true
         unidade nullable: true
         conta nullable: true
+        vincularCartao nullable: true
 
         limiteTotal validator: { val, obj ->
             if (! obj.instanceOf(PortadorAnonimo)) {

@@ -44,8 +44,6 @@ class LoteEmbossingService {
     }
 
     LoteEmbossing createLoteEmbossing() {
-
-
         LoteEmbossing loteEmbossing = new LoteEmbossing(usuario: springSecurityService.currentUser)
         loteEmbossing.save(flush: true)
         log.info "Lote Embossing #${loteEmbossing.id} criado"
