@@ -7,13 +7,12 @@ class SolicitacaoCartaoProvisorioController {
     SolicitacaoCartaoProvisorioService solicitacaoCartaoProvisorioService
 
     def index() {
-        def pars = [:]
-        pars.max = params.max ? params.max as int : 10
-        pars.offset = params.offset ? params.offset : 0
-        pars += params.subMap(['status'])
+        params.max = params.max ? params.max as int : 10
+        params.sort = "dateCreated"
+        params.order = "desc"
         [
-            solicitacaoList: solicitacaoCartaoProvisorioService.list(pars),
-            solicitacaoCount: solicitacaoCartaoProvisorioService.count(pars)
+            solicitacaoList: solicitacaoCartaoProvisorioService.list(params),
+            solicitacaoCount: solicitacaoCartaoProvisorioService.count(params)
         ]
     }
 

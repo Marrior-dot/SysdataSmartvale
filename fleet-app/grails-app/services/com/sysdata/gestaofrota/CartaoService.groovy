@@ -19,7 +19,7 @@ class CartaoService {
         portador.addToCartoes(cartaoInstance)
         portador.save(flush: true)
 
-        log.info "CRT ${cartaoInstance.numeroMascarado} gerado"
+        log.info "CRT ${cartaoInstance.numero} gerado"
 
         administradora.qtdCartoes++
         administradora.save(flush: true)

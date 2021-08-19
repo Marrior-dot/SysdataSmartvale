@@ -14,7 +14,7 @@
                     <tr>
                         <td>${lotEmb.id}</td>
                         <td><g:formatDate date="${lotEmb.dateCreated}" format="dd/MM/yy"></g:formatDate></td>
-                        <td>${lotEmb.usuario.name}</td>
+                        <td>${lotEmb.usuario ? lotEmb.usuario.name : '<< Sistema >>'}</td>
                         <td>${lotEmb.status.nome}</td>
                     </tr>
                 </g:each>

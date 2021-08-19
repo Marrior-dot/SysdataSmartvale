@@ -18,7 +18,12 @@ class ProcessadorSolicitacaoCartaoProvisorioService implements ExecutableProcess
 
     @Override
     def execute(Date date) {
+        gerarCartoesProvisoriosSolicitacao()
+        gerarLoteEmbossingCartoesProvisorios()
+    }
 
+    private void gerarCartoesProvisoriosSolicitacao() {
+        log.info "Recuperando Solicitações p/ geração de cartões provisórios..."
         def solicitacaoList = SolicitacaoCartaoProvisorio.withCriteria {
             eq("status", StatusSolicitacaoCartaoProvisorio.CRIADA)
             order("dateCreated")
@@ -38,30 +43,37 @@ class ProcessadorSolicitacaoCartaoProvisorioService implements ExecutableProcess
                 sol.save(flush: true)
                 log.info "Solicitação #${sol.id} processada"
             }
-            gerarLoteEmbossingCartoesProvisorios()
+
         } else
             log.warn "Nao há Solicitações de Cartões Provisórios a processar"
     }
 
     private void gerarLoteEmbossingCartoesProvisorios() {
+        log.info "Recuperando cartões provisórios p/ criação Lote Embossing..."
         def cartoesIds = Cartao.withCriteria {
-                            projection {
+                            projections {
                                 property("id")
                             }
                             eq("tipo", TipoCartao.PROVISORIO)
-                            eq("status", StatusCartao.LIBERADO_EMBOSSING)
+                            eq("status", StatusCartao.CRIADO)
                         }
         if (cartoesIds) {
             LoteEmbossing loteEmbossing = new LoteEmbossing(tipo: TipoLoteEmbossing.PROVISORIO)
+            loteEmbossing.save(flush: true)
             log.info "Criando Lote Embossing Cartões Provisórios..."
-            cartoesIds.each { cid, idx ->
+            cartoesIds.eachWithIndex { cid, idx ->
                 Cartao cartaoProvisorio = Cartao.get(cid)
                 loteEmbossing.addToCartoes(cartaoProvisorio)
                 log.info "\t(+) CRT ${cid}"
+                if ((idx + 1) % 50 == 0)
+                    clearSession()
+                if (!loteEmbossing.isAttached())
+                    loteEmbossing.attach()
             }
             loteEmbossing.save(flush: true)
             log.info "Lote Embossing #${loteEmbossing.id} criado"
-        }
+        } else
+            log.warn "Não há Cartões Provisórios p/ criação Lote Embossing!"
     }
 
 }

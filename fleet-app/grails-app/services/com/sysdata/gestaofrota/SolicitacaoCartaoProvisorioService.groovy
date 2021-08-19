@@ -10,7 +10,7 @@ class SolicitacaoCartaoProvisorioService {
 
     private def withParams(pars, Closure clo) {
         def criteria = {
-            if (pars.status)
+            if (pars.status != 'null' && pars.status)
                 eq("status", StatusSolicitacaoCartaoProvisorio.valueOf(pars.status))
         }
         clo(criteria)
