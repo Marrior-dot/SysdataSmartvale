@@ -30,7 +30,7 @@ class Participante {
     }
 
     static hibernateFilters = {
-        estabelecimentoPorPosto(condition: '(empresa_id=:empresa_id or id=:empresa_id)', types: 'long')
+        estabelecimentoPorPosto(condition: '(empresa_id=:emp_id or id=:emp_id)', types: 'long')
     }
 
 }

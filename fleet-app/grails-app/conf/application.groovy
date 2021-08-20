@@ -122,6 +122,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/postoCombustivel/listAllJSON/**',              access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/postoCombustivel/getReembolsoSemanal',         access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/postoCombustivel/getIntervalosReembolso',      access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/postoCombustivel/loadReembolsoIntervalos',     access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
         [pattern: '/postoCombustivel/**',                          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
@@ -130,6 +131,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/estabelecimento/list',                  access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/estabelecimento/show/**',               access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/estabelecimento/listAllJSON',           access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/estabelecimento/listByEmpresa',         access: ['ROLE_ESTAB', 'ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/estabelecimento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
