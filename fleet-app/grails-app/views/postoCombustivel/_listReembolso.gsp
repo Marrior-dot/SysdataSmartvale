@@ -16,11 +16,15 @@
         <div class="row">
             <div class="col-md-3">
 
+                <sec:ifAnyGranted roles="ROLE_ADMIN,ROLE_PROC">
+                    <g:set var="enableSelect" value="enable"></g:set>
+                </sec:ifAnyGranted>
+
                 <div class="form-group">
                     <label for="tipoReembolso">Tipo Reembolso</label>
 
                     <g:select name="tipoReembolso"
-                              class="form-control enable"
+                              class="form-control ${enableSelect}"
                               from="${TipoReembolso.values()}"
                               optionValue="nome"
                               noSelection="${['null': '-- Escolha um --']}"

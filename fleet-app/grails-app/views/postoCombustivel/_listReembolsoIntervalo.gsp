@@ -21,7 +21,10 @@
                             <td>${reemb.fimIntervalo}</td>
                             <td>${reemb.diaEfetivacao}</td>
                             <td>${reemb.meses}</td>
-                            <td><a href="#" onclick="deleteReembolso(${reemb.id});"><i class="glyphicon glyphicon-trash"></i></a></td>
+                            <sec:ifAnyGranted roles="ROLE_PROC, ROLE_ADMIN">
+                                <td><a href="#" onclick="deleteReembolso(${reemb.id});"><i class="glyphicon glyphicon-trash"></i></a></td>
+                            </sec:ifAnyGranted>
+
                         </tr>
                     </g:each>
                     </tbody>

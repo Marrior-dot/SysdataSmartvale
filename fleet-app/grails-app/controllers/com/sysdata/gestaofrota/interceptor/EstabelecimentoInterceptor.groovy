@@ -10,7 +10,7 @@ class EstabelecimentoInterceptor {
     def springSecurityService
 
     EstabelecimentoInterceptor() {
-        match(controller: ~/reembolsoFaturadoRelatorio|projecaoReembolsoRelatorio/ )
+        match(controller: ~/reembolsoFaturadoRelatorio|projecaoReembolsoRelatorio|postoCombustivel/ )
     }
 
     boolean before() {
@@ -19,6 +19,8 @@ class EstabelecimentoInterceptor {
             PagamentoEstabelecimento.enableHibernateFilter('reembolsoPorEstabelecimento')
                     .setParameter('est_id', user.owner.id)
             Lancamento.enableHibernateFilter('lancamentoPorPosto')
+                    .setParameter('emp_id', user.owner.id)
+            PostoCombustivel.enableHibernateFilter('estabelecimentoPorPosto')
                     .setParameter('emp_id', user.owner.id)
         }
         true
