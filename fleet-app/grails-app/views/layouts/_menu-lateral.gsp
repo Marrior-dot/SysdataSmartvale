@@ -103,6 +103,7 @@
                         <li>
                             <g:link class="submenu-logado" controller="console" target="Console">Console</g:link>
                             <g:link class="submenu-logado" controller="processamento" >Processamentos</g:link>
+                            <g:link class="submenu-logado" controller="historicoProcessamento" >Histórico Processamentos</g:link>
                             <g:link class="submenu-logado" controller="mockTransacao" >Gerador Transações</g:link>
                             <g:link class="submenu-logado" controller="configuracaoPropriedade" >Configurador de Propriedades</g:link>
                         </li>

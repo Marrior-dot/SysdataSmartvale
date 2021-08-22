@@ -12,17 +12,13 @@ abstract class Portador {
     BigDecimal limiteDiario
     BigDecimal limiteMensal
     BigDecimal limiteCredito
-
     BigDecimal saldoTotal = 0D
     BigDecimal saldoDiario
     BigDecimal saldoMensal
-
     Status status = Status.ATIVO
-
     Boolean vincularCartao = true
 
-
-    static hasMany = [cartoes: Cartao]
+    static hasMany = [cartoes: Cartao, relacaoCartao: RelacaoCartaoPortador]
 
     static belongsTo = [unidade: Unidade]
 

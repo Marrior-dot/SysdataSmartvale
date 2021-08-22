@@ -175,6 +175,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_PROC_FINANC']],
         [pattern: '/role/**',                               access: ['ROLE_PROC']],
         [pattern: '/processamento/**',                      access: ['ROLE_PROC']],
+        [pattern: '/historicoProcessamento/**',             access: ['ROLE_PROC']],
 
 
         [pattern: '/console/**',                            access: ['ROLE_PROC']],

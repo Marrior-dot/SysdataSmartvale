@@ -27,9 +27,9 @@ class GeracaoEmbossingBanparaIntelcavService implements GeradorArquivoEmbossing 
 
         def projetoSubprojeto
         if (loteEmbossing.tipo == TipoLoteEmbossing.PADRAO)
-            projetoSubprojeto = "74"
+            projetoSubprojeto = 74
         else if (loteEmbossing.tipo == TipoLoteEmbossing.PROVISORIO)
-            projetoSubprojeto = "75"
+            projetoSubprojeto = 75
         else
             throw new RuntimeException("Tipo Lote Embossing não identificado!")
 

@@ -9,7 +9,7 @@ class VinculoCartaoProvisorioController {
 
     def linkToCardHolder() {
         Portador cardHolder = Portador.get(params.cardHolderId as long)
-        def limitDate = params.date(params.limitDate, 'dd/MM/yyyy')
+        def limitDate = params.date('limitDate', 'dd/MM/yyyy')
         try {
             vinculoCartaoProvisorioService.linkToCardHolder(params.cardNumber, cardHolder, limitDate)
             log.info "Cartão provisório ${params.cardNumber} vinculado ao Portador #${params.cardHolderId}"

@@ -1,4 +1,4 @@
-package com.sysdata.gestaofrota.proc
+package com.sysdata.gestaofrota.proc.cartaoProvisorio
 
 import com.fourLions.processingControl.ExecutableProcessing
 import com.sysdata.gestaofrota.Cartao

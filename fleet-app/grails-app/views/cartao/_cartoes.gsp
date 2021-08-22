@@ -3,7 +3,8 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#tempCardModal"><span class="glyphicon glyphicon-plus">&nbsp;Cartão Provisório</span></button>
+		<button type="button" id="btnCardModal" class="btn btn-default">
+			<i class="glyphicon glyphicon-plus"></i>&nbsp;Cartão Provisório</button>
 	</div>
 	<div class="panel-body">
 
@@ -15,18 +16,21 @@
 				<th>Cartão</th>
 				<th>Saldo Total</th>
 				<th>Tipo</th>
-				<g:if test="${currentCard.tipo == TipoCartao.PROVISORIO}">
+				<g:if test="${currentCard?.tipo == TipoCartao.PROVISORIO}">
 				<th></th>
 				</g:if>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<td>${currentCard}</td>
+				<td>${currentCard ?: '<< Sem cartão vinculado >>'}</td>
 				<td>${Util.formatCurrency(portador?.saldoTotal)}</td>
-				<td>${currentCard.tipo?.name}</td>
-				<g:if test="${currentCard.tipo == TipoCartao.PROVISORIO}">
-				<td><button id="btnUnlink" class="btn btn-circle" data-toggle="tooltip" title="Desvincula Cartão do Portador"><span class="glyphicon glyphicon-minus"></span></button></td>
+				<td>${currentCard?.tipo?.name}</td>
+				<g:if test="${currentCard?.tipo == TipoCartao.PROVISORIO}">
+				<td><button id="btnUnlink" class="btn btn-circle" data-toggle="tooltip"
+                            title="Desvincula Cartão do Portador"><span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </td>
 				</g:if>
 			</tr>
 			</tbody>
@@ -51,8 +55,8 @@
 					<div class="panel-body">
 						<div id="divMessage" hidden>
 							<div class="alert alert-danger" role="alert">
-								<span id="errorMessage" class="glyphicon glyphicon-exclamation-sign"></span>
-							</div>
+								<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<span id="errorMessage"></span>
+                            </div>
 						</div>
 						<div class="row form-group">
 							<div class="col-md-6">
@@ -79,6 +83,19 @@
 <script>
 	var tempCardModal = $("#tempCardModal");
 
+    function showErrorMessage(error) {
+        var divMessage = tempCardModal.find("#divMessage");
+        divMessage.show();
+        divMessage.find("#errorMessage").text(" " + error);
+        console.log("Erro: ", error);
+    }
+
+    function clearErrorMessage() {
+        var divMessage = tempCardModal.find("#divMessage");
+        divMessage.find("#errorMessage").text("");
+        divMessage.hide();
+    }
+
 	function linkToCardHolder(cardNumber, cardHolderId, limitDate) {
 		$.get("${createLink(controller: 'vinculoCartaoProvisorio', action: 'linkToCardHolder')}",
 				{
@@ -90,10 +107,7 @@
 			console.log(data);
 			tempCardModal.modal('hide');
 		}).fail(function(xhr) {
-			var divMessage = tempCardModal.find("#divMessage");
-			divMessage.show();
-			divMessage.find("#errorMessage").text(" " + xhr.responseText);
-			console.log("Erro: ", xhr.responseText);
+            showErrorMessage(xhr.responseText)
 		});
 	}
 
@@ -117,11 +131,24 @@
 		linkToCardHolder(cardNumber, cardHolderId, limitDate);
 	});
 
+    function initCardModal() {
+        var cardInput = tempCardModal.find('#card');
+        var limitDateInput = tempCardModal.find('#limitDate');
+        cardInput.val('');
+        limitDateInput.val('');
+        clearErrorMessage();
+
+        tempCardModal.modal('show');
+    }
+
+    $("#btnCardModal").click(function() {
+        initCardModal();
+    });
 
 	$("#btnUnlink").click(function() {
 
 		if (confirm("Confirma a Desvinculação do Cartão Provisório do Portador?")) {
-			var cardId = "${currentCard.id}";
+			var cardId = "${currentCard?.id}";
 			var cardHolderId = "${portador.id}";
 			unlinkToCardHolder(cardId, cardHolderId);
 		}

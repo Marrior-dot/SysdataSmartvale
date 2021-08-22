@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.proc
 
+import com.sysdata.gestaofrota.proc.cartaoProvisorio.ProcessadorSolicitacaoCartaoProvisorioService
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 

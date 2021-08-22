@@ -15,6 +15,8 @@ class Cartao {
 
     static belongsTo = [portador: Portador, loteEmbossing: LoteEmbossing]
 
+    static hasMany = [relacaoPortador: RelacaoCartaoPortador]
+
     static transients = ['numeroMascarado', 'numeroFormatado', "saldoTotal"]
 
     static constraints = {
@@ -81,6 +83,10 @@ class Cartao {
 
     BigDecimal getSaldoTotal() {
         return this.portador.saldoTotal
+    }
+
+    RelacaoCartaoPortador getRelacaoPortadorAtiva(Portador portador) {
+        return this.relacaoPortador.find { it.portador == portador && it.status == StatusRelacaoCartaoPortador.ATIVA}
     }
 
 }

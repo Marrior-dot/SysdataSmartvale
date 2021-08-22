@@ -111,13 +111,16 @@
                         </div>
                     </g:if>
 
+                    <div class="form-group col-md-4">
+                        <g:checkBox name="portador.vincularCartao" value="${veiculoInstance?.portador?.vincularCartao}"></g:checkBox>&nbsp;Vincular novo cartão ao portador
+                    </div>
+
                 </g:if>
             </div>
 
             <g:if test="${veiculoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
                             veiculoInstance?.unidade?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                 <div class="row">
-
                     <div class="form-group col-md-2">
                         <label for="portador.limiteTotal">Limite Total *</label>
 
@@ -127,11 +130,6 @@
                                    value="${veiculoInstance?.portador?.limiteTotal}" required/>
                         </div>
                     </div>
-
-                    <div class="form-group col-md-4">
-                        <g:checkBox name="portador.vincularCartao" value="${veiculoInstance?.portador?.vincularCartao}"></g:checkBox>&nbsp;Criar cartão automaticamento no cadastro
-                    </div>
-
                 </div>
 
             </g:if>
