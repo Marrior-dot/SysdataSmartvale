@@ -50,7 +50,7 @@
                 </g:each>
                 </tbody>
             </table>
-            <g:paginate total="${processingCount}"></g:paginate>
+            <g:paginate total="${processingCount}" params="${params}"></g:paginate>
         </g:if>
         <g:else>
             <div class="well text-center">Não há Processamentos</div>

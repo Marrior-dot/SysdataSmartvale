@@ -36,3 +36,8 @@ dataSource {
 }
 
 
+grails {
+    mail {
+        host = "172.16.100.20"
+    }
+}

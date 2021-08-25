@@ -1,13 +1,6 @@
 package com.sysdata.gestaofrota
 
-import com.sysdata.gestaofrota.Cartao
-import com.sysdata.gestaofrota.CartaoService
-import com.sysdata.gestaofrota.Portador
-import com.sysdata.gestaofrota.PortadorAnonimo
-import com.sysdata.gestaofrota.RelacaoCartaoPortador
-import com.sysdata.gestaofrota.StatusCartao
-import com.sysdata.gestaofrota.StatusRelacaoCartaoPortador
-import com.sysdata.gestaofrota.TipoCartao
+import com.sysdata.gestaofrota.cartao.ResetSenhaCartaoService
 import com.sysdata.gestaofrota.exception.BusinessException
 import grails.gorm.transactions.Transactional
 
@@ -15,6 +8,7 @@ import grails.gorm.transactions.Transactional
 class VinculoCartaoProvisorioService {
 
     CartaoService cartaoService
+    ResetSenhaCartaoService resetSenhaCartaoService
 
     def linkToCardHolder(String cardNumber, Portador cardHolder, Date limitDate) {
         cardNumber = cardNumber.replaceAll("\\s", "")
@@ -26,6 +20,15 @@ class VinculoCartaoProvisorioService {
             [condition: { it.card.portador == PortadorAnonimo.unico }, reject: "Cartão provisório vinculado a outro portador!"],
             [condition: { it.card.status == StatusCartao.EMBOSSING || it.card.status == StatusCartao.DESVINCULADO }, reject: "Cartão ainda não disponível para vínculo!"],
             [condition: { it.limitDate > new Date().clearTime() }, reject: "Data Limite inválida!"],
+            [condition: {
+                            def extraCard = it.card
+                            def countCards = RelacaoCartaoPortador.createCriteria().count({
+                                                eq("cartao", extraCard)
+                                                eq("status", StatusRelacaoCartaoPortador.ATIVA)
+                                            })
+                            return countCards == 0
+                        },
+                        reject: "Cartão já possui vínculo Ativo com portador!"]
         ]
         def ret = [:]
         def pars = [card: card, cardHolder: cardHolder, limitDate: limitDate]
@@ -33,7 +36,6 @@ class VinculoCartaoProvisorioService {
         // Teste de cada regra
         rules.find { rule ->
             ret.ok = rule.condition(pars)
-            println "${rule.reject} => ${ret.ok}"
             if (!ret.ok) {
                 ret.reject = rule.reject
                 return true
@@ -42,9 +44,11 @@ class VinculoCartaoProvisorioService {
         if (ret.ok) {
             card.portador = cardHolder
             card.status = StatusCartao.ATIVO
-            card.addToRelacaoPortador(new RelacaoCartaoPortador(portador: cardHolder))
+            card.addToRelacaoPortador(new RelacaoCartaoPortador(portador: cardHolder, dataInicio: new Date()))
             card.save(flush: true)
-
+            def resp = resetSenhaCartaoService.resetSenha(card)
+            if (!resp.success)
+                log.warn "CRT #${card.id} => não será comandado o Reset Senha neste cenário"
         } else
             throw new BusinessException(ret.reject)
     }
@@ -53,6 +57,7 @@ class VinculoCartaoProvisorioService {
         if (card.tipo == TipoCartao.PROVISORIO) {
             PortadorAnonimo portadorAnonimo = PortadorAnonimo.unico
             card.portador = portadorAnonimo
+            card.status = StatusCartao.DESVINCULADO
             log.info "PRT #${cardHolder.id}: (-) CRT #${card.id}"
 
             RelacaoCartaoPortador relacaoCartaoPortador = card.getRelacaoPortadorAtiva(cardHolder)
@@ -63,17 +68,9 @@ class VinculoCartaoProvisorioService {
             relacaoCartaoPortador.dataFim = new Date()
             relacaoCartaoPortador.save(flush: true)
 
-/*
-            // Depois da desvinculação do cartão provisório, verifica se último cartão está cancelado para gerar um novo cartão
-            Cartao lastCard = Cartao.withCriteria(uniqueResult: true) {
-                                eq("portador", cardHolder)
-                                order("dateCreated", "desc")
-                                firstResult(1)
-
-                            }
-*/
+            //
             Cartao lastCard = cardHolder.cartaoAtual
-            if (lastCard.status == StatusCartao.CANCELADO) {
+            if (lastCard && lastCard.status == StatusCartao.CANCELADO && cardHolder.vincularCartao && cardHolder.status == Status.ATIVO) {
                 log.info "PRT #${cardHolder.id}: CRT #${lastCard.id} ${lastCard.status}"
                 Cartao newCard = cartaoService.gerar(cardHolder)
                 log.info "PRT #${cardHolder.id}: (+) CRT #${newCard.id}"

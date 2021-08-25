@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.StatusCartao" %>
+<%@ page import="com.sysdata.gestaofrota.TipoCartao; com.sysdata.gestaofrota.StatusCartao" %>
 <g:form controller="${controller}">
 
     <div class="panel panel-default">
@@ -19,6 +19,13 @@
                                 noSelection="['': '-- Todos --']"
                                 value="${params.status}"></g:select>
                 </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="tipo">Tipo</label>
+                    <g:select name="tipo" class="form-control"
+                                from="${TipoCartao.values()}" optionValue="name"
+                                noSelection="['': '-- Todos --']"
+                                value="${params.tipo}"></g:select>
+                </div>
             </div>
         </div>
         </div>
@@ -36,6 +43,7 @@
             <th>Portador</th>
             <th>Data Validade</th>
             <th>Status</th>
+            <th>Tipo</th>
             </thead>
 
             <tbody>
@@ -45,11 +53,12 @@
                     <td>${crt.portador.nomeEmbossing}</td>
                     <td><g:formatDate date="${crt.validade}" format="dd/MM/yyyy"></g:formatDate></td>
                     <td>${crt.status.nome}</td>
+                    <td>${crt.tipo?.name}</td>
                 </tr>
             </g:each>
             </tbody>
         </table>
-        <g:paginate total="${cartaoCount}"></g:paginate>
+        <g:paginate total="${cartaoCount}" params="${params}"></g:paginate>
     </div>
 </g:form>
 

@@ -229,6 +229,10 @@ class FixturesService {
                                       service: "processadorSolicitacaoCartaoProvisorioService", active: true])
                                       .save(flush: true)
 
+        Processing.findOrCreateWhere([name: "Reset/Envio Senhas de Cartões Provisórios", order: 3 as byte,
+                                      service: "resetEnvioSenhaCartaoProvisorioService", active: true])
+                                      .save(flush: true)
+
     }
 
     private def criarMarcasVeiculos() {

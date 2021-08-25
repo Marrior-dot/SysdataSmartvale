@@ -1,11 +1,16 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.cartao.ResetSenhaCartaoService
+import com.sysdata.gestaofrota.exception.BusinessException
 import grails.converters.JSON
-import org.springframework.dao.DataIntegrityViolationException
 
 class CartaoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+
+    ResetSenhaCartaoService resetSenhaCartaoService
+
 
     def index() {
         redirect(action: "list", params: params)
@@ -31,6 +36,9 @@ class CartaoController {
             }
             if (params.status) {
                 eq("status", StatusCartao.valueOf(params.status))
+            }
+            if (params.tipo) {
+                eq("tipo", TipoCartao.valueOf(params.tipo))
             }
             ne("status", StatusCartao.CANCELADO)
         }
@@ -71,6 +79,28 @@ class CartaoController {
         }
         def data = [totalRecords: cartaoCount, results: fields]
         render data as JSON
+    }
+
+    def resetSenha() {
+        if (params.id && params.id ==~ /\d+/) {
+            Cartao cartao = Cartao.get(params.id.toLong())
+            try {
+                def ret = resetSenhaCartaoService.resetSenha(cartao)
+                if (ret.success)
+                    flash.success = "Reset de Senha agendado"
+                else
+                    flash.error = ret.message
+            } catch (e) {
+                e.printStackTrace()
+                flash.error = "Erro interno! Contatar suporte."
+            }
+            redirect action: 'show', id: cartao.id
+            return
+        } else {
+            flash.error = "ID Cartão '${params.id}' inválido!"
+            redirect action: 'index'
+            return
+        }
     }
 
 }

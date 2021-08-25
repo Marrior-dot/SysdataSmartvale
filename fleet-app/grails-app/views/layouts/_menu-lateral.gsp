@@ -106,6 +106,7 @@
                             <g:link class="submenu-logado" controller="historicoProcessamento" >Histórico Processamentos</g:link>
                             <g:link class="submenu-logado" controller="mockTransacao" >Gerador Transações</g:link>
                             <g:link class="submenu-logado" controller="configuracaoPropriedade" >Configurador de Propriedades</g:link>
+                            <g:link class="submenu-logado" controller="mailTemplate" >Template de Email</g:link>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

@@ -15,7 +15,7 @@ class Cartao {
 
     static belongsTo = [portador: Portador, loteEmbossing: LoteEmbossing]
 
-    static hasMany = [relacaoPortador: RelacaoCartaoPortador]
+    static hasMany = [relacaoPortador: RelacaoCartaoPortador, resetsSenhaCartao: ResetSenhaCartao]
 
     static transients = ['numeroMascarado', 'numeroFormatado', "saldoTotal"]
 
