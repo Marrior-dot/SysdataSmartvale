@@ -39,6 +39,10 @@ class SolicitacaoCartaoProvisorioService {
     }
 
     def cancel(SolicitacaoCartaoProvisorio solicitacaoCartaoProvisorio) {
-
+        if (solicitacaoCartaoProvisorio.status == StatusSolicitacaoCartaoProvisorio.CRIADA) {
+            solicitacaoCartaoProvisorio.status = StatusSolicitacaoCartaoProvisorio.CANCELADA
+            solicitacaoCartaoProvisorio.save(flush: true)
+        } else
+            throw new BusinessException("Cancelamento inválido! Status da Solicitação incompatível com esta operação (${solicitacaoCartaoProvisorio.status.nome})")
     }
 }

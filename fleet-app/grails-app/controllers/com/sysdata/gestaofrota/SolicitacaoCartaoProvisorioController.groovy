@@ -40,4 +40,12 @@ class SolicitacaoCartaoProvisorioController {
         SolicitacaoCartaoProvisorio solicitacaoCartaoProvisorio = SolicitacaoCartaoProvisorio.get(id)
         respond solicitacaoCartaoProvisorio
     }
+
+    def cancel(Long id) {
+        SolicitacaoCartaoProvisorio solicitacaoCartaoProvisorio = SolicitacaoCartaoProvisorio.get(id)
+        solicitacaoCartaoProvisorioService.cancel(solicitacaoCartaoProvisorio)
+        log.info "Solicitação #${solicitacaoCartaoProvisorio.id} cancelada"
+        flash.success = "Solicitação #${solicitacaoCartaoProvisorio.id} Cancelada"
+        redirect action: 'show', id: solicitacaoCartaoProvisorio.id
+    }
 }
