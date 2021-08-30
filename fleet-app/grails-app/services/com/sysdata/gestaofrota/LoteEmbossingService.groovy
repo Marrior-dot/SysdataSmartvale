@@ -1,6 +1,7 @@
 package com.sysdata.gestaofrota
 
 import grails.gorm.transactions.Transactional
+import org.hibernate.sql.JoinType
 
 @Transactional
 class LoteEmbossingService {
@@ -18,19 +19,16 @@ class LoteEmbossingService {
     }
 
     List<Cartao> listCartoesParaEmbossing(params) {
-
         return Cartao.withCriteria() {
-
                     createAlias("portador", "port")
-                    createAlias("port.unidade", "unid")
-                    createAlias("unid.rh", "rh")
-
+                    createAlias("port.unidade", "unid", JoinType.LEFT_OUTER_JOIN)
+                    createAlias("unid.rh", "rh", JoinType.LEFT_OUTER_JOIN)
                     eq("status", StatusCartao.CRIADO)
-
+                    'in'("tipo", [TipoCartao.PADRAO, TipoCartao.PROVISORIO])
                     order("rh.id")
                     maxResults(params.max)
                     firstResult(params.offset)
-        }
+                }
     }
 
     List<LoteEmbossing> listLotesEmbossing(params) {
@@ -46,8 +44,6 @@ class LoteEmbossingService {
     }
 
     LoteEmbossing createLoteEmbossing() {
-
-
         LoteEmbossing loteEmbossing = new LoteEmbossing(usuario: springSecurityService.currentUser)
         loteEmbossing.save(flush: true)
         log.info "Lote Embossing #${loteEmbossing.id} criado"

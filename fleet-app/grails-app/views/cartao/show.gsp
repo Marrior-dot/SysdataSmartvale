@@ -4,25 +4,32 @@
 	<head>
 		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'cartao.label', default: 'Cartao')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
+		<title>Destalhes do Cartão</title>
 	</head>
 	<body>
 		<div class="panel panel-default panel-top">
 			<div class="panel-heading">
-				<h4>Cartão</h4>
+				<h4>Detalhes do Cartão</h4>
 			</div>
 
 			<div class="panel-body">
 
-				<a class="btn btn-default" href="${createLink(uri: '/')}">
-					<span class="glyphicon glyphicon-home"></span>
-					<g:message code="default.home.label"/>
-				</a>
-				<g:link class="btn btn-default" action="list">
-					<span class="glyphicon glyphicon-list"></span>
-					<g:message code="default.list.label" args="[entityName]"/>
-				</g:link>
+                <div class="buttons-top">
+                    <a class="btn btn-default" href="${createLink(uri: '/')}">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <g:message code="default.home.label"/>
+                    </a>
+                    <g:link class="btn btn-default" action="list">
+                        <span class="glyphicon glyphicon-list"></span>
+                        <g:message code="default.list.label" args="[entityName]"/>
+                    </g:link>
+                    <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]">
+                        Reset Senha
+                    </g:link>
 
+                </div>
+
+                <alert:all/>
 
 				<div class="panel-top">
 					<table class="table table-bordered">
@@ -79,6 +86,14 @@
 							<tr>
 								<th>Saldo Disponível</th>
 								<td>${Util.formatCurrency(cartaoInstance?.portador?.saldoTotal)}</td>
+							</tr>
+
+						</g:if>
+
+						<g:if test="${cartaoInstance?.tipo}">
+							<tr>
+								<th>Tipo Cartão</th>
+								<td>${cartaoInstance?.tipo?.name}</td>
 							</tr>
 
 						</g:if>

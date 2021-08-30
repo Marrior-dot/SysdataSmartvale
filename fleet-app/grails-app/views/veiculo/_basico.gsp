@@ -70,19 +70,6 @@
                     </div>
                 </div>
 
-%{--
-                <div class="form-group col-md-3">
-                    <label class="control-label" for="autonomia">Autonomia *</label>
-
-                    <div class="input-group">
-                        <input id="autonomia" name="autonomia" type="number" class="form-control maxValor"
-                               value="${veiculoInstance?.autonomia}" min="0" maxlength="5" required>
-                        <span class="input-group-addon">Km/l</span>
-                    </div>
-
-                </div>
---}%
-
                 <div class="form-group col-md-3">
                     <label for="tipoAbastecimento">Tipo de Combustível</label>
                     <g:select name="tipoAbastecimento" optionValue="nome" class="form-control editable"
@@ -94,16 +81,8 @@
 
             <div class="row">
 
-%{--
-                <div class="col-md-3">
-                    <label for="validadeExtintor">Validade Extintor</label>
-                    <input type="text" class="form-control datepicker" id="validadeExtintor" name="validadeExtintor"
-                           value="${Util.formattedDate(veiculoInstance?.validadeExtintor)}"/>
-                </div>
---}%
-
                 <g:if test="${programaMaquina}">
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-6">
                         <label for="complementoEmbossing">Nome Impresso no Cartão</label>
 
                         <div class="input-group">
@@ -132,13 +111,17 @@
                         </div>
                     </g:if>
 
+                    <div class="form-group col-md-4">
+                        <g:checkBox name="portador.vincularCartao"
+                                    value="${veiculoInstance?.portador?.vincularCartao ?: true}"></g:checkBox>&nbsp;Vincular cartão automaticamente ao portador
+                    </div>
+
                 </g:if>
             </div>
 
             <g:if test="${veiculoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
                             veiculoInstance?.unidade?.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
                 <div class="row">
-
                     <div class="form-group col-md-2">
                         <label for="portador.limiteTotal">Limite Total *</label>
 
@@ -148,29 +131,6 @@
                                    value="${veiculoInstance?.portador?.limiteTotal}" required/>
                         </div>
                     </div>
-
-%{--
-                    <div class="form-group col-md-2">
-                        <label for="portador.limiteDiario">Limite Diário *</label>
-
-                        <div class="input-group">
-                            <input class="form-control money"
-                                   id="portador.limiteDiario" name="portador.limiteDiario"
-                                   value="${veiculoInstance?.portador?.limiteDiario}"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-2">
-                        <label for="portador.limiteMensal">Limite Mensal *</label>
-
-                        <div class="input-group">
-                            <input class="form-control money"
-                                   id="portador.limiteMensal" name="portador.limiteMensal"
-                                   value="${veiculoInstance?.portador?.limiteMensal}"/>
-                        </div>
-                    </div>
---}%
-
                 </div>
 
             </g:if>

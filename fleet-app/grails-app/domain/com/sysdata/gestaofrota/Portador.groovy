@@ -12,14 +12,13 @@ abstract class Portador {
     BigDecimal limiteDiario
     BigDecimal limiteMensal
     BigDecimal limiteCredito
-
     BigDecimal saldoTotal = 0D
     BigDecimal saldoDiario
     BigDecimal saldoMensal
-
     Status status = Status.ATIVO
+    Boolean vincularCartao = true
 
-    static hasMany = [cartoes: Cartao]
+    static hasMany = [cartoes: Cartao, relacaoCartao: RelacaoCartaoPortador]
 
     static belongsTo = [unidade: Unidade]
 
@@ -30,32 +29,34 @@ abstract class Portador {
         saldoDiario nullable: true
         saldoMensal nullable: true
         status nullable: true
+        unidade nullable: true
+        conta nullable: true
+        vincularCartao nullable: true
 
         limiteTotal validator: { val, obj ->
-
-            // INSERT
-            if (! obj.id) {
-                def rhLimite = obj.unidade.rh.limiteTotal
-                def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
-
-                if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
-                    return ["portador.limiteTotal.superiorAoComprometido"]
-            // UPDATE
-            } else {
-                def oldValue = obj.getPersistentValue('limiteTotal')
-                def newValue = val
-
-                if (newValue > oldValue) {
-                    def dif = newValue - oldValue
+            if (! obj.instanceOf(PortadorAnonimo)) {
+                // INSERT
+                if (! obj.id) {
                     def rhLimite = obj.unidade.rh.limiteTotal
                     def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
-                    if (rhLimiteComprometido + dif > rhLimite)
+
+                    if (obj.limiteTotal + rhLimiteComprometido > rhLimite)
                         return ["portador.limiteTotal.superiorAoComprometido"]
+                    // UPDATE
+                } else {
+                    def oldValue = obj.getPersistentValue('limiteTotal')
+                    def newValue = val
+
+                    if (newValue > oldValue) {
+                        def dif = newValue - oldValue
+                        def rhLimite = obj.unidade.rh.limiteTotal
+                        def rhLimiteComprometido = obj.unidade.rh.limiteComprometido
+                        if (rhLimiteComprometido + dif > rhLimite)
+                            return ["portador.limiteTotal.superiorAoComprometido"]
+                    }
                 }
             }
-
         }
-
     }
 
     static transients = ['cartaoAtivo', 'cartaoAtual', 'saldo', 'nomeEmbossing', 'endereco', 'cpfFormatado', 'cnpj', 'telefone', 'ativo']
@@ -91,7 +92,7 @@ abstract class Portador {
             MaquinaMotorizada maquina = (this as PortadorMaquina)?.maquina
             return maquina?.nomeEmbossing
         }
-        return ""
+        return "<< Sem portador vinculado >>"
     }
 
     Endereco getEndereco() {
@@ -111,7 +112,5 @@ abstract class Portador {
 
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
-
-
 
 }

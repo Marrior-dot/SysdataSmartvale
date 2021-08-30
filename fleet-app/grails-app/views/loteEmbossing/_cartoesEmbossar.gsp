@@ -8,15 +8,17 @@
                 <th>Cliente</th>
                 <th>Unidade</th>
                 <th>Data Criação</th>
+                <th>Tipo</th>
                 </thead>
                 <tbody>
                 <g:each in="${cartoesEmbossarList}" var="crt">
                     <tr>
                         <td><g:link controller="cartao" action="show" id="${crt.id}">${crt.numeroMascarado}</g:link>    </td>
                         <td>${crt.portador.nomeEmbossing}</td>
-                        <td>${crt.portador.unidade.rh.nome}</td>
-                        <td>${crt.portador.unidade.nome}</td>
+                        <td>${crt.portador.unidade?.rh?.nome}</td>
+                        <td>${crt.portador.unidade?.nome}</td>
                         <td><g:formatDate date="${crt.dateCreated}" format="dd/MM/yy"></g:formatDate></td>
+                        <td>${crt.tipo.name}</td>
                     </tr>
                 </g:each>
                 </tbody>

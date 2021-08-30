@@ -225,6 +225,13 @@ class FixturesService {
                                       service: "recalculoSaldosConveniosService", active: true])
                                       .save(flush: true)
 
+        Processing.findOrCreateWhere([name: "Geração Cartões Provisórios", order: 2 as byte,
+                                      service: "processadorSolicitacaoCartaoProvisorioService", active: true])
+                                      .save(flush: true)
+
+        Processing.findOrCreateWhere([name: "Reset/Envio Senhas de Cartões Provisórios", order: 3 as byte,
+                                      service: "resetEnvioSenhaCartaoProvisorioService", active: true])
+                                      .save(flush: true)
 
     }
 

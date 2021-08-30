@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.6.11"
+version "1.7.0"
 group "fleet-app"
 
 apply plugin:"eclipse"
@@ -117,6 +117,10 @@ dependencies {
 
     // Caelum Stella Boleto
     compile "br.com.caelum.stella:caelum-stella-boleto:2.1.2"
+
+    // Async Email
+    compile 'org.grails.plugins:mail:3.0.0'
+    compile "org.grails.plugins:asynchronous-mail:2.0.2"
 
 
 }
