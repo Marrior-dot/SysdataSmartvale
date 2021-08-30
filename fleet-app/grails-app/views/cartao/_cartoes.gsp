@@ -119,6 +119,7 @@
 				}
 		).done(function(data) {
 			console.log(data);
+            loadCartoesVinculados(cardHolderId);
 		}).fail(function(xhr) {
 			console.log("Erro: ", xhr.responseText);
 		});
@@ -146,13 +147,17 @@
     });
 
 	$("#btnUnlink").click(function() {
-
 		if (confirm("Confirma a Desvinculação do Cartão Provisório do Portador?")) {
 			var cardId = "${currentCard?.id}";
 			var cardHolderId = "${portador.id}";
 			unlinkToCardHolder(cardId, cardHolderId);
+            loadCartoesVinculados(cardHolderId);
 		}
+	});
 
-	})
+    tempCardModal.on('hidden.bs.modal', function (e) {
+        var cardHolderId = "${portador.id}";
+        loadCartoesVinculados(cardHolderId);
+    });
 
 </script>

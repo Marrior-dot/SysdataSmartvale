@@ -103,4 +103,20 @@ class CartaoController {
         }
     }
 
+    def findAllCartoesPortador() {
+        if (params.prtId && params.prtId ==~ /\d+/) {
+            Portador portador = Portador.get(params.prtId as long)
+            if (portador) {
+                render template: "cartoes", model: [portador: portador]
+                return
+            } else {
+                render status: 404, text: "Não encontrado Portador com ID #${params.prtId}!"
+                return
+            }
+        } else {
+            render status: 404, text: "Portador ID informado na request inválido: ${params.prtId}!"
+            return
+        }
+    }
+
 }

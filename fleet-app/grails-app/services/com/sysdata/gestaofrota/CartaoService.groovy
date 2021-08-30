@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.exception.BusinessException
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -36,8 +37,17 @@ class CartaoService {
     }
 
     Cartao desbloquear(Cartao cartao) {
-       cartao.status = StatusCartao.ATIVO
-       cartao.save(flush: true)
+        Portador portador = cartao.portador
+        Cartao cartaoExtraAtivo = portador.cartoes.find { it.tipo == TipoCartao.PROVISORIO && it.status == StatusCartao.ATIVO }
+        if (cartaoExtraAtivo)
+            throw new BusinessException("Portador possui um cartão Provisório vinculado! Desvincule-o, primeiramente, antes de ativar este cartão")
+
+        if (cartao.status == StatusCartao.EMBOSSING) {
+            cartao.status = StatusCartao.ATIVO
+            cartao.save(flush: true)
+        } else
+            throw new BusinessException("Cartão não pode ser ativo! Status inválido para esta operação: ${cartao.status.nome}")
+
     }
 
     Cartao cancelar(Cartao cartao, MotivoCancelamento motivo) {

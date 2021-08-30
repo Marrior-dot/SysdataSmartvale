@@ -1,14 +1,8 @@
 package com.sysdata.gestaofrota
 
-import org.springframework.transaction.annotation.TransactionAnnotationParser
-
 class CentralAtendimentoService {
 
     def springSecurityService
-
-    def serviceMethod() {
-
-    }
 
     private def ret=[:]
 

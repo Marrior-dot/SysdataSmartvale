@@ -5,7 +5,7 @@ class ResetSenhaCartao {
     Date dateCreated
     User solicitante
     Date dataHoraSenhaEnviada
-    StatusResetSenhaCartao status = StatusResetSenhaCartao.REGISTRADO
+    StatusResetSenhaCartao status = StatusResetSenhaCartao.RESET_SENHA
 
     static belongsTo = [cartao: Cartao]
 

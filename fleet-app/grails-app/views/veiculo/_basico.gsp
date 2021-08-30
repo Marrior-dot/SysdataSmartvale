@@ -112,7 +112,8 @@
                     </g:if>
 
                     <div class="form-group col-md-4">
-                        <g:checkBox name="portador.vincularCartao" value="${veiculoInstance?.portador?.vincularCartao}"></g:checkBox>&nbsp;Vincular novo cartão ao portador
+                        <g:checkBox name="portador.vincularCartao"
+                                    value="${veiculoInstance?.portador?.vincularCartao ?: true}"></g:checkBox>&nbsp;Vincular cartão automaticamente ao portador
                     </div>
 
                 </g:if>

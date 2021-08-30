@@ -1,7 +1,6 @@
 package com.sysdata.gestaofrota.cartao
 
 import com.sysdata.gestaofrota.*
-import com.sysdata.gestaofrota.exception.BusinessException
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -14,7 +13,7 @@ class ResetSenhaCartaoService {
         if (cartao.status == StatusCartao.ATIVO) {
             def resetNaoProcessado = ResetSenhaCartao.withCriteria {
                 eq("cartao", cartao)
-                'in'("status", [StatusResetSenhaCartao.REGISTRADO, StatusResetSenhaCartao.ENVIAR_SENHA])
+                'in'("status", [StatusResetSenhaCartao.RESET_SENHA, StatusResetSenhaCartao.ENVIAR_SENHA])
             }
             if (resetNaoProcessado) {
                 log.error "CRT #${cartao.id} => Existe um Reset Senha ainda pendente para este cartão"

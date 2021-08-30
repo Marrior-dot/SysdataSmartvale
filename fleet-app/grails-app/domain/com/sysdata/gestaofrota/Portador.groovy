@@ -92,7 +92,7 @@ abstract class Portador {
             MaquinaMotorizada maquina = (this as PortadorMaquina)?.maquina
             return maquina?.nomeEmbossing
         }
-        return ""
+        return "<< Sem portador vinculado >>"
     }
 
     Endereco getEndereco() {
@@ -112,7 +112,5 @@ abstract class Portador {
 
         cnpj.replaceAll('\\.', '').replaceAll('-', '')
     }
-
-
 
 }
