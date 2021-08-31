@@ -70,6 +70,8 @@ class ProcessingService {
                                                     where pr.batch is null and es.processing = pr
                                                     and pr.active = true""")
         procList.each { proc ->
+            println "Proc: ${proc.name}"
+
             if (proc.executionSchedule && proc.runNow(date))
                 runProcessing(proc, date.clearTime())
         }
