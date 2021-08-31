@@ -9,7 +9,7 @@ class DailyProcessJob {
     ProcessingService processingService
 
     static triggers = {
-        cron startDelay: 1000 * 60, cronExpression: "0 0/5 * * * ?"
+        cron startDelay: 1000 * 60, cronExpression: "0 0/30 * * * ?"
     }
 
     def execute() {
