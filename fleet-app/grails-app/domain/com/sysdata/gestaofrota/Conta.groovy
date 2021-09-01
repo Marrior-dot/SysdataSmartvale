@@ -38,7 +38,6 @@ class Conta {
         def ultFat = Fatura.withCriteria(uniqueResult: true) {
             eq("conta", this)
             eq("status", StatusFatura.ABERTA)
-            firstResult(1)
             order("data", "desc")
         }
         ultFat
