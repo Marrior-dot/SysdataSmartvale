@@ -280,7 +280,6 @@ class CorteService {
         corteProx.with {
             fechamento = fechProx
             dataPrevista = cal.time.clearTime()
-            dataFechamento = cal.time.clearTime()
             dataCobranca = cal.time.clearTime() + fechProx.diasAteVencimento
             dataInicioCiclo = corte.dataFechamento + 1
             status = StatusCorte.ABERTO
