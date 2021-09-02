@@ -71,6 +71,8 @@
                         <ul class="nav nav-second-level">
                             <li class="controller"><g:link class="submenu-logado" controller="lotePagamento">Lotes Repasses Conveniados</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="loteRecebimento">Lotes Recebimentos Clientes</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="corteEstabelecimento">Cortes de Repasses</g:link></li>
+
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
