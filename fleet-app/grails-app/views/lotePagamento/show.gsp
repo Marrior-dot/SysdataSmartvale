@@ -61,6 +61,12 @@
                                         class="btn btn-success"
                                         onclick="return confirm('Confirma o Lote para Envio?')">
                                     <i class="fa fa-thumbs-o-up fa-fw"></i> Confirmar p/ Envio</button>
+
+                                <button type="submit"
+                                        name="_action_cancel"
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Confirma o Cancelamento do Lote?')">
+                                    <i class="fa fa-close fa-fw"></i> Cancelar Lote</button>
                             </g:form>
                         </div>
                     </g:if>
