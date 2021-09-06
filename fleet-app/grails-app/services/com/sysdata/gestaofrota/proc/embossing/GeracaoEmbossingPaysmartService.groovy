@@ -117,7 +117,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
 
         crtIds.eachWithIndex { cid, i ->
             Cartao cartao = Cartao.get(cid)
-            String nome = cartao.portador.nomeEmbossing;
+            String nome = cartao.tipo == TipoCartao.PROVISORIO ? "AO PORTADOR" : cartao.portador.nomeEmbossing
             nome = Util.normalize(nome.substring(0, Math.min(maximoColunas, nome.length())).toUpperCase())
             String pan = cartao.numero.substring(0, 16)
             String validade = sdfAAMM.format(cartao.validade)
@@ -151,11 +151,10 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 builder.append("*${emb4}")
 
             } else if (cartao.portador.instanceOf(PortadorMaquina)) {
-
                 def empresaNome = cartao.portador.unidade.rh.nomeEmbossing ? normalizeColumn(cartao.portador.unidade.rh.nomeEmbossing, maximoColunas) :
-                                    normalizeColumn(cartao.portador.unidade.rh.nome, maximoColunas)
+                                                                        normalizeColumn(cartao.portador.unidade.rh.nome, maximoColunas)
                 def unidadeNome = cartao.portador.unidade.nomeEmbossing ? normalizeColumn(cartao.portador.unidade.nomeEmbossing, maximoColunas) :
-                                    normalizeColumn(cartao.portador.unidade.nome, maximoColunas)
+                                                                        normalizeColumn(cartao.portador.unidade.nome, maximoColunas)
                 def portadorNome = normalizeColumn(cartao.portador.nomeEmbossing, maximoColunas)
 
                 // 2ª Linha - Nome da Empresa Cliente
@@ -165,6 +164,12 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
                 // 4ª Linha - Nome do Portador
                 builder.append("*${portadorNome}")
 
+            } else if (cartao.portador.instanceOf(PortadorAnonimo)) {
+                builder.append("*${normalizeColumn("CARTAO EXTRA", maximoColunas)}")
+                // 3ª Linha - Nome da Unidade
+                builder.append("*${normalizeColumn("", maximoColunas)}")
+                // 4ª Linha - Nome do Portador
+                builder.append("*${normalizeColumn("", maximoColunas)}")
             }
 
             // campo reservado uso futuro
@@ -173,7 +178,7 @@ class GeracaoEmbossingPaysmartService implements GeradorArquivoEmbossing {
             builder.append("%${trilha1}?")
             // trilha 2
             builder.append(";${trilha2}?")
-            builder.append("|${getDadosPostagem(cartao.portador.unidade.rh.endereco)}")
+            builder.append("|${getDadosPostagem(cartao.portador.unidade?.rh?.endereco)}")
             builder.append("${cartao.cvv}${campoCpf}${campoCnpj}${campoCel}DtE=${dataEfetivacao}${rfu3}${titularidade}${via}")
             builder.append("${aplicacoes}${pinBlock}  #CH#")
             builder.append("${getTerminadorLinha()}")

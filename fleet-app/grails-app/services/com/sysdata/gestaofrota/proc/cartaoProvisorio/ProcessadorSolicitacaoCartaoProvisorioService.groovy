@@ -63,6 +63,7 @@ class ProcessadorSolicitacaoCartaoProvisorioService implements ExecutableProcess
             log.info "Criando Lote Embossing Cartões Provisórios..."
             cartoesIds.eachWithIndex { cid, idx ->
                 Cartao cartaoProvisorio = Cartao.get(cid)
+                cartaoProvisorio.status = StatusCartao.LIBERADO_EMBOSSING
                 loteEmbossing.addToCartoes(cartaoProvisorio)
                 log.info "\t(+) CRT ${cid}"
                 if ((idx + 1) % 50 == 0)
