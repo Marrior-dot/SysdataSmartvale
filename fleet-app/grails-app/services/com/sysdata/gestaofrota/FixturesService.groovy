@@ -4,6 +4,9 @@ import com.fourLions.processingControl.BatchProcessing
 import com.fourLions.processingControl.DailySchedule
 import com.fourLions.processingControl.ExecutionFrequency
 import com.fourLions.processingControl.Processing
+import com.sysdata.commons.dates.Holiday
+import com.sysdata.commons.dates.HolidayDate
+import com.sysdata.commons.dates.NationalHoliday
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -22,6 +25,7 @@ class FixturesService {
         criarProcessamentos()
         criarMarcasVeiculos()
         criarMotivosNegacao()
+        criarFeriadosNacionais()
     }
 
     private void criarPerfisAcesso() {
@@ -277,5 +281,31 @@ class FixturesService {
         MotivoNegacao.findOrCreateWhere([codigo: "26", descricao: "EC não habilitado à Empresa Cliente"]).save(flush: true)
         MotivoNegacao.findOrCreateWhere([codigo: "51", descricao: "Saldo indisponível"]).save(flush: true)
         MotivoNegacao.findOrCreateWhere([codigo: "55", descricao: "Senha inválida"]).save(flush: true)
+    }
+
+    private void setDataFeriado(Holiday feriado, ano) {
+        def feriadoData = new Date()
+        feriadoData.set([dayOfMonth: feriado.day, month: feriado.month, year: ano])
+        HolidayDate.findOrCreateWhere(holiday: feriado, feriadoData).save(flush: true)
+    }
+
+    private void criarFeriadosNacionais() {
+        NationalHoliday anoNovo = NationalHoliday.findOrCreateWhere(day: 1, month: 0, description: "Confraternização Universal").save(flush: true)
+        NationalHoliday independencia = NationalHoliday.findOrCreateWhere(day: 7, month: 6, description: "Independência do Brasil").save(flush: true)
+        NationalHoliday aparecida = NationalHoliday.findOrCreateWhere(day: 12, month: 9, description: "Nossa Senhora Aparecida").save(flush: true)
+        NationalHoliday finados = NationalHoliday.findOrCreateWhere(day: 2, month: 10, description: "Finados").save(flush: true)
+        NationalHoliday republica = NationalHoliday.findOrCreateWhere(day: 15, month: 10, description: "Proclamação da República").save(flush: true)
+        NationalHoliday natal = NationalHoliday.findOrCreateWhere(day: 25, month: 11, description: "Natal").save(flush: true)
+
+        def hoje = new Date()
+        def anoAtual = hoje[Calendar.YEAR]
+
+        setDataFeriado(anoNovo, anoAtual)
+        setDataFeriado(independencia, anoAtual)
+        setDataFeriado(aparecida, anoAtual)
+        setDataFeriado(finados, anoAtual)
+        setDataFeriado(republica, anoAtual)
+        setDataFeriado(natal, anoAtual)
+
     }
 }
