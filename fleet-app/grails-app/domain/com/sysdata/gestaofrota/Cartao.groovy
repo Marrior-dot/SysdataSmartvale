@@ -78,7 +78,7 @@ class Cartao {
 
     @Override
     String toString() {
-        return "${numeroMascarado} [${status.nome}]"
+        return "${numeroFormatado} [${status.nome}]"
     }
 
     BigDecimal getSaldoTotal() {

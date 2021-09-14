@@ -16,7 +16,7 @@ class VinculoCartaoProvisorioService {
         def rules = [
             [condition: { it.card != null }, reject: "Cartão '${cardNumber}' não encontrado!"],
             [condition: { it.card.tipo == TipoCartao.PROVISORIO }, reject: "Cartão '${cardNumber}' não do tipo Provisório!"],
-            [condition: { it.cardHolder.cartaoAtual?.status != StatusCartao.ATIVO }, reject: "Portador possui um cartão já ativo no momento!"],
+            [condition: { it.cardHolder.cartaoAtivo == null }, reject: "Portador já possui um cartão ativo no momento!"],
             [condition: { it.card.portador == PortadorAnonimo.unico }, reject: "Cartão provisório vinculado a outro portador!"],
             [condition: { it.card.status == StatusCartao.EMBOSSING || it.card.status == StatusCartao.DESVINCULADO }, reject: "Cartão ainda não disponível para vínculo!"],
             [condition: { it.limitDate > new Date().clearTime() }, reject: "Data Limite inválida!"],
@@ -68,6 +68,22 @@ class VinculoCartaoProvisorioService {
             relacaoCartaoPortador.dataFim = new Date()
             relacaoCartaoPortador.save(flush: true)
 
+            //Caso exista um Reset registrado,
+            def resetsSenhasList = ResetSenhaCartao.withCriteria {
+                                        eq("cartao", card)
+                                        eq("status", StatusResetSenhaCartao.RESET_SENHA)
+                                    }
+            resetsSenhasList.each { reset ->
+
+                reset.funcionarios.each { func ->
+                    reset.removeFromFuncionarios(func)
+                }
+
+                log.info "(-) RST #${reset.id}"
+                reset.delete(flush: true)
+            }
+
+/*
             //
             Cartao lastCard = cardHolder.cartaoAtual
             if (lastCard && lastCard.status == StatusCartao.CANCELADO && cardHolder.vincularCartao && cardHolder.status == Status.ATIVO) {
@@ -75,6 +91,7 @@ class VinculoCartaoProvisorioService {
                 Cartao newCard = cartaoService.gerar(cardHolder)
                 log.info "PRT #${cardHolder.id}: (+) CRT #${newCard.id}"
             }
+*/
 
         } else
             throw new BusinessException("Não pode desvincular um cartão padrão do portador!")

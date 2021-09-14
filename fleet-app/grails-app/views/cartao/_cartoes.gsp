@@ -8,7 +8,7 @@
 	</div>
 	<div class="panel-body">
 
-		<g:set var="currentCard" value="${portador?.cartaoAtual}"></g:set>
+		<g:set var="currentCard" value="${portador?.cartaoAtivo ?: portador?.cartaoAtual}"></g:set>
 
 		<table class="table" style="font-size: 12px">
 			<thead>

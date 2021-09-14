@@ -74,11 +74,12 @@ abstract class Portador {
     }
 
     Cartao getCartaoAtivo() {
-        cartoes.find { it.status == StatusCartao.ATIVO || it.status == StatusCartao.EMBOSSING }
+        //cartoes.find { it.status == StatusCartao.ATIVO || it.status == StatusCartao.EMBOSSING }
+        return cartoes.find { it.status == StatusCartao.ATIVO }
     }
 
     Cartao getCartaoAtual() {
-        cartoes.max { it.dateCreated }
+        return cartoes.max { it.dateCreated }
     }
 
     BigDecimal getSaldo() {
