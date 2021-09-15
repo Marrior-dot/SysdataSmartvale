@@ -120,9 +120,7 @@
 						</div>
 					</g:if>
 
-
 					<g:if test="${equipamentoInstance?.unidade?.rh.modeloCobranca == TipoCobranca.POS_PAGO}">
-
 						<div class="form-group col-md-2">
 							<label for="portador.limiteTotal">Limite Total *</label>
 							<div class="input-group">
@@ -131,15 +129,17 @@
 									   value="${ com.sysdata.gestaofrota.Util.formatCurrency(equipamentoInstance?.portador?.limiteTotal)  }" required/>
 							</div>
 						</div>
-
 					</g:if>
 
+                    <div class="form-group col-md-4">
+                        <label>Vincular cartão automaticamente ao portador</label>
+                        <div>
+                            <g:checkBox name="portador.vincularCartao"
+                                        value="${equipamentoInstance?.portador?.vincularCartao}"></g:checkBox>
 
-				</g:if>
-
-
-
-
+                        </div>
+                    </div>
+                </g:if>
 
 				</div>
 
