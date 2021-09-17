@@ -82,6 +82,16 @@
 
 <script>
 	var tempCardModal = $("#tempCardModal");
+    var tabCartoes = $("#tabCartoes");
+
+    function loadCartoesVinculados(portadorId) {
+        $.get("${createLink(controller: 'cartao', action: 'findAllCartoesPortador')}", { prtId: portadorId }, function() {
+
+        })
+        .done(function(data) {
+            tabCartoes.html(data);
+        });
+    }
 
     function showErrorMessage(error) {
         var divMessage = tempCardModal.find("#divMessage");

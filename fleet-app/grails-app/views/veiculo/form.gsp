@@ -58,7 +58,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active" ><a href="#tab1" data-toggle="tab">${entityName}</a></li>
                         <g:if test="${veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
-                            <li><a href="#cartoes" data-toggle="tab">Cartões</a></li>
+                            <li><a href="#tabCartoes" data-toggle="tab">Cartões</a></li>
                         </g:if>
                         <li><a href="#tab3" data-toggle="tab">Funcionários</a></li>
                         <li><a href="#tab4" data-toggle="tab">Hodômetro</a></li>
@@ -75,7 +75,7 @@
                         </div>
 
                         <g:if test="${veiculoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
-                            <div class="tab-pane" id="cartoes">
+                            <div class="tab-pane" id="tabCartoes">
                                 %{--<g:render template="/cartao/cartoes" model="[portador: veiculoInstance.portador]"/>--}%
                             </div>
                         </g:if>
@@ -104,21 +104,12 @@
         </div>
     </div>
 
-    <script>
+<asset:javascript src="cartoes.js"></asset:javascript>
 
-        function loadCartoesVinculados(portadorId) {
-            $.get("${createLink(controller: 'cartao', action: 'findAllCartoesPortador')}", { prtId: portadorId }, function() {
-
-            })
-                .done(function(data) {
-                    $("#cartoes").html(data);
-                })
-        }
-
-        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-            loadCartoesVinculados("${veiculoInstance?.portador.id}")
-        });
-
-    </script>
+<script>
+    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+        loadCartoesVinculados("${veiculoInstance?.portador.id}");
+    });
+</script>
 </body>
 </html>

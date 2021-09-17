@@ -114,11 +114,11 @@
                                 <th>Status</th>
                                 </thead>
                                 <tbody>
-                                <g:each in="${cartaoInstance.relacaoPortador}" var="relacao">
+                                <g:each in="${cartaoInstance.relacaoPortador.sort { it.dataInicio }}" var="relacao">
                                     <tr>
                                         <td>${relacao.portador.nomeEmbossing}</td>
-                                        <td><g:formatDate date="${relacao.dataInicio}" format="dd/MM/yy"></g:formatDate></td>
-                                        <td><g:formatDate date="${relacao.dataFim}" format="dd/MM/yy"></g:formatDate></td>
+                                        <td><g:formatDate date="${relacao.dataInicio}" format="dd/MM/yy HH:mm:ss"></g:formatDate></td>
+                                        <td><g:formatDate date="${relacao.dataFim}" format="dd/MM/yy HH:mm:ss"></g:formatDate></td>
                                         <td>${relacao.status.nome}</td>
                                     </tr>
                                 </g:each>
