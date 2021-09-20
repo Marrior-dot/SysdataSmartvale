@@ -12,76 +12,11 @@ class ConsumoProdutosRelatorioController {
 
     GrailsApplication grailsApplication
 
+
+    ConsumoProdutosRelatorioService consumoProdutosRelatorioService
+
     def index() {
-
-        StringBuilder sb = new StringBuilder()
-
-        sb.append("""
-select
-    v.placa,
-    v.marca.abreviacao,
-    v.modelo,
-    v.unidade.rh.nome,
-    v.unidade.nome,
-    p.nome,
-    sum(t.qtd_litros),
-
-    (
-        (select t1.quilometragem from Transacao t1 where t1.id =
-            (select max(tu.id) from Transacao tu where tu.maquina = t.maquina and tu.tipo = 'COMBUSTIVEL'
-                and tu.statusControle in ('PENDENTE', 'CONFIRMADA')))
-
-        -
-
-        (select t2.quilometragem from Transacao t2 where t2.id =
-            (select min(ti.id) from Transacao ti where ti.maquina = t.maquina and ti.tipo = 'COMBUSTIVEL'
-                and ti.statusControle = 'CONFIRMADA'))
-
-    ) as kms_percorridos
-
-from
-    Transacao as t,
-    Veiculo as v,
-    TransacaoProduto as tp,
-    Produto p
-
-where
-    v = t.maquina and
-    tp.transacao = t and
-    tp.produto = p and
-    t.statusControle in :status
-""")
-
-        if (params.placa)
-            sb.append(" and v.placa = '${params.placa}' ")
-
-        if (params.dataInicio && params.dataFim) {
-            pars.dataInicio = params.date('dataInicio', 'dd/MM/yyyy')
-            pars.dataFim = params.date('dataFim', 'dd/MM/yyyy')
-            sb.append(""" and v.dateCreated >= :dataInicio and v.dateCreated <= :dataFim """)
-        }
-
-        if (params.unidade)
-            sb.append(" and v.unidade.id = ${params.unidade as long} ")
-
-
-        sb.append("""
-group by
-    v.placa,
-    v.marca.abreviacao,
-    v.modelo,
-    v.unidade.rh.nome,
-    v.unidade.nome,
-    p.nome,
-    t.maquina
-having
-    sum(t.qtd_litros) > 0
-
-
-order by
-    v.placa
-""")
-
+        params.max = params.max ? params.max as int : 10
 
         if (params.f && params.f != 'html') {
 
@@ -142,8 +77,7 @@ order by
             cabecalho7.quilometragem = "DESEMPENHO (km/l)"
             cabecalhoDemonstrativoRelatorio << cabecalho7
 
-            def consumoReport = Transacao.executeQuery(sb.toString(),
-                    [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]])
+            def consumoReport = consumoProdutosRelatorioService.list(params)
 
             consumoReport = consumoReport.collect {
                 [
@@ -187,21 +121,15 @@ order by
                     "quilometragem" : "KM Percorrida"
             ]
 
-            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+consumoReport, fields, labels, [:], ['header.enabled': false])
+            exportService.export(params.f, response.outputStream, cabecalhoDemonstrativoRelatorio+consumoReport, fields, labels, [:],
+                                ['header.enabled': false])
 
             return
         }
-
-        def consumoList = Transacao.executeQuery(sb.toString(),
-                [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]],
-                [max: params.max ? params.max as int : 10, offset: params.offset ? params.offset as int : 0] )
-
-        def consumoCount = Transacao.executeQuery(sb.toString(),
-                [status: [StatusControleAutorizacao.PENDENTE, StatusControleAutorizacao.CONFIRMADA]]).size()
-
-        [consumoList: consumoList, consumoCount: consumoCount, params: params]
-
-
-
+        [
+            consumoList: consumoProdutosRelatorioService.list(params),
+            consumoCount: consumoProdutosRelatorioService.count(params),
+            params: params
+        ]
     }
 }
