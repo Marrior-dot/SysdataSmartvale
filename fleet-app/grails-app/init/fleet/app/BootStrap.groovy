@@ -14,6 +14,8 @@ class BootStrap {
 
     def init = { servletContext ->
 
+        System.setProperty("java.awt.headless", "false"); //Disables headless
+
         FileProcessor.init()
 
         /* Adição do método ** round ** a classe BigDecimal: arredondamento para baixo. P.ex: 1.5 -> 1.0 (padrão -> halfUp = false) */
