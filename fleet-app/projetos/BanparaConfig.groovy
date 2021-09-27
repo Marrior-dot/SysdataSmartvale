@@ -47,6 +47,10 @@ environments {
         loginTransparente = true
 
         context = "/banpara-frota"
+
+
+        jasperImages = "/home/luiz/tmp/banpara/images/Camada x0020 2.png"
+
     }
 
     homologation {
