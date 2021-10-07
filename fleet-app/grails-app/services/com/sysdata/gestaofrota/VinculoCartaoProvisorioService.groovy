@@ -48,7 +48,7 @@ class VinculoCartaoProvisorioService {
             card.save(flush: true)
             def resp = resetSenhaCartaoService.resetSenha(card)
             if (!resp.success)
-                log.warn "CRT #${card.id} => não será comandado o Reset Senha neste cenário"
+                throw new BusinessException(resp.message)
         } else
             throw new BusinessException(ret.reject)
     }
@@ -83,15 +83,6 @@ class VinculoCartaoProvisorioService {
                 reset.delete(flush: true)
             }
 
-/*
-            //
-            Cartao lastCard = cardHolder.cartaoAtual
-            if (lastCard && lastCard.status == StatusCartao.CANCELADO && cardHolder.vincularCartao && cardHolder.status == Status.ATIVO) {
-                log.info "PRT #${cardHolder.id}: CRT #${lastCard.id} ${lastCard.status}"
-                Cartao newCard = cartaoService.gerar(cardHolder)
-                log.info "PRT #${cardHolder.id}: (+) CRT #${newCard.id}"
-            }
-*/
 
         } else
             throw new BusinessException("Não pode desvincular um cartão padrão do portador!")

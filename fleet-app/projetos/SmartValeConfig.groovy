@@ -55,9 +55,9 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = "jdbc:postgresql://192.168.250.41/smartvale_homologation"
-        username = "postgres"
-        password = "postgres"
+        url = "jdbc:postgresql://192.168.250.50/smartvale_production"
+        username = "smartvale_production"
+        password = "EC5Fsu3X6hSw/nqk"
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do

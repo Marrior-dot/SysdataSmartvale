@@ -1,12 +1,14 @@
 package com.sysdata.gestaofrota.cartao
 
 import com.sysdata.gestaofrota.*
+import com.sysdata.gestaofrota.proc.cartaoProvisorio.ResetEnvioSenhaCartaoProvisorioService
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class ResetSenhaCartaoService {
 
     def springSecurityService
+    ResetEnvioSenhaCartaoProvisorioService resetEnvioSenhaCartaoProvisorioService
 
     def resetSenha(Cartao cartao) {
         def ret = [:]
@@ -26,14 +28,10 @@ class ResetSenhaCartaoService {
                 PortadorMaquina portadorMaquina = cartao.portador as PortadorMaquina
                 if (portadorMaquina.maquina.funcionarios) {
                     resetSenhaCartao = new ResetSenhaCartao(cartao: cartao, solicitante: springSecurityService.currentUser)
-                    portadorMaquina.maquina.funcionarios.each {
-                        resetSenhaCartao.addToFuncionarios(it.funcionario)
-                        log.info "\t(+) FCN #${it.funcionario.id}"
-                    }
                 } else {
                     ret.success = false
                     log.error "CRT #${cartao.id} => Não há funcionários vinculados ao Portador Máquina deste cartão!"
-                    ret.message = "Reset inválido: Não há funcionários vinculados ao Portador Máquina deste cartão!"
+                    ret.message = "Não há funcionários vinculados ao Portador deste cartão!"
                     return ret
                 }
 
