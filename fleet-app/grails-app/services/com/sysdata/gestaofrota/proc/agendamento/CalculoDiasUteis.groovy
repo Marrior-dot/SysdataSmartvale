@@ -6,23 +6,19 @@ trait CalculoDiasUteis {
 
     HolidayService holidayService
 
-    //TODO: Melhorar tratamento para dias úteis (feriados)
-    Date dataUtil(Date data) {
-        int diaSemana = data[Calendar.DAY_OF_WEEK]
-        if (diaSemana == Calendar.SATURDAY)
-            data += 2
-        else if (diaSemana == Calendar.SUNDAY)
-            data += 1
-        else
-
-        data
+    Date dataUtil(Date date) {
+        while (! isDataUtil(date))
+            dataUtil(date + 1)
+        return date
     }
 
-    boolean isDataUtil(Date data) {
+    private boolean isWeekend(date) {
+        return date[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY]
+    }
 
-        ! holidayService.isHoliday(data)
 
-        return ! (data[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY])
+    boolean isDataUtil(Date date) {
+        return ! holidayService.isHoliday(date) && ! isWeekend(date)
     }
 
 
