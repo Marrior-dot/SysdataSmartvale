@@ -217,26 +217,19 @@ class PedidoCargaService {
     }
 
     def releasePedido(PedidoCarga pedidoCarga) {
-
         def ret = [:]
         if (pedidoCarga.status == StatusPedidoCarga.COBRANCA) {
-
             pedidoCarga.status = StatusPedidoCarga.LIBERADO
             //Registra o usuário que realizou a liberação
             pedidoCarga.usuario = springSecurityService.currentUser
-
             log.info "Liberando saldo nos cartões ..."
-            pedidoCarga.itens.each { item ->
-
+            pedidoCarga.itensCarga.each { item ->
                 Portador portador = item.portador
-
                 def oldSaldo = portador.saldoTotal
                 portador.saldoTotal += item.valor
                 portador.save(flush: true)
                 log.info "\tPRT #$portador.id - (SA: $oldSaldo NS: $portador.saldoTotal)"
-
             }
-
             ret.success = true
             ret.message = "Pedido Carga #${pedidoCarga.id} LIBERADO"
             log.info ret.message
