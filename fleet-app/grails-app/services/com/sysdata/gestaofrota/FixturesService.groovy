@@ -286,7 +286,7 @@ class FixturesService {
     private void setDataFeriado(Holiday feriado, ano) {
         def feriadoData = new Date()
         feriadoData.set([dayOfMonth: feriado.day, month: feriado.month, year: ano])
-        HolidayDate.findOrCreateWhere(holiday: feriado, date: feriadoData).save(flush: true)
+        HolidayDate.findOrCreateWhere(holiday: feriado, date: feriadoData.clearTime()).save(flush: true)
     }
 
     private void criarFeriadosNacionais() {

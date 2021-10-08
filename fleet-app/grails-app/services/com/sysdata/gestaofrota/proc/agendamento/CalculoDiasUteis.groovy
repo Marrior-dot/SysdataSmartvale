@@ -8,7 +8,7 @@ trait CalculoDiasUteis {
 
     Date dataUtil(Date date) {
         while (! isDataUtil(date))
-            dataUtil(date + 1)
+            date = dataUtil(date + 1)
         return date
     }
 
