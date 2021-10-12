@@ -27,6 +27,23 @@
             <g:link class="btn btn-default" action="executeAll"><span class="glyphicon glyphicon-play-circle"></span> Executar Todos</g:link>
         </p>
 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Parâmetros
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="dataReferencia">Data de Processamento</label>
+                        <g:form action="execute">
+                            <g:hiddenField name="id"></g:hiddenField>
+                            <g:textField name="dataProcessamento" class="form-control datepicker" value="${params.dataProcessamento}"></g:textField>
+                        </g:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <g:if test="${processingList}">
             <table class="table table-bordered table-striped">
@@ -43,8 +60,8 @@
                         <td>${p.name}</td>
                         <td>${p.service}</td>
                         <td class="text-center">
-                            <g:link class="btn btn-sm btn-primary" title="Executar" controller="processamento" action="execute" id="${p.id}">
-                                <i class="glyphicon glyphicon-play"></i></g:link>
+                            <button class="btn btn-sm btn-primary" onclick="executarProcessamento(${p.id})">
+                                <i class="glyphicon glyphicon-play"></i></button>
                         </td>
                     </tr>
                 </g:each>
@@ -57,5 +74,13 @@
         </g:else>
     </div>
 </div>
+
+<script>
+    function executarProcessamento(procId) {
+        $("#id").val(procId);
+        $("form").submit();
+    }
+</script>
+
 </body>
 </html>

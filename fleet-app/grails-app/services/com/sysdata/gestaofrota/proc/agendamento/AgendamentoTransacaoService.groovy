@@ -102,6 +102,8 @@ class AgendamentoTransacaoService implements ExecutableProcessing {
         def arrend = valTxAdm.round(2)
         def valReemb = abastInstance.valor - arrend
 
+        // Como referência será considerada sempre a maior data (transação ou processamento)
+        dataRef = abastInstance.dataHora > dataRef ? abastInstance.dataHora : dataRef
         def dataReembolso = reembolsoService.calcularDataReembolso(estabelecimentoInstance.empresa, dataRef)
         if (dataReembolso) {
             def lancReembolso = new LancamentoEstabelecimento(tipo: TipoLancamento.REEMBOLSO,

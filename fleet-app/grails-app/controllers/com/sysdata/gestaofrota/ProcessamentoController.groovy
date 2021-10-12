@@ -20,7 +20,11 @@ class ProcessamentoController {
     def execute(Long id) {
         Processing processing = Processing.get(id)
         if (processing) {
-            Date date = Util.calcularDataProcessamento()
+            Date date
+            if (params.dataProcessamento)
+                date = params.date('dataProcessamento', 'dd/MM/yyyy')
+            else
+                date = Util.calcularDataProcessamento()
             processingService.runProcessing(processing, date)
             flash.success = "Processamento (${processing.name}) executado"
         } else

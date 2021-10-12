@@ -1,19 +1,24 @@
 package com.sysdata.gestaofrota.proc.agendamento
 
+import com.sysdata.commons.dates.HolidayService
+
 trait CalculoDiasUteis {
 
-    //TODO: Melhorar tratamento para dias úteis (feriados)
-    Date dataUtil(Date data) {
-        int diaSemana = data[Calendar.DAY_OF_WEEK]
-        if (diaSemana == Calendar.SATURDAY)
-            data += 2
-        else if (diaSemana == Calendar.SUNDAY)
-            data += 1
-        data
+    HolidayService holidayService
+
+    Date dataUtil(Date date) {
+        while (! isDataUtil(date))
+            date = dataUtil(date + 1)
+        return date
     }
 
-    boolean isDataUtil(Date data) {
-        return ! (data[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY])
+    private boolean isWeekend(date) {
+        return date[Calendar.DAY_OF_WEEK] in [Calendar.SATURDAY, Calendar.SUNDAY]
+    }
+
+
+    boolean isDataUtil(Date date) {
+        return ! holidayService.isHoliday(date) && ! isWeekend(date)
     }
 
 
