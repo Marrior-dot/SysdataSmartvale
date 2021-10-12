@@ -56,12 +56,15 @@ class PortadorCorteService {
 
         if (fatura.itens) {
             fatura.save(flush: true)
-
-            Fatura ultFat = ctx.ultimaFatura
-            if (ultFat) {
-                ultFat.status = StatusFatura.FECHADA
-                ultFat.save()
+            if (ctx.ultimaFaturaId) {
+                Fatura ultFat = Fatura.get(ctx.ultimaFaturaId)
+                if (ultFat) {
+                    ultFat.status = StatusFatura.FECHADA
+                    ultFat.save()
+                    log.info "CNT #${ultFat.conta.id} ULT.FAT #${ctx.ultimaFaturaId} => FECHADA"
+                }
             }
+
             //Log fatura
             log.info "$fatura"
             fatura.itens.sort { it.data }.each { log.info "\t${it}" }
@@ -81,6 +84,8 @@ class PortadorCorteService {
 
         //Fecha última fatura
         ctx.ultimaFatura = portador.conta.ultimaFatura
+        ctx.ultimaFaturaId = portador.conta.ultimaFatura?.id
+
         ctx.atrasado = false
 
         //Data de referência para atraso pagamento

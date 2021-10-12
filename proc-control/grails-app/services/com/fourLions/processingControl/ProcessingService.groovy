@@ -61,7 +61,7 @@ class ProcessingService {
     def run(Date date) {
         BatchProcessing.findAllByActive(true).each { batch ->
             if (batch.runNow(date)) {
-                batch.processings.sort { it.order }.each { proc ->
+                batch.processings.findAll { it.active }.sort { it.order }.each { proc ->
                     runProcessing(proc, date.clearTime())
                 }
             }

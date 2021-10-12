@@ -212,9 +212,15 @@ class FixturesService {
                                           batch: batch]).save(flush: true)
 
 
+            Processing envioLote = Processing.findOrCreateWhere([
+                                            name: "Envio Lote Banpará API",
+                                            order: 1 as byte,
+                                            service: "enviarLoteAPIBanparaService",
+                                            active: true,
+                                        ]).save(flush: true)
 
-
-            //Processing.findOrCreateWhere([name: "Envio Lote Banpará API", order: 11 as byte, service: "enviarLoteAPIBanparaService", active: true, batch: batch]).save(flush: true)
+            if (! DailySchedule.findWhere(processing: envioLote))
+                new DailySchedule(processing: envioLote, hour: 10, minute: 0, executionFrequency: ExecutionFrequency.DAILY).save(flush: true)
         }
 
         if (grailsApplication.config.projeto.projectId == "smartvale") {
