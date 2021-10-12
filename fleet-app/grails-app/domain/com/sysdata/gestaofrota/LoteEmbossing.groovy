@@ -7,10 +7,13 @@ class LoteEmbossing {
     List<Arquivo> arquivos
     List<ArquivoRetorno> arquivosRetorno
     StatusLoteEmbossing status = StatusLoteEmbossing.CRIADO
+    TipoLoteEmbossing tipo
 
     static hasMany = [cartoes: Cartao]
 
     static constraints = {
+        tipo nullable: true
+        usuario nullable: true
     }
 
     static mapping = {

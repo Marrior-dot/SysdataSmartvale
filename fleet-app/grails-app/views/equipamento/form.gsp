@@ -47,7 +47,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab1" data-toggle="tab">Dados Básicos</a></li>
                         <g:if test="${equipamentoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
-                        <li><a href="#tab2" data-toggle="tab">Cartões</a></li>
+                        <li><a href="#tabCartoes" data-toggle="tab">Cartões</a></li>
                         </g:if>
                         <li><a href="#tab3" data-toggle="tab">Funcionários</a></li>
                         <g:if test="${equipamentoInstance.unidade.rh.modeloCobranca == TipoCobranca.POS_PAGO &&
@@ -65,8 +65,8 @@
                         </div>
 
                         <g:if test="${equipamentoInstance.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA}">
-                            <div class="tab-pane" id="tab2">
-                                <g:render template="/cartao/cartoes" model="[portador: equipamentoInstance.portador]"/>
+                            <div class="tab-pane" id="tabCartoes">
+                                %{--<g:render template="/cartao/cartoes" model="[portador: equipamentoInstance.portador]"/>--}%
                             </div>
                         </g:if>
 
@@ -93,6 +93,14 @@
         </div>
     </div>
 </div>
+
+    <asset:javascript src="cartoes.js"></asset:javascript>
+
+<script>
+    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+        loadCartoesVinculados("${equipamentoInstance?.portador.id}");
+    });
+</script>
 
 </body>
 </html>

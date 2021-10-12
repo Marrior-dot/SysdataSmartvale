@@ -237,11 +237,11 @@ class PedidoCargaController {
                 idEq(unidId)
             }
 
-/*
-            if (params?.searchPlaca && params?.searchPlaca.length() > 0) {
-                eq('placa', params.searchPlaca)
+            portador {
+                cartoes {
+                    eq("status", StatusCartao.ATIVO)
+                }
             }
-*/
 
             if (categoriaInstance) {
                 eq('categoria', categoriaInstance)
@@ -296,6 +296,12 @@ class PedidoCargaController {
 
             if (categoriaInstance) {
                 eq('categoria', categoriaInstance)
+            }
+
+            portador {
+                cartoes {
+                    eq("status", StatusCartao.ATIVO)
+                }
             }
 
             if (pedidoCargaInstance?.itens.findAll { it.tipo == TipoItemPedido.CARGA }) {

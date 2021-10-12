@@ -22,6 +22,7 @@
                             <li class="controller"><g:link class="submenu-logado" controller="arquivo" action="list">Arquivos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="marcaVeiculo" action="list">Marcas de Veículos</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="tipoEquipamento" action="list">Tipos de Equipamentos</g:link></li>
+                            <li class="controller"><g:link class="submenu-logado" controller="portador">Portadores</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="cartao" action="list">Cartões</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="funcionarioCadastro">Funcionários</g:link></li>
                             <li class="controller"><g:link class="submenu-logado" controller="maquina">Veículos/Equipamentos</g:link></li>
@@ -58,6 +59,7 @@
                 <li>
                     <a href="#" class="menu-logado"><i class="fa fa-cogs"></i> Operação<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
+                        <li class="controller"><g:link class="submenu-logado" controller="solicitacaoCartaoProvisorio">Solicitações Cartões Provisórios</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="list">Pedidos de Carga</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listAdmin">Transações Administrativas</g:link></li>
@@ -105,8 +107,10 @@
                         <li>
                             <g:link class="submenu-logado" controller="console" target="Console">Console</g:link>
                             <g:link class="submenu-logado" controller="processamento" >Processamentos</g:link>
+                            <g:link class="submenu-logado" controller="historicoProcessamento" >Histórico Processamentos</g:link>
                             <g:link class="submenu-logado" controller="mockTransacao" >Gerador Transações</g:link>
                             <g:link class="submenu-logado" controller="configuracaoPropriedade" >Configurador de Propriedades</g:link>
+                            <g:link class="submenu-logado" controller="mailTemplate" >Template de Email</g:link>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

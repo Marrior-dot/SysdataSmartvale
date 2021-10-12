@@ -25,32 +25,26 @@ class VeiculoService {
     }
 
     def save(Veiculo veiculo, boolean gerarCartao = false) {
-
         def ret = [success: true]
-
         if (!veiculo.id && veiculo.unidade.rh.vinculoCartao == TipoVinculoCartao.MAQUINA) {
-
             if (! veiculo.save(flush: true)) {
                 ret.success = false
                 return ret
             }
-
             PortadorMaquina portadorMaquina = veiculo.portador
             portadorMaquina.save(flush: true)
 
-            if (gerarCartao) {
+            if (portadorMaquina.vincularCartao && gerarCartao) {
                 if (portadorMaquina.unidade.rh.cartaoComChip)
                     cartaoService.gerar(portadorMaquina)
                 else
                     cartaoService.gerar(portadorMaquina, false)
             }
         }
-
         if (! veiculo.save(flush: true)) {
             ret.success = false
             return ret
         }
-
         ret
     }
 

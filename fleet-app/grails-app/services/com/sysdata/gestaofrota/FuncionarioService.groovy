@@ -20,13 +20,16 @@ class FuncionarioService {
             PortadorFuncionario portadorFuncionario = funcionarioInstance.portador
             portadorFuncionario.save(flush: true)
 
-            //Gera cartão somente se por cadastro (insert)
-            if (gerarCartao){
-                if (portadorFuncionario.funcionario.unidade.rh.cartaoComChip)
-                    cartaoService.gerar(portadorFuncionario)
-                else
-                    cartaoService.gerar(portadorFuncionario, false)
+            if (portadorFuncionario.vincularCartao) {
+                //Gera cartão somente se por cadastro (insert)
+                if (gerarCartao){
+                    if (portadorFuncionario.funcionario.unidade.rh.cartaoComChip)
+                        cartaoService.gerar(portadorFuncionario)
+                    else
+                        cartaoService.gerar(portadorFuncionario, false)
+                }
             }
+
         }
         //participanteService.saveCidade(funcionarioInstance.endereco)
         if (! funcionarioInstance.save(flush: true))

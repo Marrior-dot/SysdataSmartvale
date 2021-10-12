@@ -12,10 +12,12 @@ class Funcionario extends Participante {
     CategoriaFuncionario categoria
     CategoriaCnh categoriaCnh
     boolean gestor
+    Unidade unidade
 
-    static belongsTo = [unidade: Unidade]
+    static belongsTo = [ResetSenhaCartao]
+
     static embedded = ['telefoneComercial']
-    static hasMany = [veiculos: MaquinaFuncionario]
+    static hasMany = [veiculos: MaquinaFuncionario, resetsSenhaCartao: ResetSenhaCartao]
     static hasOne = [portador: PortadorFuncionario]
 
     static constraints = {

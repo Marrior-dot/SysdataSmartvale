@@ -11,8 +11,11 @@ class Cartao {
     Date validade
     String cvv
     Integer via = 1
+    TipoCartao tipo
 
     static belongsTo = [portador: Portador, loteEmbossing: LoteEmbossing]
+
+    static hasMany = [relacaoPortador: RelacaoCartaoPortador, resetsSenhaCartao: ResetSenhaCartao]
 
     static transients = ['numeroMascarado', 'numeroFormatado', "saldoTotal"]
 
@@ -23,6 +26,7 @@ class Cartao {
         cvv nullable: false, blank: false, maxSize: 3
         via nullable: false
         loteEmbossing nullable: true
+        tipo nullable: true
     }
 
     static namedQueries = {
@@ -74,11 +78,15 @@ class Cartao {
 
     @Override
     String toString() {
-        return "${numeroMascarado} [${status.nome}]"
+        return "${numeroFormatado} [${status.nome}]"
     }
 
     BigDecimal getSaldoTotal() {
         return this.portador.saldoTotal
+    }
+
+    RelacaoCartaoPortador getRelacaoPortadorAtiva(Portador portador) {
+        return this.relacaoPortador.find { it.portador == portador && it.status == StatusRelacaoCartaoPortador.ATIVA}
     }
 
 }

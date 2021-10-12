@@ -1,4 +1,7 @@
 package com.sysdata.gestaofrota
+
+import com.sysdata.gestaofrota.exception.BusinessException
+
 //import org.jpos.iso.ISOChannel
 //import org.jpos.iso.ISOMsg
 //import org.jpos.iso.channel.ASCIIChannel
@@ -78,13 +81,13 @@ class CentralAtendimentoController {
         flash.errors = []
         Cartao cartaoInstance = Cartao.get(params.long('id'))
         if (cartaoInstance) {
-            if(cartaoInstance.status == StatusCartao.EMBOSSING){
-                cartaoInstance = cartaoService.desbloquear(cartaoInstance)
+            try {
+                cartaoService.desbloquear(cartaoInstance)
                 flash.message = "Cartão DESBLOQUEADO com sucesso"
                 render(view: 'manageCard', model: [cartaoInstance: cartaoInstance])
                 return
-            }
-            else{
+
+            } catch (BusinessException be) {
                 flash.errors << "Cartão não possui status compatível para o desbloqueio. Status: ${cartaoInstance.status}"
                 redirect(action: 'searchCard', params: [act: 'findFuncionario', goTo: 'unlockNewCard'])
             }

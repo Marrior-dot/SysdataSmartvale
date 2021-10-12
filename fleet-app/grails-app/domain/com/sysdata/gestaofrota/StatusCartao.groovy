@@ -6,8 +6,9 @@ enum StatusCartao {
 	EMBOSSING("Embossing"),
 	ATIVO("Ativo"),
 	BLOQUEADO("Bloqueado"),
-	CANCELADO("Cancelado")
-	
+	CANCELADO("Cancelado"),
+	DESVINCULADO("Desvinculado")
+
 	String nome
 	
 	StatusCartao(nome){

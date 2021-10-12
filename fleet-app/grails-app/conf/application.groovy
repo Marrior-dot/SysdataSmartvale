@@ -138,6 +138,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/centralAtendimento/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/cartao/**',                             access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/funcionarioCadastro/**',                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/portador/**',                           access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/vinculoCartaoProvisorio/**',            access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/pedidoCarga/**',                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/transacao/**',                          access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH', 'ROLE_ESTAB']],
         [pattern: '/endereco/**',                           access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
@@ -152,6 +154,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/marcaVeiculo/**',                       access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/tipoEquipamento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/portadorCorte/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
+        [pattern: '/solicitacaoCartaoProvisorio/**',        access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/loteEmbossing/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],
         [pattern: '/lotePagamento/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
         [pattern: '/loteRecebimento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
@@ -177,6 +180,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/user/**',                               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_ESTAB', 'ROLE_RH', 'ROLE_PROC_FINANC']],
         [pattern: '/role/**',                               access: ['ROLE_PROC']],
         [pattern: '/processamento/**',                      access: ['ROLE_PROC']],
+        [pattern: '/historicoProcessamento/**',             access: ['ROLE_PROC']],
+        [pattern: '/mailTemplate/**',                       access: ['ROLE_PROC']],
 
 
         [pattern: '/console/**',                            access: ['ROLE_PROC']],
