@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Demonstrativo Abastecimentos por Estabelecimento"/>
+    <g:set var="relatorio" value="Extrato de Repasse aos Estabelecimentos"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -29,17 +29,25 @@
                     <div class="row">
                         <div class="col-md-3">
                             <label>Data Inicial</label>
-                            <g:textField name="dataInicial" class="form-control datepicker" value="${dataInicial}"></g:textField>
+                            <g:textField name="dataInicial" class="form-control datepicker" value="${params.dataInicial}"></g:textField>
                         </div>
                         <div class="col-md-3">
                             <label>Data Final</label>
-                            <g:textField name="dataFinal" class="form-control datepicker" value="${dataFinal}"></g:textField>
+                            <g:textField name="dataFinal" class="form-control datepicker" value="${params.dataFinal}"></g:textField>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
                             <label>CNPJ</label>
-                            <g:textField name="CNPJ" class="form-control cnpj" value="${CNPJ}"></g:textField>
+                            <g:textField name="CNPJ" class="form-control cnpj" value="${params.CNPJ}"></g:textField>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Estabelecimento</label>
+                            <g:textField name="nomeFantasia" class="form-control" value="${params.nomeFantasia}"></g:textField>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Cliente</label>
+                            <g:textField name="cliente" class="form-control" value="${params.cliente}"></g:textField>
                         </div>
                     </div>
                 </div>

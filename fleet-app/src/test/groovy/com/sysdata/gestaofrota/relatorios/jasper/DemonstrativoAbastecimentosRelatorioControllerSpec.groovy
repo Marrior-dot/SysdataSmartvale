@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios.jasper
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class DemonstrativoAbastecimentosRelatorioControllerSpec extends Specification implements ControllerUnitTest<DemonstrativoAbastecimentosRelatorioController> {
+class DemoAbastecimentosAutorizadosRelatorioControllerSpec extends Specification implements ControllerUnitTest<DemoAbastecimentosAutorizadosRelatorioController> {
 
     def setup() {
     }
