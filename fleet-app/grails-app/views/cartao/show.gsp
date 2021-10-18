@@ -11,9 +11,8 @@
 			<div class="panel-heading">
 				<h4>Detalhes de Cartão</h4>
 			</div>
-
 			<div class="panel-body">
-
+                <alert:all/>
                 <div class="buttons-top">
                     <a class="btn btn-default" href="${createLink(uri: '/')}">
                         <span class="glyphicon glyphicon-home"></span>
@@ -24,15 +23,12 @@
                         <g:message code="default.list.label" args="[entityName]"/>
                     </g:link>
                     <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]">
-                        Reset Senha
+                        <span class="fa fa-exchange"></span> Reset Senha
                     </g:link>
-
                 </div>
 
-                <alert:all/>
-
 				<div class="panel-top">
-					<table class="table table-bordered">
+                    <table class="table table-bordered">
 						<tr>
 							<th>#</th>
 							<td>${cartaoInstance?.id}</td>

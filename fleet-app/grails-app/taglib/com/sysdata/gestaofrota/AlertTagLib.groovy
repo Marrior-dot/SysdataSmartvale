@@ -58,16 +58,15 @@ class AlertTagLib {
      */
     Closure errorsIfExists = { attr, body ->
         if (flash.error) {
-            if (flash.error instanceof String)
-                out << errors(null, flash.error)
-            else if (flash.error instanceof List) {
+            if (flash.error instanceof List) {
                 out << body() << "<div class=\"alert alert-danger\" role=\"alert\">"
                 flash.error.each {
                     out << body() << "<span class=\"glyphicon glyphicon-exclamation-sign\"></span> "
                     out << body() << it << "<br/>"
                 }
                 out << body() << "</div>"
-            }
+            } else
+                out << errors(null, flash.error)
         }
     }
 
