@@ -1,6 +1,5 @@
 package com.sysdata.gestaofrota.camel
 
-import com.sysdata.gestaofrota.Administradora
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 import org.apache.camel.LoggingLevel
@@ -40,7 +39,7 @@ class IntelcavEmbossingRoutesService {
                 def delay = "10m"
                 def indentPath = grailsApplication.config.projeto.arquivos.baseDir + "routes"
 
-                def filenamePattern = "BANP_74_\\d{5}_\\d{8}.txt"
+                def filenamePattern = "BANP_7[4|5]_\\d{5}_\\d{8}.txt"
 
                 def fromFile="file://$srcDir?delay=$delay&initialDelay=$initDelay&include=$filenamePattern&move=${sentDir}/\${file:name}.sent"
 

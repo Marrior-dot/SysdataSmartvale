@@ -20,6 +20,9 @@ class VinculoCartaoProvisorioService {
             [condition: { it.card.portador == PortadorAnonimo.unico }, reject: "Cartão provisório vinculado a outro portador!"],
             [condition: { it.card.status == StatusCartao.EMBOSSING || it.card.status == StatusCartao.DESVINCULADO }, reject: "Cartão ainda não disponível para vínculo!"],
             [condition: { it.limitDate > new Date().clearTime() }, reject: "Data Limite inválida!"],
+
+
+
             [condition: {
                             def extraCard = it.card
                             def countCards = RelacaoCartaoPortador.createCriteria().count({

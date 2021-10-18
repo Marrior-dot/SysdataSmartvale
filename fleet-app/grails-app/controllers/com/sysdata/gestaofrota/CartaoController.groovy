@@ -56,7 +56,6 @@ class CartaoController {
             redirect(action: "list")
             return
         }
-
         [cartaoInstance: cartaoInstance]
     }
 
@@ -94,7 +93,7 @@ class CartaoController {
                 e.printStackTrace()
                 flash.error = "Erro interno! Contatar suporte."
             }
-            redirect action: 'show', id: cartao.id
+            render view: 'show', model: [cartaoInstance: cartao]
             return
         } else {
             flash.error = "ID Cartão '${params.id}' inválido!"

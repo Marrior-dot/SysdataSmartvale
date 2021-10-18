@@ -27,6 +27,14 @@ class ResetSenhaCartaoService {
             if (cartao.portador.instanceOf(PortadorMaquina)) {
                 PortadorMaquina portadorMaquina = cartao.portador as PortadorMaquina
                 if (portadorMaquina.maquina.funcionarios) {
+                    def funcionarios = portadorMaquina.maquina.funcionarios*.funcionario
+                    def naoTemEmail = funcionarios.any { it.email == ""}
+                    if (naoTemEmail) {
+                        ret.success = false
+                        log.error "CRT #${cartao.id} => Funcionário(s) sem email"
+                        ret.message = "Existe(m) funcionário(s) vinculado(s) que não possue(m) email definido no respectivo cadastro!"
+                        return ret
+                    }
                     resetSenhaCartao = new ResetSenhaCartao(cartao: cartao, solicitante: springSecurityService.currentUser)
                 } else {
                     ret.success = false
