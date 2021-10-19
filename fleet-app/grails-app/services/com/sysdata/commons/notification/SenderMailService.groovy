@@ -22,6 +22,6 @@ class SenderMailService {
                 html mailTemplate.makeBody(data)
             }
         } else
-            log.error "Mail Template '${keyTemplate}' não encontrado!"
+            throw new RuntimeException("Mail Template '${keyTemplate}' não encontrado!")
     }
 }
