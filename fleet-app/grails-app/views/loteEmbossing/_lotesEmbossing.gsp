@@ -7,6 +7,7 @@
                 <th>#</th>
                 <th>Data Criação</th>
                 <th>Liberado por</th>
+                <th>Tipo</th>
                 <th>Status</th>
                 </thead>
                 <tbody>
@@ -15,6 +16,7 @@
                         <td>${lotEmb.id}</td>
                         <td><g:formatDate date="${lotEmb.dateCreated}" format="dd/MM/yy"></g:formatDate></td>
                         <td>${lotEmb.usuario ? lotEmb.usuario.name : '<< Sistema >>'}</td>
+                        <td>${lotEmb.tipo.nome}</td>
                         <td>${lotEmb.status.nome}</td>
                     </tr>
                 </g:each>

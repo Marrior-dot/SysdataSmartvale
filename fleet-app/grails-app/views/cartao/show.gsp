@@ -22,7 +22,8 @@
                         <span class="glyphicon glyphicon-list"></span>
                         <g:message code="default.list.label" args="[entityName]"/>
                     </g:link>
-                    <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]">
+
+                    <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]" onclick="return confirm('Confirma o Reset de Senha?')">
                         <span class="fa fa-exchange"></span> Reset Senha
                     </g:link>
                 </div>
