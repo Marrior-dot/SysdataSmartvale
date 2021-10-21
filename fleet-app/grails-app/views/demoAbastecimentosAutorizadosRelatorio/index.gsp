@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Demonstrativo Abastecimentos por Estabelecimento"/>
+    <g:set var="relatorio" value="Demonstrativo Abastecimentos Autorizados"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -38,13 +38,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label>CNPJ</label>
-                            <g:textField name="CNPJ" class="form-control cnpj" value="${params.CNPJ}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Estabelecimento</label>
-                            <g:textField name="estabelecimento" class="form-control" value="${params.estabelecimento}"></g:textField>
-                        </div>
+                            <label>CNPJ Empresa</label>
+                            <g:textField name="CNPJEmp" class="form-control cnpj" value="${params.CNPJEmp}"></g:textField>
+                        </div>                        <
                     </div>
                 </div>
                 <div class="panel-footer">

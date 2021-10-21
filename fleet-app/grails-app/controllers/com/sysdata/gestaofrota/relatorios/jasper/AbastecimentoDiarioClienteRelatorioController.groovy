@@ -14,13 +14,12 @@ class AbastecimentoDiarioClienteRelatorioController extends JasperBaseRelatorioC
             def pars = [:]
             params.DataInicial = new java.sql.Date(params.date('dataInicial', 'dd/MM/yyyy').getTime())
             params.DataFinal = new java.sql.Date(params.date('dataFinal', 'dd/MM/yyyy').getTime())
-            //params.logoBanparaBranca = grailsApplication.config.project.relatorios.logoBanparaBranco
-            params.logoBanparaBranca = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
-            if (!params.cliente)
-                params.cliente = null
+            params.logoBanparaBranca = grailsApplication.config.projeto.relatorios.logoBanparaBranco
 
-            if (!params.nomeFantasia)
-                params.nomeFantasia = null
+            if (!params.CNPJEmp)
+                params.CNPJEmp = null
+            /*else
+                params.CNPJEmp = Util.cnpjToRaw(params.CNPJEmp)*/
 
             println(params)
             OutputStream outputStream = response.outputStream

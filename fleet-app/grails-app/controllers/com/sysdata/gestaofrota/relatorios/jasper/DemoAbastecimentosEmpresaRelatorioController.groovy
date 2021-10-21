@@ -14,18 +14,22 @@ class DemoAbastecimentosEmpresaRelatorioController extends JasperBaseRelatorioCo
             def pars = [:]
             params.DataInicial = new java.sql.Date(params.date('dataInicial', 'dd/MM/yyyy').getTime())
             params.DataFinal = new java.sql.Date(params.date('dataFinal', 'dd/MM/yyyy').getTime())
-            //params.logoBanparaBranca = grailsApplication.config.project.relatorios.logoBanparaBranco
-            params.logoBanparaBranca = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
-            if (!params.cartao)
-                params.cartao = null
+            params.logoBanparaBranca = grailsApplication.config.projeto.relatorios.logoBanparaBranco
 
-            if (!params.estabelecimento)
-                params.estabelecimento = null
+            if (!params.CNPJ)
+                params.CNPJ = null
+            /*else
+                params.CNPJ = Util.cnpjToRaw(params.CNPJ)*/
+
+            if (!params.CNPJEmp)
+                params.CNPJEmp = null
+            /*else
+                params.CNPJEmp = Util.cnpjToRaw(params.CNPJEmp)*/
 
             println(params)
             OutputStream outputStream = response.outputStream
             try {
-                exportToPdf(grailsApplication, "rel_DemoAbastecimentoEmpresa", params, outputStream)
+                exportToPdf(grailsApplication, "rel_DemoAbastecimentoEmp", params, outputStream)
             }
             finally {
                 outputStream.flush()

@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Extrato de Repasse aos Estabelecimentos"/>
+    <g:set var="relatorio" value="Vendas por Lojistas"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -40,10 +40,6 @@
                         <div class="col-md-3">
                             <label>CNPJ Estabelecimento</label>
                             <g:textField name="CNPJ" class="form-control cnpj" value="${params.CNPJ}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label>CNPJ Empresa</label>
-                            <g:textField name="CNPJEmp" class="form-control cnpj" value="${params.CNPJEmp}"></g:textField>
                         </div>
                     </div>
                 </div>

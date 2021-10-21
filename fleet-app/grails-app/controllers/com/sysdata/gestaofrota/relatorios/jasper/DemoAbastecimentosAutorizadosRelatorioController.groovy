@@ -14,15 +14,12 @@ class DemoAbastecimentosAutorizadosRelatorioController extends JasperBaseRelator
             def pars = [:]
             params.DataInicial = new java.sql.Date(params.date('dataInicial', 'dd/MM/yyyy').getTime())
             params.DataFinal = new java.sql.Date(params.date('dataFinal', 'dd/MM/yyyy').getTime())
-            //params.logoBanparaBranca = grailsApplication.config.project.relatorios.logoBanparaBranco
-            params.logoBanparaBranca = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
-            if (!params.CNPJ)
-                params.CNPJ = null
-            else
-                params.CNPJ = Util.cnpjToRaw(params.CNPJ)
+            params.logoBanparaBranca = grailsApplication.config.projeto.relatorios.logoBanparaBranco
 
-            if (!params.estabelecimento)
-                params.estabelecimento = null
+            if (!params.CNPJEmp)
+                params.CNPJEmp = null
+            /*else
+                params.CNPJ = Util.cnpjToRaw(params.CNPJ)*/
 
             println(params)
             OutputStream outputStream = response.outputStream

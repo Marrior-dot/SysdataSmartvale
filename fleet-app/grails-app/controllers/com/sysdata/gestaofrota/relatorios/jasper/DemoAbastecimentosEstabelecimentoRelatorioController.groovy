@@ -14,8 +14,8 @@ class DemoAbastecimentosEstabelecimentoRelatorioController extends JasperBaseRel
             def pars = [:]
             params.DataInicial = new java.sql.Date(params.date('dataInicial', 'dd/MM/yyyy').getTime())
             params.DataFinal = new java.sql.Date(params.date('dataFinal', 'dd/MM/yyyy').getTime())
-            //params.logoBanparaBranca = grailsApplication.config.project.relatorios.logoBanparaBranco
-            params.logoBanparaBranca = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
+            params.logoBanparaBranca = grailsApplication.config.projeto.relatorios.logoBanparaBranco
+
 
             if (!params.estabelecimento)
                 params.estabelecimento = null

@@ -3,7 +3,7 @@ package com.sysdata.gestaofrota.relatorios.jasper
 import com.sysdata.gestaofrota.Util
 import grails.core.GrailsApplication
 
-class ExtratoRepasseEstabelecimentosRelatorioController extends JasperBaseRelatorioController {
+class VendasLojistaRelatorioController extends JasperBaseRelatorioController {
 
     GrailsApplication grailsApplication
 
@@ -21,15 +21,10 @@ class ExtratoRepasseEstabelecimentosRelatorioController extends JasperBaseRelato
             /*else
                 params.CNPJ = Util.cnpjToRaw(params.CNPJ)*/
 
-            if (!params.CNPJEmp)
-                params.CNPJEmp = null
-            /*else
-                params.CNPJEmp = Util.cnpjToRaw(params.CNPJEmp)*/
-
             println(params)
             OutputStream outputStream = response.outputStream
             try {
-                exportToPdf(grailsApplication, "rel_ExtratoRepasseEstabelecimentosComerciais", params, outputStream)
+                exportToPdf(grailsApplication, "rel_VendasLojista", params, outputStream)
             }
             finally {
                 outputStream.flush()

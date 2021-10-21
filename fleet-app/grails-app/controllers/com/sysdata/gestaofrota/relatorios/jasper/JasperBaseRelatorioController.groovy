@@ -18,8 +18,8 @@ class JasperBaseRelatorioController {
 
     def exportToPdf(grailsApp, reportName, pars, outputStream) {
 
-        //def reportFilename = "${grailsApplication.config.relatorios.jasperDiretorio}/${reportName}.jrxml"
-        def reportFilename = "/home/diego/tmp/frota/jasper/${reportName}.jrxml"
+        def reportFilename = "${grailsApplication.config.projeto.relatorios.jasperDiretorio}/${reportName}.jrxml"
+        //def reportFilename = "/home/diego/tmp/frota/jasper/${reportName}.jrxml"
         JasperReport objJReport = JasperCompileManager.compileReport(reportFilename)
         JasperPrint jasperPrint = JasperFillManager.fillReport(objJReport, pars, dataSource.connection)
         JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream)

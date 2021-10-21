@@ -173,6 +173,7 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="demoAbastecimentosAutorizadosRelatorio">Demonstrativo Abastecimentos Autorizados</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="AbastecimentoDiarioClienteRelatorio">Abastecimento Diario por Clientes</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="ExtratoRepasseEstabelecimentosRelatorio">Extrato de Repasse aos Estabelecimentos Comerciais</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="VendasLojistaRelatorio">Vendas por Lojista</g:link></li>
                         </sec:ifAnyGranted>
 
                         %{--

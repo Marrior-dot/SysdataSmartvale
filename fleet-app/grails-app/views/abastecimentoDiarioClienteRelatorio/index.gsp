@@ -38,12 +38,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label>Cliente</label>
-                            <g:textField name="cliente" class="form-control" value="${params.cliente}"></g:textField>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Estabelecimento</label>
-                            <g:textField name="nomeFantasia" class="form-control" value="${params.nomeFantasia}"></g:textField>
+                            <label>CNPJ Empresa</label>
+                            <g:textField name="CNPJEmp" class="form-control cnpj" value="${params.CNPJEmp}"></g:textField>
                         </div>
                     </div>
                 </div>
