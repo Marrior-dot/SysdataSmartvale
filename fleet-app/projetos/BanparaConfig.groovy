@@ -34,6 +34,10 @@ environments {
         password = "postgres"
         // ** DATABASE **
 
+        relatorios {
+            logoBanparaBranco = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
+            jasperDiretorio = "/home/diego/tmp/frota/jasper"
+        }
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
@@ -65,6 +69,10 @@ environments {
         url = "jdbc:postgresql://192.168.250.41/banpara_homologation"
         username = "postgres"
         password = "postgres"
+        relatorios {
+            logoBanparaBranco = "/usr/local/banpara/renda/marituba/jasper/images/banpara_novo.png"
+            jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
+        }
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
@@ -90,6 +98,11 @@ environments {
         url = "jdbc:postgresql://172.16.100.12/banparafrota_production"
         username = "banparafrota_production"
         password = "7xAh4RWyLrzUDsuh"
+
+        relatorios {
+            logoBanparaBranco = ""
+            jasperDiretorio = ""
+        }
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do

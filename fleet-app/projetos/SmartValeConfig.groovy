@@ -34,6 +34,10 @@ environments {
         password = "postgres"
         // ** DATABASE **
 
+        relatorios {
+            logoBanparaBranco = "/home/diego/tmp/banpara/renda/marituba/logo/banpara_novo.png"
+            jasperDiretorio = "/home/diego/tmp/frota/jasper"
+        }
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
          * diretório web-app/images/projetos. Essa pasta deve conter as imagens: icon, logo, logo-small
@@ -58,6 +62,10 @@ environments {
         url = "jdbc:postgresql://192.168.250.50/smartvale_production"
         username = "smartvale_production"
         password = "EC5Fsu3X6hSw/nqk"
+        relatorios {
+            logoBanparaBranco = "/usr/local/banpara/renda/marituba/jasper/images/banpara_novo.png"
+            jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
+        }
 
         /**
          * o nome contido na variável 'folder' deve ser o mesmo nome da pasta dentro do
@@ -84,7 +92,10 @@ environments {
         username = "smartvale_production"
         password = "EC5Fsu3X6hSw/nqk"
 
-
+        relatorios {
+            logoBanparaBranco = ""
+            jasperDiretorio = ""
+        }
         // ** DATABASE **
 
         /**
