@@ -84,6 +84,12 @@ environments {
         corSecundaria = "#28156C"
 
         context = "/banpara-hom"
+
+        relatorios {
+            logoBanparaBranco = "/usr/local/banpara/renda/marituba/jasper/images/banpara_novo.png"
+            jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
+        }
+
     }
 
     production {
@@ -114,6 +120,12 @@ environments {
         corSecundaria = "#28156C"
 
         context = "/banpara-frota"
+
+        relatorios {
+            logoBanparaBranco = "/usr/local/banpara/renda/marituba/jasper/images/banpara_novo.png"
+            jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
+        }
+
     }
 }
 
