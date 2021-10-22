@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "1.7.0"
+version "1.7.2"
 group "fleet-app"
 
 apply plugin:"eclipse"
@@ -114,7 +114,6 @@ dependencies {
 
     compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
 
-
     // Caelum Stella Boleto
     compile "br.com.caelum.stella:caelum-stella-boleto:2.1.2"
 
@@ -122,6 +121,8 @@ dependencies {
     compile 'org.grails.plugins:mail:3.0.0'
     compile "org.grails.plugins:asynchronous-mail:2.0.2"
 
+
+    runtime 'net.sf.jasperreports:jasperreports:6.17.0'
 
 }
 

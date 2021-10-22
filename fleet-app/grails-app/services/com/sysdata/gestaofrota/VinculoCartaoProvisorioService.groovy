@@ -13,6 +13,7 @@ class VinculoCartaoProvisorioService {
     def linkToCardHolder(String cardNumber, Portador cardHolder, Date limitDate) {
         cardNumber = cardNumber.replaceAll("\\s", "")
         Cartao card = Cartao.findWhere(numero: cardNumber)
+
         def rules = [
             [condition: { it.card != null }, reject: "Cartão '${cardNumber}' não encontrado!"],
             [condition: { it.card.tipo == TipoCartao.PROVISORIO }, reject: "Cartão '${cardNumber}' não do tipo Provisório!"],
@@ -21,17 +22,32 @@ class VinculoCartaoProvisorioService {
             [condition: { it.card.status == StatusCartao.EMBOSSING || it.card.status == StatusCartao.DESVINCULADO }, reject: "Cartão ainda não disponível para vínculo!"],
             [condition: { it.limitDate > new Date().clearTime() }, reject: "Data Limite inválida!"],
 
-
+            [condition: {
+                if (it.cardHolder.instanceOf(PortadorMaquina)) {
+                    PortadorMaquina portadorMaquina = it.cardHolder as PortadorMaquina
+                    return portadorMaquina.maquina.funcionarios.size() > 0
+                }
+            }, reject: "Portador sem Funcionário(s) vinculado(s)"],
 
             [condition: {
-                            def extraCard = it.card
-                            def countCards = RelacaoCartaoPortador.createCriteria().count({
-                                                eq("cartao", extraCard)
-                                                eq("status", StatusRelacaoCartaoPortador.ATIVA)
-                                            })
-                            return countCards == 0
-                        },
-                        reject: "Cartão já possui vínculo Ativo com portador!"]
+                if (it.cardHolder.instanceOf(PortadorMaquina)) {
+                    PortadorMaquina portadorMaquina = it.cardHolder as PortadorMaquina
+                    def funcionarios = portadorMaquina.maquina.funcionarios*.funcionario
+                    return ! funcionarios.any { !it.email || it.email.trim() == ""}
+                } else if (it.cardHolder.instanceOf(PortadorFuncionario)) {
+                    PortadorFuncionario portadorFuncionario = it.cardHolder as PortadorFuncionario
+                    return portadorFuncionario.funcionario.email != null
+                }
+            }, reject: "Existe(m) funcionário(s) vinculado(s) que não possue(m) email definido no respectivo cadastro!"],
+
+            [condition: {
+                def extraCard = it.card
+                def countCards = RelacaoCartaoPortador.createCriteria().count({
+                                    eq("cartao", extraCard)
+                                    eq("status", StatusRelacaoCartaoPortador.ATIVA)
+                                })
+                return countCards == 0
+            }, reject: "Cartão já possui vínculo Ativo com portador!"]
         ]
         def ret = [:]
         def pars = [card: card, cardHolder: cardHolder, limitDate: limitDate]

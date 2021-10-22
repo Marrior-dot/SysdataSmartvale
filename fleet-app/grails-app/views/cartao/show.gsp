@@ -1,4 +1,4 @@
-<%@ page import="com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
+<%@ page import="com.sysdata.gestaofrota.StatusCartao; com.sysdata.gestaofrota.Util; com.sysdata.gestaofrota.Cartao" %>
 <!doctype html>
 <html>
 	<head>
@@ -22,9 +22,12 @@
                         <span class="glyphicon glyphicon-list"></span>
                         <g:message code="default.list.label" args="[entityName]"/>
                     </g:link>
-                    <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]">
-                        <span class="fa fa-exchange"></span> Reset Senha
-                    </g:link>
+                    <g:if test="${cartaoInstance?.status == StatusCartao.ATIVO}">
+                        <g:link class="btn btn-default" action="resetSenha" params="[id: cartaoInstance?.id]"
+                                onclick="return confirm('Confirma o Reset de Senha?')">
+                            <span class="fa fa-exchange"></span> Reset Senha
+                        </g:link>
+                    </g:if>
                 </div>
 
 				<div class="panel-top">
