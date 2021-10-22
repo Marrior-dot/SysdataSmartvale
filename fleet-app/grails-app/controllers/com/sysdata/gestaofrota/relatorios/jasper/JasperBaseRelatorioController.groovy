@@ -17,9 +17,10 @@ class JasperBaseRelatorioController {
     def dataSource
 
     def exportToPdf(grailsApp, reportName, pars, outputStream) {
+        def reportFilename = "${grailsApp.config.projeto.relatorios.jasperDiretorio}/${reportName}.jrxml"
+        if (!new File(reportFilename).exists())
+            throw new RuntimeException("Arquivo de relatório '${reportFilename}' não encontrado!")
 
-        def reportFilename = "${grailsApplication.config.projeto.relatorios.jasperDiretorio}/${reportName}.jrxml"
-        //def reportFilename = "/home/diego/tmp/frota/jasper/${reportName}.jrxml"
         JasperReport objJReport = JasperCompileManager.compileReport(reportFilename)
         JasperPrint jasperPrint = JasperFillManager.fillReport(objJReport, pars, dataSource.connection)
         JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream)

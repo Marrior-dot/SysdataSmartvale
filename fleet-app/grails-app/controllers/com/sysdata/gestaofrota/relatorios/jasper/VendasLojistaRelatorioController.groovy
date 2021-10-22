@@ -21,17 +21,20 @@ class VendasLojistaRelatorioController extends JasperBaseRelatorioController {
             /*else
                 params.CNPJ = Util.cnpjToRaw(params.CNPJ)*/
 
-            println(params)
             OutputStream outputStream = response.outputStream
             try {
                 exportToPdf(grailsApplication, "rel_VendasLojista", params, outputStream)
-            }
-            finally {
+            } catch (e) {
+                log.error "Erro ao gerar relatório: $e.message"
+                e.printStackTrace()
+
+            } finally {
                 outputStream.flush()
                 outputStream.close()
             }
         }else
             flash.error = "Obrigatório informar o intervalo de datas!"
+
 
     }
 }
