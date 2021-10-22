@@ -4,12 +4,14 @@ enum StatusToken {
 
     CREATED("Criado"),
     USED("Utilizado"),
-    EXPIRED("Expirado"),
-    CANCELED("Cancelado")
+    EXPIRED("Expirado", "Requisição de nova senha expirada!"),
+    INVALID("Inválido", "Requisição de nova senha inválida!")
 
     String name
+    String userMessage
 
-    StatusToken(name) {
+    StatusToken(name, userMessage = "") {
         this.name = name
+        this.userMessage = userMessage
     }
 }

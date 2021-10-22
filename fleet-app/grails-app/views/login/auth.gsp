@@ -70,9 +70,8 @@
 							</button>
 						</form>
 					</div>
-					%{--TODO: SERÁ IMPLEMENTADO MAIS TARDE--}%
 					<div class="panel-footer text-center">
-					<g:link controller="register" action="forgotPassword">Esqueci minha senha</g:link>
+					    <g:link controller="forgetPasswordToken">Esqueci minha senha</g:link>
 					</div>
 				</div>
 			</div>

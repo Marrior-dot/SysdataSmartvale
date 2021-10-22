@@ -11,6 +11,7 @@
     </div>
     <alert:all/>
     <div class="panel-body">
+        <alert:all/>
         <div class="row">
             <g:form action="requestNewPassword">
                 <div class="col-md-4">

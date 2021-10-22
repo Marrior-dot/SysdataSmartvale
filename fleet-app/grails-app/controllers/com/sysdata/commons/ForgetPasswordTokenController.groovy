@@ -15,15 +15,31 @@ class ForgetPasswordTokenController {
         try {
             forgetPasswordTokenService.requestNewPassword(params.email)
         } catch (BusinessException e) {
+            log.error e.message
             flash.error = e.message
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contate suporte."
         }
+        render view: 'index'
     }
 
-    def inputNewPassword() {
-        
+    def useToken() {
+        ForgetPasswordToken forgetPswToken = forgetPasswordTokenService.useToken(params.key)
+        if (forgetPswToken) {
+            if (forgetPswToken.statusToken == StatusToken.USED) {
+                render view: 'newPassword'
+                return
+            } else {
+                log.error "TOKEN_FORGET_PSW #${forgetPswToken.id} - ${forgetPswToken.statusToken.userMessage}"
+                flash.error = forgetPswToken.statusToken.userMessage
+                render view: 'userMessages'
+            }
+        } else {
+            log.error "TOKEN_FORGET_PSW '${params.key}' não encontrado!"
+            flash.error = "Token não encontrado!"
+            render view: 'userMessages'
+        }
     }
 
     def saveNewPassword() {
@@ -32,11 +48,12 @@ class ForgetPasswordTokenController {
             userService.saveNewPassword(user, params.newPassword, params.confirmPassword)
             flash.message = "Senha alterada com sucesso"
         } catch (BusinessException e) {
-            flash.error = e.message
             log.error e.message
+            flash.error = e.message
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contate suporte."
         }
+        render view: 'userMessages'
     }
 }

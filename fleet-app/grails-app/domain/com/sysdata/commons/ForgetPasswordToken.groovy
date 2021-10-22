@@ -6,7 +6,7 @@ class ForgetPasswordToken {
 
     Date dateCreated
     User user
-    String newPasswordUrl
+    String key
     Date expirationDatetime
     StatusToken statusToken = StatusToken.CREATED
 

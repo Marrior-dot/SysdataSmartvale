@@ -6,23 +6,27 @@
     <title>Esqueci minha senha</title>
 </head>
 <body>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Esqueci minha Senha
-        </div>
-        <alert:all/>
-        <div class="panel-body">
-            <div class="row">
-                <g:form action="requestNewPassword">
-                    <div class="col-md-4">
-                        <label>Insira seu email</label>
-                        <g:field type="email" name="email"></g:field>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-default"> Confirmar</button>
-                    </div>
-                </g:form>
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Esqueci minha Senha
             </div>
+            <alert:all/>
+            <g:form action="requestNewPassword">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Insira seu email</label>
+                            <g:field type="email" name="email"></g:field>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-success"> Confirmar</button>
+                    <g:link uri="/" class="btn btn-default"> Voltar Login</g:link>
+                </div>
+            </g:form>
         </div>
     </div>
 </body>
