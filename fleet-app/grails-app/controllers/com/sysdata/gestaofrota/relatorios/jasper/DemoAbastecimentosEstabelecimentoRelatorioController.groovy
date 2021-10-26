@@ -17,8 +17,8 @@ class DemoAbastecimentosEstabelecimentoRelatorioController extends JasperBaseRel
             params.logoBanparaBranca = grailsApplication.config.projeto.relatorios.logoBanparaBranco
 
 
-            if (!params.estabelecimento)
-                params.estabelecimento = null
+            if (!params.CNPJ)
+                params.CNPJ = null
 
             println(params)
             OutputStream outputStream = response.outputStream
