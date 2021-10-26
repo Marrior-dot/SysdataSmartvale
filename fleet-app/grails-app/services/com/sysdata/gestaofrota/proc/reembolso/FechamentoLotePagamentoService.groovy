@@ -1,21 +1,12 @@
 package com.sysdata.gestaofrota.proc.reembolso
 
 import com.fourLions.processingControl.ExecutableProcessing
-import com.sysdata.gestaofrota.CorteConvenio
-import com.sysdata.gestaofrota.Fatura
-import com.sysdata.gestaofrota.ItemFatura
-import com.sysdata.gestaofrota.LancamentoConvenio
+import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.LotePagamento
-import com.sysdata.gestaofrota.LoteRecebimento
 import com.sysdata.gestaofrota.PagamentoEstabelecimento
 import com.sysdata.gestaofrota.PagamentoLote
-import com.sysdata.gestaofrota.Rh
-import com.sysdata.gestaofrota.StatusCorte
-import com.sysdata.gestaofrota.StatusLancamento
 import com.sysdata.gestaofrota.StatusLotePagamento
 import com.sysdata.gestaofrota.StatusReenvioPagamento
-import com.sysdata.gestaofrota.TipoFatura
-import com.sysdata.gestaofrota.TipoLancamento
 import com.sysdata.gestaofrota.proc.agendamento.CalculoDiasUteis
 import grails.gorm.transactions.Transactional
 

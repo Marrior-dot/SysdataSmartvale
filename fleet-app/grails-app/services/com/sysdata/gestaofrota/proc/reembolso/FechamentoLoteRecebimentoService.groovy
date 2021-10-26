@@ -10,9 +10,7 @@ class FechamentoLoteRecebimentoService implements ExecutableProcessing, CalculoD
 
     @Override
     def execute(Date date) {
-
         log.info "Iniciando Fechamento de Lotes de Recebimentos..."
-
         if (isDataUtil(date)) {
             List<LoteRecebimento> lotesAbertos = LoteRecebimento.findAllByStatus(StatusLotePagamento.ABERTO)
             if (lotesAbertos) {

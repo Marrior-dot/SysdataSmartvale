@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota.proc.agendamento
 
+import com.sysdata.gestaofrota.Administradora
 import com.sysdata.gestaofrota.PostoCombustivel
 import grails.gorm.transactions.Transactional
 
@@ -27,7 +28,7 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
 
             dataReembolso = new Date()
             dataReembolso.set([dayOfMonth: diaReemb, month: mesReemb, year: anoReemb])
-            dataReembolso = dataUtil(dataReembolso)
+            dataReembolso = dataUtil(dataReembolso, Administradora.unica().endereco.cidade)
         } else
             throw new RuntimeException("EMP #${empresa.id} => Intervalo de Agenda não encontrado (dt: ${dataReferencia.format('dd/MM/yy')})")
         return dataReembolso.clearTime()

@@ -7,5 +7,6 @@ class Holiday {
     String description
 
     static constraints = {
+        day nullable: true
     }
 }
