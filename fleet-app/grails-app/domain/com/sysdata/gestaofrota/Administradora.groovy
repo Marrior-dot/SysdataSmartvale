@@ -11,4 +11,8 @@ class Administradora extends Participante {
         bin nullable: true
         qtdCartoes nullable: false, min: 0
     }
+
+    static Administradora unica() {
+        return Administradora.list().first()
+    }
 }

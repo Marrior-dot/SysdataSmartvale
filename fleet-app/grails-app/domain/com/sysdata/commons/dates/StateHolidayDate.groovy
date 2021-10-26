@@ -1,8 +1,8 @@
 package com.sysdata.commons.dates
 
-class HolidayDate {
+class StateHolidayDate extends HolidayDate {
 
-    Date date
+    StateHoliday holiday
 
     static constraints = {
     }

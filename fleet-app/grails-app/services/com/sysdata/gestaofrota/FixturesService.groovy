@@ -6,7 +6,10 @@ import com.fourLions.processingControl.ExecutionFrequency
 import com.fourLions.processingControl.Processing
 import com.sysdata.commons.dates.Holiday
 import com.sysdata.commons.dates.HolidayDate
+import com.sysdata.commons.dates.MunicipalHoliday
+import com.sysdata.commons.dates.MunicipalHolidayDate
 import com.sysdata.commons.dates.NationalHoliday
+import com.sysdata.commons.dates.NationalHolidayDate
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -293,7 +296,7 @@ class FixturesService {
     private void setDataFeriado(Holiday feriado, ano) {
         def feriadoData = new Date()
         feriadoData.set([dayOfMonth: feriado.day, month: feriado.month, year: ano])
-        HolidayDate.findOrCreateWhere(holiday: feriado, date: feriadoData.clearTime()).save(flush: true)
+        NationalHolidayDate.findOrCreateWhere(holiday: feriado, date: feriadoData.clearTime()).save(flush: true)
     }
 
     private void criarFeriadosNacionais() {
@@ -314,5 +317,12 @@ class FixturesService {
         setDataFeriado(republica, anoAtual)
         setDataFeriado(natal, anoAtual)
 
+
+        //Feriados Belém
+        Cidade belem = Cidade.findWhere(nome: "BELÉM", estado: Estado.findWhere(uf: 'PA'))
+        MunicipalHoliday recirio = MunicipalHoliday.findOrCreateWhere(month: 9, description: 'Recírio', city: belem).save(flush: true)
+        def recirioData = new Date()
+        recirioData.set([dayOfMonth: 25, month: recirio.month, year: 2021])
+        MunicipalHolidayDate.findOrCreateWhere(holiday: recirio, date: recirioData.clearTime()).save(flush: true)
     }
 }
