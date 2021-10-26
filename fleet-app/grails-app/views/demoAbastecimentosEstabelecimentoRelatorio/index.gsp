@@ -38,8 +38,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label>Estabelecimento</label>
-                            <g:textField name="estabelecimento" class="form-control" value="${params.estabelecimento}"></g:textField>
+                            <label>CNPJ Estabelecimento</label>
+                            <g:textField name="CNPJ" class="form-control cnpj" value="${params.CNPJ}"></g:textField>
                         </div>
                     </div>
                 </div>
