@@ -12,7 +12,7 @@ class HolidayService {
                 eq("city", cidade)
             }
             eq("date", date.clearTime())
-        } != null
+        }.size() > 0
     }
 
     boolean isStateHoliday(Date date, Cidade cidade) {
@@ -21,13 +21,13 @@ class HolidayService {
                 eq("state", cidade.estado)
             }
             eq("date", date.clearTime())
-        } != null
+        }.size() > 0
     }
 
     boolean isNationalHoliday(Date date) {
-        return NationalHoliday.withCriteria {
+        return NationalHolidayDate.withCriteria {
             eq("date", date.clearTime())
-        } != null
+        }.size() > 0
     }
 
     def isHoliday(Date date, Cidade city) {
