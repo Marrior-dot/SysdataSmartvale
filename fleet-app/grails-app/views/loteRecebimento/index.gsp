@@ -26,6 +26,9 @@
                         <th>Total Líquido</th>
                         <th>Status</th>
                         <th>Envio</th>
+                        <sec:ifAnyGranted roles="ROLE_PROC">
+                            <th>Ação</th>
+                        </sec:ifAnyGranted>
                         </thead>
                         <tbody>
                         <g:each in="${loteRecebimentoList}" var="lote">
@@ -36,6 +39,10 @@
                                 <td><g:formatNumber number="${lote.totalLiquido}" type="currency"></g:formatNumber></td>
                                 <td>${lote.status.nome}</td>
                                 <td>${lote.statusEmissao.nome}</td>
+                                <sec:ifAnyGranted roles="ROLE_PROC">
+                                    <td><g:link action="undo" id="${lote.id}" onclick="return confirm('Confirma a exclusão do Lote?')"><i class="glyphicon glyphicon-step-backward"/></g:link></td>
+                                </sec:ifAnyGranted>
+
                             </tr>
                         </g:each>
                         </tbody>

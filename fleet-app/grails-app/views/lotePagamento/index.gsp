@@ -10,6 +10,7 @@
             <h3>Lista de Lotes de Repasses à Conveniados</h3>
         </div>
         <div class="panel-body">
+            <alert:all/>
             <div class="row">
                 <div class="col-md-12">
                     <g:link uri="/" class="btn btn-default"><span class="glyphicon glyphicon-home"></span> Início</g:link>
@@ -17,6 +18,7 @@
                 </div>
             </div>
             <div class="panel panel-default panel-top">
+                <alert:all/>
                 <div class="panel-body">
                     <table class="table">
                         <thead>
@@ -25,6 +27,9 @@
                         <th>Total</th>
                         <th>Status</th>
                         <th>Envio</th>
+                        <sec:ifAnyGranted roles="ROLE_PROC">
+                            <th>Ação</th>
+                        </sec:ifAnyGranted>
                         </thead>
                         <tbody>
                         <g:each in="${lotePagamentoList}" var="lote">
@@ -34,6 +39,9 @@
                                 <td><g:formatNumber number="${lote.total}" type="currency"></g:formatNumber></td>
                                 <td>${lote.status.nome}</td>
                                 <td>${lote.statusEmissao.nome}</td>
+                                <sec:ifAnyGranted roles="ROLE_PROC">
+                                    <td><g:link action="undo" id="${lote.id}" onclick="return confirm('Confirma a exclusão do Lote?')"><i class="glyphicon glyphicon-step-backward"/></g:link></td>
+                                </sec:ifAnyGranted>
                             </tr>
                         </g:each>
                         </tbody>
