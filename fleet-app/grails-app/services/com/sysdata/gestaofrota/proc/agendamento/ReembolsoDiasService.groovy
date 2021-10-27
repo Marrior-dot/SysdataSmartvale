@@ -12,7 +12,6 @@ class ReembolsoDiasService implements CalculoDiasUteis {
         if (empresa.reembolsos[0].instanceOf(ReembolsoDias)) {
             ReembolsoDias reembolsoDias = empresa.reembolsos[0]
             return dataUtil(dataReferencia + reembolsoDias.diasTranscorridos)
-
         } else
             throw new RuntimeException("Reembolso do EC #${empresa.id} não é do tipo Dias Fixos!")
     }

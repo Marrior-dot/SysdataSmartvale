@@ -28,7 +28,7 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
 
             dataReembolso = new Date()
             dataReembolso.set([dayOfMonth: diaReemb, month: mesReemb, year: anoReemb])
-            dataReembolso = dataUtil(dataReembolso, Administradora.unica().endereco.cidade)
+            dataReembolso = dataUtil(dataReembolso)
         } else
             throw new RuntimeException("EMP #${empresa.id} => Intervalo de Agenda não encontrado (dt: ${dataReferencia.format('dd/MM/yy')})")
         return dataReembolso.clearTime()
