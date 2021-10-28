@@ -18,7 +18,6 @@
                 </div>
             </div>
             <div class="panel panel-default panel-top">
-                <alert:all/>
                 <div class="panel-body">
                     <table class="table">
                         <thead>

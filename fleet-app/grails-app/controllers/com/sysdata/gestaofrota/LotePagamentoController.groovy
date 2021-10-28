@@ -3,13 +3,14 @@ package com.sysdata.gestaofrota
 import com.sysdata.gestaofrota.banpara.ConsultaLoteRepasseIndividualService
 import com.sysdata.gestaofrota.http.ResponseData
 import com.sysdata.gestaofrota.proc.reembolso.DesfaturamentoRepasseEstabsService
+import com.sysdata.gestaofrota.proc.reembolso.RegeraLoteRecebimentoPorLoteRepasseService
 
 class LotePagamentoController {
 
     LotePagamentoService lotePagamentoService
     ConsultaLoteRepasseIndividualService consultaLoteRepasseIndividualService
     DesfaturamentoRepasseEstabsService desfaturamentoRepasseEstabsService
-
+    RegeraLoteRecebimentoPorLoteRepasseService regeraLoteRecebimentoPorLoteRepasseService
 
     def index() {
         params.max = params.max ? params.max as int: 10
@@ -106,6 +107,18 @@ class LotePagamentoController {
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro ao desfazer Lote de Pagamento. Contate suporte para detalhes."
+        }
+        redirect action: 'index'
+    }
+
+    def redo(Long id) {
+        LotePagamento lotePagamento = LotePagamento.get(id)
+        try {
+            regeraLoteRecebimentoPorLoteRepasseService.redo(lotePagamento)
+            flash.success = "Lote de Recebimento refeito com sucesso"
+        } catch (e) {
+            e.printStackTrace()
+            flash.error = "Erro ao refazer Lote de Recebimento. Contate suporte para detalhes."
         }
         redirect action: 'index'
     }
