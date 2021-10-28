@@ -67,10 +67,24 @@
                                         class="btn btn-danger"
                                         onclick="return confirm('Confirma o Cancelamento do Lote?')">
                                     <i class="fa fa-close fa-fw"></i> Cancelar Lote</button>
+
+
+                                <sec:ifAnyGranted roles="ROLE_PROC">
+                                    <button type="submit"
+                                            name="_action_redo"
+                                            class="btn btn-default"
+                                            onclick="return confirm('Confirma refazimento do Lote Recebimento?')">
+                                        Refazer Lote Recebimento</button>
+
+                                </sec:ifAnyGranted>
+
+
                             </g:form>
                         </div>
                     </g:if>
                 </sec:ifAnyGranted>
+
+
             </div>
 
             <table class="table">

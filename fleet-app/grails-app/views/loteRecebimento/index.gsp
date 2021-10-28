@@ -10,6 +10,7 @@
             <h3>Lista de Lotes de Recebimentos de Clientes</h3>
         </div>
         <div class="panel-body">
+            <alert:all/>
             <div class="row">
                 <div class="col-md-12">
                     <g:link uri="/" class="btn btn-default"><span class="glyphicon glyphicon-home"></span> Início</g:link>
