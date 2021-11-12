@@ -66,13 +66,14 @@ class HistoricoFrotaRelatorioController {
         cabecalho9.nsu = "NSU Aut"
         cabecalho9.terminal = "Terminal"
         cabecalho9.estabelecimento = "Estabelecimento"
-        cabecalho9.veiculo = "Veículo"
+        cabecalho9.veiculo = "Veiculo / Equipamento"
         cabecalho9.km = "Hodômetro"
-        cabecalho9.equipamento = "Equipamento"
+        cabecalho9.cartao = "Cartao"
         cabecalho9.funcionario = "Funcionário"
         cabecalho9.produtos = "Produtos"
         cabecalho9.precoUnitario = "Preço Unit."
         cabecalho9.valor = "Valor"
+        cabecalho9.saldo = "Saldo"
         cabecalho9.litros = "Qtde Lts"
         cabecalho9.cliente = "Cliente"
         cabecalho9.unidade = "Unidade"
@@ -105,11 +106,13 @@ class HistoricoFrotaRelatorioController {
                         "estabelecimento": tr.estabelecimento.identificacaoResumida,
                         "veiculo": tr.maquina.instanceOf(Veiculo) ? (tr.maquina as Veiculo).identificacaoCompacta : '',
                         "km": tr.quilometragem,
-                        "equipamento": tr.maquina.instanceOf(Equipamento) ? (tr.maquina as Equipamento).identificacaoCompacta : '',
+                        //"equipamento": tr.maquina.instanceOf(Equipamento) ? (tr.maquina as Equipamento).identificacaoCompacta : '',
+                        "cartao": tr.numeroCartao,
                         "funcionario": "(${tr.participante.matricula}) ${tr.participante.nome}",
                         "produtos": "${tr.produtos*.produto.nome.join('')}",
                         "precoUnitario": Util.formatCurrency(tr.precoUnitario),
                         "valor": Util.formatCurrency(tr.valor),
+                        "saldo": Util.formatCurrency(tr.cartao.saldoTotal),
                         "litros": tr.qtd_litros,
                         "cliente": tr.cartao.portador.unidade.rh.nome,
                         "unidade": tr.cartao.portador.unidade.nome,
@@ -126,11 +129,12 @@ class HistoricoFrotaRelatorioController {
                     "estabelecimento": "",
                     "veiculo": "",
                     "km": "",
-                    "equipamento": "",
+                    "cartao": "",
                     "funcionario": "",
                     "produtos": "",
                     "precoUnitario": "",
                     "valor": "",
+                    "saldo":"",
                     "litros": "",
                     "unidade": "",
                     "tipoTransacao": "",
@@ -147,11 +151,12 @@ class HistoricoFrotaRelatorioController {
                     "estabelecimento": "",
                     "veiculo": "",
                     "km": "",
-                    "equipamento": "",
+                    "cartao": "",
                     "funcionario": "",
                     "produtos": "TOTAL GERAL",
                     "precoUnitario": "",
                     "valor": Util.formatCurrency(totalValor),
+                    "saldo":"",
                     "litros": "",
                     "cliente": "",
                     "unidade": "",
@@ -167,10 +172,11 @@ class HistoricoFrotaRelatorioController {
                     "estabelecimento",
                     "veiculo",
                     "km",
-                    "equipamento",
+                    "cartao",
                     "funcionario",
                     "produtos",
                     "valor",
+                    "saldo",
                     "litros",
                     "precoUnitario",
                     "cliente",

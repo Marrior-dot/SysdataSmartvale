@@ -54,6 +54,7 @@
             <th>Ano Fabricação</th>
             <th>Cap Tanque(lts)</th>
             <th>Tipo Comb</th>
+            <th>Saldo</th>
 
             </thead>
             <tbody>
@@ -69,6 +70,7 @@
                     <td>${veic.anoFabricacao}</td>
                     <td>${veic?.capacidadeTanque}</td>
                     <td>${veic?.tipoAbastecimento}</td>
+                    <td>${veic?.portador.saldoTotal}</td>
 
                 </tr>
             </g:each>

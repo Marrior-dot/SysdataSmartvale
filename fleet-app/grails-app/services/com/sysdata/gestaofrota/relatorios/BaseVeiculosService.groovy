@@ -5,6 +5,7 @@ import com.sysdata.gestaofrota.TipoAbastecimento
 import com.sysdata.gestaofrota.TipoTransacao
 import com.sysdata.gestaofrota.Veiculo
 import com.sysdata.gestaofrota.Transacao
+import com.sysdata.gestaofrota.Portador
 
 class BaseVeiculosService {
 
