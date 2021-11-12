@@ -63,6 +63,7 @@ def index() {
         cabecalho5.fabricacao = "ANO FABRIC."
         cabecalho5.capTanque = "CAP. TANQUE"
         cabecalho5.tipoCombustivel = "TIPO COMBUST."
+        cabecalho5.saldo = "SALDO."
         BaseVeiculosRelatorio << cabecalho5
 
         def reportList = baseVeiculosService.list(params, false)
@@ -78,7 +79,8 @@ def index() {
                     "chassi": tr.chassi,
                     "fabricacao": tr.anoFabricacao,
                     "capTanque": tr.capacidadeTanque,
-                    "tipoCombustivel": tr.tipoAbastecimento
+                    "tipoCombustivel": tr.tipoAbastecimento,
+                    "saldo": tr.portador.saldoTotal
                     //"tipoCombustivel": "(${tr.participante.matricula}) ${tr.participante.nome}"
             ]
         }
@@ -91,7 +93,8 @@ def index() {
                 "chassi": "",
                 "fabricacao": "",
                 "capTanque": "",
-                "tipoCombustivel": ""
+                "tipoCombustivel": "",
+                "saldo": ""
         ]
 
         List fields = [
@@ -102,7 +105,8 @@ def index() {
                 "chassi",
                 "fabricacao",
                 "capTanque",
-                "tipoCombustivel"
+                "tipoCombustivel",
+                "saldo"
 
         ]
 
@@ -114,7 +118,8 @@ def index() {
                 "chassi": "CHASSI",
                 "fabricacao": "ANO FABRIC.",
                 "capTanque": "CAP. TANQUE",
-                "tipoCombustivel": "TIPO COMBUST."
+                "tipoCombustivel": "TIPO COMBUST.",
+                "saldo": "SALDO"
         ]
 
         //  Map formatters = [author: upperCase]
