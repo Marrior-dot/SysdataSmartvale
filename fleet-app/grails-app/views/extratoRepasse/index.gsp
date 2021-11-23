@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="layout-restrito" charset="UTF-8" >
-    <g:set var="relatorio" value="Abastecimento Diario por Cliente"/>
+    <g:set var="relatorio" value="Relatório Repasse Estabelecimento"/>
     <title>${relatorio}</title>
     <export:resource />
 </head>
@@ -26,7 +26,6 @@
                     Filtros
                 </div>
                 <div class="panel-body">
-                    %{--<g:render template="/components/rhUnidadeSelect"></g:render>--}%
                     <div class="row">
                         <div class="col-md-3">
                             <label>Data Inicial</label>
@@ -37,13 +36,6 @@
                             <g:textField name="dataFinal" class="form-control datepicker" value="${params.dataFinal}"></g:textField>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>CNPJ Empresa</label>
-                            <g:textField name="CNPJEmp" class="form-control cnpj" value="${params.CNPJEmp}"></g:textField>
-                        </div>
-                    </div>
-                </div>
                 <div class="panel-footer">
                     <button type="submit" class="btn btn-default" ><i class=""></i> Filtrar</button>
                 </div>
