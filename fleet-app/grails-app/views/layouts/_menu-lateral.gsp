@@ -180,8 +180,8 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="VendasLojistaRelatorio">Vendas por Lojista</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="QntTransacaoUnidade">Quantidade de Transações por Unidade</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="ExtratoRepasse">Relatório Repasse Estabelecimento</g:link></li>
-                            <li class="controller"><g:link  class="submenu-logado"  controller="ConsumoMesRelatorio">Consumo por Mensal</g:link></li>
-                            <li class="controller"><g:link  class="submenu-logado"  controller="EvolutivoConsumoRelatporio">Envolutivo de Consumo</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="ConsumoMesRelatorio">Consumo Mensal</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="EvolutivoConsumoRelatporio">Evolutivo de Consumo</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="TransacoesProtegidasRelatorio">Relatório de Transações Protegidas</g:link></li>
                         </sec:ifAnyGranted>
 
