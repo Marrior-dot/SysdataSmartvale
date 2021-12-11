@@ -45,8 +45,8 @@ class BaseEstabelecimentosRelatorioController {
             cabecalho3.cnpj = "CNPJ"
             cabecalho3.nome = "NOME"
             cabecalho3.nomeFantasia = "NOME FANTASIA"
-            cabecalho3.Logradouro = "lOGRADOURO"
-            cabecalho3.Numero = "NUMERO"
+            cabecalho3.Logradouro = "LOGRADOURO"
+            /*cabecalho3.Numero = "NUMERO"*/
             cabecalho3.Complemento = "COMPLEMENTO"
             cabecalho3.Bairro = "BAIRRO"
             cabecalho3.Cidade = "CIDADE"
@@ -65,8 +65,8 @@ class BaseEstabelecimentosRelatorioController {
                         "cnpj": tr.cnpj,
                         "nome": tr.nome,
                         "nomeFantasia": tr.nomeFantasia,
-                        "Logradouro": tr.telefone,
-                        "Numero": tr.empresa.endereco.logradouro,
+                        "Logradouro": tr.empresa.endereco.logradouro,
+                        /*"Numero": tr.telefone,*/
                         "Complemento": tr.empresa.endereco.complemento,
                         "Bairro": tr.empresa.endereco.bairro,
                         "Cidade": tr.endereco.cidade.nome,
@@ -84,7 +84,7 @@ class BaseEstabelecimentosRelatorioController {
                     "nome": "",
                     "nomeFantasia": "",
                     "Logradouro": "",
-                    "Numero": "",
+                   /* "Numero": "",*/
                     "Complemento": "",
                     "Bairro": "",
                     "Cidade": "",
@@ -101,7 +101,7 @@ class BaseEstabelecimentosRelatorioController {
                     "nome",
                     "nomeFantasia",
                     "Logradouro",
-                    "Numero",
+                    /*"Numero",*/
                     "Complemento",
                     "Bairro",
                     "Cidade",
@@ -135,7 +135,7 @@ class BaseEstabelecimentosRelatorioController {
                     "nome": "RAZAO SOCIAL",
                     "nomeFantasia": "NOME FANTASIA",
                     "Logradouro": "LOGRADOURO",
-                    "Numero": "NUMERO",
+                    /*"Numero": "NUMERO",*/
                     "Complemento": "COMPLEMENTO",
                     "Bairro": "BAIRRO",
                     "Cidade": "CIDADE",
