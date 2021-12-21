@@ -22,7 +22,7 @@ class ReembolsoIntervaloService implements CalculoDiasUteis {
             def anoReemb = ano
 
             if (mesReemb + 1 > 12) {
-                mesReemb = 1
+                mesReemb = 0
                 anoReemb = ano + 1
             }
 
