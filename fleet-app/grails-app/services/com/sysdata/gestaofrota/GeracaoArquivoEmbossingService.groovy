@@ -168,7 +168,9 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
 
         if (loteEmbossingList) {
 
-            loteEmbossingList.each { lote ->
+            loteEmbossingList*.id.each { loteId ->
+
+                LoteEmbossing lote = LoteEmbossing.get(loteId)
 
                 def fileName = geradorArquivoEmbossing.gerarNomeArquivo(lote)
 
@@ -182,6 +184,8 @@ class GeracaoArquivoEmbossingService implements ExecutableProcessing {
                 lote.arquivos << arquivoEmbossing
 
                 geradorArquivoEmbossing.gerarArquivoLoteEmbossing(lote)
+                if (! lote.isAttached())
+                    lote = LoteEmbossing.get(loteId)
 
                 arquivoEmbossing.status = StatusArquivo.GERADO
                 arquivoEmbossing.save(flush: true)
