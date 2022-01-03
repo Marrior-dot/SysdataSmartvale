@@ -4,7 +4,7 @@ import grails.gorm.transactions.Transactional
 import grails.plugin.asyncmail.AsynchronousMailService
 
 @Transactional
-class SenderMailService {
+class SenderMailService implements EventSubscriber {
 
     AsynchronousMailService asyncMailService
 
@@ -23,5 +23,10 @@ class SenderMailService {
             }
         } else
             log.error "Mail Template '${keyTemplate}' não encontrado!"
+    }
+
+    @Override
+    void handleEvent(String event, Map data) {
+        sendMessage(event, data)
     }
 }
