@@ -13,28 +13,34 @@ class ForgetPasswordTokenService {
     SenderMailService senderMailService
     GrailsApplication grailsApplication
 
-    def requestNewPassword(String email) {
+    def requestNewPassword(String email, String emailConfirm) {
         User user = User.findWhere(email: email)
         if (user) {
-            ForgetPasswordToken createdToken = ForgetPasswordToken.findWhere(user: user, statusToken: StatusToken.CREATED)
-            if (createdToken) {
-                createdToken.statusToken = StatusToken.INVALID
-                createdToken.save(flush: true)
-            }
-            ForgetPasswordToken newToken = new ForgetPasswordToken(user: user, key: UUID.randomUUID().toString(), expirationDatetime: new Date() + 1)
-            newToken.save(flush: true)
-            // Envia email
-            senderMailService.sendMessage('forget.password', [
-                                                                token: newToken,
-                                                                grailsApplication: grailsApplication
-                                                            ])
-
+            if (email == emailConfirm) {
+                ForgetPasswordToken createdToken = ForgetPasswordToken.findWhere(user: user,
+                                                                                    statusToken: StatusToken.CREATED)
+                if (createdToken) {
+                    createdToken.statusToken = StatusToken.INVALID
+                    createdToken.save(flush: true)
+                }
+                ForgetPasswordToken newToken = new ForgetPasswordToken(user: user,
+                                                                        key: UUID.randomUUID().toString(),
+                                                                        expirationDatetime: new Date() + 1)
+                newToken.save(flush: true)
+                // Envia email
+                senderMailService.sendMessage('forget.password', [
+                                                                    user: user,
+                                                                    token: newToken.key,
+                                                                    grailsApplication: grailsApplication
+                                                                ])
+            } else
+                throw new BusinessException("Confirmação não confere com email informado!")
         } else
             throw new BusinessException("Não existe usuário com o email informado!")
     }
 
     def useToken(String token) {
-        ForgetPasswordToken foundToken = ForgetPasswordToken.findWhere(token: token)
+        ForgetPasswordToken foundToken = ForgetPasswordToken.findWhere(key: token)
         if (foundToken) {
             def now = new Date()
             if (now <= foundToken.expirationDatetime) {

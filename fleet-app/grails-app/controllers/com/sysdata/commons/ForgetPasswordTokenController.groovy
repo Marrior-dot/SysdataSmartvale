@@ -13,15 +13,21 @@ class ForgetPasswordTokenController {
 
     def requestNewPassword() {
         try {
-            forgetPasswordTokenService.requestNewPassword(params.email)
+            forgetPasswordTokenService.requestNewPassword(params.email?.trim(), params.emailConfirm?.trim())
+            flash.success = "Email enviado para ${params.email}!"
+            render view: 'userMessages'
+            return
         } catch (BusinessException e) {
             log.error e.message
             flash.error = e.message
+            render view: 'index'
+            return
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contate suporte."
+            render view: 'index'
+            return
         }
-        render view: 'index'
     }
 
     def useToken() {
@@ -47,13 +53,17 @@ class ForgetPasswordTokenController {
             User user = User.get(params.id)
             userService.saveNewPassword(user, params.newPassword, params.confirmPassword)
             flash.message = "Senha alterada com sucesso"
+            render view: 'userMessages'
+            return
         } catch (BusinessException e) {
             log.error e.message
             flash.error = e.message
+            render view: 'newPassword'
+            return
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contate suporte."
+            render view: 'newPassword'
         }
-        render view: 'userMessages'
     }
 }

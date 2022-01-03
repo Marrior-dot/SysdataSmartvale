@@ -15,12 +15,17 @@
             <g:form action="requestNewPassword">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Insira seu email</label>
-                            <g:field type="email" name="email"></g:field>
+                            <g:textField type="email" name="email"></g:textField>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Confirme seu email</label>
+                            <g:textField type="email" name="emailConfirm"></g:textField>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-footer">
                     <button type="submit" class="btn btn-success"> Confirmar</button>
