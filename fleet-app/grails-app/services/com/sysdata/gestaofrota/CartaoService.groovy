@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.HistoricoTransferencia
 import com.sysdata.gestaofrota.exception.BusinessException
 import grails.gorm.transactions.Transactional
 
@@ -7,6 +8,7 @@ import grails.gorm.transactions.Transactional
 class CartaoService {
     def processamentoService
     def geradorCartao
+    def springSecurityService
 
     private Cartao gerarCartao(Portador portador, TipoCartao tipoCartao, comChip = true) {
         Administradora administradora = processamentoService.getAdministradoraProjeto()
@@ -66,5 +68,33 @@ class CartaoService {
         }
 
         cartao.save(flush: true)
+    }
+
+    def transferenciaEntreCartoes(numeroOrigem, numeroDestino, valor) {
+
+       log.info "Iniciando transferencia..."
+
+       if (!numeroOrigem || !numeroDestino || !valor) throw new RuntimeException("Parâmetros inválidos")
+
+       def cartaoOrigem = Cartao.findByNumero(numeroOrigem) //criar Consulta dentro de Cartões
+       //log.info "CartãoOrigem consultado..."
+       if (!cartaoOrigem) throw new RuntimeException("Cartão Origem não encontrado")
+       //log.info "CartãoOrigem consultado 2..."
+       def cartaoDestino = Cartao.findByNumero(numeroDestino) //criar Consulta dentro de Cartões
+       if (!cartaoDestino) throw new RuntimeException("Cartão Destino não encontrado")
+       if (cartaoDestino.status in [StatusCartao.CANCELADO, StatusCartao.BLOQUEADO]) throw new RuntimeException("Não é possível transferir saldo para um cartão: ${cartaoDestino.status}")
+
+       if (valor <= new BigDecimal(0)) throw new RuntimeException("Valor da transferencia tem que ser positivo")
+
+       if (valor > cartaoOrigem?.saldo) throw new RuntimeException("O valor da transferencia é maior que o disponível no cartão de origem")
+
+       log.info "Crt Org #${cartaoOrigem.id} - Crt Dst #${cartaoDestino.id} - valor: ${valor}"
+
+       def transDebito = transferenciaService.gerarTransferenciaDebito(cartaoOrigem, valor)
+       def transCredito = transferenciaService.gerarTransferenciaCredito(cartaoDestino, valor)
+
+       new HistoricoTransferencia(user: springSecurityService?.getCurrentUser(), transacaoCredito: transCredito,
+              transacaoDebito: transDebito, valorTransferencia: valor).save(flush: true, failOnError: true)
+
     }
 }
