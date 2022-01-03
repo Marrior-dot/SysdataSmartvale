@@ -64,6 +64,7 @@
                         <li class="controller"><g:link class="submenu-logado" controller="pedidoCarga" action="list">Pedidos de Carga</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="list">Transações</g:link></li>
                         <li class="controller"><g:link class="submenu-logado" controller="transacao" action="listAdmin">Transações Administrativas</g:link></li>
+                        <li class="controller"><g:link class="submenu-logado" controller="transferenciaSaldo" action="index">Transferência de Saldo entre Cartões</g:link></li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>

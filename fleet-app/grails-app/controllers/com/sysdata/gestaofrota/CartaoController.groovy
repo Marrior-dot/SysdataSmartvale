@@ -118,5 +118,11 @@ class CartaoController {
         }
     }
 
-
+    def findByNumero() {
+        Cartao cartao = Cartao.findByNumero(params.cartao)
+        if (! cartao)
+            render status: 404, text: "Cartão ${params.cartao} não localizado na base!"
+        else
+            render status: 200, text: cartao.portador.saldoTotal
+    }
 }

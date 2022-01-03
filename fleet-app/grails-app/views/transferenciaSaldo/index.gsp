@@ -20,45 +20,56 @@
             <span class="glyphicon glyphicon-home"></span>&nbsp;<g:message code="default.home.label"/>
         </g:link>
 
+        <alert:all/>
+        <g:form action="transferir">
         <div class="panel panel-default">
-            <g:form action="list">
-                <div class="panel-heading">
-                    Filtros
-                </div>
-                <div class="panel-body">
-            %{--<g:render template="/components/rhUnidadeSelect"></g:render>--}%
+            <div class="panel-body">
+
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Nº Cartão Origem 2</label>
-                            <g:textField name="cartaoOrigem"  placeholder="Cartão Origem" class="form-control number" value="${params.cartaoOrigem}"></g:textField>
-                        </div>
+                        <label>Nº Cartão Origem</label>
+                        <g:textField name="cartaoOrigem" placeholder="Cartão Origem" class="form-control number" value="${params.cartaoOrigem}"></g:textField>
+                    </div>
+                    <div class="col-md-6">
+                        <span id="saldoCartao"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Nº Cartão Destino 2</label>
-                            <g:textField name="cartaoDestino"  placeholder="Cartão Destino" class="form-control number" value="${params.cartaoDestino}"></g:textField>
-                        </div>
+                        <label>Nº Cartão Destino</label>
+                        <g:textField name="cartaoDestino"  placeholder="Cartão Destino" class="form-control number" value="${params.cartaoDestino}"></g:textField>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Valor da Transferência 2</label>
-                            <g:textField name="valorTransferencia"  placeholder="Valor" class="form-control money" value="${params.valorTransferencia}"></g:textField>
-                        </div>
+                        <label>Valor da Transferência</label>
+                        <g:textField name="valorTransferencia"  placeholder="Valor" class="form-control money" value="${params.valorTransferencia}"></g:textField>
                     </div>
                 </div>
                 <div class="panel-footer">
                     <button type="submit" class="btn btn-default" ><i class=""></i> Transferir Saldo</button>
                 </div>
-            </g:form>
+            </div>
         </div>
-        </div>
+        </g:form>
     </div>
+<script>
+    $("#cartaoOrigem").blur(function() {
+        var numeroCartao = $(this).val();
+        $.getJSON("${createLink(controller: 'cartao', action: 'findByNumero')}", {cartao: numeroCartao}, function() {
+
+        })
+       .done(function(data) {
+            console.log("Saldo: " + data);
+            $("#saldoCartao").html(data);
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+        });
+    });
+
+</script>
 </body>
 </html>

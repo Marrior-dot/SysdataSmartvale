@@ -89,28 +89,5 @@ class Cartao {
         return this.relacaoPortador.find { it.portador == portador && it.status == StatusRelacaoCartaoPortador.ATIVA}
     }
 
-    def creditarValor(valor) {
-        ContaPortador contaPortadorTitular = this.portador.contaPortadorTitular
-        Limite limite = contaPortadorTitular.limiteUnico
-        def saldoDisp = limite.saldo
-        if (this.portador.contaPortadorTitular.programa.tipo in [TipoPrograma.CREDITO, TipoPrograma.CONVENIO] && saldoDisp + valor > limite.valor)
-            throw new RuntimeException("Saldo #${this.id} nao pode ser superior ao limite do cartao para este tipo de programa!")
-        else {
-            limite.saldo += valor
-            limite.save()
-            log.debug "\t CRT #${this.id} - sld.ant: ${saldoDisp} sld.nov: ${limite.saldo} (d: ${limite.saldo - saldoDisp})}"
-        }
-    }
-
-    def debitarValor(valor) {
-        Portador contaPortadorTitular = this.portador.contaPortadorTitular
-        Portador limite = contaPortadorTitular.limiteTotal
-        def saldoDisp = limite.saldo
-        if (saldoDisp - valor < 0) throw new RuntimeException("Saldo do cartao #${this.id} nao pode ser negativo!")
-
-        limite.saldo -= valor
-        limite.save()
-        log.debug "\t CRT #${this.id} - sld.ant: ${saldoDisp} sld.nov: ${limite.saldo} (d: ${limite.saldo - saldoDisp})}"
-    }
 
 }
