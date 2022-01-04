@@ -89,4 +89,5 @@ class Cartao {
         return this.relacaoPortador.find { it.portador == portador && it.status == StatusRelacaoCartaoPortador.ATIVA}
     }
 
+
 }

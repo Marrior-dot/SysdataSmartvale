@@ -7,6 +7,7 @@ import grails.gorm.transactions.Transactional
 class CartaoService {
     def processamentoService
     def geradorCartao
+    def springSecurityService
 
     private Cartao gerarCartao(Portador portador, TipoCartao tipoCartao, comChip = true) {
         Administradora administradora = processamentoService.getAdministradoraProjeto()
@@ -67,4 +68,13 @@ class CartaoService {
 
         cartao.save(flush: true)
     }
+
+    def atualizarSaldo(Cartao cartao, BigDecimal valor) {
+        def saldoAtual = cartao.portador.saldoTotal
+        if (saldoAtual + valor < 0)
+            throw new BusinessException("Saldo do cartão não pode ser negativo!")
+        else
+            cartao.portador.saldoTotal += valor
+    }
+
 }
