@@ -185,6 +185,7 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="ConsumoMesRelatorio">Consumo Mensal</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="EvolutivoConsumoRelatporio">Evolutivo de Consumo</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="TransacoesProtegidasRelatorio">Relatório de Transações Protegidas</g:link></li>
+                            <li class="controller"><g:link  class="submenu-logado"  controller="RelatorioTransferenciaSaldo">Relatório de Transferência Saldo</g:link></li>
                         </sec:ifAnyGranted>
 
                         %{--
