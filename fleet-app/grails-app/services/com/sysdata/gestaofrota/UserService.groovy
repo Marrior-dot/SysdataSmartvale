@@ -56,7 +56,7 @@ class UserService {
             } else
                  throw new BusinessException("Confirmação não corresponde à Nova Senha!")
         } else
-            throw new BusinessException("Confirmação não corresponde à Nova Senha!")
+            throw new BusinessException("Nova senha não está no padrão de senha forte!")
     }
 
 }

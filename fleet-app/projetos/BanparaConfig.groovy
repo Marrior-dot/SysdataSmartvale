@@ -90,6 +90,8 @@ environments {
             jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
         }
 
+        serverUrl = "http://192.168.250.44:8080/banpara-hom/"
+
     }
 
     production {

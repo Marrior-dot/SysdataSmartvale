@@ -25,9 +25,9 @@ class TransferenciaSaldoController {
                     flash.error = "Erro interno. Contate o suporte"
                 }
             } else
-                flash.error = "Cartões destino não pode ser nulo!"
+                flash.error = "Cartões destino não encontrado na base!"
         } else
-            flash.error = "Cartao origem não pode ser nulo!"
+            flash.error = "Cartao origem não encontrado na base!"
 
         render view: 'index'
     }
