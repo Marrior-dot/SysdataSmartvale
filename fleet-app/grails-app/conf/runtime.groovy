@@ -38,6 +38,14 @@ dataSource {
 
 grails {
     mail {
-        host = "172.16.100.20"
+        host     = 'smtp.gmail.com'
+        username = 'sysdatamail@sysdata.com.br'
+        password = 'X@zN&8sp+XxBmL*w'
+        port     = '465'
+
+        props = ["mail.smtp.auth":"true",
+                 "mail.smtp.socketFactory.port":"465",
+                 "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                 "mail.smtp.socketFactory.fallback":"false"]
     }
 }

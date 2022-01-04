@@ -28,7 +28,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banpara_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banparafrota_development"
 
         username = "postgres"
         password = "postgres"
@@ -52,9 +52,9 @@ environments {
 
         context = "/banpara-frota"
 
-
         jasperImages = "/home/luiz/tmp/banpara/images/Camada x0020 2.png"
 
+        serverUrl = "http://localhost:8080/banpara-frota"
     }
 
     homologation {

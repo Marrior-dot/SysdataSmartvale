@@ -100,6 +100,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
         [pattern: '/login/**',                                     access: ['permitAll']],
         [pattern: '/logout/**',                                    access: ['permitAll']],
+        [pattern: '/forgetPasswordToken/**',                       access: ['permitAll']],
         [pattern: '/dashboard/**',                                 access: ['IS_AUTHENTICATED_FULLY']],
         [pattern: '/rh/**',                                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/fechamento/**',                                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],

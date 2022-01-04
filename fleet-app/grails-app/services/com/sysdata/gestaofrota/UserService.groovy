@@ -1,11 +1,15 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.exception.BusinessException
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class UserService {
 
     def grailsApplication
+
+    private static def PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*+])[A-Za-z\d][A-Za-z\d!@#$%^&*+]{7,14}$/
+
 
     def register(command) {
 		def user = new User([username: command.username, email: command.email, password: command.password,
@@ -39,5 +43,20 @@ class UserService {
 		}
 		ret
 	}
+
+    boolean validPassword(password) {
+        return password ==~ PASSWORD_PATTERN
+    }
+
+    def saveNewPassword(User user, String newPassword, String confirmPassword) {
+        if (validPassword(newPassword)) {
+            if (newPassword == confirmPassword) {
+                user.password = newPassword
+                user.save(flush: true)
+            } else
+                 throw new BusinessException("Confirmação não corresponde à Nova Senha!")
+        } else
+            throw new BusinessException("Confirmação não corresponde à Nova Senha!")
+    }
 
 }
