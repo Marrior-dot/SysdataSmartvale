@@ -54,5 +54,7 @@ notifications {
     topics = [
         [name: "pedidocarga.solicitacao", subscribers: ["senderMailService"]],
         [name: "embossingCartoes.geracao", subscribers: ["senderMailService"]],
+        [name: "loteembossing.criacao", subscribers: ["senderMailService"]],
+        [name: "loteembossing.geracaoArquivo", subscribers: ["senderMailService"]],
     ]
 }

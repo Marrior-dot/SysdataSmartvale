@@ -8,8 +8,7 @@ class UserService {
 
     def grailsApplication
 
-    private static def PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*+])[A-Za-z\d][A-Za-z\d!@#$%^&*+]{7,14}$/
-
+    private static def PASSWORD_PATTERN = /^(?=(.*[a-z])+)(?=(.*[A-Z])+)(?=(.*[0-9])+)(?=(.*[!@#\%^&*()\\-__+.])+).{14,}$/
 
     def register(command) {
 		def user = new User([username: command.username, email: command.email, password: command.password,

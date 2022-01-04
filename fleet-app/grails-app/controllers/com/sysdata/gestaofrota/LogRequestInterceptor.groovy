@@ -11,11 +11,9 @@ class LogRequestInterceptor {
 
     boolean before() {
         def username = springSecurityService.isLoggedIn() ? springSecurityService.authentication.name : "unknown"
-        //def sourceIp = request.getHeader('x-forwarded-for') ?: 'localhost'
         def sourceIp = request.getRemoteAddr() ?: 'localhost'
-        log.info "${username}@${sourceIp} - params: ${params}"
+        log.info "${username}@${sourceIp} - params: ${params.findAll { it.key ==~ /^(?!.*[Ss]enha)(?!.*[Pp]assword)([a-zA-Z0-9]+)$/ }}"
         true
-
     }
 
     boolean after() { true }

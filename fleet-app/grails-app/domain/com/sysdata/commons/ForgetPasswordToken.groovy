@@ -16,4 +16,5 @@ class ForgetPasswordToken {
     static mapping = {
         id generator: 'sequence', params: [sequence: 'fgtpwdtoken_seq']
     }
+
 }

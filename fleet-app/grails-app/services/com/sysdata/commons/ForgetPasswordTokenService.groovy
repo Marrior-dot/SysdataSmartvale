@@ -56,6 +56,6 @@ class ForgetPasswordTokenService {
             return foundToken
         } else
             return null
-
     }
+
 }

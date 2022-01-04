@@ -11,7 +11,7 @@ class SenderMailService implements EventSubscriber {
     def sendMessage(String keyTemplate, Map data) {
         MailTemplate mailTemplate = MailTemplate.findWhere(key: keyTemplate)
         if (mailTemplate) {
-            def mailTo = mailTemplate.makeTo(data)
+            def mailTo = mailTemplate.to.contains(',') ? mailTemplate.to.split(',') : mailTemplate.makeTo(data)
             log.info "Enviando email (assunto: ${mailTemplate.subject}) para '${mailTo}'..."
             asyncMailService.sendMail {
                 to mailTo

@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.commons.notification.EventDispatcherService
 import grails.gorm.transactions.Transactional
 import org.hibernate.sql.JoinType
 
@@ -7,6 +8,7 @@ import org.hibernate.sql.JoinType
 class LoteEmbossingService {
 
     def springSecurityService
+    EventDispatcherService eventDispatcherService
 
     int countCartoesParaEmbossing() {
 
@@ -57,6 +59,7 @@ class LoteEmbossingService {
             log.info "\t(+) CRT #${crt.id}"
         }
         loteEmbossing.save(flush: true)
+        eventDispatcherService.publish("loteembossing.criacao", [loteEmbossing: loteEmbossing])
 
         return loteEmbossing
     }

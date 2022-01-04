@@ -34,7 +34,7 @@ class ForgetPasswordTokenController {
         ForgetPasswordToken forgetPswToken = forgetPasswordTokenService.useToken(params.key)
         if (forgetPswToken) {
             if (forgetPswToken.statusToken == StatusToken.USED) {
-                render view: 'newPassword'
+                render view: 'newPassword', model: [token: forgetPswToken]
                 return
             } else {
                 log.error "TOKEN_FORGET_PSW #${forgetPswToken.id} - ${forgetPswToken.statusToken.userMessage}"
@@ -50,9 +50,10 @@ class ForgetPasswordTokenController {
 
     def saveNewPassword() {
         try {
-            User user = User.get(params.id)
-            userService.saveNewPassword(user, params.newPassword, params.confirmPassword)
-            flash.message = "Senha alterada com sucesso"
+            ForgetPasswordToken token = ForgetPasswordToken.get(params.id as long)
+            userService.saveNewPassword(token.user, params.newPassword, params.confirmPassword)
+            log.info "Usuario #${token.user.username} - senha alterada por Esqueci a Senha"
+            flash.success = "Senha alterada com sucesso"
             render view: 'userMessages'
             return
         } catch (BusinessException e) {
@@ -66,4 +67,6 @@ class ForgetPasswordTokenController {
             render view: 'newPassword'
         }
     }
+
+
 }

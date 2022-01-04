@@ -37,8 +37,12 @@
     </div>
 </g:if>
 <g:else>
-    <div class="row">
-        <div class="alert alert-info text-center" role="alert">Não há Cartões a Embossar</div>
+    <div class="panel panel-default panel-top">
+        <div class="panel-body">
+            <div class="row">
+                <div class="alert alert-info text-center" role="alert">Não há Cartões a Embossar</div>
+            </div>
+        </div>
     </div>
 </g:else>
 

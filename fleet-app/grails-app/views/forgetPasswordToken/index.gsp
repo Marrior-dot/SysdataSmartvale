@@ -14,13 +14,13 @@
             <alert:all/>
             <g:form action="requestNewPassword">
                 <div class="panel-body">
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-6">
                             <label>Insira seu email</label>
                             <g:textField type="email" name="email"></g:textField>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-6">
                             <label>Confirme seu email</label>
                             <g:textField type="email" name="emailConfirm"></g:textField>
