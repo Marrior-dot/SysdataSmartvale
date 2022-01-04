@@ -1,11 +1,15 @@
 <%@ page import="com.sysdata.gestaofrota.Util" %>
 
 <g:if test="${veiculoInstanceCount > 0}">
+
+    <g:checkBox name="selectAll" value="${true}" /> <strong>Marcar Todos</strong>
+
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>Seleção</th>
             <th>Máquina</th>
+            <th>Saldo Atual</th>
             <th>Valor Carga</th>
         </tr>
         </thead>
@@ -17,7 +21,7 @@
                            onchange="setItemPedido(${veiculo.id})" ${pedidoCargaInstance?.isVeiculoInPedido(veiculo) || action == Util.ACTION_NEW ? 'checked' : ''} />
                 </td>
                 <td>${veiculo?.nomeEmbossing}</td>
-
+                <td><g:formatNumber number="${veiculo?.portador?.saldoTotal}" type="currency"/></td>
                 <g:if test="${action == Util.ACTION_VIEW}">
                     <td>R$ ${pedidoCargaInstance?.valorInPedido(veiculo)}</td>
                 </g:if>
@@ -49,3 +53,16 @@
 <g:else>
     <div class="well well-lg text-center"><b>SEM DADOS</b></div>
 </g:else>
+
+<script>
+    $("#selectAll").click(function(e) {
+        var checked = $(this).is(":checked");
+        var table = $("table");
+        table.find("tbody > tr").each(function() {
+           $(this).find("td > :checkbox").each(function() {
+
+               $(this).prop('checked', checked);
+           });
+        });
+    });
+</script>

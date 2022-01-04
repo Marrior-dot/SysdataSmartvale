@@ -38,14 +38,21 @@ dataSource {
 
 grails {
     mail {
-        host     = 'smtp.gmail.com'
-        username = 'sysdatamail@sysdata.com.br'
-        password = 'X@zN&8sp+XxBmL*w'
-        port     = '465'
-
+        host = "smtp.gmail.com"
+        port = 465
+        username = "sysdatamail@sysdata.com.br"
+        password = "X@zN&8sp+XxBmL*w"
         props = ["mail.smtp.auth":"true",
                  "mail.smtp.socketFactory.port":"465",
                  "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
                  "mail.smtp.socketFactory.fallback":"false"]
     }
+}
+
+
+notifications {
+    topics = [
+        [name: "pedidocarga.solicitacao", subscribers: ["senderMailService"]],
+        [name: "embossingCartoes.geracao", subscribers: ["senderMailService"]],
+    ]
 }

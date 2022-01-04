@@ -1,11 +1,14 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.commons.notification.EventDispatcherService
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class PedidoCargaService {
 
     def springSecurityService
+
+    EventDispatcherService eventDispatcherService
 
     def save(PedidoCarga pedidoCarga, Map params) {
 
@@ -174,8 +177,10 @@ class PedidoCargaService {
 
             ret.success = false
             ret.message = pedidoCarga.errors
-        } else
+        } else {
             ret.message = "Pedido #${pedidoCarga.id} criado com sucesso"
+            eventDispatcherService.publish("pedidocarga.solicitacao", [pedidoCarga: pedidoCarga])
+        }
 
         return ret
     }
