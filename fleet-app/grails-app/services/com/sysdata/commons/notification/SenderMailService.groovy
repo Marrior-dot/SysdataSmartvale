@@ -4,14 +4,14 @@ import grails.gorm.transactions.Transactional
 import grails.plugin.asyncmail.AsynchronousMailService
 
 @Transactional
-class SenderMailService {
+class SenderMailService implements EventSubscriber {
 
     AsynchronousMailService asyncMailService
 
     def sendMessage(String keyTemplate, Map data) {
         MailTemplate mailTemplate = MailTemplate.findWhere(key: keyTemplate)
         if (mailTemplate) {
-            def mailTo = mailTemplate.makeTo(data)
+            def mailTo = mailTemplate.to.contains(',') ? mailTemplate.to.split(',') : mailTemplate.makeTo(data)
             log.info "Enviando email (assunto: ${mailTemplate.subject}) para '${mailTo}'..."
             asyncMailService.sendMail {
                 to mailTo
@@ -22,6 +22,11 @@ class SenderMailService {
                 html mailTemplate.makeBody(data)
             }
         } else
-            log.error "Mail Template '${keyTemplate}' não encontrado!"
+            throw new RuntimeException("Mail Template '${keyTemplate}' não encontrado!")
+    }
+
+    @Override
+    void handleEvent(String event, Map data) {
+        sendMessage(event, data)
     }
 }

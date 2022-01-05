@@ -100,6 +100,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
 
         [pattern: '/login/**',                                     access: ['permitAll']],
         [pattern: '/logout/**',                                    access: ['permitAll']],
+        [pattern: '/forgetPasswordToken/**',                       access: ['permitAll']],
         [pattern: '/dashboard/**',                                 access: ['IS_AUTHENTICATED_FULLY']],
         [pattern: '/rh/**',                                        access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/fechamento/**',                                access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
@@ -159,6 +160,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/lotePagamento/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
         [pattern: '/loteRecebimento/**',                    access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_PROC_FINANC']],
         [pattern: '/corteEstabelecimento/**',               access: ['ROLE_PROC']],
+        [pattern: '/transferenciaSaldo/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN']],
 
 
         // Relatórios
@@ -181,6 +183,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         [pattern: '/ConsumoMesRelatorio/**',                         access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/EvolutivoConsumoRelatporio/**',                  access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
         [pattern: '/TransacoesProtegidasRelatorio/**',               access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
+        [pattern: '/RelatorioTransferenciaSaldo/**',                 access: ['ROLE_PROC', 'ROLE_ADMIN', 'ROLE_RH']],
 
 
         //[pattern: '/motivoNegacao/**',                      access: ['ROLE_PROC', 'ROLE_ADMIN']],

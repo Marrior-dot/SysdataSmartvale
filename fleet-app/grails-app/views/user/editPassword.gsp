@@ -16,7 +16,7 @@
             <g:form method="post" action="saveNewPassword">
                 <div class="panel-body">
 
-                    <div class="buttons">
+                    <div class="buttons-top">
 
                         <g:link action="meuUsuario" class="btn btn-default" id="${sec.loggedInUserInfo(field: 'id')}" >
                             <span class="glyphicon glyphicon-triangle-left"></span>&nbsp;Voltar
@@ -25,31 +25,34 @@
                     </div>
 
 
+                    <div class="alert alert-warning" role="alert">
+                        Sua senha deve seguir o seguinte padrão:
+                        <ul>
+                            <li>Ter, no mínimo, 14 caracteres</li>
+                            <li>Ter, no mínimo, uma letra Maiúscula (A-Z)</li>
+                            <li>Ter, no mínimo, uma letra Minúscula (a-z)</li>
+                            <li>Ter, no mínimo, um dos seguintes caracteres especiais: !@#\%^&*()-_+</li>
+                            <li>Não iniciar com os caracteres especiais</li>
+                        </ul>
+                    </div>
                     <div class="panel panel-default panel-top">
 
                         <div class="panel-body">
                             <g:hiddenField name="id" value="${userInstance?.id}" />
-
-                            <g:if test="${flash.message}">
-                                <div class="alert alert-info">${flash.message}</div>
-                            </g:if>
-                            <g:if test="${flash.error}">
-                                <div class="alert alert-danger">${flash.error}</div>
-                            </g:if>
-
-                            <div class="row">
+                            <alert:all/>
+                            <div class="row form-group">
                                 <div class="col-md-3">
                                     <label for="currentPassword">Senha Atual</label>
                                     <g:passwordField class="form-control" name="currentPassword" />
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row form-group">
                                 <div class="col-md-3">
                                     <label for="newPassword">Nova Senha</label>
                                     <g:passwordField class="form-control" name="newPassword" />
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row form-group">
                                 <div class="col-md-3">
                                     <label for="currentPassword">Confirmação Nova Senha</label>
                                     <g:passwordField class="form-control" name="confirmPassword" />
@@ -64,12 +67,9 @@
                 </div>
 
                 <div class="panel-footer">
-
-                    <button type="submit" class="btn btn-default">
-                        <span class="glyphicon glyphicon-save"></span>
-                        <g:message code="default.button.update.label" default="Updatea"></g:message>
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-save"></span> Alterar
                     </button>
-
                 </div>
             </g:form>
         </div>

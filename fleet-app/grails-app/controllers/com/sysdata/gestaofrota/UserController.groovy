@@ -1,5 +1,6 @@
 package com.sysdata.gestaofrota
 
+import com.sysdata.gestaofrota.exception.BusinessException
 import grails.converters.JSON
 
 class UserController extends BaseOwnerController {
@@ -123,7 +124,12 @@ class UserController extends BaseOwnerController {
             redirect(action: "list")
         } else {
             def userRole = UserRole.findByUser(userInstance)
-            render(view: "form", model: [userInstance: userInstance, role: userRole?.role, action: Util.ACTION_EDIT, ownerList: listOwners()])
+            render(view: "form", model: [
+                                            editable: springSecurityService.currentUser.authorities.authority.any { it == 'ROLE_ADMIN' || it == 'ROLE_PROC'},
+                                            userInstance: userInstance,
+                                            role: userRole?.role,
+                                            action: Util.ACTION_EDIT,
+                                            ownerList: listOwners()])
         }
     }
 
@@ -139,17 +145,17 @@ class UserController extends BaseOwnerController {
                     return
                 }
             }
-
-            def userRole = UserRole.findByUser(userInstance)
-            userRole?.delete(flush: true)
-            UserRole.create userInstance, Role.get(params.role)
-
-            userInstance.properties = params
-            if (!userInstance.hasErrors() && userInstance.save(flush: true)) {
+            userService.update(userInstance, params)
+            if (!userInstance.hasErrors()) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'Usuario'), userInstance.id])}"
                 redirect(action: "show", id: userInstance.id)
             } else {
-                render(view: "edit", model: [userInstance: userInstance, ownerList: listOwners()])
+                render(view: "form", model: [
+                        editable: springSecurityService.currentUser.authorities.authority.any { it == 'ROLE_ADMIN' || it == 'ROLE_PROC'},
+                        userInstance: userInstance,
+                        action: Util.ACTION_EDIT,
+                        ownerList: listOwners()])
+
             }
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
@@ -166,7 +172,7 @@ class UserController extends BaseOwnerController {
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
+                flash.error = "${message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
                 redirect(action: "show", id: params.id)
             }
         } else {
@@ -182,25 +188,21 @@ class UserController extends BaseOwnerController {
 
     def saveNewPassword() {
         def userInstance = User.get(params.id)
-
         def currentPassword = params.currentPassword
         def newPassword = params.newPassword
         def confirmPassword = params.confirmPassword
 
         if (passwordEncoder.isPasswordValid(userInstance.password, currentPassword, null)) {
-            if (newPassword == confirmPassword) {
-                userInstance.password = newPassword
-                userInstance.save(flush: true)
-                flash.message = "Senha alterada com sucesso"
-                render(view: 'editPassword', model: [userInstance: userInstance])
-            } else {
-                flash.error = "Confirmação não corresponde a nova senha informada"
-                render(view: 'editPassword', model: [userInstance: userInstance])
+            try {
+                userService.saveNewPassword(userInstance, newPassword, confirmPassword)
+                flash.success = "Senha alterada com sucesso"
+            } catch (BusinessException be) {
+                flash.error = be.message
             }
-        } else {
-            flash.error = "Senha atual informada não é válida!"
-            render(view: 'editPassword', model: [userInstance: userInstance])
-        }
+        } else
+            flash.error = "Senha atual informada inválida!"
+
+        render(view: 'editPassword', model: [userInstance: userInstance])
     }
 
     def meuUsuario() {

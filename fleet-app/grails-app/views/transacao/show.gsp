@@ -58,6 +58,10 @@
                             <td><g:formatNumber number="${transacaoInstance.valor}" type="currency" currencySymbol="R\$ " format="#0.00" /></td>
                         </tr>
                         <tr>
+                            <th>Unidade</th>
+                            <td>${transacaoInstance?.cartao?.portador?.unidade?.nome}</td>
+                        </tr>
+                        <tr>
                             <th>Funcionário</th>
                             <td>${transacaoInstance.participante?.nome}</td>
                         </tr>

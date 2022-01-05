@@ -49,53 +49,13 @@
 
 			</div>
 
-		%{--
-        <g:if test="${userInstance?.owner?.instanceOf(Rh)}">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="owner.nome">Nome RH</label>
-                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner.nome}"/>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="owner.codigo">Código RH</label>
-                    <input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner.codigo}"/>
-                </div>
-            </div>
-        </g:if>
-
-        <g:elseif test="${userInstance?.owner?.instanceOf(Estabelecimento)}">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="owner.nome">Nome Estabelecimento</label>
-                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="owner.codigo">Código Estabelecimento</label>
-                    <input type="text" class="form-control" name="owner.codigo" disabled value="${userInstance?.owner?.codigo}"/>
-                </div>
-            </div>
-        </g:elseif>
-
-        <g:elseif test="${userInstance?.owner?.instanceOf(PostoCombustivel)}">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="owner.nome">Nome Posto Combustível</label>
-                    <input type="text" class="form-control" name="owner.nome" disabled value="${userInstance?.owner?.nome}"/>
-                </div>
-
-            </div>
-        </g:elseif>
---}%
-
 			<div class="row">
 				<div class="col-md-6">
-					<bs:formField label="Nome" id="name" name="name" value="${userInstance?.name}" class="form-control"/>
+					<bs:formField label="Nome" id="name" name="name" value="${userInstance?.name}" class="form-control ${editable ? 'editable': ''}"/>
 				</div>
 				<div class="form-group col-md-6">
 					<label for="email">Email</label>
-					<input type="email" id="email" name="email" value="${userInstance?.email}" class="form-control"/>
+					<input type="email" id="email" name="email" value="${userInstance?.email}" class="form-control ${editable ? 'editable': ''}"/>
 				</div>
 			</div>
 
@@ -137,7 +97,7 @@
 								%>
 
 								<g:each in="${Role.list()}" var="r" >
-									<g:checkBox name="${r.authority}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
+									<g:checkBox name="${r.authority}" class="${editable ? 'editable': ''}" value="${userAuths.find { it.authority == r.authority }}"></g:checkBox> ${r.authority} <br/>
 								</g:each>
 
 
@@ -153,10 +113,13 @@
 					<g:actionSubmit class="btn btn-default" action="${action==Util.ACTION_NEW?'save':'update'}" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</g:if>
 				<g:if test="${action in [Util.ACTION_VIEW]}">
-					<sec:ifAnyGranted roles='ROLE_ADMIN, ROLE_MASTER'>
-						<g:actionSubmit class="btn btn-default" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" />
-						<g:actionSubmit class="btn btn-default" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-					</sec:ifAnyGranted>
+					<sec:ifAnyGranted roles='ROLE_PROC'>
+                        <button type="submit" name="_action_edit" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Editar</button>
+                        <button type="submit" name="_action_delete" class="btn btn-danger"
+                                onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp;Remover</button>
+
+                    </sec:ifAnyGranted>
 				</g:if>
 				<g:if test="${action in [Util.ACTION_EDIT]}">
 					<g:actionSubmit class="btn btn-default" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />

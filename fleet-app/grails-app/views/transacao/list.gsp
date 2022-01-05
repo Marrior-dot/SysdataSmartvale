@@ -10,7 +10,7 @@
     <meta name="layout" content="layout-restrito"/>
     <g:set var="entityName" value="${message(code: 'transacao.label', default: 'Transacao')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
-
+    <export:resource />
 </head>
 
 <body>

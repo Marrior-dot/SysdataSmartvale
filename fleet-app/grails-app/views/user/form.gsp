@@ -9,22 +9,23 @@
     <body>
     <br/>
         <div class="body">
-            <g:if test="${flash.message}">
-                <div class="alert alert-info" role="alert">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${userInstance}">
-                <div class="alert alert-danger" role="alert">
-                    <strong>Erro ao salvar ${entityName} </strong>
-                    <g:renderErrors bean="${userInstance}" as="list" />
-                </div>
-            </g:hasErrors>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4><g:message code="default.show.label" args="[entityName]" /></h4>
                 </div>
                 <div class="panel-body">
 
-                    <div class="buttons">
+                    <g:hasErrors bean="${userInstance}">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Erro ao salvar ${entityName} </strong>
+                            <g:renderErrors bean="${userInstance}" as="list" />
+                        </div>
+                    </g:hasErrors>
+
+                    <alert:all/>
+
+
+                    <div class="buttons-top">
                         <sec:ifAnyGranted roles="ROLE_PROC, ROLE_ADMIN">
                             <g:link class="btn btn-default" action="list">
                                 <span class="glyphicon glyphicon-list"></span>
@@ -46,6 +47,8 @@
                         </g:if>
 
                     </div>
+
+
                     <g:render template="basico" model="${[action: action]}"/>
                 </div>
             </div>
