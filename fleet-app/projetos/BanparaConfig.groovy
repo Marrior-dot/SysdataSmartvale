@@ -334,4 +334,4 @@ environments {
     }
 }
 
-features = ["lotePagamento", "loteRecebimento"]
+features = ["banpara"]
