@@ -26,6 +26,8 @@ class TransacaoController extends BaseOwnerController {
     def autorizadorService
     def estornoService
 
+    def exportService
+
     def index() {
         redirect(action: "list", params: params)
     }
@@ -53,10 +55,65 @@ class TransacaoController extends BaseOwnerController {
                 statusRede: params.statusRede
         ]
 
-        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
         if (filtro.dataFinal)
             filtro.dataFinal -= 1
-        [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
+
+
+        if (params.f && params.f != 'html') {
+
+            response.contentType = grailsApplication.config.grails.mime.types[params.f]
+            response.setHeader("Content-disposition", "attachment; filename=transacao-${new Date().format('yyMMdd')}.${params.extension}")
+
+            def labels = [
+                "id": "ID",
+                "nsuHost": "NSU Host",
+                "dataHora": "Data/Hora",
+                "terminal": "Terminal",
+                "unidade": "Unidade",
+                "cartao": "Cartão",
+                "funcionario": "Funcionário",
+                "tipo": "Tipo",
+                "statusProc": "Status Proc",
+                "statusRede": "Status Rede",
+                "valor": "Valor",
+            ]
+
+            def fields = [
+                "id",
+                "nsuHost",
+                "dataHora",
+                "terminal",
+                "unidade",
+                "cartao",
+                "funcionario",
+                "tipo",
+                "statusProc",
+                "statusRede",
+                "valor"
+            ]
+            def transacaoList = transacaoService.list(filtro).collect { tr ->
+                [
+                    id: tr.id,
+                    nsuHost: tr.nsu,
+                    dataHora: tr.dataHora.format('dd/MM/yy HH:mm:ss'),
+                    terminal: tr.terminal,
+                    unidade: tr.cartao?.portador?.unidade?.nomeEmbossing,
+                    cartao: tr.cartao?.numeroMascarado,
+                    funcionario: tr.participante?.nome,
+                    tipo: tr.tipo?.nome,
+                    statusProc: tr.status?.nome,
+                    statusRede: tr.statusControle?.nome,
+                    valor: Util.formatCurrency(tr.valor)
+                ]
+            }
+            exportService.export(
+                    params.f,
+                    response.outputStream,
+                    transacaoList, fields, labels, [:], [:])
+            return
+        }
+        [   transacaoInstanceList: transacaoService.list(filtro, paginacao),
+            transacaoInstanceTotal: transacaoService.count(filtro) ] + filtro
     }
 
     def listAdmin() {
@@ -80,7 +137,7 @@ class TransacaoController extends BaseOwnerController {
                         TipoTransacao.TRANSFERENCIA_SALDO
                 ]
         ]
-        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
+        final PagedResultList transacoes = transacaoService.list(getCurrentUser()?.owner, filtro, paginacao)
         if (filtro.dataFinal) filtro.dataFinal -= 1
         [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
     }
@@ -100,7 +157,7 @@ class TransacaoController extends BaseOwnerController {
                 nsu                  : params.int('nsu'),
                 statusControle       : StatusControleAutorizacao.PENDENTE
         ]
-        final PagedResultList transacoes = transacaoService.pesquisar(getCurrentUser()?.owner, filtro, paginacao)
+        final PagedResultList transacoes = transacaoService.list(getCurrentUser()?.owner, filtro, paginacao)
         if (filtro.dataFinal) filtro.dataFinal -= 1
         [transacaoInstanceList: transacoes as List<Transacao>, transacaoInstanceTotal: transacoes.totalCount] + filtro
     }

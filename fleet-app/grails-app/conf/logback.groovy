@@ -46,23 +46,30 @@ logger("com.fourLions.processingControl", ALL, appenderList, false)
 logger("groovyx.net.http", ALL, appenderList, false)
 logger("org.apache.camel", INFO, appenderList, false)
 
+
+
+
+
+
+/*
+
+// Async Mail
+
 logger('grails.app.jobs.grails.plugin.asyncmail', TRACE, appenderList, false)
 logger('grails.app.services.grails.plugin.asyncmail', TRACE, appenderList, false)
 logger('grails.plugin.asyncmail', TRACE, appenderList, false)
 
-
-
-
-/*
+// Apache Camel
 logger("org.apache.camel", ERROR, appenderList, false)
 logger("org.apache.camel", DEBUG, appenderList, false)
 logger("org.apache.camel", TRACE, appenderList, false)
-*/
 
-/*
+// Hibernate
 logger 'org.hibernate.type.descriptor.sql.BasicBinder', TRACE, appenderList
 logger 'org.hibernate.SQL', TRACE, appenderList
+
 */
+
 
 
 root(ERROR, appenderList)

@@ -10,57 +10,45 @@ class TransacaoService {
     /**
      * Realiza a pesquisa de transações com o filtro e paginação repassados
      * @param participante
-     * @param filtro
+     * @param pars
      * @param paginacao
      * @return Um PagedResultList contendo a pesquisa paginada
      */
-    PagedResultList pesquisar(final Participante participante, final Map filtro, final Map paginacao) {
-        Unidade unidade
-        Estabelecimento estabelecimento
 
-/*
-        if (SpringSecurityUtils.ifAllGranted("ROLE_ESTAB") && participante?.instanceOf(PostoCombustivel)) {
-            PostoCombustivel postoCombustivel = PostoCombustivel.get(participante.id)
-            estabelecimento = Estabelecimento.findByEmpresa(postoCombustivel)
-        } else if (SpringSecurityUtils.ifAllGranted("ROLE_RH") && participante?.instanceOf(Rh)) {
-            Rh rh = Rh.get(participante.id)
-            unidade = Unidade.findByRh(rh)
+
+    private def withParams(pars, Closure clos) {
+        def criteria = {
+            if (pars.dataInicial) gt('dateCreated', pars.dataInicial)
+            if (pars.dataFinal) lt('dateCreated', pars.dataFinal)
+            if (pars.numeroCartao) eq("numeroCartao", pars.numeroCartao)
+            if (pars.terminal) eq("terminal", pars.terminal)
+            if (pars.nsu) eq("nsu", pars.nsu)
+            if (pars.tipo) eq('tipo', pars.tipo)
+            if (pars.tipos) 'in'('tipo', pars.tipos)
+            if (pars.statusRede)
+                eq("statusControle", StatusControleAutorizacao.valueOf(pars.statusRede))
         }
-*/
+        clos(criteria)
+    }
 
 
 
-        return Transacao.createCriteria().list(paginacao) {
-            if (filtro.dataInicial) gt('dateCreated', filtro.dataInicial)
-            if (filtro.dataFinal) lt('dateCreated', filtro.dataFinal)
-            if (filtro.numeroCartao) eq("numeroCartao", filtro.numeroCartao)
-            if (filtro.terminal) eq("terminal", filtro.terminal)
-            if (filtro.nsu) eq("nsu", filtro.nsu)
-            if (filtro.tipo) eq('tipo', filtro.tipo)
-            if (filtro.tipos) 'in'('tipo', filtro.tipos)
-            if (filtro.statusRede)
-                eq("statusControle", StatusControleAutorizacao.valueOf(filtro.statusRede))
 
-/*
-            if (filtro.statusControle) {
-                if (filtro.statusControle instanceof StatusControleAutorizacao)
-                    eq('statusControle', filtro.statusControle)
-                else eq('statusControle', StatusControleAutorizacao.valueOf(filtro.statusControle.toString()))
-            }
-*/
-
-/*
-            if (unidade) {
-                participante {
-                    eq('unidade', unidade)
-                }
-            }
-            if (estabelecimento?.codigo?.length() > 0) {
-                eq("codigoEstabelecimento", estabelecimento.codigo)
-            }
-*/
+    def list(Map filtro, Map paginate = null) {
+        withParams(filtro) { criteria ->
+            if (paginate)
+                return Transacao.createCriteria().list(paginate, criteria)
+            else
+                return Transacao.createCriteria().list(criteria)
         }
     }
+
+    def count(filtro) {
+        withParams(filtro) { criteria ->
+            return Transacao.createCriteria().count(criteria)
+        }
+    }
+
 
     void confirmar(List<Long> ids) {
         ids.each { confirmar(Transacao.get(it)) }

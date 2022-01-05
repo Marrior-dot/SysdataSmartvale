@@ -55,7 +55,9 @@
 
     <div class="paginateButtons">
         <g:paginate total="${transacaoInstanceTotal}" params="${params}"/>
+        <export:formats formats="['csv', 'excel', 'pdf']" params="${params}"/>
     </div>
+
 </g:if>
 <g:else>
     <div class="well well-lg text-center"><strong>SEM TRANSAÇÕES</strong></div>
