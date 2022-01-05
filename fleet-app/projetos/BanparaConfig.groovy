@@ -28,7 +28,7 @@ environments {
 
         // ** DATABASE **
         dbCreate = "update" // one of 'create', 'create-drop','update'
-        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://172.17.0.2/banpara_development"
+        url = System.getenv("FROTA_DEV_DB") ?: "jdbc:postgresql://192.168.250.41/banpara_homologation"
 
         username = "postgres"
         password = "postgres"
@@ -332,4 +332,4 @@ environments {
     }
 }
 
-features = ["lotePagamento", "loteRecebimento"]
+features = ["banpara"]

@@ -69,7 +69,7 @@
                     <!-- /.nav-second-level -->
                 </li>
 
-                <g:if test="${grailsApplication.config.projeto.features == ["lotePagamento", "loteRecebimento"]}">
+                <g:if test="${grailsApplication.config.projeto.features == ["banpara"]}">
                     <li>
                         <a href="#" class="menu-logado"><i class="fa fa-money"></i> Financeiro<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -174,6 +174,10 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="baseEquipamentosRelatorio">Base de Equipamentos</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="baseVeiculosRelatorio">Base de Veículos</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="historicoFrotaRelatorio">Histórico de Transações Frota</g:link></li>
+                        </sec:ifAnyGranted>
+
+                        <sec:ifAnyGranted roles="ROLE_ADMIN, ROLE_PROC, ROLE_RH">
+                            <g:if test="${grailsApplication.config.projeto.features == ["banpara"]}">
                             <li class="controller"><g:link  class="submenu-logado"  controller="demoAbastecimentosEstabelecimentoRelatorio">Demonstrativo Abastecimentos por Estabelecimento</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="demoAbastecimentosEmpresaRelatorio">Demonstrativo Abastecimentos por Empresa</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="demoAbastecimentosAutorizadosRelatorio">Demonstrativo Abastecimentos Autorizados</g:link></li>
@@ -186,6 +190,7 @@
                             <li class="controller"><g:link  class="submenu-logado"  controller="EvolutivoConsumoRelatporio">Evolutivo de Consumo</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="TransacoesProtegidasRelatorio">Relatório de Transações Protegidas</g:link></li>
                             <li class="controller"><g:link  class="submenu-logado"  controller="RelatorioTransferenciaSaldo">Relatório de Transferência Saldo</g:link></li>
+                            </g:if>
                         </sec:ifAnyGranted>
 
                         %{--
