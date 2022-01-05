@@ -43,6 +43,21 @@ class UserService {
 		ret
 	}
 
+    def update(User user, Map params) {
+        user.properties = params
+        def userRoles = UserRole.findAllByUser(user)
+        userRoles.each { userRole ->
+            UserRole.remove(user, userRole.role)
+        }
+        params.findAll { it.key.contains("ROLE_") && it.value == "on" }.each { k, v ->
+            user.save(failOnError: false)
+            Role role = Role.findByAuthority(k)
+            UserRole.create user, role
+        }
+    }
+
+
+
     boolean validPassword(password) {
         return password ==~ PASSWORD_PATTERN
     }

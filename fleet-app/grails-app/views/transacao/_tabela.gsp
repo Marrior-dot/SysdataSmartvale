@@ -6,6 +6,7 @@
         <th><g:message code="transacao.nsu.label" default="NSU"/></th>
         <th>Data/Hora</th>
         <th><g:message code="transacao.terminal.label" default="Terminal"/></th>
+        <th><g:message code="transacao.unidade.label" default="Unidade"/></th>
         <th><g:message code="transacao.cartao.label" default="Cartao"/></th>
         <th><g:message code="transacao.participante.label" default="Funcionário"/></th>
         <th><g:message code="transacao.tipo.label" default="Tipo"/></th>
@@ -30,6 +31,7 @@
                     <g:formatDate date="${transacaoInstance.dateCreated}" format="dd/MM/yyyy HH:mm:ss"/>
                 </td>
                 <td>${transacaoInstance.terminal}</td>
+                <td>${transacaoInstance.cartao ? transacaoInstance.cartao.portador.unidade.nomeEmbossing : '---'}</td>
                 <td>${transacaoInstance.cartao ? transacaoInstance.cartao.numeroMascarado : '---'}</td>
                 <td>${transacaoInstance.participante?.nome}</td>
                 <td>${transacaoInstance?.tipo?.nome}</td>
