@@ -128,6 +128,8 @@ environments {
             jasperDiretorio = "/usr/local/frota/banpara/jasper/reports"
         }
 
+        serverUrl = "https://app.sysdata.com.br/banpara-frota"
+
     }
 }
 
