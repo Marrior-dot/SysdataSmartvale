@@ -3,7 +3,7 @@ package com.sysdata.commons
 enum StatusToken {
 
     CREATED("Criado"),
-    USED("Utilizado"),
+    USED("Utilizado", "Requisição de nova senha já utilizada!"),
     EXPIRED("Expirado", "Requisição de nova senha expirada!"),
     INVALID("Inválido", "Requisição de nova senha inválida!")
 
