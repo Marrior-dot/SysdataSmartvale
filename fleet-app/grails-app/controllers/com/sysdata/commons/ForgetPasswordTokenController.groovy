@@ -49,8 +49,9 @@ class ForgetPasswordTokenController {
     }
 
     def saveNewPassword() {
+        ForgetPasswordToken token
         try {
-            ForgetPasswordToken token = ForgetPasswordToken.get(params.id as long)
+            token = ForgetPasswordToken.get(params.id as long)
             userService.saveNewPassword(token.user, params.newPassword, params.confirmPassword)
             log.info "Usuario #${token.user.username} - senha alterada por Esqueci a Senha"
             flash.success = "Senha alterada com sucesso"
@@ -59,12 +60,12 @@ class ForgetPasswordTokenController {
         } catch (BusinessException e) {
             log.error e.message
             flash.error = e.message
-            render view: 'newPassword'
+            render view: 'newPassword', model: [token: token]
             return
         } catch (e) {
             e.printStackTrace()
             flash.error = "Erro Interno. Contate suporte."
-            render view: 'newPassword'
+            render view: 'newPassword', model: [token: token]
         }
     }
 
