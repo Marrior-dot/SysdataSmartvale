@@ -31,9 +31,10 @@ class ForgetPasswordTokenController {
     }
 
     def useToken() {
-        ForgetPasswordToken forgetPswToken = forgetPasswordTokenService.useToken(params.key)
+        ForgetPasswordToken forgetPswToken = ForgetPasswordToken.findWhere(key: params.key)
         if (forgetPswToken) {
             if (forgetPswToken.statusToken == StatusToken.CREATED) {
+                forgetPasswordTokenService.useToken(forgetPswToken)
                 render view: 'newPassword', model: [token: forgetPswToken]
                 return
             } else {
