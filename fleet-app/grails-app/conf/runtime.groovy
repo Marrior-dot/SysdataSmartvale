@@ -38,6 +38,16 @@ dataSource {
 
 grails {
     mail {
+        host = "172.16.100.20"
+        username = "no-reply@sysdata.com.br"
+    }
+}
+
+
+
+/*
+grails {
+    mail {
         host = "smtp.gmail.com"
         port = 465
         username = "sysdatamail@sysdata.com.br"
@@ -48,6 +58,7 @@ grails {
                  "mail.smtp.socketFactory.fallback":"false"]
     }
 }
+*/
 
 
 notifications {

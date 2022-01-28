@@ -2,6 +2,7 @@ package com.sysdata.gestaofrota
 
 import com.sysdata.gestaofrota.exception.BusinessException
 import grails.converters.JSON
+import grails.validation.ValidationException
 
 class UserController extends BaseOwnerController {
 
@@ -145,18 +146,23 @@ class UserController extends BaseOwnerController {
                     return
                 }
             }
-            userService.update(userInstance, params)
-            if (!userInstance.hasErrors()) {
+
+            try {
+                userService.update(userInstance, params)
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'Usuario'), userInstance.id])}"
                 redirect(action: "show", id: userInstance.id)
-            } else {
+
+            } catch (ValidationException ve) {
+                flash.error = "Alteração inválida: ${ve.message}"
+                userInstance = User.get(params.id)
                 render(view: "form", model: [
                         editable: springSecurityService.currentUser.authorities.authority.any { it == 'ROLE_ADMIN' || it == 'ROLE_PROC'},
                         userInstance: userInstance,
                         action: Util.ACTION_EDIT,
                         ownerList: listOwners()])
-
+                return
             }
+
         } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])}"
             redirect(action: "list")

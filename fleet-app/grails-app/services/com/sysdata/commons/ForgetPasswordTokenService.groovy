@@ -39,8 +39,7 @@ class ForgetPasswordTokenService {
             throw new BusinessException("Não existe usuário com o email informado!")
     }
 
-    def useToken(String token) {
-        ForgetPasswordToken foundToken = ForgetPasswordToken.findWhere(key: token)
+    def useToken(ForgetPasswordToken foundToken) {
         if (foundToken) {
             def now = new Date()
             if (now <= foundToken.expirationDatetime) {
