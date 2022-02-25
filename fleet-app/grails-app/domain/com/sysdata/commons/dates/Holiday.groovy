@@ -8,5 +8,6 @@ class Holiday {
 
     static constraints = {
         day nullable: true
+        month nullable: true
     }
 }

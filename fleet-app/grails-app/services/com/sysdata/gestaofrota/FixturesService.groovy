@@ -306,6 +306,7 @@ class FixturesService {
         NationalHoliday finados = NationalHoliday.findOrCreateWhere(day: 2, month: 10, description: "Finados").save(flush: true)
         NationalHoliday republica = NationalHoliday.findOrCreateWhere(day: 15, month: 10, description: "Proclamação da República").save(flush: true)
         NationalHoliday natal = NationalHoliday.findOrCreateWhere(day: 25, month: 11, description: "Natal").save(flush: true)
+        NationalHoliday carnaval = NationalHoliday.findOrCreateWhere(description: "Carnaval").save(flush: true)
 
         def hoje = new Date()
         def anoAtual = hoje[Calendar.YEAR]
@@ -316,6 +317,14 @@ class FixturesService {
         setDataFeriado(finados, anoAtual)
         setDataFeriado(republica, anoAtual)
         setDataFeriado(natal, anoAtual)
+
+
+        def carnavalData = new Date()
+        carnavalData.set([dayOfMonth: 28, month: 1, year: anoAtual])
+        NationalHolidayDate.findOrCreateWhere(holiday: carnaval, date: carnavalData.clearTime()).save(flush: true)
+        carnavalData.set([dayOfMonth: 01, month: 2, year: anoAtual])
+        NationalHolidayDate.findOrCreateWhere(holiday: carnaval, date: carnavalData.clearTime()).save(flush: true)
+
 
 
         //Feriados Belém
