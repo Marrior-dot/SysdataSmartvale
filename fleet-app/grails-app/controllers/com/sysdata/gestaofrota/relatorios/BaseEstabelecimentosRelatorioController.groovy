@@ -14,9 +14,8 @@ class BaseEstabelecimentosRelatorioController {
 
     def index() {
 
-
         params.max = params.max ? params.max as int : 10
-        params.offset = params.offset ? params.offset as int : 0
+        params.offset = params.offset ? params.offset as int : 1
 
 
         if (params?.f && params.f != "html") {
@@ -55,7 +54,7 @@ class BaseEstabelecimentosRelatorioController {
             cabecalho3.Email = "EMAIL"
             BaseEstabelecimentosRelatorio << cabecalho3
 
-            def reportList = baseEstabelecimentosService.list(params, false)
+            def reportList = baseEstabelecimentosService.list(params, true)
 
             //def totalValor = reportList.sum { it.valor }
 

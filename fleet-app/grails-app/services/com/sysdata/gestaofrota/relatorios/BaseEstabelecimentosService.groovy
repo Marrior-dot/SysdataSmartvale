@@ -10,7 +10,6 @@ class BaseEstabelecimentosService {
         def criteria = {
 
             if (params.nFanta) {
-
                 eq("nomeFantasia", params.nFanta)
             }
 
@@ -43,10 +42,8 @@ class BaseEstabelecimentosService {
         def criteria = {
 
             if (pars.cnpj) {
-
                 eq("cnpj", pars.cnpj)
             }
-
             if (pars.dataInicial) {
                 gt('dateCreated', pars.dataInicial)
             }
@@ -60,6 +57,5 @@ class BaseEstabelecimentosService {
         return Estabelecimento.createCriteria().count(criteria)
 
     }
-
 
     }

@@ -24,10 +24,11 @@ class BaseFuncionariosService {
             }
         }
 
-        if (paginate)
-            return Funcionario.createCriteria().list([max: params.max, offset: params.offset], criteria)
+        if(paginate)
+           return Funcionario.createCriteria().list([max: params.max, offset: params.offset], criteria)
         else
-            return Funcionario.createCriteria().list(criteria)
+          return Funcionario.createCriteria().list(criteria)
+
     }
 
     def count(pars) {
@@ -48,8 +49,8 @@ class BaseFuncionariosService {
             }
 
         }
-
-        return Funcionario.createCriteria().count(criteria)
+        //Paginação
+       return Funcionario.createCriteria().count(criteria)
     }
 
     }

@@ -21,7 +21,7 @@ class BaseFuncionariosRelatorioController {
 
 
         params.max = params.max ? params.max as int : 10
-        params.offset = params.offset ? params.offset as int : 0
+        params.offset = params.offset ? params.offset as int : 1
 
 
         if (params?.f && params.f != "html") {

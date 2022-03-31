@@ -18,6 +18,7 @@ abstract class Portador {
     Status status = Status.ATIVO
     Boolean vincularCartao = true
 
+    //Definir o que são: Cartao, RelacaoCartaoPortador, Unidade
     static hasMany = [cartoes: Cartao, relacaoCartao: RelacaoCartaoPortador]
 
     static belongsTo = [unidade: Unidade]

@@ -2,7 +2,7 @@ package com.sysdata.gestaofrota
 
 import grails.converters.JSON
 
-class EstabelecimentoController {
+class  EstabelecimentoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -14,7 +14,9 @@ class EstabelecimentoController {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def estabelecimentoInstanceList = Estabelecimento.list(params)
+       // params.offset = Math.min(params.offset ? params.int('offset') : 10, 100)
+
+        def estabelecimentoInstanceList = Estabelecimento.list(params, criteria)
         [estabelecimentoInstanceList: estabelecimentoInstanceList, estabelecimentoInstanceTotal: Estabelecimento.count()]
     }
 
@@ -120,10 +122,11 @@ class EstabelecimentoController {
 
     def listAllJSON() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def offset = params.start ?: 10
+        //offset não está sendo utilizado
+        def offset = params.start ?: 0
         def empId = params.empId != 'null' ? params.empId.toLong() : null
 
-        def estabelecimentoInstanceList = Estabelecimento.withCriteria {
+       def estabelecimentoInstanceList = Estabelecimento.withCriteria {
             eq('status', Status.ATIVO)
             empresa { eq('id', empId) }
         }
@@ -134,6 +137,10 @@ class EstabelecimentoController {
             empresa { eq('id', empId) }
             projections { rowCount() }
         }
+
+        //estabelecimentoInstanceList = Estabelecimento.createCriteria().list([max: params.max, offset: offset])
+       // estabelecimentoInstanceTotal = Estabelecimento.createCriteria().count(criteria)
+
 
         def fields = estabelecimentoInstanceList.collect { e ->
             [id          : e.id,

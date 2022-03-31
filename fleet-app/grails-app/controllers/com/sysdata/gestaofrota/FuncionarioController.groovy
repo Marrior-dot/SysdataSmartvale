@@ -26,14 +26,14 @@ class FuncionarioController extends BaseOwnerController {
             unidadeInstance = Unidade.findByRh(rh)
         }
 
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def criteria = {
+        //params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        /*def criteria = {
             order('id')
 
             if (unidadeInstance) {
                 eq('unidade', unidadeInstance)
             }
-        }
+        }*/
 
         def funcionarioInstanceList = Funcionario.createCriteria().list(params, criteria)
         [funcionarioInstanceList: funcionarioInstanceList, funcionarioInstanceTotal: Rh.count()]
